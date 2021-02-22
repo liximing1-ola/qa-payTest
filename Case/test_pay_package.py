@@ -28,7 +28,7 @@ class TestPayCreate(unittest.TestCase):
         assert res['code'] == 200
         assert res['body']['success'] == 0
         assert res['body']['msg'] == '余额不足，无法支付'
-        assert mysqlScript.selectMoneySql(105002660) == 0
+        assert mysqlScript.selectMoneySql(105002660) == 1
 
 
     def test_02_RoomPayLiveMoney(self):

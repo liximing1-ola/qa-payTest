@@ -4,6 +4,7 @@ import os
 import requests
 import random
 import time
+from Common import logs
 
 def all_case():
     case_dir = os.path.join(os.getcwd(), "Case")   # 待执行用例的目录
@@ -19,6 +20,7 @@ def main():
     print('All case number:  {}'.format(test_result.testsRun))
     print('Failed case number:  {}'.format(len(test_result.failures)))
     print('Failed case and reason:  {}'.format(test_result.failures))
+    logs.get_log('failCase.log').error(test_result.failures)
     for case, reason in test_result.failures:
         if len(test_result.failures) > 0:
             robot(case.id())
