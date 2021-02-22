@@ -8,8 +8,6 @@ from Common import logs
 
 def all_case():
     # case_dir = os.path.join(os.getcwd(), "Case")   # 待执行用例的目录
-    # case_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)))
-    # print(case_dir)
     testcase = unittest.TestSuite()
     discover = unittest.defaultTestLoader.discover("/root/payTest/Case",
                                                    pattern="test*.py",
