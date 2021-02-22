@@ -17,7 +17,9 @@ def all_case():
 
 def main():
     test_result = unittest.TextTestRunner(verbosity=2).run(all_case())
+    now = time.strftime('%F:%H:%M', time.localtime(time.time()))
     print('All case number:  {}'.format(test_result.testsRun))
+    logs.get_log('runCaseTime.log').info(now)
     print('Failed case number:  {}'.format(len(test_result.failures)))
     print('Failed case and reason:  {}'.format(test_result.failures))
     logs.get_log('failCase.log').error(test_result.failures)
