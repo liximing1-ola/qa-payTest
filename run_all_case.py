@@ -8,9 +8,10 @@ from Common import logs
 
 def all_case():
     # case_dir = os.path.join(os.getcwd(), "Case")   # 待执行用例的目录
-    case_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    # case_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)))
+    # print(case_dir)
     testcase = unittest.TestSuite()
-    discover = unittest.defaultTestLoader.discover(case_dir,
+    discover = unittest.defaultTestLoader.discover("/root/payTest/Case",
                                                    pattern="test*.py",
                                                    top_level_dir=None)
     testcase.addTests(discover)  # 直接加载 discover
@@ -73,4 +74,5 @@ def getImage():
 
 
 if __name__ == "__main__":
+    all_case()
     main()
