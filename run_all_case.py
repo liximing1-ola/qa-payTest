@@ -16,12 +16,9 @@ def all_case():
 
 def main():
     test_result = unittest.TextTestRunner(verbosity=2).run(all_case())
-    print('All case number')
-    print(test_result.testsRun)
-    print('Failed case number')
-    print(len(test_result.failures))
-    print('Failed case and reason')
-    print(test_result.failures)
+    print('All case number:  {}'.format(test_result.testsRun))
+    print('Failed case number:  {}'.format(len(test_result.failures)))
+    print('Failed case and reason:  {]'.format(test_result.failures))
     for case, reason in test_result.failures:
         if len(test_result.failures) > 0:
             robot(case.id())
@@ -30,7 +27,7 @@ def robot(des, ):
     url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=f9d916cb-6b93-4389-8aa4-f51c755faa0e'
     headers = {'Content-Type': 'application/json'}
     now = time.strftime('%F:%H:%M', time.localtime(time.time()))
-    title = "内测支付异常_".format(now)
+    title = "内测支付异常__{}".format(now)
     des = des
     icon = getImage()
     data = {
