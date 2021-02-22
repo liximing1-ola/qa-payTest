@@ -28,7 +28,6 @@ class TestPayCreate(unittest.TestCase):
         mysqlScript.updateMoneySql(200000, 0, 0, 0, 103273407)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_title')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
-        print(res)
         assert res['code'] == 200
         assert res['body']['success'] == 1
         assert len(res['body']['args']) > 1

@@ -18,7 +18,7 @@ def main():
     test_result = unittest.TextTestRunner(verbosity=2).run(all_case())
     print('All case number:  {}'.format(test_result.testsRun))
     print('Failed case number:  {}'.format(len(test_result.failures)))
-    print('Failed case and reason:  {]'.format(test_result.failures))
+    print('Failed case and reason:  {}'.format(test_result.failures))
     for case, reason in test_result.failures:
         if len(test_result.failures) > 0:
             robot(case.id())
