@@ -1,0 +1,31 @@
+# coding=utf-8
+header_dev:
+    "Content-Type": "application/x-www-form-urlencoded"
+    "user - agent": "Agent / Xs android V1.0.5.3 / Js V1.0.0.0 / Login V1601690448"
+    "host": 'dev.iambanban.com'
+
+# 阿里云内网环境测试
+params_dev_qq:
+    t=ADC1FD03910635E8E7D87705206BAAC5&o=659826BC750ABF8FF3AED92E552DCF62
+# Common\getSession.py
+# data
+data_dev_qq:
+    "type": 'login'
+    "dtoken": 'f59eusz0LRQmFKK7ksp8mdTQNJB9sIlkhrxUnCgILSLP9DhmPNeJWryqEDIdoJlmHzk06iMalKK3CdJOWalnlUcOLa0RcizOsn93Kjo8rR__2BNIyp5KvqJrNhmEedJ5bcHmZxUFqWiqUf9bg'
+
+# eg:别忘了修改date中的UID字段
+# 房间一对一打赏，被打赏者：直播间主播
+dev_pay_package_1:
+    platform=available&type=package&money=100&params=%7B%22rid%22%3A193185545%2C%22uids%22%3A%22105002660%22%2C%22positions%22%3A%220%22%2C%22position%22%3A-1%2C%22giftId%22%3A5%2C%22giftNum%22%3A1%2C%22price%22%3A100%2C%22cid%22%3A0%2C%22ctype%22%3A%22%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A1%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22refer%22%3A%22%E7%83%AD%E9%97%A8%3Aroom%22%2C%22useCoin%22%3A-1%7D
+
+# 房间一对一打赏，被打赏者：非直播间
+dev_pay_package_2:
+    platform=available&type=package&money=100&params=%7B%22rid%22%3A193185484%2C%22uids%22%3A%22105002660%22%2C%22positions%22%3A%220%22%2C%22position%22%3A-1%2C%22giftId%22%3A5%2C%22giftNum%22%3A1%2C%22price%22%3A100%2C%22cid%22%3A0%2C%22ctype%22%3A%22%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A1%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22refer%22%3A%22%E7%83%AD%E9%97%A8%3Aroom%22%2C%22useCoin%22%3A-1%7D
+
+# 私聊一对一打赏
+dev_pay_chatGift:
+    platform=available&type=chat-gift&money=1000&params=%7B%22to%22%3A105002660%2C%22giftId%22%3A5%2C%22giftNum%22%3A10%2C%22cid%22%3A0%2C%22ctype%22%3A%22%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A10%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22useCoin%22%3A-1%7D
+
+# 爵位购买
+dev_pay_title:
+    platform=available&type=title&money=100000&params=%7B%22level%22%3A1%2C%22num%22%3A1%2C%22tid%22%3A1%2C%22cid%22%3A0%2C%22ctype%22%3Anull%2C%22duction_money%22%3A0%2C%22useCoin%22%3A-1%7D

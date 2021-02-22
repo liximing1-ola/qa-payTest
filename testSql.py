@@ -1,0 +1,46 @@
+# coding=utf-8
+import pymysql
+
+
+def conMysql():
+    _dbUrl = 'rm-bp1nfl3dp096d5o39.mysql.rds.aliyuncs.com'
+    _dbPort = 3306
+    _user = 'super'
+    _password = 'dev123456'
+    _dbName = 'xianshi'
+    con = pymysql.connect(host=_dbUrl,
+                          port=_dbPort,
+                          user=_user,
+                          passwd=_password,
+                          charset='utf8')
+    con.select_db(_dbName)
+    cursor = con.cursor()
+    return con, cursor
+
+def selectUserCommoditySql(uid):
+    con, cur = conMysql()
+    sql = "select count(*) from xs_user_commodity where uid={}".format(uid)
+    try:
+        cur.execute(sql)
+        res = cur.fetchone()
+        if int(res) >= 1:
+            deleteUserCommoditySql(uid, int(res))
+        else:
+            pass
+    except Exception as error:
+        print(error)
+
+def deleteUserCommoditySql(uid, count):
+    con, cur = conMysql()
+    sql = "delete from xs_user_commodity where uid={} limit {}".format(uid, count)
+    try:
+        cur.execute(sql)
+    except Exception as error:
+        con.rollback()
+        print('delete fail', error)
+    finally:
+        con.commit()
+
+
+if __name__ == '__main__':
+    selectUserCommoditySql(100287189)
