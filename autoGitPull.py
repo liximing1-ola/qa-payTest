@@ -15,9 +15,9 @@ def autoGitPull():
     g.pull()
     repo = Repo(git_dir)
     commit_log = repo.git.log('--pretty={"commit":"%h","author":"%an","summary":"%s","date":"%cd"}',
-                              max_count=3, date=int(time.time()))
+                              max_count=3, date='format:%Y-%m-%d %H:%M:%S')
     log_list = commit_log.split("\n")
-    real_time = [eval(item) for item in log_list]
+    real_time = [eval(item) for item in log_list][0]
     #times = int(time.mktime(real_log_list))
     print(real_time)
 
