@@ -15,6 +15,7 @@ def autoGitPull():
     g = git.cmd.Git(git_dir)
     g.pull()
     repo = Repo(git_dir)
+    print(repo.active_branch)
     if repo.active_branch == 'release-for-proxy':
         commit_log = repo.git.log('--pretty={"commit":"%h","author":"%an","summary":"%s","date":"%cd"}',
                                   max_count=3, date='format:%Y-%m-%d %H:%M:%S')
