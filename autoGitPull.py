@@ -21,6 +21,8 @@ def autoGitPull():
     timeArray = time.strptime(real_time, "%Y-%m-%d %H:%M:%S")
     times = int(time.mktime(timeArray))
     print(times)
+    now = time.time()
+    print(now)
 
 
 if __name__=="__main__":
