@@ -1,14 +1,10 @@
 import os
-from git.repo import Repo
-
-def autoGitPull():
-    local_path = "/home/webroot/banban"
-    repo = Repo(local_path)
-    repo.git.pull("")
 
 def autoGitPull2():
-    os.system('cd /home/webroot/banban')
-    os.system('git pull')
+    os.popen('cd /home/webroot/banban')
+    result = os.popen('pwd')
+    result = result.read()
+    print(result)
 
 
 if __name__=="__main__":
