@@ -17,9 +17,10 @@ def all_case():
 
 def main():
     test_result = unittest.TextTestRunner(verbosity=2).run(all_case())
-    now = time.strftime('%F:%H:%M', time.localtime(time.time()))
+    now = time.strftime('%Y-%m-%d %F:%H:%M', time.localtime(time.time()))
     timeArray = time.strptime(now, "%Y-%m-%d %H:%M:%S")
     times = int(time.mktime(timeArray))
+    print(times)
     writeUpdateTime(times)
     logs.get_log('runCaseTime.log').info("执行用例总数: {}, 失败用例总数: {}, 执行时间: {}"
                                          .format(test_result.testsRun, len(test_result.failures), now))
