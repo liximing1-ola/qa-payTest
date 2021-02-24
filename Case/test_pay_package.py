@@ -21,14 +21,14 @@ class TestPayCreate(unittest.TestCase):
         4.检查预期返回msg，预期：支付失败
         5.检查被打赏者余额,预期：0
         """
-        mysqlScript.updateMoneySql(0, 0, 0, 0, 103273407)
-        mysqlScript.updateMoneySql(0, 0, 0, 0, 105002660)
+        mysqlScript.updateMoneySql(0, 0, 0, 0, config.payUid)
+        mysqlScript.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_1')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         assert res['code'] == 200
         assert res['body']['success'] == 0
         assert res['body']['msg'] == '余额不足，无法支付'
-        assert mysqlScript.selectMoneySql(105002660) == 0
+        assert mysqlScript.selectMoneySql(config.testUid) == 0
 
 
     def test_02_RoomPayLiveMoney(self):
@@ -43,16 +43,16 @@ class TestPayCreate(unittest.TestCase):
         5.检查消费记录表消费money（xs_pay_change_new）
         6.检查消费记录表消费方式op
         """
-        mysqlScript.updateMoneySql(30, 30, 30, 10, 103273407)
-        mysqlScript.updateMoneySql(0, 0, 0, 0, 105002660)
+        mysqlScript.updateMoneySql(30, 30, 30, 10, config.payUid)
+        mysqlScript.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_1')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         assert res['code'] == 200
         assert res['body']['success'] == 1
         assert res['body']['args']['money'] == 100
-        assert mysqlScript.selectMoneySql(105002660) == 52
-        assert mysqlScript.selectPayChangeSql(103273407) == 100
-        assert mysqlScript.selectPayChangeOpSql(103273407) == 'consume'
+        assert mysqlScript.selectMoneySql(config.testUid) == 52
+        assert mysqlScript.selectPayChangeSql(config.payUid) == 100
+        assert mysqlScript.selectPayChangeOpSql(config.payUid) == 'consume'
 
     def test_03_RoomPayChangeMoney(self):
         """
@@ -66,16 +66,16 @@ class TestPayCreate(unittest.TestCase):
         5.检查消费记录表消费money（xs_pay_change_new）
         6.检查消费记录表消费方式op
         """
-        mysqlScript.updateMoneySql(30, 30, 30, 10, 103273407)
-        mysqlScript.updateMoneySql(0, 0, 0, 0, 105002660)
+        mysqlScript.updateMoneySql(30, 30, 30, 10, config.payUid)
+        mysqlScript.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_2')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         assert res['code'] == 200
         assert res['body']['success'] == 1
         assert len(res['body']['args']) > 1
-        assert mysqlScript.selectMoneySql(105002660) == 62
-        assert mysqlScript.selectPayChangeSql(103273407) == 100
-        assert mysqlScript.selectPayChangeOpSql(103273407) == 'consume'
+        assert mysqlScript.selectMoneySql(config.testUid) == 62
+        assert mysqlScript.selectPayChangeSql(config.payUid) == 100
+        assert mysqlScript.selectPayChangeOpSql(config.payUid) == 'consume'
 
 
 if __name__ == '__main__':

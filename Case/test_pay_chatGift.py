@@ -21,14 +21,14 @@ class TestPayCreate(unittest.TestCase):
         4.检查预期返回msg，预期：支付失败
         5.检查被打赏者余额,预期：0
         """
-        mysqlScript.updateMoneySql(0, 0, 0, 0, 103273407)
-        mysqlScript.updateMoneySql(0, 0, 0, 0, 105002660)
+        mysqlScript.updateMoneySql(0, 0, 0, 0, config.payUid)
+        mysqlScript.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_chatGift')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         assert res['code'] == 200
         assert res['body']['success'] == 0
         assert res['body']['msg'] == '余额不足，无法支付'
-        assert mysqlScript.selectMoneySql(105002660) == 0
+        assert mysqlScript.selectMoneySql(config.testUid) == 0
 
     def test_02_ImPayChangeMoney(self):
         """
@@ -41,15 +41,15 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：720
         5.检查打赏者剩余余额，预期为：400
         """
-        mysqlScript.updateMoneySql(1100, 100, 100, 100, 103273407)
-        mysqlScript.updateMoneySql(0, 0, 0, 0, 105002660)
+        mysqlScript.updateMoneySql(1100, 100, 100, 100, config.payUid)
+        mysqlScript.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_chatGift')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         assert res['code'] == 200
         assert res['body']['success'] == 1
         assert len(res['body']['args']) > 1
-        assert mysqlScript.selectMoneySql(105002660) == 720
-        assert mysqlScript.selectAllMoneySql(103273407) == 400
+        assert mysqlScript.selectMoneySql(config.testUid) == 720
+        assert mysqlScript.selectAllMoneySql(config.payUid) == 400
 
 
 if __name__ == '__main__':

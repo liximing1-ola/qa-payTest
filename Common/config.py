@@ -21,6 +21,10 @@ class config:
     roomConfig_url = release_host + 'room/config/?version=23&from_match=0&package=com.imbb.banban.android'
     # qq_login url
     qq_login_url = dev_host + 'account/qqlogin'
+    # 被打赏者
+    testUid = 100050010
+    # 打赏者
+    payUid = 103273407
 
 
 if __name__ == '__main__':

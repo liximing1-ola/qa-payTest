@@ -22,17 +22,17 @@ class TestPayCreate(unittest.TestCase):
         3.校验【status code】和返回值【body】状态
         4.检查剩余钱值,预期值：（200000 - 100000 + 60000 = 160000）
         """
-        mysqlScript.selectUserCommoditySql(103273407)
-        mysqlScript.deleteUserTitleSql(103273407)
-        mysqlScript.updateUserTitleSql(103273407)
-        mysqlScript.updateMoneySql(200000, 0, 0, 0, 103273407)
+        mysqlScript.selectUserCommoditySql(config.payUid)
+        mysqlScript.deleteUserTitleSql(config.payUid)
+        mysqlScript.updateUserTitleSql(config.payUid)
+        mysqlScript.updateMoneySql(200000, 0, 0, 0, config.payUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_title')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         assert res['code'] == 200
         assert res['body']['success'] == 1
         assert len(res['body']['args']) > 1
         # pytest.assume(mysqlScript.selectMoneySql(103273407, 'money') == 160000)
-        assert mysqlScript.selectMoneySql(103273407, 'money') == 160000
+        assert mysqlScript.selectMoneySql(config.payUid, 'money') == 160000
 
     @pytest.mark.run(order=2)
     def test_02_TitlePayChangeRenew(self):
@@ -45,13 +45,13 @@ class TestPayCreate(unittest.TestCase):
           3.校验【status code】和返回值【body】状态
           4.检查剩余钱值,预期值：（200000 - 60000 + 36000 = 176000）
           """
-        mysqlScript.updateMoneySql(200000, 0, 0, 0, 103273407)
+        mysqlScript.updateMoneySql(200000, 0, 0, 0, config.payUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_title')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         assert res['code'] == 200
         assert res['body']['success'] == 1
         assert len(res['body']['args']) > 1
-        assert mysqlScript.selectMoneySql(103273407, 'money') == 176000
+        assert mysqlScript.selectMoneySql(config.payUid, 'money') == 176000
 
 
 if __name__ == '__main__':
