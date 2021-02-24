@@ -20,9 +20,11 @@ def autoGitPull():
             logs.get_log('gitCode.log').error('最新代码提交时间: {}, 上次代码更新时间: {}'.format(times, lastTime))
             return True
         else:
+            logs.get_log('autoGitPull.log').error("Git未拉取到最新代码： {}".format(time.strftime('%F %H:%M',
+                                                                                         time.localtime(time.time()))))
             return False
     else:
-        print('fail')
+        logs.get_log('autoGitPull.log').error("Git分支不对： {}".format(repo.active_branch))
         return False
 
 def writeUpdateTime(now):

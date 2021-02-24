@@ -27,7 +27,7 @@ def main():
             if len(test_result.failures) > 0:
                 robot(case.id())
     else:
-        logs.get_log('autoGitPull.log').error("未拉取到代码： {}".format(time.strftime('%F-%H:%M', time.localtime(time.time()))))
+        print('notRun')
 
 
 def robot(des, ):
