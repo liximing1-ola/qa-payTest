@@ -21,3 +21,4 @@ class config:
 
 if __name__ == '__main__':
     print(config.BASE_PATH)
+    print(config.qq_login_url)

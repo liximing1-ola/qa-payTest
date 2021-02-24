@@ -26,9 +26,9 @@ def post_request_session(url, data):
         url = '%s%s' % ('https://', url)
     try:
         if data is None:
-            response = requests.post(url=url, headers=header)
+            response = requests.post(url=url, headers=header, verify=False)
         else:
-            response = requests.post(url=url, data=data, headers=header)
+            response = requests.post(url=url, data=data, headers=header, verify=False)
 
     except requests.RequestException as e:
         return ()
