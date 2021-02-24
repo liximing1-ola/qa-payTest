@@ -5,7 +5,7 @@ import requests
 import random
 import time
 from Common import logs
-from autoGitPull import writeUpdateTime
+from autoGitPull import writeUpdateTime, autoGitPull
 def all_case():
     # case_dir = os.path.join(os.getcwd(), "Case")   # 待执行用例的目录
     testcase = unittest.TestSuite()
@@ -16,15 +16,19 @@ def all_case():
     return testcase
 
 def main():
-    test_result = unittest.TextTestRunner(verbosity=2).run(all_case())
-    writeUpdateTime(str(int(time.time())))
-    now = time.strftime('%F:%H:%M', time.localtime(time.time()))
-    logs.get_log('runCaseTime.log').info("执行用例总数: {}, 失败用例总数: {}, 执行时间: {}"
-                                         .format(test_result.testsRun, len(test_result.failures), now))
-    logs.get_log('failCase.log').error(test_result.failures)
-    for case, reason in test_result.failures:
-        if len(test_result.failures) > 0:
-            robot(case.id())
+    if autoGitPull():
+        test_result = unittest.TextTestRunner(verbosity=2).run(all_case())
+        writeUpdateTime(str(int(time.time())))
+        now = time.strftime('%F-%H:%M', time.localtime(time.time()))
+        logs.get_log('runCaseTime.log').info("执行用例总数: {}, 失败用例总数: {}, 执行时间: {}"
+                                             .format(test_result.testsRun, len(test_result.failures), now))
+        logs.get_log('failCase.log').error(test_result.failures)
+        for case, reason in test_result.failures:
+            if len(test_result.failures) > 0:
+                robot(case.id())
+    else:
+        logs.get_log('autoGitPull.log').error("未拉取到代码： {}".format(time.strftime('%F-%H:%M', time.localtime(time.time()))))
+
 
 def robot(des, ):
     url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=f9d916cb-6b93-4389-8aa4-f51c755faa0e'

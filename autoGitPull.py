@@ -1,9 +1,7 @@
-import os
 import git
 from git.repo import Repo
 import time
 from Common import logs
-from Common.config import config
 
 def autoGitPull():
     git_dir = '/home/webroot/banban'
@@ -40,5 +38,4 @@ def readUpdateTime():
 
 
 if __name__=="__main__":
-    #writeUpdateTime('19999999999')
     readUpdateTime()
