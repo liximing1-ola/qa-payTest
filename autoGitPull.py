@@ -2,6 +2,7 @@ import git
 from git.repo import Repo
 import time
 from Common import logs
+import os
 
 def autoGitPull():
     git_dir = '/home/webroot/banban'
@@ -29,12 +30,12 @@ def autoGitPull():
         return False
 
 def writeUpdateTime(now):
-    txtPath = 'time.txt'
+    txtPath = os.path.split(os.path.realpath(__file__))[0] + '/time.txt'
     with open(txtPath, 'w') as f:
         f.write(now)
 
 def readUpdateTime():
-    txtPath = 'time.txt'
+    txtPath = os.path.split(os.path.realpath(__file__))[0] + '/time.txt'
     with open(txtPath, 'r') as f:
         f = f.read()
         return f
