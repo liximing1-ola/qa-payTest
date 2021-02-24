@@ -17,7 +17,7 @@ def all_case():
 
 def main():
     test_result = unittest.TextTestRunner(verbosity=2).run(all_case())
-    now = time.strftime('%Y-%m-%d %F:%H:%M', time.localtime(time.time()))
+    now = time.strftime('%F:%H:%M', time.localtime(time.time()))
     timeArray = time.strptime(now, "%Y-%m-%d %H:%M:%S")
     times = int(time.mktime(timeArray))
     print(times)
