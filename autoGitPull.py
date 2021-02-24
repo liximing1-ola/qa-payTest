@@ -12,8 +12,7 @@ def autoGitPull():
         commit_log = repo.git.log('--pretty={"commit":"%h","author":"%an","summary":"%s","date":"%cd"}',
                                   max_count=3, date='format:%Y-%m-%d %H:%M:%S')
         log_list = commit_log.split("\n")
-        print(repo.active_branch)
-        print(log_list[0])
+        logs.get_log('autoGitPull.log').error('当前分支: {}, 最新一条commit: {}'.format(repo.active_branch, log_list[0]))
         real_time = [eval(item) for item in log_list][0]['date']
         timeArray = time.strptime(real_time, "%Y-%m-%d %H:%M:%S")
         times = int(time.mktime(timeArray))

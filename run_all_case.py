@@ -27,7 +27,7 @@ def main():
             if len(test_result.failures) > 0:
                 robot(case.id())
     else:
-        print('notRun')
+        pass
 
 
 def robot(des, ):
