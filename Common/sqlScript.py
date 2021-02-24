@@ -3,7 +3,7 @@ import pymysql
 
 class mysqlScript:
 
-    _dbUrl = '127.0.0.1'
+    _dbUrl = '192.168.11.46'
     _dbPort = 3306
     _user = 'root'
     _password = '123456'
