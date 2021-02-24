@@ -5,7 +5,7 @@ import requests
 import random
 import time
 from Common import logs
-
+from autoGitPull import writeUpdateTime
 def all_case():
     # case_dir = os.path.join(os.getcwd(), "Case")   # 待执行用例的目录
     testcase = unittest.TestSuite()
@@ -18,6 +18,7 @@ def all_case():
 def main():
     test_result = unittest.TextTestRunner(verbosity=2).run(all_case())
     now = time.strftime('%F:%H:%M', time.localtime(time.time()))
+    writeUpdateTime(now)
     logs.get_log('runCaseTime.log').info("执行用例总数: {}, 失败用例总数: {}, 执行时间: {}"
                                          .format(test_result.testsRun, len(test_result.failures), now))
     logs.get_log('failCase.log').error(test_result.failures)

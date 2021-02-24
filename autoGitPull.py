@@ -17,9 +17,8 @@ def autoGitPull():
         real_time = [eval(item) for item in log_list][0]['date']
         timeArray = time.strptime(real_time, "%Y-%m-%d %H:%M:%S")
         times = int(time.mktime(timeArray))
-        print(times)
-        lastTime = 11
-        if times + 120 >= lastTime:
+        lastTime = int(readUpdateTime())
+        if times > lastTime:
             logs.get_log('gitCode.log').info('最新代码提交时间: {}, 上次代码更新时间: {}'.format(times, lastTime))
             return True
         else:
@@ -28,10 +27,18 @@ def autoGitPull():
         print('fail')
         return False
 
-def codeUpdateTime():
-    LOG_PATH = os.path.join(config.BASE_PATH, 'time.txt')
-    if not os.path.exists(LOG_PATH):
-        os.makedirs(LOG_PATH)
+def writeUpdateTime(now):
+    txtPath = 'time.txt'
+    with open(txtPath, 'w') as f:
+        f.write(now)
+
+def readUpdateTime():
+    txtPath = 'time.txt'
+    with open(txtPath, 'r') as f:
+        f = f.read()
+        return f
+
 
 if __name__=="__main__":
-    codeUpdateTime()
+    #writeUpdateTime('19999999999')
+    readUpdateTime()
