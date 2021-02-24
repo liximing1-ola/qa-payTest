@@ -21,6 +21,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查预期返回msg，预期：支付失败
         5.检查被打赏者余额,预期：0
         """
+        print(TestPayCreate.pay_package_url)
         mysqlScript.updateMoneySql(0, 0, 0, 0, config.payUid)
         mysqlScript.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_chatGift')
