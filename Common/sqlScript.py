@@ -3,10 +3,10 @@ import pymysql
 
 class mysqlScript:
 
-    _dbUrl = 'rm-bp1nfl3dp096d5o39.mysql.rds.aliyuncs.com'
+    _dbUrl = '127.0.0.1'
     _dbPort = 3306
-    _user = 'super'
-    _password = 'dev123456'
+    _user = 'root'
+    _password = '123456'
     _dbName = 'xianshi'
 
     @staticmethod
