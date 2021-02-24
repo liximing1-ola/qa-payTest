@@ -54,3 +54,5 @@ class TestPayCreate(unittest.TestCase):
 
 if __name__ == '__main__':
     pay = TestPayCreate()
+    pay.test_01_IMPayNoMoney()
+    #pay.test_02_ImPayChangeMoney()
