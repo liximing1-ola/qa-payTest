@@ -22,8 +22,7 @@ def autoGitPull():
             logs.get_log('updateGitCode.log').error('最新代码提交时间: {}, 上次代码更新时间: {}'.format(times, lastTime))
             return True
         else:
-            logs.get_log('GitNotPull.log').error("Git未拉取到最新代码： {}".format(time.strftime('%F %H:%M',
-                                                                                         time.localtime(time.time()))))
+            logs.get_log('GitNotPull.log').error("Git pull未拉取到release分支最新代码")
             return False
     else:
         logs.get_log('GitError.log').error("Git分支不对： {}".format(repo.active_branch))
