@@ -17,7 +17,7 @@ def all_case():
 
 def main():
     test_result = unittest.TextTestRunner(verbosity=2).run(all_case())
-    writeUpdateTime(time.time())
+    writeUpdateTime(str(int(time.time())))
     now = time.strftime('%F:%H:%M', time.localtime(time.time()))
     logs.get_log('runCaseTime.log').info("执行用例总数: {}, 失败用例总数: {}, 执行时间: {}"
                                          .format(test_result.testsRun, len(test_result.failures), now))
@@ -56,8 +56,7 @@ def robot(des, ):
                 "mentioned_mobile_list": ["@all"]
             }
         }
-        res = requests.post(url, headers=headers, json=data)
-        print(res.status_code)
+        requests.post(url, headers=headers, json=data)
 
 def getImage():
     url = 'https://www.mxnzp.com/api/image/girl/list/random?app_id=kilmc0p2ytsnawyp&' \
@@ -73,5 +72,4 @@ def getImage():
 
 
 if __name__ == "__main__":
-    all_case()
     main()
