@@ -5,6 +5,7 @@
 
 import requests
 from Common import Session
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 def post_request_session(url, data):
     """
@@ -16,6 +17,7 @@ def post_request_session(url, data):
       """
     session = Session.Session()
     get_session = session.get_session('dev')
+    requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
     header = {
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko)\
                             Chrome/67.0.3396.99 Safari/537.36",
