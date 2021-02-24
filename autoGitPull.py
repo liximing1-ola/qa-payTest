@@ -17,7 +17,7 @@ def autoGitPull():
         times = int(time.mktime(timeArray))
         lastTime = int(readUpdateTime())
         if times > lastTime:
-            logs.get_log('gitCode.log').info('最新代码提交时间: {}, 上次代码更新时间: {}'.format(times, lastTime))
+            logs.get_log('gitCode.log').error('最新代码提交时间: {}, 上次代码更新时间: {}'.format(times, lastTime))
             return True
         else:
             return False
