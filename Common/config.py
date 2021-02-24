@@ -22,8 +22,8 @@ class config:
     # qq_login url
     qq_login_url = dev_host + 'account/qqlogin'
     # 被打赏者
-    # testUid = 100050010
-    testUid = 105002660
+    testUid = 100050010
+    # testUid = 105002660
     # 打赏者
     payUid = 103273407
 
