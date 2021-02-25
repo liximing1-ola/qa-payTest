@@ -1,8 +1,9 @@
 from Common.config import config
-from Common import Request,api
+from Common import Request, api
 from Common.params_Yaml import Yaml
 from Common.sqlScript import mysqlScript
 import unittest
+import pytest
 
 
 class TestPayCreate(unittest.TestCase):
@@ -78,6 +79,27 @@ class TestPayCreate(unittest.TestCase):
         assert mysqlScript.selectMoneySql(config.testUid, 'money_cash') == 62
         assert mysqlScript.selectPayChangeSql(config.payUid) == 100
         assert mysqlScript.selectPayChangeOpSql(config.payUid) == 'consume'
+
+    # 打包结算主播pack_cal =1 分成6:4 钱在money_cash
+    @pytest.mark.skip
+    def test_05_livePackCalPayChange(self):
+        """
+        用例描述：
+        验证余额足够时，非直播类型房间一对一打赏,打赏分成满足师徒收益的基础上为：62:38
+        脚本步骤：
+        1.构造打赏者和被打赏者数据 （更新xs_user_money）
+        2.房间内一对一打赏（打赏100分）
+        3.校验【status code】和返回值【body】状态
+        4.检查被打赏者余额，预期为：62
+        5.检查消费记录表消费money（xs_pay_change_new）
+        6.检查消费记录表消费方式op
+        """
+        pass
+
+    @pytest.mark.skip
+    # 一代宗师 分成7:3
+    def test_06_masterPayChange(self):
+        pass
 
 
 if __name__ == '__main__':

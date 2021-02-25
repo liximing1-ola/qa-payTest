@@ -100,9 +100,9 @@ class mysqlScript:
             print(error)
 
     @staticmethod
-    def deleteUserCommoditySql(uid, count):
+    def deleteUserCommoditySql(uid, countLimit):
         con, cur = mysqlScript.conMysql()
-        sql = "delete from xs_user_commodity where uid={} limit {}".format(uid, count)
+        sql = "delete from xs_user_commodity where uid={} limit {}".format(uid, countLimit)
         try:
             cur.execute(sql)
         except Exception as error:
@@ -135,6 +135,17 @@ class mysqlScript:
         finally:
             con.commit()
 
+    @staticmethod
+    def checkUserCommoditySql(cid, uid):
+        con, cur = mysqlScript.conMysql()
+        sql = "select num from xs_user_commodity where cid={} and uid={}".format(cid, uid)
+        try:
+            cur.execute(sql)
+            res = cur.fetchone()
+            if len(res) > 0:
+                return res[0]
+        except Exception as error:
+            print(error)
 
 
 

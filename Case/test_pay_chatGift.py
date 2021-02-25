@@ -1,5 +1,5 @@
 from Common.config import config
-from Common import Request,api
+from Common import Request, api
 from Common.params_Yaml import Yaml
 from Common.sqlScript import mysqlScript
 import unittest
