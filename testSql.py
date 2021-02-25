@@ -41,6 +41,18 @@ def deleteUserCommoditySql(uid, count):
     finally:
         con.commit()
 
+def checkUserCommoditySql(cid, uid):
+    con, cur = conMysql()
+    sql = "select num from xs_user_commodity where cid={} and uid={}".format(cid, uid)
+    try:
+        cur.execute(sql)
+        res = cur.fetchone()
+        if len(res) > 0:
+            return res[0]
+    except Exception as error:
+        print(error)
+
 
 if __name__ == '__main__':
-    selectUserCommoditySql(100287189)
+    checkUserCommoditySql(329, 103273407)
+    #selectUserCommoditySql(100287189)
