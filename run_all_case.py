@@ -25,7 +25,7 @@ def main():
         logs.get_log('failCase.log').error(test_result.failures)
         for case, reason in test_result.failures:
             if len(test_result.failures) > 0:
-               # robot(case.id())
+                robot(case.id())
                 break
     else:
         pass
