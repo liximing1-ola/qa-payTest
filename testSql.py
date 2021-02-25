@@ -55,7 +55,19 @@ def checkUserCommoditySql(cid, uid):
     except Exception as error:
         print(error)
 
+def selectPayChangeOpSql(uid):
+    con, cur = conMysql()
+    sql = "select op from xs_pay_change_new where uid={} ORDER BY id DESC LIMIT 1".format(uid)
+    try:
+        cur.execute(sql)
+        res = cur.fetchone()
+        if len(res) > 0:
+            return res[0]
+    except Exception as error:
+        print(error)
+
 
 if __name__ == '__main__':
-    checkUserCommoditySql(329, 103273407)
+    selectPayChangeOpSql(103273407)
+    #checkUserCommoditySql(329, 103273407)
     #selectUserCommoditySql(100287189)
