@@ -31,7 +31,7 @@ class TestPayCreate(unittest.TestCase):
         api.errorMsg(res)
         assert res['body']['success'] == 1
         assert mysqlScript.selectAllMoneySql(config.payUid) == 100
-        assert len(mysqlScript.checkUserCommoditySql(329, config.payUid)) == 1
+        assert mysqlScript.checkUserCommoditySql(329, config.payUid) == 1
 
     @pytest.mark.run(order=2)
     def test_02_shopPayChangeBuyMore(self):
@@ -52,7 +52,7 @@ class TestPayCreate(unittest.TestCase):
         api.errorMsg(res)
         assert res['body']['success'] == 1
         assert mysqlScript.selectAllMoneySql(config.payUid) == 4000
-        assert len(mysqlScript.checkUserCommoditySql(340, config.payUid)) == 10
+        assert mysqlScript.checkUserCommoditySql(340, config.payUid) == 10
 
     @pytest.mark.run(order=3)
     def test_03_shopGiftToUser(self):
@@ -73,7 +73,7 @@ class TestPayCreate(unittest.TestCase):
         assert res['code'] == 200
         api.errorMsg(res)
         assert res['body']['success'] == 1
-        assert len(mysqlScript.checkUserCommoditySql(340, config.payUid)) == 9
+        assert mysqlScript.checkUserCommoditySql(340, config.payUid) == 9
         assert mysqlScript.selectAllMoneySql(config.testUid) == 6138
 
     @pytest.mark.skip()
@@ -97,6 +97,5 @@ class TestPayCreate(unittest.TestCase):
         api.errorMsg(res)
         assert res['body']['success'] == 0
         assert res['body']['msg'] == '物品不足抵扣！'
-        print(mysqlScript.checkUserCommoditySql(340, config.payUid))
-        assert len(mysqlScript.checkUserCommoditySql(340, config.payUid)) == 9
+        assert mysqlScript.checkUserCommoditySql(340, config.payUid) == 9
         assert mysqlScript.selectAllMoneySql(config.testUid) == 0
