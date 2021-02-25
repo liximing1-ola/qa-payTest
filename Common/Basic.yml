@@ -46,7 +46,7 @@ dev_pay_shop:
 
 # 商店礼物购买*10
 dev_pay_more_shop:
-    platform=available&type=shop-buy&money=9900&params=%7B%22num%22%3A10%2C%22cid%22%3A340%2C%22price%22%3A9900%2C%22coupon_id%22%3A0%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22gift_scene%22%3A%22shop%22%2C%22useCoin%22%3A-1%7D
+    platform=available&type=shop-buy&money=99000&params=%7B%22num%22%3A10%2C%22cid%22%3A340%2C%22price%22%3A9900%2C%22coupon_id%22%3A0%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22gift_scene%22%3A%22shop%22%2C%22useCoin%22%3A-1%7D
 
 # 赠送商城购买的礼物*1
 dev_send_gift:
