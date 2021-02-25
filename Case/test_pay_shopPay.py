@@ -28,9 +28,6 @@ class TestPayCreate(unittest.TestCase):
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_shop')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         assert res['code'] == 200
-        print(data)
-        print(mysqlScript.selectAllMoneySql(config.payUid))
-        print(res)
         assert res['body']['success'] == 1
         assert mysqlScript.selectAllMoneySql(config.payUid) == 100
         assert len(mysqlScript.checkUserCommoditySql(329, config.payUid)) == 1
