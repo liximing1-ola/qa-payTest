@@ -43,7 +43,7 @@ def deleteUserCommoditySql(uid, count):
 
 def checkUserCommoditySql(cid, uid):
     con, cur = conMysql()
-    sql = "select * from xs_user_commodity where cid={} and uid={} limit 1".format(cid, uid)
+    sql = "select num from xs_user_commodity where cid={} and uid={} limit 1".format(cid, uid)
     try:
         cur.execute(sql)
         res = cur.fetchone()
