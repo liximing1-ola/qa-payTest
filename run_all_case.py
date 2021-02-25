@@ -10,7 +10,7 @@ def all_case():
     # case_dir = os.path.join(os.getcwd(), "Case")   # 待执行用例的目录
     testcase = unittest.TestSuite()
     discover = unittest.defaultTestLoader.discover("/home/banban-1/payTest/Case",
-                                                   pattern="test_pay_chatGift.py",
+                                                   pattern="test_pay_title.py",
                                                    top_level_dir=None)
     testcase.addTests(discover)  # 直接加载 discover
     return testcase
