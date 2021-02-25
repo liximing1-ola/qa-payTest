@@ -50,7 +50,7 @@ def checkUserCommoditySql(cid, uid):
         if res is None:
             print('fail')
         if len(res) > 0:
-            print(len(res[0]))
+            print(res[0])
             return res[0]
     except Exception as error:
         print(error)
