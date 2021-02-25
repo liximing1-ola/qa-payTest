@@ -76,7 +76,7 @@ class TestPayCreate(unittest.TestCase):
         assert len(mysqlScript.checkUserCommoditySql(340, config.payUid)) == 9
         assert mysqlScript.selectAllMoneySql(config.testUid) == 6138
 
-    @pytest.mark.skip
+    @pytest.mark.skip()
     @pytest.mark.run(order=4)
     def test_04_shopGiftToUserNoEnough(self):
         """

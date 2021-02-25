@@ -81,7 +81,7 @@ class TestPayCreate(unittest.TestCase):
         assert mysqlScript.selectPayChangeOpSql(config.payUid) == 'consume'
 
     # 打包结算主播pack_cal =1 分成6:4 钱在money_cash
-    @pytest.mark.skip
+    @pytest.mark.skip()
     def test_05_livePackCalPayChange(self):
         """
         用例描述：
@@ -96,7 +96,7 @@ class TestPayCreate(unittest.TestCase):
         """
         pass
 
-    @pytest.mark.skip
+    @pytest.mark.skip()
     # 一代宗师 分成7:3
     def test_06_masterPayChange(self):
         pass
