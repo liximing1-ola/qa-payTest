@@ -1,5 +1,5 @@
 from Common.config import config
-from Common import Request
+from Common import Request,api
 from Common.params_Yaml import Yaml
 from Common.sqlScript import mysqlScript
 import unittest
@@ -46,6 +46,7 @@ class TestPayCreate(unittest.TestCase):
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_chatGift')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         assert res['code'] == 200
+        api.errorMsg(res)
         assert res['body']['success'] == 1
         assert len(res['body']['args']) > 1
         assert mysqlScript.selectMoneySql(config.testUid) == 720
