@@ -46,7 +46,7 @@ def checkUserCommoditySql(cid, uid):
     sql = "select num from xs_user_commodity where cid={} and uid={} limit 1".format(cid, uid)
     try:
         cur.execute(sql)
-        res = cur.fetchone()
+        res = cur.fetchall()
         print(res)
         if res is None:
             print('1')
