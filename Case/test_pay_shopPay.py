@@ -25,6 +25,7 @@ class TestPayCreate(unittest.TestCase):
         """
         mysqlScript.updateMoneySql(0, 100, 100, 0, config.payUid)
         mysqlScript.deleteUserCommoditySql(config.payUid, 10)
+        print(mysqlScript.selectAllMoneySql(config.payUid))
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_shop')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         assert res['code'] == 200
