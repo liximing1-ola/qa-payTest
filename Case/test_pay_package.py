@@ -26,8 +26,6 @@ class TestPayCreate(unittest.TestCase):
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_1')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         assert res['code'] == 200
-        api.errorMsg(res)
-        print(res)
         assert res['body']['success'] == 0
         assert res['body']['msg'] == '余额不足，无法支付'
         assert mysqlScript.selectMoneySql(config.testUid) == 0
@@ -51,10 +49,9 @@ class TestPayCreate(unittest.TestCase):
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         assert res['code'] == 200
         api.errorMsg(res)
-        print(res)
         assert res['body']['success'] == 1
         assert res['body']['args']['money'] == 100
-        assert mysqlScript.selectMoneySql(config.testUid) == 52
+        assert mysqlScript.selectMoneySql(config.testUid, 'money_cash') == 52
         assert mysqlScript.selectPayChangeSql(config.payUid) == 100
         assert mysqlScript.selectPayChangeOpSql(config.payUid) == 'consume'
 
@@ -76,10 +73,9 @@ class TestPayCreate(unittest.TestCase):
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         assert res['code'] == 200
         api.errorMsg(res)
-        print(res)
         assert res['body']['success'] == 1
         assert len(res['body']['args']) > 1
-        assert mysqlScript.selectMoneySql(config.testUid) == 62
+        assert mysqlScript.selectMoneySql(config.testUid, 'money_cash') == 62
         assert mysqlScript.selectPayChangeSql(config.payUid) == 100
         assert mysqlScript.selectPayChangeOpSql(config.payUid) == 'consume'
 

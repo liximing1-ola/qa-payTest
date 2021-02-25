@@ -1,5 +1,6 @@
-
-
+# 调试
 def errorMsg(res):
     if res['body']['success'] != 1:
+        print(res['body'])
+    else:
         print(res)
