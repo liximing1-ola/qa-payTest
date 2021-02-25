@@ -3,10 +3,10 @@ import pymysql
 
 
 def conMysql():
-    _dbUrl = 'rm-bp1nfl3dp096d5o39.mysql.rds.aliyuncs.com'
+    _dbUrl = '192.168.11.58'
     _dbPort = 3306
-    _user = 'super'
-    _password = 'dev123456'
+    _user = 'root'
+    _password = '123456'
     _dbName = 'xianshi'
     con = pymysql.connect(host=_dbUrl,
                           port=_dbPort,
