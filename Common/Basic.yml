@@ -38,7 +38,7 @@ dev_pay_defend:
   { 'platform': 'available',
     'type': 'defend',
     'money': '52000',
-    'params': '{"defend":2,"to":103273479,"cid":0,"duction_money":0,"unified_relation_version":1,"useCoin":-1}' }
+    'params': '{"defend":2,"to":105002312,"cid":0,"duction_money":0,"unified_relation_version":1,"useCoin":-1}' }
 
 # 商店礼物购买*1
 dev_pay_shop:

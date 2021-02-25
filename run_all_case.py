@@ -26,17 +26,17 @@ def main():
             logs.get_log('failCase.log').error(test_result.failures)
         for case, reason in test_result.failures:
             if len(test_result.failures) > 0:
-                robot(case.id(), test_result.failures)
+                robot(case.id())
                 break
     else:
         pass
 
 
-def robot(case, des):
+def robot(des):
     url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=f9d916cb-6b93-4389-8aa4-f51c755faa0e'
     headers = {'Content-Type': 'application/json'}
     now = time.strftime('%F:%H:%M', time.localtime(time.time()))
-    title = "警告!-{}".format(case)
+    title = "警告!-{}".format(now)
     des = des
     icon = getImage()
     data = {
