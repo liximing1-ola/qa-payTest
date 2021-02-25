@@ -68,6 +68,6 @@ def selectPayChangeOpSql(uid):
 
 
 if __name__ == '__main__':
-    selectPayChangeOpSql(103273407)
-    #checkUserCommoditySql(329, 103273407)
-    #selectUserCommoditySql(100287189)
+    # selectPayChangeOpSql(103273407)
+    checkUserCommoditySql(329, 103273407)
+    # selectUserCommoditySql(100287189)
