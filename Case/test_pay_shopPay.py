@@ -77,7 +77,7 @@ class TestPayCreate(unittest.TestCase):
         assert mysqlScript.selectAllMoneySql(config.testUid) == 6138
 
     @pytest.mark.run(order=4)
-    def test_04_shopGiftToUser(self):
+    def test_04_shopGiftToUserNoEnough(self):
         """
         用例描述：
         验证商城购买的道具赠送时不足的情况
