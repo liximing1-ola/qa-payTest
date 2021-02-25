@@ -43,11 +43,13 @@ def deleteUserCommoditySql(uid, count):
 
 def checkUserCommoditySql(cid, uid):
     con, cur = conMysql()
-    sql = "select num from xs_user_commodity where cid={} and uid={}".format(cid, uid)
+    sql = "select num from xs_user_commodity where cid={} and uid={} limit 1".format(cid, uid)
     try:
         cur.execute(sql)
         res = cur.fetchone()
         print(res)
+        if res is None:
+            print('1')
         if len(res) > 0:
             return res[0]
     except Exception as error:
