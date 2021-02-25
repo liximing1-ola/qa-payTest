@@ -25,7 +25,6 @@ class TestPayCreate(unittest.TestCase):
         """
         mysqlScript.updateMoneySql(0, 100, 100, 0, config.payUid)
         mysqlScript.deleteUserCommoditySql(config.payUid, 10)
-        print(mysqlScript.selectAllMoneySql(config.payUid))
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_shop')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         assert res['code'] == 200
@@ -77,6 +76,7 @@ class TestPayCreate(unittest.TestCase):
         assert len(mysqlScript.checkUserCommoditySql(340, config.payUid)) == 9
         assert mysqlScript.selectAllMoneySql(config.testUid) == 6138
 
+    @pytest.mark.skip
     @pytest.mark.run(order=4)
     def test_04_shopGiftToUserNoEnough(self):
         """
