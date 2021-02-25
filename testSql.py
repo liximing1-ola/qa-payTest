@@ -47,6 +47,7 @@ def checkUserCommoditySql(cid, uid):
     try:
         cur.execute(sql)
         res = cur.fetchone()
+        print(res)
         if len(res) > 0:
             return res[0]
     except Exception as error:
