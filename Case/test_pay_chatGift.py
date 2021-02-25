@@ -46,6 +46,8 @@ class TestPayCreate(unittest.TestCase):
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_chatGift')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         assert res['code'] == 200
+        print(res)
+        print(res['body']['success'])
         api.errorMsg(res)
         assert res['body']['success'] == 1
         assert len(res['body']['args']) > 1
