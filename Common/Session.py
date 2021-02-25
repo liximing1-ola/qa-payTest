@@ -32,7 +32,8 @@ class Session:
             res = session.post(login_url, data=body, headers=headers)
             res.raise_for_status()
             res = res.json()
-            print(res)
+            if res['success'] != 1:
+                print(res)
             tokenDict = {'token': res['data'].get('token')}
             return tokenDict
         else:

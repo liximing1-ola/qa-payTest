@@ -25,6 +25,7 @@ class TestPayCreate(unittest.TestCase):
         mysqlScript.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_1')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
+        print(res)
         assert res['code'] == 200
         assert res['body']['success'] == 0
         assert res['body']['msg'] == '余额不足，无法支付'
@@ -47,6 +48,7 @@ class TestPayCreate(unittest.TestCase):
         mysqlScript.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_1')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
+        print(res)
         assert res['code'] == 200
         assert res['body']['success'] == 1
         assert res['body']['args']['money'] == 100
