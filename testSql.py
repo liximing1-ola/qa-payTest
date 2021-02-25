@@ -3,7 +3,7 @@ import pymysql
 
 
 def conMysql():
-    _dbUrl = '192.168.11.58'
+    _dbUrl = '192.168.11.46'
     _dbPort = 3306
     _user = 'root'
     _password = '123456'
