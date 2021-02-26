@@ -97,6 +97,6 @@ class TestPayCreate(unittest.TestCase):
         assert res['code'] == 200
         api.errorMsg(res)
         assert res['body']['success'] == 0
-        assert res['body']['msg'] == '物品不足抵扣！'
+        assert res['body']['msg'] == '余额不足，无法支付'
         assert mysqlScript.checkUserCommoditySql(340, config.payUid) == 9
         assert mysqlScript.selectAllMoneySql(config.testUid) == 0
