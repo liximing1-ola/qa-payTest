@@ -69,13 +69,8 @@ class TestPayCreate(unittest.TestCase):
         mysqlScript.updateMoneySql(0, 0, 0, 0, config.payUid)
         mysqlScript.updateMoneySql(0, 0, 0, 0, config.testUid)
         cid = int(mysqlScript.getUserCommodityIdSql(340, config.payUid))
-        data = Yaml.read_yaml('Basic.yml', 'dev_send_gift')
-        print(data['params'])
-        print(data['params']['rid'])
-        print(data['params']['cid'])
-        data1 = data['params']['cid'] = cid
-        print(data1)
-        res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data1)
+        payload = 'platform=available&type=package&money=9900&params=%7B%22rid%22%3A193185484%2C%22uids%22%3A%22105002312%22%2C%22positions%22%3A%220%22%2C%22position%22%3A-1%2C%22giftId%22%3A54%2C%22giftNum%22%3A1%2C%22price%22%3A9900%2C%22cid%22%3A{}%2C%22ctype%22%3A%22gift%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A1%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22refer%22%3A%22%E7%83%AD%E9%97%A8%3Aroom%22%2C%22useCoin%22%3A-1%7D'.format(cid)
+        res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=payload)
         assert res['code'] == 200
         api.errorMsg(res)
         assert res['body']['success'] == 1
@@ -97,8 +92,8 @@ class TestPayCreate(unittest.TestCase):
         mysqlScript.updateMoneySql(0, 0, 0, 0, config.payUid)
         mysqlScript.updateMoneySql(0, 0, 0, 0, config.testUid)
         cid = mysqlScript.getUserCommodityIdSql(340, config.payUid)
-        data = 'platform=available&type=package&money=99000&params=%7B%22rid%22%3A193185484%2C%22uids%22%3A%22105002312%22%2C%22positions%22%3A%220%22%2C%22position%22%3A-1%2C%22giftId%22%3A54%2C%22giftNum%22%3A10%2C%22price%22%3A9900%2C%22cid%22%3A{}%2C%22ctype%22%3A%22%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A10%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22refer%22%3A%22%E7%83%AD%E9%97%A8%3Aroom%22%2C%22useCoin%22%3A-1%7D'.format(cid)
-        res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
+        payload = 'platform=available&type=package&money=99000&params=%7B%22rid%22%3A193185484%2C%22uids%22%3A%22105002312%22%2C%22positions%22%3A%220%22%2C%22position%22%3A-1%2C%22giftId%22%3A54%2C%22giftNum%22%3A10%2C%22price%22%3A9900%2C%22cid%22%3A{}%2C%22ctype%22%3A%22%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A10%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22refer%22%3A%22%E7%83%AD%E9%97%A8%3Aroom%22%2C%22useCoin%22%3A-1%7D'.format(cid)
+        res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=payload)
         assert res['code'] == 200
         api.errorMsg(res)
         assert res['body']['success'] == 0
