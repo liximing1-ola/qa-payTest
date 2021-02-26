@@ -73,8 +73,8 @@ class TestPayCreate(unittest.TestCase):
         print(cid)
         print(data)
         print(data['params'])
-        data['params']['cid'] = cid
-        res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
+        data1 = data['params']['cid'] = cid
+        res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data1)
         assert res['code'] == 200
         api.errorMsg(res)
         assert res['body']['success'] == 1
@@ -96,13 +96,14 @@ class TestPayCreate(unittest.TestCase):
         mysqlScript.updateMoneySql(0, 0, 0, 0, config.payUid)
         mysqlScript.updateMoneySql(0, 0, 0, 0, config.testUid)
         cid = mysqlScript.getUserCommodityIdSql(340, config.payUid)
-        data = {'platform': 'available',
-                'type': 'package',
-                'money': '99000',
-                'params': '{"rid":193185484,"uids":"105002312","positions":"0","position":-1,"giftId":54,"giftNum":10,'
+        data = {"platform": 'available',
+                "type": 'package',
+                "money": '99000',
+                "params": '{"rid":193185484,"uids":"105002312","positions":"0","position":-1,"giftId":54,"giftNum":10,'
                           '"price":9900,"cid":{},"ctype":"gift","duction_money":0,"version":2,"num":10,'
                           '"gift_type":"normal","star":0,"refer":"热门:room","useCoin":-1}'.format(cid)
                 }
+        print(data)
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         assert res['code'] == 200
         api.errorMsg(res)
