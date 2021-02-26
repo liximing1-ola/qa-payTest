@@ -72,6 +72,7 @@ class TestPayCreate(unittest.TestCase):
         data = Yaml.read_yaml('Basic.yml', 'dev_send_gift')
         print(data)
         print(data['params']['cid'])
+        print(cid)
         data['params']['cid'] = cid
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         assert res['code'] == 200
