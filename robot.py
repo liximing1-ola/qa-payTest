@@ -16,7 +16,7 @@ def roBot(des):
                 {
                     "title": title,
                     "description": des,
-                    "url": "https://www.baidu.com/",
+                    "url": "http://114.55.7.123:3000/ees/banban/commits/alpha-for-vpc",
                     "picurl": icon,
                 }
             ]
