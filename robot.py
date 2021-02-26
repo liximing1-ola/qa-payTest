@@ -48,7 +48,7 @@ def roBOt(des):
                 {
                     "title": title,
                     "description": des,
-                    "url": "http://114.55.7.123:3000/ees/banban/commits/alpha-for-vpc",
+                    "url": "http://114.55.7.123:3000/ees/banban/commits/release-for-vpc",
                     "picurl": icon,
                 }
             ]
