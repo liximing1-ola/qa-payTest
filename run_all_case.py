@@ -10,7 +10,7 @@ def all_case():
     # case_dir = os.path.join(os.getcwd(), "Case")   # 待执行用例的目录
     testcase = unittest.TestSuite()
     discover = unittest.defaultTestLoader.discover("/home/banban-1/payTest/Case",
-                                                   pattern="test_pay_shopPay.py",
+                                                   pattern="test_*.py",
                                                    top_level_dir=None)
     testcase.addTests(discover)  # 直接加载 discover
     return testcase
@@ -26,7 +26,7 @@ def main():
             logs.get_log('failCase.log').error(test_result.failures)
         for case, reason in test_result.failures:
             if len(test_result.failures) > 0:
-                #robot(case.id())
+                robot(case.id())
                 break
     else:
         pass
