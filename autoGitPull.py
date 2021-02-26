@@ -3,7 +3,7 @@ from git.repo import Repo
 import time
 from Common import logs
 import os
-from robot import roBot
+from robot import roBot, roBOt
 
 def autoGitPull():
     git_dir = '/home/webroot/banban'
@@ -21,7 +21,7 @@ def autoGitPull():
         lastTime = int(readUpdateTime())
         if times > lastTime:
             logs.get_log('updateGitCode.log').info('最新代码提交时间: {}, 上次代码更新时间: {}'.format(times, lastTime))
-            roBot('git_commit:{}'.format(log_list[0]))
+            roBOt('git_commit:{}'.format(log_list[0]))
             return True
         else:
             logs.get_log('codeNotPull.log').error("Git pull未拉取到release分支最新代码")

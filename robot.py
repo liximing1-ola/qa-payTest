@@ -34,6 +34,38 @@ def roBot(des):
         }
         requests.post(url, headers=headers, json=data)
 
+def roBOt(des):
+    url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=f9d916cb-6b93-4389-8aa4-f51c755faa0e'
+    headers = {'Content-Type': 'application/json'}
+    now = time.strftime('%F:%H:%M', time.localtime(time.time()))
+    title = now
+    des = des
+    icon = getImage()
+    data = {
+        "msgtype": "news",
+        "news": {
+            "articles": [
+                {
+                    "title": title,
+                    "description": des,
+                    "url": "http://114.55.7.123:3000/ees/banban/commits/alpha-for-vpc",
+                    "picurl": icon,
+                }
+            ]
+        }
+    }
+    r = requests.post(
+        url,
+        headers=headers, json=data)
+    if r.status_code == 200 and r.text.find('ok'):
+        data = {
+            "msgtype": "text",
+            "text": {
+                "mentioned_mobile_list": []
+            }
+        }
+        requests.post(url, headers=headers, json=data)
+
 def getImage():
     url = 'https://www.mxnzp.com/api/image/girl/list/random?app_id=kilmc0p2ytsnawyp&' \
           'app_secret=bnNoWElSVDBYbEhsc1EvYVM2WnVnZz09'
