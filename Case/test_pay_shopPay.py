@@ -70,6 +70,7 @@ class TestPayCreate(unittest.TestCase):
         mysqlScript.updateMoneySql(0, 0, 0, 0, config.testUid)
         cid = int(mysqlScript.getUserCommodityIdSql(340, config.payUid))
         data = Yaml.read_yaml('Basic.yml', 'dev_send_gift')
+        print(data)
         data['params']['cid'] = cid
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         assert res['code'] == 200
