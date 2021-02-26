@@ -50,8 +50,16 @@ dev_pay_more_shop:
 
 # 赠送商城购买的礼物*1
 dev_send_gift:
-    platform=available&type=package&money=9900&params=%7B%22rid%22%3A193185484%2C%22uids%22%3A%22105002312%22%2C%22positions%22%3A%220%22%2C%22position%22%3A-1%2C%22giftId%22%3A54%2C%22giftNum%22%3A1%2C%22price%22%3A9900%2C%22cid%22%3A33973098%2C%22ctype%22%3A%22gift%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A1%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22refer%22%3A%22%E7%83%AD%E9%97%A8%3Aroom%22%2C%22useCoin%22%3A-1%7D
+  { 'platform': 'available',
+    'type': 'package',
+    'money': '9900',
+    'params': '{"rid":193185484,"uids":"105002312","positions":"0","position":-1,"giftId":54,"giftNum":1,"price":9900,"cid":0,"ctype":"","duction_money":0,"version":2,"num":1,"gift_type":"normal","star":0,"refer":"热门:room","useCoin":-1}'
+ }
 
 # 赠送商城购买的礼物*10
 dev_send_gift_more:
-    platform=available&type=package&money=99000&params=%7B%22rid%22%3A193185484%2C%22uids%22%3A%22105002312%22%2C%22positions%22%3A%220%22%2C%22position%22%3A-1%2C%22giftId%22%3A54%2C%22giftNum%22%3A10%2C%22price%22%3A9900%2C%22cid%22%3A0%2C%22ctype%22%3A%22%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A10%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22refer%22%3A%22%E7%83%AD%E9%97%A8%3Aroom%22%2C%22useCoin%22%3A-1%7D
+  { 'platform': 'available',
+    'type': 'package',
+    'money': '99000',
+    'params': '{"rid":193185484,"uids":"105002312","positions":"0","position":-1,"giftId":54,"giftNum":10,"price":9900,"cid":0,"ctype":"","duction_money":0,"version":2,"num":10,"gift_type":"normal","star":0,"refer":"热门:room","useCoin":-1}'
+  }
