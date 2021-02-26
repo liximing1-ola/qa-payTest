@@ -55,11 +55,13 @@ dev_send_gift:
     'money': '9900',
     'params': '{"rid":193185484,"uids":"105002312","positions":"0","position":-1,"giftId":54,"giftNum":1,"price":9900,"cid":0,"ctype":"","duction_money":0,"version":2,"num":1,"gift_type":"normal","star":0,"refer":"热门:room","useCoin":-1}'
  }
+               {"rid":193185580,"uids":"103273370","positions":"0","position":-1,"giftId":54,"giftNum":1,"price":9900,"cid":33973098,"ctype":"gift","duction_money":0,"version":2,"num":1,"gift_type":"normal","star":0,"refer":"热门:room","useCoin":-1}
 
 # 赠送商城购买的礼物*10
 dev_send_gift_more:
   { 'platform': 'available',
     'type': 'package',
     'money': '99000',
-    'params': '{"rid":193185484,"uids":"105002312","positions":"0","position":-1,"giftId":54,"giftNum":10,"price":9900,"cid":0,"ctype":"","duction_money":0,"version":2,"num":10,"gift_type":"normal","star":0,"refer":"热门:room","useCoin":-1}'
+    'params': '{"rid":193185484,"uids":"105002312","positions":"0","position":-1,"giftId":54,"giftNum":10,"price":9900,"cid":{},"ctype":"gift","duction_money":0,"version":2,"num":10,"gift_type":"normal","star":0,"refer":"热门:room","useCoin":-1}'
   }
+               {"rid":193185580,"uids":"103273370","positions":"0","position":-1,"giftId":54,"giftNum":10,"price":9900,"cid":33973098,"ctype":"gift","duction_money":0,"version":2,"num":10,"gift_type":"normal","star":0,"refer":"热门:room","useCoin":-1}

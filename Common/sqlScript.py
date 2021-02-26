@@ -147,6 +147,18 @@ class mysqlScript:
         except Exception as error:
             print(error)
 
+    @staticmethod
+    def getUserCommodityIdSql(cid, uid):
+        con, cur = mysqlScript.conMysql()
+        sql = "select id from xs_user_commodity where cid={} and uid={}".format(cid, uid)
+        try:
+            cur.execute(sql)
+            res = cur.fetchone()
+            if len(res) > 0:
+                return res[0]
+        except Exception as error:
+            print(error)
+
 
 
 

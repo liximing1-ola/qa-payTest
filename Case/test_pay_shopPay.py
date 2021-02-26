@@ -68,7 +68,13 @@ class TestPayCreate(unittest.TestCase):
         """
         mysqlScript.updateMoneySql(0, 0, 0, 0, config.payUid)
         mysqlScript.updateMoneySql(0, 0, 0, 0, config.testUid)
-        data = Yaml.read_yaml('Basic.yml', 'dev_send_gift')
+        cid = mysqlScript.getUserCommodityIdSql(340, config.payUid)
+        data={'platform': 'available',
+               'type': 'package',
+               'money': '9900',
+               'params': '{"rid":193185484,"uids":"105002312","positions":"0","position":-1,"giftId":54,"giftNum":1,'
+                         '"price":9900,"cid":{},"ctype":"gift","duction_money":0,"version":2,"num":1,'
+                         '"gift_type":"normal", "star":0,"refer":"热门:room","useCoin":-1}'.format(cid)}
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         assert res['code'] == 200
         api.errorMsg(res)
@@ -76,7 +82,6 @@ class TestPayCreate(unittest.TestCase):
         assert mysqlScript.checkUserCommoditySql(340, config.payUid) == 9
         assert mysqlScript.selectAllMoneySql(config.testUid) == 6138
 
-    @pytest.mark.skip()
     @pytest.mark.run(order=4)
     def test_04_shopGiftToUserNoEnough(self):
         """
@@ -91,7 +96,14 @@ class TestPayCreate(unittest.TestCase):
         """
         mysqlScript.updateMoneySql(0, 0, 0, 0, config.payUid)
         mysqlScript.updateMoneySql(0, 0, 0, 0, config.testUid)
-        data = Yaml.read_yaml('Basic.yml', 'dev_send_gift_more')
+        cid = mysqlScript.getUserCommodityIdSql(340, config.payUid)
+        data = {'platform': 'available',
+                'type': 'package',
+                'money': '99000',
+                'params': '{"rid":193185484,"uids":"105002312","positions":"0","position":-1,"giftId":54,"giftNum":10,'
+                          '"price":9900,"cid":{},"ctype":"gift","duction_money":0,"version":2,"num":10,'
+                          '"gift_type":"normal","star":0,"refer":"热门:room","useCoin":-1}'.format(cid)
+                }
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         assert res['code'] == 200
         api.errorMsg(res)
