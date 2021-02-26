@@ -5,7 +5,8 @@ import requests
 import random
 import time
 from Common import logs
-from autoGitPull import writeUpdateTime, autoGitPull
+from autoGitPull import writeUpdateTime
+from autoGitPull import autoGitPull
 def all_case():
     # case_dir = os.path.join(os.getcwd(), "Case")   # 待执行用例的目录
     testcase = unittest.TestSuite()
