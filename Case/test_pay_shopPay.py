@@ -100,9 +100,23 @@ class TestPayCreate(unittest.TestCase):
         data = {"platform": 'available',
                 "type": 'package',
                 "money": '99000',
-                "params": '{"rid":193185484,"uids":"105002312","positions":"0","position":-1,"giftId":54,"giftNum":10,'
-                          '"price":9900,"cid":{},"ctype":"gift","duction_money":0,"version":2,"num":10,'
-                          '"gift_type":"normal","star":0,"refer":"热门:room","useCoin":-1}'.format(cid)
+                "params": {"rid": 193185484,
+                           "uids": "105002312",
+                           "positions": "0",
+                           "position": -1,
+                           "giftId": 54,
+                           "giftNum": 10,
+                           "price": 9900,
+                           "cid": cid,
+                           "ctype": "gift",
+                           "duction_money": 0,
+                           "version": 2,
+                           "num": 10,
+                           "gift_type": "normal",
+                           "star": 0,
+                           "refer": "热门:room",
+                           "useCoin": -1
+                           }
                 }
         print(data)
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
