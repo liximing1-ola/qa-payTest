@@ -1,4 +1,4 @@
-# 调试
+# 内网打印调试
 def errorMsg(res):
     if res['body']['success'] != 1:
         print(res['body'])

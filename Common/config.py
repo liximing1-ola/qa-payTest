@@ -12,9 +12,10 @@ class config:
     dev_host = domain_host['bb_dev']
     # qq_login url
     qq_login_url = dev_host + 'account/qqlogin'
+
+
     # 被打赏者
     testUid = 105002312
-    # testUid = 105002660
     # 打赏者
     payUid = 103273407
 

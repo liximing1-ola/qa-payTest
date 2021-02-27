@@ -33,7 +33,7 @@ class Session:
             res.raise_for_status()
             res = res.json()
             if res['success'] != 1:
-                print(res)
+                print('Token获取异常: {}'.format(res))
             tokenDict = {'token': res['data'].get('token')}
             return tokenDict
         else:
