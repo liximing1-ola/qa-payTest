@@ -23,7 +23,7 @@ def main():
                                              .format(test_result.testsRun, len(test_result.failures), now))
         if len(test_result.failures) == 0:
             time.sleep(5)
-            des = "执行用例总数: {}, 失败用例总数: {}, 执行时间: {}".format(test_result.testsRun, len(test_result.failures), now)
+            des = "执行用例总数: {}, 失败用例总数: {}".format(test_result.testsRun, len(test_result.failures))
             roBOt(des)
         if len(test_result.failures) >= 1:
             logs.get_log('failCase.log').error(test_result.failures)

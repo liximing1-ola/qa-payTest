@@ -38,7 +38,7 @@ def roBOt(des):
     url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=f9d916cb-6b93-4389-8aa4-f51c755faa0e'
     headers = {'Content-Type': 'application/json'}
     now = time.strftime('%F:%H:%M', time.localtime(time.time()))
-    title = now
+    title = '{}'.format(now)
     des = des
     icon = getImage()
     data = {
