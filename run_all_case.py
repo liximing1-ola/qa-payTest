@@ -23,10 +23,12 @@ def main():
             .format(test_result.testsRun, len(test_result.failures), len(test_result.errors))
         logs.get_log('runCaseTime.log').info(des)
         if len(test_result.failures) == 0 and len(test_result.errors) == 0:
-            time.sleep(5)
+            time.sleep(3)
             roBOt(des)
         if len(test_result.failures) >= 1 or len(test_result.errors) >= 1:
             logs.get_log('failCase.log').error("error: {}, failures: {}".format(test_result.errors, test_result.failures))
+            time.sleep(3)
+            roBOt(des)
         for case, reason in test_result.failures:
             if len(test_result.failures) > 0:
                 roBot(case.id())
