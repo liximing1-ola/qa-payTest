@@ -3,6 +3,8 @@ from Common import Request, api
 from Common.params_Yaml import Yaml
 from Common.sqlScript import mysqlScript
 import unittest
+import sys
+from Common import consts
 
 
 class TestPayCreate(unittest.TestCase):
@@ -29,6 +31,7 @@ class TestPayCreate(unittest.TestCase):
         assert res['body']['success'] == 0
         assert res['body']['msg'] == '余额不足，无法支付'
         assert mysqlScript.selectMoneySql(config.testUid) == 0
+        consts.CASE_LIST.append(sys._getframe(1).f_code.co_name)
 
     def test_02_ImPayChangeMoney(self):
         """
@@ -51,6 +54,7 @@ class TestPayCreate(unittest.TestCase):
         assert len(res['body']['args']) > 1
         assert mysqlScript.selectMoneySql(config.testUid, 'money_cash') == 720
         assert mysqlScript.selectAllMoneySql(config.payUid) == 400
+        consts.CASE_LIST.append(sys._getframe(1).f_code.co_name)
 
 
 if __name__ == '__main__':

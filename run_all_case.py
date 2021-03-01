@@ -7,6 +7,7 @@ from autoGitPull import autoGitPull
 from robot import roBot, robot_success
 from Common.HTMLTestRunner import HTMLTestRunner
 import os
+from Common import consts
 
 def all_case():
     # case_dir = os.path.join(os.getcwd(), "Case")   # 待执行用例的目录
@@ -30,25 +31,26 @@ def main():
         des = "执行用例总数: {}, 失败用例总数: {}, 异常用例总数: {}" \
             .format(test_result.testsRun, len(test_result.failures), len(test_result.errors))
         logs.get_log('runCaseTime.log').info(des)
+        print(consts.CASE_LIST)
         if len(test_result.failures) == 0 and len(test_result.errors) == 0:
             time.sleep(3)
-            robot_success(des)
+            #robot_success(des)
         if len(test_result.failures) >= 1 or len(test_result.errors) >= 1:
             logs.get_log('failCase.log').error("error: {}, failures: {}".format(test_result.errors, test_result.failures))
             time.sleep(3)
-            robot_success(des)
+            #robot_success(des)
         for case, reason in test_result.failures:
             if len(test_result.failures) > 0:
-                roBot(case.id())
+                #roBot(case.id())
                 break
         for case, reason in test_result.errors:
             if len(test_result.errors) > 0:
-                roBot(case.id())
+                #roBot(case.id())
                 break
     else:
         pass
 
-def test_runner():
+def html_runner():
     # 生成HTML格式
     html_path = '/home/banban-1/payTest/report/result.html'
     fp = open(html_path, 'wb')
@@ -60,5 +62,5 @@ def test_runner():
 
 
 if __name__ == "__main__":
-    #all_case()
+    # all_case()
     main()
