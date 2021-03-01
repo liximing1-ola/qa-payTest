@@ -4,7 +4,7 @@ import time
 from Common import logs
 from autoGitPull import writeUpdateTime
 from autoGitPull import autoGitPull
-from robot import roBot, robot_success
+from robot import robot_fail, robot_success
 from Common.HTMLTestRunner import HTMLTestRunner
 import os
 from Common import consts
@@ -42,11 +42,11 @@ def main():
             robot_success(des)
         for case, reason in test_result.failures:
             if len(test_result.failures) > 0:
-                roBot(case.id())
+                robot_fail(case.id())
                 break
         for case, reason in test_result.errors:
             if len(test_result.errors) > 0:
-                roBot(case.id())
+                robot_fail(case.id())
                 break
     else:
         pass
