@@ -6,6 +6,7 @@ from autoGitPull import writeUpdateTime
 from autoGitPull import autoGitPull
 from robot import roBot, robot_success
 from Common.HTMLTestRunner import HTMLTestRunner
+import os
 
 def all_case():
     # case_dir = os.path.join(os.getcwd(), "Case")   # 待执行用例的目录
@@ -49,4 +50,5 @@ def main():
 
 
 if __name__ == "__main__":
+    # all_case()
     main()
