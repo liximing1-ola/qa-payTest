@@ -3,7 +3,7 @@ from Common import Request, api
 from Common.params_Yaml import Yaml
 from Common.sqlScript import mysqlScript
 import unittest
-import pytest
+from Common import consts
 
 
 class TestPayCreate(unittest.TestCase):
@@ -30,6 +30,7 @@ class TestPayCreate(unittest.TestCase):
         assert res['body']['success'] == 0
         assert res['body']['msg'] == '余额不足，无法支付'
         assert mysqlScript.selectMoneySql(config.testUid) == 0
+        consts.CASE_LIST['验证余额不足时，房间一对一打赏'] = 'pass'
 
 
     def test_02_RoomPayLiveMoney(self):
@@ -55,6 +56,7 @@ class TestPayCreate(unittest.TestCase):
         assert mysqlScript.selectMoneySql(config.testUid, 'money_cash') == 52
         assert mysqlScript.selectPayChangeSql(config.payUid) == 100
         assert mysqlScript.selectPayChangeOpSql(config.payUid) == 'consume'
+        consts.CASE_LIST['验证余额足够时，直播类型房间一对一打赏'] = 'pass'
 
     def test_03_RoomPayChangeMoney(self):
         """
@@ -79,10 +81,11 @@ class TestPayCreate(unittest.TestCase):
         assert mysqlScript.selectMoneySql(config.testUid, 'money_cash') == 62
         assert mysqlScript.selectPayChangeSql(config.payUid) == 100
         assert mysqlScript.selectPayChangeOpSql(config.payUid) == 'consume'
+        consts.CASE_LIST['验证余额足够时，非直播类型房间一对一打赏'] = 'pass'
 
     # 打包结算主播pack_cal =1 分成6:4 钱在money_cash
     @unittest.skip
-    def test_05_livePackCalPayChange(self):
+    def test_04_livePackCalPayChange(self):
         """
         用例描述：
         验证余额足够时，非直播类型房间一对一打赏,打赏分成满足师徒收益的基础上为：62:38
@@ -98,7 +101,7 @@ class TestPayCreate(unittest.TestCase):
 
     @unittest.skip
     # 一代宗师 分成7:3
-    def test_06_masterPayChange(self):
+    def test_05_masterPayChange(self):
         pass
 
 

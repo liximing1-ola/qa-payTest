@@ -3,6 +3,7 @@ from Common import Request, api
 from Common.params_Yaml import Yaml
 from Common.sqlScript import mysqlScript
 import unittest
+from Common import consts
 
 
 class TestPayCreate(unittest.TestCase):
@@ -13,7 +14,7 @@ class TestPayCreate(unittest.TestCase):
     def test_01_defendPayChangMoney(self):
         """
         用例描述：
-        开通个人守护，打赏分成在师父收益的基础上为 62:38
+        开通个人守护，收益分成在师父收益的基础上为 62:38
         脚本步骤：
         1.构造开通者和被守护者数据 （更新xs_user_money）
         2.开通520守护
@@ -34,4 +35,5 @@ class TestPayCreate(unittest.TestCase):
         assert mysqlScript.selectAllMoneySql(config.testUid) == 32240
         assert mysqlScript.selectPayChangeSql(config.payUid) == 52000
         assert mysqlScript.selectPayChangeOpSql(config.payUid) == 'consume'
+        consts.CASE_LIST['验证开通个人守护的收益分成'] = 'pass'
 

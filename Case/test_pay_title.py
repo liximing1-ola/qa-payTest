@@ -4,6 +4,7 @@ from Common.params_Yaml import Yaml
 from Common.sqlScript import mysqlScript
 import unittest
 import pytest
+from Common import consts
 
 
 class TestPayCreate(unittest.TestCase):
@@ -33,6 +34,8 @@ class TestPayCreate(unittest.TestCase):
         assert len(res['body']['args']) > 1
         # pytest.assume(mysqlScript.selectMoneySql(103273407, 'money') == 160000)
         assert mysqlScript.selectMoneySql(config.payUid, 'money') == 160000
+        consts.CASE_LIST['验证爵位开通及返钱到余额'] = 'pass'
+
 
     @pytest.mark.run(order=2)
     def test_02_TitlePayChangeRenew(self):
@@ -52,6 +55,7 @@ class TestPayCreate(unittest.TestCase):
         assert res['body']['success'] == 1
         assert len(res['body']['args']) > 1
         assert mysqlScript.selectMoneySql(config.payUid, 'money') == 176000
+        consts.CASE_LIST['验证爵位续费及返钱到余额'] = 'pass'
 
 
 if __name__ == '__main__':

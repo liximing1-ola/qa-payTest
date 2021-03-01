@@ -4,6 +4,7 @@ from Common.params_Yaml import Yaml
 from Common.sqlScript import mysqlScript
 import unittest
 import pytest
+from Common import consts
 
 
 class TestPayCreate(unittest.TestCase):
@@ -32,6 +33,7 @@ class TestPayCreate(unittest.TestCase):
         assert res['body']['success'] == 1
         assert mysqlScript.selectAllMoneySql(config.payUid) == 100
         assert mysqlScript.checkUserCommoditySql(329, config.payUid) == 1
+        consts.CASE_LIST['验证商城购买单个道具时逻辑'] = 'pass'
 
     @pytest.mark.run(order=2)
     def test_02_shopPayChangeBuyMore(self):
@@ -53,6 +55,7 @@ class TestPayCreate(unittest.TestCase):
         assert res['body']['success'] == 1
         assert mysqlScript.selectAllMoneySql(config.payUid) == 4000
         assert mysqlScript.checkUserCommoditySql(340, config.payUid) == 10
+        consts.CASE_LIST['验证商城购买多个道具时逻辑'] = 'pass'
 
     @pytest.mark.run(order=3)
     def test_03_shopGiftToUser(self):
@@ -76,6 +79,7 @@ class TestPayCreate(unittest.TestCase):
         assert res['body']['success'] == 1
         assert mysqlScript.checkUserCommoditySql(340, config.payUid) == 9
         assert mysqlScript.selectAllMoneySql(config.testUid) == 6138
+        consts.CASE_LIST['验证商城购买的道具在房间内赠送给其他人逻辑'] = 'pass'
 
     @pytest.mark.run(order=4)
     def test_04_shopGiftToUserNoEnough(self):
@@ -100,3 +104,4 @@ class TestPayCreate(unittest.TestCase):
         assert res['body']['msg'] == '余额不足，无法支付'
         assert mysqlScript.checkUserCommoditySql(340, config.payUid) == 9
         assert mysqlScript.selectAllMoneySql(config.testUid) == 0
+        consts.CASE_LIST['验证商城购买的道具在房间内赠送给他人不足的逻辑'] = 'pass'

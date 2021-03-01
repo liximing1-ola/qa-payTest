@@ -31,21 +31,22 @@ def main():
         des = "执行用例总数: {}, 失败用例总数: {}, 异常用例总数: {}" \
             .format(test_result.testsRun, len(test_result.failures), len(test_result.errors))
         logs.get_log('runCaseTime.log').info(des)
-        print(consts.CASE_LIST)
         if len(test_result.failures) == 0 and len(test_result.errors) == 0:
+            des = "执行用例总数: {}, 失败用例总数: {}, 异常用例总数: {}, 用例结果如下: {}" \
+                .format(test_result.testsRun, len(test_result.failures), len(test_result.errors), consts.CASE_LIST)
             time.sleep(3)
-            #robot_success(des)
+            robot_success(des)
         if len(test_result.failures) >= 1 or len(test_result.errors) >= 1:
             logs.get_log('failCase.log').error("error: {}, failures: {}".format(test_result.errors, test_result.failures))
             time.sleep(3)
-            #robot_success(des)
+            robot_success(des)
         for case, reason in test_result.failures:
             if len(test_result.failures) > 0:
-                #roBot(case.id())
+                roBot(case.id())
                 break
         for case, reason in test_result.errors:
             if len(test_result.errors) > 0:
-                #roBot(case.id())
+                roBot(case.id())
                 break
     else:
         pass
