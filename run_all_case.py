@@ -18,8 +18,9 @@ def all_case():
 
 def main():
     if autoGitPull():
-        html = '/home/banban-1/payTest/report/result.html'
-        runner = HTMLTestRunner(stream=html, title=u"测试报告", description=u"用例测试情况")
+        html_path = '/home/banban-1/payTest/report/result.html'
+        fp = open(html_path, 'wb')
+        runner = HTMLTestRunner(stream=fp, title=u"测试报告", description=u"用例测试情况")
         test_result = runner.run(all_case())
         # test_result = unittest.TextTestRunner(verbosity=2).run(all_case())
         writeUpdateTime(str(int(time.time())))
