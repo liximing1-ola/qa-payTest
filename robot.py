@@ -34,37 +34,18 @@ def roBot(des):
         }
         requests.post(url, headers=headers, json=data)
 
-def roBOt(des):
+def robot_success(content):
     url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=f9d916cb-6b93-4389-8aa4-f51c755faa0e'
     headers = {'Content-Type': 'application/json'}
     now = time.strftime('%F:%H:%M', time.localtime(time.time()))
-    title = '{}'.format(now)
-    des = des
-    icon = getImage()
+    #content = '{}'.format()
     data = {
-        "msgtype": "news",
-        "news": {
-            "articles": [
-                {
-                    "title": title,
-                    "description": des,
-                    "url": "http://114.55.7.123:3000/ees/banban/commits/release-for-vpc",
-                    "picurl": icon,
-                }
-            ]
+        "msgtype": "text",
+        "text": {
+                "content": content
         }
     }
-    r = requests.post(
-        url,
-        headers=headers, json=data)
-    if r.status_code == 200 and r.text.find('ok'):
-        data = {
-            "msgtype": "text",
-            "text": {
-                "mentioned_mobile_list": []
-            }
-        }
-        requests.post(url, headers=headers, json=data)
+    requests.post(url, headers=headers, json=data)
 
 def getImage():
     url = 'https://www.mxnzp.com/api/image/girl/list/random?app_id=kilmc0p2ytsnawyp&' \
@@ -77,3 +58,7 @@ def getImage():
     else:
         icon = random.randint(1, 140)
         return 'http://xs-image.oss-cn-hangzhou.aliyuncs.com/static/gift_big/{}.png'.format(icon)
+
+
+if __name__ == '__main__':
+    robot_success('执行用例总数: 14, 失败用例总数: 0, 异常用例总数: 1')
