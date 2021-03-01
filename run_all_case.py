@@ -31,18 +31,18 @@ def main():
         logs.get_log('runCaseTime.log').info(des)
         if len(test_result.failures) == 0 and len(test_result.errors) == 0:
             time.sleep(3)
-            robot_success(des)
+            #robot_success(des)
         if len(test_result.failures) >= 1 or len(test_result.errors) >= 1:
             logs.get_log('failCase.log').error("error: {}, failures: {}".format(test_result.errors, test_result.failures))
             time.sleep(3)
-            robot_success(des)
+            #robot_success(des)
         for case, reason in test_result.failures:
             if len(test_result.failures) > 0:
-                roBot(case.id())
+                #roBot(case.id())
                 break
         for case, reason in test_result.errors:
             if len(test_result.errors) > 0:
-                roBot(case.id())
+                #roBot(case.id())
                 break
     else:
         pass
