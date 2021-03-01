@@ -21,7 +21,7 @@ def main():
         now = time.strftime('%F-%H:%M', time.localtime(time.time()))
         logs.get_log('runCaseTime.log').info("执行用例总数: {}, 失败用例总数: {}, 执行时间: {}"
                                              .format(test_result.testsRun, len(test_result.failures), now))
-        type(len(test_result.failures))
+        print(type(len(test_result.failures)))
         if len(test_result.failures) == 0:
             des = "执行用例总数: {}, 失败用例总数: {}, 执行时间: {}".format(test_result.testsRun, len(test_result.failures), now)
             roBOt(des)
