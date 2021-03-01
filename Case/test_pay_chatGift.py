@@ -31,8 +31,7 @@ class TestPayCreate(unittest.TestCase):
         assert res['body']['success'] == 0
         assert res['body']['msg'] == '余额不足，无法支付'
         assert mysqlScript.selectMoneySql(config.testUid) == 0
-        print(sys._getframe(1).f_code.co_name)
-        print(sys._getframe(0).f_code.co_name)
+        consts.CASE_LIST[sys._getframe(0).f_code.co_name] = 'ok'
 
 
 

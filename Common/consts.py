@@ -2,8 +2,5 @@
 接口全局变量
 """
 
-# 用例名称list
-CASE_LIST = []
-
-# 执行结果list
-RESULT_LIST = []
+# 用例名称字典
+CASE_LIST = {}
