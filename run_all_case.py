@@ -4,7 +4,7 @@ import time
 from Common import logs
 from autoGitPull import writeUpdateTime
 from autoGitPull import autoGitPull
-from robot import roBot
+from robot import roBot, roBOt
 def all_case():
     # case_dir = os.path.join(os.getcwd(), "Case")   # 待执行用例的目录
     testcase = unittest.TestSuite()
@@ -20,6 +20,9 @@ def main():
         writeUpdateTime(str(int(time.time())))
         now = time.strftime('%F-%H:%M', time.localtime(time.time()))
         logs.get_log('runCaseTime.log').info("执行用例总数: {}, 失败用例总数: {}, 执行时间: {}"
+                                             .format(test_result.testsRun, len(test_result.failures), now))
+        if len(test_result.failures) == 0:
+            roBOt("执行用例总数: {}, 失败用例总数: {}, 执行时间: {}"
                                              .format(test_result.testsRun, len(test_result.failures), now))
         if len(test_result.failures) >= 1:
             logs.get_log('failCase.log').error(test_result.failures)
