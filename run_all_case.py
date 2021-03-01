@@ -60,5 +60,5 @@ def test_runner():
 
 
 if __name__ == "__main__":
-    all_case()
-    # main()
+    #all_case()
+    main()
