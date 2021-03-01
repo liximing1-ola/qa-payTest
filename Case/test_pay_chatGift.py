@@ -56,7 +56,7 @@ class TestPayCreate(unittest.TestCase):
         assert len(res['body']['args']) > 1
         assert mysqlScript.selectMoneySql(config.testUid, 'money_cash') == 720
         assert mysqlScript.selectAllMoneySql(config.payUid) == 400
-        consts.CASE_LIST.append(sys._getframe(1).f_code.co_name)
+        consts.CASE_LIST['验证余额足够时，私聊一对一打赏'] = 'pass'
 
 
 if __name__ == '__main__':
