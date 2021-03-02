@@ -6,10 +6,10 @@ from Common import logs
 from Common import consts
 
 
-def assert_code(code, expected_code, body):
+def assert_code(code, expected_code, reason):
     """
     验证response状态码
-    :param body:
+    :param reason:
     :param code:
     :param expected_code:
     :return:
@@ -18,13 +18,14 @@ def assert_code(code, expected_code, body):
         assert code == expected_code
         return True
     except:
-        consts.fail_case_reason.append(body)
+        consts.fail_case_reason.append(reason)
         raise
 
 
-def assert_body(body, body_msg, expected_msg):
+def assert_body(body, body_msg, expected_msg, reason):
     """
     验证response body中任意属性的值
+    :param reason:
     :param body:
     :param body_msg:
     :param expected_msg:
@@ -35,7 +36,7 @@ def assert_body(body, body_msg, expected_msg):
         assert msg == expected_msg
         return True
     except:
-        consts.fail_case_reason.append(body)
+        consts.fail_case_reason.append(reason)
         raise
 
 
@@ -54,40 +55,10 @@ def assert_in_text(body, expected_msg):
         consts.fail_case_reason.append('fail')
         raise
 
-
-def assert_text(body, expected_msg):
-    """
-    验证response body中是否等于预期字符串
-    :param body:
-    :param expected_msg:
-    :return:
-    """
-    try:
-        assert body == expected_msg
-        return True
-    except:
-        consts.fail_case_reason.RESULT_LIST.append('fail')
-        raise
-
-
-def assert_time(time, expected_time):
-    """
-    验证response body响应时间小于预期最大响应时间,单位：毫秒
-    :param time:
-    :param expected_time:
-    :return:
-    """
-    try:
-        assert time < expected_time
-        return True
-    except:
-        consts.fail_case_reason.append('fail')
-        raise
-
-
-def assert_len(body, body_msg, expected_len):
+def assert_len(body, body_msg, expected_len, reason):
     """
     验证response body中任意属性的值
+    :param reason:
     :param expected_len:
     :param body:
     :param body_msg:
@@ -98,15 +69,15 @@ def assert_len(body, body_msg, expected_len):
         assert len(data) >= expected_len
         return True
     except:
-        consts.fail_case_reason.append(body)
+        consts.fail_case_reason.append(reason)
         raise
 
-def assert_equal(actual_result, expect_result, body):
+def assert_equal(actual_result, expect_result, reason):
     try:
         assert actual_result == expect_result
         return True
     except:
-        consts.fail_case_reason.append(body)
+        consts.fail_case_reason.append(reason)
         raise
 
 
