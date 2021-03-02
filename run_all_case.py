@@ -37,15 +37,17 @@ def main():
                 .format(test_result.testsRun, len(test_result.failures), len(test_result.errors), case_list)
             time.sleep(2)
             robot_success(des)
-        if len(test_result.failures) >= 1 or len(test_result.errors) >= 1:
-            logs.get_log('failCase.log').error("error: {}, failures: {}".format(test_result.errors, test_result.failures))
+        elif len(test_result.failures) >= 1:
+            logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
             time.sleep(3)
             robot_success(des)
             for case, reason in test_result.failures:
-                robot_fail(case.id())
+                robot_fail(case.id(), reason)
                 break
+        elif len(test_result.errors) >= 1:
+            logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
             for case, reason in test_result.errors:
-                robot_fail(case.id())
+                robot_fail(case.id(), reason)
                 break
     else:
         pass

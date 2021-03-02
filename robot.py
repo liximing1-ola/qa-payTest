@@ -2,12 +2,12 @@ import time
 import requests
 import random
 
-def robot_fail(des):
+def robot_fail(title, reason):
     url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=f9d916cb-6b93-4389-8aa4-f51c755faa0e'
     headers = {'Content-Type': 'application/json'}
-    now = time.strftime('%F:%H:%M', time.localtime(time.time()))
-    title = "警告!-{}".format(now)
-    des = des
+    now = time.strftime('%F %H:%M', time.localtime(time.time()))
+    title = "警告!{}-{}".format(now, title)
+    des = reason
     icon = getImage()
     data = {
         "msgtype": "news",
@@ -37,8 +37,6 @@ def robot_fail(des):
 def robot_success(content):
     url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=f9d916cb-6b93-4389-8aa4-f51c755faa0e'
     headers = {'Content-Type': 'application/json'}
-    now = time.strftime('%F:%H:%M', time.localtime(time.time()))
-    #content = '{}'.format()
     data = {
         "msgtype": "text",
         "text": {
