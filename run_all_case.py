@@ -1,7 +1,7 @@
 # coding=utf-8
 import unittest
 import time
-from Common import logs
+from Common import logs, api
 from autoGitPull import writeUpdateTime
 from autoGitPull import autoGitPull
 from robot import robot_fail, robot_success
@@ -31,9 +31,10 @@ def main():
         des = "执行用例总数: {}, 失败用例总数: {}, 异常用例总数: {}" \
             .format(test_result.testsRun, len(test_result.failures), len(test_result.errors))
         logs.get_log('runCaseTime.log').info(des)
+        case_list=api.dictToList(consts.CASE_LIST)
         if len(test_result.failures) == 0 and len(test_result.errors) == 0:
-            des = "执行用例总数: {}, 失败用例总数: {}, 异常用例总数: {}, 用例结果如下: {}" \
-                .format(test_result.testsRun, len(test_result.failures), len(test_result.errors), consts.CASE_LIST)
+            des = "执行用例总数: {}, 失败用例总数: {}, 异常用例总数: {}, 用例结果如下\n: {}" \
+                .format(test_result.testsRun, len(test_result.failures), len(test_result.errors), case_list)
             time.sleep(3)
             robot_success(des)
         if len(test_result.failures) >= 1 or len(test_result.errors) >= 1:

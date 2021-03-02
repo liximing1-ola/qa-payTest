@@ -88,20 +88,29 @@ class TestPayCreate(unittest.TestCase):
     def test_04_livePackCalPayChange(self):
         """
         用例描述：
-        验证余额足够时，非直播类型房间一对一打赏,打赏分成满足师徒收益的基础上为：62:38
+        验证在直播间打赏主播（打包结算主播），打赏分成满足：6:4，且收入在money_cash账户
         脚本步骤：
-        1.构造打赏者和被打赏者数据 （更新xs_user_money）
-        2.房间内一对一打赏（打赏100分）
+        1.构造打赏者和主播数据 （更新xs_user_money和xs_broker_user）
+        2.房间内一对一打赏（打赏1000分）
         3.校验【status code】和返回值【body】状态
-        4.检查被打赏者余额，预期为：62
-        5.检查消费记录表消费money（xs_pay_change_new）
-        6.检查消费记录表消费方式op
+        4.检查被打赏者余额和账户，预期为：money_cash=600
+        5.检查打赏者余额
         """
         pass
 
     @unittest.skip
     # 一代宗师 分成7:3
     def test_05_masterPayChange(self):
+        """
+        用例描述：
+        验证在直播间打赏非主播用户且用户为一代宗师，打赏分成满足：7:3
+        脚本步骤：
+        1.构造打赏者和被打赏者数据 （更新xs_user_money和xs_mentor_exp）
+        2.房间内一对一打赏（打赏1000分）
+        3.校验【status code】和返回值【body】状态
+        4.检查被打赏者余额和账户，预期为：700
+        5.检查打赏者余额
+        """
         pass
 
 

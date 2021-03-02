@@ -4,3 +4,7 @@ def errorMsg(res):
         print(res['body'])
     else:
         print(res)
+
+def dictToList(dict):
+    for k, v in dict.items():
+        return k, v
