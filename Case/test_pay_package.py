@@ -105,11 +105,9 @@ class TestPayCreate(unittest.TestCase):
         assert res['body']['success'] == 1
         assert len(res['body']['args']) > 1
         assert Mysql.selectMoneySql(config.pack_cal_uid, 'money_cash') == 60
-        assert Mysql.selectPayChangeSql(config.payUid) == 0
+        assert Mysql.selectAllMoneySql(config.payUid) == 0
         consts.CASE_LIST['验证直播间打赏主播（打包结算主播），打赏分成满足：6:4，且收入在money_cash账户'] = 'pass'
 
-    @unittest.skip
-    # 一代宗师 分成7:3
     def test_05_mentorPayChange(self):
         """
         用例描述：
