@@ -19,7 +19,7 @@ def robot_fail(title, reason):
         data = {
             "msgtype": "text",
             "text": {
-                "mentioned_mobile_list": ["@all"]
+                "mentioned_mobile_list": [""]
             }
         }
         requests.post(url, headers=headers, json=data)
