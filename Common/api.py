@@ -8,5 +8,5 @@ def errorMsg(res):
 def dictToList(case_dict):
     list_case = []
     for k, v in case_dict.items():
-        list_case.append('Case:{}, 结果:{}'.format(k, v) + '\n')
+        list_case.append('Case:{}, 结果:{}'.format(k, v))
     return list_case
