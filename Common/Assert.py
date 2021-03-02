@@ -98,7 +98,7 @@ def assert_len(body, body_msg, expected_len):
         assert len(data) >= expected_len
         return True
     except:
-        consts.fail_case_reason.append('fail')
+        consts.fail_case_reason.append(body)
         raise
 
 def assert_equal(actual_result, expect_result, body):
