@@ -6,7 +6,7 @@ def robot_fail(title, reason):
     url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=0179d8d1-2078-41ba-a8da-0fb11bd51880'
     #url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=f9d916cb-6b93-4389-8aa4-f51c755faa0e'
     headers = {'Content-Type': 'application/json'}
-    content = "警告!-失败用例: {}, 失败原因".format(title, reason)
+    content = "警告!-失败用例: {}, 失败原因: {}".format(title, reason)
     data = {
         "msgtype": "text",
         "text": {

@@ -124,7 +124,7 @@ class TestPayCreate(unittest.TestCase):
         data = Yaml.read_yaml('Basic.yml', 'dev_mentor_pay')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         assert res['code'] == 200
-        # api.errorMsg(res)
+        api.errorMsg(res)
         assert res['body']['success'] == 1
         assert Mysql.selectAllMoneySql(config.payUid) == 70
         assert Mysql.selectPayChangeSql(config.testUid) == 0
