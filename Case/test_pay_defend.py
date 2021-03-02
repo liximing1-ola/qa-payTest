@@ -1,7 +1,7 @@
 from Common.config import config
 from Common import Request, api
 from Common.params_Yaml import Yaml
-from Common.sqlScript import mysqlScript
+from Common.sqlScript import Mysql
 import unittest
 from Common import consts
 
@@ -23,17 +23,17 @@ class TestPayCreate(unittest.TestCase):
         5.检查被打赏者余额,预期：52000 * 0.62 = 32240
         6.检查消费记录
         """
-        mysqlScript.updateMoneySql(52000, 0, 0, 0, config.payUid)
-        mysqlScript.updateMoneySql(0, 0, 0, 0, config.testUid)
+        Mysql.updateMoneySql(52000, 0, 0, 0, config.payUid)
+        Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_defend')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         assert res['code'] == 200
         # api.errorMsg(res)
         assert res['body']['success'] == 1
         assert len(res['body']['args']) > 1
-        assert mysqlScript.selectAllMoneySql(config.payUid) == 0
-        assert mysqlScript.selectAllMoneySql(config.testUid) == 32240
-        assert mysqlScript.selectPayChangeSql(config.payUid) == 52000
-        assert mysqlScript.selectPayChangeOpSql(config.payUid) == 'consume'
+        assert Mysql.selectAllMoneySql(config.payUid) == 0
+        assert Mysql.selectAllMoneySql(config.testUid) == 32240
+        assert Mysql.selectPayChangeSql(config.payUid) == 52000
+        assert Mysql.selectPayChangeOpSql(config.payUid) == 'consume'
         consts.CASE_LIST['验证开通个人守护的收益分成'] = 'pass'
 

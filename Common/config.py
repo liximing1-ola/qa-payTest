@@ -18,6 +18,8 @@ class config:
     testUid = 105002312
     # 打赏者
     payUid = 103273407
+    # 打包结算主播
+    pack_cal_uid =105002313
 
 
 if __name__ == '__main__':

@@ -1,7 +1,7 @@
 from Common.config import config
 from Common import Request, api
 from Common.params_Yaml import Yaml
-from Common.sqlScript import mysqlScript
+from Common.sqlScript import Mysql
 import unittest
 from Common import consts
 
@@ -22,14 +22,14 @@ class TestPayCreate(unittest.TestCase):
         4.检查预期返回msg，预期：支付失败
         5.检查被打赏者余额,预期：0
         """
-        mysqlScript.updateMoneySql(0, 0, 0, 0, config.payUid)
-        mysqlScript.updateMoneySql(0, 0, 0, 0, config.testUid)
+        Mysql.updateMoneySql(0, 0, 0, 0, config.payUid)
+        Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_1')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         assert res['code'] == 200
         assert res['body']['success'] == 0
         assert res['body']['msg'] == '余额不足，无法支付'
-        assert mysqlScript.selectMoneySql(config.testUid) == 0
+        assert Mysql.selectMoneySql(config.testUid) == 0
         consts.CASE_LIST['验证余额不足时，房间一对一打赏'] = 'pass'
 
 
@@ -45,17 +45,17 @@ class TestPayCreate(unittest.TestCase):
         5.检查消费记录表消费money（xs_pay_change_new）
         6.检查消费记录表消费方式op
         """
-        mysqlScript.updateMoneySql(30, 30, 30, 10, config.payUid)
-        mysqlScript.updateMoneySql(0, 0, 0, 0, config.testUid)
+        Mysql.updateMoneySql(30, 30, 30, 10, config.payUid)
+        Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_1')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         assert res['code'] == 200
         # api.errorMsg(res)
         assert res['body']['success'] == 1
         assert res['body']['args']['money'] == 100
-        assert mysqlScript.selectMoneySql(config.testUid, 'money_cash') == 52
-        assert mysqlScript.selectPayChangeSql(config.payUid) == 100
-        assert mysqlScript.selectPayChangeOpSql(config.payUid) == 'consume'
+        assert Mysql.selectMoneySql(config.testUid, 'money_cash') == 52
+        assert Mysql.selectPayChangeSql(config.payUid) == 100
+        assert Mysql.selectPayChangeOpSql(config.payUid) == 'consume'
         consts.CASE_LIST['验证余额足够时，直播类型房间一对一打赏'] = 'pass'
 
     def test_03_RoomPayChangeMoney(self):
@@ -70,25 +70,23 @@ class TestPayCreate(unittest.TestCase):
         5.检查消费记录表消费money（xs_pay_change_new）
         6.检查消费记录表消费方式op
         """
-        mysqlScript.updateMoneySql(30, 30, 30, 10, config.payUid)
-        mysqlScript.updateMoneySql(0, 0, 0, 0, config.testUid)
+        Mysql.updateMoneySql(30, 30, 30, 10, config.payUid)
+        Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_2')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         assert res['code'] == 200
         # api.errorMsg(res)
         assert res['body']['success'] == 1
         assert len(res['body']['args']) > 1
-        assert mysqlScript.selectMoneySql(config.testUid, 'money_cash') == 62
-        assert mysqlScript.selectPayChangeSql(config.payUid) == 100
-        assert mysqlScript.selectPayChangeOpSql(config.payUid) == 'consume'
+        assert Mysql.selectMoneySql(config.testUid, 'money_cash') == 62
+        assert Mysql.selectPayChangeSql(config.payUid) == 100
+        assert Mysql.selectPayChangeOpSql(config.payUid) == 'consume'
         consts.CASE_LIST['验证余额足够时，非直播类型房间一对一打赏'] = 'pass'
 
-    # 打包结算主播pack_cal =1 分成6:4 钱在money_cash
-    @unittest.skip
     def test_04_livePackCalPayChange(self):
         """
         用例描述：
-        验证在直播间打赏主播（打包结算主播），打赏分成满足：6:4，且收入在money_cash账户
+        验证直播间打赏主播（打包结算主播pack_cal=1），打赏分成满足：6:4，且收入在money_cash账户
         脚本步骤：
         1.构造打赏者和主播数据 （更新xs_user_money和xs_broker_user）
         2.房间内一对一打赏（打赏1000分）
@@ -96,14 +94,26 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：money_cash=600
         5.检查打赏者余额
         """
-        pass
+        Mysql.updateChatroomUid(config.pack_cal_uid)
+        Mysql.updateBrokerUser(config.pack_cal_uid)
+        Mysql.updateMoneySql(100, 0, 0, 0, config.payUid)
+        Mysql.updateMoneySql(0, 0, 0, 0, config.pack_cal_uid)
+        data = Yaml.read_yaml('Basic.yml', 'dev_pack_cal')
+        res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
+        assert res['code'] == 200
+        # api.errorMsg(res)
+        assert res['body']['success'] == 1
+        assert len(res['body']['args']) > 1
+        assert Mysql.selectMoneySql(config.pack_cal_uid, 'money_cash') == 60
+        assert Mysql.selectPayChangeSql(config.payUid) == 0
+        consts.CASE_LIST['验证直播间打赏主播（打包结算主播），打赏分成满足：6:4，且收入在money_cash账户'] = 'pass'
 
     @unittest.skip
     # 一代宗师 分成7:3
-    def test_05_masterPayChange(self):
+    def test_05_mentorPayChange(self):
         """
         用例描述：
-        验证在直播间打赏非主播用户且用户为一代宗师，打赏分成满足：7:3
+        验证直播间内打赏一代宗师用户，在师徒收益基础上，分成比例应为7:3
         脚本步骤：
         1.构造打赏者和被打赏者数据 （更新xs_user_money和xs_mentor_exp）
         2.房间内一对一打赏（打赏1000分）
@@ -111,7 +121,16 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：700
         5.检查打赏者余额
         """
-        pass
+        Mysql.updateMoneySql(100, 0, 0, 0, config.testUid)
+        Mysql.updateMoneySql(0, 0, 0, 0, config.payUid)  # 一代宗师
+        data = Yaml.read_yaml('Basic.yml', 'dev_mentor_pay')
+        res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
+        assert res['code'] == 200
+        # api.errorMsg(res)
+        assert res['body']['success'] == 1
+        assert Mysql.selectAllMoneySql(config.payUid) == 70
+        assert Mysql.selectPayChangeSql(config.testUid) == 0
+        consts.CASE_LIST['验证直播间内打赏一代宗师用户，在师徒收益基础上，分成比例应为7:3'] = 'pass'
 
 
 if __name__ == '__main__':

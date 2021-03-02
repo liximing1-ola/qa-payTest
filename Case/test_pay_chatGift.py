@@ -1,7 +1,7 @@
 from Common.config import config
 from Common import Request, api
 from Common.params_Yaml import Yaml
-from Common.sqlScript import mysqlScript
+from Common.sqlScript import Mysql
 import unittest
 import sys
 from Common import consts
@@ -23,14 +23,14 @@ class TestPayCreate(unittest.TestCase):
         4.检查预期返回msg，预期：支付失败
         5.检查被打赏者余额,预期：0
         """
-        mysqlScript.updateMoneySql(0, 0, 0, 0, config.payUid)
-        mysqlScript.updateMoneySql(0, 0, 0, 0, config.testUid)
+        Mysql.updateMoneySql(0, 0, 0, 0, config.payUid)
+        Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_chatGift')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         assert res['code'] == 200
         assert res['body']['success'] == 0
         assert res['body']['msg'] == '余额不足，无法支付'
-        assert mysqlScript.selectMoneySql(config.testUid) == 0
+        assert Mysql.selectMoneySql(config.testUid) == 0
         consts.CASE_LIST['验证余额不足时，私聊一对一打赏'] = 'pass'
 
 
@@ -46,16 +46,16 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：720
         5.检查打赏者剩余余额，预期为：400
         """
-        mysqlScript.updateMoneySql(1100, 100, 100, 100, config.payUid)
-        mysqlScript.updateMoneySql(0, 0, 0, 0, config.testUid)
+        Mysql.updateMoneySql(1100, 100, 100, 100, config.payUid)
+        Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_chatGift')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         assert res['code'] == 200
         # api.errorMsg(res)
         assert res['body']['success'] == 1
         assert len(res['body']['args']) > 1
-        assert mysqlScript.selectMoneySql(config.testUid, 'money_cash') == 720
-        assert mysqlScript.selectAllMoneySql(config.payUid) == 400
+        assert Mysql.selectMoneySql(config.testUid, 'money_cash') == 720
+        assert Mysql.selectAllMoneySql(config.payUid) == 400
         consts.CASE_LIST['验证余额足够时，私聊一对一打赏'] = 'pass'
 
 
