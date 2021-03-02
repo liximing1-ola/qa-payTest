@@ -40,6 +40,7 @@ def main():
         elif len(test_result.failures) >= 1:
             logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
             time.sleep(3)
+            # 失败用例更新提醒
             robot_success(des)
             for case, reason in test_result.failures:
                 robot_fail(case.id(), reason)
