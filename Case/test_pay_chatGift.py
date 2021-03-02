@@ -1,10 +1,10 @@
 from Common.config import config
-from Common import Request, api
+from Common import Request
 from Common.params_Yaml import Yaml
 from Common.sqlScript import Mysql
 import unittest
-import sys
 from Common import consts
+from Common import Assert
 
 
 class TestPayCreate(unittest.TestCase):
@@ -27,6 +27,9 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_chatGift')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
+        print(res)
+        Assert.assert_code(res['code'], 200, res['body'])
+
         assert res['code'] == 200
         assert res['body']['success'] == 0
         assert res['body']['msg'] == '余额不足，无法支付'
