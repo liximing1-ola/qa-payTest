@@ -28,7 +28,7 @@ class TestPayCreate(unittest.TestCase):
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_defend')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         des = '验证开通个人守护的收益分成比例是否正确'
-        reason = '-用例说明: {}, -失败原因: {}'.format(des, res['body'])
+        reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200, reason)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_len(res['body'], 'args', 1, reason)
