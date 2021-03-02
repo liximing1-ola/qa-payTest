@@ -124,13 +124,14 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(0, 0, 0, 0, config.payUid)  # 一代宗师
         data = Yaml.read_yaml('Basic.yml', 'dev_mentor_pay')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
-        reason = '用例: {}, 失败原因: {}'.format(sys._getframe(0).f_code.co_name, res['body'])
+        des = '验证直播间内打赏一代宗师用户，在师徒收益基础上，分成比例应为7:3'
+        reason = '用例: {}, 失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200, reason)
         Assert.assert_body(res['body'], 'success', 0, reason)
         Assert.assert_equal(Mysql.selectMoneySql(config.testUid), 0, reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 70, reason)
         Assert.assert_equal(Mysql.selectPayChangeSql(config.testUid), 0, reason)
-        consts.CASE_LIST['验证直播间内打赏一代宗师用户，在师徒收益基础上，分成比例应为7:3'] = 'pass'
+        consts.CASE_LIST[des] = 'pass'
 
 
 if __name__ == '__main__':
