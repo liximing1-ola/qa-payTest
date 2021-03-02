@@ -6,10 +6,10 @@ from Common import logs
 from Common import consts
 
 
-def assert_code(code, expected_code, res):
+def assert_code(code, expected_code, body):
     """
     验证response状态码
-    :param res:
+    :param body:
     :param code:
     :param expected_code:
     :return:
@@ -18,14 +18,13 @@ def assert_code(code, expected_code, res):
         assert code == expected_code
         return True
     except:
-        consts.fail_case_reason.append(res)
+        consts.fail_case_reason.append(body)
         raise
 
 
-def assert_body(body, body_msg, expected_msg, res):
+def assert_body(body, body_msg, expected_msg):
     """
     验证response body中任意属性的值
-    :param res:
     :param body:
     :param body_msg:
     :param expected_msg:
@@ -36,7 +35,7 @@ def assert_body(body, body_msg, expected_msg, res):
         assert msg == expected_msg
         return True
     except:
-        consts.fail_case_reason.append(res)
+        consts.fail_case_reason.append(body)
         raise
 
 
@@ -52,9 +51,7 @@ def assert_in_text(body, expected_msg):
         assert expected_msg in text
         return True
     except:
-        logs.get_log('assert.log').error("Response body Does not contain expected_msg, expected_msg is %s"
-                                                 % expected_msg)
-        Consts.RESULT_LIST.append('fail')
+        consts.fail_case_reason.append('fail')
         raise
 
 
@@ -69,9 +66,7 @@ def assert_text(body, expected_msg):
         assert body == expected_msg
         return True
     except:
-        logs.get_log('assert.log').error("Response body != expected_msg, expected_msg is %s, body is %s"
-                                              % (expected_msg, body))
-        Consts.RESULT_LIST.append('fail')
+        consts.fail_case_reason.RESULT_LIST.append('fail')
         raise
 
 
@@ -86,9 +81,7 @@ def assert_time(time, expected_time):
         assert time < expected_time
         return True
     except:
-        logs.get_log('assert.log').error("Response time > expected_time, expected_time is %s, time is %s"
-                                              % (expected_time, time))
-        Consts.RESULT_LIST.append('fail')
+        consts.fail_case_reason.append('fail')
         raise
 
 
@@ -105,18 +98,19 @@ def assert_len(body, body_msg, expected_len):
         assert len(data) >= expected_len
         return True
     except:
-        logs.get_log('assert.log').error("Response body len")
-        Consts.RESULT_LIST.append('fail')
+        consts.fail_case_reason.append('fail')
         raise
-    pass
+
+def assert_equal(actual_result, expect_result, body):
+    try:
+        assert actual_result == expect_result
+        return True
+    except:
+        consts.fail_case_reason.append(body)
+        raise
 
 
 if __name__ == '__main__':
     # 示例
-    body1 = {'q': 1, 'w': '2', 'e': 3}
-    assert_code(200, 200)
-    assert_body(body1, 'q', 1)
-    assert_in_text(body1, 'q')
-    assert_text(body1['q'], 1)
-    assert_time(1, 2)
-    assert_len(body1, 'w', 1)
+    res = {'code': 200, 'body': {'success': False, 'msg': '余额不足，无法支付'}, 'time_consuming': 9.316, 'time_total': 0.009316}
+    assert_code(res['code'], 300, res['body'])

@@ -3,7 +3,7 @@ from Common import Request, api
 from Common.params_Yaml import Yaml
 from Common.sqlScript import Mysql
 import unittest
-from Common import consts
+from Common import consts, Assert
 
 
 class TestPayCreate(unittest.TestCase):
@@ -123,11 +123,11 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(0, 0, 0, 0, config.payUid)  # 一代宗师
         data = Yaml.read_yaml('Basic.yml', 'dev_mentor_pay')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
-        assert res['code'] == 200
-        api.errorMsg(res)
-        assert res['body']['success'] == 1
-        assert Mysql.selectAllMoneySql(config.payUid) == 70
-        assert Mysql.selectPayChangeSql(config.testUid) == 0
+        Assert.assert_code(res['code'], 200, res['body'])
+        Assert.assert_body(res['body'], 'success', 0)
+        Assert.assert_equal(Mysql.selectMoneySql(config.testUid), 0, res['body'])
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 70, res['body'])
+        Assert.assert_equal(Mysql.selectPayChangeSql(config.testUid), 0, res['body'])
         consts.CASE_LIST['验证直播间内打赏一代宗师用户，在师徒收益基础上，分成比例应为7:3'] = 'pass'
 
 
