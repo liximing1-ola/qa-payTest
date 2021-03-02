@@ -3,7 +3,7 @@ from Common import Request, api
 from Common.params_Yaml import Yaml
 from Common.sqlScript import Mysql
 import unittest
-from Common import consts
+from Common import consts, Assert
 
 
 class TestPayCreate(unittest.TestCase):
@@ -27,13 +27,15 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_defend')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
-        assert res['code'] == 200
-        # api.errorMsg(res)
-        assert res['body']['success'] == 1
-        assert len(res['body']['args']) > 1
-        assert Mysql.selectAllMoneySql(config.payUid) == 0
-        assert Mysql.selectAllMoneySql(config.testUid) == 32240
-        assert Mysql.selectPayChangeSql(config.payUid) == 52000
-        assert Mysql.selectPayChangeOpSql(config.payUid) == 'consume'
-        consts.CASE_LIST['验证开通个人守护的收益分成'] = 'pass'
+        print(res)
+        des = '验证开通个人守护的收益分成比例是否正确'
+        reason = '-用例说明: {}, -失败原因: {}'.format(des, res['body'])
+        Assert.assert_code(res['code'], 200, reason)
+        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_len(res['body'], 'args', 1, reason)
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0, reason)
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 32240, reason)
+        Assert.assert_equal(Mysql.selectPayChangeSql(config.payUid), 52000, reason)
+        Assert.assert_equal(Mysql.selectPayChangeOpSql(config.payUid), 'consume', reason)
+        consts.CASE_LIST[des] = 'pass'
 

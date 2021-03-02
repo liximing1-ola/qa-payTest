@@ -27,11 +27,13 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_chatGift')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
-        Assert.assert_code(res['code'], 200, res['body'])
-        Assert.assert_body(res['body'], 'success', 0)
-        Assert.assert_body(res['body'], 'msg', '余额不足，无法支付')
-        Assert.assert_equal(Mysql.selectMoneySql(config.testUid), 0, res['body'])
-        consts.CASE_LIST['验证余额不足时，私聊一对一打赏'] = 'pass'
+        des = '验证余额不足时，私聊进行一对一打赏'
+        reason = '-用例说明: {}, -失败原因: {}'.format(des, res['body'])
+        Assert.assert_code(res['code'], 200, reason)
+        Assert.assert_body(res['body'], 'success', 0, reason)
+        Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason)
+        Assert.assert_equal(Mysql.selectMoneySql(config.testUid), 0, reason)
+        consts.CASE_LIST[des] = 'pass'
 
 
 
@@ -50,12 +52,14 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_chatGift')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
-        Assert.assert_code(res['code'], 200, res['body'])
-        Assert.assert_body(res['body'], 'success', 0)
-        Assert.assert_len(res['body'], 'args', 1)
-        Assert.assert_equal(Mysql.selectMoneySql(config.testUid, 'money_cash'), 720, res['body'])
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 400, res['body'])
-        consts.CASE_LIST['验证余额足够时，私聊一对一打赏'] = 'pass'
+        des = '验证余额足够时，私聊一对一打赏'
+        reason = '-用例说明: {}, -失败原因: {}'.format(des, res['body'])
+        Assert.assert_code(res['code'], 200, reason)
+        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_len(res['body'], 'args', 1, reason)
+        Assert.assert_equal(Mysql.selectMoneySql(config.testUid, 'money_cash'), 720, reason)
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 400, reason)
+        consts.CASE_LIST[des] = 'pass'
 
 
 if __name__ == '__main__':

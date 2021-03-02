@@ -27,11 +27,14 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_1')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
-        assert res['code'] == 200
-        assert res['body']['success'] == 0
-        assert res['body']['msg'] == '余额不足，无法支付'
-        assert Mysql.selectMoneySql(config.testUid) == 0
-        consts.CASE_LIST['验证余额不足时，房间一对一打赏'] = 'pass'
+        print(res)
+        des = '验证余额不足时，房间进行一对一打赏'
+        reason = '-用例说明: {}, -失败原因: {}'.format(des, res['body'])
+        Assert.assert_code(res['code'], 200, reason)
+        Assert.assert_body(res['body'], 'success', 0, reason)
+        Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason)
+        Assert.assert_equal(Mysql.selectMoneySql(config.testUid), 0, reason)
+        consts.CASE_LIST[des] = 'pass'
 
 
     def test_02_RoomPayLiveMoney(self):
@@ -50,14 +53,15 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_1')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
-        assert res['code'] == 200
-        # api.errorMsg(res)
-        assert res['body']['success'] == 1
-        assert res['body']['args']['money'] == 100
-        assert Mysql.selectMoneySql(config.testUid, 'money_cash') == 52
-        assert Mysql.selectPayChangeSql(config.payUid) == 100
-        assert Mysql.selectPayChangeOpSql(config.payUid) == 'consume'
-        consts.CASE_LIST['验证余额足够时，直播类型房间一对一打赏'] = 'pass'
+        print(res)
+        des = '验证余额足够时，直播类型房间一对一打赏'
+        reason = '-用例说明: {}, -失败原因: {}'.format(des, res['body'])
+        Assert.assert_code(res['code'], 200, reason)
+        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_equal(Mysql.selectMoneySql(config.testUid, 'money_cash'), 52, reason)
+        Assert.assert_equal(Mysql.selectPayChangeSql(config.payUid), 100, reason)
+        Assert.assert_equal(Mysql.selectPayChangeOpSql(config.payUid), 'consume', reason)
+        consts.CASE_LIST[des] = 'pass'
 
     def test_03_RoomPayChangeMoney(self):
         """
@@ -75,14 +79,16 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_2')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
-        assert res['code'] == 200
-        # api.errorMsg(res)
-        assert res['body']['success'] == 1
-        assert len(res['body']['args']) > 1
-        assert Mysql.selectMoneySql(config.testUid, 'money_cash') == 62
-        assert Mysql.selectPayChangeSql(config.payUid) == 100
-        assert Mysql.selectPayChangeOpSql(config.payUid) == 'consume'
-        consts.CASE_LIST['验证余额足够时，非直播类型房间一对一打赏'] = 'pass'
+        print(res)
+        des = '验证余额足够时，非直播类型房间一对一打赏比例'
+        reason = '-用例说明: {}, -失败原因: {}'.format(des, res['body'])
+        Assert.assert_code(res['code'], 200, reason)
+        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_len(res['body'], 'args', 1, reason)
+        Assert.assert_equal(Mysql.selectMoneySql(config.testUid, 'money_cash'), 62, reason)
+        Assert.assert_equal(Mysql.selectPayChangeSql(config.payUid), 100, reason)
+        Assert.assert_equal(Mysql.selectPayChangeOpSql(config.payUid), 'consume', reason)
+        consts.CASE_LIST[des] = 'pass'
 
     def test_04_livePackCalPayChange(self):
         """
@@ -101,13 +107,15 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(0, 0, 0, 0, config.pack_cal_uid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pack_cal')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
-        assert res['code'] == 200
-        # api.errorMsg(res)
-        assert res['body']['success'] == 1
-        assert len(res['body']['args']) > 1
-        assert Mysql.selectMoneySql(config.pack_cal_uid, 'money_cash') == 60
-        assert Mysql.selectAllMoneySql(config.payUid) == 0
-        consts.CASE_LIST['验证直播间打赏主播（打包结算主播），打赏分成满足：6:4，且收入在money_cash账户'] = 'pass'
+        print(res)
+        des = '验证直播间打赏主播（打包结算主播），打赏分成满足：6:4，且收入在money_cash账户'
+        reason = '-用例说明: {}, -失败原因: {}'.format(des, res['body'])
+        Assert.assert_code(res['code'], 200, reason)
+        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_len(res['body'], 'args', 1, reason)
+        Assert.assert_equal(Mysql.selectMoneySql(config.pack_cal_uid, 'money_cash'), 60, reason)
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0, reason)
+        consts.CASE_LIST[des] = 'pass'
 
     def test_05_mentorPayChange(self):
         """
@@ -125,7 +133,7 @@ class TestPayCreate(unittest.TestCase):
         data = Yaml.read_yaml('Basic.yml', 'dev_mentor_pay')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         des = '验证直播间内打赏一代宗师用户，在师徒收益基础上，分成比例应为7:3'
-        reason = '用例说明: {},' + '\n' + '失败原因: {}'.format(des, res['body'])
+        reason = '-用例说明: {}, -失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200, reason)
         Assert.assert_body(res['body'], 'success', 0, reason)
         Assert.assert_equal(Mysql.selectMoneySql(config.testUid), 0, reason)

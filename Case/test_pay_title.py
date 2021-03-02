@@ -29,12 +29,13 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(200000, 0, 0, 0, config.payUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_title')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
-        assert res['code'] == 200
-        assert res['body']['success'] == 1
-        assert len(res['body']['args']) > 1
-        # pytest.assume(mysqlScript.selectMoneySql(103273407, 'money') == 160000)
-        assert Mysql.selectMoneySql(config.payUid, 'money') == 160000
-        consts.CASE_LIST['验证爵位开通及返钱到余额'] = 'pass'
+        print(res)
+        des = '验证爵位开通及返钱到余额的逻辑'
+        reason = '-用例说明: {}, -失败原因: {}'.format(des, res['body'])
+        Assert.assert_code(res['code'], 200, reason)
+        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_equal(Mysql.selectMoneySql(config.payUid, 'money'), 160000, reason)
+        consts.CASE_LIST[des] = 'pass'
 
 
     @pytest.mark.run(order=2)
@@ -51,11 +52,13 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(200000, 0, 0, 0, config.payUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_title')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
-        assert res['code'] == 200
-        assert res['body']['success'] == 1
-        assert len(res['body']['args']) > 1
-        assert Mysql.selectMoneySql(config.payUid, 'money') == 176000
-        consts.CASE_LIST['验证爵位续费及返钱到余额'] = 'pass'
+        print(res)
+        des = '验证爵位续费及返钱到余额逻辑'
+        reason = '-用例说明: {}, -失败原因: {}'.format(des, res['body'])
+        Assert.assert_code(res['code'], 200, reason)
+        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_equal(Mysql.selectMoneySql(config.payUid, 'money'), 176000, reason)
+        consts.CASE_LIST[des] = 'pass'
 
 
 if __name__ == '__main__':
