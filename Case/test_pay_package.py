@@ -27,7 +27,6 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_1')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
-        print(res)
         des = '验证余额不足时，房间进行一对一打赏'
         reason = '-用例说明: {}, -失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200, reason)
@@ -53,7 +52,6 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_1')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
-        print(res)
         des = '验证余额足够时，直播类型房间一对一打赏'
         reason = '-用例说明: {}, -失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200, reason)
@@ -79,7 +77,6 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_2')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
-        print(res)
         des = '验证余额足够时，非直播类型房间一对一打赏比例'
         reason = '-用例说明: {}, -失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200, reason)
@@ -107,7 +104,6 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(0, 0, 0, 0, config.pack_cal_uid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pack_cal')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
-        print(res)
         des = '验证直播间打赏主播（打包结算主播），打赏分成满足：6:4，且收入在money_cash账户'
         reason = '-用例说明: {}, -失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200, reason)

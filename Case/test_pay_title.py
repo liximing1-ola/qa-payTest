@@ -4,7 +4,7 @@ from Common.params_Yaml import Yaml
 from Common.sqlScript import Mysql
 import unittest
 import pytest
-from Common import consts
+from Common import consts, Assert
 
 
 class TestPayCreate(unittest.TestCase):
@@ -29,7 +29,6 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(200000, 0, 0, 0, config.payUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_title')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
-        print(res)
         des = '验证爵位开通及返钱到余额的逻辑'
         reason = '-用例说明: {}, -失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200, reason)
@@ -52,7 +51,6 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(200000, 0, 0, 0, config.payUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_title')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
-        print(res)
         des = '验证爵位续费及返钱到余额逻辑'
         reason = '-用例说明: {}, -失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200, reason)
