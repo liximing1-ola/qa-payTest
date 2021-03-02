@@ -33,20 +33,18 @@ def main():
         logs.get_log('runCaseTime.log').info(des)
         case_list=api.dictToList(consts.CASE_LIST)
         if len(test_result.failures) == 0 and len(test_result.errors) == 0:
-            des = "执行用例总数: {}, 失败用例总数: {}, 异常用例总数: {}, 用例结果如下\n: {}" \
+            des = "执行用例总数: {}, 失败用例总数: {}, 异常用例总数: {}, 用例结果如下:\n {}" \
                 .format(test_result.testsRun, len(test_result.failures), len(test_result.errors), case_list)
-            time.sleep(3)
+            time.sleep(2)
             robot_success(des)
         if len(test_result.failures) >= 1 or len(test_result.errors) >= 1:
             logs.get_log('failCase.log').error("error: {}, failures: {}".format(test_result.errors, test_result.failures))
             time.sleep(3)
             robot_success(des)
-        for case, reason in test_result.failures:
-            if len(test_result.failures) > 0:
+            for case, reason in test_result.failures:
                 robot_fail(case.id())
                 break
-        for case, reason in test_result.errors:
-            if len(test_result.errors) > 0:
+            for case, reason in test_result.errors:
                 robot_fail(case.id())
                 break
     else:

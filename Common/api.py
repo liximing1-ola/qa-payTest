@@ -5,6 +5,8 @@ def errorMsg(res):
     else:
         print(res)
 
-def dictToList(dict):
-    for k, v in dict.items():
-        return k, v
+def dictToList(case_dict):
+    list_case = []
+    for k, v in case_dict.items():
+        list_case.append('Case:{}, 结果:{}'.format(k, v) + '\n')
+    return list_case
