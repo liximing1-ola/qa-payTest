@@ -135,7 +135,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0, reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 62, reason)
-        Assert.assert_equal(Mysql.selectPayChangeSql(config.testUid), 0, reason)
+        Assert.assert_equal(Mysql.selectPayChangeSql(config.testUid), 100, reason)
         consts.CASE_LIST[des] = 'pass'
 
 
