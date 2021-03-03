@@ -2,10 +2,13 @@ import time
 import requests
 import random
 
+headers = {'Content-Type': 'application/json'}
+# 测试url
+# url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=0179d8d1-2078-41ba-a8da-0fb11bd51880'
+# 正式url
+url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=f9d916cb-6b93-4389-8aa4-f51c755faa0e'
+
 def robot_fail(title, reason):
-    url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=0179d8d1-2078-41ba-a8da-0fb11bd51880'
-    #url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=f9d916cb-6b93-4389-8aa4-f51c755faa0e'
-    headers = {'Content-Type': 'application/json'}
     content = "警告!-失败用例: {}, 失败原因: {}".format(title, reason)
     data = {
         "msgtype": "text",
@@ -20,15 +23,12 @@ def robot_fail(title, reason):
         data = {
             "msgtype": "text",
             "text": {
-                "mentioned_mobile_list": [""]
+                "mentioned_mobile_list": ["all"]
             }
         }
         requests.post(url, headers=headers, json=data)
 
 def robot_success(content):
-    url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=0179d8d1-2078-41ba-a8da-0fb11bd51880'
-    #url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=f9d916cb-6b93-4389-8aa4-f51c755faa0e'
-    headers = {'Content-Type': 'application/json'}
     data = {
         "msgtype": "text",
         "text": {
@@ -38,9 +38,6 @@ def robot_success(content):
     requests.post(url, headers=headers, json=data)
 
 def robot_markdown(content):
-    url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=0179d8d1-2078-41ba-a8da-0fb11bd51880'
-    #url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=f9d916cb-6b93-4389-8aa4-f51c755faa0e'
-    headers = {'Content-Type': 'application/json'}
     data = {
         "msgtype": "markdown",
         "markdown": {
