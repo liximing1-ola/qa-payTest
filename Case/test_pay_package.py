@@ -7,7 +7,7 @@ from Common import consts, Assert
 import sys
 from Common.runfailed import Retry
 
-@Retry(max_n=2)
+@Retry(max_n=2, func_prefix='test')
 class TestPayCreate(unittest.TestCase):
 
     # 内网支付接口

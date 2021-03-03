@@ -28,7 +28,6 @@ class ClassB(unittest.TestCase):
 class ClassC(unittest.TestCase):
     def test_001(self):
         raise AttributeError
-
     def test_002(self):
         raise AttributeError
 
@@ -37,7 +36,6 @@ class ClassC(unittest.TestCase):
 class ClassD(unittest.TestCase):
     def test_001(self):
         raise AttributeError
-
     def test_102(self):
         raise AttributeError
 
@@ -65,13 +63,13 @@ class ClassD(unittest.TestCase):
                         n += 1
                         func_or_cls(*args, **kwargs)
                         return
-                    except Exception:  # 可以修改要捕获的异常类型
+                    except Exception as error:  # 可以修改要捕获的异常类型
                         if n <= self._max_n:
                             trace = sys.exc_info()
                             traceback_info = str()
                             for trace_line in traceback.format_exception(trace[0], trace[1], trace[2], 3):
                                 traceback_info += trace_line
-                            print(traceback_info)  # 输出组装的错误信息
+                            print(traceback_info, error)  # 输出组装的错误信息
                             args[0].tearDown()
                             args[0].setUp()
                         else:
