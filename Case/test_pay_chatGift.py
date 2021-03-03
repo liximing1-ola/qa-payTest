@@ -31,12 +31,10 @@ class TestPayCreate(unittest.TestCase):
         des = '验证余额不足时，私聊进行一对一打赏'
         reason = '-用例说明: {}, --失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200, reason)
-        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_body(res['body'], 'success', 0, reason)
         Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason)
         Assert.assert_equal(Mysql.selectMoneySql(config.testUid), 0, reason)
         consts.CASE_LIST[des] = 'pass'
-
-
 
     def test_02_ImPayChangeMoney(self):
         """

@@ -6,7 +6,6 @@ import unittest
 import pytest
 from Common import consts, Assert
 
-
 class TestPayCreate(unittest.TestCase):
 
     # 内网支付接口
@@ -35,7 +34,6 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectMoneySql(config.payUid, 'money'), 160000, reason)
         consts.CASE_LIST[des] = 'pass'
-
 
     @pytest.mark.run(order=2)
     def test_02_TitlePayChangeRenew(self):
