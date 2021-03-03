@@ -6,7 +6,7 @@ import unittest
 from Common import consts
 from Common import Assert
 
-
+@Retry(max_n=2, func_prefix='test')
 class TestPayCreate(unittest.TestCase):
 
     # 内网支付接口
