@@ -8,7 +8,7 @@ def errorMsg(res):
 def dictToList(case_dict):
     list_case = []
     for k, v in case_dict.items():
-        list_case.append('用例说明: {},  结果: <font color=\"info\">{}</font>'.format(k, v))
+        list_case.append('用例说明: <font color=\"warning\">{}</font>,  结果: <font color=\"info\">{}</font>'.format(k, v))
     case = '\n'.join(list_case)
     return case
 
