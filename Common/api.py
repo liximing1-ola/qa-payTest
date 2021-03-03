@@ -1,4 +1,9 @@
 # 内网打印调试
+import os
+import requests
+import json
+import random
+
 def errorMsg(res):
     if res['body']['success'] != 1:
         print(res['body'])
