@@ -78,7 +78,7 @@ def assert_equal(actual_result, expect_result, reason):
         return True
     except:
         consts.fail_case_reason.append(reason)
-        print(actual_result)
+        print('实际结果： {}'.format(actual_result))
         raise
 
 
