@@ -41,7 +41,7 @@ def main():
             # 失败用例更新提醒
             robot('success', des)
             for case, reason in test_result.failures:
-                robot('fail', consts.fail_case_reason, title=case.id())
+                robot('fail', set(consts.fail_case_reason), title=case.id())
                 break
         elif len(test_result.errors) >= 1:
             logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
