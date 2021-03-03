@@ -9,9 +9,9 @@ from Common import consts
 def assert_code(code, expected_code, reason):
     """
     验证response状态码
-    :param reason:
-    :param code:
-    :param expected_code:
+    :param reason: 上报错误信息
+    :param code: 实际结果
+    :param expected_code: 预期结果
     :return:
     """
     try:
@@ -25,8 +25,8 @@ def assert_code(code, expected_code, reason):
 def assert_body(body, body_msg, expected_msg, reason):
     """
     验证response body中任意属性的值
-    :param reason:
-    :param body:
+    :param reason: 上报错误信息
+    :param body: 返回信息体
     :param body_msg:
     :param expected_msg:
     :return:

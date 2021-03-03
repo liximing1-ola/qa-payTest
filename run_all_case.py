@@ -4,7 +4,7 @@ import time
 from Common import logs, api
 from autoGitPull import writeUpdateTime
 from autoGitPull import autoGitPull
-from robot import robot_fail, robot_success
+from robot import robot_fail, robot_success, robot_markdown
 from Common.HTMLTestRunner import HTMLTestRunner
 import os
 from Common import consts
@@ -36,7 +36,7 @@ def main():
             des = "执行用例总数: {}, 失败用例总数: {}, 异常用例总数: {}, 执行结果如下:\n {}" \
                 .format(test_result.testsRun, len(test_result.failures), len(test_result.errors), case_list)
             time.sleep(2)
-            robot_success(des)
+            robot_markdown(des)
         elif len(test_result.failures) >= 1:
             logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
             time.sleep(3)

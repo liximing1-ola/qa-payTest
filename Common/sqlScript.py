@@ -20,6 +20,7 @@ class Mysql:
         cursor = con.cursor()
         return con, cursor
 
+    # 更新用户的账户余额
     @staticmethod
     def updateMoneySql(money, money_cash, money_cash_b, money_b, uid):
         con, cur = Mysql.conMysql()
@@ -33,6 +34,7 @@ class Mysql:
         finally:
             con.commit()
 
+    # 查询用户当前所有账户余额之和
     @staticmethod
     def selectAllMoneySql(uid):
         con, cur = Mysql.conMysql()
@@ -47,6 +49,7 @@ class Mysql:
         except Exception as error:
             print(error)
 
+    # 查询某个账户的余额值
     @staticmethod
     def selectMoneySql(uid, money_type='money_cash_b'):
         con, cur = Mysql.conMysql()
@@ -61,6 +64,7 @@ class Mysql:
         except Exception as error:
             print(error)
 
+    # 查询消费记录的money
     @staticmethod
     def selectPayChangeSql(uid):
         con, cur = Mysql.conMysql()
@@ -73,6 +77,7 @@ class Mysql:
         except Exception as error:
             print(error)
 
+    # 查询消费记录的消费方式
     @staticmethod
     def selectPayChangeOpSql(uid):
         con, cur = Mysql.conMysql()
@@ -85,6 +90,7 @@ class Mysql:
         except Exception as error:
             print(error)
 
+    # 查询用户的背包物品数
     @staticmethod
     def selectUserCommoditySql(uid):
         con, cur = Mysql.conMysql()
@@ -99,6 +105,7 @@ class Mysql:
         except Exception as error:
             print(error)
 
+    # 清空用户背包
     @staticmethod
     def deleteUserCommoditySql(uid, countLimit):
         con, cur = Mysql.conMysql()
@@ -111,6 +118,7 @@ class Mysql:
         finally:
             con.commit()
 
+    # 删除用户爵位信息
     @staticmethod
     def deleteUserTitleSql(uid):
         con, cur = Mysql.conMysql()
@@ -123,6 +131,7 @@ class Mysql:
         finally:
             con.commit()
 
+    # 删除用户爵位信息 profile
     @staticmethod
     def updateUserTitleSql(uid):
         con, cur = Mysql.conMysql()
@@ -135,6 +144,7 @@ class Mysql:
         finally:
             con.commit()
 
+    # 检查用户背包指定物品数量
     @staticmethod
     def checkUserCommoditySql(cid, uid):
         con, cur = Mysql.conMysql()
@@ -147,6 +157,7 @@ class Mysql:
         except Exception as error:
             print(error)
 
+    # 获得用户物品表的对应id
     @staticmethod
     def getUserCommodityIdSql(cid, uid):
         con, cur = Mysql.conMysql()
