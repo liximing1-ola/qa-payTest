@@ -45,7 +45,7 @@ class TestPayCreate(unittest.TestCase):
         1.构造打赏者和被打赏者数据 （更新xs_user_money）
         2.直播类房间一对一打赏（打赏100分）
         3.校验【status code】和返回值【body】状态
-        4.检查被打赏者余额，预期为：52
+        4.检查被打赏者余额，预期为：62
         5.检查消费记录表消费money（xs_pay_change_new）
         6.检查消费记录表消费方式op
         """
@@ -118,7 +118,7 @@ class TestPayCreate(unittest.TestCase):
     def test_05_mentorPayChange(self):
         """
         用例描述：
-        验证直播间内打赏一代宗师用户，在师徒收益基础上，分成比例应为7:3
+        验证直播间内打赏麦下用户，在师徒收益基础上，分成比例应为62:38
         脚本步骤：
         1.构造打赏者和被打赏者数据 （更新xs_user_money和xs_mentor_exp）
         2.房间内一对一打赏（打赏1000分）
@@ -126,17 +126,16 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：700
         5.检查打赏者余额,预期为：0
         """
-        Mysql.updateMoneySql(100, 0, 0, 0, config.testUid)
-        Mysql.updateMoneySql(0, 0, 0, 0, config.payUid)  # 一代宗师
+        Mysql.updateMoneySql(100, 0, 0, 0, config.payUid)
+        Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_mentor_pay')
-        print(data)
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         des = '验证直播间内打赏一代宗师用户，在师徒收益基础上，分成比例应为7:3'
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200, reason)
         Assert.assert_body(res['body'], 'success', 0, reason)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 0, reason)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 70, reason)
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0, reason)
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 62, reason)
         Assert.assert_equal(Mysql.selectPayChangeSql(config.testUid), 0, reason)
         consts.CASE_LIST[des] = 'pass'
 

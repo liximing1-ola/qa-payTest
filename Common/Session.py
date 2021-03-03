@@ -35,7 +35,6 @@ class Session:
             if res['success'] != 1:
                 print('Token获取异常: {}'.format(res))
             tokenDict = {'token': res['data'].get('token')}
-            print(tokenDict)
             return tokenDict
         else:
             print("get token error")

@@ -21,9 +21,6 @@ class config:
     # 打包结算主播
     pack_cal_uid =105002313
 
-    test2Uid = 105002314
-    pay2Uid = 100287189
-
 
 if __name__ == '__main__':
     print(config.BASE_PATH)
