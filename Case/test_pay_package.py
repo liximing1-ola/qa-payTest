@@ -126,7 +126,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：700
         5.检查打赏者余额,预期为：0
         """
-        Mysql.updateMoneySql(100, 0, 0, 0, config.testUid)
+        Mysql.updateMoneySql(100, 0, 0, 0, config.test2Uid)
         Mysql.updateMoneySql(0, 0, 0, 0, config.payUid)  # 一代宗师
         data = Yaml.read_yaml('Basic.yml', 'dev_mentor_pay')
         print(data)
@@ -135,9 +135,9 @@ class TestPayCreate(unittest.TestCase):
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200, reason)
         Assert.assert_body(res['body'], 'success', 0, reason)
-        Assert.assert_equal(Mysql.selectMoneySql(config.testUid), 0, reason)
+        Assert.assert_equal(Mysql.selectMoneySql(config.test2Uid), 0, reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 70, reason)
-        Assert.assert_equal(Mysql.selectPayChangeSql(config.testUid), 0, reason)
+        Assert.assert_equal(Mysql.selectPayChangeSql(config.test2Uid), 0, reason)
         consts.CASE_LIST[des] = 'pass'
 
 
