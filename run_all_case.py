@@ -8,6 +8,7 @@ from robot import robot
 from Common.HTMLTestRunner import HTMLTestRunner
 import os
 from Common import consts
+from Common.api import writeUpdateTime
 
 def all_case():
     # case_dir = os.path.join(os.getcwd(), "Case")   # 待执行用例的目录
@@ -17,7 +18,6 @@ def all_case():
                                                    top_level_dir=None)
     testcase.addTests(discover)  # 直接加载 discover
     return testcase
-
 
 def main():
     if autoGitPull():
@@ -52,16 +52,6 @@ def main():
                 break
     else:
         pass
-
-def html_runner():
-    # 生成HTML格式
-    html_path = '/home/banban-1/payTest/report/result.html'
-    fp = open(html_path, 'wb')
-    runner = HTMLTestRunner(stream=fp, title=u"测试报告", description=u"用例测试情况")
-    all_case_name = all_case()
-    m = runner.run(all_case_name)
-    fp.close()
-    return m
 
 
 if __name__ == "__main__":

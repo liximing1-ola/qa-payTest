@@ -4,6 +4,7 @@ import time
 from Common import logs
 import os
 from robot import robot
+from Common.api import readUpdateTime
 
 def autoGitPull():
     git_dir = '/home/webroot/banban'
@@ -32,17 +33,6 @@ def autoGitPull():
     else:
         logs.get_log('gitError.log').error("Git分支不对： {}".format(repo.active_branch))
         return False
-
-def writeUpdateTime(now):
-    txtPath = os.path.split(os.path.realpath(__file__))[0] + '/time.txt'
-    with open(txtPath, 'w') as f:
-        f.write(now)
-
-def readUpdateTime():
-    txtPath = os.path.split(os.path.realpath(__file__))[0] + '/time.txt'
-    with open(txtPath, 'r') as f:
-        f = f.read()
-        return f
 
 
 if __name__=="__main__":

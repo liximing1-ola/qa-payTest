@@ -5,12 +5,35 @@ def errorMsg(res):
     else:
         print(res)
 
-def dictToList(case_dict):
+def dictToList(result_dict):
     list_case = []
-    for k, v in case_dict.items():
+    for k, v in result_dict.items():
         list_case.append('checkPoint:  {},  结果: <font color=\"info\">{}</font>'.format(k, v))
     case = '\n'.join(list_case)
     return case
+
+def getImage():
+    url = 'https://www.mxnzp.com/api/image/girl/list/random?app_id=kilmc0p2ytsnawyp&' \
+          'app_secret=bnNoWElSVDBYbEhsc1EvYVM2WnVnZz09'
+    res = requests.get(url)
+    res.raise_for_status()
+    res = res.json()
+    if res['code'] == 1:
+        return res['data'][0]['imageUrl']
+    else:
+        icon = random.randint(1, 140)
+        return 'http://xs-image.oss-cn-hangzhou.aliyuncs.com/static/gift_big/{}.png'.format(icon)
+
+def writeUpdateTime(now):
+    txtPath = os.path.split(os.path.realpath(__file__))[0] + '/time.txt'
+    with open(txtPath, 'w') as f:
+        f.write(now)
+
+def readUpdateTime():
+    txtPath = os.path.split(os.path.realpath(__file__))[0] + '/time.txt'
+    with open(txtPath, 'r') as f:
+        f = f.read()
+        return f
 
 
 if __name__ == '__main__':

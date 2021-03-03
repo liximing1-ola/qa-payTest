@@ -1,6 +1,7 @@
 import time
 import requests
 import random
+from Common.api import getImage
 
 def robot(mode, reason, title=''):
     headers = {'Content-Type': 'application/json'}
@@ -8,7 +9,7 @@ def robot(mode, reason, title=''):
                   'test': 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=0179d8d1-2078-41ba-a8da-0fb11bd51880'}
     url = robot_dict['normal']
     if mode == 'fail':
-        content = "警告!-失败用例: {}, 失败原因: {}".format(title, reason)
+        content = "警告! 失败用例: {}, 失败原因: {}".format(title, reason)
         data = {
             "msgtype": "text",
             "text": {
@@ -26,6 +27,7 @@ def robot(mode, reason, title=''):
                 }
             }
             requests.post(url, headers=headers, json=data)
+
     elif mode == 'success':
         data = {
             "msgtype": "text",
@@ -73,21 +75,8 @@ def robot(mode, reason, title=''):
                 }
             }
             requests.post(url, headers=headers, json=data)
-
     else:
         print('robot over')
-
-def getImage():
-    url = 'https://www.mxnzp.com/api/image/girl/list/random?app_id=kilmc0p2ytsnawyp&' \
-          'app_secret=bnNoWElSVDBYbEhsc1EvYVM2WnVnZz09'
-    res = requests.get(url)
-    res.raise_for_status()
-    res = res.json()
-    if res['code'] == 1:
-        return res['data'][0]['imageUrl']
-    else:
-        icon = random.randint(1, 140)
-        return 'http://xs-image.oss-cn-hangzhou.aliyuncs.com/static/gift_big/{}.png'.format(icon)
 
 
 if __name__ == '__main__':

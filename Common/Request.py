@@ -31,18 +31,14 @@ def post_request_session(url, data):
             response = requests.post(url=url, headers=header, verify=False)
         else:
             response = requests.post(url=url, data=data, headers=header, verify=False)
-
     except requests.RequestException as e:
         print(e)
         return ()
     except Exception as e:
         print(e)
         return ()
-
     time_consuming = response.elapsed.microseconds / 1000
     time_total = response.elapsed.total_seconds()
-
-
     response_dicts = dict()
     response_dicts['code'] = response.status_code
     try:
@@ -53,7 +49,6 @@ def post_request_session(url, data):
     # response_dicts['text'] = response.text
     response_dicts['time_consuming'] = time_consuming
     response_dicts['time_total'] = time_total
-
     return response_dicts
 
 
