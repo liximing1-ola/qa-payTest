@@ -40,7 +40,7 @@ class TestPayCreate(unittest.TestCase):
     def test_02_RoomPayLiveMoney(self):
         """
         用例描述：
-        验证余额足够时，直播类型房间（types=live）一对一打赏,打赏分成满足师徒收益的基础上为：52:48
+        验证余额足够时，直播类型房间（types=live）一对一打赏,打赏分成满足师徒收益的基础上为：62:38
         脚本步骤：
         1.构造打赏者和被打赏者数据 （更新xs_user_money）
         2.直播类房间一对一打赏（打赏100分）
@@ -57,7 +57,7 @@ class TestPayCreate(unittest.TestCase):
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200, reason)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectMoneySql(config.testUid, 'money_cash'), 52, reason)
+        Assert.assert_equal(Mysql.selectMoneySql(config.testUid, 'money_cash'), 62, reason)
         Assert.assert_equal(Mysql.selectPayChangeSql(config.payUid), 100, reason)
         Assert.assert_equal(Mysql.selectPayChangeOpSql(config.payUid), 'consume', reason)
         consts.CASE_LIST[des] = 'pass'
@@ -97,7 +97,7 @@ class TestPayCreate(unittest.TestCase):
         2.房间内一对一打赏（打赏1000分）
         3.校验【status code】和返回值【body】状态
         4.检查被打赏者余额和账户，预期为：money_cash=600
-        5.检查打赏者余额
+        5.检查打赏者余额.预期为0
         """
         Mysql.updateChatroomUid(config.pack_cal_uid)
         Mysql.updateBrokerUser(config.pack_cal_uid)
@@ -124,7 +124,7 @@ class TestPayCreate(unittest.TestCase):
         2.房间内一对一打赏（打赏1000分）
         3.校验【status code】和返回值【body】状态
         4.检查被打赏者余额和账户，预期为：700
-        5.检查打赏者余额
+        5.检查打赏者余额,预期为：0
         """
         Mysql.updateMoneySql(100, 0, 0, 0, config.testUid)
         Mysql.updateMoneySql(0, 0, 0, 0, config.payUid)  # 一代宗师
