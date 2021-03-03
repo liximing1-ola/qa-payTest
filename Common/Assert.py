@@ -5,10 +5,9 @@ import json
 from Common import consts
 
 
-def assert_code(code, expected_code, reason):
+def assert_code(code, expected_code):
     """
     验证response状态码
-    :param reason: 上报错误信息
     :param code: 实际结果
     :param expected_code: 预期结果
     :return:
@@ -17,6 +16,7 @@ def assert_code(code, expected_code, reason):
         assert code == expected_code
         return True
     except:
+        reason = '实际结果: {}, 预期结果: {}, 对比结果不一致，导致fail'.format(code, expected_code)
         consts.fail_case_reason.append(reason)
         raise
 
@@ -71,17 +71,17 @@ def assert_len(body, body_msg, expected_len, reason):
         consts.fail_case_reason.append(reason)
         raise
 
-def assert_equal(actual_result, expect_result, reason):
+def assert_equal(actual_result, expect_result):
     try:
         assert actual_result == expect_result
         return True
     except:
+        reason = '实际结果: {}, 预期结果: {}, 对比结果不一致，导致fail'.format(actual_result, expect_result)
         consts.fail_case_reason.append(reason)
-        print('实际结果： {}'.format(actual_result))
         raise
 
 
 if __name__ == '__main__':
     # 示例
     res = {'code': 200, 'body': {'success': False, 'msg': '余额不足，无法支付'}, 'time_consuming': 9.316, 'time_total': 0.009316}
-    assert_code(res['code'], 300, res['body'])
+    assert_code(res['code'], 300)

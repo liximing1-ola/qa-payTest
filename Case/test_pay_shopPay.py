@@ -30,10 +30,10 @@ class TestPayCreate(unittest.TestCase):
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         des = '验证商城购买单一道具时逻辑'
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
-        Assert.assert_code(res['code'], 200, reason)
+        Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 100, reason)
-        Assert.assert_equal(Mysql.checkUserCommoditySql(329, config.payUid), 1, reason)
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 100)
+        Assert.assert_equal(Mysql.checkUserCommoditySql(329, config.payUid), 1)
         consts.CASE_LIST[des] = 'pass'
 
     @pytest.mark.run(order=2)
@@ -53,10 +53,10 @@ class TestPayCreate(unittest.TestCase):
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         des = '验证商城一次购买多个道具时支付逻辑'
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
-        Assert.assert_code(res['code'], 200, reason)
+        Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 4000, reason)
-        Assert.assert_equal(Mysql.checkUserCommoditySql(340, config.payUid), 10, reason)
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 4000)
+        Assert.assert_equal(Mysql.checkUserCommoditySql(340, config.payUid), 10)
         consts.CASE_LIST[des] = 'pass'
 
     @pytest.mark.run(order=3)
@@ -78,10 +78,10 @@ class TestPayCreate(unittest.TestCase):
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=payload)
         des = '验证商城一次购买多个道具时支付逻辑'
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
-        Assert.assert_code(res['code'], 200, reason)
+        Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.checkUserCommoditySql(340, config.payUid), 9, reason)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 6138, reason)
+        Assert.assert_equal(Mysql.checkUserCommoditySql(340, config.payUid), 9)
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 6138)
         consts.CASE_LIST[des] = 'pass'
 
     @pytest.mark.run(order=4)
@@ -103,9 +103,9 @@ class TestPayCreate(unittest.TestCase):
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=payload)
         des = '验证购买的背包道具在房间内赠送给他人时物品不足的逻辑'
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
-        Assert.assert_code(res['code'], 200, reason)
+        Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 0, reason)
         Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason)
-        Assert.assert_equal(Mysql.checkUserCommoditySql(340, config.payUid), 9, reason)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 0, reason)
+        Assert.assert_equal(Mysql.checkUserCommoditySql(340, config.payUid), 9)
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 0)
         consts.CASE_LIST[des] = 'pass'

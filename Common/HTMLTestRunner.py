@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
 
 # download from github
-
-
 import datetime
 import sys
 import io
-import time
 import unittest
 from xml.sax import saxutils
 

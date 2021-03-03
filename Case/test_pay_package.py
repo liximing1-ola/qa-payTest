@@ -29,10 +29,10 @@ class TestPayCreate(unittest.TestCase):
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         des = '验证余额不足时，房间进行一对一打赏'
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
-        Assert.assert_code(res['code'], 200, reason)
+        Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 0, reason)
         Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 0, reason)
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 0)
         consts.CASE_LIST[des] = 'pass'
 
 
@@ -54,11 +54,11 @@ class TestPayCreate(unittest.TestCase):
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         des = '验证余额足够时，直播类型房间一对一打赏'
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
-        Assert.assert_code(res['code'], 200, reason)
+        Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectMoneySql(config.testUid, 'money_cash'), 62, reason)
-        Assert.assert_equal(Mysql.selectPayChangeSql(config.payUid), 100, reason)
-        Assert.assert_equal(Mysql.selectPayChangeOpSql(config.payUid), 'consume', reason)
+        Assert.assert_equal(Mysql.selectMoneySql(config.testUid, 'money_cash'), 62)
+        Assert.assert_equal(Mysql.selectPayChangeSql(config.payUid), 100)
+        Assert.assert_equal(Mysql.selectPayChangeOpSql(config.payUid), 'consume')
         consts.CASE_LIST[des] = 'pass'
 
     def test_03_RoomPayChangeMoney(self):
@@ -79,12 +79,12 @@ class TestPayCreate(unittest.TestCase):
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         des = '验证余额足够时，非直播类型房间一对一打赏比例'
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
-        Assert.assert_code(res['code'], 200, reason)
+        Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_len(res['body'], 'args', 1, reason)
-        Assert.assert_equal(Mysql.selectMoneySql(config.testUid, 'money_cash'), 62, reason)
-        Assert.assert_equal(Mysql.selectPayChangeSql(config.payUid), 100, reason)
-        Assert.assert_equal(Mysql.selectPayChangeOpSql(config.payUid), 'consume', reason)
+        Assert.assert_equal(Mysql.selectMoneySql(config.testUid, 'money_cash'), 62)
+        Assert.assert_equal(Mysql.selectPayChangeSql(config.payUid), 100)
+        Assert.assert_equal(Mysql.selectPayChangeOpSql(config.payUid), 'consume')
         consts.CASE_LIST[des] = 'pass'
 
     def test_04_livePackCalPayChange(self):
@@ -106,11 +106,11 @@ class TestPayCreate(unittest.TestCase):
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         des = '验证直播间打赏主播（打包结算主播），打赏分成满足：6:4，且收入在money_cash账户'
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
-        Assert.assert_code(res['code'], 200, reason)
+        Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_len(res['body'], 'args', 1, reason)
-        Assert.assert_equal(Mysql.selectMoneySql(config.pack_cal_uid, 'money_cash'), 60, reason)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0, reason)
+        Assert.assert_equal(Mysql.selectMoneySql(config.pack_cal_uid, 'money_cash'), 60)
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
         consts.CASE_LIST[des] = 'pass'
 
     # @unittest.skip
@@ -131,11 +131,11 @@ class TestPayCreate(unittest.TestCase):
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         des = '验证直播间内打赏一代宗师用户，在师徒收益基础上，分成比例应为62:38'
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
-        Assert.assert_code(res['code'], 200, reason)
+        Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0, reason)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 62, reason)
-        Assert.assert_equal(Mysql.selectPayChangeSql(config.payUid), 100, reason)
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 62)
+        Assert.assert_equal(Mysql.selectPayChangeSql(config.payUid), 100)
         consts.CASE_LIST[des] = 'pass'
 
 

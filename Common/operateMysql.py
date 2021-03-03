@@ -7,7 +7,6 @@ class MysqlUtil:
     _user = 'super'
     _password = 'dev123456'
     _dbName ='xianshi'
-
     conn = ''
     cur = ''
 
