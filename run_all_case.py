@@ -2,12 +2,11 @@
 import unittest
 import time
 from Common import logs, api
-from autoGitPull import autoGitPull
+from autoGitPull import autoGitPull, writeUpdateTime
 from robot import robot
 from Common.HTMLTestRunner import HTMLTestRunner
 import os
 from Common import consts
-from Common.api import writeUpdateTime
 
 def all_case():
     # case_dir = os.path.join(os.getcwd(), "Case")   # 待执行用例的目录

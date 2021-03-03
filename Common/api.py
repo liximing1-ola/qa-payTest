@@ -1,5 +1,4 @@
 # 内网打印调试
-import os
 import requests
 import json
 import random
@@ -28,17 +27,6 @@ def getImage():
     else:
         icon = random.randint(1, 140)
         return 'http://xs-image.oss-cn-hangzhou.aliyuncs.com/static/gift_big/{}.png'.format(icon)
-
-def writeUpdateTime(now):
-    txtPath = os.path.split(os.path.realpath(__file__))[0] + '/time.txt'
-    with open(txtPath, 'w') as f:
-        f.write(now)
-
-def readUpdateTime():
-    txtPath = os.path.split(os.path.realpath(__file__))[0] + '/time.txt'
-    with open(txtPath, 'r') as f:
-        f = f.read()
-        return f
 
 
 if __name__ == '__main__':
