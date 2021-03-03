@@ -5,8 +5,9 @@ from Common.sqlScript import Mysql
 import unittest
 from Common import consts, Assert
 import sys
+from Common.runfailed import Retry
 
-
+@Retry(max_n=1)
 class TestPayCreate(unittest.TestCase):
 
     # 内网支付接口
@@ -113,7 +114,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0, reason)
         consts.CASE_LIST[des] = 'pass'
 
-    @unittest.skip
+    # @unittest.skip
     def test_05_mentorPayChange(self):
         """
         用例描述：
