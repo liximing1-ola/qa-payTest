@@ -2,7 +2,6 @@
 import unittest
 import time
 from Common import logs, api
-from autoGitPull import writeUpdateTime
 from autoGitPull import autoGitPull
 from robot import robot
 from Common.HTMLTestRunner import HTMLTestRunner
