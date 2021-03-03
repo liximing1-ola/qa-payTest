@@ -76,7 +76,7 @@ def assert_equal(actual_result, expect_result):
         assert actual_result == expect_result
         return True
     except:
-        reason = '实际结果: {}, 预期结果: {}, 对比结果不一致，导致fail'.format(actual_result, expect_result)
+        reason = '实际结果: {}, 预期结果: {}, 对比结果不一致，导致用例执行失败'.format(actual_result, expect_result)
         consts.fail_case_reason.append(reason)
         raise
 
