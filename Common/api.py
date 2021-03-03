@@ -1,6 +1,5 @@
 # 内网打印调试
 import requests
-import json
 import random
 
 def errorMsg(res):

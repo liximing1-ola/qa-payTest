@@ -2,7 +2,6 @@
 封装assert方法
 """
 import json
-from Common import logs
 from Common import consts
 
 
