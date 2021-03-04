@@ -9,8 +9,10 @@ import os
 from Common import consts
 
 def all_case():
-    # case_dir = os.path.join(os.getcwd(), "Case")   # 待执行用例的目录
+    # win下路径
+    # case_dir = os.path.join(os.getcwd(), "Case")
     testcase = unittest.TestSuite()
+    # 指定待执行用例的目录
     discover = unittest.defaultTestLoader.discover("/home/banban-1/payTest/Case",
                                                    pattern="test_*.py",
                                                    top_level_dir=None)

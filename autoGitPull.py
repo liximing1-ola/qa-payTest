@@ -6,10 +6,12 @@ import os
 from robot import robot
 
 def autoGitPull():
+    # 默认指定路径
     git_dir = '/home/webroot/banban'
     g = git.cmd.Git(git_dir)
     g.pull()
     repo = Repo(git_dir)
+    # 当前线上分支
     if str(repo.active_branch) == "release-for-vpc":
         commit_log = repo.git.log('--pretty={"commit":"%h","author":"%an","summary":"%s","date":"%cd"}',
                                   max_count=3, date='format:%Y-%m-%d %H:%M:%S')

@@ -57,7 +57,7 @@ def robot(mode, reason, title=''):
                     {
                         "title": title,
                         "description": des,
-                        "url": "https://meican.com/",
+                        "url": "",
                         "picurl": icon,
                     }
                 ]
