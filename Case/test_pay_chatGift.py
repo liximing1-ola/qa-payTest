@@ -28,8 +28,8 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_chatGift')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
-        des = '验证余额不足时，私聊进行一对一打赏'
-        reason = '-用例说明: {}, --失败原因: {}'.format(des, res['body'])
+        des = '检查当余额不足时，私聊一对一打赏的场景'
+        reason = '用例说明: {},  失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 0, reason)
         Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason)
@@ -51,7 +51,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_chatGift')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
-        des = '验证余额足够时，私聊一对一打赏'
+        des = '检查当余额足够时，私聊一对一打赏的场景'
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)

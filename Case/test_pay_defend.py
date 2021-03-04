@@ -1,5 +1,5 @@
 from Common.config import config
-from Common import Request, api
+from Common import Request
 from Common.params_Yaml import Yaml
 from Common.sqlScript import Mysql
 import unittest
@@ -27,7 +27,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_defend')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
-        des = '验证开通个人守护的收益分成比例是否正确'
+        des = '验证开通个人守护时收益分成是否正确'
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)

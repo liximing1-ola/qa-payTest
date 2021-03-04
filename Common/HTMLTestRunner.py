@@ -26,11 +26,6 @@ class OutputRedirector(object):
 stdout_redirector = OutputRedirector(sys.stdout)
 stderr_redirector = OutputRedirector(sys.stderr)
 
-
-# ----------------------------------------------------------------------
-# Template
-
-
 class Template_mixin(object):
     """
     Define a HTML template for report customerization and generation.

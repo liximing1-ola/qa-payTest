@@ -25,7 +25,7 @@ def autoGitPull():
         lastTime = int(readUpdateTime())
         if times > lastTime:
             logs.get_log('updateGitCode.log').info('最新代码提交时间: {}, 上次代码更新时间: {}'.format(times, lastTime))
-            # git commit更新提醒
+            # git commit update message
             robot('success', '{}'.format(log_list[0]))
             return True
         else:

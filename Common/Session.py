@@ -1,9 +1,7 @@
 # coding=utf-8
 """
 封装获取cookie方法
-
 """
-
 import requests
 from Common.config import config
 from Common.params_Yaml import Yaml
@@ -37,7 +35,7 @@ class Session:
             tokenDict = {'token': res['data'].get('token')}
             return tokenDict
         else:
-            print("get token error")
+            print("env input error")
 
 
 if __name__ == '__main__':

@@ -1,5 +1,5 @@
 from Common.config import config
-from Common import Request, api
+from Common import Request
 from Common.params_Yaml import Yaml
 from Common.sqlScript import Mysql
 import unittest
@@ -28,7 +28,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.deleteUserCommoditySql(config.payUid, 10)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_shop')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
-        des = '验证商城购买单一道具时逻辑'
+        des = '验证商城内购买道具时场景'
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
@@ -51,7 +51,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(1000, 100000, 1000, 1000, config.payUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_more_shop')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
-        des = '验证商城一次购买多个道具时支付逻辑'
+        des = '验证商城内购买多个道具时场景'
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
@@ -76,7 +76,7 @@ class TestPayCreate(unittest.TestCase):
         cid = int(Mysql.getUserCommodityIdSql(340, config.payUid))
         payload = 'platform=available&type=package&money=9900&params=%7B%22rid%22%3A193185484%2C%22uids%22%3A%22105002312%22%2C%22positions%22%3A%220%22%2C%22position%22%3A-1%2C%22giftId%22%3A54%2C%22giftNum%22%3A1%2C%22price%22%3A9900%2C%22cid%22%3A{}%2C%22ctype%22%3A%22gift%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A1%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22refer%22%3A%22%E7%83%AD%E9%97%A8%3Aroom%22%2C%22useCoin%22%3A-1%7D'.format(cid)
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=payload)
-        des = '验证商城一次购买多个道具时支付逻辑'
+        des = '验证背包内物品赠送给他人的场景'
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
@@ -101,7 +101,7 @@ class TestPayCreate(unittest.TestCase):
         cid = Mysql.getUserCommodityIdSql(340, config.payUid)
         payload = 'platform=available&type=package&money=99000&params=%7B%22rid%22%3A193185484%2C%22uids%22%3A%22105002312%22%2C%22positions%22%3A%220%22%2C%22position%22%3A-1%2C%22giftId%22%3A54%2C%22giftNum%22%3A10%2C%22price%22%3A9900%2C%22cid%22%3A{}%2C%22ctype%22%3A%22gift%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A10%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22refer%22%3A%22%E7%83%AD%E9%97%A8%3Aroom%22%2C%22useCoin%22%3A-1%7D'.format(cid)
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=payload)
-        des = '验证购买的背包道具在房间内赠送给他人时物品不足的逻辑'
+        des = '验证背包内物品赠送给他人物品不足时的场景'
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 0, reason)

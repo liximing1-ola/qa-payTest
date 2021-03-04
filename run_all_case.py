@@ -39,12 +39,12 @@ def main():
             robot('markdown', des)
         elif len(test_result.failures) >= 1:
             logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
-            time.sleep(3)
+            time.sleep(2)
             # 失败用例更新提醒
             robot('success', des)
             for case, reason in test_result.failures:
                 robot('fail', set(consts.fail_case_reason), title=case.id())
-                # 只反馈一次，否则太骚扰了
+                # 反馈一个，否则骚扰
                 break
         elif len(test_result.errors) >= 1:
             logs.get_log('failCase.log').error("error: {}".format(test_result.errors))

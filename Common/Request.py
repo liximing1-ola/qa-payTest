@@ -2,7 +2,6 @@
 """
 封装 request
 """
-
 import requests
 from Common import Session
 from requests.packages.urllib3.exceptions import InsecureRequestWarning  # 使用requests库请求HTTPS时,因为忽略证书验证,导致每次运行时都会报错

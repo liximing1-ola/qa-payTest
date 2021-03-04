@@ -2,24 +2,22 @@ import pymysql
 
 class MysqlUtil:
     # 私有属性,类外部无法直接进行访问
-    _dbUrl = 'rm-bp1nfl3dp096d5o39.mysql.rds.aliyuncs.com'
+    _dbUrl = ' '
     _dbPort = 3306
-    _user = 'super'
-    _password = 'dev123456'
-    _dbName ='xianshi'
+    _user = ' '
+    _password = ' '
+    _dbName =' '
     conn = ''
     cur = ''
 
     def __init__(self):
-        print('------ 数据库连接--------')
-        # 创建游标对象
+        print('------ MYSQL CONNECT--------')
         self.cur = self.conn.cursor()
 
     def xss_init(self):
-        print('------ 数据库连接--------')
+        print('------ MYSQL CONNECT--------')
         self.conn = pymysql.connect(host=self._dbUrl, port=self._dbPort, user=self._user, passwd=self._password,
                                     db=self._dbName, charset='utf8')
-        # 创建游标对象
         self.cur = self.conn.cursor()
 
     def update(self, sql_update):

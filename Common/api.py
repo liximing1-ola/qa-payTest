@@ -2,12 +2,6 @@
 import requests
 import random
 
-def errorMsg(res):
-    if res['body']['success'] != 1:
-        print(res['body'])
-    else:
-        print(res)
-
 def dictToList(result_dict):
     list_case = []
     for k, v in result_dict.items():

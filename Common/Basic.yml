@@ -4,7 +4,7 @@ header_dev:
     "user - agent": "Agent / Xs android V1.0.5.3 / Js V1.0.0.0 / Login V1601690448"
     "host": 'dev.iambanban.com'
 
-# 阿里云内网环境测试
+# 内网环境测试
 params_dev_qq:
     t=ADC1FD03910635E8E7D87705206BAAC5&o=659826BC750ABF8FF3AED92E552DCF62
 # Common\getSession.py
