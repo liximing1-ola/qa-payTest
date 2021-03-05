@@ -30,8 +30,9 @@ class Session:
             res = session.post(login_url, data=body, headers=headers)
             res.raise_for_status()
             res = res.json()
+            print(res)
             if res['success'] != 1:
-                print('Token获取异常: {}'.format(res))
+                print('获取异常: {}'.format(res))
             tokenDict = {'token': res['data'].get('token')}
             print(tokenDict)
             return tokenDict
