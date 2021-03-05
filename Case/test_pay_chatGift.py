@@ -51,6 +51,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_chatGift')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
+        print(res)
         des = '检查当余额足够时，私聊一对一打赏的场景'
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
