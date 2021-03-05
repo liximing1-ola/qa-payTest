@@ -42,4 +42,4 @@ class Session:
 
 if __name__ == '__main__':
     ss = Session()
-    ss.get_session('release')
+    ss.get_session('env')
