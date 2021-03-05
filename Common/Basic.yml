@@ -11,7 +11,7 @@ params_dev_qq:
 # data
 data_dev_qq:
     "type": 'login'
-    "dtoken": 'f6deV__2F07TkHsYQO1FkCT6JV6tcWNdoddlSHMsDsSUmbVKTgM2XdZRCk309aXXyApcgOECS4KnvOb6ptQ0K__2BCEK32QTF02Jh5eSSWtr0U8__2BCJPNdDveobjCaMlCnHU4XZeM9BLSf82ofLpA'
+    "dtoken": '5713cmvgW__2BdAptbXspnvIcaABPJ__2FZsiduOR5ZTUp20m4IrCVdSK7vZ2vvh5XggEOTC1P4YdD0DEi9g70FZSWezLOdEQdniqyJl9VfiuDstv7RieXUTXIAetZV31__2FePoSDyR7JqXXtl__2B1dg'
 
 # eg:别忘了修改date中的UID字段
 # 房间一对一打赏，被打赏者：直播间主播
