@@ -33,7 +33,7 @@ class Session:
             print(res)
             if res['success'] != 1:
                 print('获取异常: {}'.format(res))
-            tokenDict = {'token': res['data'].get('token')}
+            tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
             print(tokenDict)
             return tokenDict
         else:
