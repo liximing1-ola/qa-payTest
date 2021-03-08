@@ -1,6 +1,6 @@
 # coding=utf-8
 import yaml
-from Common.config import config
+from Common.Config import config
 import os
 
 

@@ -1,10 +1,10 @@
-from Common.config import config
+from Common.Config import config
 from Common import Request
 from Common.params_Yaml import Yaml
 from Common.sqlScript import Mysql
 import unittest
 import pytest
-from Common import consts, Assert
+from Common import Consts, Assert
 
 
 class TestPayCreate(unittest.TestCase):
@@ -34,7 +34,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 100)
         Assert.assert_equal(Mysql.checkUserCommoditySql(329, config.payUid), 1)
-        consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = 'pass'
 
     @pytest.mark.run(order=2)
     def test_02_shopPayChangeBuyMore(self):
@@ -57,7 +57,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 4000)
         Assert.assert_equal(Mysql.checkUserCommoditySql(340, config.payUid), 10)
-        consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = 'pass'
 
     @pytest.mark.run(order=3)
     def test_03_shopGiftToUser(self):
@@ -82,7 +82,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.checkUserCommoditySql(340, config.payUid), 9)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 6138)
-        consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = 'pass'
 
     @pytest.mark.run(order=4)
     def test_04_shopGiftToUserNoEnough(self):
@@ -108,4 +108,4 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason)
         Assert.assert_equal(Mysql.checkUserCommoditySql(340, config.payUid), 9)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 0)
-        consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = 'pass'

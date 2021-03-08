@@ -40,7 +40,6 @@ class ClassD(unittest.TestCase):
         raise AttributeError
 
     """
-
     def __new__(cls, func_or_cls=None, max_n=1, func_prefix="test"):
         self = object.__new__(cls)
         if func_or_cls:
@@ -74,7 +73,6 @@ class ClassD(unittest.TestCase):
                             args[0].setUp()
                         else:
                             raise
-
             return wrapper
         elif inspect.isclass(func_or_cls):
             for name, func in list(func_or_cls.__dict__.items()):

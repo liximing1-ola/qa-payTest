@@ -1,9 +1,9 @@
-from Common.config import config
+from Common.Config import config
 from Common import Request
 from Common.params_Yaml import Yaml
 from Common.sqlScript import Mysql
 import unittest
-from Common import consts, Assert
+from Common import Consts, Assert
 
 
 class TestPayCreate(unittest.TestCase):
@@ -36,5 +36,5 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 3224)
         Assert.assert_equal(Mysql.selectPayChangeSql(config.payUid), 5200)
         Assert.assert_equal(Mysql.selectPayChangeOpSql(config.payUid), 'consume')
-        consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = 'pass'
 

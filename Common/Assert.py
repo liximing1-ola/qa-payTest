@@ -2,7 +2,7 @@
 封装assert方法
 """
 import json
-from Common import consts
+from Common import Consts
 
 def assert_code(code, expected_code):
     """
@@ -16,7 +16,7 @@ def assert_code(code, expected_code):
         return True
     except:
         reason = '实际结果: {}, 预期结果: {}, 对比结果不一致，导致fail'.format(code, expected_code)
-        consts.fail_case_reason.append(reason)
+        Consts.fail_case_reason.append(reason)
         raise
 
 
@@ -34,7 +34,7 @@ def assert_body(body, body_msg, expected_msg, reason):
         assert msg == expected_msg
         return True
     except:
-        consts.fail_case_reason.append(reason)
+        Consts.fail_case_reason.append(reason)
         raise
 
 
@@ -50,7 +50,7 @@ def assert_in_text(body, expected_msg):
         assert expected_msg in text
         return True
     except:
-        consts.fail_case_reason.append('fail')
+        Consts.fail_case_reason.append('fail')
         raise
 
 def assert_len(body, body_msg, expected_len, reason):
@@ -67,7 +67,7 @@ def assert_len(body, body_msg, expected_len, reason):
         assert len(data) >= expected_len
         return True
     except:
-        consts.fail_case_reason.append(reason)
+        Consts.fail_case_reason.append(reason)
         raise
 
 def assert_equal(actual_result, expect_result):
@@ -76,7 +76,7 @@ def assert_equal(actual_result, expect_result):
         return True
     except:
         reason = '实际结果: {}, 预期结果: {}, 对比结果不一致，导致用例执行失败'.format(actual_result, expect_result)
-        consts.fail_case_reason.append(reason)
+        Consts.fail_case_reason.append(reason)
         raise
 
 

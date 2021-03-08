@@ -1,11 +1,11 @@
-from Common.config import config
+from Common.Config import config
 from Common import Request
 from Common.params_Yaml import Yaml
 from Common.sqlScript import Mysql
 import unittest
-from Common import consts
+from Common import Consts
 from Common import Assert
-from Common.runfailed import Retry
+from Common.runFailed import Retry
 
 @Retry(max_n=2)
 class TestPayCreate(unittest.TestCase):
@@ -34,7 +34,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 0, reason)
         Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason)
         Assert.assert_equal(Mysql.selectMoneySql(config.testUid), 0)
-        consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = 'pass'
 
     def test_02_ImPayChangeMoney(self):
         """
@@ -58,7 +58,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_len(res['body'], 'args', 1, reason)
         Assert.assert_equal(Mysql.selectMoneySql(config.testUid, 'money_cash_b'), 720)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 400)
-        consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = 'pass'
 
 
 if __name__ == '__main__':

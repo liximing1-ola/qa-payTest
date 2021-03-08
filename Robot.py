@@ -1,6 +1,6 @@
 import time
 import requests
-from Common.api import getImage
+from Common.Api import getImage
 
 def robot(mode, reason, title=''):
     headers = {'Content-Type': 'application/json'}

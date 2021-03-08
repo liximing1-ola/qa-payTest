@@ -1,12 +1,12 @@
 # coding=utf-8
 import unittest
 import time
-from Common import logs, api
+from Common import Logs, Api
 from autoGitPull import autoGitPull, writeUpdateTime
-from robot import robot
+from Robot import robot
 from Common.HTMLTestRunner import HTMLTestRunner
 import os
-from Common import consts
+from Common import Consts
 
 def all_case():
     # win下路径
@@ -30,24 +30,24 @@ def main():
         test_result = unittest.TextTestRunner(verbosity=3).run(all_case())
         des = "执行用例总数: {}, 失败用例总数: {}, 异常用例总数: {}" \
             .format(test_result.testsRun, len(test_result.failures), len(test_result.errors))
-        logs.get_log('runCaseTime.log').info(des)
-        case_list=api.dictToList(consts.CASE_LIST)
+        Logs.get_log('runCaseTime.log').info(des)
+        case_list=Api.dictToList(Consts.CASE_LIST)
         if len(test_result.failures) == 0 and len(test_result.errors) == 0:
             des = "执行用例总数: {}, 失败用例总数: {}, 异常用例总数: {}, 执行结果如下:\n {}" \
                 .format(test_result.testsRun, len(test_result.failures), len(test_result.errors), case_list)
             time.sleep(2)
             robot('markdown', des)
         elif len(test_result.failures) >= 1:
-            logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
+            Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
             time.sleep(2)
             # 失败用例更新提醒
             robot('success', des)
             for case, reason in test_result.failures:
-                robot('fail', set(consts.fail_case_reason), title=case.id())
+                robot('fail', set(Consts.fail_case_reason), title=case.id())
                 # 反馈一个，否则骚扰
                 break
         elif len(test_result.errors) >= 1:
-            logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
+            Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
             for case, reason in test_result.errors:
                 robot('fail', reason, case.id())
                 break

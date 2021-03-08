@@ -1,10 +1,10 @@
-from Common.config import config
+from Common.Config import config
 from Common import Request
 from Common.params_Yaml import Yaml
 from Common.sqlScript import Mysql
 import unittest
 import pytest
-from Common import consts, Assert
+from Common import Consts, Assert
 
 class TestPayCreate(unittest.TestCase):
 
@@ -33,7 +33,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectMoneySql(config.payUid, 'money'), 160000)
-        consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = 'pass'
 
     @pytest.mark.run(order=2)
     def test_02_TitlePayChangeRenew(self):
@@ -54,7 +54,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectMoneySql(config.payUid, 'money'), 176000)
-        consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = 'pass'
 
 
 if __name__ == '__main__':

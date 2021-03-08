@@ -3,7 +3,7 @@
 封装获取cookie方法
 """
 import requests
-from Common.config import config
+from Common.Config import config
 from Common.params_Yaml import Yaml
 
 class Session:

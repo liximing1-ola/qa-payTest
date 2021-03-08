@@ -1,11 +1,11 @@
-from Common.config import config
+from Common.Config import config
 from Common import Request
 from Common.params_Yaml import Yaml
 from Common.sqlScript import Mysql
 import unittest
-from Common import consts
+from Common import Consts
 from Common import Assert
-from Common.runfailed import Retry
+from Common.runFailed import Retry
 
 class TestPayCreate(unittest.TestCase):
 

@@ -1,11 +1,11 @@
-from Common.config import config
+from Common.Config import config
 from Common import Request
 from Common.params_Yaml import Yaml
 from Common.sqlScript import Mysql
 import unittest
-from Common import consts, Assert
+from Common import Consts, Assert
 import sys
-from Common.runfailed import Retry
+from Common.runFailed import Retry
 
 class TestPayCreate(unittest.TestCase):
 
@@ -33,7 +33,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 0, reason)
         Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 0)
-        consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = 'pass'
 
     def test_02_RoomPayLiveMoney(self):
         """
@@ -58,7 +58,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectMoneySql(config.testUid, 'money_cash_b'), 62)
         Assert.assert_equal(Mysql.selectPayChangeSql(config.payUid), 100)
         Assert.assert_equal(Mysql.selectPayChangeOpSql(config.payUid), 'consume')
-        consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = 'pass'
 
     def test_03_RoomPayChangeMoney(self):
         """
@@ -84,7 +84,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectMoneySql(config.testUid, 'money_cash_b'), 62)
         Assert.assert_equal(Mysql.selectPayChangeSql(config.payUid), 100)
         Assert.assert_equal(Mysql.selectPayChangeOpSql(config.payUid), 'consume')
-        consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = 'pass'
 
     def test_04_livePackCalPayChange(self):
         """
@@ -110,7 +110,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_len(res['body'], 'args', 1, reason)
         Assert.assert_equal(Mysql.selectMoneySql(config.pack_cal_uid, 'money_cash'), 60)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
-        consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = 'pass'
 
     # @unittest.skip
     def test_05_mentorPayChange(self):
@@ -135,7 +135,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 62)
         Assert.assert_equal(Mysql.selectPayChangeSql(config.payUid), 100)
-        consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = 'pass'
 
 
 if __name__ == '__main__':
