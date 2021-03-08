@@ -196,5 +196,19 @@ class Mysql:
         finally:
             con.commit()
 
+    # 删除用户工会记录
+    @staticmethod
+    def deleteXsBrokerUser(uid):
+        con, cur = Mysql.conMysql()
+        sql = "delete from xs_broker_user where uid ={} limit=1".format(uid)
+        try:
+            cur.execute(sql)
+        except Exception as error:
+            con.rollback()
+            print('delete fail', error)
+        finally:
+            con.commit()
+
+
 
 

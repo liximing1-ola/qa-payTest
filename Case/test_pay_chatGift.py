@@ -26,6 +26,8 @@ class TestPayCreate(unittest.TestCase):
         """
         Mysql.updateMoneySql(0, 0, 0, 0, config.payUid)
         Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
+        # 删除用户工会记录
+        Mysql.deleteXsBrokerUser(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_chatGift')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
         des = '检查当余额不足时，私聊一对一打赏的场景'
