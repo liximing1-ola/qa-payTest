@@ -25,7 +25,6 @@ class TestPayCreate(unittest.TestCase):
         5.检查背包内物品
         """
         Mysql.updateMoneySql(0, 100, 100, 0, config.payUid)
-        print(Mysql.selectAllMoneySql(config.payUid))
         Mysql.deleteUserCommoditySql(config.payUid, 10)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_shop')
         res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
