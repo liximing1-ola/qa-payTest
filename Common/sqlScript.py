@@ -200,7 +200,7 @@ class Mysql:
     @staticmethod
     def deleteXsBrokerUser(uid):
         con, cur = Mysql.conMysql()
-        sql = "delete from xs_broker_user where uid ={} limit=1".format(uid)
+        sql = "delete from xs_broker_user where uid ={} limit 1".format(uid)
         try:
             cur.execute(sql)
         except Exception as error:
