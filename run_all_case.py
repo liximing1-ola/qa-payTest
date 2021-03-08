@@ -14,7 +14,7 @@ def all_case():
     testcase = unittest.TestSuite()
     # 指定待执行用例的目录
     discover = unittest.defaultTestLoader.discover("/home/banban-1/payTest/Case",
-                                                   pattern="test_*",
+                                                   pattern="test_pay_shopPay.py",
                                                    top_level_dir=None)
     testcase.addTests(discover)  # 直接加载 discover
     return testcase
