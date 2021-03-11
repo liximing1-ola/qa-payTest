@@ -80,7 +80,6 @@ class TestPayCreate(unittest.TestCase):
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_len(res['body'], 'args', 1, reason)
         Assert.assert_equal(Mysql.selectMoneySql(config.testUid, 'money_cash_b'), 62)
         Assert.assert_equal(Mysql.selectPayChangeSql(config.payUid), 100)
         Assert.assert_equal(Mysql.selectPayChangeOpSql(config.payUid), 'consume')
@@ -107,7 +106,6 @@ class TestPayCreate(unittest.TestCase):
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_len(res['body'], 'args', 1, reason)
         Assert.assert_equal(Mysql.selectMoneySql(config.pack_cal_uid, 'money_cash'), 60)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
         Consts.CASE_LIST[des] = 'pass'

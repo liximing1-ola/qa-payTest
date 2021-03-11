@@ -31,7 +31,6 @@ class TestPayCreate(unittest.TestCase):
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_len(res['body'], 'args', 1, reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 3224)
         Assert.assert_equal(Mysql.selectPayChangeSql(config.payUid), 5200)
