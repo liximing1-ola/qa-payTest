@@ -9,7 +9,7 @@ from Common import Consts, Assert
 class TestPayCreate(unittest.TestCase):
 
     # 内网支付接口
-    pay_package_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
+    pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
 
     def test_01_defendPayChangMoney(self):
         """
@@ -26,7 +26,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(5200, 0, 0, 0, config.payUid)
         Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_defend')
-        res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
+        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         des = '验证开通个人守护时收益分成是否正确'
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)

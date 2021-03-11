@@ -9,7 +9,7 @@ from Common import Consts, Assert
 class TestPayCreate(unittest.TestCase):
 
     # 内网支付接口
-    pay_package_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
+    pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
 
     @pytest.mark.run(order=1)
     def test_01_TitlePayChangeMoney(self):
@@ -27,7 +27,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateUserTitleSql(config.payUid)
         Mysql.updateMoneySql(200000, 0, 0, 0, config.payUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_title')
-        res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
+        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         des = '验证爵位开通及返钱的场景'
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
@@ -48,7 +48,7 @@ class TestPayCreate(unittest.TestCase):
         """
         Mysql.updateMoneySql(200000, 0, 0, 0, config.payUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_title')
-        res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
+        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         des = '验证爵位续费及返钱的场景'
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)

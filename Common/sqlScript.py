@@ -209,6 +209,48 @@ class Mysql:
         finally:
             con.commit()
 
+    # 更新箱子刷新物品
+    @staticmethod
+    def updateXsUserBox(gift_type, uid, box_type):
+        con, cur = Mysql.conMysql()
+        sql = "update xs_user_box set last_refresh_cid={},last_refresh_sub_cid={} where uid={} and type ='{}'"\
+            .format(gift_type, gift_type, uid, box_type)
+        try:
+            cur.execute(sql)
+        except Exception as error:
+            con.rollback()
+            print('update fail', error)
+        finally:
+            con.commit()
+
+    # 用户背包增加测试数据
+    @staticmethod
+    def insertXsUserCommodity(uid, cid, num):
+        con, cur = Mysql.conMysql()
+        sql = "insert into xs_user_commodity (uid, cid, num) values ({}, {}, {})".format(uid, cid, num)
+        try:
+            cur.execute(sql)
+        except Exception as error:
+            con.rollback()
+            print('insert fail', error)
+        finally:
+            con.commit()
+
+    # 查询箱子开出物品
+    @staticmethod
+    def selectUserCommodity(uid):
+        con, cur = Mysql.conMysql()
+        sql = 'select sum(num) from xs_user_commodity where uid ={}'.format(uid)
+        try:
+            cur.execute(sql)
+            res = cur.fetchone()
+            return int(res[0])
+        except Exception as error:
+            print(error)
+
+
+
+
 
 
 

@@ -53,20 +53,12 @@ def assert_in_text(body, expected_msg):
         Consts.fail_case_reason.append('fail')
         raise
 
-def assert_len(body, body_msg, expected_len, reason):
-    """
-    验证response body中任意属性的值
-    :param reason:
-    :param expected_len:
-    :param body:
-    :param body_msg:
-    :return:
-    """
+def assert_len(actual_len, expect_len):
     try:
-        data = body[body_msg]
-        assert len(data) >= expected_len
+        assert actual_len > expect_len
         return True
     except:
+        reason = '实际结果: {}, 预期结果: {}, 对比结果不一致，导致用例执行失败'.format(actual_len, expect_len)
         Consts.fail_case_reason.append(reason)
         raise
 

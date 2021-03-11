@@ -11,7 +11,7 @@ from Common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
 
     # 内网支付接口
-    pay_package_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
+    pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
 
     def test_01_IMPayNoMoney(self):
         """
@@ -29,7 +29,7 @@ class TestPayCreate(unittest.TestCase):
         # 删除用户工会记录
         Mysql.deleteXsBrokerUser(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_chatGift')
-        res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
+        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         des = '检查当余额不足时，私聊一对一打赏的场景'
         reason = '用例说明: {},  失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
@@ -52,7 +52,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(1100, 100, 100, 100, config.payUid)
         Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_chatGift')
-        res = Request.post_request_session(url=TestPayCreate.pay_package_url, data=data)
+        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         des = '检查当余额足够时，私聊一对一打赏的场景'
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
