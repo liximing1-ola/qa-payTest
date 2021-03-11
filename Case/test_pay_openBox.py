@@ -29,7 +29,7 @@ class TestPayCreate(unittest.TestCase):
         """
         Mysql.deleteUserCommoditySql(config.payUid, 17)
         Mysql.insertXsUserCommodity(config.payUid, 2, 1)
-        Mysql.updateXsUserBox(9, config.payUid, 'copper')
+        Mysql.insertXsUserBox(9, config.payUid, 'copper')
         Mysql.updateMoneySql(400, 100, 100, 100, config.payUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_shop_box')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
@@ -59,7 +59,7 @@ class TestPayCreate(unittest.TestCase):
         """
         Mysql.deleteUserCommoditySql(config.payUid, 17)
         Mysql.insertXsUserCommodity(config.payUid, 3, 6)
-        Mysql.updateXsUserBox(9, config.payUid, 'silver')
+        Mysql.insertXsUserBox(9, config.payUid, 'silver')
         Mysql.updateMoneySql(12600, 0, 0, 0, config.payUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_shop_moreBox')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)

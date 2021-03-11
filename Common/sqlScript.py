@@ -211,9 +211,9 @@ class Mysql:
 
     # 更新箱子刷新物品
     @staticmethod
-    def updateXsUserBox(gift_type, uid, box_type):
+    def insertXsUserBox(gift_type, uid, box_type):
         con, cur = Mysql.conMysql()
-        sql = "update xs_user_box set last_refresh_cid={},last_refresh_sub_cid={} where uid={} and type ='{}'"\
+        sql = "insert into xs_user_box (last_refresh_cid, last_refresh_sub_cid, uid, type) values ({},{},{},'{}')"\
             .format(gift_type, gift_type, uid, box_type)
         try:
             cur.execute(sql)
