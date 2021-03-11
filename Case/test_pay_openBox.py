@@ -41,7 +41,6 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectUserCommodity(config.payUid), 2)
         Consts.CASE_LIST[des] = 'pass'
 
-    @unittest.skip
     def test_02_openMoreBoxPayChange(self):
         """
         用例描述：
