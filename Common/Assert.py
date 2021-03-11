@@ -55,7 +55,7 @@ def assert_in_text(body, expected_msg):
 
 def assert_len(actual_len, expect_len):
     try:
-        assert actual_len > expect_len
+        assert actual_len >= expect_len
         return True
     except:
         reason = '实际结果: {}, 预期结果: {}, 对比结果不一致，导致用例执行失败'.format(actual_len, expect_len)
