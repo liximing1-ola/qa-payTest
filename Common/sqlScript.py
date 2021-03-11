@@ -250,6 +250,20 @@ class Mysql:
         except Exception as error:
             print(error)
 
+    # 清除xs_user_box用户数据
+    @staticmethod
+    def deleteUserBox(uid):
+        con, cur = Mysql.conMysql()
+        sql = "delete from xs_user_box where uid={} limit 1".format(uid)
+        try:
+            cur.execute(sql)
+        except Exception as error:
+            con.rollback()
+            fail_case_reason.append(error)
+            print('delete fail', error)
+        finally:
+            con.commit()
+
 
 
 

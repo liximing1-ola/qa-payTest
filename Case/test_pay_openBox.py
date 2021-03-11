@@ -27,6 +27,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查账户余额，预期值为：100
         5.检查背包内开出物品，预期值应为：2（赠送头像框，开出礼物个数）
         """
+        Mysql.deleteUserBox(config.payUid)
         Mysql.deleteUserCommoditySql(config.payUid, 17)
         Mysql.insertXsUserCommodity(config.payUid, 2, 1)
         Mysql.insertXsUserBox(9, config.payUid, 'copper')
@@ -56,6 +57,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查账户余额，预期值为：0
         5.检查背包内开出物品，预期值应大于2（赠送头像框*1，开出礼物个数大于*2）
         """
+        Mysql.deleteUserBox(config.payUid)
         Mysql.deleteUserCommoditySql(config.payUid, 17)
         Mysql.insertXsUserCommodity(config.payUid, 3, 6)
         Mysql.insertXsUserBox(9, config.payUid, 'silver')
