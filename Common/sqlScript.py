@@ -1,5 +1,6 @@
 # coding=utf-8
 import pymysql
+from Common.Consts import fail_case_reason
 
 class Mysql:
 
@@ -219,6 +220,7 @@ class Mysql:
             cur.execute(sql)
         except Exception as error:
             con.rollback()
+            fail_case_reason.append(error)
             print('update fail', error)
         finally:
             con.commit()
