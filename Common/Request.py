@@ -12,7 +12,6 @@ def post_request_session(url, data):
       :param url:
       :param data:
       :return:
-
       """
     session = Session.Session()
     get_session = session.get_session('dev')
