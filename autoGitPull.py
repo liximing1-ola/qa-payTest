@@ -39,6 +39,7 @@ def writeUpdateTime(now):
     txtPath = os.path.split(os.path.realpath(__file__))[0] + '/time.txt'
     with open(txtPath, 'w') as f:
         f.write(now)
+        f.flush()
 
 def readUpdateTime():
     txtPath = os.path.split(os.path.realpath(__file__))[0] + '/time.txt'
