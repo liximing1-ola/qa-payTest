@@ -1,7 +1,7 @@
 import git
 from git.repo import Repo
 import time
-from Common import Logs
+from common import Logs
 import os
 from Robot import robot
 

@@ -3,8 +3,8 @@
 封装获取cookie方法
 """
 import requests
-from Common.Config import config
-from Common.params_Yaml import Yaml
+from common.Config import config
+from common.params_Yaml import Yaml
 
 class Session:
     def __init__(self):

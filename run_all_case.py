@@ -1,12 +1,12 @@
 # coding=utf-8
 import unittest
 import time
-from Common import Logs, Api
+from common import Logs, method
 from autoGitPull import autoGitPull, writeUpdateTime
 from Robot import robot
-from Common.HTMLTestRunner import HTMLTestRunner
+from common.HTMLTestRunner import HTMLTestRunner
 import os
-from Common import Consts
+from common import Consts
 
 def all_case():
     # win下路径
@@ -31,7 +31,7 @@ def main():
         des = "执行用例总数: {}, 失败用例总数: {}, 异常用例总数: {}" \
             .format(test_result.testsRun, len(test_result.failures), len(test_result.errors))
         Logs.get_log('runCaseTime.log').info(des)
-        case_list=Api.dictToList(Consts.CASE_LIST)
+        case_list=method.dictToList(Consts.CASE_LIST)
         if len(test_result.failures) == 0 and len(test_result.errors) == 0:
             des = "执行用例总数: {}, 失败用例总数: {}, 异常用例总数: {}, 执行结果如下:\n {}" \
                 .format(test_result.testsRun, len(test_result.failures), len(test_result.errors), case_list)

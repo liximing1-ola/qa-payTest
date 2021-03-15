@@ -2,7 +2,7 @@
 封装assert方法
 """
 import json
-from Common import Consts
+from common import Consts
 
 def assert_code(code, expected_code):
     """

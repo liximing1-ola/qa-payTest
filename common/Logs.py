@@ -2,7 +2,7 @@
 import logging
 import os
 from logging.handlers import TimedRotatingFileHandler
-from Common.Config import config
+from common.Config import config
 
 def get_log(log_name, level=logging.DEBUG, when='midnight', back_count=0):
     """

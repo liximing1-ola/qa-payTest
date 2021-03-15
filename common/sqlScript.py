@@ -1,6 +1,6 @@
 # coding=utf-8
 import pymysql
-from Common.Consts import fail_case_reason
+from common.Consts import fail_case_reason
 
 class Mysql:
 
