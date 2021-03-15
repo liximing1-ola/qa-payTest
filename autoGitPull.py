@@ -45,6 +45,8 @@ def writeUpdateTime(now):
 
 def readUpdateTime():
     txtPath = os.path.split(os.path.realpath(__file__))[0] + '/time.txt'
+    if not os.path.exists(txtPath):
+        os.mkdir(txtPath)
     with open(txtPath, 'r') as f:
         f = f.read()
         return f
