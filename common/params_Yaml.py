@@ -12,7 +12,7 @@ class Yaml:
         读取yaml
         :return: yaml_data
         """
-        yaml_path = config.BASE_PATH + '/Common/' + yaml_fileName
+        yaml_path = config.BASE_PATH + '/common/' + yaml_fileName
         try:
             if not os.path.exists(yaml_path):
                 return FileExistsError
