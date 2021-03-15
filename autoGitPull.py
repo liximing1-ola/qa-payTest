@@ -37,6 +37,8 @@ def autoGitPull():
 
 def writeUpdateTime(now):
     txtPath = os.path.split(os.path.realpath(__file__))[0] + '/time.txt'
+    if not os.path.exists(txtPath):
+        os.mkdir(txtPath)
     with open(txtPath, 'w') as f:
         f.write(now)
         f.flush()
