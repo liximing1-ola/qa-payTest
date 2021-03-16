@@ -136,6 +136,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectPayChangeSql(config.payUid), 100)
         Consts.CASE_LIST[des] = 'pass'
 
+    @unittest.skip
     def test_06_couponNoStatePayChange(self):
         """
         用例描述：
@@ -152,7 +153,10 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(3000, 0, 0, 0, config.payUid)
         Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
         cid = Mysql.getUserCommodityIdSql(54, config.payUid)
-        payload = {'platform': 'available', 'type': 'package', 'money': '3000', 'params': {"rid":193186934,"uids":"100010054","positions":"0","position":-1,"giftId":11,"giftNum":1,"price":3000,"cid":cid,"ctype":"coupon","duction_money":500,"version":2,"num":1,"gift_type":"normal","star":0,"show_pac_man_guide":1,"refer":"热门_开黑:room","useCoin":-1}}
+        payload = {'platform': 'available',
+                   'type': 'package',
+                   'money': '3000',
+                   'params': '{"rid":193186934,"uids":"105002312","positions":"0","position":-1,"giftId":11,"giftNum":1,"price":3000,"cid":33974138,"ctype":"coupon","duction_money":500,"version":2,"num":1,"gift_type":"normal","star":0,"show_pac_man_guide":1,"refer":"热门_开黑:room","useCoin":-1}'}
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=payload)
         des = '有未激活券(state=0)的情况下，验证打赏流程'
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
@@ -174,18 +178,18 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：3000 * 0.62 = 1860
         5.检查打赏者余额,预期为：3000 -2500 = 500
         """
-        Mysql.deleteUserCommoditySql(config.payUid, 17)
-        Mysql.insertXsUserCommodity(config.payUid, 54, 1, 1)
+        #Mysql.deleteUserCommoditySql(config.payUid, 17)
+        #Mysql.insertXsUserCommodity(config.payUid, 54, 1, 1)
         Mysql.updateMoneySql(3000, 0, 0, 0, config.payUid)
         Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
-        cid = Mysql.getUserCommodityIdSql(54, config.payUid)
+        #cid = Mysql.getUserCommodityIdSql(54, config.payUid)
         payload = {
             'platform': 'available',
             'type': 'package',
             'money': '3000',
             'params': '{"rid":193186934,"uids":"105002312","positions":"0","position":-1,"giftId":11,"giftNum":1,'
-                      '"price":3000,"cid":{},"ctype":"coupon","duction_money":500,"version":2,"num":1,'
-                      '"gift_type":"normal","star":0,"show_pac_man_guide":1,"refer":"热门_开黑:room","useCoin":-1}'.format(cid)}
+                      '"price":3000,"cid":33974162,"ctype":"coupon","duction_money":500,"version":2,"num":1,'
+                      '"gift_type":"normal","star":0,"show_pac_man_guide":1,"refer":"热门_开黑:room","useCoin":-1}'}
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=payload)
         des = '有激活券(state=1)的情况下，验证打赏流程'
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
