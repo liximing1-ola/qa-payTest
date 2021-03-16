@@ -27,7 +27,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.selectUserCommoditySql(config.payUid)
         Mysql.deleteUserTitleSql(config.payUid)
         Mysql.updateUserTitleSql(config.payUid)
-        Mysql.updateMoneySql(200000, 0, 0, 0, config.payUid)
+        Mysql.updateMoneySql(config.payUid, 200000)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_title')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         des = '验证爵位开通及返钱的场景'
@@ -48,7 +48,7 @@ class TestPayCreate(unittest.TestCase):
         3.校验【status code】和返回值【body】状态
         4.检查剩余钱值,预期值：（200000 - 60000 + 36000 = 176000）
         """
-        Mysql.updateMoneySql(200000, 0, 0, 0, config.payUid)
+        Mysql.updateMoneySql(config.payUid, 200000)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_title')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         des = '验证爵位续费及返钱的场景'

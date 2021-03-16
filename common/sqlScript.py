@@ -23,7 +23,7 @@ class Mysql:
 
     # 更新用户的账户余额
     @staticmethod
-    def updateMoneySql(money, money_cash, money_cash_b, money_b, uid):
+    def updateMoneySql(uid, money=0, money_cash=0, money_cash_b=0, money_b=0):
         con, cur = Mysql.conMysql()
         sql = "update xs_user_money set money={}, money_b={}, money_cash={}, money_cash_b={} where uid={} limit 1"\
             .format(money, money_b, money_cash, money_cash_b, uid)
@@ -108,9 +108,9 @@ class Mysql:
 
     # 清空用户背包
     @staticmethod
-    def deleteUserCommoditySql(uid, countLimit):
+    def deleteUserCommoditySql(uid):
         con, cur = Mysql.conMysql()
-        sql = "delete from xs_user_commodity where uid={} limit {}".format(uid, countLimit)
+        sql = "delete from xs_user_commodity where uid={}".format(uid)
         try:
             cur.execute(sql)
         except Exception as error:

@@ -24,8 +24,8 @@ class TestPayCreate(unittest.TestCase):
         5.检查被打赏者余额,预期：5200 * 0.62 = 3224
         6.检查消费记录
         """
-        Mysql.updateMoneySql(5200, 0, 0, 0, config.payUid)
-        Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
+        Mysql.updateMoneySql(config.payUid, 5200)
+        Mysql.updateMoneySql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_defend')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         des = '验证开通个人守护时收益分成是否正确'

@@ -29,10 +29,10 @@ class TestPayCreate(unittest.TestCase):
         5.检查背包内开出物品，预期值应为：2（赠送头像框，开出礼物个数）
         """
         Mysql.deleteUserBox(config.payUid)
-        Mysql.deleteUserCommoditySql(config.payUid, 17)
+        Mysql.deleteUserCommoditySql(config.payUid)
         Mysql.insertXsUserCommodity(config.payUid, 2, 1)
         Mysql.insertXsUserBox(9, config.payUid, 'copper')
-        Mysql.updateMoneySql(400, 100, 100, 100, config.payUid)
+        Mysql.updateMoneySql(config.payUid, 400, 100, 100, 100)
         data = Yaml.read_yaml('Basic.yml', 'dev_shop_box')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         des = '检查背包内开箱后正常开出物品'
@@ -59,10 +59,10 @@ class TestPayCreate(unittest.TestCase):
         5.检查背包内开出物品，预期值应大于2（赠送头像框*1，开出礼物个数大于*2）
         """
         Mysql.deleteUserBox(config.payUid)
-        Mysql.deleteUserCommoditySql(config.payUid, 17)
+        Mysql.deleteUserCommoditySql(config.payUid)
         Mysql.insertXsUserCommodity(config.payUid, 3, 6)
         Mysql.insertXsUserBox(9, config.payUid, 'silver')
-        Mysql.updateMoneySql(12600, 0, 0, 0, config.payUid)
+        Mysql.updateMoneySql(config.payUid, 12600)
         data = Yaml.read_yaml('Basic.yml', 'dev_shop_moreBox')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         des = '检查背包内开多个箱子后正常开出物品'
@@ -87,8 +87,8 @@ class TestPayCreate(unittest.TestCase):
         4.检查账户余额，预期值为：100
         5.检查收箱用户账户余额，预期值为：大于0
         """
-        Mysql.updateMoneySql(400, 100, 100, 100, config.payUid)
-        Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
+        Mysql.updateMoneySql(config.payUid, 400, 100, 100, 100)
+        Mysql.updateMoneySql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_package_giveBox')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         des = '检查房间内赠送箱子逻辑正常'

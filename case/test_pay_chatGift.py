@@ -24,8 +24,8 @@ class TestPayCreate(unittest.TestCase):
         4.检查预期返回msg，预期：支付失败
         5.检查被打赏者余额,预期：0
         """
-        Mysql.updateMoneySql(0, 0, 0, 0, config.payUid)
-        Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
+        Mysql.updateMoneySql(config.payUid)
+        Mysql.updateMoneySql(config.testUid)
         # 删除用户工会记录
         Mysql.deleteXsBrokerUser(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_chatGift')
@@ -49,8 +49,8 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：720
         5.检查打赏者剩余余额，预期为：400
         """
-        Mysql.updateMoneySql(1100, 100, 100, 100, config.payUid)
-        Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
+        Mysql.updateMoneySql(config.payUid, 1100, 100, 100, 100)
+        Mysql.updateMoneySql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_chatGift')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         des = '检查当余额足够时，私聊一对一打赏的场景'

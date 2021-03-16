@@ -24,8 +24,8 @@ class TestPayCreate(unittest.TestCase):
         4.检查预期返回msg，预期：支付失败
         5.检查被打赏者余额,预期：0
         """
-        Mysql.updateMoneySql(0, 0, 0, 0, config.payUid)
-        Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
+        Mysql.updateMoneySql(config.payUid)
+        Mysql.updateMoneySql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_1')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         des = '验证当余额不足时，房间一对一打赏场景'
@@ -48,8 +48,8 @@ class TestPayCreate(unittest.TestCase):
         5.检查消费记录表消费money（xs_pay_change_new）
         6.检查消费记录表消费方式op
         """
-        Mysql.updateMoneySql(30, 30, 30, 10, config.payUid)
-        Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
+        Mysql.updateMoneySql(config.payUid, 30, 30, 30, 10)
+        Mysql.updateMoneySql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_1')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         des = '验证当余额足够时，直播类型房间一对一打赏的场景'
@@ -73,8 +73,8 @@ class TestPayCreate(unittest.TestCase):
         5.检查消费记录表消费money（xs_pay_change_new）
         6.检查消费记录表消费方式op
         """
-        Mysql.updateMoneySql(30, 30, 30, 10, config.payUid)
-        Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
+        Mysql.updateMoneySql(config.payUid, 30, 30, 30, 10)
+        Mysql.updateMoneySql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_2')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         des = '验证当余额足够时，非直播类型房间一对一打赏的场景'
@@ -99,8 +99,8 @@ class TestPayCreate(unittest.TestCase):
         """
         Mysql.updateChatroomUid(config.pack_cal_uid)
         Mysql.updateBrokerUser(config.pack_cal_uid)
-        Mysql.updateMoneySql(100, 0, 0, 0, config.payUid)
-        Mysql.updateMoneySql(0, 0, 0, 0, config.pack_cal_uid)
+        Mysql.updateMoneySql(config.payUid, 100)
+        Mysql.updateMoneySql(config.pack_cal_uid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pack_cal')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         des = '验证直播类型房间打赏主播（打包结算），打赏分成满足6:4，且收入在money_cash账户'
@@ -123,8 +123,8 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：620
         5.检查打赏者余额,预期为：0
         """
-        Mysql.updateMoneySql(100, 0, 0, 0, config.payUid)
-        Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
+        Mysql.updateMoneySql(config.payUid, 100)
+        Mysql.updateMoneySql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_mentor_pay')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         des = '验证直播间打赏麦下用户，在师徒收益基础上，分成比例为62:38'
@@ -147,11 +147,12 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：0
         5.检查打赏者余额,预期为：3000
         """
-        Mysql.deleteUserCommoditySql(config.payUid, 17)
-        Mysql.insertXsUserCommodity(config.payUid, 54, 1)
-        Mysql.updateMoneySql(3000, 0, 0, 0, config.payUid)
-        Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
-        cid = Mysql.getUserCommodityIdSql(54, config.payUid)
+        gift_cid = 54  # 老司机
+        Mysql.deleteUserCommoditySql(config.payUid)
+        Mysql.insertXsUserCommodity(config.payUid, gift_cid, 1)
+        Mysql.updateMoneySql(config.payUid, 3000)
+        Mysql.updateMoneySql(config.testUid)
+        cid = Mysql.getUserCommodityIdSql(gift_cid, config.payUid)
         payload = {'platform': 'available',
                    'type': 'package',
                    'money': '3000',
@@ -177,11 +178,12 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：3000 * 0.62 = 1860
         5.检查打赏者余额,预期为：3000 -2500 = 500
         """
-        Mysql.deleteUserCommoditySql(config.payUid, 17)
-        Mysql.insertXsUserCommodity(config.payUid, 54, 1, 1)
-        Mysql.updateMoneySql(3000, 0, 0, 0, config.payUid)
-        Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
-        cid = Mysql.getUserCommodityIdSql(54, config.payUid)
+        gift_cid = 54  # 老司机
+        Mysql.deleteUserCommoditySql(config.payUid)
+        Mysql.insertXsUserCommodity(config.payUid, gift_cid, 1, 1)
+        Mysql.updateMoneySql(config.payUid, 3000)
+        Mysql.updateMoneySql(config.testUid)
+        cid = Mysql.getUserCommodityIdSql(gift_cid, config.payUid)
         payload = {
             'platform': 'available',
             'type': 'package',
