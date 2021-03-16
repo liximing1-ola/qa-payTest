@@ -227,9 +227,9 @@ class Mysql:
 
     # 用户背包增加测试数据
     @staticmethod
-    def insertXsUserCommodity(uid, cid, num, state=1):
+    def insertXsUserCommodity(uid, cid, num, state=0):
         con, cur = Mysql.conMysql()
-        sql = "insert into xs_user_commodity (uid, cid, num) values ({}, {}, {})".format(uid, cid, num)
+        sql = "insert into xs_user_commodity (uid, cid, num, state) values ({}, {}, {}, {})".format(uid, cid, num, state)
         try:
             cur.execute(sql)
         except Exception as error:
