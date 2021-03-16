@@ -147,6 +147,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：0
         5.检查打赏者余额,预期为：3000
         """
+        Mysql.deleteUserCommoditySql(config.payUid, 17)
         Mysql.insertXsUserCommodity(config.payUid, 54, 1, 1)
         Mysql.updateMoneySql(3000, 0, 0, 0, config.payUid)
         Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
