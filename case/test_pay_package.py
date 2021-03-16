@@ -188,9 +188,7 @@ class TestPayCreate(unittest.TestCase):
             'platform': 'available',
             'type': 'package',
             'money': '3000',
-            'params': '{"rid":193186934,"uids":"105002312","positions":"0","position":-1,"giftId":11,"giftNum":1,'
-                      '"price":3000,"cid":{},"ctype":"coupon","duction_money":500,"version":2,"num":1,'
-                      '"gift_type":"normal","star":0,"show_pac_man_guide":1,"refer":"热门_开黑:room","useCoin":-1}'.format(cid)}
+            'params': '{"rid":193186934,"uids":"105002312","positions":"0","position":-1,"giftId":11,"giftNum":1,"price":3000,"cid":{},"ctype":"coupon","duction_money":500,"version":2,"num":1,"gift_type":"normal","star":0,"show_pac_man_guide":1,"refer":"热门_开黑:room","useCoin":-1}'.format(cid)}
         print(payload)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=payload)
         des = '有激活券(state=1)的情况下，验证打赏流程'
