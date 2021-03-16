@@ -100,7 +100,7 @@ class Mysql:
             cur.execute(sql)
             res = cur.fetchone()
             if int(res[0]) >= 1:
-                Mysql.deleteUserCommoditySql(uid, int(res[0]))
+                Mysql.deleteUserCommoditySql(uid)
             else:
                 pass
         except Exception as error:
