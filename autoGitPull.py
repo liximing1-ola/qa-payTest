@@ -46,7 +46,7 @@ def readUpdateTime():
     if not os.path.exists(txtPath):
         os.system(r"touch {}".format(txtPath))
         with open(txtPath, 'r+') as f:
-            f.write('1600000000')
+            f.write('1600000000')  # 创建txt文件，并默认写入一个时间戳
             f.flush()
     with open(txtPath, 'r') as f:
         f = f.read()
