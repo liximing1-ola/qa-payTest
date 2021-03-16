@@ -44,7 +44,6 @@ def post_request_session(url, data):
     except Exception as e:
         print(e)
         response_dicts['body'] = ''
-    # response_dicts['text'] = response.text
     response_dicts['time_consuming'] = time_consuming
     response_dicts['time_total'] = time_total
     return response_dicts

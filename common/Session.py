@@ -5,6 +5,7 @@
 import requests
 from common.Config import config
 from common.params_Yaml import Yaml
+from common import Logs
 
 class Session:
     def __init__(self):
@@ -31,7 +32,7 @@ class Session:
             res.raise_for_status()
             res = res.json()
             if res['success'] != 1:
-                print('获取异常: {}'.format(res))
+                Logs.get_log('getSession.log').error('session获取异常，原因： {}'.format(res))
             tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
             return tokenDict
         else:

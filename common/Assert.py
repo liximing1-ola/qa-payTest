@@ -19,16 +19,7 @@ def assert_code(code, expected_code):
         Consts.fail_case_reason.append(reason)
         raise
 
-
 def assert_body(body, body_msg, expected_msg, reason):
-    """
-    验证response body中任意属性的值
-    :param reason: 上报错误信息
-    :param body: 返回信息体
-    :param body_msg:
-    :param expected_msg:
-    :return:
-    """
     try:
         msg = body[body_msg]
         assert msg == expected_msg
@@ -37,14 +28,7 @@ def assert_body(body, body_msg, expected_msg, reason):
         Consts.fail_case_reason.append(reason)
         raise
 
-
 def assert_in_text(body, expected_msg):
-    """
-    验证response body中是否包含预期字符串
-    :param body:
-    :param expected_msg:
-    :return:
-    """
     try:
         text = json.dumps(body, ensure_ascii=False)
         assert expected_msg in text

@@ -188,7 +188,7 @@ class Mysql:
     @staticmethod
     def updateChatroomUid(uid):
         con, cur = Mysql.conMysql()
-        sql = "update xs_chatroom set app_id=1, uid ={}  where rid=193185577 limit 1".format(uid)
+        sql = "update xs_chatroom set app_id=1, uid ={} where rid=193185577 limit 1".format(uid)
         try:
             cur.execute(sql)
         except Exception as error:

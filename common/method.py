@@ -1,4 +1,3 @@
-# 内网打印调试
 import requests
 import random
 
@@ -10,8 +9,7 @@ def dictToList(result_dict):
     return case
 
 def getImage():
-    url = 'https://www.mxnzp.com/api/image/girl/list/random?app_id=kilmc0p2ytsnawyp&' \
-          'app_secret=bnNoWElSVDBYbEhsc1EvYVM2WnVnZz09'
+    url = 'https://www.mxnzp.com/api/image/girl/list/random?app_id=kilmc0p2ytsnawyp&app_secret=bnNoWElSVDBYbEhsc1EvYVM2WnVnZz09'
     res = requests.get(url)
     res.raise_for_status()
     res = res.json()

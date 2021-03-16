@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
 
 # download from github
+
 import datetime
 import sys
 import io
 import unittest
 from xml.sax import saxutils
+
+from requests import __version__
+
 
 class OutputRedirector(object):
     """ Wrapper to redirect stdout or stderr """
@@ -27,42 +31,6 @@ stdout_redirector = OutputRedirector(sys.stdout)
 stderr_redirector = OutputRedirector(sys.stderr)
 
 class Template_mixin(object):
-    """
-    Define a HTML template for report customerization and generation.
-    Overall structure of an HTML report
-    HTML
-    +------------------------+
-    |<html>                  |
-    |  <head>                |
-    |                        |
-    |   STYLESHEET           |
-    |   +----------------+   |
-    |   |                |   |
-    |   +----------------+   |
-    |                        |
-    |  </head>               |
-    |                        |
-    |  <body>                |
-    |                        |
-    |   HEADING              |
-    |   +----------------+   |
-    |   |                |   |
-    |   +----------------+   |
-    |                        |
-    |   REPORT               |
-    |   +----------------+   |
-    |   |                |   |
-    |   +----------------+   |
-    |                        |
-    |   ENDING               |
-    |   +----------------+   |
-    |   |                |   |
-    |   +----------------+   |
-    |                        |
-    |  </body>               |
-    |</html>                 |
-    +------------------------+
-    """
 
     STATUS = {
         0: u'通过',
@@ -73,9 +41,7 @@ class Template_mixin(object):
     DEFAULT_TITLE = 'Unit Test Report'
     DEFAULT_DESCRIPTION = ''
 
-    # ------------------------------------------------------------------------
     # HTML Template
-
     HTML_TMPL = r"""<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -417,15 +383,11 @@ class Template_mixin(object):
     ENDING_TMPL = """<div id='ending'>&nbsp;</div>"""
 
 
-# -------------------- The end of the Template class -------------------
-
+# --- The end of the Template class ---
 
 TestResult = unittest.TestResult
 
-
 class _TestResult(TestResult):
-    # note: _TestResult is a pure representation of results.
-    # It lacks the output and reporting ability compares to unittest._TextTestResult.
 
     def __init__(self, verbosity=1):
         TestResult.__init__(self)
@@ -435,14 +397,6 @@ class _TestResult(TestResult):
         self.failure_count = 0
         self.error_count = 0
         self.verbosity = verbosity
-
-        # result is a list of result in 4 tuple
-        # (
-        #   result code (0: success; 1: fail; 2: error),
-        #   TestCase object,
-        #   Test output (byte string),
-        #   stack trace,
-        # )
         self.result = []
         self.subtestlist = []
 
@@ -576,7 +530,6 @@ class HTMLTestRunner(Template_mixin):
         self.startTime = datetime.datetime.now()
 
     def run(self, test):
-        "Run the given test case or test suite."
         result = _TestResult(self.verbosity)
         test(result)
         self.stopTime = datetime.datetime.now()
@@ -585,8 +538,6 @@ class HTMLTestRunner(Template_mixin):
         return result
 
     def sortResult(self, result_list):
-        # unittest does not seems to run in any particular order.
-        # Here at least we want to group them together by class.
         rmap = {}
         classes = []
         for n, t, o, e in result_list:
@@ -739,34 +690,14 @@ class HTMLTestRunner(Template_mixin):
     def _generate_ending(self):
         return self.ENDING_TMPL
 
-
-##############################################################################
-# Facilities for running tests from the command line
-##############################################################################
-
-# Note: Reuse unittest.TestProgram to launch test. In the future we may
-# build our own launcher to support more specific command line
-# parameters like test title, CSS, etc.
 class TestProgram(unittest.TestProgram):
-    """
-    A variation of the unittest.TestProgram. Please refer to the base
-    class for command line parameters.
-    """
 
     def runTests(self):
-        # Pick HTMLTestRunner as the default test runner.
-        # base class's testRunner parameter is not useful because it means
-        # we have to instantiate HTMLTestRunner before we know self.verbosity.
         if self.testRunner is None:
             self.testRunner = HTMLTestRunner(verbosity=self.verbosity)
         unittest.TestProgram.runTests(self)
 
 
 main = TestProgram
-
-##############################################################################
-# Executing this module from the command line
-##############################################################################
-
 if __name__ == "__main__":
     main(module=None)

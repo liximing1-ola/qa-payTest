@@ -4,8 +4,6 @@ import time
 from common import Logs, method
 from autoGitPull import autoGitPull, writeUpdateTime
 from Robot import robot
-from common.HTMLTestRunner import HTMLTestRunner
-import os
 from common import Consts
 
 def all_case():
