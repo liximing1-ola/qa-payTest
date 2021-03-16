@@ -151,8 +151,15 @@ class TestPayCreate(unittest.TestCase):
         Mysql.insertXsUserCommodity(config.payUid, 54, 1, 1)
         Mysql.updateMoneySql(3000, 0, 0, 0, config.payUid)
         Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
-        data = Yaml.read_yaml('Basic.yml', 'dev_package_couponPay')
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
+        cid = Mysql.getUserCommodityIdSql(54, config.payUid)
+        payload = {
+            'platform': 'available',
+            'type': 'package',
+            'money': '3000',
+            'params': '{"rid":193186934,"uids":"105002312","positions":"0","position":-1,"giftId":11,"giftNum":1,'
+                      '"price":3000,"cid":{},"ctype":"coupon","duction_money":500,"version":2,"num":1,'
+                      '"gift_type":"normal","star":0,"show_pac_man_guide":1,"refer":"热门_开黑:room","useCoin":-1}'.format(cid)}
+        res = Request.post_request_session(url=TestPayCreate.pay_url, data=payload)
         des = '有未激活券(state=0)的情况下，验证打赏流程'
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
@@ -177,8 +184,15 @@ class TestPayCreate(unittest.TestCase):
         Mysql.insertXsUserCommodity(config.payUid, 54, 1, 1)
         Mysql.updateMoneySql(3000, 0, 0, 0, config.payUid)
         Mysql.updateMoneySql(0, 0, 0, 0, config.testUid)
-        data = Yaml.read_yaml('Basic.yml', 'dev_package_couponPay')
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
+        cid = Mysql.getUserCommodityIdSql(54, config.payUid)
+        payload = {
+            'platform': 'available',
+            'type': 'package',
+            'money': '3000',
+            'params': '{"rid":193186934,"uids":"105002312","positions":"0","position":-1,"giftId":11,"giftNum":1,'
+                      '"price":3000,"cid":{},"ctype":"coupon","duction_money":500,"version":2,"num":1,'
+                      '"gift_type":"normal","star":0,"show_pac_man_guide":1,"refer":"热门_开黑:room","useCoin":-1}'.format(cid)}
+        res = Request.post_request_session(url=TestPayCreate.pay_url, data=payload)
         des = '有激活券(state=1)的情况下，验证打赏流程'
         reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
