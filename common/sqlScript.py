@@ -227,7 +227,7 @@ class Mysql:
 
     # 用户背包增加测试数据
     @staticmethod
-    def insertXsUserCommodity(uid, cid, num):
+    def insertXsUserCommodity(uid, cid, num, state=1):
         con, cur = Mysql.conMysql()
         sql = "insert into xs_user_commodity (uid, cid, num) values ({}, {}, {})".format(uid, cid, num)
         try:

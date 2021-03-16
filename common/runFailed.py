@@ -45,10 +45,10 @@ class ClassD(unittest.TestCase):
         self = object.__new__(cls)
         if func_or_cls:
             self.__init__(func_or_cls, max_n, func_prefix)
-            time.sleep(3)
+            time.sleep(1)
             return self(func_or_cls)
         else:
-            time.sleep(3)
+            time.sleep(1)
             return self
 
     def __init__(self, func_or_cls=None, max_n=1, func_prefix="test"):

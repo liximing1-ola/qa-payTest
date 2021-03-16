@@ -86,3 +86,13 @@ dev_package_giveBox:
     'type': 'package',
     'money': '600',
     'params': '{"rid":193185538,"uids":"1005002312","positions":"5","position":-1,"giftId":46,"giftNum":1,"price":600,"cid":0,"ctype":"","duction_money":0,"version":2,"num":1,"gift_type":"normal","star":4,"show_pac_man_guide":0,"refer":"主播_唱见:room","useCoin":-1}' }
+
+# eg:别忘了修改date中的UID字段
+# rid = 193186934
+# uid = 105002312
+# 房间送一个箱子
+dev_package_couponPay:
+  { 'platform': 'available',
+    'type': 'package',
+    'money': '3000',
+    'params': '{"rid":193186934,"uids":"105002312","positions":"0","position":-1,"giftId":11,"giftNum":1,"price":3000,"cid":33974110,"ctype":"coupon","duction_money":500,"version":2,"num":1,"gift_type":"normal","star":0,"show_pac_man_guide":1,"refer":"热门_开黑:room","useCoin":-1}' }
