@@ -25,7 +25,7 @@ class Mysql:
     @staticmethod
     def updateMoneySql(uid, money=0, money_cash=0, money_cash_b=0, money_b=0, gold_coin=0):
         con, cur = Mysql.conMysql()
-        sql = "update xs_user_money set money={}, money_b={}, money_cash={}, money_cash_b={} gold_coin={} where uid={} limit 1"\
+        sql = "update xs_user_money set money={}, money_b={}, money_cash={}, money_cash_b={},gold_coin={} where uid={} limit 1"\
             .format(money, money_b, money_cash, money_cash_b, gold_coin, uid)
         print(sql)
         try:
