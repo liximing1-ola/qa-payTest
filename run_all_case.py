@@ -14,12 +14,12 @@ def all_case():
     discover = unittest.defaultTestLoader.discover("/home/banban-1/payTest/case",
                                                    pattern="test_*",
                                                    top_level_dir=None)
-    testcase.addTests(discover)  # 直接加载 discover
+    testcase.addTests(discover)  # 直接加载discover
     return testcase
 
 def main():
     if autoGitPull():
-        # 生成HTML格式
+        # 生成HTML格式,不适用，先注释
         # html_path = '/home/banban-1/payTest/report/result.html'
         # fp = open(html_path, 'wb')
         # runner = HTMLTestRunner(stream=fp, title=u"测试报告", description=u"用例测试情况")
@@ -38,11 +38,11 @@ def main():
         elif len(test_result.failures) >= 1:
             Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
             time.sleep(2)
-            # 失败用例更新提醒
+            # 失败用例微信提醒
             robot('success', des)
             for case, reason in test_result.failures:
                 robot('fail', set(Consts.fail_case_reason), title=case.id())
-                # 反馈一个，否则骚扰
+                # 只反馈一个
                 break
         elif len(test_result.errors) >= 1:
             Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
