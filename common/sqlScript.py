@@ -23,10 +23,10 @@ class Mysql:
 
     # 更新用户的账户余额
     @staticmethod
-    def updateMoneySql(uid, money=0, money_cash=0, money_cash_b=0, money_b=0):
+    def updateMoneySql(uid, money=0, money_cash=0, money_cash_b=0, money_b=0, gold_coin=0):
         con, cur = Mysql.conMysql()
-        sql = "update xs_user_money set money={}, money_b={}, money_cash={}, money_cash_b={} where uid={} limit 1"\
-            .format(money, money_b, money_cash, money_cash_b, uid)
+        sql = "update xs_user_money set money={}, money_b={}, money_cash={}, money_cash_b={} gold_coin={} where uid={} limit 1"\
+            .format(money, money_b, money_cash, money_cash_b, gold_coin, uid)
         try:
             cur.execute(sql)
         except Exception as error:
@@ -40,6 +40,21 @@ class Mysql:
     def selectAllMoneySql(uid):
         con, cur = Mysql.conMysql()
         sql = "select money+money_b+money_cash_b+money_cash from xs_user_money where uid={}".format(uid)
+        try:
+            cur.execute(sql)
+            res = cur.fetchone()
+            if len(res) > 0:
+                return res[0]
+            else:
+                return None
+        except Exception as error:
+            print(error)
+
+    # 查询用户当前金币账户余额
+    @staticmethod
+    def selectCoinSql(uid):
+        con, cur = Mysql.conMysql()
+        sql = "select gold_coin from xs_user_money where uid={}".format(uid)
         try:
             cur.execute(sql)
             res = cur.fetchone()
