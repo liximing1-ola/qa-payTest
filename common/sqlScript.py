@@ -65,7 +65,7 @@ class Mysql:
         except Exception as error:
             print(error)
 
-    # 查询某个账户的余额值
+    # 查询某个账户的余额
     @staticmethod
     def selectMoneySql(uid, money_type='money_cash_b'):
         con, cur = Mysql.conMysql()
@@ -103,21 +103,6 @@ class Mysql:
             res = cur.fetchone()
             if len(res) > 0:
                 return res[0]
-        except Exception as error:
-            print(error)
-
-    # 查询用户的背包物品数
-    @staticmethod
-    def selectUserCommoditySql(uid):
-        con, cur = Mysql.conMysql()
-        sql = "select count(*) from xs_user_commodity where uid={}".format(uid)
-        try:
-            cur.execute(sql)
-            res = cur.fetchone()
-            if int(res[0]) >= 1:
-                Mysql.deleteUserCommoditySql(uid)
-            else:
-                pass
         except Exception as error:
             print(error)
 
@@ -190,7 +175,7 @@ class Mysql:
     @staticmethod
     def updateBrokerUser(uid):
         con, cur = Mysql.conMysql()
-        sql = "update xs_broker_user set uid={}, state=1, pack_cal=1  where id = 50 limit 1".format(uid)
+        sql = "update xs_broker_user set uid={}, state=1, pack_cal=1 where id = 50 limit 1".format(uid)
         try:
             cur.execute(sql)
         except Exception as error:

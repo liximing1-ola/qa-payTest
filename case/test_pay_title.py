@@ -24,7 +24,7 @@ class TestPayCreate(unittest.TestCase):
         3.校验【status code】和返回值【body】状态
         4.检查剩余钱值,预期值：（200000 - 100000 + 60000 = 160000）
         """
-        Mysql.selectUserCommoditySql(config.payUid)
+        Mysql.deleteUserCommoditySql(config.payUid)
         Mysql.deleteUserTitleSql(config.payUid)
         Mysql.updateUserTitleSql(config.payUid)
         Mysql.updateMoneySql(config.payUid, 200000)
