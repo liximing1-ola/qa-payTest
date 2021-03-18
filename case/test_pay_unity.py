@@ -23,11 +23,11 @@ class TestPayCreate(unittest.TestCase):
         3.校验【status code】和返回值【body】状态
         4.检查账户余额，预期值为：
         """
+        des = '检查unity小游戏内道具购买'
         Mysql.updateMoneySql(config.payUid, 100)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_unityGame')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        des = '检查unity小游戏内道具购买'
-        reason = '用例说明: {},  失败原因: {}'.format(des, res['body'])
+        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)

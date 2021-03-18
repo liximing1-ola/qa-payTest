@@ -24,12 +24,12 @@ class TestPayCreate(unittest.TestCase):
         5.检查被打赏者余额,预期：5200 * 0.62 = 3224
         6.检查消费记录
         """
+        des = '检查开通个人守护时收益分成场景'
         Mysql.updateMoneySql(config.payUid, 5200)
         Mysql.updateMoneySql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_defend')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        des = '验证开通个人守护时收益分成是否正确'
-        reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
+        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)

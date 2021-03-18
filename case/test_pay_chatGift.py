@@ -16,22 +16,21 @@ class TestPayCreate(unittest.TestCase):
     def test_01_IMPayNoMoney(self):
         """
         用例描述：
-        验证余额不足时，私聊一对一打赏
+        检查账户余额不足时，私聊一对一打赏
         脚本步骤：
         1.构造打赏者和被打赏者数据 （更新xs_user_money）
-        2.私聊一对一打赏
+        2.私聊一对一打赏流程
         3.校验【status code】和返回值【body】状态
-        4.检查预期返回msg，预期：支付失败
+        4.检查预期返回msg，预期：支付失败，提示Toast
         5.检查被打赏者余额,预期：0
         """
+        des = '检查账户余额不足时，私聊一对一打赏场景'
         Mysql.updateMoneySql(config.payUid)
         Mysql.updateMoneySql(config.testUid)
-        # 删除用户工会记录
-        Mysql.deleteXsBrokerUser(config.testUid)
+        Mysql.deleteXsBrokerUser(config.testUid)  # 删除用户工会记录
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_chatGift')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        des = '检查当余额不足时，私聊一对一打赏的场景'
-        reason = '用例说明: {},  失败原因: {}'.format(des, res['body'])
+        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 0, reason)
         Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason)
@@ -49,12 +48,12 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：720
         5.检查打赏者剩余余额，预期为：400
         """
+        des = '检查账户余额足够时，一对一打赏的场景'
         Mysql.updateMoneySql(config.payUid, 1100, 100, 100, 100)
         Mysql.updateMoneySql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_chatGift')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        des = '检查当余额足够时，私聊一对一打赏的场景'
-        reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
+        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectMoneySql(config.testUid, 'money_cash_b'), 720)

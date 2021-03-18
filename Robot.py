@@ -15,9 +15,7 @@ def robot(mode, reason, title=''):
                 "content": content
             }
         }
-        r = requests.post(
-            url,
-            headers=headers, json=data)
+        r = requests.post(url, headers=headers, json=data)
         if r.status_code == 200 and r.text.find('ok'):
             data = {
                 "msgtype": "text",
@@ -63,9 +61,7 @@ def robot(mode, reason, title=''):
                 ]
             }
         }
-        r = requests.post(
-            url,
-            headers=headers, json=data)
+        r = requests.post(url, headers=headers, json=data)
         if r.status_code == 200 and r.text.find('ok'):
             data = {
                 "msgtype": "text",
@@ -75,8 +71,8 @@ def robot(mode, reason, title=''):
             }
             requests.post(url, headers=headers, json=data)
     else:
-        print('robot over')
+        print('robot over gg')
 
 
 if __name__ == '__main__':
-    pass
+    robot('', '')

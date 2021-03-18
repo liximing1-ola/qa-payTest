@@ -28,6 +28,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查账户余额，预期值为：100
         5.检查背包内开出物品，预期值应为：2（赠送头像框，开出礼物个数）
         """
+        des = '检查背包内开箱子获得对应物品的场景'
         Mysql.deleteUserBox(config.payUid)
         Mysql.deleteUserCommoditySql(config.payUid)
         Mysql.insertXsUserCommodity(config.payUid, 2, 1)
@@ -35,8 +36,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(config.payUid, 400, 100, 100, 100)
         data = Yaml.read_yaml('Basic.yml', 'dev_shop_box')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        des = '检查背包内开箱后正常开出物品'
-        reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
+        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 100)
@@ -50,7 +50,7 @@ class TestPayCreate(unittest.TestCase):
         脚本步骤：
         1.构造数据（更新xs_user_money，xs_user_commodity，xs_user_box）
             * 清空用户背包内所有物品
-            * 用户背包内插入多个箱子*6
+            * 用户背包内插入多个箱子*6 2100*6=12600
             * 修改用户指定箱子礼物刷新
             * 修改用户钱包余额
         2.openBox
@@ -58,6 +58,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查账户余额，预期值为：0
         5.检查背包内开出物品，预期值应大于2（赠送头像框*1，开出礼物个数大于*2）
         """
+        des = '检查背包内多开箱子获得多个物品的场景'
         Mysql.deleteUserBox(config.payUid)
         Mysql.deleteUserCommoditySql(config.payUid)
         Mysql.insertXsUserCommodity(config.payUid, 3, 6)
@@ -65,8 +66,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(config.payUid, 12600)
         data = Yaml.read_yaml('Basic.yml', 'dev_shop_moreBox')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        des = '检查背包内开多个箱子后正常开出物品'
-        reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
+        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
@@ -87,12 +87,12 @@ class TestPayCreate(unittest.TestCase):
         4.检查账户余额，预期值为：100
         5.检查收箱用户账户余额，预期值为：大于0
         """
+        des = '检查房间内赠送箱子打赏的场景'
         Mysql.updateMoneySql(config.payUid, 400, 100, 100, 100)
         Mysql.updateMoneySql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_package_giveBox')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        des = '检查房间内赠送箱子逻辑正常'
-        reason = '用例说明: {}, --失败原因: {}'.format(des, res['body'])
+        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 100)
