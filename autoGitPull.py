@@ -29,7 +29,8 @@ def autoGitPull():
             robot('success', '{}'.format(log_list[0]))
             return True
         else:
-            Logs.get_log('updateGitCode.log').info("Git_Pull未拉取到release分支最新代码，最新代码提交时间: {}, 上次代码更新时间: {}".format(times, lastTime))
+            Logs.get_log('updateGitCode.log').info("Git_Pull未拉取到release分支最新代码，最新代码提交时间: {}, "
+                                                   "上次代码更新时间: {}".format(times, lastTime))
             return False
     else:
         Logs.get_log('gitBranchError.log').error("Git分支不对： {}".format(repo.active_branch))
