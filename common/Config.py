@@ -6,7 +6,7 @@ class config:
     BASE_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     #  release域名
     domain_host = {'bb': 'https://api.yinjietd.com/', 'bb_dev_58': 'https://dev.iambanban.com/',
-                   'pt': 'http://test.overseaban.com/', }
+                   'pt': 'https://test.overseaban.com/', }
 
     # dev域名-（国内qq登陆方式)
     dev_host = domain_host['bb_dev_58']
