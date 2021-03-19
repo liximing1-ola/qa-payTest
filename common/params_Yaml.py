@@ -26,5 +26,5 @@ class Yaml:
 
 
 if __name__ == '__main__':
-    y = Yaml.read_yaml('Basic.yml', 'payload')
+    y = Yaml.read_yaml('Basic_pt.yml', 'pt_pay_chatGift')
     print(y)

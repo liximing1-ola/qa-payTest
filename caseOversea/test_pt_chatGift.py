@@ -43,21 +43,22 @@ class TestPayCreate(unittest.TestCase):
         验证余额足够时，私聊一对一打赏,打赏分成满足师徒收益的基础上为：80:20
         步骤：
         1.清理打赏者和被打赏者数据 （更新xs_user_money）
-        2.私聊一对一打赏(余额1400分，打赏1000分)
+        2.私聊一对一打赏(余额400分，打赏100分)
         3.校验【status code】和【body】状态
-        4.检查被打赏者余额，预期为：800
-        5.检查打赏者剩余余额，预期为：400
+        4.检查被打赏者余额，预期为：80
+        5.检查打赏者剩余余额，预期为：300
         """
         des = '检查账户余额足够时，一对一打赏的场景'
-        Mysql.updateMoneySql(config.pt_payUid, 1100, 100, 100, 100)
+        Mysql.updateMoneySql(config.pt_payUid, 100, 100, 100, 100)
         Mysql.updateMoneySql(config.pt_testUid)
         data = Yaml.read_yaml('Basic_pt.yml', 'pt_pay_chatGift')
         res = Request.pt_post_request_session(url=TestPayCreate.pay_url, data=data)
+        print(res)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectMoneySql(config.pt_testUid, 'money_cash_b'), 800)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.pt_payUid), 400)
+        Assert.assert_equal(Mysql.selectMoneySql(config.pt_testUid, 'money_cash_b'), 80)
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.pt_payUid), 300)
         Consts.CASE_LIST[des] = 'pass'
 
 
