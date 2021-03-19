@@ -22,7 +22,6 @@ def post_request_session(url, data):
         "Content-Type": "application/x-www-form-urlencoded",
         "user-token": get_session['token']
     }
-    print(header)
     if not url.startswith('https://'):
         url = '%s%s' % ('https://', url)
     try:
@@ -65,6 +64,7 @@ def pt_post_request_session(url, data):
         "Content-Type": "application/x-www-form-urlencoded",
         "user-token": get_session['token']
     }
+    print(header)
     if not url.startswith('https://'):
         url = '%s%s' % ('https://', url)
     try:
