@@ -57,7 +57,6 @@ def pt_post_request_session(url, data):
       """
     session = Session.Session()
     get_session = session.get_session('pt')
-    print(get_session['token'])
     requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
     header = {
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko)\
