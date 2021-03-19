@@ -8,11 +8,11 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning  # 使�
 
 def post_request_session(url, data):
     """
-      post请求
-      :param url:
-      :param data:
-      :return:
-      """
+    post请求
+    :param url:
+    :param data:
+    :return:
+    """
     session = Session.Session()
     get_session = session.get_session('dev')
     requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
@@ -49,12 +49,6 @@ def post_request_session(url, data):
     return response_dicts
 
 def pt_post_request_session(url, data):
-    """
-      post请求
-      :param url:
-      :param data:
-      :return:
-      """
     session = Session.Session()
     get_session = session.get_session('pt')
     requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
@@ -64,7 +58,6 @@ def pt_post_request_session(url, data):
         "Content-Type": "application/x-www-form-urlencoded",
         "user-token": get_session['token']
     }
-    print(header)
     if not url.startswith('https://'):
         url = '%s%s' % ('https://', url)
     try:

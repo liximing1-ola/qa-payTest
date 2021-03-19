@@ -11,7 +11,7 @@ from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
 
     # 内网支付接口
-    pay_url = config.dev_host + 'pay/create'
+    pay_url = config.pt_host + 'pay/create'
 
     @unittest.skip
     def test_01_IMPayNoMoney(self):
