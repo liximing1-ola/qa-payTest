@@ -43,6 +43,7 @@ class Session:
             if res['success'] != 1:
                 Logs.get_log('getSession.log').error('session获取异常，原因： {}'.format(res))
             tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
+            print(tokenDict)
             return tokenDict
         else:
             print("env input error")
