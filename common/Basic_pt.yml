@@ -1,0 +1,7 @@
+header_pt:
+    "Content-Type": "application/x-www-form-urlencoded"
+    "user - agent": "Agent / Xs android V1.0.5.3 / Js V1.0.0.0 / Login V1601690448"
+    "host": 'test.overseaban.com'
+
+data_pt_mobile:
+    'mobile=15827552051&area=86&password=7c4a8d09ca3762af61e59520943dc26494f8941b'

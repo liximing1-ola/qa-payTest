@@ -7,7 +7,8 @@ from Robot import robot
 
 def autoGitPull():
     # 默认指定路径
-    git_dir = '/home/webroot/banban'
+    codeDir = {'git_dir': '/home/webroot/banban', 'pt_git_dir': '/home/webroot/oversea/oversea-server'}
+    git_dir = codeDir['git_dir']
     g = git.cmd.Git(git_dir)
     g.pull()
     repo = Repo(git_dir)
