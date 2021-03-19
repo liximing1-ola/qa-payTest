@@ -2,12 +2,12 @@
 import unittest
 import time
 from common import Logs, method
-from autoGitPull import autoGitPull, writeUpdateTime
+from pt_autoGitPull import autoGitPull, writeUpdateTime
 from Robot import robot
 from common import Consts
 
 def all_case():
-    case_dir = {"bb_dir": '/home/banban-1/payTest/case', "pt_dir": '/root/payTest/case'}
+    case_dir = {"pt_dir": '/root/payTest/caseOversea'}
     testcase = unittest.TestSuite()
     discover = unittest.defaultTestLoader.discover(case_dir['pt_dir'],
                                                    pattern="test_pt_chatGift.py",
