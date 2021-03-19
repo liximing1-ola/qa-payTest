@@ -20,6 +20,7 @@ def post_request_session(url, data):
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko)\
                             Chrome/67.0.3396.99 Safari/537.36",
         "Content-Type": "application/x-www-form-urlencoded",
+        'Connection': 'close',
         "user-token": get_session['token']
     }
     if not url.startswith('https://'):
