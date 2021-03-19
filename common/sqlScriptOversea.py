@@ -3,12 +3,11 @@ import pymysql
 from common.Consts import fail_case_reason
 
 class Mysql:
-    db_config = {"dev_46_db": '192.168.11.46', "dev_46_user": 'root', "dev_46_pas": '123456',
-                 "ali_db": 'rm-bp1nfl3dp096d5o39.mysql.rds.aliyuncs.com', "ali_user": 'super', "ali_pas": 'dev123456'}
+    db_config = {"pt_db": '127.0.0.1', "pt_user": 'root', "pt_pas": '123456'}
 
-    _dbUrl = db_config['dev_46_db']
-    _user = db_config['dev_46_user']
-    _password = db_config['dev_46_pas']
+    _dbUrl = db_config['pt_db']
+    _user = db_config['pt_user']
+    _password = db_config['pt_pas']
     _dbName = 'xianshi'
     _dbPort = 3306
 
@@ -265,8 +264,3 @@ class Mysql:
             print('delete fail', error)
         finally:
             con.commit()
-
-
-
-
-

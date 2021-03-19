@@ -7,24 +7,16 @@ from Robot import robot
 from common import Consts
 
 def all_case():
-    # win下路径
-    # case_dir = os.path.join(os.getcwd(), "Case")
     case_dir = {"bb_dir": '/home/banban-1/payTest/case', "pt_dir": '/root/payTest/case'}
     testcase = unittest.TestSuite()
-    # 指定待执行用例的目录
-    discover = unittest.defaultTestLoader.discover(case_dir['bb_dir'],
-                                                   pattern="test_*",
+    discover = unittest.defaultTestLoader.discover(case_dir['pt_dir'],
+                                                   pattern="test_pt_chatGift.py",
                                                    top_level_dir=None)
-    testcase.addTests(discover)  # 直接加载discover
+    testcase.addTests(discover)
     return testcase
 
 def main():
     if autoGitPull():
-        # 生成HTML格式,不适用，先注释
-        # html_path = '/home/banban-1/payTest/report/result.html'
-        # fp = open(html_path, 'wb')
-        # runner = HTMLTestRunner(stream=fp, title=u"测试报告", description=u"用例测试情况")
-        # test_result = runner.run(all_case())
         test_result = unittest.TextTestRunner(verbosity=3).run(all_case())
         writeUpdateTime(str(int(time.time())))
         des = "执行用例总数: {}, 失败用例总数: {}, 异常用例总数: {}" \
@@ -39,11 +31,9 @@ def main():
         elif len(test_result.failures) >= 1:
             Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
             time.sleep(2)
-            # 失败用例微信提醒
             robot('success', des)
             for case, reason in test_result.failures:
                 robot('fail', set(Consts.fail_case_reason), title=case.id())
-                # 只反馈一个
                 break
         elif len(test_result.errors) >= 1:
             Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
@@ -55,5 +45,4 @@ def main():
 
 
 if __name__ == "__main__":
-    # all_case() 123
     main()

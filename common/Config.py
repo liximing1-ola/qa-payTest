@@ -22,7 +22,13 @@ class config:
     # 打包结算主播
     pack_cal_uid =105002313
 
+    # PT
+    pt_test_uid = {'payUid': 800240376, 'testUid': 800000116}
+    pt_payUid = pt_test_uid['payUid']
+    pt_testUid = pt_test_uid['testUid']
+
 
 if __name__ == '__main__':
     print(config.BASE_PATH)
     print(config.qq_login_url)
+    print(config.mobile_login_url)
