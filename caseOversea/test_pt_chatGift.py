@@ -7,7 +7,7 @@ from common import Consts
 from common import Assert
 from common.runFailed import Retry
 
-@Retry(max_n=2)
+@Retry(max_n=1)
 class TestPayCreate(unittest.TestCase):
 
     # 内网支付接口
