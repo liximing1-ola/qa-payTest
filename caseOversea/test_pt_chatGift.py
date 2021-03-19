@@ -30,6 +30,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.deleteXsBrokerUser(config.pt_testUid)  # 删除用户工会记录
         data = Yaml.read_yaml('Basic_pt.yml', 'pt_pay_chatGift')
         res = Request.pt_post_request_session(url=TestPayCreate.pay_url, data=data)
+        print(res)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 0, reason)
