@@ -35,7 +35,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 0, reason)
         Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason)
-        Assert.assert_equal(Mysql.selectMoneySql(config.testUid), 0)
+        Assert.assert_equal(Mysql.selectMoneySql(config.pt_testUid), 0)
         Consts.CASE_LIST[des] = 'pass'
 
     def test_02_ImPayChangeMoney(self):
