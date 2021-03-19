@@ -3,7 +3,7 @@ import pymysql
 from common.Consts import fail_case_reason
 
 class Mysql:
-    db_config = {"pt_db": '127.0.0.1', "pt_user": 'root', "pt_pas": '123456'}
+    db_config = {"pt_db": 'localhost', "pt_user": 'root', "pt_pas": '123456'}
 
     _dbUrl = db_config['pt_db']
     _user = db_config['pt_user']
