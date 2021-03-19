@@ -13,7 +13,6 @@ class TestPayCreate(unittest.TestCase):
     # 内网支付接口
     pay_url = config.dev_host + 'pay/create'
 
-
     def test_01_IMPayNoMoney(self):
         """
         用例描述：
@@ -41,24 +40,24 @@ class TestPayCreate(unittest.TestCase):
     def test_02_ImPayChangeMoney(self):
         """
         用例描述：
-        验证余额足够时，私聊一对一打赏,打赏分成满足师徒收益的基础上为：72:28
+        验证余额足够时，私聊一对一打赏,打赏分成满足师徒收益的基础上为：80:20
         步骤：
         1.清理打赏者和被打赏者数据 （更新xs_user_money）
         2.私聊一对一打赏(余额1400分，打赏1000分)
         3.校验【status code】和【body】状态
-        4.检查被打赏者余额，预期为：720
+        4.检查被打赏者余额，预期为：800
         5.检查打赏者剩余余额，预期为：400
         """
         des = '检查账户余额足够时，一对一打赏的场景'
-        Mysql.updateMoneySql(config.payUid, 1100, 100, 100, 100)
-        Mysql.updateMoneySql(config.testUid)
-        data = Yaml.read_yaml('Basic.yml', 'dev_pay_chatGift')
+        Mysql.updateMoneySql(config.pt_payUid, 1100, 100, 100, 100)
+        Mysql.updateMoneySql(config.pt_testUid)
+        data = Yaml.read_yaml('Basic_pt.yml', 'pt_pay_chatGift')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectMoneySql(config.testUid, 'money_cash_b'), 720)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 400)
+        Assert.assert_equal(Mysql.selectMoneySql(config.pt_testUid, 'money_cash_b'), 800)
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.pt_payUid), 400)
         Consts.CASE_LIST[des] = 'pass'
 
 
