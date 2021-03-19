@@ -52,8 +52,6 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(config.pt_payUid, 100, 100, 100, 100)
         Mysql.updateMoneySql(config.pt_testUid)
         data = Yaml.read_yaml('Basic_pt.yml', 'pt_pay_chatGift')
-        print(data)
-        print(TestPayCreate.pay_url)
         res = Request.pt_post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
