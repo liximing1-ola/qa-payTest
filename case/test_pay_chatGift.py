@@ -62,4 +62,4 @@ class TestPayCreate(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    pay = TestPayCreate()
+    pass
