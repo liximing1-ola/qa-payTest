@@ -21,7 +21,7 @@ class TestPayCreate(unittest.TestCase):
         1.构造用户数据（更新xs_user_money）
         2.购买流程
         3.校验【status code】和返回值【body】状态
-        4.检查账户余额，预期值为：
+        4.检查账户余额，预期值为：100-100=0
         """
         des = '检查unity小游戏内道具购买'
         Mysql.updateMoneySql(config.payUid, 100)

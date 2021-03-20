@@ -14,3 +14,10 @@ pt_pay_chatGift:
 # 爵位开通和续费
 pt_pay_title:
     platform=available&type=title&money=40000&params=%7B%22level%22%3A1%2C%22num%22%3A1%2C%22tid%22%3A1%2C%22cid%22%3A0%2C%22ctype%22%3Anull%2C%22duction_money%22%3A0%2C%22useCoin%22%3A-1%7D
+
+# unity道具购买
+pt_pay_unityGame:
+  { 'platform': 'available',
+    'type': 'unity-game-buy',
+    'money': '100',
+    'params': '{"amount":1,"app_ver":"1.0.0","c_id":10001,"c_name":"棋子皮肤","c_num":1,"game_type":"Ludo","money_type":"diamond","rid":105707946}'}

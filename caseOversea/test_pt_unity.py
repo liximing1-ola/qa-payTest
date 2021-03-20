@@ -21,14 +21,14 @@ class TestPayCreate(unittest.TestCase):
         1.构造用户数据（更新xs_user_money）
         2.购买流程
         3.校验【status code】和返回值【body】状态
-        4.检查账户余额，预期值为：
+        4.检查账户余额，预期值为：200-100=100
         """
         des = '检查unity小游戏内道具购买'
-        Mysql.updateMoneySql(config.pt_payUid, 100)
-        data = Yaml.read_yaml('Basic_pt.yml', '')
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
+        Mysql.updateMoneySql(config.pt_payUid, 200)
+        data = Yaml.read_yaml('Basic_pt.yml', 'pt_pay_unityGame')
+        res = Request.pt_post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.pt_payUid), 0)
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.pt_payUid), 100)
         Consts.CASE_LIST[des] = 'pass'
