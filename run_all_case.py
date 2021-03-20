@@ -27,12 +27,12 @@ def main():
         # test_result = runner.run(all_case())
         test_result = unittest.TextTestRunner(verbosity=3).run(all_case())
         writeUpdateTime(str(int(time.time())))
-        des = "Banban:执行用例总数: {}, 失败用例总数: {}, 异常用例总数: {}" \
+        des = "Banban:执行用例数: {}, 失败用例数: {}, 异常用例数: {}" \
             .format(test_result.testsRun, len(test_result.failures), len(test_result.errors))
         Logs.get_log('caseResult.log').info(des)
         case_list=method.dictToList(Consts.CASE_LIST)
         if len(test_result.failures) == 0 and len(test_result.errors) == 0:
-            des = "Banban:执行用例总数: {}, 失败用例总数: {}, 异常用例总数: {}, 执行结果如下:\n {}" \
+            des = "Banban:执行用例数: {}, 失败用例数: {}, 异常用例数: {}, 执行结果如下:\n {}" \
                 .format(test_result.testsRun, len(test_result.failures), len(test_result.errors), case_list)
             time.sleep(2)
             robot('markdown', des)
