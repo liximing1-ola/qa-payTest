@@ -24,7 +24,7 @@ class TestPayCreate(unittest.TestCase):
         3.校验【status code】和返回值【body】状态
         4.检查剩余钱值,预期值：（50000 - 40000  = 10000）
         """
-        des = '检查PT用户开通爵位的场景'
+        des = '检查PT用户开通爵位不返钱的流程'
         Mysql.deleteUserCommoditySql(config.pt_payUid)
         Mysql.deleteUserTitleSql(config.pt_payUid)
         Mysql.updateUserTitleSql(config.pt_payUid)
@@ -48,7 +48,7 @@ class TestPayCreate(unittest.TestCase):
         3.校验【status code】和返回值【body】状态
         4.检查剩余钱值,预期值：（40000 - 24000  = 16000）
         """
-        des = '检查续费爵位及返钱的场景'
+        des = '检查PT用户续费爵位的流程'
         Mysql.updateMoneySql(config.pt_payUid, 40000)
         data = Yaml.read_yaml('Basic_pt.yml', 'pt_pay_title')
         res = Request.pt_post_request_session(url=TestPayCreate.pay_url, data=data)
