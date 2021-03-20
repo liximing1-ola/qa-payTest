@@ -40,7 +40,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.pt_payUid), 100)
-        Assert.assert_equal(Mysql.selectUserCommodity(config.pt_payUid), 1)
+        Assert.assert_equal(Mysql.selectUserCommodity(config.pt_payUid), 2)  # 海外购买钥匙也会赠送一个头像框
         Consts.CASE_LIST[des] = 'pass'
 
     def test_02_openMoreBoxPayChange(self):
