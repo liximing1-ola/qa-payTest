@@ -29,7 +29,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.deleteUserTitleSql(config.pt_payUid)
         Mysql.updateUserTitleSql(config.pt_payUid)
         Mysql.updateMoneySql(config.pt_payUid, 50000)
-        data = Yaml.read_yaml('Basic_pt.yml', '')
+        data = Yaml.read_yaml('Basic_pt.yml', 'pt_pay_title')
         res = Request.pt_post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
@@ -41,21 +41,21 @@ class TestPayCreate(unittest.TestCase):
     def test_02_TitlePayChangeRenew(self):
         """
         用例描述：
-        续01步骤，验证爵位续费及返钱到余额（money）
+        续01步骤，验证爵位续费*60%
         脚本步骤：
         1.清空背包内物品，模拟开通者数据（更新xs_user_money）
         2.续费子爵
         3.校验【status code】和返回值【body】状态
-        4.检查剩余钱值,预期值：（200000 - 60000 + 36000 = 176000）
+        4.检查剩余钱值,预期值：（40000 - 24000  = 16000）
         """
         des = '检查续费爵位及返钱的场景'
-        Mysql.updateMoneySql(config.pt_payUid, 200000)
-        data = Yaml.read_yaml('Basic_pt.yml', '')
+        Mysql.updateMoneySql(config.pt_payUid, 40000)
+        data = Yaml.read_yaml('Basic_pt.yml', 'pt_pay_title')
         res = Request.pt_post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectMoneySql(config.pt_payUid, 'money'), 176000)
+        Assert.assert_equal(Mysql.selectMoneySql(config.pt_payUid, 'money'), 16000)
         Consts.CASE_LIST[des] = 'pass'
 
 
