@@ -16,16 +16,16 @@ class TestPayCreate(unittest.TestCase):
     def test_01_moneyChangeExchangeCoin(self):
         """
         用例描述：
-        验证money兑换金币流程
+        验证钻石兑换金豆流程
         脚本步骤：
-        1.构造用户数据 （更新xs_user_money）
-        2.金币兑换
+        1.构造用户数据（更新xs_user_money）
+        2.金豆兑换
         3.校验【status code】和返回值【body】状态
         4.检查账户余额（money, gold_coin） 1000-600=400
         """
-        des = '检查余额兑换金币流程'
+        des = '检查PT钻石兑换金豆流程'
         Mysql.updateMoneySql(config.pt_payUid, 1000)
-        data = Yaml.read_yaml('Basic_pt.yml', '')
+        data = Yaml.read_yaml('Basic_pt.yml', 'pt_pay_coin')
         res = Request.pt_post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
