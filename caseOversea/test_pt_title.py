@@ -1,0 +1,63 @@
+from common.Config import config
+from common import Request
+from common.params_Yaml import Yaml
+from common.sqlScriptOversea import Mysql
+import unittest
+import pytest
+from common import Consts, Assert
+from common.runFailed import Retry
+
+@Retry(max_n=2)
+class TestPayCreate(unittest.TestCase):
+
+    # 内网支付接口
+    pay_url = config.pt_host + 'pay/create'
+
+    @pytest.mark.run(order=1)
+    def test_01_TitlePayChangeMoney(self):
+        """
+        用例描述：
+        验证爵位开通但海外爵位购买不反钻石
+        脚本步骤：
+        1.清空背包内物品，模拟开通者数据（更新xs_user_money）
+        2.开通子爵
+        3.校验【status code】和返回值【body】状态
+        4.检查剩余钱值,预期值：（50000 - 40000  = 10000）
+        """
+        des = '检查PT用户开通爵位的场景'
+        Mysql.deleteUserCommoditySql(config.pt_payUid)
+        Mysql.deleteUserTitleSql(config.pt_payUid)
+        Mysql.updateUserTitleSql(config.pt_payUid)
+        Mysql.updateMoneySql(config.pt_payUid, 50000)
+        data = Yaml.read_yaml('Basic_pt.yml', '')
+        res = Request.pt_post_request_session(url=TestPayCreate.pay_url, data=data)
+        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
+        Assert.assert_code(res['code'], 200)
+        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_equal(Mysql.selectMoneySql(config.pt_payUid, 'money'), 10000)
+        Consts.CASE_LIST[des] = 'pass'
+
+    @pytest.mark.run(order=2)
+    def test_02_TitlePayChangeRenew(self):
+        """
+        用例描述：
+        续01步骤，验证爵位续费及返钱到余额（money）
+        脚本步骤：
+        1.清空背包内物品，模拟开通者数据（更新xs_user_money）
+        2.续费子爵
+        3.校验【status code】和返回值【body】状态
+        4.检查剩余钱值,预期值：（200000 - 60000 + 36000 = 176000）
+        """
+        des = '检查续费爵位及返钱的场景'
+        Mysql.updateMoneySql(config.pt_payUid, 200000)
+        data = Yaml.read_yaml('Basic_pt.yml', '')
+        res = Request.pt_post_request_session(url=TestPayCreate.pay_url, data=data)
+        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
+        Assert.assert_code(res['code'], 200)
+        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_equal(Mysql.selectMoneySql(config.pt_payUid, 'money'), 176000)
+        Consts.CASE_LIST[des] = 'pass'
+
+
+if __name__ == '__main__':
+    pay = TestPayCreate()

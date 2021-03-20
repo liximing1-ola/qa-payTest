@@ -10,7 +10,7 @@ def all_case():
     case_dir = {"pt_dir": '/root/payTest/caseOversea'}
     testcase = unittest.TestSuite()
     discover = unittest.defaultTestLoader.discover(case_dir['pt_dir'],
-                                                   pattern="test_pt_chatGift.py",
+                                                   pattern="test_pt_title.py",
                                                    top_level_dir=None)
     testcase.addTests(discover)
     return testcase
@@ -19,7 +19,7 @@ def main():
     if autoGitPull():
         test_result = unittest.TextTestRunner(verbosity=3).run(all_case())
         writeUpdateTime(str(int(time.time())))
-        des = "执行用例总数: {}, 失败用例总数: {}, 异常用例总数: {}" \
+        des = "PT:执行用例总数: {}, 失败用例总数: {}, 异常用例总数: {}" \
             .format(test_result.testsRun, len(test_result.failures), len(test_result.errors))
         Logs.get_log('caseResult.log').info(des)
         case_list=method.dictToList(Consts.CASE_LIST)

@@ -41,7 +41,7 @@ class TestPayCreate(unittest.TestCase):
     def test_02_TitlePayChangeRenew(self):
         """
         用例描述：
-        续test_01步骤，验证爵位续费及返钱到余额（money）
+        续01步骤，验证爵位续费及返钱到余额（money）
         脚本步骤：
         1.清空背包内物品，模拟开通者数据（更新xs_user_money）
         2.续费子爵
