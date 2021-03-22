@@ -25,7 +25,7 @@ class TestPayCreate(unittest.TestCase):
         6.检查消费记录
         """
         des = '检查PT开通个人守护支付场景'
-        Mysql.updateMoneySql(config.pt_payUid, 5200)
+        Mysql.updateMoneySql(config.pt_payUid, 52000)
         Mysql.updateMoneySql(config.pt_testUid)
         data = Yaml.read_yaml('Basic_pt.yml', 'pt_pay_defend')
         res = Request.pt_post_request_session(url=TestPayCreate.pay_url, data=data)
