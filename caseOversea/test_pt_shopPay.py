@@ -52,6 +52,7 @@ class TestPayCreate(unittest.TestCase):
         """
         cid = 6  # 银钥匙
         des = '检查商城内购买多个道具时场景'
+        Mysql.deleteUserCommoditySql(config.pt_payUid)
         Mysql.updateMoneySql(config.pt_payUid, 10000, 10000, 10000, 10000)
         data = Yaml.read_yaml('Basic_pt.yml', 'pt_pay_moreShop')
         res = Request.pt_post_request_session(url=TestPayCreate.pay_url, data=data)
@@ -59,5 +60,5 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.pt_payUid), 33700)
-        Assert.assert_equal(Mysql.checkUserCommoditySql(cid, config.pt_payUid), 12)
+        Assert.assert_equal(Mysql.checkUserCommoditySql(cid, config.pt_payUid), 6)
         Consts.CASE_LIST[des] = 'pass'
