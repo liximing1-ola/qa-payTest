@@ -12,7 +12,13 @@
 
 `Basic.yml` 存放yaml文件
 
-`config.py` 常用路径数据
+`config.py` 常用数据路径
+
+`Consts` 全局数据记录
+
+`HTMLTestRunner` 生成html方法
+
+`runFailed.py` 失败重试方法
 
 ****Pytest使用规则****
 
@@ -21,3 +27,9 @@
 测试类以Test开头，并且不能带有 init 方法
 
 测试函数以test_开头
+
+****case目录****
+
+整理项目相关用例
+
+

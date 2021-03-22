@@ -25,6 +25,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查购买者余额 (200-100=100)
         5.检查背包内物品
         """
+        cid=329  # 四叶草
         des = '检查商城内购买道具的流程'
         Mysql.updateMoneySql(config.payUid, 0, 100, 100, 0)
         Mysql.deleteUserCommoditySql(config.payUid)
@@ -34,7 +35,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 100)
-        Assert.assert_equal(Mysql.checkUserCommoditySql(329, config.payUid), 1)
+        Assert.assert_equal(Mysql.checkUserCommoditySql(cid, config.payUid), 1)
         Consts.CASE_LIST[des] = 'pass'
 
     @pytest.mark.run(order=2)
@@ -49,6 +50,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查购买者余额 (103000-99000=4000)
         5.检查背包内物品
         """
+        cid=340  # 小天使
         des = '检查商城内购买多个道具时场景'
         Mysql.updateMoneySql(config.payUid, 1000, 100000, 1000, 1000)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_more_shop')
@@ -57,7 +59,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 4000)
-        Assert.assert_equal(Mysql.checkUserCommoditySql(340, config.payUid), 10)
+        Assert.assert_equal(Mysql.checkUserCommoditySql(cid, config.payUid), 10)
         Consts.CASE_LIST[des] = 'pass'
 
     @pytest.mark.run(order=3)
