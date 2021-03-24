@@ -34,11 +34,11 @@ def main():
         if len(test_result.failures) == 0 and len(test_result.errors) == 0:
             des = "Banban:执行用例数: {}, 失败用例数: {}, 异常用例数: {}, 执行结果如下:\n {}" \
                 .format(test_result.testsRun, len(test_result.failures), len(test_result.errors), case_list)
-            time.sleep(2)
+            time.sleep(1)
             robot('markdown', des)
         elif len(test_result.failures) >= 1:
             Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
-            time.sleep(2)
+            time.sleep(1)
             # 失败用例微信提醒
             robot('success', des)
             for case, reason in test_result.failures:

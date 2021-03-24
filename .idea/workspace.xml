@@ -21,12 +21,7 @@
   <component name="ChangeListManager">
     <list default="true" id="44793b3e-09e5-4af0-a369-84e9b064bd19" name="Default Changelist" comment="‘提交修改’">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/case/test_pay_shopPay.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_shopPay.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/Assert.py" beforeDir="false" afterPath="$PROJECT_DIR$/common/Assert.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/Config.py" beforeDir="false" afterPath="$PROJECT_DIR$/common/Config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/sqlScript.py" beforeDir="false" afterPath="$PROJECT_DIR$/common/sqlScript.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/sqlScriptOversea.py" beforeDir="false" afterPath="$PROJECT_DIR$/common/sqlScriptOversea.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run_all_case.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_all_case.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +45,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../PyCode" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="configurable.group.project" />
   </component>
@@ -151,13 +146,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1615801946332</updated>
-    </task>
-    <task id="LOCAL-00030" summary="‘提交修改’">
-      <created>1616139781741</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1616139781741</updated>
     </task>
     <task id="LOCAL-00031" summary="‘提交修改’">
       <created>1616141127559</created>
@@ -495,7 +483,14 @@
       <option name="project" value="LOCAL" />
       <updated>1616401617521</updated>
     </task>
-    <option name="localTasksCounter" value="79" />
+    <task id="LOCAL-00079" summary="‘提交修改’">
+      <created>1616403688516</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1616403688516</updated>
+    </task>
+    <option name="localTasksCounter" value="80" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -519,14 +514,14 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="511" y="265" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1536.824@0.0.1536.824" timestamp="1616127724725" />
-    <state x="147" y="65" key="DiffContextDialog" timestamp="1615805391133">
+    <state x="147" y="65" key="DiffContextDialog" timestamp="1616403777062">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="147" y="65" key="DiffContextDialog/0.0.1536.824@0.0.1536.824" timestamp="1615805391133" />
-    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1616127199959">
+    <state x="147" y="65" key="DiffContextDialog/0.0.1536.824@0.0.1536.824" timestamp="1616403777062" />
+    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1616416878566">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1616127199959" />
+    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1616416878566" />
     <state width="1515" height="212" key="GridCell.Tab.0.bottom" timestamp="1616149491369">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -547,10 +542,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="270" y="57" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1616127694646" />
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1616401629417">
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1616403777947">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1616401629417" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1616403777947" />
     <state x="573" y="325" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1616229541043">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
