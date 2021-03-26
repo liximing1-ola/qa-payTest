@@ -5,7 +5,6 @@ from common import Logs, method
 from pt_autoGitPull import autoGitPull, writeUpdateTime
 from Robot import robot
 from common import Consts
-
 def all_case():
     case_dir = {"pt_dir": '/root/payTest/caseOversea'}
     testcase = unittest.TestSuite()

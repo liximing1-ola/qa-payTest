@@ -5,7 +5,6 @@ from common import Logs, method
 from autoGitPull import autoGitPull, writeUpdateTime
 from Robot import robot
 from common import Consts
-
 def all_case():
     # win下路径
     # case_dir = os.path.join(os.getcwd(), "Case")

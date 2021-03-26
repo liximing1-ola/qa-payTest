@@ -3,7 +3,6 @@
 """
 import json
 from common import Consts
-
 def assert_code(code, expected_code):
     """
     验证response状态码

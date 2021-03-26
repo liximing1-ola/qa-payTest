@@ -1,6 +1,5 @@
 # coding=utf-8
 import os
-
 class config:
     #  工程目录
     BASE_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))

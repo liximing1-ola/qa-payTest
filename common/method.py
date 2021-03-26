@@ -1,6 +1,5 @@
 import requests
 import random
-
 def dictToList(result_dict):
     list_case = []
     for k, v in result_dict.items():

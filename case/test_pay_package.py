@@ -5,7 +5,6 @@ from common.sqlScript import Mysql
 import unittest
 from common import Consts, Assert
 from common.runFailed import Retry
-
 @Retry(max_n=2)
 class TestPayCreate(unittest.TestCase):
 

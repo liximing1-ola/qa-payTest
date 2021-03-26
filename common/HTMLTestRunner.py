@@ -7,10 +7,7 @@ import sys
 import io
 import unittest
 from xml.sax import saxutils
-
 from requests import __version__
-
-
 class OutputRedirector(object):
     """ Wrapper to redirect stdout or stderr """
 

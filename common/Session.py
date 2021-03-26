@@ -6,7 +6,7 @@ import requests
 from common.Config import config
 from common.params_Yaml import Yaml
 from common import Logs
-
+from common.Consts import fail_case_reason
 class Session:
     def __init__(self):
         self.config = config
@@ -36,6 +36,7 @@ class Session:
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
                 return tokenDict
             except Exception as error:
+                fail_case_reason.append('QQ登陆失败，未获取到session，46测试服务器环境异常')
                 Logs.get_log('getSession.log').error('session获取异常，原因： {}'.format(error))
         elif env == 'pt':
             try:

@@ -1,5 +1,4 @@
 import pymysql
-
 class MysqlUtil:
     # 私有属性,类外部无法直接进行访问
     _dbUrl = ' '

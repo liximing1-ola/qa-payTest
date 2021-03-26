@@ -1,7 +1,6 @@
 # coding=utf-8
 import pymysql
 from common.Consts import fail_case_reason
-
 class Mysql:
 
     db_config = {"dev_46_db": '192.168.11.46',

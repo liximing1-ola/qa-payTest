@@ -1,7 +1,6 @@
 import time
 import requests
 from common.method import getImage
-
 def robot(mode, reason, title='', bot='BB'):
     headers = {'Content-Type': 'application/json'}
     robot_dict = {'BB': 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=f9d916cb-6b93-4389-8aa4-f51c755faa0e',

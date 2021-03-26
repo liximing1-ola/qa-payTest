@@ -2,8 +2,6 @@
 import yaml
 from common.Config import config
 import os
-
-
 class Yaml:
 
     @staticmethod

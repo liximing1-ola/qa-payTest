@@ -7,8 +7,6 @@ import traceback
 import inspect
 import time
 import unittest
-
-
 class Retry(object):
     """
     类装饰器, 功能与Retry一样

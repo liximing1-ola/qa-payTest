@@ -1,6 +1,5 @@
 # coding=utf-8
 import pymysql
-
 # 本地服务器数据库测试用
 def conMysql():
     _dbUrl = '192.168.11.46'

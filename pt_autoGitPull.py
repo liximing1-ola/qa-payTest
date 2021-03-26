@@ -4,7 +4,6 @@ import time
 from common import Logs
 import os
 from Robot import robot
-
 def autoGitPull():
     # 默认指定路径
     codeDir = {'pt_git_dir': '/home/webroot/oversea/oversea-server'}
