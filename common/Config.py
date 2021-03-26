@@ -12,7 +12,7 @@ class config:
     # dev域名-（国内qq登陆方式)
     dev_host = domain_host['bb_dev_58']
     qq_login_url = dev_host + 'account/qqlogin'
-    # pt域名-（pt登陆方式）
+    # pt域名-（PT登陆方式）
     pt_host = domain_host['pt']
     mobile_login_url = pt_host + 'account/passwordLogin'
 

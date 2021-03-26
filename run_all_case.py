@@ -51,7 +51,7 @@ def main():
                 robot('fail', reason, case.id())
                 break
     else:
-        pass
+        Logs.get_log('runCode.log').info('Fail')
 
 
 if __name__ == "__main__":
