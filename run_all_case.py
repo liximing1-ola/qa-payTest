@@ -8,7 +8,8 @@ from common import Consts
 def all_case():
     # win下路径
     # case_dir = os.path.join(os.getcwd(), "Case")
-    case_dir = {"bb_dir": '/home/banban-1/payTest/case', "pt_dir": '/root/payTest/case'}
+    case_dir = {"bb_dir": '/home/banban-1/payTest/case',
+                "pt_dir": '/root/payTest/case'}
     testcase = unittest.TestSuite()
     # 指定待执行用例的目录
     discover = unittest.defaultTestLoader.discover(case_dir['bb_dir'],
@@ -54,5 +55,4 @@ def main():
 
 
 if __name__ == "__main__":
-    # all_case() 123
     main()

@@ -27,8 +27,13 @@ class config:
     pt_payUid = pt_test_uid['payUid']
     pt_testUid = pt_test_uid['testUid']
 
+    # git branch
+    banban_git_branch = 'release-for-vpc'
+    pt_git_branch = 'release_for_php7'
+
 
 if __name__ == '__main__':
     print(config.BASE_PATH)
     print(config.qq_login_url)
     print(config.mobile_login_url)
+    print(config.banban_git_branch)

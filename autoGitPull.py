@@ -2,6 +2,7 @@ import git
 from git.repo import Repo
 import time
 from common import Logs
+from common.Config import config
 import os
 from Robot import robot
 def autoGitPull():
@@ -12,7 +13,7 @@ def autoGitPull():
     g.pull()
     repo = Repo(git_dir)
     # 当前线上分支
-    if str(repo.active_branch) == "release-for-vpc":
+    if str(repo.active_branch) == config.banban_git_branch:
         commit_log = repo.git.log('--pretty={"commit":"%h","author":"%an","summary":"%s","date":"%cd"}',
                                   max_count=3, date='format:%Y-%m-%d %H:%M:%S')
         log_list = commit_log.split("\n")
@@ -29,11 +30,11 @@ def autoGitPull():
             robot('success', '{}'.format(log_list[0]))
             return True
         else:
-            Logs.get_log('updateGitCode.log').info("Git_Pull未拉取到release分支最新代码，最新代码提交时间: {}, "
-                                                   "上次代码更新时间: {}".format(times, lastTime))
+            Logs.get_log('updateGitCode.log').info("未拉取到{}分支代码，最近代码提交时间: {}, "
+                                                   "上次代码更新时间: {}".format(repo.active_branch, times, lastTime))
             return False
     else:
-        Logs.get_log('gitBranchError.log').error("Git分支不对： {}".format(repo.active_branch))
+        Logs.get_log('gitBranchError.log').error("git branch error： {}".format(repo.active_branch))
         return False
 
 def writeUpdateTime(now):

@@ -33,11 +33,11 @@ class Session:
                 res = res.json()
                 if res['success'] != 1:
                     Logs.get_log('getSession.log').error('session获取异常，原因： {}'.format(res))
+                    return '46测试服务器异常'
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
                 return tokenDict
             except Exception as error:
-                fail_case_reason.append('QQ登陆失败，未获取到session，46测试服务器环境异常')
-                Logs.get_log('getSession.log').error('session获取异常，原因： {}'.format(error))
+                Logs.get_log('getSession.log').error('session异常，原因： {}'.format(error))
         elif env == 'pt':
             try:
                 headers = Yaml.read_yaml('Basic_pt.yml', 'header_pt')
@@ -48,6 +48,7 @@ class Session:
                 res = res.json()
                 if res['success'] != 1:
                     Logs.get_log('getSession.log').error('session获取异常，原因： {}'.format(res))
+                    return '测试服务器异常'
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
                 return tokenDict
             except Exception as error:
@@ -58,4 +59,4 @@ class Session:
 
 if __name__ == '__main__':
     ss = Session()
-    ss.get_session('pt')
+    ss.get_session('dev')
