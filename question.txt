@@ -1,0 +1,9 @@
+# Step
+cd /home/webroot
+git clone http://fc81d1271c05206031bf42cd29cba1ffa0ef7a93@114.55.7.123:3000/ees/banban.git
+git branch
+git checkout -b release-for-vpc origin/release-for-vpc
+git pull
+# 修改config_dev.php文件
+# 修改env.php文件
+# 以上文件在/home/banban-1路径下有备份
