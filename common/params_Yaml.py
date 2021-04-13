@@ -8,7 +8,7 @@ class Yaml:
     def read_yaml(yaml_fileName, yaml_name):
         """
         读取yaml
-        :return: yaml_data
+        :return: yaml_data[yaml_name]
         """
         yaml_path = config.BASE_PATH + '/common/' + yaml_fileName
         try:
@@ -24,5 +24,5 @@ class Yaml:
 
 
 if __name__ == '__main__':
-    y = Yaml.read_yaml('Basic_pt.yml', 'pt_pay_chatGift')
+    y = Yaml.read_yaml('Basic_pt.yml', 'pt_shop_moreBox')
     print(y)
