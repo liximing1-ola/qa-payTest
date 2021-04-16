@@ -68,7 +68,7 @@ def readGitStatus():
             if line == 'no changes added to commit (use "git add" and/or "git commit -a")':
                 return True
         else:
-            robot('icon', '代码冲突，脚本启动执行，请@李羲明先生严查')
+            robot('icon', '代码冲突，脚本启动失败，请@李羲明严查')
 
 
 if __name__=="__main__":
