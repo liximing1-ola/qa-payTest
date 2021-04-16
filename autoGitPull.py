@@ -12,7 +12,6 @@ def autoGitPull():
     g = git.cmd.Git(git_dir)
     g.pull()
     repo = Repo(git_dir)
-    Logs.get_log('git.log').info([str(i.message) for i in repo.iter_commits()])
     # 当前线上分支
     if str(repo.active_branch) == config.banban_git_branch:
         commit_log = repo.git.log('--pretty={"commit":"%h","author":"%an","summary":"%s","date":"%cd"}',
