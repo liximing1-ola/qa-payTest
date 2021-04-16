@@ -61,6 +61,15 @@ def writeGitStatus(file):
         f.write(file)
         f.flush()
 
+def readGitStatus():
+    txtPath = os.path.split(os.path.realpath(__file__))[0] + '/gitStatus.txt'
+    with open(txtPath, 'r') as f:
+        for line in f.readlines():
+            if line == 'no changes added to commit (use "git add" and/or "git commit -a")':
+                return True
+        else:
+            robot('icon', '代码冲突，脚本启动执行，请@李羲明先生严查')
+
 
 if __name__=="__main__":
-    readUpdateTime()
+    readGitStatus()

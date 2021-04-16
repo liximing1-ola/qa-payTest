@@ -48,7 +48,7 @@ def robot(mode, reason, title='', bot='BB'):
     elif mode == 'icon':
         now = time.strftime('%H:%M', time.localtime(time.time()))
         title = "{}".format(now)
-        des = ' '
+        des = reason
         icon = getImage()
         data = {
             "msgtype": "news",
@@ -57,7 +57,7 @@ def robot(mode, reason, title='', bot='BB'):
                     {
                         "title": title,
                         "description": des,
-                        "url": "",
+                        "url": "https://www.12306.cn/index/",
                         "picurl": icon,
                     }
                 ]
