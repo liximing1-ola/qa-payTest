@@ -20,7 +20,7 @@ def all_case():
 
 def main():
     if autoGitPull():
-        # 生成HTML格式,不适用，先注释
+        # 生成HTML格式
         # html_path = '/home/banban-1/payTest/report/result.html'
         # fp = open(html_path, 'wb')
         # runner = HTMLTestRunner(stream=fp, title=u"测试报告", description=u"用例测试情况")
