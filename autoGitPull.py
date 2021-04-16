@@ -63,7 +63,9 @@ def writeGitStatus(file):
 
 def readGitStatus():
     txtPath = os.path.split(os.path.realpath(__file__))[0] + '/gitStatus.txt'
+    now = time.strftime('%Y-%m-%d %H:%M', time.localtime(time.time()))
     with open(txtPath, 'r') as f:
+        Logs.get_log('gitStatus.log').info(now)
         for line in f.readlines():
             if line == 'no changes added to commit (use "git add" and/or "git commit -a")':
                 return True
