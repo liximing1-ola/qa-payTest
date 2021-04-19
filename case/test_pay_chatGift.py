@@ -27,6 +27,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(config.payUid)
         Mysql.updateMoneySql(config.testUid)
         Mysql.deleteXsBrokerUser(config.testUid)  # 删除用户工会记录
+        Mysql.deleteXsChatroom(config.testUid)  # 删除用户商业房
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_chatGift')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
@@ -55,6 +56,7 @@ class TestPayCreate(unittest.TestCase):
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
+        # 商业房房主 or （工会会长 or 工会成员）且同意大神协议
         Assert.assert_equal(Mysql.selectMoneySql(config.testUid, 'money_cash_b'), 720)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 400)
         Consts.CASE_LIST[des] = 'pass'

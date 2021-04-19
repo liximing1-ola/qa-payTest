@@ -215,6 +215,19 @@ class Mysql:
         finally:
             con.commit()
 
+    # 删除用户商业房
+    @staticmethod
+    def deleteXsChatroom(uid):
+        con, cur = Mysql.conMysql()
+        sql = "delete from xs_chatroom where uid ={} limit 1".format(uid)
+        try:
+            cur.execute(sql)
+        except Exception as error:
+            con.rollback()
+            print('delete fail', error)
+        finally:
+            con.commit()
+
     # 更新箱子刷新物品
     @staticmethod
     def insertXsUserBox(gift_type, uid, box_type):
