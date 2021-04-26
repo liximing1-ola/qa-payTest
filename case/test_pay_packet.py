@@ -21,12 +21,4 @@ class TestPayCreate(unittest.TestCase):
         3.校验【status code】和返回值【body】状态
         4.检查发送者余额，预期为：0
         """
-        des = '检查房间红包发送红包的场景'
-        Mysql.updateMoneySql(config.payUid, 52000)
-        data = Yaml.read_yaml('Basic.yml', 'dev_red_packet')
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
-        Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectMoneySql(config.testUid), 0)
-        Consts.CASE_LIST[des] = 'pass'
+        pass
