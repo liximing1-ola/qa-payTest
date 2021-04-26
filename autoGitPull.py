@@ -70,7 +70,7 @@ def readGitStatus():
                 Logs.get_log('gitStatus.log').info(now)
                 return True
         else:
-            robot('icon', '代码冲突，脚本启动失败，请@李羲明严查')
+            robot('icon', '代码冲突，脚本启动失败，请@lixm严查')
 
 
 if __name__=="__main__":

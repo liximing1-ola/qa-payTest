@@ -100,3 +100,7 @@ dev_pay_unityGame:
     'type': 'unity-game-buy',
     'money': '100',
     'params': '{"amount":1,"app_ver":"1.0.0","c_id":10001,"c_name":"棋子皮肤","c_num":1,"game_type":"Ludo","money_type":"diamond","rid":105707946}'}
+
+# 房间红包发送
+dev_red_packet:
+    platform=available&type=red-packet&money=52000&params=%7B%22rid%22%3A193185577%2C%22money%22%3A52000%2C%22num%22%3A10%2C%22type%22%3A%22random%22%2C%22cond%22%3A%22none%22%2C%22version%22%3A%221%22%2C%22useCoin%22%3A-1%7D
