@@ -12,7 +12,6 @@ def autoGitPull():
     g = git.cmd.Git(git_dir)
     g.pull()
     repo = Repo(git_dir)
-    print(repo.git.status())
     writeGitStatus(repo.git.status())
     # 当前线上分支
     if str(repo.active_branch) == config.banban_git_branch:
@@ -69,7 +68,6 @@ def readGitStatus():
         for line in f.readlines():
             if line == 'no changes added to commit (use "git add" and/or "git commit -a")':
                 Logs.get_log('gitStatus.log').info(now)
-                print(line)
                 return True
         else:
             robot('icon', '代码冲突，脚本启动失败，请@lixm严查')
