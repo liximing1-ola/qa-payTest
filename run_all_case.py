@@ -43,11 +43,13 @@ def main():
             robot('success', des)
             for case, reason in test_result.failures:
                 robot('fail', set(Consts.fail_case_reason), title=case.id())
+                break
                 # 只反馈一个
         elif len(test_result.errors) >= 1:
             Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
             for case, reason in test_result.errors:
                 robot('fail', reason, case.id())
+                break
     else:
         Logs.get_log('runCode.log').info('Fail')
 
