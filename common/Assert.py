@@ -57,5 +57,6 @@ def assert_in_text(body, expected_msg):
 
 if __name__ == '__main__':
     # 示例
-    res = {'code': 200, 'body': {'success': False, 'msg': '余额不足，无法支付'}, 'time_consuming': 9.316, 'time_total': 0.009316}
+    res = {'code': 200, 'body': {'success': False, 'msg': '余额不足，无法支付'},
+           'time_consuming': 9.316, 'time_total': 0.009316}
     assert_code(res['code'], 300)
