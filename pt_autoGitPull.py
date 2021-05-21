@@ -18,8 +18,6 @@ def autoGitPull():
                                   max_count=3, date='format:%Y-%m-%d %H:%M:%S')
         log_list = commit_log.split("\n")
         Logs.get_log('gitCommitPull.log').info('PT当前分支: {}, 最新一条commit: {}'.format(repo.active_branch, log_list[0]))
-        times = int(time.mktime(time.strptime([eval(item) for item in log_list][0]['date'], "%Y-%m-%d %H:%M:%S")))
-        lastTime = int(readUpdateTime())
         now_version = updateVersion('get')
         last_version = updateVersion('read')
         if now_version != last_version:
@@ -28,29 +26,12 @@ def autoGitPull():
             robot('success', '{}'.format(log_list[0]), bot='PT')
             return True
         else:
-            Logs.get_log('updateGitCode.log').info("未拉取到{}分支代码，最近代码提交时间: {}, "
-                                                   "上次代码更新时间: {}".format(repo.active_branch, times, lastTime))
+            Logs.get_log('updateGitCode.log').info("未拉取到{}分支代码，最新代码部署版本: {}, "
+                                                   "上次代码部署版本: {}".format(repo.active_branch, now_version, last_version))
             return False
     else:
         Logs.get_log('gitBranchError.log').error("git branch error： {}".format(repo.active_branch))
         return False
-
-def writeUpdateTime(now):
-    txtPath = os.path.split(os.path.realpath(__file__))[0] + '/time.txt'
-    with open(txtPath, 'w') as f:
-        f.write(now)
-        f.flush()
-
-def readUpdateTime():
-    txtPath = os.path.split(os.path.realpath(__file__))[0] + '/time.txt'
-    if not os.path.exists(txtPath):
-        os.system(r"touch {}".format(txtPath))
-        with open(txtPath, 'r+') as f:
-            f.write('1600000000')
-            f.flush()
-    with open(txtPath, 'r') as f:
-        f = f.read()
-        return f
 
 def updateVersion(p):
     api_url = 'http://api.partying.sg/_version.txt'
