@@ -23,7 +23,7 @@ def autoGitPull():
         now_version = updateVersion('get')
         last_version = updateVersion('read')
         if now_version != last_version:
-            Logs.get_log('updateGitCode.log').info('最新代码提交时间: {}, 上次代码更新时间: {}'.format(times, lastTime))
+            Logs.get_log('updateGitCode.log').info('最新代码部署版本: {}, 上次代码部署版本: {}'.format(now_version, last_version))
             # git commit update message
             robot('success', '{}'.format(log_list[0]), bot='PT')
             return True
