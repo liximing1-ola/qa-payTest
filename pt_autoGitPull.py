@@ -1,6 +1,5 @@
 import git
 from git.repo import Repo
-import time
 from common import Logs
 from common.Config import config
 import os
