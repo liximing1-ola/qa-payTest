@@ -27,6 +27,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.deleteUserCommoditySql(config.payUid)
         Mysql.deleteUserTitleSql(config.payUid)
         Mysql.updateUserTitleSql(config.payUid)
+        Mysql.updateUserTitleSubscribeTime(config.payUid)
         Mysql.updateMoneySql(config.payUid, 200000)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_title')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)

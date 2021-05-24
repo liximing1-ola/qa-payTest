@@ -282,6 +282,21 @@ class Mysql:
         finally:
             con.commit()
 
+    #  xs_user_title_new 每次跑都清一下subscribe_time
+    @staticmethod
+    def updateUserTitleSubscribeTime(uid):
+        con, cur = Mysql.conMysql()
+        sql = "update xs_user_title_new set subscribe_time=0 where uid={} limit 1".format(uid)
+        try:
+            cur.execute(sql)
+        except Exception as error:
+            con.rollback()
+            print('update fail', error)
+        finally:
+            con.commit()
+
+
+
 
 
 
