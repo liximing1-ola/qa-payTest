@@ -3,7 +3,7 @@ import random
 def dictToList(result_dict):
     list_case = []
     for k, v in result_dict.items():
-        list_case.append('checkPoint:  {},  结果: <font color=\"info\">{}</font>'.format(k, v))
+        list_case.append('checkPoint:  <font color="comment">{}</font>,  结果: <font color=\"info\">{}</font>'.format(k, v))
     case = '\n'.join(list_case)
     return case
 
