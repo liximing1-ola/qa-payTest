@@ -173,13 +173,6 @@
       <option name="presentableId" value="Default" />
       <updated>1615801946332</updated>
     </task>
-    <task id="LOCAL-00075" summary="‘提交修改’">
-      <created>1616386088714</created>
-      <option name="number" value="00075" />
-      <option name="presentableId" value="LOCAL-00075" />
-      <option name="project" value="LOCAL" />
-      <updated>1616386088714</updated>
-    </task>
     <task id="LOCAL-00076" summary="‘提交修改’">
       <created>1616400407756</created>
       <option name="number" value="00076" />
@@ -516,7 +509,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622038009366</updated>
     </task>
-    <option name="localTasksCounter" value="124" />
+    <task id="LOCAL-00124" summary="‘提交修改’">
+      <created>1622777171619</created>
+      <option name="number" value="00124" />
+      <option name="presentableId" value="LOCAL-00124" />
+      <option name="project" value="LOCAL" />
+      <updated>1622777171619</updated>
+    </task>
+    <option name="localTasksCounter" value="125" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -552,30 +552,30 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1621506178295" />
-    <state width="1515" height="212" key="GridCell.Tab.0.bottom" timestamp="1622776976576">
+    <state width="1515" height="212" key="GridCell.Tab.0.bottom" timestamp="1622777233393">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="212" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1622776976576" />
-    <state width="1515" height="212" key="GridCell.Tab.0.center" timestamp="1622776976576">
+    <state width="1515" height="212" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1622777233393" />
+    <state width="1515" height="212" key="GridCell.Tab.0.center" timestamp="1622777233393">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="212" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1622776976576" />
-    <state width="1515" height="212" key="GridCell.Tab.0.left" timestamp="1622776976575">
+    <state width="1515" height="212" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1622777233393" />
+    <state width="1515" height="212" key="GridCell.Tab.0.left" timestamp="1622777233392">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="212" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1622776976575" />
-    <state width="1515" height="212" key="GridCell.Tab.0.right" timestamp="1622776976576">
+    <state width="1515" height="212" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1622777233392" />
+    <state width="1515" height="212" key="GridCell.Tab.0.right" timestamp="1622777233393">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="212" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1622776976576" />
+    <state width="1515" height="212" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1622777233393" />
     <state x="270" y="57" key="SettingsEditor" timestamp="1616127694646">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="270" y="57" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1616127694646" />
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1622038010489">
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1622777172708">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1622038010489" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1622777172708" />
     <state x="573" y="325" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1619431439497">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
