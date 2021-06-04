@@ -6,13 +6,13 @@ header_dev:
 
 # 内网环境测试
 params_dev_qq:
-    t=ADC1FD03910635E8E7D87705206BAAC5&o=659826BC750ABF8FF3AED92E552DCF62
+    t=681DCA85B00F243C79DE76AC48CE5514&o=659826BC750ABF8FF3AED92E552DCF62
 
 # Common\getSession.py
 # data
 data_dev_qq:
     "type": 'login'
-    "dtoken": '5713cmvgW__2BdAptbXspnvIcaABPJ__2FZsiduOR5ZTUp20m4IrCVdSK7vZ2vvh5XggEOTC1P4YdD0DEi9g70FZSWezLOdEQdniqyJl9VfiuDstv7RieXUTXIAetZV31__2FePoSDyR7JqXXtl__2B1dg'
+    "dtoken": '700242z13h5w9dOtDLgThQU92dXnZC9upfcQ1JiMQsVcs3NYNTTVb__2B7pDZbr6tnaViJ1IxNC8BLU6__2FobIClQWSWuSURct6VflMs4mECEnTy9EilWWxAgPV8baX9avbwYz1FIEs__2FyvWiu1Q'
 
 # eg:别忘了修改date中的UID字段
 # 房间一对一打赏，被打赏者：直播间主播
