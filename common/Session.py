@@ -31,11 +31,11 @@ class Session:
                 res = session.post(login_url, data=body, headers=headers)
                 res.raise_for_status()
                 res = res.json()
+                print(res)
                 if res['success'] != 1:
                     Logs.get_log('getSession.log').error('session获取异常，原因： {}'.format(res))
                     return '46测试服务器异常'
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
-                print(tokenDict)
                 return tokenDict
             except Exception as error:
                 Logs.get_log('getSession.log').error('session异常，原因： {}'.format(error))
