@@ -33,7 +33,7 @@ class Session:
                 res = res.json()
                 if res['success'] != 1:
                     Logs.get_log('getSession.log').error('session获取异常，原因： {}'.format(res))
-                    return '46测试服务器异常'
+                    return '测试服务器异常'
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
                 return tokenDict
             except Exception as error:
@@ -49,6 +49,7 @@ class Session:
                 if res['success'] != 1:
                     Logs.get_log('getSession.log').error('session获取异常，原因： {}'.format(res))
                     return '测试服务器异常'
+
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
                 return tokenDict
             except Exception as error:
