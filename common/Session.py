@@ -49,13 +49,13 @@ class Session:
                 res = res.json()
                 print(res)
                 if res['success'] != 1:
-                    return res['msg']
+                    raise res['msg']
                 if method.isExtend(res, 'token'):
-                    return res['msg']
+                    raise res['msg']
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
                 return tokenDict
             except Exception as error:
-                Logs.get_log('getSession.log').error('session获取异常，原因： {}'.format(error))
+                Logs.get_log('getSession.log').error('session获取异常，原因： {}'.format(' '))
         else:
             print("env input error")
 
