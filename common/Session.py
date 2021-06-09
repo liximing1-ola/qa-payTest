@@ -32,11 +32,8 @@ class Session:
                 res = session.post(login_url, data=body, headers=headers)
                 res.raise_for_status()
                 res = res.json()
-                if res['success'] != 1:
-                    # Logs.get_log('getSession.log').error('session获取异常，原因： {}'.format(res))
-                    raise res['msg']
-                if not method.isExtend(res, 'token'):
-                    raise res['msg']
+                if not method.isExtend(res, 'token') or res['success'] != 1:
+                    return res['msg']
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
                 return tokenDict
             except Exception as error:
@@ -49,10 +46,8 @@ class Session:
                 res = session.post(config.mobile_login_url, data=body, headers=headers)
                 res.raise_for_status()
                 res = res.json()
-                if res['success'] != 1:
-                    raise res['msg']
-                if not method.isExtend(res, 'token'):
-                    raise res['msg']
+                if not method.isExtend(res, 'token') or res['success'] != 1:
+                    return res['msg']
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
                 return tokenDict
             except Exception as error:
