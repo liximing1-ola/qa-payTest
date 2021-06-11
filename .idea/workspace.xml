@@ -173,27 +173,6 @@
       <option name="presentableId" value="Default" />
       <updated>1615801946332</updated>
     </task>
-    <task id="LOCAL-00098" summary="‘提交修改’">
-      <created>1618562758261</created>
-      <option name="number" value="00098" />
-      <option name="presentableId" value="LOCAL-00098" />
-      <option name="project" value="LOCAL" />
-      <updated>1618562758261</updated>
-    </task>
-    <task id="LOCAL-00099" summary="‘提交修改’">
-      <created>1618562930522</created>
-      <option name="number" value="00099" />
-      <option name="presentableId" value="LOCAL-00099" />
-      <option name="project" value="LOCAL" />
-      <updated>1618562930522</updated>
-    </task>
-    <task id="LOCAL-00100" summary="‘提交修改’">
-      <created>1618563100281</created>
-      <option name="number" value="00100" />
-      <option name="presentableId" value="LOCAL-00100" />
-      <option name="project" value="LOCAL" />
-      <updated>1618563100282</updated>
-    </task>
     <task id="LOCAL-00101" summary="‘提交修改’">
       <created>1618838688681</created>
       <option name="number" value="00101" />
@@ -516,7 +495,28 @@
       <option name="project" value="LOCAL" />
       <updated>1623396996712</updated>
     </task>
-    <option name="localTasksCounter" value="147" />
+    <task id="LOCAL-00147" summary="‘提交修改’">
+      <created>1623397216689</created>
+      <option name="number" value="00147" />
+      <option name="presentableId" value="LOCAL-00147" />
+      <option name="project" value="LOCAL" />
+      <updated>1623397216689</updated>
+    </task>
+    <task id="LOCAL-00148" summary="‘提交修改’">
+      <created>1623397272439</created>
+      <option name="number" value="00148" />
+      <option name="presentableId" value="LOCAL-00148" />
+      <option name="project" value="LOCAL" />
+      <updated>1623397272439</updated>
+    </task>
+    <task id="LOCAL-00149" summary="‘提交修改’">
+      <created>1623397358807</created>
+      <option name="number" value="00149" />
+      <option name="presentableId" value="LOCAL-00149" />
+      <option name="project" value="LOCAL" />
+      <updated>1623397358807</updated>
+    </task>
+    <option name="localTasksCounter" value="150" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -572,10 +572,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="270" y="57" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1616127694646" />
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1623396999725">
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1623397360277">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1623396999725" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1623397360276" />
     <state x="573" y="325" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1619431439497">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
