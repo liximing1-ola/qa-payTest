@@ -11,6 +11,7 @@ def autoGitPull():
     git_dir = codeDir['git_dir']
     g = git.cmd.Git(git_dir)
     print(11111111111111)
+    print(g.pull())
     g.pull()
     print(g.pull())
     repo = Repo(git_dir)
