@@ -67,7 +67,7 @@ def readGitStatus():
     now = time.strftime('%Y-%m-%d %H:%M', time.localtime(time.time()))
     with open(txtPath, 'r') as f:
         for line in f.readlines():
-            if line == 'no changes added to commit (use "git add" and/or "git commit -a")':
+            if line == "Your branch is up to date with 'origin/release-for-vpc'":
                 Logs.get_log('gitStatus.log').info(now)
                 return True
         else:
