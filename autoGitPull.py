@@ -10,11 +10,10 @@ def autoGitPull():
     codeDir = {'git_dir': '/home/webroot/banban', 'pt_git_dir': '/home/webroot/oversea/oversea-server'}
     git_dir = codeDir['git_dir']
     g = git.cmd.Git(git_dir)
-    print(1)
+    print(11111111111111)
     g.pull()
-    print(2)
+    print(g.pull())
     repo = Repo(git_dir)
-    print('报错信息：', repo.git.status())
     writeGitStatus(repo.git.status())
     # 当前线上分支
     if str(repo.active_branch) == config.banban_git_branch:
