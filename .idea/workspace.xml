@@ -20,7 +20,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="44793b3e-09e5-4af0-a369-84e9b064bd19" name="Default Changelist" comment="‘提交修改’">
-      <change beforePath="$PROJECT_DIR$/autoGitPull.py" beforeDir="false" afterPath="$PROJECT_DIR$/autoGitPull.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Robot.py" beforeDir="false" afterPath="$PROJECT_DIR$/Robot.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -172,20 +172,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1615801946332</updated>
-    </task>
-    <task id="LOCAL-00101" summary="‘提交修改’">
-      <created>1618838688681</created>
-      <option name="number" value="00101" />
-      <option name="presentableId" value="LOCAL-00101" />
-      <option name="project" value="LOCAL" />
-      <updated>1618838688682</updated>
-    </task>
-    <task id="LOCAL-00102" summary="‘提交修改’">
-      <created>1618839630848</created>
-      <option name="number" value="00102" />
-      <option name="presentableId" value="LOCAL-00102" />
-      <option name="project" value="LOCAL" />
-      <updated>1618839630848</updated>
     </task>
     <task id="LOCAL-00103" summary="‘提交修改’">
       <created>1618839695000</created>
@@ -516,7 +502,21 @@
       <option name="project" value="LOCAL" />
       <updated>1623397358807</updated>
     </task>
-    <option name="localTasksCounter" value="150" />
+    <task id="LOCAL-00150" summary="‘提交修改’">
+      <created>1623397738923</created>
+      <option name="number" value="00150" />
+      <option name="presentableId" value="LOCAL-00150" />
+      <option name="project" value="LOCAL" />
+      <updated>1623397738923</updated>
+    </task>
+    <task id="LOCAL-00151" summary="‘提交修改’">
+      <created>1623397894170</created>
+      <option name="number" value="00151" />
+      <option name="presentableId" value="LOCAL-00151" />
+      <option name="project" value="LOCAL" />
+      <updated>1623397894170</updated>
+    </task>
+    <option name="localTasksCounter" value="152" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -572,10 +572,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="270" y="57" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1616127694646" />
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1623397360277">
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1623397895155">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1623397360276" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1623397895155" />
     <state x="573" y="325" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1619431439497">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
