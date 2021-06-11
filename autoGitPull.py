@@ -12,7 +12,7 @@ def autoGitPull():
     g = git.cmd.Git(git_dir)
     g.pull()
     repo = Repo(git_dir)
-    print(repo.git.status())
+    print('报错信息：', repo.git.status())
     writeGitStatus(repo.git.status())
     # 当前线上分支
     if str(repo.active_branch) == config.banban_git_branch:
