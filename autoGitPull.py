@@ -10,8 +10,6 @@ def autoGitPull():
     codeDir = {'git_dir': '/home/webroot/banban', 'pt_git_dir': '/home/webroot/oversea/oversea-server'}
     git_dir = codeDir['git_dir']
     g = git.cmd.Git(git_dir)
-    print(g.status())
-    print(1111111111111111)
     g.pull()
     repo = Repo(git_dir)
     writeGitStatus(repo.git.status())
@@ -68,7 +66,7 @@ def readGitStatus():
     now = time.strftime('%Y-%m-%d %H:%M', time.localtime(time.time()))
     with open(txtPath, 'r') as f:
         for line in f.readlines():
-            if line == "Your branch is up to date with 'origin/release-for-vpc'.":
+            if line.startswith("Your branch is up to date with 'origin/release-for-vpc'."):
                 Logs.get_log('gitStatus.log').info(now)
                 return True
         else:

@@ -19,9 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="44793b3e-09e5-4af0-a369-84e9b064bd19" name="Default Changelist" comment="‘提交修改’">
-      <change beforePath="$PROJECT_DIR$/autoGitPull.py" beforeDir="false" afterPath="$PROJECT_DIR$/autoGitPull.py" afterDir="false" />
-    </list>
+    <list default="true" id="44793b3e-09e5-4af0-a369-84e9b064bd19" name="Default Changelist" comment="‘提交修改’" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -172,27 +170,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1615801946332</updated>
-    </task>
-    <task id="LOCAL-00107" summary="‘提交修改’">
-      <created>1620876699080</created>
-      <option name="number" value="00107" />
-      <option name="presentableId" value="LOCAL-00107" />
-      <option name="project" value="LOCAL" />
-      <updated>1620876699080</updated>
-    </task>
-    <task id="LOCAL-00108" summary="‘提交修改’">
-      <created>1620876832989</created>
-      <option name="number" value="00108" />
-      <option name="presentableId" value="LOCAL-00108" />
-      <option name="project" value="LOCAL" />
-      <updated>1620876832989</updated>
-    </task>
-    <task id="LOCAL-00109" summary="‘提交修改’">
-      <created>1620877044762</created>
-      <option name="number" value="00109" />
-      <option name="presentableId" value="LOCAL-00109" />
-      <option name="project" value="LOCAL" />
-      <updated>1620877044763</updated>
     </task>
     <task id="LOCAL-00110" summary="‘提交修改’">
       <created>1621223836738</created>
@@ -516,7 +493,28 @@
       <option name="project" value="LOCAL" />
       <updated>1623399681645</updated>
     </task>
-    <option name="localTasksCounter" value="156" />
+    <task id="LOCAL-00156" summary="‘提交修改’">
+      <created>1623399717170</created>
+      <option name="number" value="00156" />
+      <option name="presentableId" value="LOCAL-00156" />
+      <option name="project" value="LOCAL" />
+      <updated>1623399717170</updated>
+    </task>
+    <task id="LOCAL-00157" summary="‘提交修改’">
+      <created>1623399812141</created>
+      <option name="number" value="00157" />
+      <option name="presentableId" value="LOCAL-00157" />
+      <option name="project" value="LOCAL" />
+      <updated>1623399812141</updated>
+    </task>
+    <task id="LOCAL-00158" summary="‘提交修改’">
+      <created>1623399930363</created>
+      <option name="number" value="00158" />
+      <option name="presentableId" value="LOCAL-00158" />
+      <option name="project" value="LOCAL" />
+      <updated>1623399930363</updated>
+    </task>
+    <option name="localTasksCounter" value="159" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -572,10 +570,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="270" y="57" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1616127694646" />
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1623399683097">
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1623399931503">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1623399683097" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1623399931503" />
     <state x="573" y="325" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1619431439497">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
