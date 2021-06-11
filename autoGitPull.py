@@ -10,7 +10,7 @@ def autoGitPull():
     codeDir = {'git_dir': '/home/webroot/banban', 'pt_git_dir': '/home/webroot/oversea/oversea-server'}
     git_dir = codeDir['git_dir']
     g = git.cmd.Git(git_dir)
-    print(g.status)
+    print(g.status())
     print(1111111111111111)
     g.pull()
     repo = Repo(git_dir)
