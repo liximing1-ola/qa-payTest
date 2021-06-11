@@ -6,7 +6,6 @@ import requests
 from common.Config import config
 from common.params_Yaml import Yaml
 from common import Logs
-from common.Consts import fail_case_reason
 from common import method
 class Session:
     def __init__(self):
