@@ -294,10 +294,3 @@ class Mysql:
             print('update fail', error)
         finally:
             con.commit()
-
-
-
-
-
-
-
