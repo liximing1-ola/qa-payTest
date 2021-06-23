@@ -14,6 +14,7 @@ class config:
     qq_login_url = dev_host + 'account/qqlogin'
     # 被打赏者
     testUid =bb_test['testUid']
+    testUid_2 = 100500205
     # 打赏者
     payUid = bb_test['payUid']
     # 打包结算主播
