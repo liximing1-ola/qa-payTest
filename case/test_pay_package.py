@@ -195,7 +195,6 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 500)
         Consts.CASE_LIST[des] = 'pass'
 
-    @unittest.skip
     def test_08_RoomToMorePayChange(self):
         """
         用例描述：
@@ -204,10 +203,20 @@ class TestPayCreate(unittest.TestCase):
         1.构造打赏者和被打赏者数据 （更新xs_user_money）
         2.房间内一对多打赏
         3.校验【status code】和返回值【body】状态
-        4.检查打赏者余额,预期为：300 - 200 = 100
-        5.依次检查被打赏者余额，预期为：62
+        4.检查打赏者余额,预期为：12000-10800=1200
+        5.检查被打赏者余额，预期为：600*6*0.7=2520
         """
-        pass
+        des = '检查非直播房间内一打赏多用户的场景'
+        Mysql.updateMoneySql(config.payUid, 3000, 3000, 3000, 3000)
+        Mysql.updateMoneySql(config.testUid)
+        data = Yaml.read_yaml('Basic.yml', 'dev_pay_more')
+        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
+        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
+        Assert.assert_code(res['code'], 200)
+        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_equal(Mysql.selectMoneySql(config.testUid), 2520)
+        Assert.assert_equal(Mysql.selectMoneySql(config.payUid), 1200)
+        Consts.CASE_LIST[des] = 'pass'
 
 
 if __name__ == '__main__':
