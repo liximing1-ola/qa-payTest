@@ -67,7 +67,7 @@ def readGitStatus():
     now = time.strftime('%Y-%m-%d %H:%M', time.localtime(time.time()))
     with open(txtPath, 'r') as f:
         for line in f.readlines():
-            if line.startswith("Your branch is up to date with 'origin/release-for-vpc'."):
+            if line.startswith("Your branch is up to date with 'origin/{}'.".format(config.banban_git_branch)):
                 Logs.get_log('gitStatus.log').info(now)
                 return True
         else:
