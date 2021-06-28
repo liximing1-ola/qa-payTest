@@ -16,7 +16,7 @@ def robot():
                 "title": title,
                 "description": des,
                 "url": "https://meican.com/",
-                "picurl": '/home/banban-1/payTest/001.jpg', }
+                "picurl": 'https://user.qzone.qq.com/3621560992?source=panelstar', }
             ]
         }
     }
