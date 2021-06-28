@@ -27,7 +27,7 @@ def dictToList(result_dict):
     list_case = []
     for k, v in result_dict.items():
         list_case.append(
-            '<font color="comment">{}</font>,  套餐系列: <font color=\"info\">{}</font>'.format(k, v))
+            '<font color="comment">{}</font>,  下午茶套餐: <font color=\"info\">{}</font>'.format(k, v))
     case = '\n'.join(list_case)
     return case
 
