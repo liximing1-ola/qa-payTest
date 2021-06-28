@@ -4,7 +4,7 @@ def robot():
     url1 = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e317861a-d1ec-4ac4-af96-9d4b8f12d9d6'
     url= 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=0179d8d1-2078-41ba-a8da-0fb11bd51880'
     headers = {'Content-Type': 'application/json'}
-    reason = {'TEA-1': 'cake（手快有手慢无系列）', 'TEA-2': 'milky tea（手快有手慢无系列）', 'TEA-3': 'cook（无图）', 'TEA-4': 'chicken（无图）', 'TEA-5': 'fruit（无图）'}
+    reason = {'HighTea-1': 'cake（手快有手慢无系列）', 'HighTea-2': 'milky tea（手快有手慢无系列）', 'HighTea-3': 'cook（无图）', 'HighTea-4': 'chicken（无图）', 'HighTea-5': 'fruit（无图）'}
     data = {
         "msgtype": "markdown",
         "markdown": {
