@@ -16,7 +16,7 @@ def robot():
                 "title": title,
                 "description": des,
                 "url": "https://meican.com/",
-                "picurl": 'https://user.qzone.qq.com/3621560992?source=panelstar', }
+                "picurl": 'http://m.qpic.cn/psc?/V52hTYBe40XQKg3ty77Y0YPE4S2QKHbM/45NBuzDIW489QBoVep5mcQaIr2wdYcoru7B8IOrLeR*gjHWKrpX7LOWfaiWcuAUwnnq6krlUuO9y3GqBQ66w4ErgZebDqBgP21AmXFz0erE!/b&bo=OARUBgAAAAABJ24!&rf=viewer_4', }
             ]
         }
     }
