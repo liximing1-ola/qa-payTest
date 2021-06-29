@@ -7,7 +7,7 @@ def robot():
     headers = {'Content-Type': 'application/json'}
     reason = {'HighTea-1': 'cake（手快有手慢无）', 'HighTea-2': 'milky tea（手快有手慢无）', 'HighTea-3': 'cook（无图）', 'HighTea-4': 'chicken（无图）', 'HighTea-5': 'fruit（无图）'}
     now = time.strftime('%H:%M', time.localtime(time.time()))
-    title = "广告位招租:当前时间-{}, 放松下，自取下午茶".format(now)
+    title = "广告位隆重招租:当前时间-{}, 放松一下，马上回来".format(now)
     des = '手快有手慢无'
     data = {
         "msgtype": "news",
