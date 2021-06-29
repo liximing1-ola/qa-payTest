@@ -8,7 +8,7 @@ def robot():
     reason = {'广告位招租': '霸气牛油果生椰斑斓（手快有手慢无）'}
     now = time.strftime('%H:%M', time.localtime(time.time()))
     title = "下午茶时间到:当前时间-{}, 放松一下，马上回来".format(now)
-    des = '谢谢榜一大哥'
+    des = '谢谢榜一大哥：下午茶大作战'
     data = {
         "msgtype": "news",
         "news": {
