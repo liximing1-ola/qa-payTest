@@ -32,3 +32,26 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 400)
         Assert.assert_equal(Mysql.selectCoinSql(config.payUid), 600)
         Consts.CASE_LIST[des] = 'pass'
+
+    @unittest.skip
+    def test_02_roomChangePayCoin(self):
+        """
+        用例描述：
+        验证房间内打赏金币流程
+        脚本步骤：
+        1.构造用户数据 （更新xs_user_money）
+        2.房间打赏金币礼物
+        3.校验【status code】和返回值【body】状态
+        4.检查打赏者账户余额（gold_coin） 100 - 20*3 = 40
+        5.检查被打赏者账户余额（gold_coin）  60*0.6 = 36
+        """
+        des = '检查房间打赏金币礼物的场景'
+        Mysql.updateMoneySql(config.payUid, 0, 0, 0, 0, 1000)
+        data = Yaml.read_yaml('Basic.yml', 'dev_pay_coin')
+        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
+        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
+        Assert.assert_code(res['code'], 200)
+        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 400)
+        Assert.assert_equal(Mysql.selectCoinSql(config.payUid), 600)
+        Consts.CASE_LIST[des] = 'pass'
