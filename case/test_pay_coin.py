@@ -42,7 +42,7 @@ class TestPayCreate(unittest.TestCase):
         2.房间打赏金币礼物
         3.校验【status code】和返回值【body】状态
         4.检查打赏者账户余额（gold_coin） 100 - 20*3 = 40
-        5.检查被打赏者账户余额（gold_coin）  60*0.6 = 36
+        5.检查被打赏者账户余额（gold_coin）  20 * 0.6 = 12
         """
         des = '检查房间内打赏金币礼物的消费场景'
         Mysql.updateMoneySql(config.payUid, 0, 0, 0, 0, 100)
@@ -54,5 +54,5 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectCoinSql(config.payUid), 60)
-        Assert.assert_equal(Mysql.selectCoinSql(config.testUid_2), 36)
+        Assert.assert_equal(Mysql.selectCoinSql(config.testUid_2), 12)
         Consts.CASE_LIST[des] = 'pass'
