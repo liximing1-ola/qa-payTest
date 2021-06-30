@@ -33,7 +33,6 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectCoinSql(config.payUid), 600)
         Consts.CASE_LIST[des] = 'pass'
 
-    @unittest.skip
     def test_02_roomChangePayCoin(self):
         """
         用例描述：
@@ -45,13 +44,15 @@ class TestPayCreate(unittest.TestCase):
         4.检查打赏者账户余额（gold_coin） 100 - 20*3 = 40
         5.检查被打赏者账户余额（gold_coin）  60*0.6 = 36
         """
-        des = '检查房间打赏金币礼物的场景'
-        Mysql.updateMoneySql(config.payUid, 0, 0, 0, 0, 1000)
-        data = Yaml.read_yaml('Basic.yml', 'dev_pay_coin')
+        des = '检查房间内打赏金币礼物的消费场景'
+        Mysql.updateMoneySql(config.payUid, 0, 0, 0, 0, 100)
+        Mysql.updateMoneySql(config.testUid)
+        Mysql.updateMoneySql(config.testUid_2)
+        data = Yaml.read_yaml('Basic.yml', 'dev_pay_coins')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 400)
-        Assert.assert_equal(Mysql.selectCoinSql(config.payUid), 600)
+        Assert.assert_equal(Mysql.selectCoinSql(config.payUid), 60)
+        Assert.assert_equal(Mysql.selectCoinSql(config.testUid_2), 36)
         Consts.CASE_LIST[des] = 'pass'

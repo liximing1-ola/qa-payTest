@@ -21,7 +21,9 @@
   <component name="ChangeListManager">
     <list default="true" id="44793b3e-09e5-4af0-a369-84e9b064bd19" name="Default Changelist" comment="‘提交修改’">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot_tea.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot_tea.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case/test_pay_coin.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_coin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case/test_pay_openBox.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_openBox.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/Basic.yml" beforeDir="false" afterPath="$PROJECT_DIR$/common/Basic.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -183,13 +185,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1615801946332</updated>
-    </task>
-    <task id="LOCAL-00135" summary="‘提交修改’">
-      <created>1622883406625</created>
-      <option name="number" value="00135" />
-      <option name="presentableId" value="LOCAL-00135" />
-      <option name="project" value="LOCAL" />
-      <updated>1622883406625</updated>
     </task>
     <task id="LOCAL-00136" summary="‘提交修改’">
       <created>1622883707602</created>
@@ -527,7 +522,14 @@
       <option name="project" value="LOCAL" />
       <updated>1624952525808</updated>
     </task>
-    <option name="localTasksCounter" value="184" />
+    <task id="LOCAL-00184" summary="‘提交修改’">
+      <created>1624952713267</created>
+      <option name="number" value="00184" />
+      <option name="presentableId" value="LOCAL-00184" />
+      <option name="project" value="LOCAL" />
+      <updated>1624952713267</updated>
+    </task>
+    <option name="localTasksCounter" value="185" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -579,10 +581,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="614" y="325" key="VCS.ChangelistChooser/0.0.1536.824@0.0.1536.824" timestamp="1624626874281" />
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1624952526603">
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1624952714303">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1624952526603" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1624952714303" />
     <state x="573" y="325" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1623834591424">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
