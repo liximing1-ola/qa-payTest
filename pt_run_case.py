@@ -9,7 +9,7 @@ def all_case():
     case_dir = {"pt_dir": '/root/payTest/caseOversea'}
     testcase = unittest.TestSuite()
     discover = unittest.defaultTestLoader.discover(case_dir['pt_dir'],
-                                                   pattern="test_*",
+                                                   pattern="test_pay_coin.py",
                                                    top_level_dir=None)
     testcase.addTests(discover)
     return testcase
