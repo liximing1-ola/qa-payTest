@@ -23,7 +23,7 @@ class config:
     banban_git_branch = bb_test['bb_git_branch']
 
     # PT
-    pt_test= {'payUid': 800240376, 'testUid': 800000116, 'pt_git_branch': 'release_for_php7'}
+    pt_test= {'payUid': 800240376, 'testUid': 800000116, 'pt_git_branch': 'main'}
     # pt域名-（PT登陆方式）
     pt_host = domain_host['pt']
     mobile_login_url = pt_host + 'account/passwordLogin'
