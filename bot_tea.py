@@ -5,7 +5,7 @@ def robot():
     url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e317861a-d1ec-4ac4-af96-9d4b8f12d9d6'
     url1= 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=0179d8d1-2078-41ba-a8da-0fb11bd51880'
     headers = {'Content-Type': 'application/json'}
-    reason = {'广告位招租': '霸气牛油果生椰斑斓（手快有手慢无）'}
+    reason = {'伴伴项目组感谢猫女提供的零食': '奶茶只有20杯！（手快有手慢无）'}
     now = time.strftime('%H:%M', time.localtime(time.time()))
     title = "下午茶时间到:当前时间-{}, 放松一下，马上回来".format(now)
     des = '谢谢榜一大哥：下午茶大作战'
