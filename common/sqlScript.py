@@ -40,6 +40,33 @@ class Mysql:
         finally:
             con.commit()
 
+    # 删除用户金豆账户数据
+    @staticmethod
+    def deleteUserBeanSql(uid):
+        con, cur = Mysql.conMysql()
+        sql = "delete from xs_user_money_extend where uid = {} limit 1".format(uid)
+        try:
+            cur.execute(sql)
+        except Exception as error:
+            con.rollback()
+            print('delete fail', error)
+        finally:
+            con.commit()
+
+    # 更新用户金豆余额
+    @staticmethod
+    def updateBeanSql(uid, money_coupon):
+        con, cur = Mysql.conMysql()
+        sql = "insert into xs_user_money_extend(uid, money_coupon) values({},{})".format(uid, money_coupon)
+        try:
+            cur.execute(sql)
+        except Exception as error:
+            con.rollback()
+            print('insert fail', error)
+        finally:
+            con.commit()
+
+
     # 查询用户当前所有账户余额之和
     @staticmethod
     def selectAllMoneySql(uid):

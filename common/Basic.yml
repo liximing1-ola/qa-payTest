@@ -122,3 +122,11 @@ dev_pay_unityGame:
 # 房间红包发送
 dev_red_packet:
     platform=available&type=red-packet&money=52000&params=%7B%22rid%22%3A193185577%2C%22money%22%3A52000%2C%22num%22%3A10%2C%22type%22%3A%22random%22%2C%22cond%22%3A%22none%22%2C%22version%22%3A%221%22%2C%22useCoin%22%3A-1%7D
+
+# 金豆礼物打赏
+# rid = 193185484
+# uid = 105002312
+dev_gold_NoGold:
+    platform=available&type=package&money=1000&params=%7B%22rid%22%3A193185484%2C%22uids%22%3A%22105002312%22%2C%22positions%22%3A%220%22%2C%22position%22%3A-1%2C%22giftId%22%3A362%2C%22giftNum%22%3A1%2C%22price%22%3A1000%2C%22cid%22%3A0%2C%22ctype%22%3A%22%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A1%2C%22gift_type%22%3A%22bean%22%2C%22star%22%3A0%2C%22show_pac_man_guide%22%3A1%2C%22refer%22%3A%22flow_recommend%3Aroom%22%2C%22all_mic%22%3A0%2C%22useCoin%22%3A-1%7D
+
+#
