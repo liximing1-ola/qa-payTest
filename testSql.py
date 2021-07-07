@@ -22,11 +22,10 @@ def selectMoneySql(uid):
     try:
         cur.execute(sql)
         res = cur.fetchone()
-        print(type(res))
-        if len(res) > 0:
-            return res[0]
+        if res is None:
+            return 0
         else:
-            return None
+            return res[0]
     except Exception as error:
         print(error)
 
