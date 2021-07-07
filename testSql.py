@@ -16,6 +16,19 @@ def conMysql():
     cursor = con.cursor()
     return con, cursor
 
+def selectMoneySql(uid, money_coupon):
+    con, cur = conMysql()
+    sql = "select {} from xs_user_money_extend where uid={}".format(money_coupon, uid)
+    try:
+        cur.execute(sql)
+        res = cur.fetchone()
+        if len(res) > 0:
+            return res[0]
+        else:
+            return None
+    except Exception as error:
+        print(error)
+
 
 if __name__ == '__main__':
     pass
