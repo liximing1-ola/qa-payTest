@@ -16,9 +16,9 @@ def conMysql():
     cursor = con.cursor()
     return con, cursor
 
-def selectMoneySql(uid, money_coupon):
+def selectMoneySql(uid):
     con, cur = conMysql()
-    sql = "select {} from xs_user_money_extend where uid={}".format(money_coupon, uid)
+    sql = "select money_coupon from xs_user_money_extend where uid={}".format(uid)
     try:
         cur.execute(sql)
         res = cur.fetchone()
@@ -31,4 +31,4 @@ def selectMoneySql(uid, money_coupon):
 
 
 if __name__ == '__main__':
-    pass
+    selectMoneySql(100287189)
