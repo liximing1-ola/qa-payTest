@@ -31,4 +31,4 @@ def selectMoneySql(uid):
 
 
 if __name__ == '__main__':
-    selectMoneySql(100287189)
+    print(selectMoneySql(100287189))
