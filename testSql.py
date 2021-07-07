@@ -22,7 +22,7 @@ def selectMoneySql(uid):
     try:
         cur.execute(sql)
         res = cur.fetchone()
-        type(res)
+        print(type(res))
         if len(res) > 0:
             return res[0]
         else:
