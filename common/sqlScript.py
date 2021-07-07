@@ -66,6 +66,20 @@ class Mysql:
         finally:
             con.commit()
 
+    # 查询用户金豆余额
+    @staticmethod
+    def selectBeanSql(uid):
+        con, cur = Mysql.conMysql()
+        sql = "select money_coupon from xs_user_money_extend where uid={}".format(uid)
+        try:
+            cur.execute(sql)
+            res = cur.fetchone()
+            if res is None:
+                return 0
+            else:
+                return res[0]
+        except Exception as error:
+            print(error)
 
     # 查询用户当前所有账户余额之和
     @staticmethod

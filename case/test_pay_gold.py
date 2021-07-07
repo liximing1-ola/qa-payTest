@@ -33,7 +33,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 0, reason)
         Assert.assert_body(res['body'], 'msg', '金豆不足', reason)
-        Assert.assert_equal(Mysql.selectMoneySql(config.testUid), 0)
+        Assert.assert_equal(Mysql.selectBeanSql(config.testUid), 0)
         Consts.CASE_LIST[des] = 'pass'
 
     @unittest.skip
