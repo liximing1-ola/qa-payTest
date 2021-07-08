@@ -16,8 +16,10 @@ class TestPayCreate(unittest.TestCase):
         # 每个case执行前处理下数据
         Mysql.deleteUserBeanSql(config.payUid)
         Mysql.deleteUserBeanSql(config.testUid)
+        print('start')
 
     def tearDown(self) -> None:
+        print('end')
         pass
 
     def test_01_NoBeanPayBeanGift(self):
@@ -41,6 +43,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'msg', '金豆不足', reason)
         Assert.assert_equal(Mysql.selectBeanSql(config.testUid), 0)
         Consts.CASE_LIST[des] = 'pass'
+        print(1)
 
     def test_02_beanPayChangeGoldGift(self):
         """
@@ -60,9 +63,10 @@ class TestPayCreate(unittest.TestCase):
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 0, reason)
-        Assert.assert_equal(Mysql.selectMoneySql(config.payUid), 0)
+        Assert.assert_equal(Mysql.selectBeanSql(config.payUid), 0)
         Assert.assert_equal(Mysql.selectBeanSql(config.testUid), 4200)
         Consts.CASE_LIST[des] = 'pass'
+        print(2)
 
     @unittest.skip
     def test_03_MoneyConvertGoldPayGift(self):
