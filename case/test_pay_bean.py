@@ -133,7 +133,6 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(config.payUid, 700)
         Mysql.updateMoneySql(config.testUid)
         Mysql.updateBeanSql(config.payUid, 400)
-        print(Mysql.selectAllMoneySql(config.payUid), Mysql.selectBeanSql(config.payUid))
         data = Yaml.read_yaml('Basic.yml', 'dev_gold_RoomBeanDeduct')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
@@ -144,7 +143,6 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
         Consts.CASE_LIST[des] = 'pass'
 
-    @unittest.skip
     def test_06_BeanPayChangeCombo(self):
         """
         用例描述：
