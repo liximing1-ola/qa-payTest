@@ -22,7 +22,7 @@ class TestPayCreate(unittest.TestCase):
         3.校验【status code】和返回值【body】状态
         4.检查账户余额，预期值为：100-100=0
         """
-        des = '检查unity小游戏内道具购买'
+        des = 'unity道具购买'
         Mysql.updateMoneySql(config.payUid, 100)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_unityGame')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)

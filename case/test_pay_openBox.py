@@ -27,7 +27,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查账户余额，预期值为：100
         5.检查背包内开出物品，预期值应为：2（赠送头像框，开出礼物个数）
         """
-        des = '检查背包内开箱子获得对应物品的场景'
+        des = '背包内单开箱子的场景'
         Mysql.deleteUserBox(config.payUid)
         Mysql.deleteUserCommoditySql(config.payUid)
         Mysql.insertXsUserCommodity(config.payUid, 2, 1)
@@ -57,7 +57,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查账户余额，预期值为：0
         5.检查背包内开出物品，预期值应大于2（赠送头像框*1，开出礼物个数大于*2）
         """
-        des = '检查背包内多开箱子获得多个物品的场景'
+        des = '背包内多开箱子的场景'
         Mysql.deleteUserBox(config.payUid)
         Mysql.deleteUserCommoditySql(config.payUid)
         Mysql.insertXsUserCommodity(config.payUid, 3, 6)
@@ -83,7 +83,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查账户余额，预期值为：100
         5.检查收箱用户账户余额，预期值为：大于0
         """
-        des = '检查房间内赠送箱子打赏的场景'
+        des = '房间赠送箱子的场景'
         Mysql.updateMoneySql(config.payUid, 400, 100, 100, 100)
         Mysql.updateMoneySql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_package_giveBox')
@@ -106,7 +106,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查账户余额，预期值为：10000 - 2100*2*2 = 1600
         5.检查收箱用户账户余额，预期值为：大于0
         """
-        des = '检查房间内赠送多人多个箱子的消费场景'
+        des = '房间赠送多人多个箱子的消费场景'
         Mysql.updateMoneySql(config.payUid, 10000)
         Mysql.updateMoneySql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_OpenBox')
