@@ -12,7 +12,15 @@ class TestPayCreate(unittest.TestCase):
     # 内网支付接口
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
 
-    def test_01_NoGoldPayGoldGift(self):
+    def setUp(self):
+        # 每个case执行前处理下数据
+        Mysql.deleteUserBeanSql(config.payUid)
+        Mysql.deleteUserBeanSql(config.testUid)
+
+    def tearDown(self) -> None:
+        pass
+
+    def test_01_NoBeanPayBeanGift(self):
         """
         用例描述：
         验证账户内金豆不足时打赏金豆礼物的场景
@@ -21,13 +29,11 @@ class TestPayCreate(unittest.TestCase):
         2.房间内打赏金豆礼物
         3.校验【status code】和返回值【body】状态
         4.检查预期返回msg，预期：支付失败，提示Toast
-        5.检查被打赏者余额,预期：0
+        5.检查被打赏者金豆余额,预期：0
         """
         des = '验证账户内金豆不足时打赏金豆礼物的场景'
-        Mysql.deleteUserBeanSql(config.payUid)
-        Mysql.deleteUserBeanSql(config.testUid)
         Mysql.updateMoneySql(config.payUid)
-        data = Yaml.read_yaml('Basic.yml', 'dev_gold_NoGold')
+        data = Yaml.read_yaml('Basic.yml', 'dev_gold_NoBean')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
@@ -36,30 +42,26 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectBeanSql(config.testUid), 0)
         Consts.CASE_LIST[des] = 'pass'
 
-    @unittest.skip
-    def test_02_GoldPayGoldGift(self):
+    def test_02_beanPayChangeGoldGift(self):
         """
         用例描述：
-        验证打赏金豆礼物的场景（足够）
+        验证打赏金豆礼物的场景（金豆足够）
         脚本步骤：
-        1.构造打赏者和被打赏者数据 （更新xs_user_money, xs_user_money_extend）
+        1.构造打赏者和被打赏者数据 （更新xs_user_money_extend）
         2.房间内打赏金豆礼物
         3.校验【status code】和返回值【body】状态
-        4.检查预期返回msg，预期：支付失败，提示Toast
-        5.检查被打赏者余额,预期：0
+        4.检查被打赏者金豆余额，预期为：0
+        5.检查打赏者剩余金豆余额，预期为：6000 * 0.7 = 4200
         """
-        des = '验证打赏金豆礼物时金豆足够的场景'
-        Mysql.updateMoneySql(config.payUid)
-        Mysql.updateMoneySql(config.testUid)
-        Mysql.deleteXsBrokerUser(config.testUid)  # 删除用户工会记录
-        Mysql.deleteXsChatroom(config.testUid)  # 删除用户商业房
-        data = Yaml.read_yaml('Basic.yml', 'dev_pay_chatGift')
+        des = '验证正常打赏金豆礼物的场景'
+        Mysql.updateBeanSql(config.payUid, 6000)
+        data = Yaml.read_yaml('Basic.yml', 'dev_gold_BeanEnough')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 0, reason)
-        Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason)
-        Assert.assert_equal(Mysql.selectMoneySql(config.testUid), 0)
+        Assert.assert_equal(Mysql.selectMoneySql(config.payUid), 0)
+        Assert.assert_equal(Mysql.selectBeanSql(config.testUid), 4200)
         Consts.CASE_LIST[des] = 'pass'
 
     @unittest.skip
