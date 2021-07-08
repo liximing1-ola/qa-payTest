@@ -87,7 +87,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectBeanSql(config.payUid), 500)
-        Assert.assert_equal(Mysql.selectMoneySql(config.payUid), 9000)
+        Assert.assert_equal(Mysql.selectMoneySql(config.payUid, money_type='money'), 9000)
         Assert.assert_equal(Mysql.selectBeanSql(config.testUid), 700)
         Consts.CASE_LIST[des] = 'pass'
 
