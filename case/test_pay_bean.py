@@ -133,7 +133,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(config.payUid, 700)
         Mysql.updateMoneySql(config.testUid)
         Mysql.updateBeanSql(config.payUid, 400)
-        data = Yaml.read_yaml('Basic.yml', 'dev_gold_BeanDeduct')
+        data = Yaml.read_yaml('Basic.yml', 'dev_gold_RoomBeanDeduct')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
@@ -143,28 +143,25 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
         Consts.CASE_LIST[des] = 'pass'
 
-    @unittest.skip
-    def test_06_GoldPayChangeCombo(self):
+    def test_06_BeanPayChangeCombo(self):
         """
         用例描述：
-        验证打赏金豆礼物的场景（不足）
+        验证卡座内购买套餐的场景（钻补）
         脚本步骤：
         1.构造打赏者和被打赏者数据 （更新xs_user_money, xs_user_money_extend）
-        2.房间内打赏金豆礼物
+        2.卡座内购买酒桌套餐
         3.校验【status code】和返回值【body】状态
-        4.检查预期返回msg，预期：支付失败，提示Toast
-        5.检查被打赏者余额,预期：0
+        4.检查购买者金豆余额，预期为：400
+        5.检查购买者钻石余额，预期为：80000 - 79900 = 100
         """
-        des = '验证打赏金豆礼物时金豆不足用钻转换的场景'
-        Mysql.updateMoneySql(config.payUid)
-        Mysql.updateMoneySql(config.testUid)
-        Mysql.deleteXsBrokerUser(config.testUid)  # 删除用户工会记录
-        Mysql.deleteXsChatroom(config.testUid)  # 删除用户商业房
-        data = Yaml.read_yaml('Basic.yml', 'dev_pay_chatGift')
+        des = '验证卡座内购买套餐的场景'
+        Mysql.deleteUserCommoditySql(config.payUid)
+        Mysql.updateMoneySql(config.payUid, 80000)
+        data = Yaml.read_yaml('Basic.yml', 'dev_gold_Combo')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 0, reason)
-        Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason)
-        Assert.assert_equal(Mysql.selectMoneySql(config.testUid), 0)
+        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_equal(Mysql.selectMoneySql(config.payUid), 100)
+        Assert.assert_equal(Mysql.selectBeanSql(config.payUid), 400)
         Consts.CASE_LIST[des] = 'pass'
