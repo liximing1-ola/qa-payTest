@@ -158,7 +158,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查预期返回msg，预期：支付失败，提示Toast
         5.检查被打赏者余额,预期：0
         """
-        des = '验证房间内打赏钻石礼物时金豆抵扣平台手续费但钻石少于礼物价格时的场景'
+        des = '验证打赏礼物金豆抵扣手续费且钻石小于礼物价格的场景'
         Mysql.updateMoneySql(config.payUid, 700)
         Mysql.updateMoneySql(config.testUid)
         Mysql.updateBeanSql(config.payUid, 400)
@@ -181,7 +181,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查购买者金豆余额，预期为：400
         5.检查购买者钻石余额，预期为：80000 - 79900 = 100
         """
-        des = '验证卡座内购买套餐的场景'
+        des = '验证卡座购买套餐的场景'
         Mysql.deleteUserCommoditySql(config.payUid)
         Mysql.updateMoneySql(config.payUid, 80000)
         Mysql.updateBeanSql(config.payUid, 400)
