@@ -183,6 +183,7 @@ class TestPayCreate(unittest.TestCase):
         data = Yaml.read_yaml('Basic.yml', 'dev_gold_Combo')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
+        print(Mysql.selectAllMoneySql(config.payUid))
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectMoneySql(config.payUid), 100)
