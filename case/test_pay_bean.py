@@ -180,6 +180,7 @@ class TestPayCreate(unittest.TestCase):
         des = '验证卡座内购买套餐的场景'
         Mysql.deleteUserCommoditySql(config.payUid)
         Mysql.updateMoneySql(config.payUid, 80000)
+        Mysql.updateBeanSql(config.payUid, 400)
         data = Yaml.read_yaml('Basic.yml', 'dev_gold_Combo')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
