@@ -22,8 +22,7 @@ class TestPayCreate(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls) -> None:
-        Mysql.deleteUserBeanSql(config.payUid)
-        Mysql.deleteUserBeanSql(config.testUid)
+        pass
 
     def test_01_NoBeanPayBeanGift(self):
         """
@@ -193,6 +192,8 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 100)
         Assert.assert_equal(Mysql.selectBeanSql(config.payUid), 400)
         Consts.CASE_LIST[des] = 'pass'
+        Mysql.deleteUserBeanSql(config.payUid)
+        Mysql.deleteUserBeanSql(config.testUid)
 
 
 if __name__ == '__main__':
