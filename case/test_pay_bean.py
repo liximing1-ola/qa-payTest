@@ -12,14 +12,13 @@ class TestPayCreate(unittest.TestCase):
     # 内网支付接口
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
 
-    def setUp(self):
+    def setUp(self) -> None:
         # 每个case执行前处理下数据
-        Mysql.deleteUserBeanSql(config.payUid)
-        Mysql.deleteUserBeanSql(config.testUid)
-        print('start')
+        # Mysql.deleteUserBeanSql(config.payUid)
+        # Mysql.deleteUserBeanSql(config.testUid)
+        pass
 
     def tearDown(self) -> None:
-        print('end')
         pass
 
     def test_01_NoBeanPayBeanGift(self):
@@ -34,6 +33,8 @@ class TestPayCreate(unittest.TestCase):
         5.检查被打赏者金豆余额,预期：0
         """
         des = '验证账户内金豆不足时打赏金豆礼物的场景'
+        Mysql.deleteUserBeanSql(config.payUid)
+        Mysql.deleteUserBeanSql(config.testUid)
         Mysql.updateMoneySql(config.payUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_gold_NoBean')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
@@ -43,7 +44,6 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'msg', '金豆不足', reason)
         Assert.assert_equal(Mysql.selectBeanSql(config.testUid), 0)
         Consts.CASE_LIST[des] = 'pass'
-        print(1)
 
     def test_02_beanPayChangeGoldGift(self):
         """
@@ -57,6 +57,8 @@ class TestPayCreate(unittest.TestCase):
         5.检查打赏者剩余金豆余额，预期为：6000 * 0.7 = 4200
         """
         des = '验证正常打赏金豆礼物的场景'
+        Mysql.deleteUserBeanSql(config.payUid)
+        Mysql.deleteUserBeanSql(config.testUid)
         Mysql.updateBeanSql(config.payUid, 6000)
         data = Yaml.read_yaml('Basic.yml', 'dev_gold_BeanEnough')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
@@ -66,7 +68,6 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectBeanSql(config.payUid), 0)
         Assert.assert_equal(Mysql.selectBeanSql(config.testUid), 4200)
         Consts.CASE_LIST[des] = 'pass'
-        print(2)
 
     @unittest.skip
     def test_03_MoneyConvertGoldPayGift(self):
