@@ -101,7 +101,7 @@ class TestPayCreate(unittest.TestCase):
         3.校验【status code】和返回值【body】状态
         4.检查打赏者金豆余额，预期为：200 - 200 = 0
         5.检查打赏者钻石余额，预期为：1000 - 800 = 200
-        6.检查被打赏者钻石余额，预期为：1000 * 0.8 = 800
+        6.检查被打赏者钻石余额，预期为：1000 * 0.72 = 720
         """
         des = '验证私聊场景打赏钻石礼物时金豆抵扣平台手续费的场景'
         Mysql.updateMoneySql(config.payUid, 1000)
@@ -114,7 +114,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectBeanSql(config.payUid), 0)
         Assert.assert_equal(Mysql.selectMoneySql(config.payUid, money_type='money'), 200)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 800)
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 720)
         Consts.CASE_LIST[des] = 'pass'
 
     def test_05_RoomMoneyConvertGoldPayGift(self):
@@ -127,7 +127,7 @@ class TestPayCreate(unittest.TestCase):
         3.校验【status code】和返回值【body】状态
         4.检查打赏者金豆余额，预期为：400 - 300 = 100
         5.检查打赏者钻石余额，预期为：700 - 700 = 0
-        6.检查被打赏者钻石余额，预期为：1000 * 0.7 = 700
+        6.检查被打赏者钻石余额，预期为：1000 * 0.62 = 620
         """
         des = '验证房间内打赏钻石礼物时金豆抵扣平台手续费的场景'
         Mysql.updateMoneySql(config.payUid, 700)
@@ -139,7 +139,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectBeanSql(config.payUid), 100)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 700)
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 620)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
         Consts.CASE_LIST[des] = 'pass'
 
