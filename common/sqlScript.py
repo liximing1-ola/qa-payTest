@@ -50,6 +50,7 @@ class Mysql:
         sql = "delete from xs_user_money_extend where uid = {} limit 1".format(uid)
         try:
             cur.execute(sql)
+            # 防止
             time.sleep(1)
         except Exception as error:
             con.rollback()
