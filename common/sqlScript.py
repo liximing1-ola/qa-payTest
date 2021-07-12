@@ -55,7 +55,7 @@ class Mysql:
             print('delete fail', error)
         finally:
             # 防止
-            time.sleep(1)
+            time.sleep(0.5)
             con.commit()
 
     # 更新用户金豆余额
@@ -69,7 +69,7 @@ class Mysql:
             con.rollback()
             print('insert fail', error)
         finally:
-            time.sleep(1)
+            time.sleep(0.5)
             con.commit()
 
     # 查询用户金豆余额
