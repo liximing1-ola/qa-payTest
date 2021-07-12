@@ -1,6 +1,7 @@
 # coding=utf-8
 import pymysql
 from common.Consts import fail_case_reason
+import time
 class Mysql:
 
     db_config = {"dev_46_db": '192.168.11.46',
@@ -49,6 +50,7 @@ class Mysql:
         sql = "delete from xs_user_money_extend where uid = {} limit 1".format(uid)
         try:
             cur.execute(sql)
+            time.sleep(1)
         except Exception as error:
             con.rollback()
             print('delete fail', error)
