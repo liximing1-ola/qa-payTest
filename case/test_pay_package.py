@@ -5,7 +5,7 @@ from common.sqlScript import Mysql
 import unittest
 from common import Consts, Assert
 from common.runFailed import Retry
-@Retry(max_n=2)
+@Retry
 class TestPayCreate(unittest.TestCase):
 
     # 内网支付接口
@@ -22,7 +22,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查预期返回msg，预期：支付失败
         5.检查被打赏者余额,预期：0
         """
-        des = '余额不足时房间一对一打赏'
+        des = '余额不足时房间一对一打赏场景'
         Mysql.updateMoneySql(config.payUid)
         Mysql.updateMoneySql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_1')
@@ -46,7 +46,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查消费记录表消费money（xs_pay_change_new）
         6.检查消费记录表消费方式op
         """
-        des = '直播房一对一打赏'
+        des = '直播房一对一打赏场景'
         Mysql.updateMoneySql(config.payUid, 30, 30, 30, 10)
         Mysql.updateMoneySql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_1')
@@ -71,7 +71,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查消费记录表消费money（xs_pay_change_new）
         6.检查消费记录表消费方式op
         """
-        des = '非直播房一对一打赏'
+        des = '非直播房一对一打赏场景'
         Mysql.updateMoneySql(config.payUid, 30, 30, 30, 10)
         Mysql.updateMoneySql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_2')
@@ -95,7 +95,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：money_cash=600
         5.检查打赏者余额.预期为0
         """
-        des = '直播房打包结算主播打赏分成6:4且收入在money_cash'
+        des = '直播房打包结算主播打赏分成6:4且收入在money_cash的场景'
         Mysql.updateChatroomUid(config.pack_cal_uid)
         Mysql.updateBrokerUser(config.pack_cal_uid)
         Mysql.updateMoneySql(config.payUid, 100)
@@ -120,7 +120,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：620
         5.检查打赏者余额,预期为：0
         """
-        des = '直播间打赏麦下用户'
+        des = '直播间打赏麦下用户场景'
         Mysql.updateMoneySql(config.payUid, 100)
         Mysql.updateMoneySql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_mentor_pay')
@@ -144,7 +144,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：0
         5.检查打赏者余额,预期为：3000
         """
-        des = '未激活券打赏流程'
+        des = '使用未激活券打赏场景'
         gift_cid = 54  # 老司机
         Mysql.deleteUserCommoditySql(config.payUid)
         Mysql.insertXsUserCommodity(config.payUid, gift_cid, 1)
@@ -175,7 +175,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：3000 * 0.62 = 1860
         5.检查打赏者余额,预期为：3000 -2500 = 500
         """
-        des = '激活券打赏流程'
+        des = '使用已激活券打赏场景'
         gift_cid = 54  # 老司机
         Mysql.deleteUserCommoditySql(config.payUid)
         Mysql.insertXsUserCommodity(config.payUid, gift_cid, 1, 1)
@@ -206,7 +206,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查打赏者余额,预期为：12000-10800=1200
         5.检查被打赏者余额，预期为：600*6*0.7=2520
         """
-        des = '非直播房一打赏多的场景'
+        des = '房间内一打赏多场景'
         Mysql.updateMoneySql(config.payUid, 3000, 3000, 3000, 3000)
         Mysql.updateMoneySql(config.testUid_2)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_more')

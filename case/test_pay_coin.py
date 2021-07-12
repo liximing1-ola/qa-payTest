@@ -6,7 +6,7 @@ import unittest
 from common import Consts
 from common import Assert
 from common.runFailed import Retry
-@Retry(max_n=2)
+@Retry(max_n=3, func_prefix='test_02_roomChangePayCoin')
 class TestPayCreate(unittest.TestCase):
 
     # 内网支付接口
@@ -44,7 +44,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查打赏者账户余额（gold_coin） 100 - 20*3 = 40
         5.检查被打赏者账户余额（gold_coin）  20 * 0.6 = 12
         """
-        des = '房间打赏金币礼物的消费场景'
+        des = '房间打赏金币礼物场景'
         Mysql.updateMoneySql(config.payUid, 0, 0, 0, 0, 100)
         Mysql.updateMoneySql(config.testUid)
         Mysql.updateMoneySql(config.testUid_2)

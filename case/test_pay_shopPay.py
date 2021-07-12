@@ -6,7 +6,7 @@ import unittest
 import pytest
 from common import Consts, Assert
 from common.runFailed import Retry
-@Retry(max_n=2)
+@Retry
 class TestPayCreate(unittest.TestCase):
 
     # 内网支付接口
@@ -50,7 +50,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查背包内物品
         """
         cid=340  # 小天使
-        des = '商城购买多个道具场景'
+        des = '商城购买多道具场景'
         Mysql.updateMoneySql(config.payUid, 1000, 100000, 1000, 1000)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_more_shop')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
@@ -73,7 +73,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查背包内物品
         5.检查被打赏者余额 990*0.62 = 6138
         """
-        des = '检查背包礼物打赏场景'
+        des = '检查打赏背包礼物的场景'
         bag_gift_cid = 340
         Mysql.updateMoneySql(config.payUid)
         Mysql.updateMoneySql(config.testUid)
@@ -99,7 +99,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查背包内物品
         5.检查被打赏者余额 预期：0
         """
-        des = '检查物品不足抵扣场景'
+        des = '检查物品不足抵扣的场景'
         bag_gift_cid = 340
         Mysql.updateMoneySql(config.payUid)
         Mysql.updateMoneySql(config.testUid)

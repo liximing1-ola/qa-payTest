@@ -4,9 +4,7 @@ class config:
     #  工程目录
     BASE_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     #  release域名
-    domain_host = {'bb_dev_58': 'https://dev.iambanban.com/',
-                   'pt': 'https://test.overseaban.com/', }
-
+    domain_host = {'bb_dev_58': 'https://dev.iambanban.com/', 'pt': 'https://test.overseaban.com/', }
     # 伴伴
     bb_test = {'payUid': 103273407, 'testUid': 105002312, 'pack_cal_uid': 105002313, 'bb_git_branch': 'release-for-vpc'}
     # dev域名（qq登陆方式)

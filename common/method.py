@@ -1,5 +1,7 @@
 import requests
 import random
+
+# 将列表生成支持markdown的形式
 def dictToList(result_dict):
     list_case = []
     for k, v in result_dict.items():
@@ -8,6 +10,7 @@ def dictToList(result_dict):
     case = '\n'.join(list_case)
     return case
 
+# 随机获取图片
 def getImage():
     url = 'https://www.mxnzp.com/api/image/girl/list/random?app_id=kilmc0p2ytsnawyp&app_secret=bnNoWElSVDBYbEhsc1EvYVM2WnVnZz09'
     res = requests.get(url)
@@ -16,13 +19,24 @@ def getImage():
     if res['code'] == 1:
         return res['data'][0]['imageUrl']
     else:
-        icon = random.randint(1, 140)
+        icon = random.randint(1, 200)
         return 'http://xs-image.oss-cn-hangzhou.aliyuncs.com/static/gift_big/{}.png'.format(icon)
+
+# 检查当前字段是否在Json中存在
+def isExtend(data, tag):
+    if type(data) != type({}):
+        print('please input a json!')
+    else:
+        key_list = getKeys(data)
+        for key in key_list:
+            if key == tag:
+                return True
+    return False
 
 def getKeys(data):
     keysAll_list = []
 
-    def getkeys(json_data):  # 遍历json所有key
+    def getKey(json_data):  # 遍历json所有key
         if type(json_data) == type({}):
             keys = json_data.keys()
             for key in keys:
@@ -31,26 +45,17 @@ def getKeys(data):
                     keysAll_list.append(key)
                 elif type(value) == type({}):
                     keysAll_list.append(key)
-                    getkeys(value)
+                    getKey(value)
                 elif type(value) == type([]):
                     keysAll_list.append(key)
                     for para in value:
                         if type(para) == type({}) or type(para) == type([]):
-                            getkeys(para)
+                            getKey(para)
                         else:
                             keysAll_list.append(para)
-    getkeys(data)
-    return keysAll_list
 
-def isExtend(data, tagkey):
-    if type(data) != type({}):
-        print('please input a json!')
-    else:
-        key_list = getKeys(data)
-        for key in key_list:
-            if key == tagkey:
-                return True
-    return False
+    getKey(data)
+    return keysAll_list
 
 
 if __name__ == '__main__':
@@ -58,5 +63,5 @@ if __name__ == '__main__':
                  '验证余额不足时，房间一对一打赏': 'pass', '验证余额足够时，直播类型房间一对一打赏': 'pass', '验证余额足够时，非直播类型房间一对一打赏': 'pass',
                  '验证商城购买单个道具时逻辑': 'pass', '验证商城购买多个道具时逻辑': 'pass', '验证商城购买的道具在房间内赠送给其他人逻辑': 'pass',
                  '验证商城购买的道具在房间内赠送给他人不足的逻辑': 'pass', '验证爵位开通及返钱到余额': 'pass', '验证爵位续费及返钱到余额': 'pass'}
-    # print(dictToList(case_dict))
+    print(dictToList(case_dict))
     print(isExtend(case_dict, '验证余额不足时，私聊一对一打赏'))

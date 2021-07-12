@@ -6,7 +6,7 @@ import unittest
 from common import Consts
 from common import Assert
 from common.runFailed import Retry
-@Retry(max_n=2)
+@Retry
 class TestPayCreate(unittest.TestCase):
 
     # 内网支付接口
@@ -22,7 +22,7 @@ class TestPayCreate(unittest.TestCase):
         3.校验【status code】和返回值【body】状态
         4.检查账户余额，预期值为：100-100=0
         """
-        des = 'unity道具购买'
+        des = 'unity道具购买场景'
         Mysql.updateMoneySql(config.payUid, 100)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_unityGame')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)

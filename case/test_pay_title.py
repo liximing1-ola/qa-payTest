@@ -6,7 +6,7 @@ import unittest
 import pytest
 from common import Consts, Assert
 from common.runFailed import Retry
-@Retry(max_n=2)
+@Retry
 class TestPayCreate(unittest.TestCase):
 
     # 内网支付接口
@@ -23,7 +23,7 @@ class TestPayCreate(unittest.TestCase):
         3.校验【status code】和返回值【body】状态
         4.检查剩余钱值,预期值：（200000 - 100000 + 60000 = 160000）
         """
-        des = '开通爵位和返钱的场景'
+        des = '开通爵位及返钱场景'
         Mysql.deleteUserCommoditySql(config.payUid)
         Mysql.deleteUserTitleSql(config.payUid)
         Mysql.updateUserTitleSql(config.payUid)
@@ -48,7 +48,7 @@ class TestPayCreate(unittest.TestCase):
         3.校验【status code】和返回值【body】状态
         4.检查剩余钱值,预期值：（200000 - 60000 + 36000 = 176000）
         """
-        des = '续费爵位及返钱的场景'
+        des = '爵位续费及返钱场景'
         Mysql.updateMoneySql(config.payUid, 200000)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_title')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)

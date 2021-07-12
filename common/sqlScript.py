@@ -23,10 +23,12 @@ class Mysql:
                               passwd=Mysql._password,
                               charset='utf8')
         con.select_db(Mysql._dbName)
+        # 断开重连
+        # con.ping(reconnect=True)
         cursor = con.cursor()
         return con, cursor
 
-    # 更新用户的账户余额
+    # 更新用户账户余额
     @staticmethod
     def updateMoneySql(uid, money=0, money_cash=0, money_cash_b=0, money_b=0, gold_coin=0):
         con, cur = Mysql.conMysql()
@@ -81,7 +83,7 @@ class Mysql:
         except Exception as error:
             print(error)
 
-    # 查询用户当前所有账户余额之和
+    # 查询用户所有账户余额总和
     @staticmethod
     def selectAllMoneySql(uid):
         con, cur = Mysql.conMysql()
@@ -96,7 +98,7 @@ class Mysql:
         except Exception as error:
             print(error)
 
-    # 查询用户当前金币账户余额
+    # 查询用户金币账户余额
     @staticmethod
     def selectCoinSql(uid):
         con, cur = Mysql.conMysql()
@@ -111,7 +113,7 @@ class Mysql:
         except Exception as error:
             print(error)
 
-    # 查询某个账户的余额
+    # 查询用户某个账户余额
     @staticmethod
     def selectMoneySql(uid, money_type='money_cash_b'):
         con, cur = Mysql.conMysql()
@@ -279,7 +281,6 @@ class Mysql:
             cur.execute(sql)
         except Exception as error:
             con.rollback()
-            fail_case_reason.append(error)
             print('update fail', error)
         finally:
             con.commit()
@@ -323,7 +324,7 @@ class Mysql:
         finally:
             con.commit()
 
-    #  xs_user_title_new 每次跑都清一下subscribe_time
+    #  xs_user_title_new每次跑都清一下subscribe_time，防止溢出
     @staticmethod
     def updateUserTitleSubscribeTime(uid):
         con, cur = Mysql.conMysql()

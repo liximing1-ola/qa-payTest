@@ -6,8 +6,9 @@ from autoGitPull import autoGitPull, writeUpdateTime
 from Robot import robot
 from common import Consts
 def all_case():
-    # win下路径
+    # win 路径
     # case_dir = os.path.join(os.getcwd(), "Case")
+    # linux
     case_dir = {"bb_dir": '/home/banban-1/payTest/case',
                 "pt_dir": '/root/payTest/case'}
     testcase = unittest.TestSuite()

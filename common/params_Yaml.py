@@ -10,6 +10,8 @@ class Yaml:
         读取yaml
         :return: yaml_data[yaml_name]
         """
+        # bath_path = os.path.dirname(os.path.dirname(os.path.abspath(os.path.defpath)))
+        # yaml_path = bath_path + '/' + yaml_fileName
         yaml_path = config.BASE_PATH + '/common/' + yaml_fileName
         try:
             if not os.path.exists(yaml_path):

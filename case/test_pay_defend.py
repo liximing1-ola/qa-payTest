@@ -5,7 +5,7 @@ from common.sqlScript import Mysql
 import unittest
 from common import Consts, Assert
 from common.runFailed import Retry
-@Retry(max_n=2)
+@Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
 
     # 内网支付接口
@@ -23,7 +23,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查被打赏者余额,预期：5200 * 0.62 = 3224
         6.检查消费记录
         """
-        des = '开通个人守护收益分成场景'
+        des = '开通个人守护场景'
         Mysql.updateMoneySql(config.payUid, 5200)
         Mysql.updateMoneySql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_defend')

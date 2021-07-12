@@ -5,23 +5,27 @@ from common.sqlScript import Mysql
 import unittest
 from common import Consts
 from common import Assert
-
+from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
 
     # 内网支付接口
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
 
     def setUp(self) -> None:
+        # 不做处理
         pass
 
     def tearDown(self) -> None:
+        # 清理前置数据
         Mysql.deleteUserBeanSql(config.payUid)
         Mysql.deleteUserBeanSql(config.testUid)
 
     @classmethod
     def tearDownClass(cls) -> None:
+        # p
         pass
 
+    @Retry(max_n=2)
     def test_01_NoBeanPayBeanGift(self):
         """
         用例描述：
@@ -33,8 +37,8 @@ class TestPayCreate(unittest.TestCase):
         4.检查预期返回msg，预期：支付失败，提示Toast
         5.检查被打赏者金豆余额,预期：0
         """
-        des = '账户金豆不足时打赏金礼场景'
-        # 每个case执行前处理下数据
+        des = '金豆不足时打赏金豆礼物场景'
+        # case执行前处理下数据
         Mysql.deleteUserBeanSql(config.payUid)
         Mysql.deleteUserBeanSql(config.testUid)
         Mysql.updateMoneySql(config.payUid)
@@ -58,7 +62,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者金豆余额，预期为：0
         5.检查打赏者剩余金豆余额，预期为：6000 * 0.7 = 4200
         """
-        des = '打赏金礼的场景'
+        des = '金豆足够时打赏金豆礼物场景'
         Mysql.updateBeanSql(config.payUid, 6000)
         data = Yaml.read_yaml('Basic.yml', 'dev_gold_BeanEnough')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
@@ -81,7 +85,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查打赏者钻石余额，预期为：10000 - 1000（转换） = 9000
         6.检查被打赏者金豆余额，预期为：1000 * 0.7 = 700
         """
-        des = '打赏金豆礼物金豆不足用钻转换的场景'
+        des = '打赏金豆礼物不足时用钻转换的场景'
         Mysql.updateMoneySql(config.payUid, 10000)
         Mysql.updateMoneySql(config.testUid)
         Mysql.updateBeanSql(config.payUid, 500)
@@ -107,7 +111,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查打赏者钻石余额，预期为：1000 - 800 = 200
         6.检查被打赏者钻石余额，预期为：1000 * 0.72 = 720
         """
-        des = '私聊打赏钻石礼物时金豆抵扣平台手续费的场景'
+        des = '私聊打赏钻石礼物时金豆抵扣平台手续费场景'
         Mysql.updateMoneySql(config.payUid, 1000)
         Mysql.updateMoneySql(config.testUid)
         Mysql.updateBeanSql(config.payUid, 200)
@@ -133,7 +137,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查打赏者钻石余额，预期为：1000 - 700 = 300
         6.检查被打赏者钻石余额，预期为：1000 * 0.62 = 620
         """
-        des = '房间打赏钻石礼物时金豆抵扣平台手续费的场景'
+        des = '房间打赏钻石礼物时金豆抵扣平台手续费场景'
         Mysql.updateMoneySql(config.payUid, 1000)
         Mysql.updateMoneySql(config.testUid)
         Mysql.updateBeanSql(config.payUid, 400)
@@ -155,10 +159,10 @@ class TestPayCreate(unittest.TestCase):
         1.构造打赏者和被打赏者数据 （更新xs_user_money, xs_user_money_extend）
         2.房间内打赏金豆礼物
         3.校验【status code】和返回值【body】状态
-        4.检查预期返回msg，预期：支付失败，提示Toast
+        4.检查预期返回msg，预期：支付失败（钻石小于当前礼物价格时，打赏失败），提示Toast
         5.检查被打赏者余额,预期：0
         """
-        des = '打赏礼物金豆抵扣手续费且钻石小于礼物价格的场景'
+        des = '打赏时金豆抵扣手续费但钻石小于礼物价格场景'
         Mysql.updateMoneySql(config.payUid, 700)
         Mysql.updateMoneySql(config.testUid)
         Mysql.updateBeanSql(config.payUid, 400)
@@ -181,7 +185,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查购买者金豆余额，预期为：400
         5.检查购买者钻石余额，预期为：80000 - 79900 = 100
         """
-        des = '卡座购买套餐的场景'
+        des = '卡座内购买套餐场景'
         Mysql.deleteUserCommoditySql(config.payUid)
         Mysql.updateMoneySql(config.payUid, 80000)
         Mysql.updateBeanSql(config.payUid, 400)
