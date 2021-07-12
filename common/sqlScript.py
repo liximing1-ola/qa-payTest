@@ -50,12 +50,12 @@ class Mysql:
         sql = "delete from xs_user_money_extend where uid = {} limit 1".format(uid)
         try:
             cur.execute(sql)
-            # 防止
-            time.sleep(1)
         except Exception as error:
             con.rollback()
             print('delete fail', error)
         finally:
+            # 防止
+            time.sleep(1)
             con.commit()
 
     # 更新用户金豆余额
@@ -69,6 +69,7 @@ class Mysql:
             con.rollback()
             print('insert fail', error)
         finally:
+            time.sleep(1)
             con.commit()
 
     # 查询用户金豆余额

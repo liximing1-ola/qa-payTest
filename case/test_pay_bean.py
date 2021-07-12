@@ -25,7 +25,7 @@ class TestPayCreate(unittest.TestCase):
         # p
         pass
 
-    @Retry(max_n=2)
+    @Retry
     def test_01_NoBeanPayBeanGift(self):
         """
         用例描述：
