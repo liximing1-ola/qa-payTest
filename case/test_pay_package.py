@@ -87,7 +87,7 @@ class TestPayCreate(unittest.TestCase):
     def test_04_livePackCalPayChange(self):
         """
         用例描述：
-        验证直播间打赏主播（打包结算主播pack_cal=1），打赏分成满足：6:4，且收入在money_cash账户
+        验证直播间打赏主播（打包结算主播pack_cal=1），打赏分成满足：52:48，且收入在money_cash账户
         脚本步骤：
         1.构造打赏者和主播数据 （更新xs_user_money和xs_broker_user）
         2.房间内一对一打赏（打赏1000分）
@@ -105,7 +105,7 @@ class TestPayCreate(unittest.TestCase):
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectMoneySql(config.pack_cal_uid, 'money_cash'), 60)
+        Assert.assert_equal(Mysql.selectMoneySql(config.pack_cal_uid, 'money_cash'), 52)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
         Consts.CASE_LIST[des] = 'pass'
 
