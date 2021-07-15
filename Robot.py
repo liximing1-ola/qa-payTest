@@ -49,7 +49,7 @@ def robot(mode, reason, title='', bot='BB'):
         now = time.strftime('%Y-%m-%d %H:%M', time.localtime(time.time()))
         title = "{}".format(now)
         des = reason
-        icon = getImage()
+        icon = getImage(mode=1)
         data = {
             "msgtype": "news",
             "news": {
