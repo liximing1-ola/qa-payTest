@@ -24,7 +24,7 @@ def getImage(mode=2):
         res = requests.get(url_dog)
         res = res.json()
         return res[0]
-    else:
+    elif mode == 3:
         icon = random.randint(1, 200)
         return 'http://xs-image.oss-cn-hangzhou.aliyuncs.com/static/gift_big/{}.png'.format(icon)
 
@@ -69,6 +69,6 @@ if __name__ == '__main__':
                  '验证余额不足时，房间一对一打赏': 'pass', '验证余额足够时，直播类型房间一对一打赏': 'pass', '验证余额足够时，非直播类型房间一对一打赏': 'pass',
                  '验证商城购买单个道具时逻辑': 'pass', '验证商城购买多个道具时逻辑': 'pass', '验证商城购买的道具在房间内赠送给其他人逻辑': 'pass',
                  '验证商城购买的道具在房间内赠送给他人不足的逻辑': 'pass', '验证爵位开通及返钱到余额': 'pass', '验证爵位续费及返钱到余额': 'pass'}
-    #print(dictToList(case_dict))
-    #print(isExtend(case_dict, '验证余额不足时，私聊一对一打赏'))
+    # print(dictToList(case_dict))
+    # print(isExtend(case_dict, '验证余额不足时，私聊一对一打赏'))
     getImage(2)
