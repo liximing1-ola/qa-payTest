@@ -29,7 +29,7 @@ class Session:
                 body = Yaml.read_yaml('Basic.yml', 'data_dev_qq')
                 session = requests.session()
                 res = session.post(login_url, data=body, headers=headers)
-                print(res)
+                print(res.json())
                 res.raise_for_status()
                 res = res.json()
                 if not method.isExtend(res, 'token') or res['success'] != 1:
