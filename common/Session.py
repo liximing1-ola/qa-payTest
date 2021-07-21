@@ -32,9 +32,7 @@ class Session:
                 res.raise_for_status()
                 res = res.json()
                 if not method.isExtend(res, 'token') or res['success'] != 1:
-                    print(1)
-                    print(res['msg'])
-                    return res['msg']
+                    raise res['msg']
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
                 return tokenDict
             except Exception as error:
