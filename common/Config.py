@@ -19,6 +19,7 @@ class config:
     pack_cal_uid = bb_test['pack_cal_uid']
     # git branch
     banban_git_branch = bb_test['bb_git_branch']
+    banban_package = ''
 
     # PT
     pt_test= {'payUid': 800240376, 'testUid': 800000116, 'pt_git_branch': 'main'}
