@@ -84,6 +84,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectPayChangeOpSql(config.payUid), 'consume')
         Consts.CASE_LIST[des] = 'pass'
 
+    @unittest.skip
     def test_04_livePackCalPayChange(self):
         """
         用例描述：
