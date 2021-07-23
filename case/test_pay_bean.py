@@ -49,9 +49,10 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 0, reason)
         Assert.assert_body(res['body'], 'msg', '金豆不足', reason)
-        Assert.assert_equal(Mysql.selectBeanSql(config.testUid), 0)
+        result = Mysql.selectBeanSql(config.testUid)
+        Assert.assert_equal(result, 0)
         # 查验
-        print('预期结果: {}'.format(actual), '实际结果：{}'.format(Mysql.selectBeanSql(config.testUid)))
+        print('用例描述: {}'.format(des), '打赏前: {}'.format(actual), '打赏后：{}'.format(result))
         Consts.CASE_LIST[des] = 'pass'
 
     def test_02_beanPayChangeGoldGift(self):
