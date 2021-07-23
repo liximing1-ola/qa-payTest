@@ -187,20 +187,6 @@
       <option name="presentableId" value="Default" />
       <updated>1615801946332</updated>
     </task>
-    <task id="LOCAL-00230" summary="‘提交修改’">
-      <created>1625738700351</created>
-      <option name="number" value="00230" />
-      <option name="presentableId" value="LOCAL-00230" />
-      <option name="project" value="LOCAL" />
-      <updated>1625738700351</updated>
-    </task>
-    <task id="LOCAL-00231" summary="‘提交修改’">
-      <created>1625738810755</created>
-      <option name="number" value="00231" />
-      <option name="presentableId" value="LOCAL-00231" />
-      <option name="project" value="LOCAL" />
-      <updated>1625738810755</updated>
-    </task>
     <task id="LOCAL-00232" summary="‘提交修改’">
       <created>1625740729527</created>
       <option name="number" value="00232" />
@@ -530,7 +516,21 @@
       <option name="project" value="LOCAL" />
       <updated>1627035276033</updated>
     </task>
-    <option name="localTasksCounter" value="279" />
+    <task id="LOCAL-00279" summary="‘提交修改’">
+      <created>1627036138752</created>
+      <option name="number" value="00279" />
+      <option name="presentableId" value="LOCAL-00279" />
+      <option name="project" value="LOCAL" />
+      <updated>1627036138752</updated>
+    </task>
+    <task id="LOCAL-00280" summary="‘提交修改’">
+      <created>1627036329720</created>
+      <option name="number" value="00280" />
+      <option name="presentableId" value="LOCAL-00280" />
+      <option name="project" value="LOCAL" />
+      <updated>1627036329721</updated>
+    </task>
+    <option name="localTasksCounter" value="281" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -582,10 +582,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="614" y="325" key="VCS.ChangelistChooser/0.0.1536.824@0.0.1536.824" timestamp="1624626874281" />
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1627035281916">
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1627036330805">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1627035281916" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1627036330805" />
     <state x="573" y="325" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1623834591424">
       <screen x="0" y="0" width="1536" height="824" />
     </state>

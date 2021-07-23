@@ -51,8 +51,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'msg', '金豆不足', reason)
         result = Mysql.selectBeanSql(config.testUid)
         Assert.assert_equal(result, 0)
-        # 查验
-        print('\n' + '用例描述: {}'.format(des), '打赏前: {}'.format(actual), '打赏后：{}'.format(result))
+        print('\n' + '用例描述: {}'.format(des), '打赏前金豆: {}'.format(actual), '打赏后金豆：{}'.format(result))
         Consts.CASE_LIST[des] = 'pass'
 
     def test_02_beanPayChangeGoldGift(self):
@@ -68,13 +67,18 @@ class TestPayCreate(unittest.TestCase):
         """
         des = '金豆足够时打赏金豆礼物场景'
         Mysql.updateBeanSql(config.payUid, 6000)
+        actual = Mysql.selectBeanSql(config.payUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_gold_BeanEnough')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res)
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectBeanSql(config.payUid), 0)
-        Assert.assert_equal(Mysql.selectBeanSql(config.testUid), 4200)
+        pay_result = Mysql.selectBeanSql(config.payUid)
+        test_result = Mysql.selectBeanSql(config.testUid)
+        Assert.assert_equal(pay_result, 0)
+        Assert.assert_equal(test_result, 4200)
+        print('\n' + '用例描述: {}'.format(des), '打赏者消费前金豆: {}'.format(actual),
+              '打赏者消费后金豆：{}'.format(pay_result), '收货者金豆余额: {}'.format(test_result))
         Consts.CASE_LIST[des] = 'pass'
 
     def test_03_MoneyConvertGoldPayGift(self):
