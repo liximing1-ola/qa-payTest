@@ -42,14 +42,16 @@ class TestPayCreate(unittest.TestCase):
         Mysql.deleteUserBeanSql(config.payUid)
         Mysql.deleteUserBeanSql(config.testUid)
         Mysql.updateMoneySql(config.payUid)
+        actual = Mysql.selectBeanSql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_gold_NoBean')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        print(res)
         reason = 'Depiction: {},  failReason: {}'.format(des, res)
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 0, reason)
         Assert.assert_body(res['body'], 'msg', '金豆不足', reason)
         Assert.assert_equal(Mysql.selectBeanSql(config.testUid), 0)
+        # 查验
+        print('预期结果: {}'.format(actual), '实际结果：{}'.format(Mysql.selectBeanSql(config.testUid)))
         Consts.CASE_LIST[des] = 'pass'
 
     def test_02_beanPayChangeGoldGift(self):
@@ -67,7 +69,6 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateBeanSql(config.payUid, 6000)
         data = Yaml.read_yaml('Basic.yml', 'dev_gold_BeanEnough')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        print(res)
         reason = 'Depiction: {},  failReason: {}'.format(des, res)
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
