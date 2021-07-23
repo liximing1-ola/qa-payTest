@@ -52,7 +52,7 @@ class TestPayCreate(unittest.TestCase):
         result = Mysql.selectBeanSql(config.testUid)
         Assert.assert_equal(result, 0)
         # 查验
-        print('用例描述: {}'.format(des), '打赏前: {}'.format(actual), '打赏后：{}'.format(result))
+        print('\n' + '用例描述: {}'.format(des), '打赏前: {}'.format(actual), '打赏后：{}'.format(result))
         Consts.CASE_LIST[des] = 'pass'
 
     def test_02_beanPayChangeGoldGift(self):
