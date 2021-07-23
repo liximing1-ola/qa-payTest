@@ -1,6 +1,5 @@
 # -*- coding = UTF-8 -*-
 # Describe : 失败用例重跑
-
 import sys
 import functools
 import traceback
@@ -8,7 +7,7 @@ import inspect
 import time
 class Retry(object):
     """
-    类装饰器, 功能与Retry一样
+类装饰器, 功能与Retry一样
 # example_1: test_001默认重试1次
 class ClassA(unittest.TestCase):
     @Retry
@@ -62,7 +61,7 @@ class ClassD(unittest.TestCase):
                         n += 1
                         func_or_cls(*args, **kwargs)
                         return
-                    except Exception as error:  # 可以修改要捕获的异常类型
+                    except Exception as error:  # 修改捕获的异常类型
                         if n <= self._max_n:
                             trace = sys.exc_info()
                             traceback_info = str()
