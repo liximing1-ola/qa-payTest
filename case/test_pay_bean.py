@@ -12,7 +12,7 @@ class TestPayCreate(unittest.TestCase):
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
 
     def setUp(self) -> None:
-        # 不做处理
+        # 不处理
         pass
 
     def tearDown(self) -> None:
@@ -21,7 +21,7 @@ class TestPayCreate(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls) -> None:
-        # p
+        # 暂不处理
         pass
 
     @Retry
@@ -36,7 +36,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查预期返回msg，预期：支付失败，提示Toast
         5.检查被打赏者金豆余额,预期：0
         """
-        des = '金豆不足时打赏金豆礼物场景'
+        des = '打赏金豆礼物但金豆不足的场景'
         # case执行前处理下数据
         Mysql.deleteUserBeanSql(config.payUid, config.testUid)
         Mysql.updateMoneySql(config.payUid)
@@ -63,7 +63,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者金豆余额，预期为：0
         5.检查打赏者剩余金豆余额，预期为：6000 * 0.7 = 4200
         """
-        des = '金豆足够时打赏金豆礼物场景'
+        des = '金豆足够时打赏金豆礼物的场景'
         Mysql.updateBeanSql(config.payUid, 6000)
         actual = Mysql.selectBeanSql(config.payUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_gold_BeanEnough')
@@ -191,7 +191,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查购买者金豆余额，预期为：400
         5.检查购买者钻石余额，预期为：80000 - 79900 = 100
         """
-        des = '卡座内购买套餐场景'
+        des = '卡座内购买套餐的场景'
         Mysql.deleteUserCommoditySql(config.payUid)
         Mysql.updateMoneySql(config.payUid, 80000)
         Mysql.updateBeanSql(config.payUid, 400)

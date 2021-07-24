@@ -21,8 +21,15 @@
   <component name="ChangeListManager">
     <list default="true" id="44793b3e-09e5-4af0-a369-84e9b064bd19" name="Default Changelist" comment="‘提交修改’">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case/test_pay_bean.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_bean.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case/test_pay_chatGift.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_chatGift.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/case/test_pay_coin.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_coin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case/test_pay_defend.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_defend.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case/test_pay_openBox.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_openBox.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case/test_pay_package.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_package.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case/test_pay_shopPay.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_shopPay.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/sqlScript.py" beforeDir="false" afterPath="$PROJECT_DIR$/common/sqlScript.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run_all_case.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_all_case.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -187,13 +194,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1615801946332</updated>
-    </task>
-    <task id="LOCAL-00236" summary="‘提交修改’">
-      <created>1626055303901</created>
-      <option name="number" value="00236" />
-      <option name="presentableId" value="LOCAL-00236" />
-      <option name="project" value="LOCAL" />
-      <updated>1626055303901</updated>
     </task>
     <task id="LOCAL-00237" summary="‘提交修改’">
       <created>1626055632305</created>
@@ -531,7 +531,14 @@
       <option name="project" value="LOCAL" />
       <updated>1627112582278</updated>
     </task>
-    <option name="localTasksCounter" value="285" />
+    <task id="LOCAL-00285" summary="‘提交修改’">
+      <created>1627113594799</created>
+      <option name="number" value="00285" />
+      <option name="presentableId" value="LOCAL-00285" />
+      <option name="project" value="LOCAL" />
+      <updated>1627113594799</updated>
+    </task>
+    <option name="localTasksCounter" value="286" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -583,10 +590,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="614" y="325" key="VCS.ChangelistChooser/0.0.1536.824@0.0.1536.824" timestamp="1624626874281" />
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1627112583585">
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1627113596025">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1627112583585" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1627113596025" />
     <state x="573" y="325" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1623834591424">
       <screen x="0" y="0" width="1536" height="824" />
     </state>

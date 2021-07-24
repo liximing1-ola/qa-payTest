@@ -73,7 +73,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查背包内物品
         5.检查被打赏者余额 990*0.62 = 6138
         """
-        des = '检查打赏背包礼物的场景'
+        des = '打赏背包礼物场景'
         bag_gift_cid = 340
         Mysql.updateMoneySql(config.payUid)
         Mysql.updateMoneySql(config.testUid)

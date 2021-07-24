@@ -106,21 +106,6 @@ class Mysql:
         except Exception as error:
             print(error)
 
-    # 查询用户金币账户余额
-    @staticmethod
-    def selectCoinSql(uid):
-        con, cur = Mysql.conMysql()
-        sql = "select gold_coin from xs_user_money where uid={}".format(uid)
-        try:
-            cur.execute(sql)
-            res = cur.fetchone()
-            if len(res) > 0:
-                return res[0]
-            else:
-                return None
-        except Exception as error:
-            print(error)
-
     # 查询用户某个账户余额
     @staticmethod
     def selectMoneySql(uid, money_type='money_cash_b'):
@@ -136,7 +121,7 @@ class Mysql:
         except Exception as error:
             print(error)
 
-    # 查询消费记录的money
+    # 查询消费记录的支付方式
     @staticmethod
     def selectPayChangeSql(uid):
         con, cur = Mysql.conMysql()
@@ -188,7 +173,7 @@ class Mysql:
         finally:
             con.commit()
 
-    # 删除用户爵位信息 profile
+    # 更新用户爵位信息 profile
     @staticmethod
     def updateUserTitleSql(uid):
         con, cur = Mysql.conMysql()
@@ -327,12 +312,11 @@ class Mysql:
             cur.execute(sql)
         except Exception as error:
             con.rollback()
-            fail_case_reason.append(error)
             print('delete fail', error)
         finally:
             con.commit()
 
-    #  xs_user_title_new每次跑都清一下subscribe_time，防止溢出
+    #  xs_user_title_new每次跑都清一下subscribe_time，防止数据溢出
     @staticmethod
     def updateUserTitleSubscribeTime(uid):
         con, cur = Mysql.conMysql()

@@ -22,7 +22,7 @@ class TestPayCreate(unittest.TestCase):
         3.校验【status code】和返回值【body】状态
         4.检查账户余额（money, gold_coin） 1000-600=400
         """
-        des = '余额兑换金币流程'
+        des = '余额兑换金币的流程'
         Mysql.updateMoneySql(config.payUid, 1000)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_coin')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
@@ -44,7 +44,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查打赏者账户余额（gold_coin） 100 - 20*3 = 40
         5.检查被打赏者账户余额（gold_coin）  20 * 0.6 = 12
         """
-        des = '房间打赏金币礼物场景'
+        des = '房间打赏金币礼物的场景'
         Mysql.updateMoneySql(config.payUid, 0, 0, 0, 0, 100)
         Mysql.updateMoneySql(config.testUid)
         Mysql.updateMoneySql(config.testUid_2)
