@@ -17,8 +17,7 @@ class TestPayCreate(unittest.TestCase):
 
     def tearDown(self) -> None:
         # 清理前置数据
-        Mysql.deleteUserBeanSql(config.payUid)
-        Mysql.deleteUserBeanSql(config.testUid)
+        Mysql.deleteUserBeanSql(config.payUid, config.testUid)
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -39,8 +38,7 @@ class TestPayCreate(unittest.TestCase):
         """
         des = '金豆不足时打赏金豆礼物场景'
         # case执行前处理下数据
-        Mysql.deleteUserBeanSql(config.payUid)
-        Mysql.deleteUserBeanSql(config.testUid)
+        Mysql.deleteUserBeanSql(config.payUid, config.testUid)
         Mysql.updateMoneySql(config.payUid)
         actual = Mysql.selectBeanSql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_gold_NoBean')

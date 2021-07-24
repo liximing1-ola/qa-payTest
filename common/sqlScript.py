@@ -45,7 +45,25 @@ class Mysql:
 
     # 删除用户金豆账户数据
     @staticmethod
-    def deleteUserBeanSql(uid):
+    def deleteUserBeanSql(*uids):
+        con, cur = Mysql.conMysql()
+        try:
+            for uid in uids:
+                sql = "delete from xs_user_money_extend where uid = {} limit 1".format(uid)
+                time.sleep(0.5)
+                cur.execute(sql)
+        except Exception as error:
+            con.rollback()
+            print('delete fail', error)
+        finally:
+            # 防止lock
+            time.sleep(0.2)
+            cur.close()
+            con.commit()
+            con.close()
+
+    @staticmethod
+    def deleteUserBeanSql1(uid):
         con, cur = Mysql.conMysql()
         sql = "delete from xs_user_money_extend where uid = {} limit 1".format(uid)
         try:
@@ -54,7 +72,7 @@ class Mysql:
             con.rollback()
             print('delete fail', error)
         finally:
-            # 防止
+            # 防止lock
             time.sleep(0.5)
             con.commit()
 
