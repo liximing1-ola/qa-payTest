@@ -52,6 +52,7 @@ class Mysql:
                 sql = "delete from xs_user_money_extend where uid = {} limit 1".format(uid)
                 time.sleep(0.5)
                 cur.execute(sql)
+                con.commit()
         except Exception as error:
             con.rollback()
             print('delete fail', error)
@@ -59,7 +60,6 @@ class Mysql:
             # 防止lock
             time.sleep(0.2)
             cur.close()
-            con.commit()
             con.close()
 
     @staticmethod
