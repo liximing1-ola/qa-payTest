@@ -50,7 +50,7 @@ class Mysql:
         try:
             for uid in uids:
                 sql = "delete from xs_user_money_extend where uid = {} limit 1".format(uid)
-                time.sleep(0.5)
+                time.sleep(0.3)
                 cur.execute(sql)
                 con.commit()
         except Exception as error:
@@ -61,20 +61,6 @@ class Mysql:
             time.sleep(0.2)
             cur.close()
             con.close()
-
-    @staticmethod
-    def deleteUserBeanSql1(uid):
-        con, cur = Mysql.conMysql()
-        sql = "delete from xs_user_money_extend where uid = {} limit 1".format(uid)
-        try:
-            cur.execute(sql)
-        except Exception as error:
-            con.rollback()
-            print('delete fail', error)
-        finally:
-            # 防止lock
-            time.sleep(0.5)
-            con.commit()
 
     # 更新用户金豆余额
     @staticmethod

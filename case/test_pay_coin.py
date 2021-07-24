@@ -30,7 +30,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 400)
-        Assert.assert_equal(Mysql.selectCoinSql(config.payUid), 600)
+        Assert.assert_equal(Mysql.selectMoneySql(config.payUid, money_type='gold_coin'), 600)
         Consts.CASE_LIST[des] = 'pass'
 
     def test_02_roomChangePayCoin(self):
@@ -53,6 +53,6 @@ class TestPayCreate(unittest.TestCase):
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectCoinSql(config.payUid), 60)
-        Assert.assert_equal(Mysql.selectCoinSql(config.testUid_2), 12)
+        Assert.assert_equal(Mysql.selectMoneySql(config.payUid, money_type='gold_coin'), 60)
+        Assert.assert_equal(Mysql.selectMoneySql(config.testUid_2, money_type='gold_coin'), 12)
         Consts.CASE_LIST[des] = 'pass'
