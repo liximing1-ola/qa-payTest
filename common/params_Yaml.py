@@ -16,8 +16,7 @@ class Yaml:
         try:
             if not os.path.exists(yaml_path):
                 return FileExistsError
-            # yaml_data = yaml.load(open(yaml_path, 'r', encoding='utf-8'), Loader=yaml.FullLoader)  # 添加后不会报warning
-            yaml_data = yaml.load(open(yaml_path, 'r', encoding='utf-8'))
+            yaml_data = yaml.load(open(yaml_path, 'r', encoding='utf-8'), Loader=yaml.FullLoader)  # 添加后不会报warnig
             if yaml_data[yaml_name] is None:
                 return TypeError
             else:
