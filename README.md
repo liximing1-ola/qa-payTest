@@ -32,4 +32,6 @@
 
 整理项目相关用例
 
+pip3 install gitpython
+
 
