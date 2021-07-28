@@ -29,10 +29,10 @@ const OSS_HOST = 'https://xs-image.oss-cn-hangzhou.aliyuncs.com';
 
 return array(
 	'db' => array(
-        "host" => "rm-bp1nfl3dp096d5o39.mysql.rds.aliyuncs.com",
+        "host" => "mysql",
         "port" => 3306,
-        "username" => "normal",
-        "password" => "dev123456",
+        "username" => "root",
+        "password" => "123456",
         "dbname" => "xianshi",
         "charset" => 'utf8mb4'
     ),
