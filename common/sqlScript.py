@@ -10,9 +10,9 @@ class Mysql:
                  "ali_db": 'rm-bp1nfl3dp096d5o39.mysql.rds.aliyuncs.com',
                  "ali_user": 'super',
                  "ali_pas": 'dev123456'}
-    _dbUrl = db_config['dev_46_db']
-    _user = db_config['dev_46_user']
-    _password = db_config['dev_46_pas']
+    _dbUrl = db_config['ali_db']
+    _user = db_config['ali_user']
+    _password = db_config['ali_pas']
     _dbName = 'xianshi'
     _dbPort = 3306
 

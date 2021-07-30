@@ -23,11 +23,11 @@ class Session:
         elif env == "dev":
             # noinspection PyBroadException
             try:
-                headers = Yaml.read_yaml('Basic_ali.yml', 'header_dev')
-                params = Yaml.read_yaml('Basic_ali.yml', 'params_dev_qq')
+                headers = Yaml.read_yaml('Basic.yml', 'header_dev')
+                params = Yaml.read_yaml('Basic.yml', 'params_dev_qq')
                 # 7.22修改，请求接口加包名限制
                 login_url = config.qq_login_url + '?' + params + '&package=com.imbb.banban.android'
-                body = Yaml.read_yaml('Basic_ali.yml', 'data_dev_qq')
+                body = Yaml.read_yaml('Basic.yml', 'data_dev_qq')
                 session = requests.session()
                 res = session.post(login_url, data=body, headers=headers)
                 res.raise_for_status()
