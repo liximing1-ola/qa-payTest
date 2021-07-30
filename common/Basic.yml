@@ -16,26 +16,25 @@ data_dev_qq:
 
 # eg:别忘了修改date中的UID字段
 # 房间一对一打赏，被打赏者：直播间主播
-# rid = 193185553
 dev_pay_package_1:
-    platform=available&type=package&money=100&params=%7B%22rid%22%3A193185553%2C%22uids%22%3A%22105002312%22%2C%22positions%22%3A%220%22%2C%22position%22%3A-1%2C%22giftId%22%3A5%2C%22giftNum%22%3A1%2C%22price%22%3A100%2C%22cid%22%3A0%2C%22ctype%22%3A%22%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A1%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22refer%22%3A%22%E7%83%AD%E9%97%A8%3Aroom%22%2C%22useCoin%22%3A-1%7D
+    platform=available&type=package&money=100&params=%7B%22rid%22%3A193185408%2C%22uids%22%3A%22105002312%22%2C%22positions%22%3A%220%22%2C%22position%22%3A-1%2C%22giftId%22%3A5%2C%22giftNum%22%3A1%2C%22price%22%3A100%2C%22cid%22%3A0%2C%22ctype%22%3A%22%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A1%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22refer%22%3A%22%E7%83%AD%E9%97%A8%3Aroom%22%2C%22useCoin%22%3A-1%7D
 
 # eg:别忘了修改date中的UID字段
 # 房间一对一打赏，被打赏者：非直播间
 dev_pay_package_2:
-    platform=available&type=package&money=100&params=%7B%22rid%22%3A193185553%2C%22uids%22%3A%22105002312%22%2C%22positions%22%3A%220%22%2C%22position%22%3A-1%2C%22giftId%22%3A5%2C%22giftNum%22%3A1%2C%22price%22%3A100%2C%22cid%22%3A0%2C%22ctype%22%3A%22%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A1%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22refer%22%3A%22%E7%83%AD%E9%97%A8%3Aroom%22%2C%22useCoin%22%3A-1%7D
+    platform=available&type=package&money=100&params=%7B%22rid%22%3A193185484%2C%22uids%22%3A%22105002312%22%2C%22positions%22%3A%220%22%2C%22position%22%3A-1%2C%22giftId%22%3A5%2C%22giftNum%22%3A1%2C%22price%22%3A100%2C%22cid%22%3A0%2C%22ctype%22%3A%22%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A1%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22refer%22%3A%22%E7%83%AD%E9%97%A8%3Aroom%22%2C%22useCoin%22%3A-1%7D
 
 # 房间一对多打赏，被打赏者：非直播间
-# rid = 193185553
+# rid = 193185484
 # uid = 105002312, 100500131, 100500205
 dev_pay_more:
-    platform=available&type=package&money=10800&params=%7B%22rid%22%3A193185553%2C%22uids%22%3A%22105002312%2C100500131%2C100500205%22%2C%22positions%22%3A%220%2C1%2C2%22%2C%22position%22%3A-1%2C%22giftId%22%3A10%2C%22giftNum%22%3A6%2C%22price%22%3A600%2C%22cid%22%3A0%2C%22ctype%22%3A%22%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A18%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22show_pac_man_guide%22%3A1%2C%22refer%22%3A%22flow_recommend%3Aroom%22%2C%22all_mic%22%3A0%2C%22useCoin%22%3A-1%7D
+    platform=available&type=package&money=10800&params=%7B%22rid%22%3A193185484%2C%22uids%22%3A%22105002312%2C100500131%2C100500205%22%2C%22positions%22%3A%220%2C1%2C2%22%2C%22position%22%3A-1%2C%22giftId%22%3A10%2C%22giftNum%22%3A6%2C%22price%22%3A600%2C%22cid%22%3A0%2C%22ctype%22%3A%22%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A18%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22show_pac_man_guide%22%3A1%2C%22refer%22%3A%22flow_recommend%3Aroom%22%2C%22all_mic%22%3A0%2C%22useCoin%22%3A-1%7D
 
 # 房间打赏金币礼物
-# rid = 193185553
+# rid = 193185484
 # uid = 105002312, 100500205
 dev_pay_coins:
-    platform=available&type=package&money=40&params=%7B%22rid%22%3A193185553%2C%22uids%22%3A%22105002312%2C100500205%22%2C%22positions%22%3A%220%2C1%22%2C%22position%22%3A-1%2C%22giftId%22%3A63%2C%22giftNum%22%3A1%2C%22price%22%3A20%2C%22cid%22%3A0%2C%22ctype%22%3A%22%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A2%2C%22gift_type%22%3A%22coin%22%2C%22star%22%3A0%2C%22show_pac_man_guide%22%3A1%2C%22refer%22%3A%22flow_recommend%3Aroom%22%2C%22all_mic%22%3A0%2C%22useCoin%22%3A-1%7D
+    platform=available&type=package&money=40&params=%7B%22rid%22%3A193185484%2C%22uids%22%3A%22105002312%2C100500205%22%2C%22positions%22%3A%220%2C1%22%2C%22position%22%3A-1%2C%22giftId%22%3A63%2C%22giftNum%22%3A1%2C%22price%22%3A20%2C%22cid%22%3A0%2C%22ctype%22%3A%22%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A2%2C%22gift_type%22%3A%22coin%22%2C%22star%22%3A0%2C%22show_pac_man_guide%22%3A1%2C%22refer%22%3A%22flow_recommend%3Aroom%22%2C%22all_mic%22%3A0%2C%22useCoin%22%3A-1%7D
 
 # eg:别忘了修改date中的UID字段
 # 私聊一对一打赏
@@ -91,20 +90,20 @@ dev_shop_moreBox:
     'params': '{"num":6,"cid":6,"price":2100,"type":"silver","opennum":6,"coupon_id":0,"duction_money":0,"version":2,"star":5,"show_pac_man_guide":0,"useCoin":-1}' }
 
 # 房间内给多人开多箱
-# rid = 193185553
+# rid = 193185484
 # uid = 105002312, 100500205
 dev_pay_OpenBox:
-    platform=available&type=package&money=8400&params=%7B%22rid%22%3A193185553%2C%22uids%22%3A%22105002312%2C100500205%22%2C%22positions%22%3A%220%2C1%22%2C%22position%22%3A-1%2C%22giftId%22%3A47%2C%22giftNum%22%3A2%2C%22price%22%3A2100%2C%22cid%22%3A0%2C%22ctype%22%3A%22%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A4%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A8%2C%22show_pac_man_guide%22%3A1%2C%22refer%22%3A%22flow_recommend%3Aroom%22%2C%22all_mic%22%3A0%2C%22useCoin%22%3A-1%7D
+    platform=available&type=package&money=8400&params=%7B%22rid%22%3A193185484%2C%22uids%22%3A%22105002312%2C100500205%22%2C%22positions%22%3A%220%2C1%22%2C%22position%22%3A-1%2C%22giftId%22%3A47%2C%22giftNum%22%3A2%2C%22price%22%3A2100%2C%22cid%22%3A0%2C%22ctype%22%3A%22%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A4%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A8%2C%22show_pac_man_guide%22%3A1%2C%22refer%22%3A%22flow_recommend%3Aroom%22%2C%22all_mic%22%3A0%2C%22useCoin%22%3A-1%7D
 
 # 一代宗师用户
-# rid = 193185553
+# rid = 193185538
 # uid = 105002312
 # 房间送一个箱子
 dev_package_giveBox:
   { 'platform': 'available',
     'type': 'package',
     'money': '600',
-    'params': '{"rid":193185553,"uids":"1005002312","positions":"5","position":-1,"giftId":46,"giftNum":1,"price":600,"cid":0,"ctype":"","duction_money":0,"version":2,"num":1,"gift_type":"normal","star":4,"show_pac_man_guide":0,"refer":"主播_唱见:room","useCoin":-1}' }
+    'params': '{"rid":193185538,"uids":"1005002312","positions":"5","position":-1,"giftId":46,"giftNum":1,"price":600,"cid":0,"ctype":"","duction_money":0,"version":2,"num":1,"gift_type":"normal","star":4,"show_pac_man_guide":0,"refer":"主播_唱见:room","useCoin":-1}' }
 
 # 金币兑换
 dev_pay_coin:
@@ -125,22 +124,22 @@ dev_red_packet:
     platform=available&type=red-packet&money=52000&params=%7B%22rid%22%3A193185577%2C%22money%22%3A52000%2C%22num%22%3A10%2C%22type%22%3A%22random%22%2C%22cond%22%3A%22none%22%2C%22version%22%3A%221%22%2C%22useCoin%22%3A-1%7D
 
 # 金豆礼物打赏
-# rid = 193185553
+# rid = 193185484
 # uid = 105002312
 dev_gold_NoBean:
-    platform=available&type=package&money=1000&params=%7B%22rid%22%3A193185553%2C%22uids%22%3A%22105002312%22%2C%22positions%22%3A%220%22%2C%22position%22%3A-1%2C%22giftId%22%3A362%2C%22giftNum%22%3A1%2C%22price%22%3A1000%2C%22cid%22%3A0%2C%22ctype%22%3A%22%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A1%2C%22gift_type%22%3A%22bean%22%2C%22star%22%3A0%2C%22show_pac_man_guide%22%3A1%2C%22refer%22%3A%22flow_recommend%3Aroom%22%2C%22all_mic%22%3A0%2C%22useCoin%22%3A-1%7D
+    platform=available&type=package&money=1000&params=%7B%22rid%22%3A193185484%2C%22uids%22%3A%22105002312%22%2C%22positions%22%3A%220%22%2C%22position%22%3A-1%2C%22giftId%22%3A362%2C%22giftNum%22%3A1%2C%22price%22%3A1000%2C%22cid%22%3A0%2C%22ctype%22%3A%22%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A1%2C%22gift_type%22%3A%22bean%22%2C%22star%22%3A0%2C%22show_pac_man_guide%22%3A1%2C%22refer%22%3A%22flow_recommend%3Aroom%22%2C%22all_mic%22%3A0%2C%22useCoin%22%3A-1%7D
 
 # 金豆礼物打赏（钻转换）
-# rid = 193185553
+# rid = 193185484
 # uid = 105002312
 dev_gold_moneyToBean:
-    platform=available&type=package&money=1000&params=%7B%22rid%22%3A193185553%2C%22uids%22%3A%22105002312%22%2C%22positions%22%3A%220%22%2C%22position%22%3A-1%2C%22giftId%22%3A362%2C%22giftNum%22%3A1%2C%22price%22%3A1000%2C%22cid%22%3A0%2C%22ctype%22%3A%22%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A1%2C%22gift_type%22%3A%22bean%22%2C%22star%22%3A0%2C%22show_pac_man_guide%22%3A1%2C%22refer%22%3A%22flow_recommend%3Aroom%22%2C%22all_mic%22%3A0%2C%22useCoin%22%3A-1%2C%22exchange%22%3A1%7D
+    platform=available&type=package&money=1000&params=%7B%22rid%22%3A193185484%2C%22uids%22%3A%22105002312%22%2C%22positions%22%3A%220%22%2C%22position%22%3A-1%2C%22giftId%22%3A362%2C%22giftNum%22%3A1%2C%22price%22%3A1000%2C%22cid%22%3A0%2C%22ctype%22%3A%22%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A1%2C%22gift_type%22%3A%22bean%22%2C%22star%22%3A0%2C%22show_pac_man_guide%22%3A1%2C%22refer%22%3A%22flow_recommend%3Aroom%22%2C%22all_mic%22%3A0%2C%22useCoin%22%3A-1%2C%22exchange%22%3A1%7D
 
 # 金豆礼物打赏（足够）
-# rid = 193185553
+# rid = 193185484
 # uid = 105002312
 dev_gold_BeanEnough:
-    platform=available&type=package&money=6000&params=%7B%22rid%22%3A193185553%2C%22uids%22%3A%22105002312%22%2C%22positions%22%3A%220%22%2C%22position%22%3A-1%2C%22giftId%22%3A362%2C%22giftNum%22%3A6%2C%22price%22%3A1000%2C%22cid%22%3A0%2C%22ctype%22%3A%22%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A6%2C%22gift_type%22%3A%22bean%22%2C%22star%22%3A0%2C%22show_pac_man_guide%22%3A1%2C%22refer%22%3A%22flow_recommend%3Aroom%22%2C%22all_mic%22%3A0%2C%22useCoin%22%3A-1%7D
+    platform=available&type=package&money=6000&params=%7B%22rid%22%3A193185484%2C%22uids%22%3A%22105002312%22%2C%22positions%22%3A%220%22%2C%22position%22%3A-1%2C%22giftId%22%3A362%2C%22giftNum%22%3A6%2C%22price%22%3A1000%2C%22cid%22%3A0%2C%22ctype%22%3A%22%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A6%2C%22gift_type%22%3A%22bean%22%2C%22star%22%3A0%2C%22show_pac_man_guide%22%3A1%2C%22refer%22%3A%22flow_recommend%3Aroom%22%2C%22all_mic%22%3A0%2C%22useCoin%22%3A-1%7D
 
 # IM钻石礼物打赏（金豆抵扣平台手续费）
 # uid = 105002312
@@ -148,12 +147,12 @@ dev_gold_BeanDeduct:
     platform=available&type=chat-gift&money=1000&params=%7B%22notify_group_id%22%3A0%2C%22to%22%3A105002312%2C%22giftId%22%3A7%2C%22giftNum%22%3A1%2C%22cid%22%3A0%2C%22ctype%22%3A%22%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A1%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22show_pac_man_guide%22%3A1%2C%22all_mic%22%3A0%2C%22useCoin%22%3A-1%7D
 
 # 房间内钻石礼物打赏（金豆抵扣平台手续费）
-# rid = 193185553
+# rid = 193185484
 # uid = 105002312
 dev_gold_RoomBeanDeduct:
-    platform=available&type=package&money=1000&params=%7B%22rid%22%3A193185553%2C%22uids%22%3A%22105002312%22%2C%22positions%22%3A%222%22%2C%22position%22%3A-1%2C%22giftId%22%3A7%2C%22giftNum%22%3A1%2C%22price%22%3A1000%2C%22cid%22%3A0%2C%22ctype%22%3A%22%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A1%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22show_pac_man_guide%22%3A1%2C%22refer%22%3A%22flow_recommend%3Aroom%22%2C%22all_mic%22%3A0%2C%22useCoin%22%3A-1%7D
+    platform=available&type=package&money=1000&params=%7B%22rid%22%3A193185484%2C%22uids%22%3A%22105002312%22%2C%22positions%22%3A%222%22%2C%22position%22%3A-1%2C%22giftId%22%3A7%2C%22giftNum%22%3A1%2C%22price%22%3A1000%2C%22cid%22%3A0%2C%22ctype%22%3A%22%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A1%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22show_pac_man_guide%22%3A1%2C%22refer%22%3A%22flow_recommend%3Aroom%22%2C%22all_mic%22%3A0%2C%22useCoin%22%3A-1%7D
 
 # 购买卡座套餐
-# rid = 193185553
+# rid = 193185484
 dev_gold_Combo:
-    platform=available&type=pub-drink-buy&money=79900&params=%7B%22pub_club_rid%22%3A193185553%2C%22menu_id%22%3A6%2C%22num%22%3A1%2C%22useCoin%22%3A-1%2C%22gift_type%22%3A%22bean%22%2C%22refer%22%3A%22flow_recommend%3Aroom%22%2C%22exchange%22%3A1%7D
+    platform=available&type=pub-drink-buy&money=79900&params=%7B%22pub_club_rid%22%3A193185484%2C%22menu_id%22%3A6%2C%22num%22%3A1%2C%22useCoin%22%3A-1%2C%22gift_type%22%3A%22bean%22%2C%22refer%22%3A%22flow_recommend%3Aroom%22%2C%22exchange%22%3A1%7D
