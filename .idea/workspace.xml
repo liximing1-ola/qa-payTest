@@ -193,13 +193,6 @@
       <option name="presentableId" value="Default" />
       <updated>1615801946332</updated>
     </task>
-    <task id="LOCAL-00250" summary="‘提交修改’">
-      <created>1626667439308</created>
-      <option name="number" value="00250" />
-      <option name="presentableId" value="LOCAL-00250" />
-      <option name="project" value="LOCAL" />
-      <updated>1626667439308</updated>
-    </task>
     <task id="LOCAL-00251" summary="‘提交修改’">
       <created>1626675104240</created>
       <option name="number" value="00251" />
@@ -536,7 +529,14 @@
       <option name="project" value="LOCAL" />
       <updated>1627640700181</updated>
     </task>
-    <option name="localTasksCounter" value="299" />
+    <task id="LOCAL-00299" summary="‘提交修改’">
+      <created>1627641965691</created>
+      <option name="number" value="00299" />
+      <option name="presentableId" value="LOCAL-00299" />
+      <option name="project" value="LOCAL" />
+      <updated>1627641965691</updated>
+    </task>
+    <option name="localTasksCounter" value="300" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -596,10 +596,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="614" y="325" key="VCS.ChangelistChooser/0.0.1536.824@0.0.1536.824" timestamp="1624626874281" />
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1627640703456">
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1627641969357">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1627640703456" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1627641969357" />
     <state x="573" y="325" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1627477250496">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
