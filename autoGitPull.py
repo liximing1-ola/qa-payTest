@@ -73,6 +73,16 @@ def readGitStatus():
         else:
             robot('icon', '代码冲突，脚本启动失败，请@lixm严查')
 
+def checkBranch():
+    # 默认指定路径
+    codeDir = '/home/banban-1/payTest'
+    g = git.cmd.Git(codeDir)
+    # writeGitStatus(g.status())
+    g.pull()
+    repo = Repo(codeDir)
+    # 当前线上分支
+    print(repo.active_branch)
+
 
 if __name__=="__main__":
-    readGitStatus()
+    checkBranch()
