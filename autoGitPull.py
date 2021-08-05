@@ -84,6 +84,7 @@ def checkBranch(git_branch):
     if str(repo.active_branch) != git_branch:
         Logs.get_log('gitBranchError.log').error("git branch error： {}".format(repo.active_branch))
         return False
+    return True
 
 
 if __name__=="__main__":
