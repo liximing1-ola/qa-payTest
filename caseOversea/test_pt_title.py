@@ -13,6 +13,7 @@ class TestPayCreate(unittest.TestCase):
     # 内网支付接口
     pay_url = config.pt_host + 'pay/create'
 
+    @unittest.skip('case 取消')
     @pytest.mark.run(order=1)
     def test_01_TitlePayChangeMoney(self):
         """
@@ -37,6 +38,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectMoneySql(config.pt_payUid, 'money'), 10000)
         Consts.CASE_LIST[des] = 'pass'
 
+    @unittest.skip('case取消')
     @pytest.mark.run(order=2)
     def test_02_TitlePayChangeRenew(self):
         """
