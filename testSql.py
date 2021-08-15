@@ -33,7 +33,7 @@ def selectMoneySql(uid):
 def insertUserXsBroker(bid, app_id=1, bname='支付工会', dateline=1571481302, types='live'):
     con, cur = conMysql()
     sql = "insert into xs_broker (bid,app_id,bname,creater,dateline,types) values({}, {}, {}, {}, {}, {})"\
-        .format(bid, bid, app_id, bname, dateline, types)
+        .format(bid, app_id, bname, bid, dateline, types)
     try:
         cur.execute(sql)
     except Exception as error:
