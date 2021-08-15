@@ -30,18 +30,32 @@ def selectMoneySql(uid):
     except Exception as error:
         print(error)
 
-def selectUserXsBroker():
+def insertUserXsBroker(bid, app_id=1, bname='支付工会', dateline=1571481302, types='live'):
     con, cur = conMysql()
-    sql = 'select * from xs_broker where bid=105002314 and creater=105002314'
+    sql = "insert into xs_broker (bid,app_id,bname,creater,dateline,types) values({}, {}, {}, {}, {}, {})"\
+        .format(bid, bid, app_id, bname, dateline, types)
+    try:
+        cur.execute(sql)
+    except Exception as error:
+        con.rollback()
+        print('insert fail', error)
+    finally:
+        con.commit()
+
+
+def selectUserXsBroker(bid):
+    con, cur = conMysql()
+    sql = 'select * from xs_broker where bid={} and creater={}'.format(bid, bid)
     try:
         cur.execute(sql)
         res = cur.fetchone()
-        print(res)
-        print(int(res[0]))
-        return int(res[0])
+        if res is None:
+            insertUserXsBroker(bid)
+        else:
+            return 1
     except Exception as error:
         print(error)
 
 
 if __name__ == '__main__':
-    selectUserXsBroker()
+    selectUserXsBroker(105002314)
