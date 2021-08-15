@@ -37,6 +37,7 @@ def selectUserXsBroker():
         cur.execute(sql)
         res = cur.fetchone()
         print(res)
+        print(int(res[0]))
         return int(res[0])
     except Exception as error:
         print(error)
