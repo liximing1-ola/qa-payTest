@@ -30,10 +30,10 @@ def selectMoneySql(uid):
     except Exception as error:
         print(error)
 
-def insertUserXsBroker(bid, app_id=1, bname='支付工会', dateline=1571481302, types='live'):
+def insertUserXsBroker(bid):
     con, cur = conMysql()
     sql = "insert into xs_broker (bid,app_id,bname,creater,dateline,types) values({}, {}, {}, {}, {}, {})"\
-        .format(bid, app_id, bname, bid, dateline, types)
+        .format(bid, 1, 'payTest', bid, 1571481302, 'live')
     try:
         cur.execute(sql)
     except Exception as error:
