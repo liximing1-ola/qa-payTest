@@ -2,17 +2,18 @@
 import pymysql
 # 本地服务器数据库测试用
 def conMysql():
-    _dbUrl = '192.168.11.46'
-    _dbPort = 3306
-    _user = 'root'
-    _password = '123456'
-    _dbName = 'xianshi'
-    con = pymysql.connect(host=_dbUrl,
-                          port=_dbPort,
-                          user=_user,
-                          passwd=_password,
+    db_config = {"dev_46_db": '192.168.11.46',
+                 "dev_46_user": 'root',
+                 "dev_46_pas": '123456',
+                 "ali_db": 'rm-bp1nfl3dp096d5o39.mysql.rds.aliyuncs.com',
+                 "ali_user": 'super',
+                 "ali_pas": 'dev123456'}
+    con = pymysql.connect(host=db_config['ali_db'],
+                          port=3306,
+                          user=db_config['ali_user'],
+                          passwd=db_config['ali_pas'],
                           charset='utf8')
-    con.select_db(_dbName)
+    con.select_db('xianshi')
     cursor = con.cursor()
     return con, cursor
 
@@ -29,6 +30,17 @@ def selectMoneySql(uid):
     except Exception as error:
         print(error)
 
+def selectUserXsBroker():
+    con, cur = conMysql()
+    sql = 'select * from xs_broker where bid=105002314 and creater=105002314'
+    try:
+        cur.execute(sql)
+        res = cur.fetchone()
+        print(res)
+        return int(res[0])
+    except Exception as error:
+        print(error)
+
 
 if __name__ == '__main__':
-    print(selectMoneySql(100287189))
+    selectUserXsBroker()
