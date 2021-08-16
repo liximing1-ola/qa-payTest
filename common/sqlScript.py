@@ -328,3 +328,61 @@ class Mysql:
             print('update fail', error)
         finally:
             con.commit()
+
+    # 新建一个直播公会
+    @staticmethod
+    def insertUserXsBroker(bid):
+        con, cur = Mysql.conMysql()
+        sql = "insert into xs_broker (bid,app_id,bname,creater,dateline,types) values({}, {}, '{}', {}, {}, '{}')" \
+            .format(bid, 1, '10086', bid, 1571481302, 'live')
+        try:
+            cur.execute(sql)
+        except Exception as error:
+            con.rollback()
+            print('insert fail', error)
+        finally:
+            con.commit()
+
+    # 查询工会是否存在
+    @staticmethod
+    def selectUserXsBroker(bid):
+        con, cur = Mysql.conMysql()
+        sql = 'select * from xs_broker where bid={} and creater={}'.format(bid, bid)
+        try:
+            cur.execute(sql)
+            res = cur.fetchone()
+            if res is None:
+                Mysql.insertUserXsBroker(bid)
+            else:
+                return 1
+        except Exception as error:
+            print(error)
+
+    # 将用户变为一代宗师
+    @staticmethod
+    def insertXsMentorExpLevel(uid, level):
+        con, cur = Mysql.conMysql()
+        sql = 'insert into xs_mentor_exp (uid, level) values({}, {})'.format(uid, level)
+        try:
+            cur.execute(sql)
+        except Exception as error:
+            con.rollback()
+            print('insert fail', error)
+        finally:
+            con.commit()
+
+    # 查询用户是否是一代宗师
+    @staticmethod
+    def selectUserXsMentorLevel(uid):
+        con, cur = Mysql.conMysql()
+        sql = 'select * from xs_mentor_exp where uid={}'.format(uid)
+        try:
+            cur.execute(sql)
+            res = cur.fetchone()
+            if res is None:
+                Mysql.insertXsMentorExpLevel(uid, 4)
+            else:
+                return 1
+        except Exception as error:
+            print(error)
+

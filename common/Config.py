@@ -6,7 +6,19 @@ class config:
     #  release域名
     domain_host = {'bb_dev_58': 'https://dev.iambanban.com/', 'pt': 'https://test.overseaban.com/', }
     # 伴伴
-    bb_test = {'payUid': 103273407, 'testUid': 105002312, 'pack_cal_uid': 105002313, 'bb_git_branch': 'release-for-vpc'}
+    bb_test = {
+        'payUid': 103273407,  # god
+        'testUid': 105002312,  # 非一代宗师
+        'pack_cal_uid': 105002313,  # 打包结算签约主播
+        'bb_git_branch': 'release-for-vpc'  # 线上代码分支
+    }
+    live_role = {
+        'pack_ceo': 105002314,  # 直播公会公会长
+        'pack_master_NoPack': 105002315,  # 非公会一代宗师主播
+        'pack_noMaster': 105002316,  # 非一代宗师主播
+        'pack_cal_uid': 105002313,  # 公会签约主播（打包结算），宗师等级可设置为一代和非一代
+        'testUid': 105002312,  # 非公会非一代宗师主播
+    }
     # dev域名（qq登陆方式)
     dev_host = domain_host['bb_dev_58']
     qq_login_url = dev_host + 'account/qqlogin'
@@ -19,10 +31,12 @@ class config:
     pack_cal_uid = bb_test['pack_cal_uid']
     # git branch
     banban_git_branch = bb_test['bb_git_branch']
-    banban_package = ''
 
     # PT
-    pt_test= {'payUid': 800240376, 'testUid': 800000116, 'pt_git_branch': 'main'}
+    pt_test= {
+        'payUid': 800240376,
+        'testUid': 800000116,
+        'pt_git_branch': 'main'}
     # pt域名-（PT登陆方式）
     pt_host = domain_host['pt']
     mobile_login_url = pt_host + 'account/passwordLogin'

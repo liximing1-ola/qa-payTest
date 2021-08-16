@@ -11,3 +11,7 @@ git pull
 #  Step2 重启服务器后：
 service php7.2-fpm restart
 redis-server  /etc/redis/redis-6378.conf
+
+# 问题处理
+# 1- 登录：500 Server Error
+# 2-日志地址：/home/webroot/banban/cache/log/error.log /var/log/nginx/error.log
