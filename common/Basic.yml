@@ -103,7 +103,7 @@ dev_package_giveBox:
   { 'platform': 'available',
     'type': 'package',
     'money': '600',
-    'params': '{"rid":193185538,"uids":"1005002312","positions":"5","position":-1,"giftId":46,"giftNum":1,"price":600,"cid":0,"ctype":"","duction_money":0,"version":2,"num":1,"gift_type":"normal","star":4,"show_pac_man_guide":0,"refer":"主播_唱见:room","useCoin":-1}' }
+    'params': '{"rid":193185538,"uids":"105002312","positions":"5","position":-1,"giftId":46,"giftNum":1,"price":600,"cid":0,"ctype":"","duction_money":0,"version":2,"num":1,"gift_type":"normal","star":4,"show_pac_man_guide":0,"refer":"主播_唱见:room","useCoin":-1}' }
 
 # 金币兑换
 dev_pay_coin:
