@@ -22,7 +22,7 @@ class TestPayCreate(unittest.TestCase):
         3.校验【status code】和返回值【body】状态
         4.检查账户余额（money, gold_coin） 1000-600=400
         """
-        des = '余额兑换金币的流程'
+        des = '余额兑换金币流程'
         Mysql.updateMoneySql(config.payUid, 1000)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_coin')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)

@@ -77,16 +77,18 @@ class TestPayCreate(unittest.TestCase):
         tdr:直播间内非公会一代宗师主播打赏后分成比：70:30
         验证余额足够时，直播类型房间（types=live）一对一打赏,打赏分成满足师徒收益（一代宗师）的基础上为：70:30
         脚本步骤：
-        1.构造打赏者和被打赏者数据 （更新xs_user_money）
+        1.构造打赏者和被打赏者数据 （更新xs_user_money,xs_mentor_exp）
         2.直播类房间一对一打赏（打赏1000分）
         3.校验【status code】和返回值【body】状态
         4.检查被打赏者余额，预期为：700
         5.检查打赏者余额，预期为：1000 - 1000 = 0
         """
         des = '房间打赏非公宗师主播分成7:3'
-        Mysql.updateMoneySql(config.payUid, 30, 30, 30, 10)
-        Mysql.updateMoneySql(config.testUid)
-        data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_1')
+        testUid=config.live_role['pack_master_NoPack']  # 非公会一代宗师主播
+        Mysql.updateMoneySql(config.payUid, 900, 30, 30, 40)
+        Mysql.updateMoneySql(testUid)
+        Mysql.selectUserXsMentorLevel(testUid)
+        data = Yaml.read_yaml('Basic.yml', '')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)

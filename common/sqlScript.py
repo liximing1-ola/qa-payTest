@@ -371,7 +371,7 @@ class Mysql:
         finally:
             con.commit()
 
-    # 查询用户是否是一代宗师
+    # 查询用户是否是一代宗师.不是就把他变成一代宗师
     @staticmethod
     def selectUserXsMentorLevel(uid):
         con, cur = Mysql.conMysql()
