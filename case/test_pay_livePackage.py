@@ -41,9 +41,10 @@ class TestPayCreate(unittest.TestCase):
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectMoneySql(config.testUid, 'money_cash_b'), 62)
+        Assert.assert_equal(Mysql.selectMoneySql(config.testUid, money_type='money_cash_b'), 62)
         Assert.assert_equal(Mysql.selectPayChangeSql(config.payUid), 100)
         Assert.assert_equal(Mysql.selectPayChangeOpSql(config.payUid), 'consume')
+        Consts.CASE_LIST[des] = 'pass'
 
     def test_02_ImPay_7228(self):
         """
@@ -66,7 +67,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         # 商业房房主 or （工会会长 or 工会成员）|| 同意大神协议
-        Assert.assert_equal(Mysql.selectMoneySql(config.testUid, 'money_cash_b'), 720)
+        Assert.assert_equal(Mysql.selectMoneySql(config.testUid, money_type='money_cash_b'), 720)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 400)
         Consts.CASE_LIST[des] = 'pass'
 
@@ -80,22 +81,23 @@ class TestPayCreate(unittest.TestCase):
         1.构造打赏者和被打赏者数据 （更新xs_user_money,xs_mentor_exp）
         2.直播类房间一对一打赏（打赏1000分）
         3.校验【status code】和返回值【body】状态
-        4.检查被打赏者余额，预期为：700
+        4.检查被打赏者余额，预期为：700(账户：money_cash_b)
         5.检查打赏者余额，预期为：1000 - 1000 = 0
         """
         des = '房间打赏非公宗师主播分成7:3'
         testUid=config.live_role['pack_master_NoPack']  # 非公会一代宗师主播
         Mysql.updateMoneySql(config.payUid, 900, 30, 30, 40)
         Mysql.updateMoneySql(testUid)
-        Mysql.selectUserXsMentorLevel(testUid)
+        Mysql.selectUserXsMentorLevel(testUid, 4)  # 更新成一代宗师
+        Mysql.updateChatroomUid(testUid)  # 更新成商业房主播
         data = Yaml.read_yaml('Basic.yml', '')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectMoneySql(config.testUid, 'money_cash_b'), 62)
-        Assert.assert_equal(Mysql.selectPayChangeSql(config.payUid), 100)
-        Assert.assert_equal(Mysql.selectPayChangeOpSql(config.payUid), 'consume')
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
+        Assert.assert_equal(Mysql.selectMoneySql(config.testUid, money_type='money_cash_b'), 700)
+        Consts.CASE_LIST[des] = 'pass'
 
     @unittest.skip
     def test_04_IMPay_8020(self):

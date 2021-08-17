@@ -371,16 +371,16 @@ class Mysql:
         finally:
             con.commit()
 
-    # 查询用户是否是一代宗师.不是就把他变成一代宗师
+    # 查询用户是否是师父.不是就把他变成一代宗师（level=4，一代宗师）
     @staticmethod
-    def selectUserXsMentorLevel(uid):
+    def selectUserXsMentorLevel(uid, level):
         con, cur = Mysql.conMysql()
         sql = 'select * from xs_mentor_exp where uid={}'.format(uid)
         try:
             cur.execute(sql)
             res = cur.fetchone()
             if res is None:
-                Mysql.insertXsMentorExpLevel(uid, 4)
+                Mysql.insertXsMentorExpLevel(uid, level)
             else:
                 return 1
         except Exception as error:
