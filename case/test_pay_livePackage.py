@@ -71,7 +71,6 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 400)
         Consts.CASE_LIST[des] = 'pass'
 
-    @unittest.skip
     def test_03_liveRoomPay_7030(self):
         """
         用例描述：
