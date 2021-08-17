@@ -50,7 +50,7 @@ dev_pay_title:
 dev_pay_defend:
   { 'platform': 'available',
     'type': 'defend',
-    'money': '520000',
+    'money': '52000',
     'params': '{"defend":1,"to":105002312,"cid":0,"duction_money":0,"unified_relation_version":1,"useCoin":-1}' }
 
 # 商店礼物购买*1
