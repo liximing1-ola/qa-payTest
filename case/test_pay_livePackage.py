@@ -80,22 +80,22 @@ class TestPayCreate(unittest.TestCase):
         1.构造打赏者和被打赏者数据 （更新xs_user_money,xs_mentor_exp）
         2.直播类房间一对一打赏（打赏1000分）
         3.校验【status code】和返回值【body】状态
-        4.检查被打赏者余额，预期为：700(账户：money_cash_b)
+        4.检查被打赏者余额，预期为：700(账户：money_cash，商业房房主进工会魅力值)
         5.检查打赏者余额，预期为：1000 - 1000 = 0
         """
         des = '房间打赏非公宗师主播分成7:3'
-        testUid=config.live_role['pack_master_NoPack']  # 非公会一代宗师主播
+        test_uid=config.live_role['pack_master_NoPack']  # 非公会一代宗师主播
         Mysql.updateMoneySql(config.payUid, 900, 30, 30, 40)
-        Mysql.updateMoneySql(testUid)
-        Mysql.selectUserXsMentorLevel(testUid, 4)  # 更新成一代宗师
-        Mysql.updateChatroomUid(testUid)  # 更新成商业房主播
+        Mysql.updateMoneySql(test_uid)
+        Mysql.selectUserXsMentorLevel(test_uid, 4)  # 更新成一代宗师
+        Mysql.updateChatroomUid(test_uid)  # 更新成商业房主播
         data = Yaml.read_yaml('Basic.yml', 'dev_livePay_7030')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
-        Assert.assert_equal(Mysql.selectMoneySql(config.testUid, money_type='money_cash_b'), 700)
+        Assert.assert_equal(Mysql.selectMoneySql(test_uid, money_type='money_cash'), 700)
         Consts.CASE_LIST[des] = 'pass'
 
     @unittest.skip
