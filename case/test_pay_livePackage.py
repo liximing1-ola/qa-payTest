@@ -101,7 +101,7 @@ class TestPayCreate(unittest.TestCase):
     def test_04_IMPay_8020(self):
         """
         用例描述：
-        tdr:私聊非公会一代宗师主播：80:20,50%进工会魅力值，30%进个人魅力值
+        tdr:私聊非公会一代宗师主播：80:20, 50%进工会魅力值，30%进个人魅力值
         脚本步骤：
         1.构造打赏者和被打赏者数据 （更新xs_user_money）
         2.私聊打赏（打赏1100分）
@@ -122,7 +122,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectMoneySql(test_uid, 'money_cash_b'), 300)
         Assert.assert_equal(Mysql.selectMoneySql(test_uid, 'money_cash'), 500)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 100)
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 200)
         Consts.CASE_LIST[des] = 'pass'
 
     @unittest.skip
