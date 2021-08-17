@@ -112,7 +112,7 @@ class TestPayCreate(unittest.TestCase):
         des = '私聊打赏非公宗师主播分成8:2'
         test_uid = config.live_role['pack_master_NoPack']  # 非公会一代宗师主播
         Mysql.updateMoneySql(config.payUid, 900, 100, 100, 100)
-        Mysql.updateMoneySql(config.testUid)
+        Mysql.updateMoneySql(test_uid)
         Mysql.selectUserXsMentorLevel(test_uid, 4)  # 更新成一代宗师
         Mysql.updateChatroomUid(test_uid)  # 更新成商业房主播
         data = Yaml.read_yaml('Basic.yml', 'dev_IMPay_8020')
