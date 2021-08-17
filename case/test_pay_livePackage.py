@@ -98,7 +98,6 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectMoneySql(test_uid, money_type='money_cash'), 700)
         Consts.CASE_LIST[des] = 'pass'
 
-    @unittest.skip
     def test_04_IMPay_8020(self):
         """
         用例描述：
@@ -111,16 +110,20 @@ class TestPayCreate(unittest.TestCase):
         5.检查打赏者余额，预期为：1100 - 1000 = 100
         """
         des = '私聊打赏非公宗师主播分成8:2'
-        Mysql.updateMoneySql(config.payUid, 30, 30, 30, 10)
+        test_uid = config.live_role['pack_master_NoPack']  # 非公会一代宗师主播
+        Mysql.updateMoneySql(config.payUid, 900, 100, 100, 100)
         Mysql.updateMoneySql(config.testUid)
-        data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_1')
+        Mysql.selectUserXsMentorLevel(test_uid, 4)  # 更新成一代宗师
+        Mysql.updateChatroomUid(test_uid)  # 更新成商业房主播
+        data = Yaml.read_yaml('Basic.yml', 'dev_IMPay_8020')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectMoneySql(config.testUid, 'money_cash_b'), 62)
+        Assert.assert_equal(Mysql.selectMoneySql(test_uid, 'money_cash_b'), 30)
+        Assert.assert_equal(Mysql.selectMoneySql(test_uid, 'money_cash'), 50)
         Assert.assert_equal(Mysql.selectPayChangeSql(config.payUid), 100)
-        Assert.assert_equal(Mysql.selectPayChangeOpSql(config.payUid), 'consume')
+        Consts.CASE_LIST[des] = 'pass'
 
     @unittest.skip
     def test_05_liveRoomPay_602515(self):
