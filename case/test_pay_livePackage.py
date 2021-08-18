@@ -142,7 +142,7 @@ class TestPayCreate(unittest.TestCase):
         test_uid = config.live_role['pack_cal_uid']
         ceo_uid = config.live_role['pack_ceo']
         Mysql.updateChatroomUid(test_uid)  # 商业房房主
-        Mysql.updateBrokerUser(test_uid)  # 打包结算
+        Mysql.updateBrokerUser(ceo_uid, test_uid)  # 打包结算
         Mysql.selectUserXsBroker(ceo_uid)  # 工会公会长
         Mysql.updateMoneySql(config.payUid, 1000)
         Mysql.updateMoneySql(test_uid)

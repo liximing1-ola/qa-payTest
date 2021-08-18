@@ -214,9 +214,9 @@ class Mysql:
 
     # 修改用户为打包结算主播
     @staticmethod
-    def updateBrokerUser(uid):
+    def updateBrokerUser(bid, uid):
         con, cur = Mysql.conMysql()
-        sql = "update xs_broker_user set bid={}, uid={}, state=1, pack_cal=1where id = 50 limit 1".format(105002314, uid)
+        sql = "update xs_broker_user set bid={}, uid={}, state=1, pack_cal=1where id = 50 limit 1".format(bid, uid)
         try:
             cur.execute(sql)
         except Exception as error:
