@@ -143,10 +143,10 @@ class TestPayCreate(unittest.TestCase):
         ceo_uid = config.live_role['pack_ceo']
         Mysql.updateChatroomUid(test_uid)  # 商业房房主
         Mysql.updateBrokerUser(test_uid)  # 打包结算
+        Mysql.selectUserXsBroker(ceo_uid)  # 工会公会长
         Mysql.updateMoneySql(config.payUid, 1000)
         Mysql.updateMoneySql(test_uid)
         Mysql.updateMoneySql(ceo_uid)
-        Mysql.selectUserXsBroker(ceo_uid)  # 工会公会长
         Mysql.selectUserXsMentorLevel(test_uid, 4)  # 师父等级改为一代宗师
         data = Yaml.read_yaml('Basic.yml', 'dev_livePay_602515')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)

@@ -216,7 +216,7 @@ class Mysql:
     @staticmethod
     def updateBrokerUser(uid):
         con, cur = Mysql.conMysql()
-        sql = "update xs_broker_user set uid={}, state=1, pack_cal=1 where id = 50 limit 1".format(uid)
+        sql = "update xs_broker_user set bid={}, uid={}, state=1, pack_cal=1where id = 50 limit 1".format(105002314, uid)
         try:
             cur.execute(sql)
         except Exception as error:
