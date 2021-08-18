@@ -148,7 +148,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(ceo_uid)
         Mysql.selectUserXsBroker(ceo_uid)  # 工会公会长
         Mysql.selectUserXsMentorLevel(test_uid, 4)  # 师父等级改为一代宗师
-        data = Yaml.read_yaml('Basic.yml', 'dev_pack_cal')
+        data = Yaml.read_yaml('Basic.yml', 'dev_livePay_602515')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res)
         Assert.assert_code(res['code'], 200)
