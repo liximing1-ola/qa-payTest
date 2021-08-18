@@ -125,7 +125,6 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 200)
         Consts.CASE_LIST[des] = 'pass'
 
-    @unittest.skip
     def test_05_liveRoomPay_602515(self):
         """
         用例描述：
@@ -139,18 +138,25 @@ class TestPayCreate(unittest.TestCase):
         5.检查公会长余额，预期为：250
         6.检查打赏者余额.预期为：0
         """
-        des = '房间打赏宗师公会主播-会长-官方分成：60:25:15'
-        Mysql.updateChatroomUid(config.pack_cal_uid)
-        Mysql.updateBrokerUser(config.pack_cal_uid)
-        Mysql.updateMoneySql(config.payUid, 100)
-        Mysql.updateMoneySql(config.pack_cal_uid)
+        des = '房间打赏宗师公会主播:会长:官方分成：60:25:15'
+        test_uid = config.live_role['pack_cal_uid']
+        ceo_uid = config.live_role['pack_ceo']
+        Mysql.updateChatroomUid(test_uid)  # 商业房房主
+        Mysql.updateBrokerUser(test_uid)  # 打包结算
+        Mysql.updateMoneySql(config.payUid, 1000)
+        Mysql.updateMoneySql(test_uid)
+        Mysql.updateMoneySql(ceo_uid)
+        Mysql.selectUserXsBroker(ceo_uid)  # 工会公会长
+        Mysql.selectUserXsMentorLevel(test_uid, 4)  # 师父等级改为一代宗师
         data = Yaml.read_yaml('Basic.yml', 'dev_pack_cal')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res)
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectMoneySql(config.pack_cal_uid, 'money_cash'), 60)
+        Assert.assert_equal(Mysql.selectMoneySql(test_uid, 'money_cash'), 600)
+        Assert.assert_equal(Mysql.selectAllMoneySql(ceo_uid), 250)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
+
         Consts.CASE_LIST[des] = 'pass'
 
     @unittest.skip
