@@ -114,7 +114,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(config.payUid, 900, 100, 100, 100)
         Mysql.updateMoneySql(test_uid)
         Mysql.selectUserXsMentorLevel(test_uid, 4)  # 更新成一代宗师
-        Mysql.updateChatroomUid(test_uid)  # 更新成商业房主播
+        Mysql.updateChatroomUid(test_uid)  # 更新成商业房主播&&直播结算频道
         data = Yaml.read_yaml('Basic.yml', 'dev_IMPay_8020')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
