@@ -128,7 +128,7 @@ class TestPayCreate(unittest.TestCase):
     def test_05_liveRoomPay_602515(self):
         """
         用例描述：
-        tdr:直播间内工会一代宗师主播-公会长-官方抽成：60:25:15
+        tdr:直播间内工会一代宗师主播-公会长-官方抽成：60:25:15,且打包结算频道是直播
         验证直播间打赏一代宗师主播（打包结算主播pack_cal=1），打赏分成满足：60:25:15，且收入在money_cash账户
         脚本步骤：
         1.构造打赏者和主播数据 （更新xs_user_money和xs_broker_user）
