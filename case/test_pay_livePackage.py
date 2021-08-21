@@ -35,7 +35,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查消费记录表消费money（xs_pay_change_new）
         6.检查消费记录表消费方式op
         """
-        des = '房间打赏非公非宗师主播62:38'
+        des = '房间打赏非公非师主播6238'
         Mysql.updateMoneySql(config.payUid, 30, 30, 30, 10)
         Mysql.updateMoneySql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_1')
@@ -60,7 +60,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：720
         5.检查打赏者剩余余额，预期为：400
         """
-        des = '私聊打赏非公非宗师主播72:28'
+        des = '私聊打赏非公非师7228'
         Mysql.updateMoneySql(config.payUid, 1100, 100, 100, 100)
         Mysql.updateMoneySql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_chatGift')
@@ -111,7 +111,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：money_cash=500, money_cash_b=30
         5.检查打赏者余额，预期为：1100 - 1000 = 100
         """
-        des = '私聊打赏非公宗师主播8:2'
+        des = '私聊打赏非公宗师8:2'
         test_uid = config.live_role['pack_master_NoPack']  # 非公会一代宗师主播
         Mysql.updateMoneySql(config.payUid, 900, 100, 100, 100)
         Mysql.updateMoneySql(test_uid)
@@ -140,7 +140,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查公会长余额，预期为：250
         6.检查打赏者余额.预期为：0
         """
-        des = '房间打赏宗师公会主播会长官方60:25:15'
+        des = '房间打赏宗师公会主播602515'
         test_uid = config.live_role['pack_cal_uid']
         ceo_uid = config.live_role['pack_ceo']
         Mysql.updateChatroomUid(test_uid)  # 商业房房主
@@ -172,7 +172,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查公会长余额，预期为：200
         6.检查打赏者余额.预期为：0
         """
-        des = '私聊打赏宗师公会主播会长官方6:2:2'
+        des = '私聊打赏宗师公会主播622'
         test_uid = config.live_role['pack_cal_uid']
         ceo_uid = config.live_role['pack_ceo']
         Mysql.updateChatroomUid(test_uid)  # 商业房房主
@@ -204,7 +204,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查公会长余额，预期为：250
         6.检查打赏者余额.预期为：0
         """
-        des = '房间打赏非宗师公会主播会长官方分成522523'
+        des = '房间打赏非师公会主播522523'
         test_uid = config.live_role['pack_cal_uid']
         ceo_uid = config.live_role['pack_ceo']
         Mysql.updateChatroomUid(test_uid)  # 商业房房主
@@ -236,7 +236,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查公会长余额，预期为：200
         6.检查打赏者余额.预期为：0
         """
-        des = '私聊打赏非宗师公会主播会长官方52:20:28'
+        des = '私聊打赏非宗师公会主播522028'
         test_uid = config.live_role['pack_cal_uid']
         ceo_uid = config.live_role['pack_ceo']
         Mysql.updateChatroomUid(test_uid)  # 商业房房主
@@ -291,7 +291,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：money_cash_b=700
         6.检查打赏者余额.预期为：0
         """
-        des = '主播非直播房被打赏70进个人魅力值'
+        des = '非直播房被打赏70进个人魅力值'
         test_uid = config.live_role['pack_cal_uid']
         Mysql.updateMoneySql(config.payUid, 1000)
         Mysql.updateMoneySql(test_uid)

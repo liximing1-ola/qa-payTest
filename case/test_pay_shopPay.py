@@ -25,7 +25,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查背包内物品
         """
         cid=329  # 四叶草
-        des = '商城购买道具场景'
+        des = '购买商城道具'
         Mysql.updateMoneySql(config.payUid, 0, 100, 100, 0)
         Mysql.deleteUserCommoditySql(config.payUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_shop')
@@ -50,7 +50,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查背包内物品
         """
         cid=340  # 小天使
-        des = '商城购买多道具场景'
+        des = '购买多个道具'
         Mysql.updateMoneySql(config.payUid, 1000, 100000, 1000, 1000)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_more_shop')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
@@ -73,7 +73,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查背包内物品
         5.检查被打赏者余额 990*0.62 = 6138
         """
-        des = '打赏背包礼物场景'
+        des = '打赏背包礼物'
         bag_gift_cid = 340
         Mysql.updateMoneySql(config.payUid)
         Mysql.updateMoneySql(config.testUid)
