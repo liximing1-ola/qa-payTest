@@ -63,7 +63,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者金豆余额，预期为：0
         5.检查打赏者剩余金豆余额，预期为：6000 * 0.7 = 4200
         """
-        des = '金豆足够时打赏金豆礼物的场景'
+        des = '打赏金豆礼物场景'
         Mysql.updateBeanSql(config.payUid, 6000)
         actual = Mysql.selectBeanSql(config.payUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_gold_BeanEnough')
@@ -191,7 +191,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查购买者金豆余额，预期为：400
         5.检查购买者钻石余额，预期为：80000 - 79900 = 100
         """
-        des = '卡座内购买套餐的场景'
+        des = '卡座内购买套餐'
         Mysql.deleteUserCommoditySql(config.payUid)
         Mysql.updateMoneySql(config.payUid, 80000)
         Mysql.updateBeanSql(config.payUid, 400)

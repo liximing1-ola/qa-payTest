@@ -11,7 +11,7 @@ class TestPayCreate(unittest.TestCase):
     # 内网支付接口
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
 
-    @unittest.skip
+    @unittest.skip('pass')
     def test_01_RoomPayRedPacket(self):
         """
         用例描述：

@@ -99,7 +99,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查背包内物品
         5.检查被打赏者余额 预期：0
         """
-        des = '检查物品不足抵扣的场景'
+        des = '物品不足抵扣场景'
         bag_gift_cid = 340
         Mysql.updateMoneySql(config.payUid)
         Mysql.updateMoneySql(config.testUid)

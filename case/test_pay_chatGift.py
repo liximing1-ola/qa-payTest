@@ -23,7 +23,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查预期返回msg，预期：支付失败，提示Toast
         5.检查被打赏者余额,预期：0
         """
-        des = '私聊打赏但余额不足的场景'
+        des = '私聊打赏余额不足的场景'
         Mysql.updateMoneySql(config.payUid)
         Mysql.updateMoneySql(config.testUid)
         Mysql.deleteXsBrokerUser(config.testUid)  # 删除用户工会记录
