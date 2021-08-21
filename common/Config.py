@@ -12,12 +12,16 @@ class config:
         'pack_cal_uid': 105002313,  # 打包结算签约主播
         'bb_git_branch': 'release-for-vpc'  # 线上代码分支
     }
+    # 角色配置
     live_role = {
         'pack_ceo': 105002314,  # 直播公会公会长
         'pack_master_NoPack': 105002319,  # 非公会一代宗师主播
         'pack_noMaster': 105002316,  # 非一代宗师主播
         'pack_cal_uid': 105002313,  # 公会签约主播（打包结算），宗师等级可设置为一代和非一代
         'testUid': 105002312,  # 非公会非一代宗师主播
+        'live_rid': 193185577,  # 直播间
+        'auto_rid': 193185484,  # 商业8坑位房间
+        'cp_link_rid': 193185538  # 商业连连看房间
     }
     # dev域名（qq登陆方式)
     dev_host = domain_host['bb_dev_58']
