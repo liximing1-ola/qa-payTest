@@ -213,7 +213,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(config.payUid, 1000)
         Mysql.updateMoneySql(test_uid)
         Mysql.updateMoneySql(ceo_uid)
-        Mysql.selectUserXsMentorLevel(test_uid, 1)  # 师父等级改为一代宗师
+        Mysql.selectUserXsMentorLevel(test_uid, 1)  # 师父等级改为非一代宗师
         data = Yaml.read_yaml('Basic.yml', 'dev_livePay_602515')  # 共用
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res)
@@ -245,7 +245,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(config.payUid, 1000)
         Mysql.updateMoneySql(test_uid)
         Mysql.updateMoneySql(ceo_uid)
-        Mysql.selectUserXsMentorLevel(test_uid, 1)  # 师父等级改为一代宗师
+        Mysql.selectUserXsMentorLevel(test_uid, 1)  # 师父等级改为非一代宗师
         data = Yaml.read_yaml('Basic.yml', 'dev_IMPay_602020')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res)
@@ -293,7 +293,6 @@ class TestPayCreate(unittest.TestCase):
         """
         des = '主播在非直播房间内被打赏70进个人魅力值'
         test_uid = config.live_role['pack_cal_uid']
-        Mysql.updateChatroomUid(test_uid)  # 商业房房主
         Mysql.updateMoneySql(config.payUid, 1000)
         Mysql.updateMoneySql(test_uid)
         Mysql.selectUserXsMentorLevel(test_uid, 4)  # 师父等级改为一代宗师
