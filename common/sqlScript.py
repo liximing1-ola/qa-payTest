@@ -373,7 +373,7 @@ class Mysql:
 
     # 查询用户是否是师父.不是就把他变成一代宗师（level=4，一代宗师）
     @staticmethod
-    def selectUserXsMentorLevel(uid, level):
+    def selectUserXsMentorLevel(uid, level=4):
         con, cur = Mysql.conMysql()
         sql = 'select * from xs_mentor_exp where uid={}'.format(uid)
         try:
@@ -382,7 +382,19 @@ class Mysql:
             if res is None:
                 Mysql.insertXsMentorExpLevel(uid, level)
             else:
-                return 1
+                Mysql.updateUserMentorLevel(uid, level)
         except Exception as error:
             print(error)
+
+    @staticmethod
+    def updateUserMentorLevel(uid, level):
+        con, cur = Mysql.conMysql()
+        sql = "update xs_mentor_exp set level={} where uid={} limit 1".format(level, uid)
+        try:
+            cur.execute(sql)
+        except Exception as error:
+            con.rollback()
+            print('update fail', error)
+        finally:
+            con.commit()
 
