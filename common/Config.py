@@ -16,7 +16,6 @@ class config:
     live_role = {
         'pack_ceo': 105002314,  # 直播公会公会长
         'pack_master_NoPack': 105002319,  # 非公会一代宗师主播
-        'pack_noMaster': 105002316,  # 非一代宗师主播
         'pack_cal_uid': 105002313,  # 公会签约主播（打包结算），宗师等级可设置为一代和非一代
         'testUid': 105002312,  # 非公会非一代宗师主播
         'live_rid': 193185577,  # 直播间
