@@ -36,7 +36,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查预期返回msg，预期：支付失败，提示Toast
         5.检查被打赏者金豆余额,预期：0
         """
-        des = '打赏金豆礼物但金豆不足的场景'
+        des = '打赏金豆礼物但金豆不足场景'
         # case执行前处理下数据
         Mysql.deleteUserBeanSql(config.payUid, config.testUid)
         Mysql.updateMoneySql(config.payUid)
@@ -50,7 +50,7 @@ class TestPayCreate(unittest.TestCase):
         result = Mysql.selectBeanSql(config.testUid)
         Assert.assert_equal(result, 0)
         print('\n' + '用例描述: {}'.format(des), '打赏前金豆: {}'.format(actual), '打赏后金豆：{}'.format(result))
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = 'P'
 
     def test_02_beanPayChangeGoldGift(self):
         """

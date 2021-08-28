@@ -50,7 +50,7 @@ class Mysql:
         try:
             for uid in uids:
                 sql = "delete from xs_user_money_extend where uid = {} limit 1".format(uid)
-                time.sleep(0.3)
+                time.sleep(0.1)
                 cur.execute(sql)
                 con.commit()
         except Exception as error:
@@ -58,7 +58,6 @@ class Mysql:
             print('delete fail', error)
         finally:
             # 防止lock
-            time.sleep(0.2)
             cur.close()
             con.close()
 
@@ -73,7 +72,7 @@ class Mysql:
             con.rollback()
             print('insert fail', error)
         finally:
-            time.sleep(0.5)
+            time.sleep(0.1)
             con.commit()
 
     # 查询用户金豆余额

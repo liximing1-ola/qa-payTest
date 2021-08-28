@@ -12,7 +12,7 @@ class TestPayCreate(unittest.TestCase):
     # 内网支付接口
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
 
-    @unittest.skip('游戏支付暂时关闭')
+    @unittest.skip('伴伴暂时关闭')
     def test_01_unityGameBugPayChange(self):
         """
         用例描述：
