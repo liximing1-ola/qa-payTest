@@ -11,7 +11,7 @@ class TestPayCreate(unittest.TestCase):
     # 内网支付接口
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
 
-    # 角色配置
+    # 角色配置BackUp
     live_role = {
         'pack_ceo': 105002314,  # 直播公会公会长
         'pack_master_NoPack': 105002319,  # 非公会一代宗师主播
@@ -35,7 +35,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查消费记录表消费money（xs_pay_change_new）
         6.检查消费记录表消费方式op
         """
-        des = '房间打赏分成6238'
+        des = 'live打赏分成62:38'
         Mysql.updateMoneySql(config.payUid, 30, 30, 30, 10)
         Mysql.updateMoneySql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_1')
@@ -60,7 +60,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：720
         5.检查打赏者剩余余额，预期为：400
         """
-        des = '私聊打赏分成7228'
+        des = '私聊打赏分成72:28'
         Mysql.updateMoneySql(config.payUid, 1100, 100, 100, 100)
         Mysql.updateMoneySql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_chatGift')
@@ -85,7 +85,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：700(账户：money_cash，商业房房主进工会魅力值)
         5.检查打赏者余额，预期为：1000 - 1000 = 0
         """
-        des = '房间打赏分成7:3'
+        des = 'live打赏分成7:3'
         test_uid=config.live_role['pack_master_NoPack']  # 非公会一代宗师主播
         Mysql.updateMoneySql(config.payUid, 900, 30, 30, 40)
         Mysql.updateMoneySql(test_uid)
@@ -98,7 +98,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
         Assert.assert_equal(Mysql.selectMoneySql(test_uid, money_type='money_cash'), 700)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = Consts.result
 
     def test_04_IMPay_8020(self):
         """
@@ -125,7 +125,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectMoneySql(test_uid, 'money_cash_b'), 300)
         Assert.assert_equal(Mysql.selectMoneySql(test_uid, 'money_cash'), 500)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 200)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = Consts.result
 
     def test_05_liveRoomPay_602515(self):
         """
@@ -140,7 +140,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查公会长余额，预期为：250
         6.检查打赏者余额.预期为：0
         """
-        des = '房间打赏分成602515'
+        des = 'live打赏分成60:25:15'
         test_uid = config.live_role['pack_cal_uid']
         ceo_uid = config.live_role['pack_ceo']
         Mysql.updateChatroomUid(test_uid)  # 商业房房主
@@ -158,7 +158,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectMoneySql(test_uid, 'money_cash'), 600)
         Assert.assert_equal(Mysql.selectAllMoneySql(ceo_uid), 250)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = Consts.result
 
     def test_06_IMPay_602020(self):
         """
@@ -172,7 +172,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查公会长余额，预期为：200
         6.检查打赏者余额.预期为：0
         """
-        des = '私聊打赏分成622'
+        des = '私聊打赏分成6:2:2'
         test_uid = config.live_role['pack_cal_uid']
         ceo_uid = config.live_role['pack_ceo']
         Mysql.updateChatroomUid(test_uid)  # 商业房房主
@@ -190,7 +190,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectMoneySql(test_uid, 'money_cash'), 600)
         Assert.assert_equal(Mysql.selectAllMoneySql(ceo_uid), 200)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = Consts.result
 
     def test_07_liveRoomPay_522523(self):
         """
@@ -204,7 +204,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查公会长余额，预期为：250
         6.检查打赏者余额.预期为：0
         """
-        des = '房间打赏分成522523'
+        des = 'live打赏分成52:25:23'
         test_uid = config.live_role['pack_cal_uid']
         ceo_uid = config.live_role['pack_ceo']
         Mysql.updateChatroomUid(test_uid)  # 商业房房主
@@ -222,7 +222,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectMoneySql(test_uid, 'money_cash'), 520)
         Assert.assert_equal(Mysql.selectAllMoneySql(ceo_uid), 250)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = Consts.result
 
     def test_08_IMPay_522028(self):
         """
@@ -254,7 +254,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectMoneySql(test_uid, 'money_cash'), 520)
         Assert.assert_equal(Mysql.selectAllMoneySql(ceo_uid), 200)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = Consts.result
 
     def test_09_underRolePay_6238(self):
         """
@@ -278,7 +278,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
         Assert.assert_equal(Mysql.selectMoneySql(config.testUid, money_type='money_cash_b'), 62)
         Assert.assert_equal(Mysql.selectPayChangeSql(config.payUid), 100)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = Consts.result
 
     def test_10_NotLiveRoomPayAnchor(self):
         """
@@ -291,7 +291,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：money_cash_b=700
         6.检查打赏者余额.预期为：0
         """
-        des = '非直播房被打赏70进个魅'
+        des = '非直播间被打赏分成70进个人魅力'
         test_uid = config.live_role['pack_cal_uid']
         Mysql.updateMoneySql(config.payUid, 1000)
         Mysql.updateMoneySql(test_uid)
@@ -303,4 +303,4 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectMoneySql(test_uid, 'money_cash_b'), 700)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = Consts.result

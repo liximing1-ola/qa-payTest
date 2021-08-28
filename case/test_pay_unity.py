@@ -6,11 +6,16 @@ import unittest
 from common import Consts
 from common import Assert
 from common.runFailed import Retry
+import time
 @Retry
 class TestPayCreate(unittest.TestCase):
 
     # 内网支付接口
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        Consts.endTime = time.time()
 
     @unittest.skip('伴伴暂时关闭')
     def test_01_unityGameBugPayChange(self):
@@ -31,4 +36,4 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = Consts.result

@@ -6,22 +6,23 @@ import unittest
 from common import Consts
 from common import Assert
 from common.runFailed import Retry
+import time
 class TestPayCreate(unittest.TestCase):
 
     # 内网支付接口
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
 
+    @classmethod
+    def setUpClass(cls) -> None:
+        Consts.startTime=time.time()
+
     def setUp(self) -> None:
-        # 不处理
+        # 不作处理
         pass
 
     def tearDown(self) -> None:
         # 清理前置冗余数据
         Mysql.deleteUserBeanSql(config.payUid, config.testUid)
-
-    @classmethod
-    def tearDownClass(cls) -> None:
-        pass
 
     @Retry
     def test_01_NoBeanPayBeanGift(self):

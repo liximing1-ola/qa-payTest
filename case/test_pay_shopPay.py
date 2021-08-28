@@ -35,7 +35,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 100)
         Assert.assert_equal(Mysql.checkUserCommoditySql(cid, config.payUid), 1)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = Consts.result
 
     @pytest.mark.run(order=2)
     def test_02_shopPayChangeBuyMore(self):
@@ -50,7 +50,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查背包内物品
         """
         cid=340  # 小天使
-        des = '购买多个道具'
+        des = '商城购买n个道具'
         Mysql.updateMoneySql(config.payUid, 1000, 100000, 1000, 1000)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_more_shop')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
@@ -59,7 +59,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 4000)
         Assert.assert_equal(Mysql.checkUserCommoditySql(cid, config.payUid), 10)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = Consts.result
 
     @pytest.mark.run(order=3)
     def test_03_shopGiftToUser(self):
@@ -73,7 +73,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查背包内物品
         5.检查被打赏者余额 990*0.62 = 6138
         """
-        des = '打赏背包礼物'
+        des = '打赏背包内礼物场景'
         bag_gift_cid = 340
         Mysql.updateMoneySql(config.payUid)
         Mysql.updateMoneySql(config.testUid)
@@ -85,7 +85,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.checkUserCommoditySql(bag_gift_cid, config.payUid), 9)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 6138)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = Consts.result
 
     @pytest.mark.run(order=4)
     def test_04_shopGiftToUserNoEnough(self):
@@ -112,4 +112,4 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason)
         Assert.assert_equal(Mysql.checkUserCommoditySql(bag_gift_cid, config.payUid), 9)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 0)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = Consts.result

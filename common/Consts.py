@@ -7,3 +7,6 @@ CASE_LIST = {}
 fail_case_reason = []
 # pass
 result = 'P'
+# 记录时间
+startTime=0
+endTime=0

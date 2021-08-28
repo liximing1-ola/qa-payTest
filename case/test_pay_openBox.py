@@ -40,7 +40,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 100)
         Assert.assert_equal(Mysql.selectUserCommodity(config.payUid), 2)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = Consts.result
 
     def test_02_openMoreBoxPayChange(self):
         """
@@ -70,7 +70,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
         Assert.assert_len(Mysql.selectUserCommodity(config.payUid), 12)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = Consts.result
 
     def test_03_giveBoxPayChange(self):
         """
@@ -93,7 +93,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 100)
         Assert.assert_len(Mysql.selectAllMoneySql(config.testUid), 0)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = Consts.result
 
     def test_04_giveBoxMorePeople(self):
         """
@@ -116,4 +116,4 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 1600)
         Assert.assert_len(Mysql.selectAllMoneySql(config.testUid), 1000)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = Consts.result

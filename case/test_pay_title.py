@@ -23,7 +23,7 @@ class TestPayCreate(unittest.TestCase):
         3.校验【status code】和返回值【body】状态
         4.检查剩余钱值,预期值：（200000 - 100000 + 60000 = 160000）
         """
-        des = '开通爵位'
+        des = '开通爵位场景'
         Mysql.deleteUserCommoditySql(config.payUid)
         Mysql.deleteUserTitleSql(config.payUid)
         Mysql.updateUserTitleSql(config.payUid)
@@ -35,7 +35,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectMoneySql(config.payUid, 'money'), 160000)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = Consts.result
 
     @pytest.mark.run(order=2)
     def test_02_TitlePayChangeRenew(self):
@@ -48,7 +48,7 @@ class TestPayCreate(unittest.TestCase):
         3.校验【status code】和返回值【body】状态
         4.检查剩余钱值,预期值：（200000 - 60000 + 36000 = 176000）
         """
-        des = '爵位续费'
+        des = '爵位续费场景'
         Mysql.updateMoneySql(config.payUid, 200000)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_title')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
@@ -56,8 +56,4 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectMoneySql(config.payUid, 'money'), 176000)
-        Consts.CASE_LIST[des] = 'pass'
-
-
-if __name__ == '__main__':
-    pay = TestPayCreate()
+        Consts.CASE_LIST[des] = Consts.result

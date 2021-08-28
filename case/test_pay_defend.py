@@ -23,7 +23,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查被打赏者余额,预期：52000 * 0.62 = 32240
         6.检查消费记录
         """
-        des = '开通个人守护'
+        des = '开通个人守护场景'
         Mysql.updateMoneySql(config.payUid, 52000)
         Mysql.updateMoneySql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_defend')
@@ -35,5 +35,4 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 32240)
         Assert.assert_equal(Mysql.selectPayChangeSql(config.payUid), 52000)
         Assert.assert_equal(Mysql.selectPayChangeOpSql(config.payUid), 'consume')
-        Consts.CASE_LIST[des] = 'pass'
-
+        Consts.CASE_LIST[des] = Consts.result

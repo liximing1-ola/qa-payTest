@@ -22,7 +22,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查预期返回msg，预期：支付失败
         5.检查被打赏者余额,预期：0
         """
-        des = '房间一对一打赏但余额不足'
+        des = '房间1V1打赏但余额不足的场景'
         Mysql.updateMoneySql(config.payUid)
         Mysql.updateMoneySql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_1')
@@ -32,7 +32,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 0, reason)
         Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 0)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = Consts.result
 
     def test_02_RoomPayChangeMoney(self):
         """
@@ -46,7 +46,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查消费记录表消费money（xs_pay_change_new）
         6.检查消费记录表消费方式op
         """
-        des = '非直播一对一打赏'
+        des = '非直播1V1打赏场景'
         Mysql.updateMoneySql(config.payUid, 30, 30, 30, 10)
         Mysql.updateMoneySql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_2')
@@ -57,7 +57,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectMoneySql(config.testUid, 'money_cash_b'), 62)
         Assert.assert_equal(Mysql.selectPayChangeSql(config.payUid), 100)
         Assert.assert_equal(Mysql.selectPayChangeOpSql(config.payUid), 'consume')
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = Consts.result
 
     def test_03_couponNoStatePayChange(self):
         """
@@ -70,7 +70,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：0
         5.检查打赏者余额,预期为：3000
         """
-        des = '打赏礼物券未激活'
+        des = '使用未激活券的场景'
         gift_cid = 54  # 老司机
         Mysql.deleteUserCommoditySql(config.payUid)
         Mysql.insertXsUserCommodity(config.payUid, gift_cid, 1)
@@ -88,7 +88,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason)
         Assert.assert_equal(Mysql.selectMoneySql(config.testUid), 0)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 3000)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = Consts.result
 
     def test_04_couponStatePayChange(self):
         """
@@ -101,7 +101,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：3000 * 0.62 = 1860
         5.检查打赏者余额,预期为：3000 -2500 = 500
         """
-        des = '打赏礼物券已激活'
+        des = '打赏已激活券场景'
         gift_cid = 54  # 老司机
         Mysql.deleteUserCommoditySql(config.payUid)
         Mysql.insertXsUserCommodity(config.payUid, gift_cid, 1, 1)
@@ -119,7 +119,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectMoneySql(config.testUid), 1860)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 500)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = Consts.result
 
     def test_05_RoomToMorePayChange(self):
         """
@@ -132,7 +132,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查打赏者余额,预期为：12000-10800=1200
         5.检查被打赏者余额，预期为：600*6*0.7=2520
         """
-        des = '礼物打赏多人'
+        des = '打赏多人场景'
         Mysql.updateMoneySql(config.payUid, 3000, 3000, 3000, 3000)
         Mysql.updateMoneySql(config.testUid_2)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_more')
@@ -142,9 +142,4 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectMoneySql(config.testUid_2), 2520)
         Assert.assert_equal(Mysql.selectMoneySql(config.payUid, 'money_cash'), 1200)
-        Consts.CASE_LIST[des] = 'pass'
-
-
-if __name__ == '__main__':
-    pay = TestPayCreate()
-    pay.test_01_RoomPayNoMoney()
+        Consts.CASE_LIST[des] = Consts.result
