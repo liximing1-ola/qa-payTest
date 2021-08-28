@@ -46,7 +46,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectMoneySql(config.testUid, money_type='money_cash_b'), 62)
         Assert.assert_equal(Mysql.selectPayChangeSql(config.payUid), 100)
         Assert.assert_equal(Mysql.selectPayChangeOpSql(config.payUid), 'consume')
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = Consts.result
 
     def test_02_ImPay_7228(self):
         """
@@ -71,7 +71,7 @@ class TestPayCreate(unittest.TestCase):
         # 商业房房主 or （工会会长 or 工会成员）|| 同意大神协议
         Assert.assert_equal(Mysql.selectMoneySql(config.testUid, money_type='money_cash_b'), 720)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 400)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = Consts.result
 
     def test_03_liveRoomPay_7030(self):
         """
@@ -291,7 +291,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：money_cash_b=700
         6.检查打赏者余额.预期为：0
         """
-        des = '非直播间被打赏分成70进个人魅力'
+        des = '主播在非live被打赏分成70进个人魅力'
         test_uid = config.live_role['pack_cal_uid']
         Mysql.updateMoneySql(config.payUid, 1000)
         Mysql.updateMoneySql(test_uid)
