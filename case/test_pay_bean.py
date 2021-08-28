@@ -16,12 +16,11 @@ class TestPayCreate(unittest.TestCase):
         pass
 
     def tearDown(self) -> None:
-        # 清理前置数据
+        # 清理前置冗余数据
         Mysql.deleteUserBeanSql(config.payUid, config.testUid)
 
     @classmethod
     def tearDownClass(cls) -> None:
-        # 暂不处理
         pass
 
     @Retry
@@ -36,7 +35,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查预期返回msg，预期：支付失败，提示Toast
         5.检查被打赏者金豆余额,预期：0
         """
-        des = '打赏金豆礼物但金豆不足场景'
+        des = '打赏金豆礼物但金豆不足的场景'
         # case执行前处理下数据
         Mysql.deleteUserBeanSql(config.payUid, config.testUid)
         Mysql.updateMoneySql(config.payUid)
@@ -50,7 +49,7 @@ class TestPayCreate(unittest.TestCase):
         result = Mysql.selectBeanSql(config.testUid)
         Assert.assert_equal(result, 0)
         print('\n' + '用例描述: {}'.format(des), '打赏前金豆: {}'.format(actual), '打赏后金豆：{}'.format(result))
-        Consts.CASE_LIST[des] = 'P'
+        Consts.CASE_LIST[des] = Consts.result
 
     def test_02_beanPayChangeGoldGift(self):
         """
@@ -77,7 +76,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(test_result, 4200)
         print('\n' + '用例描述: {}'.format(des), '打赏者消费前金豆: {}'.format(actual),
               '打赏者消费后金豆：{}'.format(pay_result), '收货者金豆余额: {}'.format(test_result))
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = Consts.result
 
     def test_03_MoneyConvertGoldPayGift(self):
         """
@@ -103,7 +102,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectBeanSql(config.payUid), 500)
         Assert.assert_equal(Mysql.selectMoneySql(config.payUid, money_type='money'), 9000)
         Assert.assert_equal(Mysql.selectBeanSql(config.testUid), 700)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = Consts.result
 
     def test_04_ImMoneyPayChangeBeanDeduct(self):
         """
@@ -129,7 +128,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectBeanSql(config.payUid), 0)
         Assert.assert_equal(Mysql.selectMoneySql(config.payUid, money_type='money'), 200)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 720)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = Consts.result
 
     def test_05_RoomMoneyConvertGoldPayGift(self):
         """
@@ -155,7 +154,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectBeanSql(config.payUid), 100)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 620)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 300)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = Consts.result
 
     def test_06_MoneyConvertGoldPayGift(self):
         """
@@ -178,7 +177,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 0, reason)
         Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.CASE_LIST[des] = Consts.result
 
     def test_07_BeanPayChangeCombo(self):
         """
@@ -202,8 +201,4 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 100)
         Assert.assert_equal(Mysql.selectBeanSql(config.payUid), 400)
-        Consts.CASE_LIST[des] = 'pass'
-
-
-if __name__ == '__main__':
-    pass
+        Consts.CASE_LIST[des] = Consts.result
