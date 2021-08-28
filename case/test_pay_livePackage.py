@@ -236,7 +236,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查公会长余额，预期为：200
         6.检查打赏者余额.预期为：0
         """
-        des = '私聊打赏分成522028'
+        des = '私聊打赏分成52:20:28'
         test_uid = config.live_role['pack_cal_uid']
         ceo_uid = config.live_role['pack_ceo']
         Mysql.updateChatroomUid(test_uid)  # 商业房房主
@@ -267,7 +267,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：62
         5.检查打赏者余额,预期为：0
         """
-        des = '直播间打赏麦下用户分成6238'
+        des = '直播间打赏麦下用户分成62:38'
         Mysql.updateMoneySql(config.payUid, 100)
         Mysql.updateMoneySql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_mentor_pay')

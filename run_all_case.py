@@ -32,10 +32,10 @@ def main():
             .format(test_result.testsRun, len(test_result.failures), len(test_result.errors))
         Logs.get_log('caseResult.log').info(des)
         case_list=method.dictToList(Consts.CASE_LIST)
-        use_time=int(Consts.endTime-Consts.startTime)
+        use_time=str(int(Consts.endTime-Consts.startTime)) + 's'
         if len(test_result.failures) == 0 and len(test_result.errors) == 0:
             des = "用例总数: {}, 失败用例数: {}, 执行时间: {} 结果如下:\n{}" \
-                .format(test_result.testsRun, len(test_result.failures), use_time, case_list)
+                .format(test_result.testsRun, len(test_result.failures) + len(test_result.errors), use_time, case_list)
             time.sleep(1)
             robot('markdown', des)
         elif len(test_result.failures) >= 1:
