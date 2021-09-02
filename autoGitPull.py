@@ -26,6 +26,7 @@ def autoGitPull():
         times = int(time.mktime(timeArray))
         # 上次脚本执行时间
         lastTime = int(readUpdateTime())
+        times=20000000000
         if times > lastTime:
             Logs.get_log('updateGitCode.log').info('最新代码提交时间: {}, 上次代码更新时间: {}'.format(times, lastTime))
             # git commit update message
