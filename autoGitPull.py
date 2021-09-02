@@ -21,12 +21,12 @@ def autoGitPull():
         log_list = commit_log.split("\n")
         Logs.get_log('gitCommitPull.log').info('当前分支: {}, 最新一条commit: {}'.format(repo.active_branch, log_list[0]))
         real_time = [eval(item) for item in log_list][0]['date']
+        print(real_time)
         timeArray = time.strptime(real_time, "%Y-%m-%d %H:%M:%S")
         # commit更新时间
         times = int(time.mktime(timeArray))
         # 上次脚本执行时间
         lastTime = int(readUpdateTime())
-        times=20000000000
         if times > lastTime:
             Logs.get_log('updateGitCode.log').info('最新代码提交时间: {}, 上次代码更新时间: {}'.format(times, lastTime))
             # git commit update message
