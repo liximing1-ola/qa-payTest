@@ -21,7 +21,7 @@ def all_case():
     return testcase
 
 def main():
-    if True:
+    if autoGitPull():
         # 生成HTML格式
         # html_path = '/home/banban-1/payTest/report/result.html'
         # fp = open(html_path, 'wb')
