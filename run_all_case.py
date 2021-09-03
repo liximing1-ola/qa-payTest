@@ -5,6 +5,7 @@ from common import Logs, method
 from autoGitPull import autoGitPull, writeUpdateTime
 from Robot import robot
 from common import Consts
+from common import Config
 import random
 def all_case():
     # win 路径
@@ -35,8 +36,8 @@ def main():
         case_list=method.dictToList(Consts.CASE_LIST)
         use_time=str(int(Consts.endTime-Consts.startTime)) + 's'
         if len(test_result.failures) == 0 and len(test_result.errors) == 0:
-            des = "{}\n用例总数: {}, 失败用例数: {}, 执行时间: {}" \
-                .format(case_list, test_result.testsRun, len(test_result.failures) + len(test_result.errors), use_time)
+            des = "{}\n用例总数: {}, 失败用例数: {}, 执行时间: {}, 分支：{}" \
+                .format(case_list, test_result.testsRun, len(test_result.failures) + len(test_result.errors), use_time, Config.config.bb_test['bb_git_branch'])
             time.sleep(0.5)
             robot('markdown', des)
         elif len(test_result.failures) >= 1:
