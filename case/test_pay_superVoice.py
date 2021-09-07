@@ -64,7 +64,7 @@ class TestPayCreate(unittest.TestCase):
         test_uid = config.super_live_role['super_star_uid']
         test_bid = config.super_live_role['super_broker']
         Mysql.updateMoneySql(test_uid)
-        Mysql.updateSuperVoiceUser(test_bid, test_uid)
+        Mysql.updateSuperVoiceUser(test_bid, test_uid, 100)
         data = Yaml.read_yaml('Basic.yml', 'dev_superVoice_35')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
@@ -95,8 +95,8 @@ class TestPayCreate(unittest.TestCase):
         Mysql.selectOnlineEarnArtist(test_uid, 100)
         Mysql.updateMoneySql(test_uid)
         Mysql.updateMoneySql(test_agent)
-        Mysql.updateSuperVoiceUser(test_bid, test_uid)
-        Mysql.updateSuperVoiceUser(test_bid, test_agent)
+        Mysql.updateSuperVoiceUser(test_bid, test_uid, 99)
+        Mysql.updateSuperVoiceUser(test_bid, test_agent, 100)
         Mysql.updateOnlineEarnRelation(test_agent, test_uid)
         data = Yaml.read_yaml('Basic.yml', 'dev_superVoice_5015')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
