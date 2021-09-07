@@ -126,7 +126,7 @@ class TestPayCreate(unittest.TestCase):
         test_uid = config.super_live_role['agent_star_uid']
         test_bid = config.super_live_role['super_broker']
         test_agent = config.super_live_role['super_agent_uid']
-        Mysql.selectOnlineEarnAgent(test_agent, 10000)
+        Mysql.selectOnlineEarnAgent(test_agent, 100000)
         Mysql.selectOnlineEarnArtist(test_uid, 100)
         Mysql.updateMoneySql(test_uid)
         Mysql.updateMoneySql(test_agent)
@@ -159,7 +159,7 @@ class TestPayCreate(unittest.TestCase):
         test_uid = config.super_live_role['pack_cal_uid']
         test_bid = config.super_live_role['super_broker']
         test_agent = config.super_live_role['super_agent_uid']
-        Mysql.selectOnlineEarnAgent(test_agent, 10000)
+        Mysql.selectOnlineEarnAgent(test_agent, 100000)
         Mysql.updateMoneySql(test_uid)
         Mysql.updateMoneySql(test_agent)
         Mysql.updateSuperVoiceUser(test_bid, test_agent)
