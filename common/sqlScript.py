@@ -226,7 +226,7 @@ class Mysql:
 
     # 修改用户为指定工会用户
     @staticmethod
-    def updateSuperVoiceUser(bid, uid, nid):
+    def updateSuperVoiceUser(bid, uid, nid=100):
         con, cur = Mysql.conMysql()
         sql = "update xs_broker_user set bid={}, uid={}, state=1 where id = {} limit 1".format(bid, uid, nid)
         try:
