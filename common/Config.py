@@ -29,7 +29,8 @@ class config:
         'super_agent_uid': 105002323,  # 指定工会经纪人
         'agent_star_uid': 105002331,  # 指定工会内有经纪人(105002323)的艺人
         'super_broker': 136594717,  # 指定工会bid
-        'super-voice-fresh': 200000287  # 网赚房间
+        'super-voice-fresh': 200000287,  # 网赚房间
+        'pack_cal_uid': 105002313,  # 公会签约主播（打包结算）
     }
     # dev域名（qq登陆方式)
     dev_host = domain_host['bb_dev_58']

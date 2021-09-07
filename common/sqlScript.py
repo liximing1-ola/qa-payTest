@@ -426,7 +426,7 @@ class Mysql:
 
     # 查询用户经纪人身份是否存在,没有就创建一个
     @staticmethod
-    def selectOnlineEarnAgent(uid, point):
+    def selectOnlineEarnAgent(uid, point=100):
         con, cur = Mysql.conMysql()
         sql = 'select * from xs_online_earn_agent where uid={}'.format(uid)
         try:
@@ -435,9 +435,21 @@ class Mysql:
             if res is None:
                 Mysql.insertOnlineEarnAgent(uid, point)
             else:
-                return 1
+                Mysql.updateOnlineEarnAgent(uid, point)
         except Exception as error:
             print(error)
+
+    @staticmethod
+    def updateOnlineEarnAgent(uid, point):
+        con, cur = Mysql.conMysql()
+        sql = "update xs_online_earn_agent set point={} where uid={} limit 1".format(point, uid)
+        try:
+            cur.execute(sql)
+        except Exception as error:
+            con.rollback()
+            print('update fail', error)
+        finally:
+            con.commit()
 
     # 新建一个艺人
     @staticmethod
@@ -455,7 +467,7 @@ class Mysql:
 
     # 查询用户艺人身份是否存在,没有就造一个
     @staticmethod
-    def selectOnlineEarnArtist(uid, point):
+    def selectOnlineEarnArtist(uid, point=100):
         con, cur = Mysql.conMysql()
         sql = 'select * from xs_online_earn_artist where uid={}'.format(uid)
         try:
