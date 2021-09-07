@@ -164,7 +164,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(test_agent)
         Mysql.updateSuperVoiceUser(test_bid, test_agent)
         Mysql.updateOnlineEarnRelation(test_agent, test_uid)
-        data = Yaml.read_yaml('Basic.yml', 'dev_superVoice_5020')
+        data = Yaml.read_yaml('Basic.yml', 'dev_normalBroker_5020')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
