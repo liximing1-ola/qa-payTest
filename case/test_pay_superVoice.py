@@ -18,7 +18,7 @@ class TestPayCreate(unittest.TestCase):
         'super_star_uid': 105002325,  # 指定工会艺人
         'super_agent_uid': 105002323,  # 指定工会经纪人
         'agent_star_uid': 105002331,  # 指定工会内有经纪人(105002323)的艺人
-        'super_broker': 103109865,  # 指定工会bid
+        'super_broker': 136594717,  # 指定工会bid
         'super-voice-fresh': 200000287  # 网赚房间
     }
 
@@ -49,6 +49,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectAllMoneySql(test_uid), 350)
         Consts.CASE_LIST[des] = Consts.result
 
+    @unittest.skip
     def test_02_starRoomSuperVoicePay_35(self):
         """
         用例描述：

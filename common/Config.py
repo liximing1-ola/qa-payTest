@@ -23,12 +23,13 @@ class config:
         'cp_link_rid': 193185538  # 商业连连看房间
     }
     super_live_role = {
-        'testUid': 105002312,  # 非公会非一代宗师主播
+        'testUid': 105002312,  # 非公会用户
         'auto_rid': 193185484,  # 商业8坑位房间
         'super_star_uid': 105002325,  # 指定工会艺人
         'super_agent_uid': 105002323,  # 指定工会经纪人
-        'agent_star_uid': 105002331,  # 指定工会内有经纪人的艺人
-        'super_broker': 103109865,  # 指定工会
+        'agent_star_uid': 105002331,  # 指定工会内有经纪人(105002323)的艺人
+        'super_broker': 136594717,  # 指定工会bid
+        'super-voice-fresh': 200000287  # 网赚房间
     }
     # dev域名（qq登陆方式)
     dev_host = domain_host['bb_dev_58']
