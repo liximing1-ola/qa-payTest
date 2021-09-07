@@ -49,7 +49,6 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectAllMoneySql(test_uid), 350)
         Consts.CASE_LIST[des] = Consts.result
 
-    @unittest.skip
     def test_02_starRoomSuperVoicePay_35(self):
         """
         用例描述：
