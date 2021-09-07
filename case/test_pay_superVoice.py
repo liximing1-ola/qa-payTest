@@ -108,7 +108,6 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
         Consts.CASE_LIST[des] = Consts.result
 
-
     def test_04_starRoomAgent_20(self):
         """
         用例描述：
