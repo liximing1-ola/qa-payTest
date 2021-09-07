@@ -1,5 +1,6 @@
 # coding=utf-8
 import pymysql
+import time
 # 本地服务器数据库测试用
 def conMysql():
     db_config = {"dev_46_db": '192.168.11.46',
@@ -58,4 +59,5 @@ def selectUserXsBroker(bid):
 
 
 if __name__ == '__main__':
-    selectUserXsBroker(105002314)
+    tt=time.time()
+    print(int(tt))

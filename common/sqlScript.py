@@ -224,6 +224,19 @@ class Mysql:
         finally:
             con.commit()
 
+    # 修改用户为指定工会用户
+    @staticmethod
+    def updateSuperVoiceUser(bid, uid):
+        con, cur = Mysql.conMysql()
+        sql = "update xs_broker_user set bid={}, uid={}, state=1 where id = 100 limit 1".format(bid, uid)
+        try:
+            cur.execute(sql)
+        except Exception as error:
+            con.rollback()
+            print('update fail', error)
+        finally:
+            con.commit()
+
     # 修改用户为房间房主
     @staticmethod
     def updateChatroomUid(uid):
@@ -397,3 +410,90 @@ class Mysql:
         finally:
             con.commit()
 
+    # 新建一个经纪人(1-5级,6级)
+    @staticmethod
+    def insertOnlineEarnAgent(uid, point):
+        con, cur = Mysql.conMysql()
+        sql = 'insert into xs_online_earn_agent (uid, point,create_time,update_time) values' \
+              '({}, {}, 1630577931, 1630577931)'.format(uid, point)
+        try:
+            cur.execute(sql)
+        except Exception as error:
+            con.rollback()
+            print('insert fail', error)
+        finally:
+            con.commit()
+
+    # 查询用户经纪人身份是否存在,没有就创建一个
+    @staticmethod
+    def selectOnlineEarnAgent(uid, point):
+        con, cur = Mysql.conMysql()
+        sql = 'select * from xs_online_earn_agent where uid={}'.format(uid)
+        try:
+            cur.execute(sql)
+            res = cur.fetchone()
+            if res is None:
+                Mysql.insertOnlineEarnAgent(uid, point)
+            else:
+                return 1
+        except Exception as error:
+            print(error)
+
+    # 新建一个艺人
+    @staticmethod
+    def insertOnlineEarnArtist(uid, point):
+        con, cur = Mysql.conMysql()
+        sql = 'insert into xs_online_earn_artist (uid, point,create_time,update_time) values' \
+              '({}, {}, 1630577931, 1630577931)'.format(uid, point)
+        try:
+            cur.execute(sql)
+        except Exception as error:
+            con.rollback()
+            print('insert fail', error)
+        finally:
+            con.commit()
+
+    # 查询用户艺人身份是否存在,没有就造一个
+    @staticmethod
+    def selectOnlineEarnArtist(uid, point):
+        con, cur = Mysql.conMysql()
+        sql = 'select * from xs_online_earn_artist where uid={}'.format(uid)
+        try:
+            cur.execute(sql)
+            res = cur.fetchone()
+            if res is None:
+                Mysql.insertOnlineEarnArtist(uid, point)
+            else:
+                return 1
+        except Exception as error:
+            print(error)
+
+    # 更新艺人和经纪人关联的表
+    @staticmethod
+    def updateOnlineEarnRelation(agent_uid, artist_uid):
+        con, cur = Mysql.conMysql()
+        sign_time=int(time.time())
+        end_time=sign_time + 604800
+        sql = 'update xs_online_earn_relation set agent_uid={}, artist_uid={}, sign_time={}, end_time={} ' \
+              'where id=1'.format(agent_uid, artist_uid, sign_time, end_time)
+        try:
+            cur.execute(sql)
+        except Exception as error:
+            con.rollback()
+            print('update fail', error)
+        finally:
+            con.commit()
+
+    # 网赚房间
+    @staticmethod
+    def updateXsFreshRoom():
+        con, cur = Mysql.conMysql()
+        sql = "update xs_chatroom set type='super-voice-fresh',property='business',version=737," \
+              "room_factory_type='super-voice-fresh',room_module_id=73,settlement_channel='super-voice' where rid=200000287"
+        try:
+            cur.execute(sql)
+        except Exception as error:
+            con.rollback()
+            print('update fail', error)
+        finally:
+            con.commit()
