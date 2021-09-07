@@ -104,6 +104,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectMoneySql(test_uid, money_type='money_cash'), 500)
+        Assert.assert_equal(Mysql.selectMoneySql(test_agent, money_type='money_cash'), 150)
         Assert.assert_equal(Mysql.selectAllMoneySql(test_uid), 350)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
         Consts.CASE_LIST[des] = Consts.result
