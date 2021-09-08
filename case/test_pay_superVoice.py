@@ -178,7 +178,7 @@ class TestPayCreate(unittest.TestCase):
     def test_06_SuperStarNormalRoomPay_5015(self):
         """
         用例描述：
-        tdr：普通房间内指定公会中有经纪人的艺人被打赏后收到62%的个人魅力值，经纪人收到15%个人魅力值
+        tdr：普通房间内指定公会中有经纪人的艺人被打赏后收到62%的个人魅力值，经纪人无收入
         脚本步骤：
         1.构造打赏者和被打赏者数据 （更新xs_user_money）
         2.网赚房间一对一打赏（打赏1000分）
@@ -186,7 +186,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：500（工会魅力值）
         5.检查经纪人余额，预期为：150（工会魅力值）
         """
-        des = '普通房指定工会有经纪人(1级)艺人分成50:15'
+        des = '普通房指定工会有经纪人(1级)只艺人收到62'
         Mysql.updateMoneySql(config.payUid, 1000)
         test_uid = config.super_live_role['agent_star_uid']
         test_bid = config.super_live_role['super_broker']
