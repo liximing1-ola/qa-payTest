@@ -110,7 +110,6 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
-    @unittest.skip
     def test_04_starRoomAgent_5020(self):
         """
         用例描述：
@@ -131,7 +130,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.selectOnlineEarnArtist(test_uid)
         Mysql.updateMoneySql(test_uid)
         Mysql.updateMoneySql(test_agent)
-        Mysql.updateSuperVoiceUser(test_bid, test_uid, nid=99)
+        Mysql.updateSuperVoiceUser(test_bid, test_uid, nid=98)
         Mysql.updateSuperVoiceUser(test_bid, test_agent)
         Mysql.updateOnlineEarnRelation(test_agent, test_uid)
         data = Yaml.read_yaml('Basic.yml', 'dev_superVoice_5020')
@@ -145,7 +144,6 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
-    @unittest.skip
     def test_05_starRoomNormalBroker_50(self):
         """
         用例描述：
