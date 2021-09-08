@@ -48,7 +48,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectMoneySql(test_uid, money_type='money_cash_b'), 350)
         Assert.assert_equal(Mysql.selectAllMoneySql(test_uid), 350)
-        Consts.CASE_LIST[des] = Consts.result
+        Consts.CASE_LIST_2[des] = Consts.result
 
     def test_02_starRoomSuperVoicePay_35(self):
         """
@@ -74,7 +74,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectMoneySql(test_uid, money_type='money_cash'), 350)
         Assert.assert_equal(Mysql.selectAllMoneySql(test_uid), 350)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
-        Consts.CASE_LIST[des] = Consts.result
+        Consts.CASE_LIST_2[des] = Consts.result
 
     def test_03_starRoomSuperVoicePay_5015(self):
         """
@@ -108,7 +108,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectMoneySql(test_agent, money_type='money_cash'), 150)
         Assert.assert_equal(Mysql.selectAllMoneySql(test_uid), 500)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
-        Consts.CASE_LIST[des] = Consts.result
+        Consts.CASE_LIST_2[des] = Consts.result
 
     def test_04_starRoomAgent_5020(self):
         """
@@ -142,7 +142,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectMoneySql(test_agent, money_type='money_cash'), 200)
         Assert.assert_equal(Mysql.selectAllMoneySql(test_uid), 500)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
-        Consts.CASE_LIST[des] = Consts.result
+        Consts.CASE_LIST_2[des] = Consts.result
 
     def test_05_starRoomNormalBroker_50(self):
         """
@@ -173,4 +173,4 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectMoneySql(test_agent, money_type='money_cash'), 200)
         Assert.assert_equal(Mysql.selectAllMoneySql(test_uid), 500)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
-        Consts.CASE_LIST[des] = Consts.result
+        Consts.CASE_LIST_2[des] = Consts.result

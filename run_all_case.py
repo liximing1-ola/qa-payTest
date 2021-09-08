@@ -34,12 +34,17 @@ def main():
             .format(test_result.testsRun, len(test_result.failures), len(test_result.errors))
         Logs.get_log('caseResult.log').info(des)
         case_list=method.dictToList(Consts.CASE_LIST)
+        case_list_2=method.dictToList(Consts.CASE_LIST_2)
         use_time=str(int(Consts.endTime-Consts.startTime)) + 's'
         if len(test_result.failures) == 0 and len(test_result.errors) == 0:
-            des = "{}\n用例总数: {}, 失败数: {}, 执行时间: {}, 分支：{}" \
+            des = "{}\n用例数: {}, 失败数: {}, 执行时间: {}, 分支：{}" \
                 .format(case_list, test_result.testsRun, len(test_result.failures) + len(test_result.errors), use_time, Config.config.bb_test['bb_git_branch'])
-            time.sleep(0.5)
+            des_2 = "{}\n用例数: {}, 失败数: {}, 执行时间: {}, 分支：{}" \
+                .format(case_list_2, test_result.testsRun, len(test_result.failures) + len(test_result.errors), use_time, Config.config.bb_test['bb_git_branch'])
+            time.sleep(0.3)
             robot('markdown', des)
+            time.sleep(0.3)
+            robot('markdown', des_2)
         elif len(test_result.failures) >= 1:
             Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
             time.sleep(1)

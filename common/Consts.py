@@ -1,8 +1,10 @@
 """
 全局变量
 """
-# 用例名称字典
+# 用例名称字典1
 CASE_LIST = {}
+# 用例名称字典2
+CASE_LIST_2 = {}
 # 失败结果列表
 fail_case_reason = []
 # pass
