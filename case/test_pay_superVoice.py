@@ -76,6 +76,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
+    @unittest.skip
     def test_03_starRoomSuperVoicePay_5015(self):
         """
         用例描述：
@@ -110,6 +111,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
+    @unittest.skip
     def test_04_starRoomAgent_5020(self):
         """
         用例描述：
@@ -144,6 +146,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
+    @unittest.skip
     def test_05_starRoomNormalBroker_50(self):
         """
         用例描述：
