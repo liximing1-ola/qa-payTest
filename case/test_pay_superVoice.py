@@ -174,3 +174,38 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectAllMoneySql(test_uid), 500)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
+
+    def test_06_SuperStarNormalRoomPay_5015(self):
+        """
+        用例描述：
+        tdr：普通房间内指定公会中有经纪人的艺人被打赏后收到62%的个人魅力值，经纪人收到15%个人魅力值
+        脚本步骤：
+        1.构造打赏者和被打赏者数据 （更新xs_user_money）
+        2.网赚房间一对一打赏（打赏1000分）
+        3.校验【status code】和返回值【body】状态
+        4.检查被打赏者余额，预期为：500（工会魅力值）
+        5.检查经纪人余额，预期为：150（工会魅力值）
+        """
+        des = '普通房指定工会有经纪人(1级)艺人分成50:15'
+        Mysql.updateMoneySql(config.payUid, 1000)
+        test_uid = config.super_live_role['agent_star_uid']
+        test_bid = config.super_live_role['super_broker']
+        test_agent = config.super_live_role['super_agent_uid']
+        Mysql.selectOnlineEarnAgent(test_agent)
+        Mysql.selectOnlineEarnArtist(test_uid)
+        Mysql.updateMoneySql(test_uid)
+        Mysql.updateMoneySql(test_agent)
+        Mysql.updateSuperVoiceUser(test_bid, test_uid, nid=98)
+        Mysql.updateSuperVoiceUser(test_bid, test_agent)
+        Mysql.updateOnlineEarnRelation(test_agent, test_uid)
+        data = Yaml.read_yaml('Basic.yml', 'dev_normalRoom_6215')
+        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
+        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
+        Assert.assert_code(res['code'], 200)
+        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_equal(Mysql.selectMoneySql(test_uid, money_type='money_cash_b'), 620)
+        Assert.assert_equal(Mysql.selectMoneySql(test_agent, money_type='money_cash_b'), 150)
+        Assert.assert_equal(Mysql.selectAllMoneySql(test_uid), 620)
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
+        Consts.CASE_LIST_2[des] = Consts.result
+
