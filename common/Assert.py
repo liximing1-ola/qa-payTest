@@ -14,7 +14,7 @@ def assert_code(actual_code, expected_code):
         assert actual_code == expected_code
         return True
     except:
-        reason = '实际结果: {}, 预期结果: {}, 对比结果不一致，fail，望严查!'.format(actual_code, expected_code)
+        reason = '实际Code: {}, 预期Code: {}, 对比结果不一致，fail，望严查!'.format(actual_code, expected_code)
         Consts.fail_case_reason.append(reason)
         raise
 
