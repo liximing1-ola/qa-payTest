@@ -141,7 +141,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectMoneySql(test_uid, money_type='money_cash'), 500)
         Assert.assert_equal(Mysql.selectMoneySql(test_agent, money_type='money_cash'), 200)
         Assert.assert_equal(Mysql.selectAllMoneySql(test_uid), 500)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 1)
         Consts.CASE_LIST_2[des] = Consts.result
 
     def test_05_starRoomNormalBroker_50(self):
