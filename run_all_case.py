@@ -47,10 +47,10 @@ def main():
         elif len(test_result.failures) >= 1:
             Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
             time.sleep(0.5)
-            print(Consts.fail_case_reason)
+            print(set(Consts.fail_case_reason))
             robot('success', des)
             for case, reason in test_result.failures:
-                robot('fail', set(Consts.fail_case_reason), title=case.id())
+                robot('fail', Consts.fail_case_reason[0], title=case.id())
                 break
         elif len(test_result.errors) >= 1:
             Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
