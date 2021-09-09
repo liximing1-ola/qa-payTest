@@ -16,7 +16,7 @@ def all_case():
     testcase = unittest.TestSuite()
     # 指定待执行用例的目录
     discover = unittest.defaultTestLoader.discover(case_dir['bb_dir'],
-                                                   pattern="test_*",
+                                                   pattern="test_pay_superVoice.py",
                                                    top_level_dir=None)
     testcase.addTests(discover)
     return testcase
@@ -37,17 +37,16 @@ def main():
         case_list_2=method.dictToList(Consts.CASE_LIST_2)
         use_time=str(int(Consts.endTime-Consts.startTime)) + 's'
         if len(test_result.failures) == 0 and len(test_result.errors) == 0:
-            des = "{}\n" \
-                .format(case_list)
-            des_2 = "{}\n用例数: {}, 失败数: {}, 执行时间: {}, 分支：{}" \
-                .format(case_list_2, test_result.testsRun, len(test_result.failures) + len(test_result.errors), use_time, Config.config.bb_test['bb_git_branch'])
-            time.sleep(0.3)
+            des = "{}\n".format(case_list)
+            des_2 = "{}\n用例数: {}, 失败数: {}, 执行时间: {}, 分支：{}".format(case_list_2, test_result.testsRun,
+                                                                   len(test_result.failures) + len(test_result.errors),
+                                                                   use_time, Config.config.bb_test['bb_git_branch'])
             robot('markdown', des)
             time.sleep(0.3)
             robot('markdown', des_2)
         elif len(test_result.failures) >= 1:
             Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
-            time.sleep(1)
+            time.sleep(0.5)
             robot('success', des)
             for case, reason in test_result.failures:
                 robot('fail', set(Consts.fail_case_reason), title=case.id())

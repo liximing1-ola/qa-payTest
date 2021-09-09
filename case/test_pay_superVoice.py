@@ -87,7 +87,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：500（工会魅力值）
         5.检查经纪人余额，预期为：150（工会魅力值）
         """
-        des = '网赚房指定工会有经纪人(1级)艺人分成50:15'
+        des = '网赚房指定工会有经纪人(1j)艺人分成50:15'
         Mysql.updateMoneySql(config.payUid, 1000)
         test_uid = config.super_live_role['agent_star_uid']
         test_bid = config.super_live_role['super_broker']
@@ -121,7 +121,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：500
         5.检查经纪人余额，预期为：200
         """
-        des = '网赚房指定工会有经纪人(7级)的艺人分成50:15'
+        des = '网赚房指定工会有经纪人(7j)的艺人分成50:15'
         Mysql.updateMoneySql(config.payUid, 1000)
         test_uid = config.super_live_role['agent_star_uid']
         test_bid = config.super_live_role['super_broker']
@@ -172,7 +172,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectMoneySql(test_uid, money_type='money_cash_b'), 500)
         Assert.assert_equal(Mysql.selectMoneySql(test_agent, money_type='money_cash'), 200)
         Assert.assert_equal(Mysql.selectAllMoneySql(test_uid), 500)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 1)
         Consts.CASE_LIST_2[des] = Consts.result
 
     def test_06_SuperStarNormalRoomPay_5015(self):
@@ -186,7 +186,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：500（工会魅力值）
         5.检查经纪人余额，预期为：150（工会魅力值）
         """
-        des = '普通房指定工会有经纪人(1级)只艺人收到62'
+        des = '普通房指定工会有经纪人(1j)只艺人收到62'
         Mysql.updateMoneySql(config.payUid, 1000)
         test_uid = config.super_live_role['agent_star_uid']
         test_bid = config.super_live_role['super_broker']
@@ -206,5 +206,5 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectMoneySql(test_uid, money_type='money_cash_b'), 620)
         Assert.assert_equal(Mysql.selectMoneySql(test_agent, money_type='money_cash_b'), 0)
         Assert.assert_equal(Mysql.selectAllMoneySql(test_uid), 620)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 1)
         Consts.CASE_LIST_2[des] = Consts.result
