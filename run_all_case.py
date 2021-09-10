@@ -57,7 +57,7 @@ def main():
                 robot('fail', reason, case.id())
                 break
     else:
-        Logs.get_log('runCode.log').info('Fail')
+        Logs.get_log('runCode.log').info('NoRun')
 
 
 if __name__ == "__main__":
