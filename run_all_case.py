@@ -6,7 +6,6 @@ from autoGitPull import autoGitPull, writeUpdateTime
 from Robot import robot
 from common import Consts
 from common import Config
-import random
 def all_case():
     # win 路径
     # case_dir = os.path.join(os.getcwd(), "Case")
@@ -42,11 +41,11 @@ def main():
                                                                    len(test_result.failures) + len(test_result.errors),
                                                                    use_time, Config.config.bb_test['bb_git_branch'])
             robot('markdown', des)
-            time.sleep(0.3)
+            time.sleep(0.1)
             robot('markdown', des_2)
         elif len(test_result.failures) >= 1:
             Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
-            time.sleep(0.5)
+            time.sleep(0.2)
             print(set(Consts.fail_case_reason))
             robot('success', des)
             for case, reason in test_result.failures:

@@ -37,7 +37,7 @@ class TestPayCreate(unittest.TestCase):
         3.校验【status code】和返回值【body】状态
         4.检查被打赏者余额，预期为：350(个人魅力值)
         """
-        des = '网赚房无公会无经纪人艺人收35个人魅力值'
+        des = '网赚房无公会无经纪人艺人收35%个人魅力值'
         Mysql.updateMoneySql(config.payUid, 1000)
         test_uid=config.super_live_role['testUid']
         Mysql.updateMoneySql(test_uid)
@@ -60,7 +60,7 @@ class TestPayCreate(unittest.TestCase):
         3.校验【status code】和返回值【body】状态
         4.检查被打赏者余额，预期为：350（公会魅力值）
         """
-        des = '网赚房指定工会无经纪人艺人收35工会魅力值'
+        des = '网赚房指定工会无经纪人艺人收35%工会魅力值'
         Mysql.updateMoneySql(config.payUid, 1000)
         test_uid = config.super_live_role['super_star_uid']
         test_bid = config.super_live_role['super_broker']
@@ -121,7 +121,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：500
         5.检查经纪人余额，预期为：200
         """
-        des = '网赚房指定工会有经纪人(7j)的艺人分成50:15'
+        des = '网赚房指定工会有经纪人(7j)的艺人分成50:20'
         Mysql.updateMoneySql(config.payUid, 1000)
         test_uid = config.super_live_role['agent_star_uid']
         test_bid = config.super_live_role['super_broker']
@@ -154,7 +154,7 @@ class TestPayCreate(unittest.TestCase):
         3.校验【status code】和返回值【body】状态
         4.检查被打赏者余额，预期为：500
         """
-        des = '网赚房普通工会有经纪人(7j)艺人'
+        des = '网赚房普通工会有经纪人(7j)艺人分成50(个人):20(工会)'
         Mysql.updateMoneySql(config.payUid, 1000)
         test_uid = config.super_live_role['pack_cal_uid']
         test_bid = config.super_live_role['super_broker']
@@ -186,7 +186,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：500（工会魅力值）
         5.检查经纪人余额，预期为：150（工会魅力值）
         """
-        des = '普通房指定工会有经纪人(1j)只艺人收到62'
+        des = '普通房指定工会有经纪人(1j)只艺人收到62%'
         Mysql.updateMoneySql(config.payUid, 1000)
         test_uid = config.super_live_role['agent_star_uid']
         test_bid = config.super_live_role['super_broker']
