@@ -70,7 +70,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：0
         5.检查打赏者余额,预期为：3000
         """
-        des = '使用未激活券的场景'
+        des = '打赏礼物使用未激活券的场景'
         gift_cid = 54  # 老司机
         Mysql.deleteUserCommoditySql(config.payUid)
         Mysql.insertXsUserCommodity(config.payUid, gift_cid, 1)
@@ -101,7 +101,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：3000 * 0.62 = 1860
         5.检查打赏者余额,预期为：3000 -2500 = 500
         """
-        des = '打赏已激活券场景'
+        des = '打赏礼物时有激活券的场景'
         gift_cid = 54  # 老司机
         Mysql.deleteUserCommoditySql(config.payUid)
         Mysql.insertXsUserCommodity(config.payUid, gift_cid, 1, 1)
@@ -132,7 +132,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查打赏者余额,预期为：12000-10800=1200
         5.检查被打赏者余额，预期为：600*6*0.7=2520
         """
-        des = '打赏多人场景'
+        des = '房间内打赏多人场景'
         Mysql.updateMoneySql(config.payUid, 3000, 3000, 3000, 3000)
         Mysql.updateMoneySql(config.testUid_2)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_more')
