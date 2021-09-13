@@ -5,14 +5,14 @@ class config:
     BASE_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     #  release域名
     domain_host = {'bb_dev_58': 'https://dev.iambanban.com/', 'pt': 'https://test.overseaban.com/', }
-    # 伴伴
+    # 标准配置
     bb_test = {
         'payUid': 103273407,  # god
         'testUid': 105002312,  # 非一代宗师
         'pack_cal_uid': 105002313,  # 打包结算签约主播
         'bb_git_branch': 'release-for-vpc'  # 线上代码分支
     }
-    # 角色配置
+    # 直播间角色配置
     live_role = {
         'pack_ceo': 105002314,  # 直播公会公会长
         'pack_master_NoPack': 105002319,  # 非公会一代宗师主播
@@ -22,6 +22,7 @@ class config:
         'auto_rid': 193185484,  # 商业8坑位房间
         'cp_link_rid': 193185538  # 商业连连看房间
     }
+    # 网赚房角色配置
     super_live_role = {
         'testUid': 105002312,  # 非公会用户
         'auto_rid': 193185484,  # 商业8坑位房间

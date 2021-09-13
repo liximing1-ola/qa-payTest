@@ -14,23 +14,7 @@ def assert_code(actual_code, expected_code):
         assert actual_code == expected_code
         return True
     except:
-        reason = '实际Code: {}, 预期Code: {}, 对比结果不一致，fail，望严查!'.format(actual_code, expected_code)
-        Consts.fail_case_reason.append(reason)
-        raise
-
-def assert_body(body, body_msg, expected_msg, reason):
-    """
-    验证response状态码
-    :param body: 返回值
-    :param body_msg: 参数
-    :param expected_msg: 预期结果
-    :param reason: 原因
-    """
-    try:
-        msg = body[body_msg]
-        assert msg == expected_msg
-        return True
-    except:
+        reason = 'Actual Code: {}, Expected Code: {}, 对比结果不一致，望严查!'.format(actual_code, expected_code)
         Consts.fail_case_reason.append(reason)
         raise
 
@@ -71,6 +55,22 @@ def assert_in_text(body, expected_msg):
         return True
     except:
         Consts.fail_case_reason.append('fail')
+        raise
+
+def assert_body(body, body_msg, expected_msg, reason):
+    """
+    验证response状态码
+    :param body: 返回值
+    :param body_msg: 参数
+    :param expected_msg: 预期结果
+    :param reason: 原因
+    """
+    try:
+        msg = body[body_msg]
+        assert msg == expected_msg
+        return True
+    except:
+        Consts.fail_case_reason.append(reason)
         raise
 
 

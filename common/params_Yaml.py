@@ -20,7 +20,8 @@ class Yaml:
             if checkBranch('master'):
                 yaml_data = yaml.load(open(yaml_path, 'r', encoding='utf-8'))
             else:
-                yaml_data = yaml.load(open(yaml_path, 'r', encoding='utf-8'), Loader=yaml.FullLoader)  # 添加后不会报warnig
+                yaml_data = yaml.load(open(yaml_path, 'r', encoding='utf-8'), Loader=yaml.FullLoader)  # 添加后不会报warning
+
             if yaml_data[yaml_name] is None:
                 return TypeError
             else:
@@ -30,5 +31,5 @@ class Yaml:
 
 
 if __name__ == '__main__':
-    y = Yaml.read_yaml('Basic_pt.yml', 'pt_shop_moreBox')
+    y = Yaml.read_yaml('Basic.yml', 'dev_normalRoom_6215')
     print(y)
