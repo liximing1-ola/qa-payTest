@@ -372,7 +372,7 @@ class Mysql:
     @staticmethod
     def selectUserXsBroker(bid):
         con, cur = Mysql.conMysql()
-        sql = 'select * from xs_broker where bid={} and creater={}'.format(bid, bid)
+        sql = 'select * from xs_broker where bid={}'.format(bid)
         try:
             cur.execute(sql)
             res = cur.fetchone()
