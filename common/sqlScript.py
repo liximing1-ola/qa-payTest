@@ -355,6 +355,19 @@ class Mysql:
         finally:
             con.commit()
 
+    # 更新工会数据
+    @staticmethod
+    def updateUserXsBroker(bid):
+        con, cur = Mysql.conMysql()
+        sql = 'update xs_broker set creater={} where bid={}'.format(bid, bid)
+        try:
+            cur.execute(sql)
+        except Exception as error:
+            con.rollback()
+            print('update fail', error)
+        finally:
+            con.commit()
+
     # 查询工会是否存在
     @staticmethod
     def selectUserXsBroker(bid):
@@ -366,7 +379,7 @@ class Mysql:
             if res is None:
                 Mysql.insertUserXsBroker(bid)
             else:
-                return 1
+                Mysql.updateUserXsBroker(bid)
         except Exception as error:
             print(error)
 
