@@ -9,10 +9,10 @@ def conMysql():
                  "ali_db": 'rm-bp1nfl3dp096d5o39.mysql.rds.aliyuncs.com',
                  "ali_user": 'super',
                  "ali_pas": 'dev123456'}
-    con = pymysql.connect(host=db_config['ali_db'],
+    con = pymysql.connect(host=db_config['dev_46_db'],
                           port=3306,
-                          user=db_config['ali_user'],
-                          passwd=db_config['ali_pas'],
+                          user=db_config['dev_46_user'],
+                          passwd=db_config['dev_46_pas'],
                           charset='utf8')
     con.select_db('xianshi')
     cursor = con.cursor()
