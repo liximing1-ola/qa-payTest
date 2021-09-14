@@ -43,6 +43,17 @@ def insertUserXsBroker(bid):
     finally:
         con.commit()
 
+def updateUserXsBroker(bid):
+    con, cur = conMysql()
+    sql = 'update xs_broker set creater={} where bid={}'.format(bid, bid)
+    try:
+        cur.execute(sql)
+    except Exception as error:
+        con.rollback()
+        print('update fail', error)
+    finally:
+        con.commit()
+
 
 def selectUserXsBroker(bid):
     con, cur = conMysql()
@@ -50,14 +61,14 @@ def selectUserXsBroker(bid):
     try:
         cur.execute(sql)
         res = cur.fetchone()
+        print(res)
         if res is None:
             insertUserXsBroker(bid)
         else:
-            return 1
+            updateUserXsBroker(bid)
     except Exception as error:
         print(error)
 
 
 if __name__ == '__main__':
-    tt=time.time()
-    print(int(tt))
+    selectUserXsBroker(105002314)
