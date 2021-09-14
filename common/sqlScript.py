@@ -376,6 +376,7 @@ class Mysql:
         try:
             cur.execute(sql)
             res = cur.fetchone()
+            print(res)
             if res is None:
                 Mysql.insertUserXsBroker(bid)
             else:
