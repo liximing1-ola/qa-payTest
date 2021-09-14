@@ -15,7 +15,7 @@ def all_case():
     testcase = unittest.TestSuite()
     # 指定待执行用例的目录
     discover = unittest.defaultTestLoader.discover(case_dir['bb_dir'],
-                                                   pattern="test_*",
+                                                   pattern="test_pay_livePackage.py",
                                                    top_level_dir=None)
     testcase.addTests(discover)
     return testcase
