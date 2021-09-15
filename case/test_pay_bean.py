@@ -30,10 +30,10 @@ class TestPayCreate(unittest.TestCase):
         用例描述：
         验证账户内金豆不足时打赏金豆礼物的场景
         脚本步骤：
-        1.构造打赏者和被打赏者数据 （更新xs_user_money_extend）
+        1.构造打赏者和被打赏者数据（更新xs_user_money_extend）
         2.房间内打赏金豆礼物
         3.校验【status code】和返回值【body】状态
-        4.检查预期返回msg，预期：支付失败，提示Toast
+        4.检查预期返回msg，预期：Toast提示 '金豆不足'
         5.检查被打赏者金豆余额,预期：0
         """
         des = '打赏金豆礼物但金豆不足的场景'
@@ -57,7 +57,7 @@ class TestPayCreate(unittest.TestCase):
         用例描述：
         验证打赏金豆礼物的场景（金豆足够）
         脚本步骤：
-        1.构造打赏者和被打赏者数据 （更新xs_user_money_extend）
+        1.构造打赏者和被打赏者数据（更新xs_user_money_extend）
         2.房间内打赏金豆礼物
         3.校验【status code】和返回值【body】状态
         4.检查被打赏者金豆余额，预期为：0

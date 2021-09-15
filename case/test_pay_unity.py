@@ -21,7 +21,7 @@ class TestPayCreate(unittest.TestCase):
     def test_01_unityGameBugPayChange(self):
         """
         用例描述：
-        验证unity游戏内购买
+        验证unity游戏内道具购买
         脚本步骤：
         1.构造用户数据（更新xs_user_money）
         2.购买流程

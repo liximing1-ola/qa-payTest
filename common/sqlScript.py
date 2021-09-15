@@ -424,7 +424,7 @@ class Mysql:
         finally:
             con.commit()
 
-    # 新建一个经纪人(1-5级,6级)
+    # 新建一个经纪人(1-5级/6级)
     @staticmethod
     def insertOnlineEarnAgent(uid, point):
         con, cur = Mysql.conMysql()

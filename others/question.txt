@@ -6,9 +6,9 @@ git checkout -b release-for-vpc origin/release-for-vpc
 git pull
 # 修改config_dev.php文件
 # 修改env.php文件
-# 以上文件在/home/banban-1路径下有备份
+# 以上文件在/home/banban-1/payTest/others路径下有备份
 
-#  Step2 重启服务器后：
+# Step2 重启服务器后：
 service php7.2-fpm restart
 redis-server  /etc/redis/redis-6378.conf
 
