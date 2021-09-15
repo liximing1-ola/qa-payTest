@@ -1,7 +1,7 @@
 # coding=utf-8
 import unittest
 import time
-from common import Logs, method
+from common import Logs
 from Robot import robot
 from common import Consts
 from common import Config
@@ -25,11 +25,10 @@ def main():
     elif len(test_result.failures) >= 1:
         Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
         time.sleep(0.5)
-        print(set(Consts.fail_case_reason))
         robot('success', des)
         for case, reason in test_result.failures:
             print(case, reason)
-            robot('icon', Consts.fail_case_reason, title=case.id())
+            robot('icon', Consts.fail_case_reason, title=case.id(), bot='test')
 
 
 if __name__ == "__main__":
