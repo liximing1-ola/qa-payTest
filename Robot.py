@@ -47,7 +47,7 @@ def robot(mode, reason, title='', bot='BB'):
 
     elif mode == 'icon':
         now = time.strftime('%Y-%m-%d %H:%M', time.localtime(time.time()))
-        title = "{}, 执行异常，请检查下线上情况！".format(now)
+        title = "{}, Execution is abnormal. Please check the offline status!".format(now)
         des = reason
         icon = getImage(mode=1)
         data = {
