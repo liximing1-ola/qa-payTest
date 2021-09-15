@@ -17,11 +17,10 @@ def main():
     des = "定时任务执行数: {}, 失败用例数: {}, 异常用例数: {}".format(test_result.testsRun, len(test_result.failures), len(test_result.errors))
     Logs.get_log('caseResult_2.log').info(des)
     case_list=method.dictToList(Consts.CASE_LIST)
-    use_time=str(int(Consts.endTime-Consts.startTime)) + 's'
     if len(test_result.failures) == 0 and len(test_result.errors) == 0:
-        des = "{}\n用例数: {}, 失败数: {}, 执行时间: {}, 执行分支：{}".format(case_list, test_result.testsRun,
+        des = "{}\n用例数: {}, 失败数: {}, 执行分支：{}".format(case_list, test_result.testsRun,
                                                                        len(test_result.failures) + len(test_result.errors),
-                                                                       use_time, Config.config.bb_test['bb_git_branch'])
+                                                                       Config.config.bb_test['bb_git_branch'])
         robot('markdown', des, bot='test')
     elif len(test_result.failures) >= 1:
         Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
