@@ -46,8 +46,8 @@ def robot(mode, reason, title='', bot='BB'):
         requests.post(url, headers=headers, json=data)
 
     elif mode == 'icon':
-        now = time.strftime('%Y-%m-%d %H:%M', time.localtime(time.time()))
-        title = "{}, Execution is abnormal. Please check the offline status!".format(now)
+        now = time.strftime('%m-%d %H:%M', time.localtime(time.time()))
+        title = "{}, Execution is abnormal.Please check the status!".format(now)
         des = reason
         icon = getImage(mode=1)
         data = {
