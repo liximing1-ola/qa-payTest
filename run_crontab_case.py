@@ -30,11 +30,6 @@ def main():
         for case, reason in test_result.failures:
             print(case, reason)
             robot('icon', Consts.fail_case_reason, title=case.id())
-    elif len(test_result.errors) >= 1:
-        Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
-        for case, reason in test_result.errors:
-            print(case, reason)
-            robot('icon', reason, case.id())
 
 
 if __name__ == "__main__":
