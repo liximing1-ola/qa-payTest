@@ -29,11 +29,11 @@ def main():
         print(set(Consts.fail_case_reason))
         robot('success', des)
         for case, reason in test_result.failures:
-            robot('icon', set(Consts.fail_case_reason), title=case.id())
+            robot('icon', set(Consts.fail_case_reason), title=case.id(), bot='test')
     elif len(test_result.errors) >= 1:
         Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
         for case, reason in test_result.errors:
-            robot('icon', reason, case.id())
+            robot('icon', reason, case.id(), bot='test')
 
 
 if __name__ == "__main__":
