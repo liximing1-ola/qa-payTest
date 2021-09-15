@@ -18,7 +18,7 @@ def main():
     Logs.get_log('caseResult_2.log').info(des)
     now = time.strftime('%Y/%m/%d-%H:%M', time.localtime(time.time()))
     if len(test_result.failures) == 0 and len(test_result.errors) == 0:
-        des = "时间：{}，用例数: {}, 失败数: {}, 分支：{}".format(now, test_result.testsRun,
+        des = "时间：{}, 用例数: {}, 失败数: {}, 分支：{}".format(now, test_result.testsRun,
                                                                        len(test_result.failures) + len(test_result.errors),
                                                                        Config.config.bb_test['bb_git_branch'])
         robot('markdown', des, bot='test')
