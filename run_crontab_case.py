@@ -14,7 +14,7 @@ def all_case():
 
 def main():
     test_result = unittest.TextTestRunner(verbosity=3).run(all_case())
-    des = "定时脚本执行数: {}, 失败用例数: {}, 异常用例数: {}".format(test_result.testsRun, len(test_result.failures), len(test_result.errors))
+    des = "定时任务执行数: {}, 失败用例数: {}, 异常用例数: {}".format(test_result.testsRun, len(test_result.failures), len(test_result.errors))
     Logs.get_log('caseResult_2.log').info(des)
     case_list=method.dictToList(Consts.CASE_LIST)
     use_time=str(int(Consts.endTime-Consts.startTime)) + 's'
@@ -29,10 +29,12 @@ def main():
         print(set(Consts.fail_case_reason))
         robot('success', des)
         for case, reason in test_result.failures:
-            robot('icon', set(Consts.fail_case_reason), title=case.id(), bot='test')
+            print(case, reason)
+            robot('icon', Consts.fail_case_reason, title=case.id(), bot='test')
     elif len(test_result.errors) >= 1:
         Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
         for case, reason in test_result.errors:
+            print(case, reason)
             robot('icon', reason, case.id(), bot='test')
 
 
