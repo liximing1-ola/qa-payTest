@@ -3,7 +3,6 @@ import unittest
 import time
 from common import Logs
 from Robot import robot
-from common import Consts
 from common import Config
 def all_case():
     case_dir = '/home/banban-1/payTest/case'
@@ -25,12 +24,11 @@ def main():
     elif len(test_result.failures) >= 1:
         Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
         for case, reason in test_result.failures:
-            print(case.id().split('.'))
-            robot('icon', case.id(), bot='test')
+            robot('icon', case.id().split('.')[2], bot='test')
     elif len(test_result.errors) >= 1:
         Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
         for case, reason in test_result.errors:
-            robot('icon', case.id(), bot='test')
+            robot('icon', case.id().split('.')[2], bot='test')
 
 
 if __name__ == "__main__":
