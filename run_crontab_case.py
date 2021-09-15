@@ -30,6 +30,7 @@ def main():
     elif len(test_result.errors) >= 1:
         Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
         for case, reason in test_result.errors:
+            print(Consts.fail_case_reason)
             robot('icon', Consts.fail_case_reason, title=case.id(), bot='test')
 
 
