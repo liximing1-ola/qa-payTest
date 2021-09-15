@@ -14,7 +14,7 @@ def all_case():
 
 def main():
     test_result = unittest.TextTestRunner(verbosity=3).run(all_case())
-    des = "用例总数: {}, 失败用例数: {}, 异常用例数: {}".format(test_result.testsRun, len(test_result.failures), len(test_result.errors))
+    des = "定时脚本执行数: {}, 失败用例数: {}, 异常用例数: {}".format(test_result.testsRun, len(test_result.failures), len(test_result.errors))
     Logs.get_log('caseResult_2.log').info(des)
     case_list=method.dictToList(Consts.CASE_LIST)
     use_time=str(int(Consts.endTime-Consts.startTime)) + 's'
