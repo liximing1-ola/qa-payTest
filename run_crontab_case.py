@@ -25,7 +25,7 @@ def main():
     elif len(test_result.failures) >= 1:
         Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
         for case, reason in test_result.failures:
-            print(case.id().strip('.'))
+            print(case.id().split('.'))
             robot('icon', case.id(), bot='test')
     elif len(test_result.errors) >= 1:
         Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
