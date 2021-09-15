@@ -25,15 +25,15 @@ def main():
         robot('markdown', des, bot='test')
     elif len(test_result.failures) >= 1:
         Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
-        time.sleep(0.2)
+        time.sleep(0.5)
         print(set(Consts.fail_case_reason))
         robot('success', des)
         for case, reason in test_result.failures:
-            robot('fail', set(Consts.fail_case_reason), title=case.id())
+            robot('icon', set(Consts.fail_case_reason), title=case.id())
     elif len(test_result.errors) >= 1:
         Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
         for case, reason in test_result.errors:
-            robot('fail', reason, case.id())
+            robot('icon', reason, case.id())
 
 
 if __name__ == "__main__":

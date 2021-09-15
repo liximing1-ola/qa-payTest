@@ -64,14 +64,14 @@ def robot(mode, reason, title='', bot='BB'):
             }
         }
         r = requests.post(url, headers=headers, json=data)
-        # if r.status_code == 200 and r.text.find('ok'):
-        #    data = {
-        #        "msgtype": "text",
-        #        "text": {
-        #            "mentioned_mobile_list": ["@all"]
-        #        }
-        #    }
-        #    requests.post(url, headers=headers, json=data)
+        if r.status_code == 200 and r.text.find('ok'):
+            data = {
+                "msgtype": "text",
+                "text": {
+                    "mentioned_mobile_list": ["@all"]
+                }
+            }
+        requests.post(url, headers=headers, json=data)
 
     else:
         print('robot over gg')
