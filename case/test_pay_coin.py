@@ -48,7 +48,6 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(config.testUid_2)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_coins')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        print(res)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
