@@ -204,11 +204,3 @@ dev_pay_defend:
     'money': '52000',
     'params': '{"defend":1,"to":105002312,"cid":0,"duction_money":0,"unified_relation_version":1,"useCoin":-1}' }
 
-# @
-# 金币兑换
-dev_pay_coin:
-  { 'platform': 'available',
-    'type': 'exchange_gold',
-    'money': '600',
-    'params': '{"type":"exchange_gold"}' }
-
