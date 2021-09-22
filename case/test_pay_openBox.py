@@ -31,7 +31,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.insertXsUserCommodity(config.payUid, 2, 1)
         Mysql.insertXsUserBox(9, config.payUid, 'copper')
         Mysql.updateMoneySql(config.payUid, 400, 100, 100, 100)
-        data = basicData.encodeData(payType='shop-pay', money=600, num=1, boxType='copper')
+        data = basicData.encodeData(payType='shop-buy', money=600, num=1, boxType='copper')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
