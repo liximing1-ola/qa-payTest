@@ -27,7 +27,7 @@ def main():
         # runner = HTMLTestRunner(stream=fp, title=u"测试报告", description=u"用例测试情况")
         # test_result = runner.run(all_case())
         lock = threading.Lock()
-        lock.acquire(blocking=True, timeout=1)  # 加
+        lock.acquire(blocking=False)  # 加
         test_result = unittest.TextTestRunner(verbosity=3).run(all_case())
         writeUpdateTime(str(int(time.time())))
         des = "用例总数: {}, 失败用例数: {}, 异常用例数: {}" \
