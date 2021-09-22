@@ -217,11 +217,3 @@ dev_pay_coin:
     'money': '600',
     'params': '{"type":"exchange_gold"}' }
 
-# @
-# unity道具购买
-dev_pay_unityGame:
-  { 'platform': 'available',
-    'type': 'unity-game-buy',
-    'money': '100',
-    'params': '{"amount":1,"app_ver":"1.0.0","c_id":10001,"c_name":"棋子皮肤","c_num":1,"game_type":"Ludo","money_type":"diamond","rid":105707946}'}
-

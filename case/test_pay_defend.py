@@ -3,7 +3,7 @@ from common import Request
 from common.params_Yaml import Yaml
 from common.sqlScript import Mysql
 import unittest
-from common import Consts, Assert, newData
+from common import Consts, Assert, basicData
 from common.runFailed import Retry
 @Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
@@ -27,7 +27,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(config.payUid, 52000)
         Mysql.updateMoneySql(config.testUid)
         # data = Yaml.read_yaml('Basic.yml', 'dev_pay_defend')
-        data = newData.encodeData(payType='defend', money=52000, uid=config.testUid)
+        data = basicData.encodeData(payType='defend', money=52000, uid=config.testUid)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
