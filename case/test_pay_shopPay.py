@@ -1,10 +1,9 @@
 from common.Config import config
-from common import Request
 from common.params_Yaml import Yaml
 from common.sqlScript import Mysql
 import unittest
 import pytest
-from common import Consts, Assert
+from common import Consts, Assert, Request, basicData
 from common.runFailed import Retry
 @Retry
 class TestPayCreate(unittest.TestCase):
@@ -28,7 +27,8 @@ class TestPayCreate(unittest.TestCase):
         des = '商城购买单个道具场景'
         Mysql.updateMoneySql(config.payUid, 0, 100, 100, 0)
         Mysql.deleteUserCommoditySql(config.payUid)
-        data = Yaml.read_yaml('Basic.yml', 'dev_pay_shop')
+        # data = Yaml.read_yaml('Basic.yml', 'dev_pay_shop')
+        data = basicData.encodeData(payType='shop-buy', money=100, cid=329, boxType='')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)

@@ -1,10 +1,8 @@
 from common.Config import config
-from common import Request
 from common.params_Yaml import Yaml
 from common.sqlScript import Mysql
 import unittest
-from common import Consts
-from common import Assert
+from common import Assert, Consts, Request, basicData
 from common.runFailed import Retry
 @Retry
 class TestPayCreate(unittest.TestCase):
@@ -33,7 +31,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.insertXsUserCommodity(config.payUid, 2, 1)
         Mysql.insertXsUserBox(9, config.payUid, 'copper')
         Mysql.updateMoneySql(config.payUid, 400, 100, 100, 100)
-        data = Yaml.read_yaml('Basic.yml', 'dev_shop_box')
+        data = basicData.encodeData(payType='shop-pay', money=600, num=1, boxType='copper')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
@@ -63,7 +61,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.insertXsUserCommodity(config.payUid, 3, 6)
         Mysql.insertXsUserBox(9, config.payUid, 'silver')
         Mysql.updateMoneySql(config.payUid, 12600)
-        data = Yaml.read_yaml('Basic.yml', 'dev_shop_moreBox')
+        data = basicData.encodeData(payType='shop-buy', money=2100, num=6, cid=6, boxType='silver')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)

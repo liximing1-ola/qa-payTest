@@ -1,12 +1,12 @@
 import urllib.parse
 
 def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, giftId=7, giftType='normal',
-               cid=5, boxType='copper'):
+               cid=5, boxType='copper', num=1):
 
     if payType=='packages':
         data = {
             "platform": "available",
-            "type": "{}".format(payType),
+            "type": "packages",
             "money": money,
             "params":
                 {"rid": rid,
@@ -35,14 +35,14 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
     elif payType=='shop-buy':
         data = {
             "platform": 'available',
-            "type": '{}'.format(payType),
-            "money": money,
+            "type": 'shop-buy',
+            "money": money*num,
             "params":
-                {"num": 1,
+                {"num": num,
                  "cid": cid,
                  "price": money,
                  "type": "{}".format(boxType),
-                 "opennum": 1,
+                 "opennum": num,
                  "coupon_id": 0,
                  "duction_money": 0,
                  "version": 2,
@@ -53,6 +53,7 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
         }
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
+        print(data)
         return data
     elif payType=='defend':
         data = {
@@ -74,7 +75,7 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
     elif payType=='title':
         data = {
             "platform": "available",
-            "type": "{}".format(payType),
+            "type": "title",
             "money": money,
             "params":
                 {"level": 1,
@@ -120,9 +121,17 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
         return data
+    elif payType=='pub-drink-buy':
+        data = {}
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        return data
+    else:
+        raise Exception('need payType')
+
 
 
 
 
 if __name__ == '__main__':
-    encodeData(payType='exchange_gold')
+    encodeData(payType='shop-buy', money=100, cid=329, boxType='')
