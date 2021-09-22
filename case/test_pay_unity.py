@@ -1,10 +1,8 @@
 from common.Config import config
-from common import Request
 from common.params_Yaml import Yaml
 from common.sqlScript import Mysql
 import unittest
-from common import Consts
-from common import Assert
+from common import Consts, Request, Assert, newData
 from common.runFailed import Retry
 import time
 @Retry
@@ -17,7 +15,6 @@ class TestPayCreate(unittest.TestCase):
     def tearDownClass(cls) -> None:
         Consts.endTime = time.time()
 
-    @unittest.skip('伴伴暂时关闭')
     def test_01_unityGameBugPayChange(self):
         """
         用例描述：
@@ -30,7 +27,8 @@ class TestPayCreate(unittest.TestCase):
         """
         des = 'unity道具购买场景'
         Mysql.updateMoneySql(config.payUid, 100)
-        data = Yaml.read_yaml('Basic.yml', 'dev_pay_unityGame')
+        # data = Yaml.read_yaml('Basic.yml', 'dev_pay_unityGame')
+        data = newData.encodeData(payType='unity-game-buy', money=100)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)

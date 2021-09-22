@@ -1,10 +1,8 @@
 from common.Config import config
-from common import Request
 from common.params_Yaml import Yaml
 from common.sqlScript import Mysql
 import unittest
-from common import Consts
-from common import Assert
+from common import Consts, Assert, newData, Request
 from common.runFailed import Retry
 @Retry(max_n=3, func_prefix='test_02_roomChangePayCoin')
 class TestPayCreate(unittest.TestCase):
@@ -24,7 +22,8 @@ class TestPayCreate(unittest.TestCase):
         """
         des = '余额兑换金币场景'
         Mysql.updateMoneySql(config.payUid, 1000)
-        data = Yaml.read_yaml('Basic.yml', 'dev_pay_coin')
+        # data = Yaml.read_yaml('Basic.yml', 'dev_pay_coin')
+        data = newData.encodeData(payType='exchange_gold')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)

@@ -1,11 +1,10 @@
 # coding=utf-8
 import unittest
 import time
-from common import Logs, method
+from common import Logs, method, Consts, Config
 from autoGitPull import autoGitPull, writeUpdateTime
 from Robot import robot
-from common import Consts
-from common import Config
+import threading
 def all_case():
     # win 路径
     # case_dir = os.path.join(os.getcwd(), "Case")
@@ -27,6 +26,8 @@ def main():
         # fp = open(html_path, 'wb')
         # runner = HTMLTestRunner(stream=fp, title=u"测试报告", description=u"用例测试情况")
         # test_result = runner.run(all_case())
+        lock = threading.Lock()
+        lock.acquire(blocking=True, timeout=1)  # 加
         test_result = unittest.TextTestRunner(verbosity=3).run(all_case())
         writeUpdateTime(str(int(time.time())))
         des = "用例总数: {}, 失败用例数: {}, 异常用例数: {}" \
@@ -35,6 +36,7 @@ def main():
         case_list=method.dictToList(Consts.CASE_LIST)
         case_list_2=method.dictToList(Consts.CASE_LIST_2)
         use_time=str(int(Consts.endTime-Consts.startTime)) + 's'
+        lock.release()  # 解
         if len(test_result.failures) == 0 and len(test_result.errors) == 0:
             des = "{}\n".format(case_list)
             des_2 = "{}\n用例数: {}, 失败数: {}, 执行时间: {}, 执行分支：{}".format(case_list_2, test_result.testsRun,

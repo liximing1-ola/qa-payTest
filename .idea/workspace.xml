@@ -26,8 +26,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="44793b3e-09e5-4af0-a369-84e9b064bd19" name="Default Changelist" comment="‘提交修改’">
+      <change afterPath="$PROJECT_DIR$/common/newData.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run_crontab_case.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_crontab_case.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Robot.py" beforeDir="false" afterPath="$PROJECT_DIR$/Robot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case/test_pay_coin.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_coin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case/test_pay_defend.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_defend.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case/test_pay_title.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_title.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case/test_pay_unity.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_unity.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/Basic.yml" beforeDir="false" afterPath="$PROJECT_DIR$/common/Basic.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/sqlScript.py" beforeDir="false" afterPath="$PROJECT_DIR$/common/sqlScript.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run_all_case.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_all_case.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,8 +81,8 @@
       <recent name="E:\payTest" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.params_Yaml">
-    <configuration name="method" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.newData">
+    <configuration name="newData" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="payTest" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -86,7 +94,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/common/method.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/common/newData.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -181,11 +189,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.newData" />
         <item itemvalue="Python.params_Yaml" />
         <item itemvalue="Python.testSql" />
         <item itemvalue="Python.testGift" />
         <item itemvalue="Python.pt_autoGitPull" />
-        <item itemvalue="Python.method" />
       </list>
     </recent_temporary>
   </component>
@@ -197,83 +205,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1615801946332</updated>
-    </task>
-    <task id="LOCAL-00385" summary="‘提交修改’">
-      <created>1631071463569</created>
-      <option name="number" value="00385" />
-      <option name="presentableId" value="LOCAL-00385" />
-      <option name="project" value="LOCAL" />
-      <updated>1631071463569</updated>
-    </task>
-    <task id="LOCAL-00386" summary="‘提交修改’">
-      <created>1631071565987</created>
-      <option name="number" value="00386" />
-      <option name="presentableId" value="LOCAL-00386" />
-      <option name="project" value="LOCAL" />
-      <updated>1631071565987</updated>
-    </task>
-    <task id="LOCAL-00387" summary="‘提交修改’">
-      <created>1631071806315</created>
-      <option name="number" value="00387" />
-      <option name="presentableId" value="LOCAL-00387" />
-      <option name="project" value="LOCAL" />
-      <updated>1631071806315</updated>
-    </task>
-    <task id="LOCAL-00388" summary="‘提交修改’">
-      <created>1631073797874</created>
-      <option name="number" value="00388" />
-      <option name="presentableId" value="LOCAL-00388" />
-      <option name="project" value="LOCAL" />
-      <updated>1631073797874</updated>
-    </task>
-    <task id="LOCAL-00389" summary="‘提交修改’">
-      <created>1631074248413</created>
-      <option name="number" value="00389" />
-      <option name="presentableId" value="LOCAL-00389" />
-      <option name="project" value="LOCAL" />
-      <updated>1631074248413</updated>
-    </task>
-    <task id="LOCAL-00390" summary="‘提交修改’">
-      <created>1631074314576</created>
-      <option name="number" value="00390" />
-      <option name="presentableId" value="LOCAL-00390" />
-      <option name="project" value="LOCAL" />
-      <updated>1631074314577</updated>
-    </task>
-    <task id="LOCAL-00391" summary="‘提交修改’">
-      <created>1631082816935</created>
-      <option name="number" value="00391" />
-      <option name="presentableId" value="LOCAL-00391" />
-      <option name="project" value="LOCAL" />
-      <updated>1631082816935</updated>
-    </task>
-    <task id="LOCAL-00392" summary="‘提交修改’">
-      <created>1631084694986</created>
-      <option name="number" value="00392" />
-      <option name="presentableId" value="LOCAL-00392" />
-      <option name="project" value="LOCAL" />
-      <updated>1631084694986</updated>
-    </task>
-    <task id="LOCAL-00393" summary="‘提交修改’">
-      <created>1631085144740</created>
-      <option name="number" value="00393" />
-      <option name="presentableId" value="LOCAL-00393" />
-      <option name="project" value="LOCAL" />
-      <updated>1631085144740</updated>
-    </task>
-    <task id="LOCAL-00394" summary="‘提交修改’">
-      <created>1631093114731</created>
-      <option name="number" value="00394" />
-      <option name="presentableId" value="LOCAL-00394" />
-      <option name="project" value="LOCAL" />
-      <updated>1631093114731</updated>
-    </task>
-    <task id="LOCAL-00395" summary="‘提交修改’">
-      <created>1631093706420</created>
-      <option name="number" value="00395" />
-      <option name="presentableId" value="LOCAL-00395" />
-      <option name="project" value="LOCAL" />
-      <updated>1631093706420</updated>
     </task>
     <task id="LOCAL-00396" summary="‘提交修改’">
       <created>1631094006276</created>
@@ -541,7 +472,84 @@
       <option name="project" value="LOCAL" />
       <updated>1631701743386</updated>
     </task>
-    <option name="localTasksCounter" value="434" />
+    <task id="LOCAL-00434" summary="‘提交修改’">
+      <created>1631702742801</created>
+      <option name="number" value="00434" />
+      <option name="presentableId" value="LOCAL-00434" />
+      <option name="project" value="LOCAL" />
+      <updated>1631702742801</updated>
+    </task>
+    <task id="LOCAL-00435" summary="‘提交修改’">
+      <created>1631702929151</created>
+      <option name="number" value="00435" />
+      <option name="presentableId" value="LOCAL-00435" />
+      <option name="project" value="LOCAL" />
+      <updated>1631702929151</updated>
+    </task>
+    <task id="LOCAL-00436" summary="‘提交修改’">
+      <created>1631703368982</created>
+      <option name="number" value="00436" />
+      <option name="presentableId" value="LOCAL-00436" />
+      <option name="project" value="LOCAL" />
+      <updated>1631703368982</updated>
+    </task>
+    <task id="LOCAL-00437" summary="‘提交修改’">
+      <created>1631703518018</created>
+      <option name="number" value="00437" />
+      <option name="presentableId" value="LOCAL-00437" />
+      <option name="project" value="LOCAL" />
+      <updated>1631703518018</updated>
+    </task>
+    <task id="LOCAL-00438" summary="‘提交修改’">
+      <created>1631703899344</created>
+      <option name="number" value="00438" />
+      <option name="presentableId" value="LOCAL-00438" />
+      <option name="project" value="LOCAL" />
+      <updated>1631703899344</updated>
+    </task>
+    <task id="LOCAL-00439" summary="‘提交修改’">
+      <created>1631704156299</created>
+      <option name="number" value="00439" />
+      <option name="presentableId" value="LOCAL-00439" />
+      <option name="project" value="LOCAL" />
+      <updated>1631704156299</updated>
+    </task>
+    <task id="LOCAL-00440" summary="‘提交修改’">
+      <created>1631704289403</created>
+      <option name="number" value="00440" />
+      <option name="presentableId" value="LOCAL-00440" />
+      <option name="project" value="LOCAL" />
+      <updated>1631704289403</updated>
+    </task>
+    <task id="LOCAL-00441" summary="‘提交修改’">
+      <created>1631704768645</created>
+      <option name="number" value="00441" />
+      <option name="presentableId" value="LOCAL-00441" />
+      <option name="project" value="LOCAL" />
+      <updated>1631704768645</updated>
+    </task>
+    <task id="LOCAL-00442" summary="‘提交修改’">
+      <created>1631704902802</created>
+      <option name="number" value="00442" />
+      <option name="presentableId" value="LOCAL-00442" />
+      <option name="project" value="LOCAL" />
+      <updated>1631704902802</updated>
+    </task>
+    <task id="LOCAL-00443" summary="‘提交修改’">
+      <created>1631704996015</created>
+      <option name="number" value="00443" />
+      <option name="presentableId" value="LOCAL-00443" />
+      <option name="project" value="LOCAL" />
+      <updated>1631704996015</updated>
+    </task>
+    <task id="LOCAL-00444" summary="‘提交修改’">
+      <created>1631705153333</created>
+      <option name="number" value="00444" />
+      <option name="presentableId" value="LOCAL-00444" />
+      <option name="project" value="LOCAL" />
+      <updated>1631705153333</updated>
+    </task>
+    <option name="localTasksCounter" value="445" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -592,29 +600,34 @@
     </state>
     <state x="147" y="65" key="DiffContextDialog/0.0.1536.824@0.0.1536.824" timestamp="1627118636227" />
     <state x="184" y="82" width="1536" height="860" key="DiffContextDialog/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1631702496601" />
-    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1629180708709">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state x="2469" y="50" key="FileChooserDialogImpl" timestamp="1631761740383">
+      <screen x="1920" y="-119" width="1536" height="832" />
     </state>
     <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1629180708709" />
-    <state width="1515" height="142" key="GridCell.Tab.0.bottom" timestamp="1631537417549">
-      <screen x="1920" y="-119" width="1536" height="832" />
+    <state x="2469" y="50" key="FileChooserDialogImpl/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1631761740383" />
+    <state width="1515" height="141" key="GridCell.Tab.0.bottom" timestamp="1632036507549">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="142" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1626589070129" />
+    <state width="1515" height="141" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1632036507549" />
+    <state width="1899" height="192" key="GridCell.Tab.0.bottom/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1631968079095" />
     <state width="1515" height="142" key="GridCell.Tab.0.bottom/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1631537417549" />
-    <state width="1515" height="142" key="GridCell.Tab.0.center" timestamp="1631537417549">
-      <screen x="1920" y="-119" width="1536" height="832" />
+    <state width="1515" height="141" key="GridCell.Tab.0.center" timestamp="1632036507549">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="142" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1626589070129" />
+    <state width="1515" height="141" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1632036507549" />
+    <state width="1899" height="192" key="GridCell.Tab.0.center/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1631968079095" />
     <state width="1515" height="142" key="GridCell.Tab.0.center/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1631537417549" />
-    <state width="1515" height="142" key="GridCell.Tab.0.left" timestamp="1631537417549">
-      <screen x="1920" y="-119" width="1536" height="832" />
+    <state width="1515" height="141" key="GridCell.Tab.0.left" timestamp="1632036507548">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="142" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1626589070128" />
+    <state width="1515" height="141" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1632036507548" />
+    <state width="1899" height="192" key="GridCell.Tab.0.left/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1631968079095" />
     <state width="1515" height="142" key="GridCell.Tab.0.left/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1631537417549" />
-    <state width="1515" height="142" key="GridCell.Tab.0.right" timestamp="1631537417549">
-      <screen x="1920" y="-119" width="1536" height="832" />
+    <state width="1515" height="141" key="GridCell.Tab.0.right" timestamp="1632036507549">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="142" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1626589070129" />
+    <state width="1515" height="141" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1632036507549" />
+    <state width="1899" height="192" key="GridCell.Tab.0.right/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1631968079095" />
     <state width="1515" height="142" key="GridCell.Tab.0.right/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1631537417549" />
     <state x="2543" y="-5" key="RollbackChangesDialog" timestamp="1630922945672">
       <screen x="1920" y="-119" width="1536" height="832" />
@@ -624,11 +637,11 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="614" y="325" key="VCS.ChangelistChooser/0.0.1536.824@0.0.1536.824" timestamp="1624626874281" />
-    <state x="451" y="183" key="Vcs.Push.Dialog.v2" timestamp="1631701744454">
+    <state x="451" y="183" key="Vcs.Push.Dialog.v2" timestamp="1631705168725">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1631688145940" />
-    <state x="451" y="183" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1631701744454" />
+    <state x="451" y="183" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1631705168725" />
     <state x="2281" y="27" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1631686397050" />
     <state x="573" y="325" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1629200916895">
       <screen x="0" y="0" width="1536" height="824" />
