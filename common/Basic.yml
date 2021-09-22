@@ -205,11 +205,6 @@ dev_pay_defend:
     'params': '{"defend":1,"to":105002312,"cid":0,"duction_money":0,"unified_relation_version":1,"useCoin":-1}' }
 
 # @
-# 爵位购买
-dev_pay_title:
-    platform=available&type=title&money=100000&params=%7B%22level%22%3A1%2C%22num%22%3A1%2C%22tid%22%3A1%2C%22cid%22%3A0%2C%22ctype%22%3Anull%2C%22duction_money%22%3A0%2C%22useCoin%22%3A-1%7D
-
-# @
 # 金币兑换
 dev_pay_coin:
   { 'platform': 'available',

@@ -2,6 +2,7 @@ import urllib.parse
 
 def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, giftId=7, giftType='normal',
                cid=5, boxType='copper'):
+
     if payType=='packages':
         data = {
             "platform": "available",
@@ -29,6 +30,8 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
         data = d.replace('+', '').replace('%27', '%22')
         print(data)
         return data
+    elif payType == 'chat-gift':
+        pass
     elif payType=='shop-buy':
         data = {
             "platform": 'available',
@@ -50,7 +53,6 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
         }
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
-        print(data)
         return data
     elif payType=='defend':
         data = {
@@ -68,7 +70,6 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
         }
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
-        print(data)
         return data
     elif payType=='title':
         data = {
@@ -87,10 +88,7 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
         }
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
-        print(data)
         return data
-    elif payType=='chat-gift':
-        pass
     elif payType=='exchange_gold':
         data = {
             "platform": 'available',

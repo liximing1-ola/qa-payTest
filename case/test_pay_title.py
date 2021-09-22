@@ -1,6 +1,5 @@
 from common.Config import config
 from common import Request
-from common.params_Yaml import Yaml
 from common.sqlScript import Mysql
 import unittest
 import pytest
@@ -29,7 +28,6 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateUserTitleSql(config.payUid)
         Mysql.updateUserTitleSubscribeTime(config.payUid)  # 更新用户爵位时间
         Mysql.updateMoneySql(config.payUid, 200000)
-        # data = Yaml.read_yaml('Basic.yml', 'dev_pay_title')
         data = basicData.encodeData(payType='title', money=100000)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
@@ -51,7 +49,6 @@ class TestPayCreate(unittest.TestCase):
         """
         des = '爵位续费场景'
         Mysql.updateMoneySql(config.payUid, 200000)
-        # data = Yaml.read_yaml('Basic.yml', 'dev_pay_title')
         data = basicData.encodeData(payType='title', money=100000)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
