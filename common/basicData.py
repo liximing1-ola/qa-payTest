@@ -121,12 +121,9 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
         data = d.replace('+', '').replace('%27', '%22')
         return data
     elif payType=='pub-drink-buy':
-        data = {}
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
+        pass
     else:
-        raise Exception('need payType')
+        raise Exception('payType is error')
 
 
 
