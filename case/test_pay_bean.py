@@ -61,7 +61,7 @@ class TestPayCreate(unittest.TestCase):
         2.房间内打赏金豆礼物
         3.校验【status code】和返回值【body】状态
         4.检查被打赏者金豆余额，预期为：0
-        5.检查打赏者剩余金豆余额，预期为：6000 * 0.7 = 4200
+        5.检查打赏者剩余金豆余额，预期为：6000 * 0.5 = 3000
         """
         des = '打赏金豆礼物的场景'
         Mysql.updateBeanSql(config.payUid, 6000)
@@ -74,7 +74,7 @@ class TestPayCreate(unittest.TestCase):
         pay_result = Mysql.selectBeanSql(config.payUid)
         test_result = Mysql.selectBeanSql(config.testUid)
         Assert.assert_equal(pay_result, 0)
-        Assert.assert_equal(test_result, 4200)
+        Assert.assert_equal(test_result, 3000)
         print('\n' + '用例描述: {}'.format(des), '打赏者消费前金豆: {}'.format(actual),
               '打赏者消费后金豆：{}'.format(pay_result), '收货者金豆余额: {}'.format(test_result))
         Consts.CASE_LIST[des] = Consts.result
@@ -89,7 +89,7 @@ class TestPayCreate(unittest.TestCase):
         3.校验【status code】和返回值【body】状态
         4.检查打赏者金豆余额，预期为：500
         5.检查打赏者钻石余额，预期为：10000 - 1000（转换） = 9000
-        6.检查被打赏者金豆余额，预期为：1000 * 0.7 = 700
+        6.检查被打赏者金豆余额，预期为：1000 * 0.5 = 500
         """
         des = '打赏金豆礼物不足时用钻转换的场景'
         Mysql.updateMoneySql(config.payUid, 10000)
@@ -102,7 +102,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectBeanSql(config.payUid), 500)
         Assert.assert_equal(Mysql.selectMoneySql(config.payUid, money_type='money'), 9000)
-        Assert.assert_equal(Mysql.selectBeanSql(config.testUid), 700)
+        Assert.assert_equal(Mysql.selectBeanSql(config.testUid), 500)
         Consts.CASE_LIST[des] = Consts.result
 
     def test_04_ImMoneyPayChangeBeanDeduct(self):
