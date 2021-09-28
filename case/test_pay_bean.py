@@ -139,8 +139,8 @@ class TestPayCreate(unittest.TestCase):
         1.构造打赏者和被打赏者数据 （更新xs_user_money, xs_user_money_extend）
         2.房间内打赏金豆礼物
         3.校验【status code】和返回值【body】状态
-        4.检查打赏者金豆余额，预期为：400 - 300 = 100
-        5.检查打赏者钻石余额，预期为：1000 - 700 = 300
+        4.检查打赏者金豆余额，预期为：400 - 200 = 200
+        5.检查打赏者钻石余额，预期为：1000 - 800 = 200
         6.检查被打赏者钻石余额，预期为：1000 * 0.62 = 620
         """
         des = '房间打赏钻石礼物时金豆抵扣平台手续费场景'
@@ -152,9 +152,9 @@ class TestPayCreate(unittest.TestCase):
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectBeanSql(config.payUid), 100)
+        Assert.assert_equal(Mysql.selectBeanSql(config.payUid), 200)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 620)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 300)
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 200)
         Consts.CASE_LIST[des] = Consts.result
 
     def test_06_MoneyConvertGoldPayGift(self):
