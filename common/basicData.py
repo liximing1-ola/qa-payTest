@@ -55,7 +55,7 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
         return data
-    elif payType=='shop-buy':
+    elif payType=='shop-buy-box':
         data = {
             "platform": 'available',
             "type": 'shop-buy',
@@ -73,6 +73,25 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
                  "show_pac_man_guide": 0,
                  "useCoin": -1
                  }
+        }
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        return data
+    elif payType=='shop-buy':
+        data = {
+            "platform": 'available',
+            "type": 'shop-buy',
+            "money": money*num,
+            "params":
+                {"num": num,
+                 "cid": cid,
+                 "price": money,
+                 "coupon_id": 0,
+                 "duction_money": 0,
+                 "version": 2,
+                 "gift_scene": "shop",
+                 "money_type": "money",
+                 "useCoin": -1}
         }
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
@@ -150,4 +169,4 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
 
 
 if __name__ == '__main__':
-    encodeData(payType='chat-gift', uid=105002312, money=1000, num=10)
+    encodeData(payType='shop-buy', money=100, num=1, cid=329)
