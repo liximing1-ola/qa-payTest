@@ -31,7 +31,31 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
         print(data)
         return data
     elif payType == 'chat-gift':
-        pass
+        data = {
+            "platform": "available",
+            "type": "packages",
+            "money": money,
+            "params":
+                {"notify_group_id": 0,
+                 "to": '{}'.format(uid),
+                 "giftId": giftId,
+                 "giftNum": num,
+                 "cid": 0,
+                 "ctype": "",
+                 "duction_money": 0,
+                 "version": 2,
+                 "num": num,
+                 "gift_type": "normal",
+                 "star": 0,
+                 "show_pac_man_guide": 1,
+                 "all_mic": 0,
+                 "useCoin": -1
+                 }
+        }
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        print(data)
+        return data
     elif payType=='shop-buy':
         data = {
             "platform": 'available',
@@ -126,8 +150,5 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
         raise Exception('payType is error')
 
 
-
-
-
 if __name__ == '__main__':
-    encodeData(payType='shop-buy', money=100, cid=329, boxType='')
+    pass

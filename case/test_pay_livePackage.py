@@ -1,9 +1,8 @@
 from common.Config import config
-from common import Request
 from common.params_Yaml import Yaml
 from common.sqlScript import Mysql
 import unittest
-from common import Consts, Assert
+from common import Consts, Assert, Request, basicData
 from common.runFailed import Retry
 @Retry
 class TestPayCreate(unittest.TestCase):
@@ -63,7 +62,8 @@ class TestPayCreate(unittest.TestCase):
         des = '非公会主播(非宗师)私聊打赏分成72:28'
         Mysql.updateMoneySql(config.payUid, 1100, 100, 100, 100)
         Mysql.updateMoneySql(config.testUid)
-        data = Yaml.read_yaml('Basic.yml', 'dev_pay_chatGift')
+        data = basicData.encodeData(payType='chat-gift', uid=config.testUid, money=100*10, num=10)
+        # data = Yaml.read_yaml('Basic.yml', 'dev_pay_chatGift')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
