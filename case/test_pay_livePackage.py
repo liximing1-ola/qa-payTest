@@ -116,7 +116,8 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(test_uid)
         Mysql.selectUserXsMentorLevel(test_uid, 4)  # 更新成一代宗师
         Mysql.updateChatroomUid(test_uid)  # 更新成商业房主播&&直播结算频道
-        data = Yaml.read_yaml('Basic.yml', 'dev_IMPay_8020')
+        data = basicData.encodeData(payType='chat-gift', money=1000, uid=test_uid, giftId=20)
+        # data = Yaml.read_yaml('Basic.yml', 'dev_IMPay_8020')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
@@ -181,7 +182,8 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(test_uid)
         Mysql.updateMoneySql(ceo_uid)
         Mysql.selectUserXsMentorLevel(test_uid, 4)  # 师父等级改为一代宗师
-        data = Yaml.read_yaml('Basic.yml', 'dev_IMPay_602020')
+        data = basicData.encodeData(payType='chat-gift', money=1000, uid=test_uid, giftId=20)
+        # data = Yaml.read_yaml('Basic.yml', 'dev_IMPay_602020')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res)
         Assert.assert_code(res['code'], 200)
@@ -245,7 +247,8 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(test_uid)
         Mysql.updateMoneySql(ceo_uid)
         Mysql.selectUserXsMentorLevel(test_uid, 1)  # 师父等级改为非一代宗师
-        data = Yaml.read_yaml('Basic.yml', 'dev_IMPay_602020')
+        data = basicData.encodeData(payType='chat-gift', money=1000, uid=test_uid, giftId=20)
+        # data = Yaml.read_yaml('Basic.yml', 'dev_IMPay_602020')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res)
         Assert.assert_code(res['code'], 200)
