@@ -33,7 +33,7 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
     elif payType == 'chat-gift':
         data = {
             "platform": "available",
-            "type": "packages",
+            "type": "chat-gift",
             "money": money,
             "params":
                 {"notify_group_id": 0,
@@ -151,4 +151,4 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
 
 
 if __name__ == '__main__':
-    pass
+    encodeData(payType='chat-gift', uid=105002312, money=1000, num=10)
