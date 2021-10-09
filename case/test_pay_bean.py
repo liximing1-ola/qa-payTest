@@ -1,10 +1,8 @@
 from common.Config import config
-from common import Request
 from common.params_Yaml import Yaml
 from common.sqlScript import Mysql
 import unittest
-from common import Consts
-from common import Assert
+from common import Assert, Consts, Request, basicData
 from common.runFailed import Retry
 import time
 class TestPayCreate(unittest.TestCase):
@@ -121,7 +119,8 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(config.payUid, 1000)
         Mysql.updateMoneySql(config.testUid)
         Mysql.updateBeanSql(config.payUid, 200)
-        data = Yaml.read_yaml('Basic.yml', 'dev_gold_BeanDeduct')
+        data = basicData.encodeData(payType='chat-gift', uid=config.testUid, )
+        # data = Yaml.read_yaml('Basic.yml', 'dev_gold_BeanDeduct')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)

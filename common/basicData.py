@@ -3,10 +3,10 @@ import urllib.parse
 def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, giftId=7, giftType='normal',
                cid=5, boxType='copper', num=1):
 
-    if payType=='packages':
+    if payType=='package':
         data = {
             "platform": "available",
-            "type": "packages",
+            "type": "package",
             "money": money,
             "params":
                 {"rid": rid,
@@ -23,7 +23,10 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
                  "num": 1,
                  "gift_type": "{}".format(giftType),
                  "useCoin": -1,
-                 "exchange": 1,
+                 "star": 0,
+                 "show_pac_man_guide": 1,
+                 "refer": "",
+                 "all_mic": 0,
                  }
         }
         d = urllib.parse.urlencode(data)
@@ -169,4 +172,4 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
 
 
 if __name__ == '__main__':
-    encodeData(payType='shop-buy', money=100, num=1, cid=329)
+    encodeData(payType='package')
