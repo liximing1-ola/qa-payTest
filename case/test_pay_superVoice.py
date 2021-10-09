@@ -1,5 +1,4 @@
 from common.Config import config
-from common.params_Yaml import Yaml
 from common.sqlScript import Mysql
 import unittest
 from common import Consts, Assert, Request, basicData
@@ -41,7 +40,6 @@ class TestPayCreate(unittest.TestCase):
         test_uid=config.super_live_role['testUid']
         Mysql.updateMoneySql(test_uid)
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
-        # data = Yaml.read_yaml('Basic.yml', 'dev_noBroker_35')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
@@ -67,7 +65,6 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(test_uid)
         Mysql.updateSuperVoiceUser(test_bid, test_uid)
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
-        # data = Yaml.read_yaml('Basic.yml', 'dev_superVoice_35')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
@@ -101,7 +98,6 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateSuperVoiceUser(test_bid, test_agent)
         Mysql.updateOnlineEarnRelation(test_agent, test_uid)
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
-        # data = Yaml.read_yaml('Basic.yml', 'dev_superVoice_5015')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
@@ -136,7 +132,6 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateSuperVoiceUser(test_bid, test_agent)
         Mysql.updateOnlineEarnRelation(test_agent, test_uid)
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
-        # data = Yaml.read_yaml('Basic.yml', 'dev_superVoice_5020')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
@@ -168,7 +163,6 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateSuperVoiceUser(test_bid, test_agent)
         Mysql.updateOnlineEarnRelation(test_agent, test_uid)
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
-        # data = Yaml.read_yaml('Basic.yml', 'dev_normalBroker_5020')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
@@ -203,7 +197,6 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateSuperVoiceUser(test_bid, test_agent)
         Mysql.updateOnlineEarnRelation(test_agent, test_uid)
         data = basicData.encodeData(payType='package')
-        # data = Yaml.read_yaml('Basic.yml', 'dev_normalRoom_6215')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
