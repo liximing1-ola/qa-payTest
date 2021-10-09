@@ -47,8 +47,8 @@ def main():
             robot('markdown', des_2)
         elif len(test_result.failures) >= 1:
             Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
-            time.sleep(0.2)
-            print(set(Consts.fail_case_reason))
+            # time.sleep(0.2)
+            # print(set(Consts.fail_case_reason))
             robot('success', des)
             for case, reason in test_result.failures:
                 robot('fail', Consts.fail_case_reason[0], title=case.id())
