@@ -3,7 +3,7 @@ from common.sqlScript import Mysql
 import unittest
 from common import Consts, Assert, basicData, Request
 from common.runFailed import Retry
-# @Retry(max_n=3)
+@Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
 
     # 内网支付接口
