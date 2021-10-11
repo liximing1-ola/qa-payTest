@@ -11,10 +11,6 @@ class TestPayCreate(unittest.TestCase):
     # 内网支付接口
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
 
-    @classmethod
-    def tearDownClass(cls) -> None:
-        Consts.endTime = time.time()
-
     @unittest.skip('暂无unity购买入口')
     def test_01_unityGameBugPayChange(self):
         """

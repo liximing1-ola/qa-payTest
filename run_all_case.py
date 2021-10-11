@@ -35,6 +35,7 @@ def main():
         Logs.get_log('caseResult.log').info(des)
         case_list=method.dictToList(Consts.CASE_LIST)
         case_list_2=method.dictToList(Consts.CASE_LIST_2)
+        Consts.endTime = time.time()
         use_time=str(int(Consts.endTime-Consts.startTime)) + 's'
         # lock.release()  # 解
         if len(test_result.failures) == 0 and len(test_result.errors) == 0:
