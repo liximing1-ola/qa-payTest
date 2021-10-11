@@ -1,9 +1,7 @@
 # coding=utf-8
 import pymysql
-from common.Consts import fail_case_reason
 import time
 class Mysql:
-
     db_config = {"dev_46_db": '192.168.11.46',
                  "dev_46_user": 'root',
                  "dev_46_pas": '123456',
@@ -65,7 +63,7 @@ class Mysql:
     @staticmethod
     def updateBeanSql(uid, money_coupon):
         con, cur = Mysql.conMysql()
-        sql = "insert into xs_user_money_extend(uid, money_coupon) values({},{})".format(uid, money_coupon)
+        sql = "insert into xs_user_money_extend(uid, money_coupon) values({},{}) limit 1".format(uid, money_coupon)
         try:
             cur.execute(sql)
         except Exception as error:
@@ -79,7 +77,7 @@ class Mysql:
     @staticmethod
     def selectBeanSql(uid):
         con, cur = Mysql.conMysql()
-        sql = "select money_coupon from xs_user_money_extend where uid={}".format(uid)
+        sql = "select money_coupon from xs_user_money_extend where uid={} limit 1".format(uid)
         try:
             cur.execute(sql)
             res = cur.fetchone()
