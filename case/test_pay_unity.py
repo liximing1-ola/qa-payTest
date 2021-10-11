@@ -1,10 +1,8 @@
 from common.Config import config
-from common.params_Yaml import Yaml
 from common.sqlScript import Mysql
 import unittest
 from common import Consts, Request, Assert, basicData
 from common.runFailed import Retry
-import time
 @Retry
 class TestPayCreate(unittest.TestCase):
 

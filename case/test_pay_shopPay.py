@@ -1,5 +1,4 @@
 from common.Config import config
-from common.params_Yaml import Yaml
 from common.sqlScript import Mysql
 import unittest
 import pytest

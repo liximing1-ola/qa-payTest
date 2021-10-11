@@ -4,7 +4,6 @@ from common.sqlScript import Mysql
 import unittest
 from common import Assert, Consts, Request, basicData
 from common.runFailed import Retry
-import time
 class TestPayCreate(unittest.TestCase):
 
     # 内网支付接口
