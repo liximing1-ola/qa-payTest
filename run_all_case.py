@@ -43,7 +43,7 @@ def main():
                                                                        len(test_result.failures) + len(test_result.errors),
                                                                        use_time, Config.config.bb_test['bb_git_branch'])
             robot('markdown', des)
-            time.sleep(0.2)
+            time.sleep(0.1)
             robot('markdown', des_2)
         elif len(test_result.failures) >= 1:
             Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
