@@ -3,7 +3,7 @@ from common.sqlScript import Mysql
 import unittest
 from common import Consts, Assert, basicData, Request
 from common.runFailed import Retry
-@Retry(max_n=3)
+# @Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
 
     # 内网支付接口
@@ -29,8 +29,8 @@ class TestPayCreate(unittest.TestCase):
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        #Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
-        #Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 32240)
-        #Assert.assert_equal(Mysql.selectPayChangeSql(config.payUid), 52000)
-        #Assert.assert_equal(Mysql.selectPayChangeOpSql(config.payUid), 'consume')
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 32240)
+        Assert.assert_equal(Mysql.selectPayChangeSql(config.payUid), 52000)
+        Assert.assert_equal(Mysql.selectPayChangeOpSql(config.payUid), 'consume')
         Consts.CASE_LIST[des] = Consts.result

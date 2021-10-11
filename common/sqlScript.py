@@ -20,7 +20,8 @@ class Mysql:
                               port=Mysql._dbPort,
                               user=Mysql._user,
                               passwd=Mysql._password,
-                              charset='utf8')
+                              charset='utf8',
+                              autocommit=True)
         con.select_db(Mysql._dbName)
         # 断开重连
         # con.ping(reconnect=True)
