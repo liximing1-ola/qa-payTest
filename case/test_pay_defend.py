@@ -24,6 +24,7 @@ class TestPayCreate(unittest.TestCase):
         des = '开通个人守护场景'
         Mysql.updateMoneySql(config.payUid, 52000)
         Mysql.updateMoneySql(config.testUid)
+        print(1)
         data = basicData.encodeData(payType='defend', money=52000, uid=config.testUid)
         print(data)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
