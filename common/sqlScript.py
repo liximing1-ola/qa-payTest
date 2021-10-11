@@ -55,10 +55,6 @@ class Mysql:
         except Exception as error:
             con.rollback()
             print('delete fail', error)
-        finally:
-            # 防止lock
-            cur.close()
-            con.close()
 
     # 更新用户金豆余额
     @staticmethod
