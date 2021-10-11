@@ -25,6 +25,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(config.payUid, 52000)
         Mysql.updateMoneySql(config.testUid)
         data = basicData.encodeData(payType='defend', money=52000, uid=config.testUid)
+        print(data)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
