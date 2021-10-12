@@ -2,8 +2,8 @@ from common.Config import config
 import unittest
 from common import Consts, Assert, basicData, Request
 from common.runFailed import Retry
-from common.conMysql import Mysql
-# from common.sqlScript import Mysql
+# from common.conMysql import Mysql
+from common.sqlScript import Mysql
 @Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
 
