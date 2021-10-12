@@ -14,19 +14,52 @@ class Mysql:
     _dbName = 'xianshi'
     _dbPort = 3306
 
-    def __init__(self):
-        self.con = pymysql.connect(host=self._dbUrl, port=self._dbPort, user=self._user, passwd=self._password,
-                                    db=self._dbName, charset='utf8')
-        self.cur = self.con.cursor()
+    con = pymysql.connect(host=_dbUrl,
+                          port=_dbPort,
+                          user=_user,
+                          passwd=_password,
+                          charset='utf8',
+                          autocommit=True)
+    con.select_db(_dbName)
+    # 断开重连
+    con.ping(reconnect=True)
+    cur = con.cursor()
 
     # 更新用户账户余额
-    def updateMoneySql(self, uid, money=0, money_cash=0, money_cash_b=0, money_b=0, gold_coin=0):
+    @staticmethod
+    def updateMoneySql(uid, money=0, money_cash=0, money_cash_b=0, money_b=0, gold_coin=0):
         sql = "update xs_user_money set money={}, money_b={}, money_cash={}, money_cash_b={},gold_coin={} where uid={} limit 1"\
             .format(money, money_b, money_cash, money_cash_b, gold_coin, uid)
         try:
-            self.cur.execute(sql)
+            Mysql.cur.execute(sql)
         except Exception as error:
-            self.con.rollback()
+            Mysql.con.rollback()
             print('update fail', error)
         finally:
-            self.con.commit()
+            Mysql.con.commit()
+
+    # 查询用户所有账户余额总和
+    @staticmethod
+    def selectAllMoneySql(uid):
+        sql = "select money+money_b+money_cash_b+money_cash from xs_user_money where uid={}".format(uid)
+        try:
+            Mysql.cur.execute(sql)
+            res = Mysql.cur.fetchone()
+            if len(res) > 0:
+                return res[0]
+            else:
+                return None
+        except Exception as error:
+            print(error)
+
+    # 查询消费记录的支付方式
+    @staticmethod
+    def selectPayChangeSql(uid):
+        sql = "select money from xs_pay_change_new where uid={} ORDER BY id DESC LIMIT 1".format(uid)
+        try:
+            Mysql.cur.execute(sql)
+            res = Mysql.cur.fetchone()
+            if len(res) > 0:
+                return res[0]
+        except Exception as error:
+            print(error)
