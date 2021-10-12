@@ -1,5 +1,5 @@
 from common.Config import config
-from common.sqlScript import Mysql
+from common.conMysql import Mysql
 import unittest
 from common import Assert, Request, Consts, basicData
 from common.runFailed import Retry

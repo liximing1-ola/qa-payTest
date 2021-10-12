@@ -4,7 +4,7 @@ import time
 from common import Logs, method, Consts, Config
 from autoGitPull import autoGitPull, writeUpdateTime
 from Robot import robot
-import threading
+# import threading
 def all_case():
     # win 路径
     # case_dir = os.path.join(os.getcwd(), "Case")

@@ -1,6 +1,5 @@
 # coding=utf-8
 import pymysql
-import time
 class Mysql:
     db_config = {"dev_46_db": '192.168.11.46',
                  "dev_46_user": 'root',
@@ -13,7 +12,6 @@ class Mysql:
     _password = db_config['dev_46_pas']
     _dbName = 'xianshi'
     _dbPort = 3306
-
     con = pymysql.connect(host=_dbUrl,
                           port=_dbPort,
                           user=_user,
@@ -21,8 +19,7 @@ class Mysql:
                           charset='utf8',
                           autocommit=True)
     con.select_db(_dbName)
-    # 断开重连
-    con.ping(reconnect=True)
+    con.ping(reconnect=True)  # 断开重连
     cur = con.cursor()
 
     # 更新用户账户余额
@@ -34,12 +31,12 @@ class Mysql:
             Mysql.cur.execute(sql)
         except Exception as error:
             Mysql.con.rollback()
-            print('update fail', error)
+            print('update fail： {}'.format(error))
 
     # 查询用户所有账户余额总和
     @staticmethod
     def selectAllMoneySql(uid):
-        sql = "select money+money_b+money_cash_b+money_cash from xs_user_money where uid={}".format(uid)
+        sql = "select (money+money_b+money_cash_b+money_cash) from xs_user_money where uid={}".format(uid)
         try:
             Mysql.cur.execute(sql)
             res = Mysql.cur.fetchone()
@@ -59,5 +56,39 @@ class Mysql:
             res = Mysql.cur.fetchone()
             if len(res) > 0:
                 return res[0]
+        except Exception as error:
+            print(error)
+
+    # 删除用户工会记录
+    @staticmethod
+    def deleteXsBrokerUser(uid):
+        sql = "delete from xs_broker_user where uid ={} limit 1".format(uid)
+        try:
+            Mysql.cur.execute(sql)
+        except Exception as error:
+            Mysql.con.rollback()
+            print('delete fail', error)
+
+    # 删除用户商业房
+    @staticmethod
+    def deleteXsChatroom(uid):
+        sql = "delete from xs_chatroom where uid ={} limit 1".format(uid)
+        try:
+            Mysql.cur.execute(sql)
+        except Exception as error:
+            Mysql.con.rollback()
+            print('delete fail', error)
+
+    # 查询用户某个账户余额
+    @staticmethod
+    def selectMoneySql(uid, money_type='money_cash_b'):
+        sql = "select {} from xs_user_money where uid={}".format(money_type, uid)
+        try:
+            Mysql.cur.execute(sql)
+            res = Mysql.cur.fetchone()
+            if len(res) > 0:
+                return res[0]
+            else:
+                return None
         except Exception as error:
             print(error)
