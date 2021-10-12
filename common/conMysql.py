@@ -15,6 +15,18 @@ class Mysql:
     _dbPort = 3306
 
     def __init__(self):
-        self.conn = pymysql.connect(host=self._dbUrl, port=self._dbPort, user=self._user, passwd=self._password,
+        self.con = pymysql.connect(host=self._dbUrl, port=self._dbPort, user=self._user, passwd=self._password,
                                     db=self._dbName, charset='utf8')
-        self.cur = self.conn.cursor()
+        self.cur = self.con.cursor()
+
+    # 更新用户账户余额
+    def updateMoneySql(self, uid, money=0, money_cash=0, money_cash_b=0, money_b=0, gold_coin=0):
+        sql = "update xs_user_money set money={}, money_b={}, money_cash={}, money_cash_b={},gold_coin={} where uid={} limit 1"\
+            .format(money, money_b, money_cash, money_cash_b, gold_coin, uid)
+        try:
+            self.cur.execute(sql)
+        except Exception as error:
+            self.con.rollback()
+            print('update fail', error)
+        finally:
+            self.con.commit()

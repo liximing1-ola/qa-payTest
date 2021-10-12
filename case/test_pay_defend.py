@@ -3,6 +3,7 @@ from common.sqlScript import Mysql
 import unittest
 from common import Consts, Assert, basicData, Request
 from common.runFailed import Retry
+from common.conMysql import Mysql as m
 @Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
 
@@ -22,7 +23,7 @@ class TestPayCreate(unittest.TestCase):
         6.检查消费记录
         """
         des = '开通个人守护场景'
-        Mysql.updateMoneySql(config.payUid, 52000)
+        m.updateMoneySql(config.payUid, 52000)
         Mysql.updateMoneySql(config.testUid)
         data = basicData.encodeData(payType='defend', money=52000, uid=config.testUid)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
