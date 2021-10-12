@@ -35,8 +35,6 @@ class Mysql:
         except Exception as error:
             Mysql.con.rollback()
             print('update fail', error)
-        finally:
-            Mysql.con.commit()
 
     # 查询用户所有账户余额总和
     @staticmethod
