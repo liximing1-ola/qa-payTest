@@ -13,16 +13,15 @@ def post_request_session(url, data):
     :param data:
     :return:
     """
-    session = Session.Session()
-    get_session = session.get_session('dev')
-    get_session['token'] = readUserToken()
+    # session = Session.Session()
+    # get_session = session.get_session('dev')
     requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
     header = {
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko)\
                             Chrome/67.0.3396.99 Safari/537.36",
         "Content-Type": "application/x-www-form-urlencoded",
         'Connection': 'close',
-        "user-token": get_session['token']
+        "user-token": readUserToken()
     }
     if not url.startswith('https://'):
         url = '%s%s' % ('https://', url)
