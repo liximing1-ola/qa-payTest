@@ -16,8 +16,7 @@ def autoGitPull():
     repo = Repo(git_dir)
     writeGitStatus(repo.git.status())
     # 更新userToken
-    session = Session.Session()
-    session.get_session('dev')
+    Session.Session().get_session('dev')
     # 当前线上分支
     if str(repo.active_branch) == config.banban_git_branch:
         commit_log = repo.git.log('--pretty={"commit":"%h","author":"%an","summary":"%s","date":"%cd"}',
@@ -88,3 +87,7 @@ def checkBranch(git_branch):
         Logs.get_log('gitBranchError.log').error("git branch error： {}".format(repo.active_branch))
         return False
     return True
+
+
+if __name__=='__main__':
+    pass
