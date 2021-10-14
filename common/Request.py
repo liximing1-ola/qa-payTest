@@ -4,6 +4,7 @@
 """
 import requests
 from common import Session
+from common.Session import readUserToken
 from requests.packages.urllib3.exceptions import InsecureRequestWarning  # 使用requests库请求HTTPS时,因为忽略证书验证,导致每次运行时都会报错
 def post_request_session(url, data):
     """
@@ -14,6 +15,7 @@ def post_request_session(url, data):
     """
     session = Session.Session()
     get_session = session.get_session('dev')
+    get_session['token'] = readUserToken()
     requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
     header = {
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko)\

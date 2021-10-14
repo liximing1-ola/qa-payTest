@@ -7,6 +7,7 @@ from common.Config import config
 from common.params_Yaml import Yaml
 from common import Logs
 from common import method
+import os
 class Session:
     def __init__(self):
         self.config = config
@@ -35,6 +36,7 @@ class Session:
                 if not method.isExtend(res, 'token') or res['success'] != 1:
                     print('failReason： {}'.format(res['msg']))
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
+                writeUserToken(tokenDict['token'])
                 return tokenDict
             except Exception as error:
                 Logs.get_log('getSession.log').error('session异常，原因： {}'.format(error))
@@ -55,7 +57,23 @@ class Session:
         else:
             print("env input error")
 
+def writeUserToken(t):
+    txtPath = os.path.split(os.path.realpath(__file__))[0] + '/userToken.txt'
+    with open(txtPath, 'w') as f:
+        f.write(t)
+        f.flush()
+
+def readUserToken():
+    txtPath = os.path.split(os.path.realpath(__file__))[0] + '/userToken.txt'
+    if not os.path.exists(txtPath):
+        os.system(r"touch {}".format(txtPath))
+        with open(txtPath, 'r+') as f:
+            f.write('')
+            f.flush()
+    with open(txtPath, 'r') as f:
+        f = f.read()
+        return f
+
 
 if __name__ == '__main__':
-    ss = Session()
-    ss.get_session('dev')
+    pass
