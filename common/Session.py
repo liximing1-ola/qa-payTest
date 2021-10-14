@@ -36,7 +36,6 @@ class Session:
                 if not method.isExtend(res, 'token') or res['success'] != 1:
                     print('failReason： {}'.format(res['msg']))
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
-                print(tokenDict['token'])
                 writeUserToken(tokenDict['token'])
                 return tokenDict
             except Exception as error:
