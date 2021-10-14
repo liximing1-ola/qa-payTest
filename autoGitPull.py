@@ -1,7 +1,7 @@
 import git
 from git.repo import Repo
 import time
-from common import Logs, Consts
+from common import Logs, Consts, Session
 from common.Config import config
 import os
 from Robot import robot
@@ -15,6 +15,9 @@ def autoGitPull():
     g.pull()
     repo = Repo(git_dir)
     writeGitStatus(repo.git.status())
+    # 更新userToken
+    session = Session.Session()
+    session.get_session('dev')
     # 当前线上分支
     if str(repo.active_branch) == config.banban_git_branch:
         commit_log = repo.git.log('--pretty={"commit":"%h","author":"%an","summary":"%s","date":"%cd"}',

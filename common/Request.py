@@ -13,9 +13,6 @@ def post_request_session(url, data):
     :param data:
     :return:
     """
-    # 耗时优化，每次不在请求qq/login
-    # session = Session.Session()
-    # get_session = session.get_session('dev')
     requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
     header = {
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko)\
