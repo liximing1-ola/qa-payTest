@@ -2,7 +2,9 @@
 import yaml
 from common.Config import config
 import os
-from autoGitPull import checkBranch
+from common import Logs
+import git
+from git.repo import Repo
 class Yaml:
 
     @staticmethod
@@ -28,6 +30,19 @@ class Yaml:
                 return yaml_data[yaml_name]
         except Exception as e:
             print(e)
+
+    @staticmethod
+    def checkBranch(git_branch):
+        # 默认指定路径
+        codeDir = '/home/banban-1/payTest'
+        g = git.cmd.Git(codeDir)
+        g.pull()
+        repo = Repo(codeDir)
+        # 当前线上分支
+        if str(repo.active_branch) != git_branch:
+            Logs.get_log('gitBranchError.log').error("git branch error： {}".format(repo.active_branch))
+            return False
+        return True
 
 
 if __name__ == '__main__':
