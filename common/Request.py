@@ -13,6 +13,7 @@ def post_request_session(url, data):
     :param data:
     :return:
     """
+    # 耗时优化，每次不在请求qq/login
     # session = Session.Session()
     # get_session = session.get_session('dev')
     requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
