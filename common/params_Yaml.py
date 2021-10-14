@@ -31,18 +31,17 @@ class Yaml:
         except Exception as e:
             print(e)
 
-    @staticmethod
-    def checkBranch(git_branch):
-        # 默认指定路径
-        codeDir = '/home/banban-1/payTest'
-        g = git.cmd.Git(codeDir)
-        g.pull()
-        repo = Repo(codeDir)
-        # 当前线上分支
-        if str(repo.active_branch) != git_branch:
-            Logs.get_log('gitBranchError.log').error("git branch error： {}".format(repo.active_branch))
-            return False
-        return True
+def checkBranch(git_branch):
+    # 默认指定路径
+    codeDir = '/home/banban-1/payTest'
+    g = git.cmd.Git(codeDir)
+    g.pull()
+    repo = Repo(codeDir)
+    # 当前线上分支
+    if str(repo.active_branch) != git_branch:
+        Logs.get_log('gitBranchError.log').error("git branch error： {}".format(repo.active_branch))
+        return False
+    return True
 
 
 if __name__ == '__main__':
