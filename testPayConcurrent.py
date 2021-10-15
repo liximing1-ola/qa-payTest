@@ -85,7 +85,6 @@ class TestPayConcurrent:
     @staticmethod
     def commodityUse():
         cid = int(Mysql.getUserCommodityIdSql(264, config.payUid))
-        print(cid)
         payload = 'id={}&num=1'.format(cid)
         res = Request.post_request_session(url=TestPayConcurrent.commodity_use, data=payload)
         print(res)
@@ -95,7 +94,6 @@ class TestPayConcurrent:
     @staticmethod
     def main_commodityUse():
         TestPayConcurrent.commodityReady()
-        time.sleep(30)
         threads = []
         for i in range(2):
             thread = gevent.spawn(TestPayConcurrent.commodityUse)
