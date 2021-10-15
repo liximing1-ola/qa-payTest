@@ -1,9 +1,9 @@
 import gevent
+from gevent import monkey
+monkey.patch_all()
 from common.Config import config
 from common.sqlScript import Mysql
 from common import Assert, Request, basicData
-from gevent import monkey
-monkey.patch_all()
 class TestPayConcurrent:
 
     # 内网支付接口
