@@ -188,10 +188,10 @@ class Mysql:
         try:
             cur.execute(sql)
             res = cur.fetchone()
-            if len(res) > 0:
-                return res[0]
-            elif res is None:
+            if res is None:
                 return 0
+            else:
+                return res[0]
         except Exception as error:
             print(error)
 
