@@ -79,8 +79,8 @@ class TestPayConcurrent:
         """
         Mysql.updateMoneySql(config.payUid)
         Mysql.deleteUserCommoditySql(config.payUid)
-        Mysql.insertXsUserCommodity(config.payUid, 264, 2)
-        Assert.assert_equal(Mysql.checkUserCommoditySql(264, config.payUid), 0)
+        Mysql.insertXsUserCommodity(config.payUid, 264, 1)
+        Assert.assert_equal(Mysql.checkUserCommoditySql(264, config.payUid), 1)
 
     @staticmethod
     def commodityUse():
