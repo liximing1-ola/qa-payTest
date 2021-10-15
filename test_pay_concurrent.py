@@ -30,7 +30,6 @@ class TestPayConcurrent:
         data = basicData.encodeData(payType='shop-buy', cid=340, money=9900, num=1)
         res = Request.post_request_session(url=TestPayConcurrent.pay_url, data=data)
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 100)
         Assert.assert_equal(Mysql.checkUserCommoditySql(cid, config.payUid), 1)
 
