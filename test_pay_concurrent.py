@@ -61,7 +61,7 @@ class TestPayConcurrent:
 if __name__=='__main__':
     TestPayConcurrent.shopBuyGift()
     threads = []
-    for i in range(10):
+    for i in range(5):
         thread = gevent.spawn(TestPayConcurrent.shopGiftToUser)
         threads.append(thread)
 
