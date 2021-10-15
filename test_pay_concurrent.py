@@ -26,11 +26,9 @@ class TestPayConcurrent:
         5.检查背包内物品
         """
         cid=340  # 小天使
-        des = '商城购买n个道具场景'
         Mysql.updateMoneySql(config.payUid, 10000)
         data = basicData.encodeData(payType='shop-buy', cid=340, money=9900, num=1)
         res = Request.post_request_session(url=TestPayConcurrent.pay_url, data=data)
-        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 100)
@@ -48,7 +46,6 @@ class TestPayConcurrent:
         4.检查背包内物品
         5.检查被打赏者余额 990*0.62 = 6138
         """
-        des = '打赏背包内物品场景'
         bag_gift_cid = 340
         Mysql.updateMoneySql(config.payUid)
         Mysql.updateMoneySql(config.testUid)
