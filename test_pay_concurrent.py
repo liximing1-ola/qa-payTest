@@ -4,6 +4,7 @@ monkey.patch_all()
 from common.Config import config
 from common.sqlScript import Mysql
 from common import Assert, Request, basicData
+import time
 class TestPayConcurrent:
 
     # 内网支付接口
@@ -60,6 +61,7 @@ class TestPayConcurrent:
 
 if __name__=='__main__':
     TestPayConcurrent.shopBuyGift()
+    time.sleep(20)
     threads = []
     for i in range(5):
         thread = gevent.spawn(TestPayConcurrent.shopGiftToUser)

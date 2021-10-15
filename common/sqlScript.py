@@ -191,7 +191,7 @@ class Mysql:
             if len(res) > 0:
                 return res[0]
             else:
-                return 0
+                return None
         except Exception as error:
             print(error)
 
