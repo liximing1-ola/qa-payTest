@@ -4,6 +4,7 @@ monkey.patch_all()
 from common.Config import config
 from common.sqlScript import Mysql
 from common import Assert, Request, basicData
+import time
 class TestPayConcurrent:
 
     # 内网支付接口
@@ -38,7 +39,7 @@ class TestPayConcurrent:
     def shopGiftToUser():
         """
         用例描述：
-        验证商城购买的道具在房间内赠送给其他人，他人收到的分成比在师徒收益上为 62：38
+        验证商城购买的道具在房间内赠送给其他人
         脚本步骤：
         1.构造打赏者和被打赏者数据
         2.打赏背包道具 cid：340 * 1
@@ -66,8 +67,41 @@ class TestPayConcurrent:
             threads.append(thread)
         gevent.joinall(threads)
 
+    @staticmethod
+    def commodityReady():
+        """
+        用例描述：
+        使用商城购买的道具
+        脚本步骤：
+        1.构造使用者数据
+        2.校验【status code】和返回值【body】状态
+        3.检查背包内物品
+        """
+        Mysql.updateMoneySql(config.payUid)
+        Mysql.deleteUserCommoditySql(config.payUid)
+        Mysql.insertXsUserCommodity(config.payUid, 264, 2)
+        Assert.assert_equal(Mysql.checkUserCommoditySql(264, config.payUid), 0)
+
+    @staticmethod
+    def commodityUse():
+        cid = Mysql.getUserCommodityIdSql(264, config.payUid)
+        data = 'id={}&num=1'.format(cid)
+        res = Request.post_request_session(url=TestPayConcurrent.commodity_use, data=data)
+        Assert.assert_code(res['code'], 200)
+        Assert.assert_equal(Mysql.checkUserCommoditySql(264, config.payUid), 0)
+
+    @staticmethod
+    def main_commodityUse():
+        TestPayConcurrent.commodityReady()
+        time.sleep(30)
+        threads = []
+        for i in range(10):
+            thread = gevent.spawn(TestPayConcurrent.commodityUse)
+            threads.append(thread)
+        gevent.joinall(threads)
+
 
 if __name__=='__main__':
-    TestPayConcurrent.main_payCreate()
+    TestPayConcurrent.main_commodityUse()
 
 
