@@ -87,6 +87,7 @@ class TestPayConcurrent:
         cid = Mysql.getUserCommodityIdSql(264, config.payUid)
         data = 'id={}&num=1'.format(cid)
         res = Request.post_request_session(url=TestPayConcurrent.commodity_use, data=data)
+        print(res)
         Assert.assert_code(res['code'], 200)
         Assert.assert_equal(Mysql.checkUserCommoditySql(264, config.payUid), 0)
 
