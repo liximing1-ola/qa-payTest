@@ -17,7 +17,7 @@ class TestPayConcurrent:
     def shopBuyGift():
         """
         用例描述：
-        验证商城购买道具
+        构造背包内购买礼物场景
         脚本步骤：
         1.构造购买者数据 （更新xs_user_money和xs_user_commodity）
         2.商城内购买礼物道具*10 9900*1=9900

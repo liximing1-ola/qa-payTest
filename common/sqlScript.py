@@ -190,6 +190,8 @@ class Mysql:
             res = cur.fetchone()
             if len(res) > 0:
                 return res[0]
+            else:
+                return 0
         except Exception as error:
             print(error)
 
