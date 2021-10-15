@@ -4,7 +4,6 @@ monkey.patch_all()
 from common.Config import config
 from common.sqlScript import Mysql
 from common import Assert, Request, basicData
-import time
 class TestPayConcurrent:
 
     # 内网支付接口
@@ -58,14 +57,17 @@ class TestPayConcurrent:
         Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 6138)
         print(res)
 
+    @staticmethod
+    def main_payCreate():
+        TestPayConcurrent.shopBuyGift()
+        threads = []
+        for i in range(10):
+            thread = gevent.spawn(TestPayConcurrent.shopGiftToUser)
+            threads.append(thread)
+        gevent.joinall(threads)
+
 
 if __name__=='__main__':
-    TestPayConcurrent.shopBuyGift()
-    threads = []
-    for i in range(10):
-        thread = gevent.spawn(TestPayConcurrent.shopGiftToUser)
-        threads.append(thread)
-
-    gevent.joinall(threads)
+    TestPayConcurrent.main_payCreate()
 
 
