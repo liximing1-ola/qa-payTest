@@ -1,12 +1,10 @@
 import gevent
 from common.Config import config
 from common.sqlScript import Mysql
-import unittest
-import pytest
 from common import Assert, Request, basicData
 from gevent import monkey
 monkey.patch_all()
-class TestPayConcurrent(unittest.TestCase):
+class TestPayConcurrent:
 
     # 内网支付接口
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
@@ -15,8 +13,8 @@ class TestPayConcurrent(unittest.TestCase):
     # 物品使用接口
     commodity_use = config.dev_host + 'commodity/use?package=com.imbb.banban.android'
 
-    @pytest.mark.run(order=1)
-    def test_01_shopBuyGift(self):
+    @staticmethod
+    def test_01_shopBuyGift():
         """
         用例描述：
         验证商城购买多个道具时
@@ -38,8 +36,8 @@ class TestPayConcurrent(unittest.TestCase):
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 100)
         Assert.assert_equal(Mysql.checkUserCommoditySql(cid, config.payUid), 1)
 
-    @pytest.mark.run(order=2)
-    def test_02_shopGiftToUser(self):
+    @staticmethod
+    def test_02_shopGiftToUser():
         """
         用例描述：
         验证商城购买的道具在房间内赠送给其他人，他人收到的分成比在师徒收益上为 62：38
