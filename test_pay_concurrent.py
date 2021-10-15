@@ -27,6 +27,7 @@ class TestPayConcurrent:
         """
         cid=340  # 小天使
         Mysql.updateMoneySql(config.payUid, 10000)
+        Mysql.deleteUserCommoditySql(config.payUid)
         data = basicData.encodeData(payType='shop-buy', cid=340, money=9900, num=1)
         res = Request.post_request_session(url=TestPayConcurrent.pay_url, data=data)
         Assert.assert_code(res['code'], 200)
