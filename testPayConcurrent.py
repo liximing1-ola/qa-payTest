@@ -61,7 +61,6 @@ class TestPayConcurrent:
 
 if __name__=='__main__':
     TestPayConcurrent.shopBuyGift()
-    time.sleep(20)
     threads = []
     for i in range(10):
         thread = gevent.spawn(TestPayConcurrent.shopGiftToUser)
