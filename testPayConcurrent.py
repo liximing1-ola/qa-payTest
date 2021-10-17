@@ -34,6 +34,7 @@ class TestPayConcurrent:
         Assert.assert_code(res['code'], 200)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 100)
         Assert.assert_equal(Mysql.checkUserCommoditySql(cid, config.payUid), 1)
+        print('DES:背包内礼物并发打赏给其他人')
 
     @staticmethod
     def shopGiftToUser():
