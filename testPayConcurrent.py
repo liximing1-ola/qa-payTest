@@ -112,8 +112,8 @@ class TestPayConcurrent:
         Assert.assert_equal(Mysql.checkUserCommoditySql(263, config.payUid), 0)
         Assert.assert_equal(Mysql.checkUserCommoditySql(263, config.testUid), 1)
 
-
-    def test_01_commodityPresent(self):
+    @staticmethod
+    def test_01_commodityPresent():
         des = '并发赠送用户物品的场景'
         TestPayConcurrent.commodityReadyPresent()
         threads = []
@@ -123,7 +123,8 @@ class TestPayConcurrent:
         gevent.joinall(threads)
         # Consts.CASE_LIST_2[des] = Consts.result
 
-    def test_02_payCreate(self):
+    @staticmethod
+    def test_02_payCreate():
         des = '并发打赏用户礼物的场景'
         TestPayConcurrent.startPayCreateReady()
         threads = []
