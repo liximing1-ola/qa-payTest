@@ -129,7 +129,7 @@ class TestPayConcurrent:
         TestPayConcurrent.startPayCreateReady()
         threads = []
         for i in range(8):
-            thread = gevent.spawn(TestPayConcurrent.payCreateConcurrent())
+            thread = gevent.spawn(TestPayConcurrent.payCreateConcurrent)
             threads.append(thread)
         gevent.joinall(threads)
         TestPayConcurrent.endPayCreate()
