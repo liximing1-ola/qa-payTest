@@ -5,6 +5,7 @@ from common.Config import config
 from common.sqlScript import Mysql
 from common import Assert, Request, basicData
 from common.method import getValue
+import time
 class TestPayConcurrent:
 
     # 内网支付接口
@@ -80,7 +81,7 @@ class TestPayConcurrent:
         res = Request.post_request_session(url=TestPayConcurrent.commodity_use, data=payload)
         Assert.assert_code(res['code'], 200)
         Assert.assert_equal(Mysql.checkUserCommoditySql(264, config.payUid), 0)
-        print(res)
+        getValue(res)
 
     @staticmethod
     def commodityReadyPresent():
@@ -129,6 +130,7 @@ class TestPayConcurrent:
     @staticmethod
     def main_commodityUse():
         TestPayConcurrent.commodityReady()
+        time.sleep(20)
         threads = []
         for i in range(8):
             thread = gevent.spawn(TestPayConcurrent.commodityUse)
@@ -137,4 +139,4 @@ class TestPayConcurrent:
 
 
 if __name__=='__main__':
-    TestPayConcurrent.main_payCreate()
+    TestPayConcurrent.main_commodityUse()
