@@ -62,6 +62,7 @@ class TestPayConcurrent:
         Assert.assert_equal(Mysql.checkUserCommoditySql(340, config.payUid), 0)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 6138)
         Assert.assert_equal(Consts.success_num, 1)
+        Consts.fail_num=0
 
     @staticmethod
     def test_01_payCreate():
@@ -104,6 +105,8 @@ class TestPayConcurrent:
         Assert.assert_equal(Mysql.checkUserCommoditySql(264, config.payUid), 0)
         print(Consts.fail_num)
         Assert.assert_equal(Consts.fail_num, 8)
+        Consts.success_num=0
+        print(Consts.success_num)
 
     @staticmethod
     def test_02_commodityUse():
