@@ -63,13 +63,14 @@ class TestPayConcurrent:
         Assert.assert_equal(Mysql.checkUserCommoditySql(340, config.payUid), 0)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 6138)
         print(Consts.success_num)
+        print(Consts.fail_num)
 
     @staticmethod
     def test_01_payCreate():
         des = '并发打赏用户礼物的场景'
         TestPayConcurrent.startPayCreateReady()
         threads = []
-        for i in range(8):
+        for i in range(12):
             thread = gevent.spawn(TestPayConcurrent.payCreateConcurrent)
             threads.append(thread)
         gevent.joinall(threads)

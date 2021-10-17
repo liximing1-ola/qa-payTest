@@ -71,6 +71,7 @@ def getValue(res):
         Consts.success_num += 1
     else:
         print('结果：{}， 时间：{}'.format(res['body'], time.time()))
+        Consts.fail_num += 1
 
 
 if __name__ == '__main__':
