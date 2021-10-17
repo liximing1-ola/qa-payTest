@@ -104,10 +104,10 @@ class TestPayConcurrent:
     def commodityPresent():
         cid = int(Mysql.getUserCommodityIdSql(263, config.payUid))
         payload = 'id={}&num=1&targetId={}'.format(cid, config.testUid)
-        res = Request.post_request_session(url=TestPayConcurrent.commodity_use, data=payload)
-        print(res)
+        res = Request.post_request_session(url=TestPayConcurrent.commodity_present, data=payload)
         Assert.assert_code(res['code'], 200)
         Assert.assert_equal(Mysql.checkUserCommoditySql(263, config.payUid), 0)
+        getValue(res)
 
     @staticmethod
     def main_commodityPresent():
@@ -139,4 +139,4 @@ class TestPayConcurrent:
 
 
 if __name__=='__main__':
-    TestPayConcurrent.main_commodityUse()
+    TestPayConcurrent.main_commodityPresent()

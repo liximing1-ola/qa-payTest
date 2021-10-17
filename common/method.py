@@ -66,9 +66,9 @@ def getKeys(data):
 
 def getValue(res):
     if res['body']['success'] is True:
-        print('结果：{}, 耗时：{}'.format(res['body']['success'], time.time()))
+        print('结果：{}, 时间：{}'.format(res['body']['success'], time.time()))
     else:
-        print('结果：{}， 耗时：{}'.format(res['body'], time.time()))
+        print('结果：{}， 时间：{}'.format(res['body'], time.time()))
 
 
 if __name__ == '__main__':
