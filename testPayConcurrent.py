@@ -112,6 +112,7 @@ class TestPayConcurrent:
     @staticmethod
     def main_commodityPresent():
         TestPayConcurrent.commodityReadyPresent()
+        time.sleep(30)
         threads = []
         for i in range(8):
             thread = gevent.spawn(TestPayConcurrent.commodityPresent)
@@ -130,7 +131,6 @@ class TestPayConcurrent:
     @staticmethod
     def main_commodityUse():
         TestPayConcurrent.commodityReady()
-        time.sleep(20)
         threads = []
         for i in range(8):
             thread = gevent.spawn(TestPayConcurrent.commodityUse)
