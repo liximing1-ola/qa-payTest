@@ -3,7 +3,8 @@ from gevent import monkey
 monkey.patch_all()
 from common.Config import config
 from common.sqlScript import Mysql
-from common import Assert, Request, basicData, Consts
+from Robot import robot
+from common import Assert, Request, basicData, Consts, Logs, method
 from common.method import getValue
 class TestPayConcurrent:
 
@@ -64,7 +65,7 @@ class TestPayConcurrent:
 
     @staticmethod
     def test_01_payCreate():
-        des = '并发打赏用户礼物的场景'
+        d = '并发打赏用户礼物的场景'
         TestPayConcurrent.startPayCreateReady()
         threads = []
         for i in range(10):
@@ -72,7 +73,7 @@ class TestPayConcurrent:
             threads.append(thread)
         gevent.joinall(threads)
         TestPayConcurrent.endPayCreate()
-        # Consts.CASE_LIST_2[des] = Consts.result
+        Consts.CASE_LIST_3[d] = Consts.result
 
     @staticmethod
     def startCommodityUseReady():
@@ -105,7 +106,7 @@ class TestPayConcurrent:
 
     @staticmethod
     def test_02_commodityUse():
-        des = '并发使用背包物品的场景'
+        d = '并发使用背包物品的场景'
         TestPayConcurrent.startCommodityUseReady()
         threads = []
         for i in range(9):
@@ -113,7 +114,7 @@ class TestPayConcurrent:
             threads.append(thread)
         gevent.joinall(threads)
         TestPayConcurrent.endCommodityUse()
-        # Consts.CASE_LIST_2[des] = Consts.result
+        Consts.CASE_LIST_3[d] = Consts.result
 
     @staticmethod
     def startCommodityPresentReady():
@@ -148,7 +149,7 @@ class TestPayConcurrent:
 
     @staticmethod
     def test_03_commodityPresent():
-        des = '并发赠送用户物品的场景'
+        d = '并发赠送用户物品的场景'
         TestPayConcurrent.startCommodityPresentReady()
         threads = []
         for i in range(8):
@@ -156,8 +157,14 @@ class TestPayConcurrent:
             threads.append(thread)
         gevent.joinall(threads)
         TestPayConcurrent.endCommodityPresent()
-        # Consts.CASE_LIST_2[des] = Consts.result
+        Consts.CASE_LIST_3[d] = Consts.result
 
 
 if __name__=='__main__':
     TestPayConcurrent.test_01_payCreate()
+    TestPayConcurrent.test_02_commodityUse()
+    TestPayConcurrent.test_03_commodityPresent()
+    case_list=method.dictToList(Consts.CASE_LIST_3)
+    des = "{}\n".format(case_list)
+    Logs.get_log('concurrentCaseResult.log').info(des)
+    robot('markdown', des, bot='test')

@@ -5,6 +5,8 @@
 CASE_LIST = {}
 # 用例名称字典2
 CASE_LIST_2 = {}
+# 并发case
+CASE_LIST_3 = {}
 # 失败结果列表
 fail_case_reason = []
 # pass
