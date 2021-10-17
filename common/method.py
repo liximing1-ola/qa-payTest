@@ -65,10 +65,16 @@ def getKeys(data):
     return keysAll_list
 
 def getValue(res):
+    success_num=0
+    fail_num=0
     if res['body']['success'] is True:
+        success_num += 1
         print('结果：{}, 时间：{}'.format(res['body']['success'], time.time()))
+        return success_num
     else:
+        fail_num += 1
         print('结果：{}， 时间：{}'.format(res['body'], time.time()))
+        return fail_num
 
 
 if __name__ == '__main__':

@@ -54,7 +54,9 @@ class TestPayConcurrent:
         payload = 'platform=available&type=package&money=9900&params=%7B%22rid%22%3A193185484%2C%22uids%22%3A%22105002312%22%2C%22positions%22%3A%220%22%2C%22position%22%3A-1%2C%22giftId%22%3A54%2C%22giftNum%22%3A1%2C%22price%22%3A9900%2C%22cid%22%3A{}%2C%22ctype%22%3A%22gift%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A1%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22refer%22%3A%22%E7%83%AD%E9%97%A8%3Aroom%22%2C%22useCoin%22%3A-1%7D'.format(cid)
         res = Request.post_request_session(url=TestPayConcurrent.pay_url, data=payload)
         Assert.assert_code(res['code'], 200)
-        getValue(res)
+        print(getValue(res))
+        Assert.assert_equal(Mysql.checkUserCommoditySql(340, config.payUid), 0)
+        Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 6138)
 
     @staticmethod
     def endPayCreate():
@@ -62,7 +64,19 @@ class TestPayConcurrent:
         Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 6138)
 
     @staticmethod
-    def commodityReady():
+    def test_01_payCreate():
+        des = '并发打赏用户礼物的场景'
+        TestPayConcurrent.startPayCreateReady()
+        threads = []
+        for i in range(8):
+            thread = gevent.spawn(TestPayConcurrent.payCreateConcurrent)
+            threads.append(thread)
+        gevent.joinall(threads)
+        TestPayConcurrent.endPayCreate()
+        # Consts.CASE_LIST_2[des] = Consts.result
+
+    @staticmethod
+    def startCommodityUseReady():
         """
         用例描述：
         使用商城购买的道具
@@ -77,16 +91,32 @@ class TestPayConcurrent:
         Assert.assert_equal(Mysql.checkUserCommoditySql(264, config.payUid), 1)
 
     @staticmethod
-    def commodityUse():
+    def commodityUseConcurrent():
         cid = int(Mysql.getUserCommodityIdSql(264, config.payUid))
         payload = 'id={}&num=1'.format(cid)
         res = Request.post_request_session(url=TestPayConcurrent.commodity_use, data=payload)
-        getValue(res)
         Assert.assert_code(res['code'], 200)
+        getValue(res)
         Assert.assert_equal(Mysql.checkUserCommoditySql(264, config.payUid), 0)
 
     @staticmethod
-    def commodityReadyPresent():
+    def endCommodityUse():
+        Assert.assert_equal(Mysql.checkUserCommoditySql(264, config.payUid), 0)
+
+    @staticmethod
+    def test_02_commodityUse():
+        des = '并发使用背包物品的场景'
+        TestPayConcurrent.startCommodityUseReady()
+        threads = []
+        for i in range(8):
+            thread = gevent.spawn(TestPayConcurrent.commodityUseConcurrent)
+            threads.append(thread)
+        gevent.joinall(threads)
+        TestPayConcurrent.endCommodityUse()
+        # Consts.CASE_LIST_2[des] = Consts.result
+
+    @staticmethod
+    def startCommodityPresentReady():
         """
         用例描述：
         赠送商城购买的道具
@@ -103,48 +133,30 @@ class TestPayConcurrent:
         Assert.assert_equal(Mysql.checkUserCommoditySql(263, config.payUid), 2)
 
     @staticmethod
-    def commodityPresent():
+    def commodityPresentConcurrent():
         cid = int(Mysql.getUserCommodityIdSql(263, config.payUid))
         payload = 'id={}&num=1&targetId={}'.format(cid, config.testUid)
         res = Request.post_request_session(url=TestPayConcurrent.commodity_present, data=payload)
-        getValue(res)
         Assert.assert_code(res['code'], 200)
+        getValue(res)
+
+    @staticmethod
+    def endCommodityPresent():
         Assert.assert_equal(Mysql.checkUserCommoditySql(263, config.payUid), 0)
         Assert.assert_equal(Mysql.checkUserCommoditySql(263, config.testUid), 1)
 
     @staticmethod
-    def test_01_commodityPresent():
+    def test_03_commodityPresent():
         des = '并发赠送用户物品的场景'
-        TestPayConcurrent.commodityReadyPresent()
+        TestPayConcurrent.startCommodityPresentReady()
         threads = []
         for i in range(8):
-            thread = gevent.spawn(TestPayConcurrent.commodityPresent)
+            thread = gevent.spawn(TestPayConcurrent.commodityPresentConcurrent)
             threads.append(thread)
         gevent.joinall(threads)
-        # Consts.CASE_LIST_2[des] = Consts.result
-
-    @staticmethod
-    def test_02_payCreate():
-        des = '并发打赏用户礼物的场景'
-        TestPayConcurrent.startPayCreateReady()
-        threads = []
-        for i in range(8):
-            thread = gevent.spawn(TestPayConcurrent.payCreateConcurrent)
-            threads.append(thread)
-        gevent.joinall(threads)
-        TestPayConcurrent.endPayCreate()
-        # Consts.CASE_LIST_2[des] = Consts.result
-
-    def test_03_commodityUse(self):
-        des = '并发使用背包物品的场景'
-        TestPayConcurrent.commodityReady()
-        threads = []
-        for i in range(8):
-            thread = gevent.spawn(TestPayConcurrent.commodityUse)
-            threads.append(thread)
-        gevent.joinall(threads)
+        TestPayConcurrent.endCommodityPresent()
         # Consts.CASE_LIST_2[des] = Consts.result
 
 
 if __name__=='__main__':
-    TestPayConcurrent.test_02_payCreate()
+    TestPayConcurrent.test_01_payCreate()

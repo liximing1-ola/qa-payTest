@@ -28,6 +28,8 @@
     <list default="true" id="44793b3e-09e5-4af0-a369-84e9b064bd19" name="Default Changelist" comment="‘提交修改’">
       <change afterPath="$PROJECT_DIR$/case/test_user_payConcurrent.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Robot.py" beforeDir="false" afterPath="$PROJECT_DIR$/Robot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/method.py" beforeDir="false" afterPath="$PROJECT_DIR$/common/method.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testPayConcurrent.py" beforeDir="false" afterPath="$PROJECT_DIR$/testPayConcurrent.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -198,13 +200,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1615801946332</updated>
-    </task>
-    <task id="LOCAL-00508" summary="‘提交修改’">
-      <created>1634204072331</created>
-      <option name="number" value="00508" />
-      <option name="presentableId" value="LOCAL-00508" />
-      <option name="project" value="LOCAL" />
-      <updated>1634204072331</updated>
     </task>
     <task id="LOCAL-00509" summary="‘提交修改’">
       <created>1634209143724</created>
@@ -542,7 +537,14 @@
       <option name="project" value="LOCAL" />
       <updated>1634456995159</updated>
     </task>
-    <option name="localTasksCounter" value="557" />
+    <task id="LOCAL-00557" summary="‘提交修改’">
+      <created>1634457105031</created>
+      <option name="number" value="00557" />
+      <option name="presentableId" value="LOCAL-00557" />
+      <option name="project" value="LOCAL" />
+      <updated>1634457105031</updated>
+    </task>
+    <option name="localTasksCounter" value="558" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -629,10 +631,10 @@
     </state>
     <state x="779" y="143" key="RollbackChangesDialog/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1634032921504" />
     <state x="2543" y="-5" key="RollbackChangesDialog/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1630922945672" />
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1634456996261">
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1634457105919">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1634456996261" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1634457105919" />
     <state x="451" y="183" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1634292103409" />
     <state x="2281" y="27" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1634280948633" />
     <state x="573" y="325" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1629200916895">
