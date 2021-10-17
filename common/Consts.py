@@ -12,3 +12,6 @@ result = 'P'
 # 记录时间
 startTime=0
 endTime=0
+# 并发结果
+success_num=0
+fail_num=0

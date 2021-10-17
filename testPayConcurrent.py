@@ -3,7 +3,7 @@ from gevent import monkey
 monkey.patch_all()
 from common.Config import config
 from common.sqlScript import Mysql
-from common import Assert, Request, basicData
+from common import Assert, Request, basicData, Consts
 from common.method import getValue
 class TestPayConcurrent:
 
@@ -54,14 +54,16 @@ class TestPayConcurrent:
         payload = 'platform=available&type=package&money=9900&params=%7B%22rid%22%3A193185484%2C%22uids%22%3A%22105002312%22%2C%22positions%22%3A%220%22%2C%22position%22%3A-1%2C%22giftId%22%3A54%2C%22giftNum%22%3A1%2C%22price%22%3A9900%2C%22cid%22%3A{}%2C%22ctype%22%3A%22gift%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A1%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22refer%22%3A%22%E7%83%AD%E9%97%A8%3Aroom%22%2C%22useCoin%22%3A-1%7D'.format(cid)
         res = Request.post_request_session(url=TestPayConcurrent.pay_url, data=payload)
         Assert.assert_code(res['code'], 200)
-        print(getValue(res))
+        getValue(res)
         Assert.assert_equal(Mysql.checkUserCommoditySql(340, config.payUid), 0)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 6138)
+        Consts.success_num += 1
 
     @staticmethod
     def endPayCreate():
         Assert.assert_equal(Mysql.checkUserCommoditySql(340, config.payUid), 0)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 6138)
+        print(Consts.success_num)
 
     @staticmethod
     def test_01_payCreate():
