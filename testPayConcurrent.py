@@ -160,4 +160,4 @@ class TestPayConcurrent:
 
 
 if __name__=='__main__':
-    TestPayConcurrent.test_03_commodityPresent()
+    TestPayConcurrent.test_01_payCreate()
