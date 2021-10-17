@@ -55,8 +55,6 @@ class TestPayConcurrent:
         res = Request.post_request_session(url=TestPayConcurrent.pay_url, data=payload)
         Assert.assert_code(res['code'], 200)
         getValue(res)
-        Assert.assert_equal(Mysql.checkUserCommoditySql(340, config.payUid), 0)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 6138)
 
     @staticmethod
     def endPayCreate():
