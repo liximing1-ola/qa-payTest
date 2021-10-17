@@ -65,7 +65,7 @@ def getKeys(data):
     return keysAll_list
 
 def getValue(res):
-    if res['body']['success']=='True':
+    if res['body']['success'] is True:
         print('结果：{}, 耗时：{}'.format(res['body']['success'], time.time()))
     else:
         print('结果：{}， 耗时：{}'.format(res['body'], time.time()))

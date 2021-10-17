@@ -27,7 +27,6 @@
   <component name="ChangeListManager">
     <list default="true" id="44793b3e-09e5-4af0-a369-84e9b064bd19" name="Default Changelist" comment="‘提交修改’">
       <change beforePath="$PROJECT_DIR$/common/method.py" beforeDir="false" afterPath="$PROJECT_DIR$/common/method.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testPayConcurrent.py" beforeDir="false" afterPath="$PROJECT_DIR$/testPayConcurrent.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -198,13 +197,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1615801946332</updated>
-    </task>
-    <task id="LOCAL-00498" summary="‘提交修改’">
-      <created>1634030974665</created>
-      <option name="number" value="00498" />
-      <option name="presentableId" value="LOCAL-00498" />
-      <option name="project" value="LOCAL" />
-      <updated>1634030974665</updated>
     </task>
     <task id="LOCAL-00499" summary="‘提交修改’">
       <created>1634031702555</created>
@@ -542,7 +534,14 @@
       <option name="project" value="LOCAL" />
       <updated>1634452437665</updated>
     </task>
-    <option name="localTasksCounter" value="547" />
+    <task id="LOCAL-00547" summary="‘提交修改’">
+      <created>1634452954884</created>
+      <option name="number" value="00547" />
+      <option name="presentableId" value="LOCAL-00547" />
+      <option name="project" value="LOCAL" />
+      <updated>1634452954884</updated>
+    </task>
+    <option name="localTasksCounter" value="548" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -629,10 +628,10 @@
     </state>
     <state x="779" y="143" key="RollbackChangesDialog/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1634032921504" />
     <state x="2543" y="-5" key="RollbackChangesDialog/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1630922945672" />
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1634452438867">
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1634452956028">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1634452438867" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1634452956028" />
     <state x="451" y="183" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1634292103409" />
     <state x="2281" y="27" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1634280948633" />
     <state x="573" y="325" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1629200916895">
