@@ -77,9 +77,9 @@ class TestPayConcurrent:
         cid = int(Mysql.getUserCommodityIdSql(264, config.payUid))
         payload = 'id={}&num=1'.format(cid)
         res = Request.post_request_session(url=TestPayConcurrent.commodity_use, data=payload)
-        print(res)
         Assert.assert_code(res['code'], 200)
         Assert.assert_equal(Mysql.checkUserCommoditySql(264, config.payUid), 0)
+        print(res)
 
     @staticmethod
     def commodityReadyPresent():
@@ -111,8 +111,8 @@ class TestPayConcurrent:
     def main_commodityPresent():
         TestPayConcurrent.commodityReadyPresent()
         threads = []
-        for i in range(2):
-            thread = gevent.spawn(TestPayConcurrent.commodityPresent())
+        for i in range(8):
+            thread = gevent.spawn(TestPayConcurrent.commodityPresent)
             threads.append(thread)
         gevent.joinall(threads)
 
@@ -120,7 +120,7 @@ class TestPayConcurrent:
     def main_payCreate():
         TestPayConcurrent.shopBuyGift()
         threads = []
-        for i in range(10):
+        for i in range(8):
             thread = gevent.spawn(TestPayConcurrent.shopGiftToUser)
             threads.append(thread)
         gevent.joinall(threads)
@@ -129,13 +129,11 @@ class TestPayConcurrent:
     def main_commodityUse():
         TestPayConcurrent.commodityReady()
         threads = []
-        for i in range(2):
+        for i in range(8):
             thread = gevent.spawn(TestPayConcurrent.commodityUse)
             threads.append(thread)
         gevent.joinall(threads)
 
 
 if __name__=='__main__':
-    TestPayConcurrent.main_payCreate()
-
-
+    TestPayConcurrent.main_commodityUse()
