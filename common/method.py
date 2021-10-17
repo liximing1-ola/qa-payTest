@@ -1,6 +1,7 @@
 import requests
 import random
 import time
+from common import Consts
 
 # 将列表生成支持markdown的形式
 def dictToList(result_dict):
@@ -67,6 +68,7 @@ def getKeys(data):
 def getValue(res):
     if res['body']['success'] is True:
         print('结果：{}, 时间：{}'.format(res['body']['success'], time.time()))
+        Consts.success_num += 1
     else:
         print('结果：{}， 时间：{}'.format(res['body'], time.time()))
 

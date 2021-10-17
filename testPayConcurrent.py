@@ -57,7 +57,6 @@ class TestPayConcurrent:
         getValue(res)
         Assert.assert_equal(Mysql.checkUserCommoditySql(340, config.payUid), 0)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 6138)
-        Consts.success_num += 1
 
     @staticmethod
     def endPayCreate():
