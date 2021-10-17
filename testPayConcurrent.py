@@ -147,4 +147,4 @@ class TestPayConcurrent:
 
 
 if __name__=='__main__':
-    TestPayConcurrent.payCreateConcurrent()
+    TestPayConcurrent.test_02_payCreate()
