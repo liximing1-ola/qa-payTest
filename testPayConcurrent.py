@@ -4,7 +4,7 @@ monkey.patch_all()
 from common.Config import config
 from common.sqlScript import Mysql
 from common import Assert, Request, basicData
-import time
+from common.method import getValue
 class TestPayConcurrent:
 
     # 内网支付接口
@@ -57,7 +57,7 @@ class TestPayConcurrent:
         Assert.assert_code(res['code'], 200)
         Assert.assert_equal(Mysql.checkUserCommoditySql(bag_gift_cid, config.payUid), 0)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.testUid), 6138)
-        print('Response: {}, total_time：{}, now_time:{}'.format(res['body'], res['time_total'], time.time()))
+        getValue(res)
 
     @staticmethod
     def commodityReady():

@@ -1,5 +1,6 @@
 import requests
 import random
+import time
 
 # 将列表生成支持markdown的形式
 def dictToList(result_dict):
@@ -62,6 +63,12 @@ def getKeys(data):
 
     getKey(data)
     return keysAll_list
+
+def getValue(res):
+    if res['body']['success']=='True':
+        print('结果：{}, 耗时：{}'.format(res['body']['success'], time.time()))
+    else:
+        print('结果：{}， 耗时：{}'.format(res['body'], time.time()))
 
 
 if __name__ == '__main__':
