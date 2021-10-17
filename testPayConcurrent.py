@@ -101,13 +101,14 @@ class TestPayConcurrent:
     @staticmethod
     def endCommodityUse():
         Assert.assert_equal(Mysql.checkUserCommoditySql(264, config.payUid), 0)
+        Assert.assert_equal(Consts.fail_num, 8)
 
     @staticmethod
     def test_02_commodityUse():
         des = '并发使用背包物品的场景'
         TestPayConcurrent.startCommodityUseReady()
         threads = []
-        for i in range(8):
+        for i in range(9):
             thread = gevent.spawn(TestPayConcurrent.commodityUseConcurrent)
             threads.append(thread)
         gevent.joinall(threads)
@@ -158,4 +159,4 @@ class TestPayConcurrent:
 
 
 if __name__=='__main__':
-    TestPayConcurrent.test_01_payCreate()
+    TestPayConcurrent.test_02_commodityUse()
