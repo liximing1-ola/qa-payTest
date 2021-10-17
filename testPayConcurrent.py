@@ -4,7 +4,6 @@ monkey.patch_all()
 from common.Config import config
 from common.sqlScript import Mysql
 from common import Assert, Request, basicData
-import time
 class TestPayConcurrent:
 
     # 内网支付接口
@@ -59,15 +58,6 @@ class TestPayConcurrent:
         print(res)
 
     @staticmethod
-    def main_payCreate():
-        TestPayConcurrent.shopBuyGift()
-        threads = []
-        for i in range(10):
-            thread = gevent.spawn(TestPayConcurrent.shopGiftToUser)
-            threads.append(thread)
-        gevent.joinall(threads)
-
-    @staticmethod
     def commodityReady():
         """
         用例描述：
@@ -92,6 +82,50 @@ class TestPayConcurrent:
         Assert.assert_equal(Mysql.checkUserCommoditySql(264, config.payUid), 0)
 
     @staticmethod
+    def commodityReadyPresent():
+        """
+        用例描述：
+        赠送商城购买的道具
+        脚本步骤：
+        1.构造使用者数据
+        2.校验【status code】和返回值【body】状态
+        3.检查背包内物品
+        """
+        Mysql.updateMoneySql(config.payUid)
+        Mysql.updateMoneySql(config.testUid)
+        Mysql.deleteUserCommoditySql(config.payUid)
+        Mysql.deleteUserCommoditySql(config.testUid)
+        Mysql.insertXsUserCommodity(config.payUid, 263, 2)
+        Assert.assert_equal(Mysql.checkUserCommoditySql(263, config.payUid), 2)
+
+    @staticmethod
+    def commodityPresent():
+        cid = int(Mysql.getUserCommodityIdSql(263, config.payUid))
+        payload = 'id={}&num=1&targetId={}'.format(cid, config.testUid)
+        res = Request.post_request_session(url=TestPayConcurrent.commodity_use, data=payload)
+        print(res)
+        Assert.assert_code(res['code'], 200)
+        Assert.assert_equal(Mysql.checkUserCommoditySql(263, config.payUid), 0)
+
+    @staticmethod
+    def main_commodityPresent():
+        TestPayConcurrent.commodityReadyPresent()
+        threads = []
+        for i in range(2):
+            thread = gevent.spawn(TestPayConcurrent.commodityPresent())
+            threads.append(thread)
+        gevent.joinall(threads)
+
+    @staticmethod
+    def main_payCreate():
+        TestPayConcurrent.shopBuyGift()
+        threads = []
+        for i in range(10):
+            thread = gevent.spawn(TestPayConcurrent.shopGiftToUser)
+            threads.append(thread)
+        gevent.joinall(threads)
+
+    @staticmethod
     def main_commodityUse():
         TestPayConcurrent.commodityReady()
         threads = []
@@ -102,6 +136,6 @@ class TestPayConcurrent:
 
 
 if __name__=='__main__':
-    TestPayConcurrent.main_commodityUse()
+    TestPayConcurrent.main_payCreate()
 
 
