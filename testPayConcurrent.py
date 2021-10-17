@@ -102,6 +102,7 @@ class TestPayConcurrent:
     @staticmethod
     def endCommodityUse():
         Assert.assert_equal(Mysql.checkUserCommoditySql(264, config.payUid), 0)
+        print(Consts.fail_num)
         Assert.assert_equal(Consts.fail_num, 8)
 
     @staticmethod
@@ -161,9 +162,9 @@ class TestPayConcurrent:
 
 
 if __name__=='__main__':
-    TestPayConcurrent.test_01_payCreate()
+    #TestPayConcurrent.test_01_payCreate()
     TestPayConcurrent.test_02_commodityUse()
-    TestPayConcurrent.test_03_commodityPresent()
+    #TestPayConcurrent.test_03_commodityPresent()
     case_list=method.dictToList(Consts.CASE_LIST_3)
     des = "{}\n".format(case_list)
     Logs.get_log('concurrentCaseResult.log').info(des)
