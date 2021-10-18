@@ -59,7 +59,3 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectMoneySql(config.pt_testUid, 'money_cash'), 80)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.pt_payUid), 300)
         Consts.CASE_LIST[des] = 'pass'
-
-
-if __name__ == '__main__':
-    pass

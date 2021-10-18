@@ -60,8 +60,3 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectPayChangeSql(config.pt_payUid), 100)
         Assert.assert_equal(Mysql.selectPayChangeOpSql(config.pt_payUid), 'consume')
         Consts.CASE_LIST[des] = 'pass'
-
-
-if __name__ == '__main__':
-    pay = TestPayCreate()
-    pay.test_01_RoomPayNoMoney()
