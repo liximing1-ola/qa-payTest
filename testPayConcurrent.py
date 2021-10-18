@@ -146,7 +146,7 @@ class TestPayConcurrent:
     @staticmethod
     def endCommodityPresent():
         Assert.assert_equal(Mysql.checkUserCommoditySql(263, config.payUid), 0)
-        Assert.assert_equal(Mysql.checkUserCommoditySql(263, config.testUid), 1)
+        Assert.assert_equal(Mysql.checkUserCommoditySql(263, config.testUid), 2)
         Assert.assert_equal(Consts.success_num, 2)
 
     @staticmethod
