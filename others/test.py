@@ -1,4 +1,5 @@
 import requests
+import time
 
 def test():
     url = 'http://192.168.11.46/test?uid=105002093&rid=200000563'
@@ -8,4 +9,5 @@ def test():
 
 if __name__=='__main__':
     while True:
+        time.sleep(0.5)
         test()
