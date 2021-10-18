@@ -169,4 +169,4 @@ if __name__=='__main__':
     case_list=method.dictToList(Consts.CASE_LIST_3)
     des = "{}\n".format(case_list)
     Logs.get_log('concurrentCaseResult.log').info(des)
-    robot('markdown', des, bot='test')
+    robot('markdown', des, bot='BB')
