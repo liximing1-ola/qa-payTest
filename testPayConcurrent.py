@@ -4,7 +4,7 @@ monkey.patch_all()
 from common.Config import config
 from common.sqlScript import Mysql
 from Robot import robot
-from common import Assert, Request, basicData, Consts, Logs, method
+from common import Assert, Request, basicData, Consts, Logs, method, Session
 from common.method import getValue
 class TestPayConcurrent:
 
@@ -28,6 +28,7 @@ class TestPayConcurrent:
         5.检查背包内物品
         """
         cid=340  # 小天使
+        Session.Session().get_session('dev')
         Mysql.updateMoneySql(config.payUid, 10000)
         Mysql.deleteUserCommoditySql(config.payUid)
         data = basicData.encodeData(payType='shop-buy', cid=340, money=9900, num=1)
