@@ -1,12 +1,13 @@
-import gevent
 from gevent import monkey
 monkey.patch_all()
+import gevent
 from common.Config import config
 from common.sqlScript import Mysql
 from Robot import robot
 from common import Assert, Request, basicData, Consts, Logs, method, Session
 from common.method import getValue
 import unittest
+import sys
 class TestPayConcurrent(unittest.TestCase):
 
     # 内网支付接口
@@ -15,6 +16,8 @@ class TestPayConcurrent(unittest.TestCase):
     commodity_present = config.dev_host + 'commodity/present?package=com.imbb.banban.android'
     # 物品使用接口
     commodity_use = config.dev_host + 'commodity/use?package=com.imbb.banban.android'
+
+    sys.setrecursionlimit(1000000)  # 递归调用限制次数
 
     @staticmethod
     def startPayCreateReady():
