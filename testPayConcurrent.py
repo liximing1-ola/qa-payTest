@@ -66,11 +66,11 @@ class TestPayConcurrent:
         Consts.fail_num=0
 
     @staticmethod
-    def test_01_payCreate():
-        d = '并发打赏用户礼物的场景'
+    def test_01_payCreate(num_times):
+        d = '并发打赏背包礼物的场景'
         TestPayConcurrent.startPayCreateReady()
         threads = []
-        for i in range(10):
+        for i in range(num_times):
             thread = gevent.spawn(TestPayConcurrent.payCreateConcurrent)
             threads.append(thread)
         gevent.joinall(threads)
@@ -102,21 +102,21 @@ class TestPayConcurrent:
         Assert.assert_equal(Mysql.checkUserCommoditySql(264, config.payUid), 0)
 
     @staticmethod
-    def endCommodityUse():
+    def endCommodityUse(num_times):
         Assert.assert_equal(Mysql.checkUserCommoditySql(264, config.payUid), 0)
-        Assert.assert_equal(Consts.fail_num, 8)
+        Assert.assert_equal(Consts.fail_num, num_times - 1)
         Consts.success_num=0
 
     @staticmethod
-    def test_02_commodityUse():
+    def test_02_commodityUse(num_times):
         d = '并发使用背包物品的场景'
         TestPayConcurrent.startCommodityUseReady()
         threads = []
-        for i in range(9):
+        for i in range(num_times):
             thread = gevent.spawn(TestPayConcurrent.commodityUseConcurrent)
             threads.append(thread)
         gevent.joinall(threads)
-        TestPayConcurrent.endCommodityUse()
+        TestPayConcurrent.endCommodityUse(num_times)
         Consts.CASE_LIST_3[d] = Consts.result
 
     @staticmethod
@@ -151,11 +151,11 @@ class TestPayConcurrent:
         Assert.assert_equal(Consts.success_num, 2)
 
     @staticmethod
-    def test_03_commodityPresent():
+    def test_03_commodityPresent(num_times):
         d = '并发赠送用户物品的场景'
         TestPayConcurrent.startCommodityPresentReady()
         threads = []
-        for i in range(8):
+        for i in range(num_times):
             thread = gevent.spawn(TestPayConcurrent.commodityPresentConcurrent)
             threads.append(thread)
         gevent.joinall(threads)
@@ -164,9 +164,10 @@ class TestPayConcurrent:
 
 
 if __name__=='__main__':
-    TestPayConcurrent.test_01_payCreate()
-    TestPayConcurrent.test_02_commodityUse()
-    TestPayConcurrent.test_03_commodityPresent()
+    num=10
+    TestPayConcurrent.test_01_payCreate(num)
+    TestPayConcurrent.test_02_commodityUse(num)
+    TestPayConcurrent.test_03_commodityPresent(num)
     case_list=method.dictToList(Consts.CASE_LIST_3)
     des = "{}\n".format(case_list)
     Logs.get_log('concurrentCaseResult.log').info(des)
