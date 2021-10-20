@@ -95,8 +95,8 @@ def main_pay():
     updateBeanSql(100287189, 0)
     time.sleep(5)
     while i < 10000:
-        print(i)
         num = int(random.choice('136'))
+        print('第{}次, 开蛋数为{}'.format(i, num))
         postPayCreate(num)
         time.sleep(1)
         i += 1
