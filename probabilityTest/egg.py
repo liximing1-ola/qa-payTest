@@ -2,11 +2,10 @@
 import requests
 import urllib.parse
 import json
-import logging
 import pymysql
 import random
 import time
-def postPayCreate():
+def postPayCreate(giftNum):
     url = "https://dev.iambanban.com/pay/create?package=com.imbb.banban.android"
     headers = {
         'Content-Type': "application/x-www-form-urlencoded",
@@ -16,20 +15,20 @@ def postPayCreate():
     data = {
         "platform": "available",
         "type": "package",
-        "money": 200,
+        "money": 200*giftNum,
         "params":
             {"rid": 200000563,
              "uids": 100287189,
              "positions": "1",
              "position": -1,
              "giftId": 558,
-             "giftNum": 1,
+             "giftNum": giftNum,
              "price": 200,
              "cid": 0,
              "ctype": "",
              "duction_money": 0,
              "version": 2,
-             "num": 1,
+             "num": giftNum,
              "gift_type": 'bean',
              "useCoin": -1,
              "star": 0,
@@ -43,51 +42,10 @@ def postPayCreate():
     re = requests.post(url, data=data, headers=headers)
     res = json.loads(re.text)
     if res.get('success') > 0:
-        logging.info('post success')
+        print('success')
     else:
         raise EnvironmentError('测试环境异常:', res.get('msg'))
 
-
-# 房间赠送箱子
-def postPayCreateRoom(giftNum):
-    url = 'https://dev.iambanban.com/pay/create?package=com.imbb.banban.android'
-    headers = {
-        'Content-Type': "application/x-www-form-urlencoded",
-        'cache-control': "no-cache",
-        'Postman-Token': "f7d705b2-cf29-4a4a-81ba-2c8c8d0f5ed5",
-        "user-token": '8257__2BTAUzHPAI0sZrX6TQ8iLqv__2F__2FT3cRNpUsIQvOiA7noig5GnLyxCWq8Un6P6iIiajb2VxljHscHwAAM2xMU__2FoNzPLla4ai__2FmdmSOxnHXTrx__2FueX2__2BbsLvl'}
-    data = {
-        "platform": "available",
-        "type": "package",
-        "money": 600,
-        "params":
-            {"rid": 193185405,
-             "uids": "100287189",
-             "positions": "0",
-             "giftId": 488,
-             "giftNum": giftNum,
-             "position": -1,
-             "price": giftNum*600,
-             "cid": 0,
-             "ctype": "",
-             "duction_money": 0,
-             "version": 2,
-             "num": giftNum,
-             "gift_type": "bean",
-             "exchange":1
-             }
-    }
-    d = urllib.parse.urlencode(data)
-    data = d.replace('+', '').replace('%27', '%22')
-    re = requests.post(url, data=data, headers=headers)
-    res = json.loads(re.text)
-    if res.get('success') > 0:
-        pass
-        # logging.info('post success')
-    else:
-        raise EnvironmentError('测试环境异常:', res.get('msg'))
-
-# 本地服务器数据库测试用
 def conMysql():
     db_config = {"dev_46_db": '192.168.11.46',
                  "dev_46_user": 'root',
@@ -104,17 +62,6 @@ def conMysql():
     cursor = con.cursor()
     return con, cursor
 
-def giveBox():
-    # updateMoneySql(118433132, 100000000)
-    # updateBeanSql(100287189)
-    num = 1
-    while 5000:
-        box_num=random.randint(1, 99)
-        print('第{}次，随机开箱数{}'.format(num, box_num))
-        num=num+1
-        postPayCreateRoom(box_num)
-        time.sleep(2)
-
 def updateMoneySql(uid, money=0, money_cash=0, money_cash_b=0, money_b=0, gold_coin=0):
     # xs_user_money_extend:money_coupon*2
     # xs_user_money:money
@@ -130,9 +77,9 @@ def updateMoneySql(uid, money=0, money_cash=0, money_cash_b=0, money_b=0, gold_c
     finally:
         con.commit()
 
-def updateBeanSql(uid):
+def updateBeanSql(uid, coupon_money):
     con, cur = conMysql()
-    sql = "update xs_user_money_extend set money_coupon=0 where uid={} limit 1".format(uid)
+    sql = "update xs_user_money_extend set money_coupon={} where uid={} limit 1".format(uid, coupon_money)
     try:
         cur.execute(sql)
     except Exception as error:
@@ -142,6 +89,18 @@ def updateBeanSql(uid):
         time.sleep(0.1)
         con.commit()
 
+def main():
+    i = 0
+    updateBeanSql(127565486, coupon_money=1000000000)
+    updateBeanSql(100287189, 0)
+    time.sleep(30)
+    while i > 10000:
+        num = int(random.choice('136'))
+        postPayCreate(num)
+        time.sleep(1)
+        num += 1
+
 
 if __name__ == '__main__':
-    postPayCreate()
+    r = random.choice('136')
+    print(r)
