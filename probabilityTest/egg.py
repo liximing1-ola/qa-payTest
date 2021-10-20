@@ -42,7 +42,7 @@ def postPayCreate(giftNum):
     re = requests.post(url, data=data, headers=headers)
     res = json.loads(re.text)
     if res.get('success') > 0:
-        print('success')
+        pass
     else:
         raise EnvironmentError('测试环境异常:', res.get('msg'))
 
@@ -94,11 +94,9 @@ def main_pay():
     updateBeanSql(127565486, coupon_money=1000000000)
     updateBeanSql(100287189, 0)
     time.sleep(5)
-    while i > 10000:
+    while i < 10000:
         print(i)
         num = int(random.choice('136'))
-        print(num)
-        print(type(num))
         postPayCreate(num)
         time.sleep(1)
         i += 1
