@@ -89,17 +89,19 @@ def updateBeanSql(uid, coupon_money):
         time.sleep(0.1)
         con.commit()
 
-def main():
+def main_pay():
     i = 0
     updateBeanSql(127565486, coupon_money=1000000000)
     updateBeanSql(100287189, 0)
-    time.sleep(30)
+    time.sleep(5)
     while i > 10000:
         num = int(random.choice('136'))
+        print(num)
+        print(type(num))
         postPayCreate(num)
         time.sleep(1)
         num += 1
 
 
 if __name__ == '__main__':
-    postPayCreate(1)
+    main_pay()
