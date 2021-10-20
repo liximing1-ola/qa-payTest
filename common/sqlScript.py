@@ -497,7 +497,7 @@ class Mysql:
         sign_time=int(time.time())
         end_time=sign_time + 604800
         sql = 'update xs_online_earn_relation set agent_uid={}, artist_uid={}, sign_time={}, end_time={} ' \
-              'where id=1'.format(agent_uid, artist_uid, sign_time, end_time)
+              'where id=13'.format(agent_uid, artist_uid, sign_time, end_time)
         try:
             cur.execute(sql)
         except Exception as error:
