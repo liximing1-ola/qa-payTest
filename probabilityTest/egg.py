@@ -100,7 +100,7 @@ def main_pay():
         print(type(num))
         postPayCreate(num)
         time.sleep(1)
-        num += 1
+        i += 1
 
 
 if __name__ == '__main__':
