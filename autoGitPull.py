@@ -1,9 +1,7 @@
-import git
+import git, time, os
 from git.repo import Repo
-import time
 from common import Logs, Consts, Session
 from common.Config import config
-import os
 from Robot import robot
 def autoGitPull():
     Consts.startTime = time.time()

@@ -193,19 +193,19 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
-    def test_07_liveRoomPay_522523(self):
+    def test_07_liveRoomPay_602515(self):
         """
         用例描述：
-        tdr:直播间内工会非一代宗师主播-公会长-官方：52:25:23
+        tdr:直播间内工会非一代宗师主播-公会长-官方：60:25:15
         脚本步骤：
         1.构造打赏者和主播数据 （更新xs_user_money和xs_broker_user）
         2.房间内一对一打赏（打赏1000分）
         3.校验【status code】和返回值【body】状态
-        4.检查被打赏者余额和账户，预期为：money_cash=520
+        4.检查被打赏者余额和账户，预期为：money_cash=600
         5.检查公会长余额，预期为：250
         6.检查打赏者余额.预期为：0
         """
-        des = '直播公会主播(非宗师)/公会长打赏分成52:25:23'
+        des = '直播公会主播(非宗师)/公会长打赏分成60:25:15'
         test_uid = config.live_role['pack_cal_uid']
         ceo_uid = config.live_role['pack_ceo']
         Mysql.updateChatroomUid(test_uid)  # 商业房房主
@@ -220,24 +220,24 @@ class TestPayCreate(unittest.TestCase):
         reason = 'Depiction: {},  failReason: {}'.format(des, res)
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectMoneySql(test_uid, 'money_cash'), 520)
+        Assert.assert_equal(Mysql.selectMoneySql(test_uid, 'money_cash'), 600)
         Assert.assert_equal(Mysql.selectAllMoneySql(ceo_uid), 250)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
-    def test_08_IMPay_522028(self):
+    def test_08_IMPay_602020(self):
         """
         用例描述：
-        tdr:私聊工会非一代宗师主播-公会长-官方：52:20:28
+        tdr:私聊工会非一代宗师主播-公会长-官方：60:20:20
         脚本步骤：
         1.构造打赏者和主播数据 （更新xs_user_money和xs_broker_user）
         2.房间内一对一打赏（打赏1000分）
         3.校验【status code】和返回值【body】状态
-        4.检查被打赏者余额和账户，预期为：money_cash=520
+        4.检查被打赏者余额和账户，预期为：money_cash=600
         5.检查公会长余额，预期为：200
         6.检查打赏者余额.预期为：0
         """
-        des = '公会主播(非宗师)/公会长私聊分成52:20:28'
+        des = '公会主播(非宗师)/公会长私聊分成60:20:20'
         test_uid = config.live_role['pack_cal_uid']
         ceo_uid = config.live_role['pack_ceo']
         Mysql.updateChatroomUid(test_uid)  # 商业房房主
@@ -253,7 +253,7 @@ class TestPayCreate(unittest.TestCase):
         reason = 'Depiction: {},  failReason: {}'.format(des, res)
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectMoneySql(test_uid, 'money_cash'), 520)
+        Assert.assert_equal(Mysql.selectMoneySql(test_uid, 'money_cash'), 600)
         Assert.assert_equal(Mysql.selectAllMoneySql(ceo_uid), 200)
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
