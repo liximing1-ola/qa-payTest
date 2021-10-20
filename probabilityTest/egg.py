@@ -7,7 +7,7 @@ import pymysql
 import random
 import time
 def postPayCreate():
-    url = "https://192.168.11.58/pay/create?package=com.imbb.banban.android"
+    url = "https://dev.iambanban.com/pay/create?package=com.imbb.banban.android"
     headers = {
         'Content-Type': "application/x-www-form-urlencoded",
         'cache-control': "no-cache",
