@@ -102,5 +102,4 @@ def main():
 
 
 if __name__ == '__main__':
-    r = random.choice('136')
-    print(r)
+    main()
