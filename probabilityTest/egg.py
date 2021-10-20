@@ -79,7 +79,7 @@ def updateMoneySql(uid, money=0, money_cash=0, money_cash_b=0, money_b=0, gold_c
 
 def updateBeanSql(uid, coupon_money):
     con, cur = conMysql()
-    sql = "update xs_user_money_extend set money_coupon={} where uid={} limit 1".format(uid, coupon_money)
+    sql = "update xs_user_money_extend set money_coupon={} where uid={} limit 1".format(coupon_money, uid)
     try:
         cur.execute(sql)
     except Exception as error:
