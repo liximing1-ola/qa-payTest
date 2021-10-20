@@ -56,7 +56,7 @@ def conMysql():
     con = pymysql.connect(host=db_config['dev_46_db'],
                           port=3306,
                           user=db_config['dev_46_user'],
-                          passwd=db_config['dev_46+pas'],
+                          passwd=db_config['dev_46_pas'],
                           charset='utf8')
     con.select_db('xianshi')
     cursor = con.cursor()
