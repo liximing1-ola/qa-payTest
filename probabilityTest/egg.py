@@ -41,7 +41,7 @@ def postPayCreate(giftNum):
     d = urllib.parse.urlencode(data)
     data = d.replace('+', '').replace('%27', '%22')
     res = requests.post(url, data=data, headers=headers)
-    print(res)
+    print(res.reason)
 
 def conMysql():
     db_config = {"dev_46_db": '192.168.11.46',
