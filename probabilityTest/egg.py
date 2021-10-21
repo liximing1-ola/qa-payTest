@@ -40,7 +40,8 @@ def postPayCreate(giftNum):
     }
     d = urllib.parse.urlencode(data)
     data = d.replace('+', '').replace('%27', '%22')
-    requests.post(url, data=data, headers=headers)
+    res = requests.post(url, data=data, headers=headers)
+    print(res)
 
 def conMysql():
     db_config = {"dev_46_db": '192.168.11.46',
@@ -72,8 +73,8 @@ def updateBeanSql(uid, coupon_money):
 
 def main_pay():
     i = 1
-    #updateBeanSql(127565486, coupon_money=1000000000)
-    #updateBeanSql(100287189, 0)
+    # updateBeanSql(127565486, coupon_money=1000000000)
+    # updateBeanSql(100287189, 0)
     while i < 10000:
         num = int(random.choice('136'))
         print('第{}次, 开蛋数为{}'.format(i, num))
