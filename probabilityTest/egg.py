@@ -5,6 +5,7 @@ import json
 import pymysql
 import random
 import time
+# 个人房幸运蛋概率测试
 def postPayCreate(giftNum):
     url = "https://dev.iambanban.com/pay/create?package=com.imbb.banban.android"
     headers = {
@@ -62,21 +63,6 @@ def conMysql():
     cursor = con.cursor()
     return con, cursor
 
-def updateMoneySql(uid, money=0, money_cash=0, money_cash_b=0, money_b=0, gold_coin=0):
-    # xs_user_money_extend:money_coupon*2
-    # xs_user_money:money
-    # money_coupon*2/money=返奖率
-    con, cur = conMysql()
-    sql = "update xs_user_money set money={}, money_b={}, money_cash={}, money_cash_b={},gold_coin={} where uid={} limit 1"\
-            .format(money, money_b, money_cash, money_cash_b, gold_coin, uid)
-    try:
-        cur.execute(sql)
-    except Exception as error:
-        con.rollback()
-        print('update fail', error)
-    finally:
-        con.commit()
-
 def updateBeanSql(uid, coupon_money):
     con, cur = conMysql()
     sql = "update xs_user_money_extend set money_coupon={} where uid={} limit 1".format(coupon_money, uid)
@@ -90,10 +76,9 @@ def updateBeanSql(uid, coupon_money):
         con.commit()
 
 def main_pay():
-    i = 0
-    updateBeanSql(127565486, coupon_money=1000000000)
-    updateBeanSql(100287189, 0)
-    time.sleep(5)
+    i = 1
+    #updateBeanSql(127565486, coupon_money=1000000000)
+    #updateBeanSql(100287189, 0)
     while i < 10000:
         num = int(random.choice('136'))
         print('第{}次, 开蛋数为{}'.format(i, num))
