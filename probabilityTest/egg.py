@@ -12,7 +12,7 @@ def postPayCreate(giftNum):
         'Content-Type': "application/x-www-form-urlencoded",
         'cache-control': "no-cache",
         'Postman-Token': "f7d705b2-cf29-4a4a-81ba-2c8c8d0f5ed5",
-        "user-token": '80f0VpMwTs__2Fb__2BWidJAx60q1CJUZ46MoetFHMfPhJq9P__2F16VRv3rTJidyKNuOsXMqJGZUgQZwKOeyTAjI0RwEM8koV7UeQYZs0L6S__2Bn7auhQgBEr8G36FCM9t'}
+        "user-token": 'd5ebEDTZUx__2Fr39HLI7Pgt0jvVlvxlgGFnBWZsQOSzqLQkR0LKp897obh6O56WqMAtcdd0b__2FMVKAWRgQRm5knamMkjxulS0ZeuscVUu7jRfvrdcaFVgb3rO7R'}
     data = {
         "platform": "available",
         "type": "package",
@@ -41,7 +41,11 @@ def postPayCreate(giftNum):
     d = urllib.parse.urlencode(data)
     data = d.replace('+', '').replace('%27', '%22')
     res = requests.post(url, data=data, headers=headers)
-    print(res.text)
+    res = res.json()
+    if res['success'] != 1:
+        pass
+    else:
+        raise EnvironmentError('error')
 
 def conMysql():
     db_config = {"dev_46_db": '192.168.11.46',
