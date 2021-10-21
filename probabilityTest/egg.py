@@ -40,12 +40,7 @@ def postPayCreate(giftNum):
     }
     d = urllib.parse.urlencode(data)
     data = d.replace('+', '').replace('%27', '%22')
-    re = requests.post(url, data=data, headers=headers)
-    res = json.loads(re.text)
-    if res.get('success') > 0:
-        pass
-    else:
-        raise EnvironmentError('测试环境异常:', res.get('msg'))
+    requests.post(url, data=data, headers=headers)
 
 def conMysql():
     db_config = {"dev_46_db": '192.168.11.46',
