@@ -42,6 +42,7 @@ def postPayCreate(giftNum):
     data = d.replace('+', '').replace('%27', '%22')
     res = requests.post(url, data=data, headers=headers)
     res = res.json()
+    print(res)
     if res['success'] != 1:
         pass
     else:
