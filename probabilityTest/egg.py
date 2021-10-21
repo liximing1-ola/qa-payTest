@@ -83,7 +83,7 @@ def main_pay():
         num = int(random.choice('136'))
         print('第{}次, 开蛋数为{}'.format(i, num))
         postPayCreate(num)
-        time.sleep(1)
+        time.sleep(0.2)
         i += 1
 
 
