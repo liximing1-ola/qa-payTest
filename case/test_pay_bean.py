@@ -1,6 +1,7 @@
 from common.Config import config
 from common.params_Yaml import Yaml
 from common.sqlScript import Mysql
+from common.conMysql import conMysql
 import unittest
 from common import Assert, Consts, Request, basicData
 from common.runFailed import Retry
@@ -11,7 +12,7 @@ class TestPayCreate(unittest.TestCase):
 
     def tearDown(self) -> None:
         # 清理前置冗余数据
-        Mysql.deleteUserBeanSql(config.payUid, config.testUid)
+        conMysql.deleteUserBeanSql(config.payUid, config.testUid)
 
     @Retry
     def test_01_NoBeanPayBeanGift(self):

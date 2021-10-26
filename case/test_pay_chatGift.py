@@ -1,5 +1,5 @@
 from common.Config import config
-from common.conMysql import Mysql
+from common.conMysql import conMysql
 import unittest
 from common import Assert, Request, Consts, basicData
 from common.runFailed import Retry
@@ -21,15 +21,15 @@ class TestPayCreate(unittest.TestCase):
         5.检查被打赏者余额,预期：0
         """
         des = '私聊打赏余额不足的场景'
-        Mysql.updateMoneySql(config.payUid)
-        Mysql.updateMoneySql(config.testUid)
-        Mysql.deleteXsBrokerUser(config.testUid)  # 删除用户工会记录
-        Mysql.deleteXsChatroom(config.testUid)  # 删除用户商业房
+        conMysql.updateMoneySql(config.payUid)
+        conMysql.updateMoneySql(config.testUid)
+        conMysql.deleteXsBrokerUser(config.testUid)  # 删除用户工会记录
+        conMysql.deleteXsChatroom(config.testUid)  # 删除用户商业房
         data = basicData.encodeData(payType='chat-gift', uid=config.testUid, money=1000, num=10, giftId=5)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 0, reason)
         Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason)
-        Assert.assert_equal(Mysql.selectMoneySql(config.testUid), 0)
+        Assert.assert_equal(conMysql.selectMoneySql(config.testUid), 0)
         Consts.CASE_LIST[des] = Consts.result

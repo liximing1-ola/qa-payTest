@@ -28,12 +28,63 @@ class Mysql:
         cursor = con.cursor()
         return con, cursor
 
+    # 查询用户账户信息
+    @staticmethod
+    def selectUserMoneySql(moneyType, uid, money_type=''):
+        con, cur = Mysql.conMysql()
+        if moneyType=='bean':
+            sql = "select money_coupon from xs_user_money_extend where uid={}".format(uid)
+            try:
+                cur.execute(sql)
+                res = cur.fetchone()
+                if res is None:
+                    return 0
+                else:
+                    return res[0]
+            except Exception as error:
+                print(error)
+        elif moneyType=='cash':
+            sql = "select cash from xs_user_money_extend where uid={}".format(uid)
+            try:
+                cur.execute(sql)
+                res = cur.fetchone()
+                if res is None:
+                    return 0
+                else:
+                    return res[0]
+            except Exception as error:
+                print(error)
+        elif moneyType=='sum_money':
+            sql = "select money+money_b+money_cash_b+money_cash from xs_user_money where uid={}"
+            try:
+                cur.execute(sql)
+                res = cur.fetchone()
+                if res is None:
+                    return 0
+                else:
+                    return res[0]
+            except Exception as error:
+                print(error)
+        elif moneyType=='single_money':
+            sql = "select {} from xs_user_money where uid={}".format(money_type, uid)
+            try:
+                cur.execute(sql)
+                res = cur.fetchone()
+                if len(res) > 0:
+                    return res[0]
+                else:
+                    return None
+            except Exception as error:
+                print(error)
+        else:
+            print('{} Error'.format(moneyType))
+
     # 更新用户账户余额
     @staticmethod
-    def updateMoneySql(uid, money=0, money_cash=0, money_cash_b=0, money_b=0, gold_coin=0):
+    def updateMoneySql(uid, money=0, money_cash=0, money_cash_b=0, money_b=0, gold_coin=0, money_debts=0):
         con, cur = Mysql.conMysql()
-        sql = "update xs_user_money set money={}, money_b={}, money_cash={}, money_cash_b={},gold_coin={} where uid={} limit 1"\
-            .format(money, money_b, money_cash, money_cash_b, gold_coin, uid)
+        sql = "update xs_user_money set money={}, money_b={}, money_cash={}, money_cash_b={},gold_coin={}, money_debts={} where uid={} limit 1"\
+            .format(money, money_b, money_cash, money_cash_b, gold_coin, money_debts, uid)
         try:
             cur.execute(sql)
         except Exception as error:
@@ -58,9 +109,9 @@ class Mysql:
 
     # 更新用户金豆余额
     @staticmethod
-    def updateBeanSql(uid, money_coupon):
+    def updateBeanSql(uid, money_coupon, cash=0, cash_lock=0):
         con, cur = Mysql.conMysql()
-        sql = "insert into xs_user_money_extend(uid, money_coupon) values({},{})".format(uid, money_coupon)
+        sql = "insert into xs_user_money_extend(uid, money_coupon, cash, cash_lock) values({},{},{},{})".format(uid, money_coupon, cash, cash_lock)
         try:
             cur.execute(sql)
         except Exception as error:

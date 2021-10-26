@@ -1,6 +1,7 @@
 # coding=utf-8
 import pymysql
-class Mysql:
+import time
+class conMysql:
     db_config = {"dev_46_db": '192.168.11.46',
                  "dev_46_user": 'root',
                  "dev_46_pas": '123456',
@@ -28,9 +29,9 @@ class Mysql:
         sql = "update xs_user_money set money={}, money_b={}, money_cash={}, money_cash_b={},gold_coin={} where uid={} limit 1"\
             .format(money, money_b, money_cash, money_cash_b, gold_coin, uid)
         try:
-            Mysql.cur.execute(sql)
+            conMysql.cur.execute(sql)
         except Exception as error:
-            Mysql.con.rollback()
+            conMysql.con.rollback()
             print('update fail： {}'.format(error))
 
     # 查询用户所有账户余额总和
@@ -38,8 +39,8 @@ class Mysql:
     def selectAllMoneySql(uid):
         sql = "select (money+money_b+money_cash_b+money_cash) from xs_user_money where uid={}".format(uid)
         try:
-            Mysql.cur.execute(sql)
-            res = Mysql.cur.fetchone()
+            conMysql.cur.execute(sql)
+            res = conMysql.cur.fetchone()
             if len(res) > 0:
                 return res[0]
             else:
@@ -52,8 +53,8 @@ class Mysql:
     def selectPayChangeSql(uid):
         sql = "select money from xs_pay_change_new where uid={} ORDER BY id DESC LIMIT 1".format(uid)
         try:
-            Mysql.cur.execute(sql)
-            res = Mysql.cur.fetchone()
+            conMysql.cur.execute(sql)
+            res = conMysql.cur.fetchone()
             if len(res) > 0:
                 return res[0]
         except Exception as error:
@@ -64,9 +65,9 @@ class Mysql:
     def deleteXsBrokerUser(uid):
         sql = "delete from xs_broker_user where uid ={} limit 1".format(uid)
         try:
-            Mysql.cur.execute(sql)
+            conMysql.cur.execute(sql)
         except Exception as error:
-            Mysql.con.rollback()
+            conMysql.con.rollback()
             print('delete fail', error)
 
     # 删除用户商业房
@@ -74,9 +75,9 @@ class Mysql:
     def deleteXsChatroom(uid):
         sql = "delete from xs_chatroom where uid ={} limit 1".format(uid)
         try:
-            Mysql.cur.execute(sql)
+            conMysql.cur.execute(sql)
         except Exception as error:
-            Mysql.con.rollback()
+            conMysql.con.rollback()
             print('delete fail', error)
 
     # 查询用户某个账户余额
@@ -84,11 +85,24 @@ class Mysql:
     def selectMoneySql(uid, money_type='money_cash_b'):
         sql = "select {} from xs_user_money where uid={}".format(money_type, uid)
         try:
-            Mysql.cur.execute(sql)
-            res = Mysql.cur.fetchone()
+            conMysql.cur.execute(sql)
+            res = conMysql.cur.fetchone()
             if len(res) > 0:
                 return res[0]
             else:
                 return None
         except Exception as error:
             print(error)
+
+    # 删除用户金豆账户数据
+    @staticmethod
+    def deleteUserBeanSql(*uids):
+        try:
+            for uid in uids:
+                sql = "delete from xs_user_money_extend where uid = {} limit 1".format(uid)
+                time.sleep(0.01)
+                conMysql.cur.execute(sql)
+                conMysql.con.commit()
+        except Exception as error:
+            conMysql.con.rollback()
+            print('delete fail', error)
