@@ -25,7 +25,6 @@ class TestPayCreate(unittest.TestCase):
     def setUpClass(cls) -> None:
         Mysql.updateXsFreshRoom()
 
-    @unittest.skip('')
     def test_01_starRoomNoBrokerPay_35(self):
         """
         用例描述：
@@ -49,7 +48,6 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectAllMoneySql(test_uid), 350)
         Consts.CASE_LIST_2[des] = Consts.result
 
-    @unittest.skip('')
     def test_02_starRoomSuperVoicePay_35(self):
         """
         用例描述：
@@ -97,7 +95,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(test_uid)
         Mysql.updateMoneySql(test_agent)
         Mysql.updateSuperVoiceUser(test_bid, test_uid)
-        Mysql.updateSuperVoiceUser(test_bid, test_agent)
+        Mysql.updateSuperVoiceUser(test_bid, test_agent, nid=101)
         Mysql.updateOnlineEarnRelation(test_agent, test_uid)
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
@@ -131,7 +129,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(test_uid)
         Mysql.updateMoneySql(test_agent)
         Mysql.updateSuperVoiceUser(test_bid, test_uid)
-        Mysql.updateSuperVoiceUser(test_bid, test_agent)
+        Mysql.updateSuperVoiceUser(test_bid, test_agent, nid=101)
         Mysql.updateOnlineEarnRelation(test_agent, test_uid)
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
@@ -144,7 +142,6 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
-    @unittest.skip('')
     def test_05_starRoomNormalBroker_50(self):
         """
         用例描述：
@@ -176,7 +173,6 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
-    @unittest.skip('')
     def test_06_SuperStarNormalRoomPay_5015(self):
         """
         用例描述：
@@ -198,7 +194,7 @@ class TestPayCreate(unittest.TestCase):
         Mysql.updateMoneySql(test_uid)
         Mysql.updateMoneySql(test_agent)
         Mysql.updateSuperVoiceUser(test_bid, test_uid)
-        Mysql.updateSuperVoiceUser(test_bid, test_agent)
+        Mysql.updateSuperVoiceUser(test_bid, test_agent, nid=101)
         Mysql.updateOnlineEarnRelation(test_agent, test_uid)
         data = basicData.encodeData(payType='package')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
