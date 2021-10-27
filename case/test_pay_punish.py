@@ -22,17 +22,19 @@ class TestPayCreate(unittest.TestCase):
         5.检查消费记录表消费money（xs_pay_change_new）
         6.检查消费记录表消费方式op
         """
-        des = '非直播1V1打赏场景'
+        des = '收到打赏时触发罚款流程'
         Mysql.updateMoneySql(config.payUid, 100)
-        Mysql.updateBeanSql(config.testUid, 20, 20)
-        Mysql.updateMoneySql(config.testUid, 20, 20, 20, 20, money_debts=100)
+        Mysql.updateBeanSql(config.testUid, 20)
+        Mysql.updateMoneySql(config.testUid, 20, money_debts=100)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_2')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(Mysql.selectUserMoneySql('bean', config.testUid), 0)
-        Assert.assert_equal(Mysql.selectUserMoneySql('single_money', config.testUid, 'money_cash_b'), 0)
+        Assert.assert_equal(Mysql.selectUserMoneySql('single_money', config.testUid, 'money'), 0)
+        Assert.assert_equal(Mysql.selectUserMoneySql('single_money', config.testUid, 'money_cash_b'), 2)
+        Assert.assert_equal(Mysql.selectUserMoneySql('single_money', config.testUid, 'money_debts'), 0)
         Assert.assert_equal(Mysql.selectPayChangeSql(config.testUid), 100)
         Assert.assert_equal(Mysql.selectPayChangeOpSql(config.testUid), 'punish')
         Consts.CASE_LIST[des] = Consts.result
