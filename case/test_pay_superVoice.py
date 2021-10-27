@@ -25,6 +25,7 @@ class TestPayCreate(unittest.TestCase):
     def setUpClass(cls) -> None:
         Mysql.updateXsFreshRoom()
 
+    @unittest.skip('')
     def test_01_starRoomNoBrokerPay_35(self):
         """
         用例描述：
@@ -48,6 +49,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectAllMoneySql(test_uid), 350)
         Consts.CASE_LIST_2[des] = Consts.result
 
+    @unittest.skip('')
     def test_02_starRoomSuperVoicePay_35(self):
         """
         用例描述：
@@ -142,6 +144,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
+    @unittest.skip('')
     def test_05_starRoomNormalBroker_50(self):
         """
         用例描述：
@@ -173,6 +176,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
+    @unittest.skip('')
     def test_06_SuperStarNormalRoomPay_5015(self):
         """
         用例描述：
