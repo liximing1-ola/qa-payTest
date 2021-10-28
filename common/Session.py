@@ -36,7 +36,25 @@ class Session:
                 if not method.isExtend(res, 'token') or res['success'] != 1:
                     print('failReason： {}'.format(res['msg']))
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
-                writeUserToken(tokenDict['token'])
+                writeUserToken(tokenDict['token'], env)
+                return tokenDict
+            except Exception as error:
+                Logs.get_log('getSession.log').error('session异常，原因： {}'.format(error))
+        elif env == 'games':
+            try:
+                headers = Yaml.read_yaml('Basic.yml', 'header_dev')
+                params = Yaml.read_yaml('Basic.yml', 'params_dev_qq')
+                # 7.22修改，请求接口加包名限制
+                login_url = config.qq_login_url + '?' + params + '&package=com.imbb.banban.android'
+                body = Yaml.read_yaml('Basic.yml', 'data_dev_qq')
+                session = requests.session()
+                res = session.post(login_url, data=body, headers=headers)
+                res.raise_for_status()
+                res = res.json()
+                if not method.isExtend(res, 'token') or res['success'] != 1:
+                    print('failReason： {}'.format(res['msg']))
+                tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
+                writeUserToken(tokenDict['token'], env)
                 return tokenDict
             except Exception as error:
                 Logs.get_log('getSession.log').error('session异常，原因： {}'.format(error))
@@ -57,14 +75,14 @@ class Session:
         else:
             print("env input error")
 
-def writeUserToken(t):
-    txtPath = os.path.split(os.path.realpath(__file__))[0] + '/userToken.txt'
+def writeUserToken(t, app_name):
+    txtPath = os.path.split(os.path.realpath(__file__))[0] + '/{}UserToken.txt'.format(app_name)
     with open(txtPath, 'w') as f:
         f.write(t)
         f.flush()
 
-def readUserToken():
-    txtPath = os.path.split(os.path.realpath(__file__))[0] + '/userToken.txt'
+def readUserToken(app_name):
+    txtPath = os.path.split(os.path.realpath(__file__))[0] + '/{}UserToken.txt'.format(app_name)
     if not os.path.exists(txtPath):
         os.system(r"touch {}".format(txtPath))
         with open(txtPath, 'r+') as f:
@@ -76,4 +94,5 @@ def readUserToken():
 
 
 if __name__ == '__main__':
+    print(os.path.split(os.path.realpath(__file__))[0] + '/{}UserToken.txt'.format('env'))
     pass
