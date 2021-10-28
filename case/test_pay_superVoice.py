@@ -65,8 +65,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, 1000)
         test_uid = config.super_live_role['super_star_uid']
         test_bid = config.super_live_role['super_broker']
-        conMysql.updateMoneySql(test_uid)
-        conMysql.updateSuperVoiceUser(test_bid, test_uid)
+        conMysql.updateMoneySql(test_uid)  # 清空账户
+        conMysql.updateSuperVoiceUser(test_bid, test_uid)  # 修改用户为网赚工会用户
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
@@ -94,11 +94,11 @@ class TestPayCreate(unittest.TestCase):
         test_uid = config.super_live_role['agent_star_uid']
         test_bid = config.super_live_role['super_broker']
         test_agent = config.super_live_role['super_agent_uid']
-        conMysql.selectOnlineEarnAgent(test_agent)
-        conMysql.selectOnlineEarnArtist(test_uid)
-        conMysql.updateUserMoneyClearSql(test_agent, test_uid)
-        conMysql.updateSuperVoiceUser(test_bid, test_uid)
-        conMysql.updateSuperVoiceUser(test_bid, test_agent, nid=201)
+        conMysql.checkOnlineEarnAgent(test_agent)  # 检查用户经纪人身份
+        conMysql.checkOnlineEarnArtist(test_uid)   # 检查用户艺人身份
+        conMysql.updateUserMoneyClearSql(test_agent, test_uid)  # 清空用户账户
+        conMysql.updateSuperVoiceUser(test_uid, test_bid, nid=200)  # 更新用户到指定工会
+        conMysql.checkSuperVoiceUser(test_agent, test_bid)
         conMysql.updateOnlineEarnRelation(test_agent, test_uid)
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
@@ -128,11 +128,11 @@ class TestPayCreate(unittest.TestCase):
         test_uid = config.super_live_role['agent_star_uid']
         test_bid = config.super_live_role['super_broker']
         test_agent = config.super_live_role['super_agent_uid']
-        conMysql.selectOnlineEarnAgent(test_agent, 100000)
-        conMysql.selectOnlineEarnArtist(test_uid)
+        conMysql.checkOnlineEarnAgent(test_agent, 100000)
+        conMysql.checkOnlineEarnArtist(test_uid)
         conMysql.updateUserMoneyClearSql(test_agent, test_uid)
-        conMysql.updateSuperVoiceUser(test_bid, test_uid)
-        conMysql.updateSuperVoiceUser(test_bid, test_agent, nid=201)
+        conMysql.updateSuperVoiceUser(test_uid, test_bid, nid=200)  # 更新用户到指定工会
+        conMysql.checkSuperVoiceUser(test_agent, test_bid)
         conMysql.updateOnlineEarnRelation(test_agent, test_uid)
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
@@ -161,9 +161,9 @@ class TestPayCreate(unittest.TestCase):
         test_uid = config.super_live_role['pack_cal_uid']
         test_bid = config.super_live_role['super_broker']
         test_agent = config.super_live_role['super_agent_uid']
-        conMysql.selectOnlineEarnAgent(test_agent, 100000)
+        conMysql.checkOnlineEarnAgent(test_agent, 100000)
         conMysql.updateUserMoneyClearSql(test_agent, test_uid)
-        conMysql.updateSuperVoiceUser(test_bid, test_agent)
+        conMysql.checkSuperVoiceUser(test_agent, test_bid)
         conMysql.updateOnlineEarnRelation(test_agent, test_uid)
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
@@ -193,11 +193,11 @@ class TestPayCreate(unittest.TestCase):
         test_uid = config.super_live_role['agent_star_uid']
         test_bid = config.super_live_role['super_broker']
         test_agent = config.super_live_role['super_agent_uid']
-        conMysql.selectOnlineEarnAgent(test_agent)
-        conMysql.selectOnlineEarnArtist(test_uid)
+        conMysql.checkOnlineEarnAgent(test_agent)
+        conMysql.checkOnlineEarnArtist(test_uid)
         conMysql.updateUserMoneyClearSql(test_agent, test_uid)
-        conMysql.updateSuperVoiceUser(test_bid, test_uid)
-        conMysql.updateSuperVoiceUser(test_bid, test_agent, nid=201)
+        conMysql.updateSuperVoiceUser(test_uid, test_bid, nid=200)  # 更新用户到指定工会
+        conMysql.checkSuperVoiceUser(test_agent, test_bid)
         conMysql.updateOnlineEarnRelation(test_agent, test_uid)
         data = basicData.encodeData(payType='package')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)

@@ -248,7 +248,7 @@ class conMysql:
 
     # 修改用户为指定工会用户
     @staticmethod
-    def updateSuperVoiceUser(bid, uid, nid=200):
+    def updateSuperVoiceUser(uid, bid, nid):
         sql = "update xs_broker_user set bid={}, uid={}, state=1 where id={} limit 1".format(bid, uid, nid)
         try:
             conMysql.cur.execute(sql)
@@ -257,6 +257,20 @@ class conMysql:
             print('update fail', error)
         finally:
             conMysql.con.commit()
+
+    #  检查用户是否为指定工会用户
+    @staticmethod
+    def checkSuperVoiceUser(uid, bid, nid=9):
+        sql = 'select * from xs_broker_user where uid={} limit 1'.format(uid)
+        try:
+            conMysql.cur.execute(sql)
+            res = conMysql.cur.fetchone()
+            if res is None:
+                conMysql.updateSuperVoiceUser(uid, bid, nid=201)
+            else:
+                conMysql.updateSuperVoiceUser(uid, bid, nid)
+        except Exception as error:
+            print(error)
 
     # 修改用户为房间房主
     @staticmethod
@@ -348,7 +362,7 @@ class conMysql:
 
     # 查询用户是否是师父.不是就把他变成一代宗师（level=4，一代宗师）
     @staticmethod
-    def selectUserXsMentorLevel(uid, level=4):
+    def checkUserXsMentorLevel(uid, level=4):
         sql = 'select * from xs_mentor_exp where uid={}'.format(uid)
         try:
             conMysql.cur.execute(sql)
@@ -386,7 +400,7 @@ class conMysql:
 
     # 查询用户经纪人身份是否存在,没有就创建一个
     @staticmethod
-    def selectOnlineEarnAgent(uid, point=100):
+    def checkOnlineEarnAgent(uid, point=100):
         sql = 'select * from xs_online_earn_agent where uid={}'.format(uid)
         try:
             conMysql.cur.execute(sql)
@@ -424,7 +438,7 @@ class conMysql:
 
     # 查询用户艺人身份是否存在,没有就造一个
     @staticmethod
-    def selectOnlineEarnArtist(uid, point=100):
+    def checkOnlineEarnArtist(uid, point=100):
         sql = 'select * from xs_online_earn_artist where uid={}'.format(uid)
         try:
             conMysql.cur.execute(sql)

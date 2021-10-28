@@ -44,7 +44,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid), 62)
         Assert.assert_equal(conMysql.selectUserMoneySql('pay_change', config.payUid), 100)
-        Assert.assert_equal(conMysql.selectUserMoneySql('pay_change', config.payUid, op='consume'), 'consume')
+        Assert.assert_equal(conMysql.selectUserMoneySql('pay_change', config.payUid, op='op'), 'consume')
         Consts.CASE_LIST_2[des] = Consts.result
 
     def test_02_ImPay_7228(self):
@@ -88,7 +88,7 @@ class TestPayCreate(unittest.TestCase):
         test_uid=config.live_role['pack_master_NoPack']  # 非公会一代宗师主播
         conMysql.updateMoneySql(config.payUid, 900, 30, 30, 40)
         conMysql.updateMoneySql(test_uid)
-        conMysql.selectUserXsMentorLevel(test_uid, 4)  # 更新成一代宗师
+        conMysql.checkUserXsMentorLevel(test_uid, 4)  # 更新成一代宗师
         conMysql.updateChatroomUid(test_uid)  # 更新成商业房主播
         data = Yaml.read_yaml('Basic.yml', 'dev_livePay_7030')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
@@ -114,7 +114,7 @@ class TestPayCreate(unittest.TestCase):
         test_uid = config.live_role['pack_master_NoPack']  # 非公会一代宗师主播
         conMysql.updateMoneySql(config.payUid, 900, 100, 100, 100)
         conMysql.updateMoneySql(test_uid)
-        conMysql.selectUserXsMentorLevel(test_uid, 4)  # 更新成一代宗师
+        conMysql.checkUserXsMentorLevel(test_uid, 4)  # 更新成一代宗师
         conMysql.updateChatroomUid(test_uid)  # 更新成商业房主播&&直播结算频道
         data = basicData.encodeData(payType='chat-gift', money=1000, uid=test_uid, giftId=20)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
@@ -147,7 +147,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.selectUserXsBroker(ceo_uid)  # 工会公会长
         conMysql.updateMoneySql(config.payUid, 1000)
         conMysql.updateUserMoneyClearSql(test_uid, ceo_uid)
-        conMysql.selectUserXsMentorLevel(test_uid, 4)  # 师父等级改为一代宗师
+        conMysql.checkUserXsMentorLevel(test_uid, 4)  # 师父等级改为一代宗师
         data = Yaml.read_yaml('Basic.yml', 'dev_livePay_602515')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res)
@@ -178,7 +178,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.selectUserXsBroker(ceo_uid)  # 工会公会长
         conMysql.updateMoneySql(config.payUid, 1000)
         conMysql.updateUserMoneyClearSql(test_uid, ceo_uid)
-        conMysql.selectUserXsMentorLevel(test_uid, 4)  # 师父等级改为一代宗师
+        conMysql.checkUserXsMentorLevel(test_uid, 4)  # 师父等级改为一代宗师
         data = basicData.encodeData(payType='chat-gift', money=1000, uid=test_uid, giftId=20)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res)
@@ -209,7 +209,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.selectUserXsBroker(ceo_uid)  # 工会公会长
         conMysql.updateMoneySql(config.payUid, 1000)
         conMysql.updateUserMoneyClearSql(test_uid, ceo_uid)
-        conMysql.selectUserXsMentorLevel(test_uid, 1)  # 师父等级改为非一代宗师
+        conMysql.checkUserXsMentorLevel(test_uid, 1)  # 师父等级改为非一代宗师
         data = Yaml.read_yaml('Basic.yml', 'dev_livePay_602515')  # 共用
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res)
@@ -240,7 +240,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.selectUserXsBroker(ceo_uid)  # 工会公会长
         conMysql.updateMoneySql(config.payUid, 1000)
         conMysql.updateUserMoneyClearSql(test_uid, ceo_uid)
-        conMysql.selectUserXsMentorLevel(test_uid, 1)  # 师父等级改为非一代宗师
+        conMysql.checkUserXsMentorLevel(test_uid, 1)  # 师父等级改为非一代宗师
         data = basicData.encodeData(payType='chat-gift', money=1000, uid=test_uid, giftId=20)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res)
@@ -289,7 +289,7 @@ class TestPayCreate(unittest.TestCase):
         test_uid = config.live_role['pack_cal_uid']
         conMysql.updateMoneySql(config.payUid, 1000)
         conMysql.updateMoneySql(test_uid)
-        conMysql.selectUserXsMentorLevel(test_uid, 4)  # 师父等级改为一代宗师
+        conMysql.checkUserXsMentorLevel(test_uid, 4)  # 师父等级改为一代宗师
         data = Yaml.read_yaml('Basic.yml', 'dev_NotLivePay_7030')  # 共用
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res)
