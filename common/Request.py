@@ -19,7 +19,7 @@ def post_request_session(url, data):
                             Chrome/67.0.3396.99 Safari/537.36",
         "Content-Type": "application/x-www-form-urlencoded",
         'Connection': 'close',
-        "user-token": readUserToken('env')
+        "user-token": readUserToken('dev')
     }
     if not url.startswith('https://'):
         url = '%s%s' % ('https://', url)
