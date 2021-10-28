@@ -1,7 +1,7 @@
 from common.Config import config
 from common import Request
 from common.params_Yaml import Yaml
-from common.sqlScriptOversea import Mysql
+from common.sqlScriptOversea import mysql
 import unittest
 from common import Consts, Assert
 from common.runFailed import Retry
@@ -24,15 +24,15 @@ class TestPayCreate(unittest.TestCase):
         5.检查被打赏者余额,预期：0
         """
         des = '检查账户余额不足时，房间内一对一打赏场景'
-        Mysql.updateMoneySql(config.pt_payUid)
-        Mysql.updateMoneySql(config.pt_testUid)
+        mysql.updateMoneySql(config.pt_payUid)
+        mysql.updateMoneySql(config.pt_testUid)
         data = Yaml.read_yaml('Basic_pt.yml', 'pt_package_room')
         res = Request.pt_post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 0, reason)
         Assert.assert_body(res['body'], 'msg', '餘額不足，無法支付', reason)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.pt_testUid), 0)
+        Assert.assert_equal(mysql.selectAllMoneySql(config.pt_testUid), 0)
         Consts.CASE_LIST[des] = 'pass'
 
 
@@ -49,14 +49,14 @@ class TestPayCreate(unittest.TestCase):
         6.检查消费记录表消费方式op
         """
         des = '检查非直播类型房间一对一打赏的场景'
-        Mysql.updateMoneySql(config.pt_payUid, 30, 30, 30, 10)
-        Mysql.updateMoneySql(config.pt_testUid)
+        mysql.updateMoneySql(config.pt_payUid, 30, 30, 30, 10)
+        mysql.updateMoneySql(config.pt_testUid)
         data = Yaml.read_yaml('Basic_pt.yml', 'pt_package_room')
         res = Request.pt_post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectMoneySql(config.pt_testUid), 70)
-        Assert.assert_equal(Mysql.selectPayChangeSql(config.pt_payUid), 100)
-        Assert.assert_equal(Mysql.selectPayChangeOpSql(config.pt_payUid), 'consume')
+        Assert.assert_equal(mysql.selectMoneySql(config.pt_testUid), 70)
+        Assert.assert_equal(mysql.selectPayChangeSql(config.pt_payUid), 100)
+        Assert.assert_equal(mysql.selectPayChangeOpSql(config.pt_payUid), 'consume')
         Consts.CASE_LIST[des] = 'pass'

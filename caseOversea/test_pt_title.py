@@ -1,7 +1,7 @@
 from common.Config import config
 from common import Request
 from common.params_Yaml import Yaml
-from common.sqlScriptOversea import Mysql
+from common.sqlScriptOversea import mysql
 import unittest
 import pytest
 from common import Consts, Assert
@@ -26,16 +26,16 @@ class TestPayCreate(unittest.TestCase):
         4.检查剩余钱值,预期值：（50000 - 40000  = 10000）
         """
         des = '检查PT用户开通爵位不返钱的流程'
-        Mysql.deleteUserCommoditySql(config.pt_payUid)
-        Mysql.deleteUserTitleSql(config.pt_payUid)
-        Mysql.updateUserTitleSql(config.pt_payUid)
-        Mysql.updateMoneySql(config.pt_payUid, 50000)
+        mysql.deleteUserCommoditySql(config.pt_payUid)
+        mysql.deleteUserTitleSql(config.pt_payUid)
+        mysql.updateUserTitleSql(config.pt_payUid)
+        mysql.updateMoneySql(config.pt_payUid, 50000)
         data = Yaml.read_yaml('Basic_pt.yml', 'pt_pay_title')
         res = Request.pt_post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectMoneySql(config.pt_payUid, 'money'), 10000)
+        Assert.assert_equal(mysql.selectMoneySql(config.pt_payUid, 'money'), 10000)
         Consts.CASE_LIST[des] = 'pass'
 
     @unittest.skip('case取消')
@@ -51,11 +51,11 @@ class TestPayCreate(unittest.TestCase):
         4.检查剩余钱值,预期值：（40000 - 24000  = 16000）
         """
         des = '检查PT用户续费爵位的流程'
-        Mysql.updateMoneySql(config.pt_payUid, 40000)
+        mysql.updateMoneySql(config.pt_payUid, 40000)
         data = Yaml.read_yaml('Basic_pt.yml', 'pt_pay_title')
         res = Request.pt_post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectMoneySql(config.pt_payUid, 'money'), 16000)
+        Assert.assert_equal(mysql.selectMoneySql(config.pt_payUid, 'money'), 16000)
         Consts.CASE_LIST[des] = 'pass'

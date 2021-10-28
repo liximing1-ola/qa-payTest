@@ -1,32 +1,34 @@
 # coding=utf-8
 import pymysql
 from common.Consts import fail_case_reason
-class Mysql:
-
-    db_config = {"pt_db": '192.168.0.43',
-                 "pt_user": 'root',
-                 "pt_pas": '123456'}
-    _dbUrl = db_config['pt_db']
-    _user = db_config['pt_user']
-    _password = db_config['pt_pas']
+class mysql:
+    db_config = {"dev_46_db": '192.168.11.46',
+                 "dev_46_user": 'root',
+                 "dev_46_pas": '123456',
+                 "ali_db": 'rm-bp1nfl3dp096d5o39.mysql.rds.aliyuncs.com',
+                 "ali_user": 'super',
+                 "ali_pas": 'dev123456'}
+    _dbUrl = db_config['dev_46_db']
+    _user = db_config['dev_46_user']
+    _password = db_config['dev_46_pas']
     _dbName = 'xianshi'
     _dbPort = 3306
 
     @staticmethod
     def conMysql():
-        con = pymysql.connect(host=Mysql._dbUrl,
-                              port=Mysql._dbPort,
-                              user=Mysql._user,
-                              passwd=Mysql._password,
+        con = pymysql.connect(host=mysql._dbUrl,
+                              port=mysql._dbPort,
+                              user=mysql._user,
+                              passwd=mysql._password,
                               charset='utf8')
-        con.select_db(Mysql._dbName)
+        con.select_db(mysql._dbName)
         cursor = con.cursor()
         return con, cursor
 
     # 更新用户的账户余额
     @staticmethod
     def updateMoneySql(uid, money=0, money_cash=0, money_cash_b=0, money_b=0, gold_coin=0):
-        con, cur = Mysql.conMysql()
+        con, cur = mysql.conMysql()
         sql = "update xs_user_money set money={}, money_b={}, money_cash={}, money_cash_b={},gold_coin={} where uid={} limit 1"\
             .format(money, money_b, money_cash, money_cash_b, gold_coin, uid)
         try:
@@ -40,7 +42,7 @@ class Mysql:
     # 查询用户当前所有账户余额之和
     @staticmethod
     def selectAllMoneySql(uid):
-        con, cur = Mysql.conMysql()
+        con, cur = mysql.conMysql()
         sql = "select money+money_b+money_cash_b+money_cash from xs_user_money where uid={}".format(uid)
         try:
             cur.execute(sql)
@@ -55,7 +57,7 @@ class Mysql:
     # 查询用户当前金币账户余额
     @staticmethod
     def selectCoinSql(uid):
-        con, cur = Mysql.conMysql()
+        con, cur = mysql.conMysql()
         sql = "select gold_coin from xs_user_money where uid={}".format(uid)
         try:
             cur.execute(sql)
@@ -70,7 +72,7 @@ class Mysql:
     # 查询某个账户的余额
     @staticmethod
     def selectMoneySql(uid, money_type='money_cash_b'):
-        con, cur = Mysql.conMysql()
+        con, cur = mysql.conMysql()
         sql = "select {} from xs_user_money where uid={}".format(money_type, uid)
         try:
             cur.execute(sql)
@@ -85,7 +87,7 @@ class Mysql:
     # 查询消费记录的money
     @staticmethod
     def selectPayChangeSql(uid):
-        con, cur = Mysql.conMysql()
+        con, cur = mysql.conMysql()
         sql = "select money from xs_pay_change_new where uid={} ORDER BY id DESC LIMIT 1".format(uid)
         try:
             cur.execute(sql)
@@ -98,7 +100,7 @@ class Mysql:
     # 查询消费记录的消费方式
     @staticmethod
     def selectPayChangeOpSql(uid):
-        con, cur = Mysql.conMysql()
+        con, cur = mysql.conMysql()
         sql = "select op from xs_pay_change_new where uid={} ORDER BY id DESC LIMIT 1".format(uid)
         try:
             cur.execute(sql)
@@ -111,7 +113,7 @@ class Mysql:
     # 清空用户背包
     @staticmethod
     def deleteUserCommoditySql(uid):
-        con, cur = Mysql.conMysql()
+        con, cur = mysql.conMysql()
         sql = "delete from xs_user_commodity where uid={}".format(uid)
         try:
             cur.execute(sql)
@@ -124,7 +126,7 @@ class Mysql:
     # 删除用户爵位信息
     @staticmethod
     def deleteUserTitleSql(uid):
-        con, cur = Mysql.conMysql()
+        con, cur = mysql.conMysql()
         sql = "delete from xs_user_title where uid = {} limit 5".format(uid)
         try:
             cur.execute(sql)
@@ -137,7 +139,7 @@ class Mysql:
     # 删除用户爵位信息 profile
     @staticmethod
     def updateUserTitleSql(uid):
-        con, cur = Mysql.conMysql()
+        con, cur = mysql.conMysql()
         sql = "update xs_user_profile set title=0 where uid={} limit 1".format(uid)
         try:
             cur.execute(sql)
@@ -149,8 +151,8 @@ class Mysql:
 
     # 检查用户背包指定物品数量
     @staticmethod
-    def checkUserCommoditySql(cid, uid):
-        con, cur = Mysql.conMysql()
+    def checkUserCommoditySql(uid, cid):
+        con, cur = mysql.conMysql()
         sql = "select num from xs_user_commodity where cid={} and uid={}".format(cid, uid)
         try:
             cur.execute(sql)
@@ -160,10 +162,22 @@ class Mysql:
         except Exception as error:
             print(error)
 
+    # 检查用户背包所有物品数量
+    @staticmethod
+    def checkUserAllCommoditySql(uid):
+        con, cur = mysql.conMysql()
+        sql = 'select sum(num) from xs_user_commodity where uid ={}'.format(uid)
+        try:
+            cur.execute(sql)
+            res = cur.fetchone()
+            return int(res[0])
+        except Exception as error:
+            print(error)
+
     # 获得用户物品表的对应id
     @staticmethod
     def getUserCommodityIdSql(cid, uid):
-        con, cur = Mysql.conMysql()
+        con, cur = mysql.conMysql()
         sql = "select id from xs_user_commodity where cid={} and uid={}".format(cid, uid)
         try:
             cur.execute(sql)
@@ -176,7 +190,7 @@ class Mysql:
     # 修改用户为打包结算主播
     @staticmethod
     def updateBrokerUser(uid):
-        con, cur = Mysql.conMysql()
+        con, cur = mysql.conMysql()
         sql = "update xs_broker_user set uid={}, state=1, pack_cal=1 where id = 50 limit 1".format(uid)
         try:
             cur.execute(sql)
@@ -189,7 +203,7 @@ class Mysql:
     # 修改用户为房间房主
     @staticmethod
     def updateChatroomUid(uid):
-        con, cur = Mysql.conMysql()
+        con, cur = mysql.conMysql()
         sql = "update xs_chatroom set app_id=1, uid ={} where rid=193185577 limit 1".format(uid)
         try:
             cur.execute(sql)
@@ -202,7 +216,7 @@ class Mysql:
     # 删除用户工会记录
     @staticmethod
     def deleteXsBrokerUser(uid):
-        con, cur = Mysql.conMysql()
+        con, cur = mysql.conMysql()
         sql = "delete from xs_broker_user where uid ={} limit 1".format(uid)
         try:
             cur.execute(sql)
@@ -215,7 +229,7 @@ class Mysql:
     # 更新箱子刷新物品
     @staticmethod
     def insertXsUserBox(gift_type, uid, box_type):
-        con, cur = Mysql.conMysql()
+        con, cur = mysql.conMysql()
         sql = "insert into xs_user_box (last_refresh_cid, last_refresh_sub_cid, uid, type) values ({},{},{},'{}')"\
             .format(gift_type, gift_type, uid, box_type)
         try:
@@ -230,7 +244,7 @@ class Mysql:
     # 用户背包增加测试数据
     @staticmethod
     def insertXsUserCommodity(uid, cid, num, state=0):
-        con, cur = Mysql.conMysql()
+        con, cur = mysql.conMysql()
         sql = "insert into xs_user_commodity (uid, cid, num, state) values ({}, {}, {}, {})".format(uid, cid, num, state)
         try:
             cur.execute(sql)
@@ -243,7 +257,7 @@ class Mysql:
     # 查询箱子开出物品
     @staticmethod
     def selectUserCommodity(uid):
-        con, cur = Mysql.conMysql()
+        con, cur = mysql.conMysql()
         sql = 'select sum(num) from xs_user_commodity where uid ={}'.format(uid)
         try:
             cur.execute(sql)
@@ -255,7 +269,7 @@ class Mysql:
     # 清除xs_user_box用户数据
     @staticmethod
     def deleteUserBox(uid):
-        con, cur = Mysql.conMysql()
+        con, cur = mysql.conMysql()
         sql = "delete from xs_user_box where uid={} limit 1".format(uid)
         try:
             cur.execute(sql)

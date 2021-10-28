@@ -1,7 +1,7 @@
 from common.Config import config
 from common import Request
 from common.params_Yaml import Yaml
-from common.sqlScriptOversea import Mysql
+from common.sqlScriptOversea import mysql
 import unittest
 import pytest
 from common import Consts, Assert
@@ -27,15 +27,15 @@ class TestPayCreate(unittest.TestCase):
         """
         cid = 5  # 铜钥匙
         des = '检查商城内购买道具的流程'
-        Mysql.updateMoneySql(config.pt_payUid, 0, 300, 300, 0)
-        Mysql.deleteUserCommoditySql(config.pt_payUid)
+        mysql.updateMoneySql(config.pt_payUid, 0, 300, 300, 0)
+        mysql.deleteUserCommoditySql(config.pt_payUid)
         data = Yaml.read_yaml('Basic_pt.yml', 'pt_pay_shop')
         res = Request.pt_post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.pt_payUid), 0)
-        Assert.assert_equal(Mysql.checkUserCommoditySql(cid, config.pt_payUid), 1)
+        Assert.assert_equal(mysql.selectAllMoneySql(config.pt_payUid), 0)
+        Assert.assert_equal(mysql.checkUserCommoditySql(cid, config.pt_payUid), 1)
         Consts.CASE_LIST[des] = 'pass'
 
     @pytest.mark.run(order=2)
@@ -52,13 +52,13 @@ class TestPayCreate(unittest.TestCase):
         """
         cid = 6  # 银钥匙
         des = '检查商城内购买多个道具时场景'
-        Mysql.deleteUserCommoditySql(config.pt_payUid)
-        Mysql.updateMoneySql(config.pt_payUid, 10000, 10000, 10000, 10000)
+        mysql.deleteUserCommoditySql(config.pt_payUid)
+        mysql.updateMoneySql(config.pt_payUid, 10000, 10000, 10000, 10000)
         data = Yaml.read_yaml('Basic_pt.yml', 'pt_pay_moreShop')
         res = Request.pt_post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.pt_payUid), 33700)
-        Assert.assert_equal(Mysql.checkUserCommoditySql(cid, config.pt_payUid), 3)
+        Assert.assert_equal(mysql.selectAllMoneySql(config.pt_payUid), 33700)
+        Assert.assert_equal(mysql.checkUserCommoditySql(cid, config.pt_payUid), 3)
         Consts.CASE_LIST[des] = 'pass'

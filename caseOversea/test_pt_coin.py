@@ -1,7 +1,7 @@
 from common.Config import config
 from common import Request
 from common.params_Yaml import Yaml
-from common.sqlScriptOversea import Mysql
+from common.sqlScriptOversea import mysql
 import unittest
 from common import Consts
 from common import Assert
@@ -24,12 +24,12 @@ class TestPayCreate(unittest.TestCase):
         4.检查账户余额（money, gold_coin） 1000-600=400
         """
         des = '检查PT钻石兑换金豆流程'
-        Mysql.updateMoneySql(config.pt_payUid, 1000)
+        mysql.updateMoneySql(config.pt_payUid, 1000)
         data = Yaml.read_yaml('Basic_pt.yml', 'pt_pay_coin')
         res = Request.pt_post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.pt_payUid), 400)
-        Assert.assert_equal(Mysql.selectCoinSql(config.pt_payUid), 600)
+        Assert.assert_equal(mysql.selectAllMoneySql(config.pt_payUid), 400)
+        Assert.assert_equal(mysql.selectCoinSql(config.pt_payUid), 600)
         Consts.CASE_LIST[des] = 'pass'
