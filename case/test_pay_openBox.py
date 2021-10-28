@@ -90,7 +90,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 0)
+        Assert.assert_len(conMysql.selectUserMoneySql('sum_money', config.testUid), 0)
         Consts.CASE_LIST[des] = Consts.result
 
     def test_04_giveBoxMorePeople(self):
@@ -113,5 +113,5 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 1600)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 1000)
+        Assert.assert_len(conMysql.selectUserMoneySql('sum_money', config.testUid), 1000)
         Consts.CASE_LIST[des] = Consts.result

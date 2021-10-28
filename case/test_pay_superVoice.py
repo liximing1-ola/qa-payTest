@@ -1,6 +1,6 @@
 from common.Config import config
 from common.conMysql import conMysql
-import unittest
+import unittest, pytest
 from common import Consts, Assert, Request, basicData
 from common.runFailed import Retry
 @Retry
@@ -25,6 +25,7 @@ class TestPayCreate(unittest.TestCase):
     def setUpClass(cls) -> None:
         conMysql.updateXsFreshRoom()
 
+    @pytest.mark.run(order=1)
     def test_01_starRoomNoBrokerPay_35(self):
         """
         用例描述：
@@ -49,6 +50,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
+    @pytest.mark.run(order=2)
     def test_02_starRoomSuperVoicePay_35(self):
         """
         用例描述：
@@ -75,6 +77,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
+    @pytest.mark.run(order=3)
     def test_03_starRoomSuperVoicePay_5015(self):
         """
         用例描述：
@@ -108,6 +111,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
+    @pytest.mark.run(order=4)
     def test_04_starRoomAgent_5020(self):
         """
         用例描述：
@@ -141,6 +145,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
+    @pytest.mark.run(order=5)
     def test_05_starRoomNormalBroker_50(self):
         """
         用例描述：
@@ -171,6 +176,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
+    @pytest.mark.run(order=6)
     def test_06_SuperStarNormalRoomPay_5015(self):
         """
         用例描述：

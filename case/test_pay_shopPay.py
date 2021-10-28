@@ -56,7 +56,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 4000)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_commodity', config.payUid), 10)
+        Assert.assert_equal(conMysql.selectUserMoneySql('num_commodity', config.payUid, cid=cid), 10)
         Consts.CASE_LIST[des] = Consts.result
 
     @pytest.mark.run(order=3)

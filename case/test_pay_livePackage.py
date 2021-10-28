@@ -42,7 +42,7 @@ class TestPayCreate(unittest.TestCase):
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(conMysql.selectUserMoneySql('single', config.testUid), 62)
+        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid), 62)
         Assert.assert_equal(conMysql.selectUserMoneySql('pay_change', config.payUid), 100)
         Assert.assert_equal(conMysql.selectUserMoneySql('pay_change', config.payUid, op='consume'), 'consume')
         Consts.CASE_LIST_2[des] = Consts.result
