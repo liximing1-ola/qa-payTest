@@ -66,7 +66,7 @@ class TestPayCreate(unittest.TestCase):
         test_uid = config.super_live_role['super_star_uid']
         test_bid = config.super_live_role['super_broker']
         conMysql.updateMoneySql(test_uid)  # 清空账户
-        conMysql.updateSuperVoiceUser(test_bid, test_uid)  # 修改用户为网赚工会用户
+        conMysql.updateSuperVoiceUser(test_uid, test_bid, nid=200)  # 修改用户为网赚工会用户
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
@@ -163,7 +163,6 @@ class TestPayCreate(unittest.TestCase):
         test_agent = config.super_live_role['super_agent_uid']
         conMysql.checkOnlineEarnAgent(test_agent, 100000)
         conMysql.updateUserMoneyClearSql(test_agent, test_uid)
-        conMysql.checkSuperVoiceUser(test_agent, test_bid)
         conMysql.updateOnlineEarnRelation(test_agent, test_uid)
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
