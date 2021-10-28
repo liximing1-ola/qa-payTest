@@ -159,7 +159,7 @@ class TestPayCreate(unittest.TestCase):
         des = '网赚房普通工会有经纪人(7j)艺人分成50(个人):20(工会)'
         conMysql.updateMoneySql(config.payUid, 1000)
         test_uid = config.super_live_role['pack_cal_uid']
-        test_bid = config.super_live_role['super_broker']
+        # test_bid = config.super_live_role['super_broker']
         test_agent = config.super_live_role['super_agent_uid']
         conMysql.checkOnlineEarnAgent(test_agent, 100000)
         conMysql.updateUserMoneyClearSql(test_agent, test_uid)
@@ -170,7 +170,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 500)
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_agent, money_type='money_cash'), 150)
+        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_agent, money_type='money_cash'), 200)
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 500)
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
