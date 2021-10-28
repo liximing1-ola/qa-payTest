@@ -49,7 +49,7 @@ class conMysql:
             except Exception as error:
                 print(error)
         elif accountType== 'sum_money':  # 查询用户所有账户数据之和
-            sql = "select money+money_b+money_cash_b+money_cash from xs_user_money where uid={}"
+            sql = "select money+money_b+money_cash_b+money_cash from xs_user_money where uid={}".format(uid)
             try:
                 conMysql.cur.execute(sql)
                 res = conMysql.cur.fetchone()
