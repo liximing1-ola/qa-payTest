@@ -1,6 +1,6 @@
 from common.Config import config
 from common.params_Yaml import Yaml
-from common.sqlScript import Mysql
+from common.conMysql import conMysql
 import unittest
 from common import Assert, Consts, Request, basicData
 from common.runFailed import Retry
@@ -26,18 +26,18 @@ class TestPayCreate(unittest.TestCase):
         5.检查背包内开出物品，预期值应为：2（赠送头像框，开出礼物个数）
         """
         des = '背包开箱子场景'
-        Mysql.deleteUserBox(config.payUid)
-        Mysql.deleteUserCommoditySql(config.payUid)
-        Mysql.insertXsUserCommodity(config.payUid, 2, 1)
-        Mysql.insertXsUserBox(9, config.payUid, 'copper')
-        Mysql.updateMoneySql(config.payUid, 400, 100, 100, 100)
+        conMysql.deleteUserAccountSql('user_box', config.payUid)
+        conMysql.deleteUserAccountSql('user_commodity', config.payUid)
+        conMysql.insertXsUserCommodity(config.payUid, 2, 1)
+        conMysql.insertXsUserBox(9, config.payUid, 'copper')
+        conMysql.updateMoneySql(config.payUid, 400, 100, 100, 100)
         data = basicData.encodeData(payType='shop-buy-box', money=600, num=1, boxType='copper')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 100)
-        Assert.assert_equal(Mysql.selectUserCommodity(config.payUid), 2)
+        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
+        Assert.assert_equal(conMysql.selectUserMoneySql('sum_commodity', config.payUid), 2)
         Consts.CASE_LIST[des] = Consts.result
 
     def test_02_openMoreBoxPayChange(self):
@@ -56,18 +56,18 @@ class TestPayCreate(unittest.TestCase):
         5.检查背包内开出物品，预期值应大于2（赠送头像框*1，开出礼物个数大于*2）
         """
         des = '背包箱子多开场景'
-        Mysql.deleteUserBox(config.payUid)
-        Mysql.deleteUserCommoditySql(config.payUid)
-        Mysql.insertXsUserCommodity(config.payUid, 3, 6)
-        Mysql.insertXsUserBox(9, config.payUid, 'silver')
-        Mysql.updateMoneySql(config.payUid, 12600)
+        conMysql.deleteUserAccountSql('user_box', config.payUid)
+        conMysql.deleteUserAccountSql('user_commodity', config.payUid)
+        conMysql.insertXsUserCommodity(config.payUid, 3, 6)
+        conMysql.insertXsUserBox(9, config.payUid, 'silver')
+        conMysql.updateMoneySql(config.payUid, 12600)
         data = basicData.encodeData(payType='shop-buy-box', money=2100, num=6, cid=6, boxType='silver')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
-        Assert.assert_len(Mysql.selectUserCommodity(config.payUid), 12)
+        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        Assert.assert_equal(conMysql.selectUserMoneySql('sum_commodity', config.payUid), 12)
         Consts.CASE_LIST[des] = Consts.result
 
     def test_03_giveBoxPayChange(self):
@@ -82,15 +82,15 @@ class TestPayCreate(unittest.TestCase):
         5.检查收箱用户账户余额，预期值为：大于0
         """
         des = '房间送箱子场景'
-        Mysql.updateMoneySql(config.payUid, 400, 100, 100, 100)
-        Mysql.updateMoneySql(config.testUid)
+        conMysql.updateMoneySql(config.payUid, 400, 100, 100, 100)
+        conMysql.updateMoneySql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_package_giveBox')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 100)
-        Assert.assert_len(Mysql.selectAllMoneySql(config.testUid), 0)
+        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
+        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 0)
         Consts.CASE_LIST[des] = Consts.result
 
     def test_04_giveBoxMorePeople(self):
@@ -105,13 +105,13 @@ class TestPayCreate(unittest.TestCase):
         5.检查收箱用户账户余额，预期值为：大于0
         """
         des = '房间送多人多个箱子场景'
-        Mysql.updateMoneySql(config.payUid, 10000)
-        Mysql.updateMoneySql(config.testUid)
+        conMysql.updateMoneySql(config.payUid, 10000)
+        conMysql.updateMoneySql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_OpenBox')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 1600)
-        Assert.assert_len(Mysql.selectAllMoneySql(config.testUid), 1000)
+        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 1600)
+        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 1000)
         Consts.CASE_LIST[des] = Consts.result

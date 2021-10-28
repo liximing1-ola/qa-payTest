@@ -1,5 +1,5 @@
 from common.Config import config
-from common.sqlScript import Mysql
+from common.conMysql import conMysql
 from common.params_Yaml import Yaml
 import unittest
 from common import Consts, Request, Assert
@@ -8,7 +8,7 @@ class TestPayCreate(unittest.TestCase):
     # 内网支付接口
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
 
-    @unittest.skip('没上线')
+    @unittest.skip('等待上线')
     def test_01_PayChangeTriggerPunish(self):
         """
         用例描述：
@@ -23,18 +23,18 @@ class TestPayCreate(unittest.TestCase):
         6.检查消费记录表消费方式op
         """
         des = '收到打赏时触发罚款流程'
-        Mysql.updateMoneySql(config.payUid, 100)
-        Mysql.updateBeanSql(config.testUid, 20)
-        Mysql.updateMoneySql(config.testUid, 20, money_debts=100)
+        conMysql.updateMoneySql(config.payUid, 100)
+        conMysql.insertBeanSql(config.testUid, 20)
+        conMysql.updateMoneySql(config.testUid, 20, money_debts=100)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_2')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectUserMoneySql('bean', config.testUid), 0)
-        Assert.assert_equal(Mysql.selectUserMoneySql('single_money', config.testUid, 'money'), 2)
-        Assert.assert_equal(Mysql.selectUserMoneySql('single_money', config.testUid, 'money_cash_b'), 0)
-        Assert.assert_equal(Mysql.selectUserMoneySql('single_money', config.testUid, 'money_debts'), 0)
-        Assert.assert_equal(Mysql.selectPayChangeSql(config.testUid), 100)
-        Assert.assert_equal(Mysql.selectPayChangeOpSql(config.testUid), 'punish')
+        Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.testUid), 0)
+        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid, 'money'), 2)
+        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid, 'money_cash_b'), 0)
+        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid, 'money_debts'), 0)
+        Assert.assert_equal(conMysql.selectUserMoneySql('pay_change', config.testUid, op='money'), 100)
+        Assert.assert_equal(conMysql.selectUserMoneySql('pay_change', config.testUid, op='punish'), 'punish')
         Consts.CASE_LIST[des] = Consts.result

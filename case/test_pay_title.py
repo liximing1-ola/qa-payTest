@@ -1,6 +1,6 @@
 from common.Config import config
 from common import Request
-from common.sqlScript import Mysql
+from common.conMysql import conMysql
 import unittest
 import pytest
 from common import Consts, Assert, basicData
@@ -23,17 +23,17 @@ class TestPayCreate(unittest.TestCase):
         4.检查剩余钱值,预期值：（200000 - 100000 + 60000 = 160000）
         """
         des = '开通爵位场景'
-        Mysql.deleteUserCommoditySql(config.payUid)
-        Mysql.deleteUserTitleSql(config.payUid)
-        Mysql.updateUserTitleSql(config.payUid)
-        Mysql.updateUserTitleSubscribeTime(config.payUid)  # 更新用户爵位时间
-        Mysql.updateMoneySql(config.payUid, 200000)
+        conMysql.deleteUserAccountSql('user_commodity', config.payUid)
+        conMysql.deleteUserAccountSql('user_title', config.payUid)
+        conMysql.deleteUserAccountSql('user_profile', config.payUid)
+        conMysql.deleteUserAccountSql('user_title_new', config.payUid)
+        conMysql.updateMoneySql(config.payUid, 200000)
         data = basicData.encodeData(payType='title', money=100000)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectMoneySql(config.payUid, 'money'), 160000)
+        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money'), 160000)
         Consts.CASE_LIST[des] = Consts.result
 
     @pytest.mark.run(order=2)
@@ -48,11 +48,11 @@ class TestPayCreate(unittest.TestCase):
         4.检查剩余钱值,预期值：（200000 - 60000 + 36000 = 176000）
         """
         des = '爵位续费场景'
-        Mysql.updateMoneySql(config.payUid, 200000)
+        conMysql.updateMoneySql(config.payUid, 200000)
         data = basicData.encodeData(payType='title', money=100000)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectMoneySql(config.payUid, 'money'), 176000)
+        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money'), 176000)
         Consts.CASE_LIST[des] = Consts.result

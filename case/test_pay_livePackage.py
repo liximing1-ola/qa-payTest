@@ -1,6 +1,6 @@
 from common.Config import config
 from common.params_Yaml import Yaml
-from common.sqlScript import Mysql
+from common.conMysql import conMysql
 import unittest
 from common import Consts, Assert, Request, basicData
 from common.runFailed import Retry
@@ -35,16 +35,16 @@ class TestPayCreate(unittest.TestCase):
         6.检查消费记录表消费方式op
         """
         des = '直播间非公会主播(非宗师)打赏分成62:38'
-        Mysql.updateMoneySql(config.payUid, 30, 30, 30, 10)
-        Mysql.updateMoneySql(config.testUid)
+        conMysql.updateMoneySql(config.payUid, 30, 30, 30, 10)
+        conMysql.updateMoneySql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_1')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectMoneySql(config.testUid, money_type='money_cash_b'), 62)
-        Assert.assert_equal(Mysql.selectPayChangeSql(config.payUid), 100)
-        Assert.assert_equal(Mysql.selectPayChangeOpSql(config.payUid), 'consume')
+        Assert.assert_equal(conMysql.selectUserMoneySql('single', config.testUid), 62)
+        Assert.assert_equal(conMysql.selectUserMoneySql('pay_change', config.payUid), 100)
+        Assert.assert_equal(conMysql.selectUserMoneySql('pay_change', config.payUid, op='consume'), 'consume')
         Consts.CASE_LIST_2[des] = Consts.result
 
     def test_02_ImPay_7228(self):
@@ -60,16 +60,16 @@ class TestPayCreate(unittest.TestCase):
         5.检查打赏者剩余余额，预期为：400
         """
         des = '非公会主播(非宗师)私聊打赏分成72:28'
-        Mysql.updateMoneySql(config.payUid, 1100, 100, 100, 100)
-        Mysql.updateMoneySql(config.testUid)
+        conMysql.updateMoneySql(config.payUid, 1100, 100, 100, 100)
+        conMysql.updateMoneySql(config.testUid)
         data = basicData.encodeData(payType='chat-gift', uid=config.testUid, money=1000, num=10, giftId=5)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         # 商业房房主 or （工会会长 or 工会成员）|| 同意大神协议
-        Assert.assert_equal(Mysql.selectMoneySql(config.testUid, money_type='money_cash_b'), 720)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 400)
+        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid), 720)
+        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 400)
         Consts.CASE_LIST_2[des] = Consts.result
 
     def test_03_liveRoomPay_7030(self):
@@ -86,17 +86,17 @@ class TestPayCreate(unittest.TestCase):
         """
         des = '直播间非公会主播(宗师)打赏分成7:3'
         test_uid=config.live_role['pack_master_NoPack']  # 非公会一代宗师主播
-        Mysql.updateMoneySql(config.payUid, 900, 30, 30, 40)
-        Mysql.updateMoneySql(test_uid)
-        Mysql.selectUserXsMentorLevel(test_uid, 4)  # 更新成一代宗师
-        Mysql.updateChatroomUid(test_uid)  # 更新成商业房主播
+        conMysql.updateMoneySql(config.payUid, 900, 30, 30, 40)
+        conMysql.updateMoneySql(test_uid)
+        conMysql.selectUserXsMentorLevel(test_uid, 4)  # 更新成一代宗师
+        conMysql.updateChatroomUid(test_uid)  # 更新成商业房主播
         data = Yaml.read_yaml('Basic.yml', 'dev_livePay_7030')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
-        Assert.assert_equal(Mysql.selectMoneySql(test_uid, money_type='money_cash'), 700)
+        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 700)
         Consts.CASE_LIST_2[des] = Consts.result
 
     def test_04_IMPay_8020(self):
@@ -112,19 +112,18 @@ class TestPayCreate(unittest.TestCase):
         """
         des = '非公会的主播(宗师)私聊打赏分成8:2'
         test_uid = config.live_role['pack_master_NoPack']  # 非公会一代宗师主播
-        Mysql.updateMoneySql(config.payUid, 900, 100, 100, 100)
-        Mysql.updateMoneySql(test_uid)
-        Mysql.selectUserXsMentorLevel(test_uid, 4)  # 更新成一代宗师
-        Mysql.updateChatroomUid(test_uid)  # 更新成商业房主播&&直播结算频道
+        conMysql.updateMoneySql(config.payUid, 900, 100, 100, 100)
+        conMysql.updateMoneySql(test_uid)
+        conMysql.selectUserXsMentorLevel(test_uid, 4)  # 更新成一代宗师
+        conMysql.updateChatroomUid(test_uid)  # 更新成商业房主播&&直播结算频道
         data = basicData.encodeData(payType='chat-gift', money=1000, uid=test_uid, giftId=20)
-        # data = Yaml.read_yaml('Basic.yml', 'dev_IMPay_8020')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectMoneySql(test_uid, 'money_cash_b'), 300)
-        Assert.assert_equal(Mysql.selectMoneySql(test_uid, 'money_cash'), 500)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 200)
+        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 300)
+        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 500)
+        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 200)
         Consts.CASE_LIST_2[des] = Consts.result
 
     def test_05_liveRoomPay_602515(self):
@@ -143,21 +142,20 @@ class TestPayCreate(unittest.TestCase):
         des = '直播间公会主播(宗师)/公会长分成60:25:15'
         test_uid = config.live_role['pack_cal_uid']
         ceo_uid = config.live_role['pack_ceo']
-        Mysql.updateChatroomUid(test_uid)  # 商业房房主
-        Mysql.updateBrokerUser(ceo_uid, test_uid)  # 打包结算
-        Mysql.selectUserXsBroker(ceo_uid)  # 工会公会长
-        Mysql.updateMoneySql(config.payUid, 1000)
-        Mysql.updateMoneySql(test_uid)
-        Mysql.updateMoneySql(ceo_uid)
-        Mysql.selectUserXsMentorLevel(test_uid, 4)  # 师父等级改为一代宗师
+        conMysql.updateChatroomUid(test_uid)  # 商业房房主
+        conMysql.updateBrokerUser(ceo_uid, test_uid)  # 打包结算
+        conMysql.selectUserXsBroker(ceo_uid)  # 工会公会长
+        conMysql.updateMoneySql(config.payUid, 1000)
+        conMysql.updateUserMoneyClearSql(test_uid, ceo_uid)
+        conMysql.selectUserXsMentorLevel(test_uid, 4)  # 师父等级改为一代宗师
         data = Yaml.read_yaml('Basic.yml', 'dev_livePay_602515')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res)
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectMoneySql(test_uid, 'money_cash'), 600)
-        Assert.assert_equal(Mysql.selectAllMoneySql(ceo_uid), 250)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
+        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 600)
+        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', ceo_uid), 250)
+        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
     def test_06_IMPay_602020(self):
@@ -175,22 +173,20 @@ class TestPayCreate(unittest.TestCase):
         des = '公会主播(宗师)/公会长私聊分成6:2:2'
         test_uid = config.live_role['pack_cal_uid']
         ceo_uid = config.live_role['pack_ceo']
-        Mysql.updateChatroomUid(test_uid)  # 商业房房主
-        Mysql.updateBrokerUser(ceo_uid, test_uid)  # 打包结算
-        Mysql.selectUserXsBroker(ceo_uid)  # 工会公会长
-        Mysql.updateMoneySql(config.payUid, 1000)
-        Mysql.updateMoneySql(test_uid)
-        Mysql.updateMoneySql(ceo_uid)
-        Mysql.selectUserXsMentorLevel(test_uid, 4)  # 师父等级改为一代宗师
+        conMysql.updateChatroomUid(test_uid)  # 商业房房主
+        conMysql.updateBrokerUser(ceo_uid, test_uid)  # 打包结算
+        conMysql.selectUserXsBroker(ceo_uid)  # 工会公会长
+        conMysql.updateMoneySql(config.payUid, 1000)
+        conMysql.updateUserMoneyClearSql(test_uid, ceo_uid)
+        conMysql.selectUserXsMentorLevel(test_uid, 4)  # 师父等级改为一代宗师
         data = basicData.encodeData(payType='chat-gift', money=1000, uid=test_uid, giftId=20)
-        # data = Yaml.read_yaml('Basic.yml', 'dev_IMPay_602020')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res)
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectMoneySql(test_uid, 'money_cash'), 600)
-        Assert.assert_equal(Mysql.selectAllMoneySql(ceo_uid), 200)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
+        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 600)
+        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', ceo_uid), 200)
+        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
     def test_07_liveRoomPay_602515(self):
@@ -208,21 +204,20 @@ class TestPayCreate(unittest.TestCase):
         des = '直播公会主播(非宗师)/公会长打赏分成60:25:15'
         test_uid = config.live_role['pack_cal_uid']
         ceo_uid = config.live_role['pack_ceo']
-        Mysql.updateChatroomUid(test_uid)  # 商业房房主
-        Mysql.updateBrokerUser(ceo_uid, test_uid)  # 打包结算
-        Mysql.selectUserXsBroker(ceo_uid)  # 工会公会长
-        Mysql.updateMoneySql(config.payUid, 1000)
-        Mysql.updateMoneySql(test_uid)
-        Mysql.updateMoneySql(ceo_uid)
-        Mysql.selectUserXsMentorLevel(test_uid, 1)  # 师父等级改为非一代宗师
+        conMysql.updateChatroomUid(test_uid)  # 商业房房主
+        conMysql.updateBrokerUser(ceo_uid, test_uid)  # 打包结算
+        conMysql.selectUserXsBroker(ceo_uid)  # 工会公会长
+        conMysql.updateMoneySql(config.payUid, 1000)
+        conMysql.updateUserMoneyClearSql(test_uid, ceo_uid)
+        conMysql.selectUserXsMentorLevel(test_uid, 1)  # 师父等级改为非一代宗师
         data = Yaml.read_yaml('Basic.yml', 'dev_livePay_602515')  # 共用
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res)
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectMoneySql(test_uid, 'money_cash'), 600)
-        Assert.assert_equal(Mysql.selectAllMoneySql(ceo_uid), 250)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
+        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 600)
+        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', ceo_uid), 250)
+        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
     def test_08_IMPay_602020(self):
@@ -240,22 +235,20 @@ class TestPayCreate(unittest.TestCase):
         des = '公会主播(非宗师)/公会长私聊分成60:20:20'
         test_uid = config.live_role['pack_cal_uid']
         ceo_uid = config.live_role['pack_ceo']
-        Mysql.updateChatroomUid(test_uid)  # 商业房房主
-        Mysql.updateBrokerUser(ceo_uid, test_uid)  # 打包结算
-        Mysql.selectUserXsBroker(ceo_uid)  # 工会公会长
-        Mysql.updateMoneySql(config.payUid, 1000)
-        Mysql.updateMoneySql(test_uid)
-        Mysql.updateMoneySql(ceo_uid)
-        Mysql.selectUserXsMentorLevel(test_uid, 1)  # 师父等级改为非一代宗师
+        conMysql.updateChatroomUid(test_uid)  # 商业房房主
+        conMysql.updateBrokerUser(ceo_uid, test_uid)  # 打包结算
+        conMysql.selectUserXsBroker(ceo_uid)  # 工会公会长
+        conMysql.updateMoneySql(config.payUid, 1000)
+        conMysql.updateUserMoneyClearSql(test_uid, ceo_uid)
+        conMysql.selectUserXsMentorLevel(test_uid, 1)  # 师父等级改为非一代宗师
         data = basicData.encodeData(payType='chat-gift', money=1000, uid=test_uid, giftId=20)
-        # data = Yaml.read_yaml('Basic.yml', 'dev_IMPay_602020')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res)
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectMoneySql(test_uid, 'money_cash'), 600)
-        Assert.assert_equal(Mysql.selectAllMoneySql(ceo_uid), 200)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
+        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 600)
+        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', ceo_uid), 200)
+        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
     def test_09_underRolePay_6238(self):
@@ -270,16 +263,15 @@ class TestPayCreate(unittest.TestCase):
         5.检查打赏者余额,预期为：0
         """
         des = '直播间打赏麦下用户分成62:38'
-        Mysql.updateMoneySql(config.payUid, 100)
-        Mysql.updateMoneySql(config.testUid)
+        conMysql.updateMoneySql(config.payUid, 100)
+        conMysql.updateMoneySql(config.testUid)
         data = Yaml.read_yaml('Basic.yml', 'dev_mentor_pay')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
-        Assert.assert_equal(Mysql.selectMoneySql(config.testUid, money_type='money_cash_b'), 62)
-        Assert.assert_equal(Mysql.selectPayChangeSql(config.payUid), 100)
+        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid, money_type='money_cash_b'), 62)
+        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
     def test_10_NotLiveRoomPayAnchor(self):
@@ -295,14 +287,14 @@ class TestPayCreate(unittest.TestCase):
         """
         des = '主播在非直播间被打赏70%进个人魅力'
         test_uid = config.live_role['pack_cal_uid']
-        Mysql.updateMoneySql(config.payUid, 1000)
-        Mysql.updateMoneySql(test_uid)
-        Mysql.selectUserXsMentorLevel(test_uid, 4)  # 师父等级改为一代宗师
+        conMysql.updateMoneySql(config.payUid, 1000)
+        conMysql.updateMoneySql(test_uid)
+        conMysql.selectUserXsMentorLevel(test_uid, 4)  # 师父等级改为一代宗师
         data = Yaml.read_yaml('Basic.yml', 'dev_NotLivePay_7030')  # 共用
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res)
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        Assert.assert_equal(Mysql.selectMoneySql(test_uid, 'money_cash_b'), 700)
-        Assert.assert_equal(Mysql.selectAllMoneySql(config.payUid), 0)
+        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 700)
+        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
