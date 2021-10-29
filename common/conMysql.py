@@ -203,6 +203,16 @@ class conMysql:
                 print('update fail', error)
             finally:
                 conMysql.con.commit()
+        elif tableName=='super_chatroom':
+            sql = "update xs_chatroom set type='super-voice-fresh',property='business',version=737," \
+                  "room_factory_type='super-voice-fresh',room_module_id=73,settlement_channel='super-voice' where rid={}".format(uid)
+            try:
+                conMysql.cur.execute(sql)
+            except Exception as error:
+                conMysql.con.rollback()
+                print('update fail', error)
+            finally:
+                conMysql.con.commit()
         else:
             print('{} Error'.format(tableName))
 
@@ -442,18 +452,5 @@ class conMysql:
                     print('update fail', error)
         except Exception as error:
             print(error)
-        finally:
-            conMysql.con.commit()
-
-    # 网赚房间
-    @staticmethod
-    def updateXsFreshRoom():
-        sql = "update xs_chatroom set type='super-voice-fresh',property='business',version=737," \
-              "room_factory_type='super-voice-fresh',room_module_id=73,settlement_channel='super-voice' where rid=200000287"
-        try:
-            conMysql.cur.execute(sql)
-        except Exception as error:
-            conMysql.con.rollback()
-            print('update fail', error)
         finally:
             conMysql.con.commit()

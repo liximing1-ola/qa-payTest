@@ -23,7 +23,7 @@ class TestPayCreate(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        conMysql.updateXsFreshRoom()
+        conMysql.updateUserInfoSql('super_chatroom', config.super_live_role['super-voice-fresh'])
 
     @pytest.mark.run(order=1)
     def test_01_starRoomNoBrokerPay_35(self):
