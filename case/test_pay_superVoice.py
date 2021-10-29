@@ -99,7 +99,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateUserMoneyClearSql(test_agent, test_uid)  # 清空用户账户
         conMysql.updateSuperVoiceUser(test_uid, test_bid, nid=200)  # 更新用户到指定工会
         conMysql.checkSuperVoiceUser(test_agent, test_bid)
-        conMysql.updateOnlineEarnRelation(test_agent, test_uid)
+        conMysql.checkOnlineEarnRelation(test_agent, test_uid)
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
