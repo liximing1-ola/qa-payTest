@@ -318,7 +318,7 @@ class conMysql:
             conMysql.cur.execute(sql)
             res = conMysql.cur.fetchone()
             if res is None:
-                sql = "insert into xs_broker (bid,app_id,bname,creater,dateline,types) values({}, {}, '{}', {}, {}, '{}') limit 1" \
+                sql = "insert into xs_broker (bid,app_id,bname,creater,dateline,types) values({}, {}, '{}', {}, {}, '{}')" \
                     .format(bid, 1, '10086', bid, 1571481302, 'live')
                 try:
                     conMysql.cur.execute(sql)
@@ -345,7 +345,7 @@ class conMysql:
             conMysql.cur.execute(sql)
             res = conMysql.cur.fetchone()
             if res is None:
-                sql = 'insert into xs_mentor_exp (uid, level) values({}, {}) limit 1'.format(uid, level)
+                sql = 'insert into xs_mentor_exp (uid, level) values({}, {})'.format(uid, level)
                 try:
                     conMysql.cur.execute(sql)
                 except Exception as error:
@@ -425,7 +425,7 @@ class conMysql:
             res = conMysql.cur.fetchone()
             if res is None:
                 sql = 'insert into xs_online_earn_relation (agent_uid, artist_uid, sign_time, end_time) values' \
-                      '({}, {}, {}, {}) limit 1'.format(agent_uid, artist_uid, sign_time, end_time)
+                      '({}, {}, {}, {})'.format(agent_uid, artist_uid, sign_time, end_time)
                 print(sql)
                 try:
                     conMysql.cur.execute(sql)
