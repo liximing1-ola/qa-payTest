@@ -43,10 +43,10 @@ class Session:
         elif env == 'games':
             try:
                 headers = Yaml.read_yaml('Basic.yml', 'header_dev')
-                params = Yaml.read_yaml('Basic.yml', 'params_dev_qq')
+                params = Yaml.read_yaml('Basic.yml', 'params_games_qq')
                 # 7.22修改，请求接口加包名限制
-                login_url = config.qq_login_url + '?' + params + '&package=com.imbb.banban.android'
-                body = Yaml.read_yaml('Basic.yml', 'data_dev_qq')
+                login_url = config.qq_login_url + '?' + params + '&package=com.who.android'
+                body = Yaml.read_yaml('Basic.yml', 'data_games_qq')
                 session = requests.session()
                 res = session.post(login_url, data=body, headers=headers)
                 res.raise_for_status()

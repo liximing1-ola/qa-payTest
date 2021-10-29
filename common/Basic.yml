@@ -5,14 +5,24 @@ header_dev:
     "host": 'dev.iambanban.com'
 
 # 192.168.11.58(测试支付服务器)
+# 伴伴
 params_dev_qq:
     t=BCB514D0C9FBEBB04F30223DBE7DCE20&o=659826BC750ABF8FF3AED92E552DCF62
 
+# 谁是凶手
+params_games_qq:
+    t=43186A7FCE3FA060285F804799B0AED6&o=031FA431ABAF5C51186548C417A96A9C
+
 # Common\getSession.py
-# data
+# 伴伴
 data_dev_qq:
     "type": 'login'
     "dtoken": 'a22d70__2B7asrlNuzEiCBoImnXGjHFCwaI90idRRvGfzb8nyb71kD__2Bck__2FF4Mq8__2B5tWBAT6FWfkz6mF8uJa2krUsAyit__2F1uvCxMfEZ8ntGyrOzF6lQPGCN0jQNJNYMdRyygzEnIShSsua93eQ'
+
+# 谁是凶手
+data_games_qq:
+    "type": 'login'
+    "dtoken": 'aefeoOlcxTeyYjsqve6apR1nF8__2BwxGi__2B8Hvc2ylTmlHNUuCxfCkxjba__2FmYdli8ROKMSX9UU4A__2By__2FkG4mfCfpJ3dNwgeiJk__2FxqAhxMWQs2veALvUFrxCn6N7DsFZSnbTp__2Fw7FyfcTF4n1Tg'
 
 # rid=193185408
 # uid=105002312

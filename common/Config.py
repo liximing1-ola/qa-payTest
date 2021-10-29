@@ -59,6 +59,13 @@ class config:
     # git branch
     pt_git_branch = pt_test['pt_git_branch']
 
+    # 谁是凶手
+    games_test= {
+        'payUid': 105000291,
+        'testUid': 128440025,
+        'games_git_branch': 'release-for-vpc',  # 线上代码分支
+    }
+
 
 if __name__ == '__main__':
     print(config.BASE_PATH)
