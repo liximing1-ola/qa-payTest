@@ -426,6 +426,7 @@ class conMysql:
             if res is None:
                 sql = 'insert into xs_online_earn_relation (agent_uid, artist_uid, sign_time, end_time) values' \
                       '({}, {}, {}, {}) limit 1'.format(agent_uid, artist_uid, sign_time, end_time)
+                print(sql)
                 try:
                     conMysql.cur.execute(sql)
                 except Exception as error:
