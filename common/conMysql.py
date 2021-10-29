@@ -181,6 +181,31 @@ class conMysql:
         else:
             print('{} Error'.format(tableName))
 
+    # 更新用户数据
+    @staticmethod
+    def updateUserInfoSql(tableName, uid, bid=105002314):
+        if tableName=='broker_user':  # 修改用户为打包结算主播
+            sql = "update xs_broker_user set bid={}, uid={}, state=1, pack_cal=1 where id = 50 limit 1".format(bid, uid)
+            try:
+                conMysql.cur.execute(sql)
+            except Exception as error:
+                conMysql.con.rollback()
+                print('update fail', error)
+            finally:
+                conMysql.con.commit()
+        elif tableName=='chatroom':  # 修改用户为房间房主
+            sql = "update xs_chatroom set app_id=1, uid ={}, settlement_channel='live' where rid=193185577 limit 1".format(
+                uid)
+            try:
+                conMysql.cur.execute(sql)
+            except Exception as error:
+                conMysql.con.rollback()
+                print('update fail', error)
+            finally:
+                conMysql.con.commit()
+        else:
+            print('{} Error'.format(tableName))
+
     # 清空用户账户
     @staticmethod
     def updateUserMoneyClearSql(*uids):
@@ -234,18 +259,6 @@ class conMysql:
             time.sleep(0.01)
             conMysql.con.commit()
 
-    # 修改用户为打包结算主播
-    @staticmethod
-    def updateBrokerUser(bid, uid):
-        sql = "update xs_broker_user set bid={}, uid={}, state=1, pack_cal=1 where id = 50 limit 1".format(bid, uid)
-        try:
-            conMysql.cur.execute(sql)
-        except Exception as error:
-            conMysql.con.rollback()
-            print('update fail', error)
-        finally:
-            conMysql.con.commit()
-
     # 修改用户为指定工会用户
     @staticmethod
     def updateSuperVoiceUser(uid, bid, nid):
@@ -272,18 +285,6 @@ class conMysql:
         except Exception as error:
             print(error)
 
-    # 修改用户为房间房主
-    @staticmethod
-    def updateChatroomUid(uid):
-        sql = "update xs_chatroom set app_id=1, uid ={}, settlement_channel='live' where rid=193185577 limit 1".format(uid)
-        try:
-            conMysql.cur.execute(sql)
-        except Exception as error:
-            conMysql.con.rollback()
-            print('update fail', error)
-        finally:
-            conMysql.con.commit()
-
     # 更新箱子刷新物品
     @staticmethod
     def insertXsUserBox(gift_type, uid, box_type):
@@ -297,7 +298,7 @@ class conMysql:
         finally:
             conMysql.con.commit()
 
-    # 用户背包增加测试数据
+    # 用户背包增加测试数据@
     @staticmethod
     def insertXsUserCommodity(uid, cid, num, state=0):
         sql = "insert into xs_user_commodity (uid, cid, num, state) values ({}, {}, {}, {})".format(uid, cid, num, state)
@@ -309,54 +310,30 @@ class conMysql:
         finally:
             conMysql.con.commit()
 
-    # 新建一个直播公会
-    @staticmethod
-    def insertUserXsBroker(bid):
-        sql = "insert into xs_broker (bid,app_id,bname,creater,dateline,types) values({}, {}, '{}', {}, {}, '{}')" \
-            .format(bid, 1, '10086', bid, 1571481302, 'live')
-        try:
-            conMysql.cur.execute(sql)
-        except Exception as error:
-            conMysql.con.rollback()
-            print('insert fail', error)
-        finally:
-            conMysql.con.commit()
-
-    # 更新工会数据
-    @staticmethod
-    def updateUserXsBroker(bid):
-        sql = 'update xs_broker set creater={} where bid={}'.format(bid, bid)
-        try:
-            conMysql.cur.execute(sql)
-        except Exception as error:
-            conMysql.con.rollback()
-            print('update fail', error)
-        finally:
-            conMysql.con.commit()
-
     # 查询工会是否存在
     @staticmethod
-    def selectUserXsBroker(bid):
+    def checkUserXsBroker(bid):
         sql = 'select * from xs_broker where bid={}'.format(bid)
         try:
             conMysql.cur.execute(sql)
             res = conMysql.cur.fetchone()
             if res is None:
-                conMysql.insertUserXsBroker(bid)
+                sql = "insert into xs_broker (bid,app_id,bname,creater,dateline,types) values({}, {}, '{}', {}, {}, '{}') limit 1" \
+                    .format(bid, 1, '10086', bid, 1571481302, 'live')
+                try:
+                    conMysql.cur.execute(sql)
+                except Exception as error:
+                    conMysql.con.rollback()
+                    print('insert fail', error)
             else:
-                conMysql.updateUserXsBroker(bid)
+                sql = 'update xs_broker set creater={} where bid={} limit 1'.format(bid, bid)
+                try:
+                    conMysql.cur.execute(sql)
+                except Exception as error:
+                    conMysql.con.rollback()
+                    print('update fail', error)
         except Exception as error:
             print(error)
-
-    # 将用户变为一代宗师
-    @staticmethod
-    def insertXsMentorExpLevel(uid, level):
-        sql = 'insert into xs_mentor_exp (uid, level) values({}, {})'.format(uid, level)
-        try:
-            conMysql.cur.execute(sql)
-        except Exception as error:
-            conMysql.con.rollback()
-            print('insert fail', error)
         finally:
             conMysql.con.commit()
 
@@ -368,33 +345,21 @@ class conMysql:
             conMysql.cur.execute(sql)
             res = conMysql.cur.fetchone()
             if res is None:
-                conMysql.insertXsMentorExpLevel(uid, level)
+                sql = 'insert into xs_mentor_exp (uid, level) values({}, {}) limit 1'.format(uid, level)
+                try:
+                    conMysql.cur.execute(sql)
+                except Exception as error:
+                    conMysql.con.rollback()
+                    print('insert fail', error)
             else:
-                conMysql.updateUserMentorLevel(uid, level)
+                sql = "update xs_mentor_exp set level={} where uid={} limit 1".format(level, uid)
+                try:
+                    conMysql.cur.execute(sql)
+                except Exception as error:
+                    conMysql.con.rollback()
+                    print('update fail', error)
         except Exception as error:
             print(error)
-
-    @staticmethod
-    def updateUserMentorLevel(uid, level):
-        sql = "update xs_mentor_exp set level={} where uid={} limit 1".format(level, uid)
-        try:
-            conMysql.cur.execute(sql)
-        except Exception as error:
-            conMysql.con.rollback()
-            print('update fail', error)
-        finally:
-            conMysql.con.commit()
-
-    # 新建一个经纪人(1-5级/6级)
-    @staticmethod
-    def insertOnlineEarnAgent(uid, point):
-        sql = 'insert into xs_online_earn_agent (uid, point,create_time,update_time) values' \
-              '({}, {}, 1630577931, 1630577931)'.format(uid, point)
-        try:
-            conMysql.cur.execute(sql)
-        except Exception as error:
-            conMysql.con.rollback()
-            print('insert fail', error)
         finally:
             conMysql.con.commit()
 
@@ -406,35 +371,26 @@ class conMysql:
             conMysql.cur.execute(sql)
             res = conMysql.cur.fetchone()
             if res is None:
-                conMysql.insertOnlineEarnAgent(uid, point)
+                sql = 'insert into xs_online_earn_agent (uid, point,create_time,update_time) values' \
+                      '({}, {}, 1630577931, 1630577931)'.format(uid, point)
+                try:
+                    conMysql.cur.execute(sql)
+                except Exception as error:
+                    conMysql.con.rollback()
+                    print('insert fail', error)
+                finally:
+                    conMysql.con.commit()
             else:
-                conMysql.updateOnlineEarnAgent(uid, point)
+                sql = "update xs_online_earn_agent set point={} where uid={} limit 1".format(point, uid)
+                try:
+                    conMysql.cur.execute(sql)
+                except Exception as error:
+                    conMysql.con.rollback()
+                    print('update fail', error)
+                finally:
+                    conMysql.con.commit()
         except Exception as error:
             print(error)
-
-    @staticmethod
-    def updateOnlineEarnAgent(uid, point):
-        sql = "update xs_online_earn_agent set point={} where uid={} limit 1".format(point, uid)
-        try:
-            conMysql.cur.execute(sql)
-        except Exception as error:
-            conMysql.con.rollback()
-            print('update fail', error)
-        finally:
-            conMysql.con.commit()
-
-    # 新建一个艺人
-    @staticmethod
-    def insertOnlineEarnArtist(uid, point):
-        sql = 'insert into xs_online_earn_artist (uid, point,create_time,update_time) values' \
-              '({}, {}, 1630577931, 1630577931)'.format(uid, point)
-        try:
-            conMysql.cur.execute(sql)
-        except Exception as error:
-            conMysql.con.rollback()
-            print('insert fail', error)
-        finally:
-            conMysql.con.commit()
 
     # 查询用户艺人身份是否存在,没有就造一个
     @staticmethod
@@ -444,53 +400,49 @@ class conMysql:
             conMysql.cur.execute(sql)
             res = conMysql.cur.fetchone()
             if res is None:
-                conMysql.insertOnlineEarnArtist(uid, point)
+                sql = 'insert into xs_online_earn_artist (uid, point,create_time,update_time) values' \
+                      '({}, {}, 1630577931, 1630577931)'.format(uid, point)
+                try:
+                    conMysql.cur.execute(sql)
+                except Exception as error:
+                    conMysql.con.rollback()
+                    print('insert fail', error)
             else:
                 return 1
         except Exception as error:
             print(error)
-
-    # 更新艺人和经纪人关联的表
-    @staticmethod
-    def updateOnlineEarnRelation(agent_uid, artist_uid):
-        sign_time=int(time.time())
-        end_time=sign_time + 604800
-        sql = 'update xs_online_earn_relation set agent_uid={}, artist_uid={}, sign_time={}, end_time={} ' \
-              'where id>=1 limit 1'.format(agent_uid, artist_uid, sign_time, end_time)
-        try:
-            conMysql.cur.execute(sql)
-        except Exception as error:
-            conMysql.con.rollback()
-            print('update fail', error)
         finally:
             conMysql.con.commit()
 
-    @staticmethod
-    def insertOnlineEarnRelation(agent_uid, artist_uid):
-        sign_time=int(time.time())
-        end_time=sign_time + 604800
-        sql = 'insert into xs_online_earn_relation (agent_uid, artist_uid, sign_time, end_time) values' \
-              '({}, {}, {}, {})'.format(agent_uid, artist_uid, sign_time, end_time)
-        try:
-            conMysql.cur.execute(sql)
-        except Exception as error:
-            conMysql.con.rollback()
-            print('insert fail', error)
-        finally:
-            conMysql.con.commit()
-
+    # 查询艺人经纪人关系
     @staticmethod
     def checkOnlineEarnRelation(agent_uid, artist_uid):
+        sign_time = int(time.time())
+        end_time = sign_time + 604800
         sql = 'select * from xs_online_earn_relation where agent_uid={} and artist_uid={}'.format(agent_uid, artist_uid)
         try:
             conMysql.cur.execute(sql)
             res = conMysql.cur.fetchone()
             if res is None:
-                conMysql.insertOnlineEarnRelation(agent_uid, artist_uid)
+                sql = 'insert into xs_online_earn_relation (agent_uid, artist_uid, sign_time, end_time) values' \
+                      '({}, {}, {}, {}) limit 1'.format(agent_uid, artist_uid, sign_time, end_time)
+                try:
+                    conMysql.cur.execute(sql)
+                except Exception as error:
+                    conMysql.con.rollback()
+                    print('insert fail', error)
             else:
-                conMysql.updateOnlineEarnRelation(agent_uid, artist_uid)
+                sql = 'update xs_online_earn_relation set agent_uid={}, artist_uid={}, sign_time={}, end_time={} ' \
+                      'where id>=1 limit 1'.format(agent_uid, artist_uid, sign_time, end_time)
+                try:
+                    conMysql.cur.execute(sql)
+                except Exception as error:
+                    conMysql.con.rollback()
+                    print('update fail', error)
         except Exception as error:
             print(error)
+        finally:
+            conMysql.con.commit()
 
     # 网赚房间
     @staticmethod

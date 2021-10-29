@@ -89,7 +89,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, 900, 30, 30, 40)
         conMysql.updateMoneySql(test_uid)
         conMysql.checkUserXsMentorLevel(test_uid, 4)  # 更新成一代宗师
-        conMysql.updateChatroomUid(test_uid)  # 更新成商业房主播
+        conMysql.updateUserInfoSql('chatroom', test_uid)  # 更新成商业房主播
         data = Yaml.read_yaml('Basic.yml', 'dev_livePay_7030')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
@@ -115,7 +115,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, 900, 100, 100, 100)
         conMysql.updateMoneySql(test_uid)
         conMysql.checkUserXsMentorLevel(test_uid, 4)  # 更新成一代宗师
-        conMysql.updateChatroomUid(test_uid)  # 更新成商业房主播&&直播结算频道
+        conMysql.updateUserInfoSql('chatroom', test_uid)  # 更新成商业房主播&&直播结算频道
         data = basicData.encodeData(payType='chat-gift', money=1000, uid=test_uid, giftId=20)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
@@ -142,9 +142,9 @@ class TestPayCreate(unittest.TestCase):
         des = '直播间公会主播(宗师)/公会长分成60:25:15'
         test_uid = config.live_role['pack_cal_uid']
         ceo_uid = config.live_role['pack_ceo']
-        conMysql.updateChatroomUid(test_uid)  # 商业房房主
-        conMysql.updateBrokerUser(ceo_uid, test_uid)  # 打包结算
-        conMysql.selectUserXsBroker(ceo_uid)  # 工会公会长
+        conMysql.updateUserInfoSql('chatroom', test_uid)  # 商业房房主
+        conMysql.updateUserInfoSql('broker_user', test_uid, ceo_uid)  # 打包结算
+        conMysql.checkUserXsBroker(ceo_uid)  # 工会公会长
         conMysql.updateMoneySql(config.payUid, 1000)
         conMysql.updateUserMoneyClearSql(test_uid, ceo_uid)
         conMysql.checkUserXsMentorLevel(test_uid, 4)  # 师父等级改为一代宗师
@@ -173,9 +173,9 @@ class TestPayCreate(unittest.TestCase):
         des = '公会主播(宗师)/公会长私聊分成6:2:2'
         test_uid = config.live_role['pack_cal_uid']
         ceo_uid = config.live_role['pack_ceo']
-        conMysql.updateChatroomUid(test_uid)  # 商业房房主
-        conMysql.updateBrokerUser(ceo_uid, test_uid)  # 打包结算
-        conMysql.selectUserXsBroker(ceo_uid)  # 工会公会长
+        conMysql.updateUserInfoSql('chatroom', test_uid)  # 商业房房主
+        conMysql.updateUserInfoSql('broker_user', test_uid, ceo_uid)  # 打包结算
+        conMysql.checkUserXsBroker(ceo_uid)  # 工会公会长
         conMysql.updateMoneySql(config.payUid, 1000)
         conMysql.updateUserMoneyClearSql(test_uid, ceo_uid)
         conMysql.checkUserXsMentorLevel(test_uid, 4)  # 师父等级改为一代宗师
@@ -204,9 +204,9 @@ class TestPayCreate(unittest.TestCase):
         des = '直播公会主播(非宗师)/公会长打赏分成60:25:15'
         test_uid = config.live_role['pack_cal_uid']
         ceo_uid = config.live_role['pack_ceo']
-        conMysql.updateChatroomUid(test_uid)  # 商业房房主
-        conMysql.updateBrokerUser(ceo_uid, test_uid)  # 打包结算
-        conMysql.selectUserXsBroker(ceo_uid)  # 工会公会长
+        conMysql.updateUserInfoSql('chatroom', test_uid)  # 商业房房主
+        conMysql.updateUserInfoSql('broker_user', test_uid, ceo_uid)  # 打包结算
+        conMysql.checkUserXsBroker(ceo_uid)  # 工会公会长
         conMysql.updateMoneySql(config.payUid, 1000)
         conMysql.updateUserMoneyClearSql(test_uid, ceo_uid)
         conMysql.checkUserXsMentorLevel(test_uid, 1)  # 师父等级改为非一代宗师
@@ -235,9 +235,9 @@ class TestPayCreate(unittest.TestCase):
         des = '公会主播(非宗师)/公会长私聊分成60:20:20'
         test_uid = config.live_role['pack_cal_uid']
         ceo_uid = config.live_role['pack_ceo']
-        conMysql.updateChatroomUid(test_uid)  # 商业房房主
-        conMysql.updateBrokerUser(ceo_uid, test_uid)  # 打包结算
-        conMysql.selectUserXsBroker(ceo_uid)  # 工会公会长
+        conMysql.updateUserInfoSql('chatroom', test_uid)  # 商业房房主
+        conMysql.updateUserInfoSql('broker_user', test_uid, ceo_uid)  # 打包结算
+        conMysql.checkUserXsBroker(ceo_uid)  # 工会公会长
         conMysql.updateMoneySql(config.payUid, 1000)
         conMysql.updateUserMoneyClearSql(test_uid, ceo_uid)
         conMysql.checkUserXsMentorLevel(test_uid, 1)  # 师父等级改为非一代宗师
