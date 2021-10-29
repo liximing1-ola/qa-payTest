@@ -465,6 +465,33 @@ class conMysql:
         finally:
             conMysql.con.commit()
 
+    @staticmethod
+    def insertOnlineEarnRelation(agent_uid, artist_uid):
+        sign_time=int(time.time())
+        end_time=sign_time + 604800
+        sql = 'insert into xs_online_earn_relation (agent_uid, artist_uid, sign_time, end_time) values' \
+              '({}, {}, {}, {})'.format(agent_uid, artist_uid, sign_time, end_time)
+        try:
+            conMysql.cur.execute(sql)
+        except Exception as error:
+            conMysql.con.rollback()
+            print('insert fail', error)
+        finally:
+            conMysql.con.commit()
+
+    @staticmethod
+    def checkOnlineEarnRelation(agent_uid, artist_uid):
+        sql = 'select * from xs_online_earn_relation where agent_uid={} and artist_uid={}'.format(agent_uid, artist_uid)
+        try:
+            conMysql.cur.execute(sql)
+            res = conMysql.cur.fetchone()
+            if res is None:
+                conMysql.insertOnlineEarnRelation(agent_uid, artist_uid)
+            else:
+                conMysql.updateOnlineEarnRelation(agent_uid, artist_uid)
+        except Exception as error:
+            print(error)
+
     # 网赚房间
     @staticmethod
     def updateXsFreshRoom():
