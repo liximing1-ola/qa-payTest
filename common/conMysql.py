@@ -414,7 +414,7 @@ class conMysql:
         finally:
             conMysql.con.commit()
 
-    # 查询艺人经纪人关系
+    # 检查和构造艺人经纪人关系
     @staticmethod
     def checkOnlineEarnRelation(agent_uid, artist_uid):
         sign_time = int(time.time())
