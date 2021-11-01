@@ -47,9 +47,9 @@ class TestPayCreate(unittest.TestCase):
         des = '桌游私聊1V1打赏分成比5:5'
         conMysql.updateMoneySql(config.payUid, 1000)
         conMysql.updateMoneySql(config.testUid)
-        data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_2')
         data = basicData.encodeData(payType='chat-gift', rid=config.games_rid, uid=config.games_testUid)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data, tokenName='games')
+        print(res)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
