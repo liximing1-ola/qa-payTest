@@ -1,9 +1,8 @@
 from common.Config import config
-from common import Request
 from common.params_Yaml import Yaml
 from common.conMysql import conMysql
 import unittest
-from common import Consts, Assert
+from common import Consts, Assert, Request
 from common.runFailed import Retry
 @Retry
 class TestPayCreate(unittest.TestCase):
