@@ -6,7 +6,7 @@ class config:
     #  release域名
     domain_host = {'bb_dev_58': 'https://dev.iambanban.com/', 'pt': 'https://test.overseaban.com/', }
     # 标准配置
-    bb_test = {
+    bb_user = {
         'payUid': 103273407,  # god
         'testUid': 105002312,  # 非一代宗师
         'pack_cal_uid': 105002313,  # 打包结算签约主播
@@ -37,34 +37,38 @@ class config:
     dev_host = domain_host['bb_dev_58']
     qq_login_url = dev_host + 'account/qqlogin'
     # 被打赏者
-    testUid =bb_test['testUid']
+    testUid =bb_user['testUid']
     testUid_2 = 100500205
     # 打赏者
-    payUid = bb_test['payUid']
+    payUid = bb_user['payUid']
     # 打包结算主播
-    pack_cal_uid = bb_test['pack_cal_uid']
+    pack_cal_uid = bb_user['pack_cal_uid']
     # git branch
-    banban_git_branch = bb_test['bb_git_branch']
+    banban_git_branch = bb_user['bb_git_branch']
 
     # PT
-    pt_test= {
+    pt_user= {
         'payUid': 800240376,
         'testUid': 800000116,
         'pt_git_branch': 'main'}
     # pt域名-（PT登陆方式）
     pt_host = domain_host['pt']
     mobile_login_url = pt_host + 'account/passwordLogin'
-    pt_payUid = pt_test['payUid']
-    pt_testUid = pt_test['testUid']
+    pt_payUid = pt_user['payUid']
+    pt_testUid = pt_user['testUid']
     # git branch
-    pt_git_branch = pt_test['pt_git_branch']
+    pt_git_branch = pt_user['pt_git_branch']
 
     # 谁是凶手
-    games_test= {
+    games_user= {
         'payUid': 105000291,
         'testUid': 128440025,
+        'gameRid': 100000000,
         'games_git_branch': 'release-for-vpc',  # 线上代码分支
     }
+    games_payUid = games_user['payUid']
+    games_testUid = games_user['testUid']
+    games_rid = games_user['gameRid']
 
 
 if __name__ == '__main__':

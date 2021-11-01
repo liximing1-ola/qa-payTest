@@ -31,6 +31,7 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
         }
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
+        print(data)
         return data
     elif payType == 'chat-gift':
         data = {
@@ -171,4 +172,4 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
 
 
 if __name__ == '__main__':
-    encodeData(payType='package')
+    encodeData(payType='package', money=100, rid=193185408, uid=105002312, giftId=5)

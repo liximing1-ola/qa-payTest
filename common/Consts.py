@@ -7,6 +7,8 @@ CASE_LIST = {}
 CASE_LIST_2 = {}
 # 并发case
 CASE_LIST_3 = {}
+# gamesCase
+GAME_LIST = {}
 # 失败结果列表
 fail_case_reason = []
 # pass
