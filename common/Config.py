@@ -63,7 +63,7 @@ class config:
     games_user= {
         'payUid': 105000291,
         'testUid': 128440025,
-        'gameRid': 100000000,
+        'gameRid': 200000799,
         'games_git_branch': 'release-for-vpc',  # 线上代码分支
     }
     games_payUid = games_user['payUid']
