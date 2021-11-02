@@ -11,6 +11,7 @@ class TestPayCreate(unittest.TestCase):
     # 内网支付接口
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
 
+    @unittest.skip('已下线')
     @pytest.mark.run(order=1)
     def test_01_TitlePayChangeMoney(self):
         """
@@ -36,6 +37,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money'), 160000)
         Consts.CASE_LIST[des] = Consts.result
 
+    @unittest.skip('已下线')
     @pytest.mark.run(order=2)
     def test_02_TitlePayChangeRenew(self):
         """
