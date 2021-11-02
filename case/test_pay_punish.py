@@ -36,5 +36,5 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid, 'money_cash_b'), 0)
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid, 'money_debts'), 0)
         Assert.assert_equal(conMysql.selectUserMoneySql('pay_change', config.testUid, op='money'), 100)
-        Assert.assert_equal(conMysql.selectUserMoneySql('pay_change', config.testUid, op='punish'), 'punish')
+        Assert.assert_equal(conMysql.selectUserMoneySql('pay_change', config.testUid, op='op'), 'punish')
         Consts.CASE_LIST[des] = Consts.result
