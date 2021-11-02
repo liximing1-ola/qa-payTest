@@ -8,6 +8,7 @@ class TestPayCreate(unittest.TestCase):
     # 内网支付接口
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
 
+    @unittest.skip('待上线')
     def test_01_PayChangeTriggerPunish(self):
         """
         用例描述：
