@@ -1,7 +1,7 @@
 from common.Config import config
 from common.conMysql import conMysql
 from common.params_Yaml import Yaml
-import unittest
+import unittest, time
 from common import Consts, Request, Assert
 class TestPayCreate(unittest.TestCase):
 
@@ -30,7 +30,7 @@ class TestPayCreate(unittest.TestCase):
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        print(conMysql.selectUserMoneySql('bean', config.testUid))
+        time.sleep(1)  # 延迟处理扣款
         Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.testUid), 0)
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid, 'money'), 2)
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid, 'money_cash_b'), 0)
