@@ -22,7 +22,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查消费记录表消费money（xs_pay_change_new）
         6.检查消费记录表消费方式op
         """
-        des = '打赏时触发罚款流程(未执行)'
+        des = '打赏时触发罚款流程(NoRun)'
         conMysql.updateMoneySql(config.payUid, 100)
         conMysql.insertBeanSql(config.testUid, 20)
         conMysql.updateMoneySql(config.testUid, 20, money_debts=100)
