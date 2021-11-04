@@ -85,7 +85,6 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, 400, 100, 100, 100)
         conMysql.updateMoneySql(config.testUid)
         data = basicData.encodeData(payType='package', money=600, rid=193185538, uid=config.testUid, giftId=46, star=4)
-        # data = Yaml.read_yaml('Basic.yml', 'dev_package_giveBox')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)

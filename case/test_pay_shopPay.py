@@ -75,8 +75,9 @@ class TestPayCreate(unittest.TestCase):
         bag_gift_cid = 340
         conMysql.updateUserMoneyClearSql(config.payUid, config.testUid)
         cid = int(conMysql.selectUserMoneySql('id_commodity', config.payUid, cid=bag_gift_cid))
-        payload = 'platform=available&type=package&money=9900&params=%7B%22rid%22%3A193185484%2C%22uids%22%3A%22105002312%22%2C%22positions%22%3A%220%22%2C%22position%22%3A-1%2C%22giftId%22%3A54%2C%22giftNum%22%3A1%2C%22price%22%3A9900%2C%22cid%22%3A{}%2C%22ctype%22%3A%22gift%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A1%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22refer%22%3A%22%E7%83%AD%E9%97%A8%3Aroom%22%2C%22useCoin%22%3A-1%7D'.format(cid)
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=payload)
+        data = basicData.encodeData(payType='package', rid=config.super_live_role['auto_rid'], uid=config.testUid,
+                                    giftId=54, money=9900, package_cid=cid, ctype='gift')
+        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
@@ -100,8 +101,9 @@ class TestPayCreate(unittest.TestCase):
         bag_gift_cid = 340
         conMysql.updateUserMoneyClearSql(config.payUid, config.testUid)
         cid = int(conMysql.selectUserMoneySql('id_commodity', config.payUid, cid=bag_gift_cid))
-        payload = 'platform=available&type=package&money=99000&params=%7B%22rid%22%3A193185484%2C%22uids%22%3A%22105002312%22%2C%22positions%22%3A%220%22%2C%22position%22%3A-1%2C%22giftId%22%3A54%2C%22giftNum%22%3A10%2C%22price%22%3A9900%2C%22cid%22%3A{}%2C%22ctype%22%3A%22gift%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A10%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22refer%22%3A%22%E7%83%AD%E9%97%A8%3Aroom%22%2C%22useCoin%22%3A-1%7D'.format(cid)
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=payload)
+        data = basicData.encodeData(payType='package', rid=config.super_live_role['auto_rid'], uid=config.testUid,
+                                    giftId=54, money=99000, package_cid=cid, ctype='gift', num=10)
+        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 0, reason)

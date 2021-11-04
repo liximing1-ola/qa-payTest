@@ -14,13 +14,13 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
                  "positions": "1",
                  "position": -1,
                  "giftId": giftId,
-                 "giftNum": 1,
+                 "giftNum": num,
                  "price": money,
                  "cid": package_cid,
                  "ctype": ctype,
                  "duction_money": duction_money,
                  "version": 2,
-                 "num": 1,
+                 "num": num,
                  "gift_type": "{}".format(giftType),
                  "useCoin": -1,
                  "star": star,
@@ -31,7 +31,6 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
         }
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
-        print(data)
         return data
     elif payType == 'chat-gift':
         data = {
@@ -188,5 +187,5 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
 
 
 if __name__ == '__main__':
-    encodeData(payType='package', rid=193185577, uid=105002319, giftId=20)
+    encodeData(payType='package', rid=193185484, uid=105002312, giftId=54, money=9900, package_cid=1, ctype='gift')
     # encodeData(payType='pub-drink-buy', money=79900, rid=193185484)
