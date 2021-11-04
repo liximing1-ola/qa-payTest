@@ -9,7 +9,7 @@ class TestPayCreate(unittest.TestCase):
     # 内网支付接口
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
 
-    @unittest.skip('暂无unity购买入口')
+    @unittest.skip('暂无入口')
     def test_01_unityGamePayChange(self):
         """
         用例描述：

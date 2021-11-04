@@ -2,7 +2,7 @@ import gevent
 from gevent import monkey
 monkey.patch_all()
 from common.Config import config
-from common.sqlScriptOversea import mysql
+from common.sqlScript import mysql
 from Robot import robot
 from common import Assert, Request, basicData, Consts, Logs, method, Session
 from common.method import getValue

@@ -1,7 +1,7 @@
 from common.Config import config
 from common import Request
 from common.params_Yaml import Yaml
-from common.sqlScriptOversea import mysql
+from common.sqlScript import mysql
 import unittest
 import pytest
 from common import Consts, Assert
