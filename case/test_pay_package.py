@@ -2,7 +2,7 @@ from common.Config import config
 from common.params_Yaml import Yaml
 from common.conMysql import conMysql
 import unittest
-from common import Consts, Assert, Request
+from common import Consts, Assert, Request, basicData
 from common.runFailed import Retry
 @Retry
 class TestPayCreate(unittest.TestCase):
@@ -23,7 +23,7 @@ class TestPayCreate(unittest.TestCase):
         """
         des = '房间1V1打赏但余额不足的场景'
         conMysql.updateUserMoneyClearSql(config.payUid, config.testUid)
-        data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_1')
+        data = basicData.encodeData(payType='package', money=100, rid=193185408, uid=config.testUid, giftId=5)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
@@ -45,7 +45,8 @@ class TestPayCreate(unittest.TestCase):
         des = '非直播1V1打赏场景'
         conMysql.updateMoneySql(config.payUid, 30, 30, 30, 10)
         conMysql.updateMoneySql(config.testUid)
-        data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_2')
+        # data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_2')
+        data = basicData.encodeData(payType='package', money=100, rid=config.super_live_role['auto_rid'], uid=config.testUid, giftId=5)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
@@ -75,7 +76,8 @@ class TestPayCreate(unittest.TestCase):
                    'type': 'package',
                    'money': '3000',
                    'params': '{"rid":193186934,"uids":"105002312","positions":"0","position":-1,"giftId":11,"giftNum":1,"price":3000,"cid": %s,"ctype":"coupon","duction_money":500,"version":2,"num":1,"gift_type":"normal","star":0,"show_pac_man_guide":1,"refer":"热门_开黑:room","useCoin":-1}' % cid}
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=payload)
+        data = basicData.encodeData(payType='package', rid=193186934, uid=config.testUid, giftId=11, money=3000, package_cid=cid, ctype='coupon', duction_money=500)
+        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 0, reason)
@@ -107,7 +109,8 @@ class TestPayCreate(unittest.TestCase):
             'type': 'package',
             'money': '3000',
             'params': '{"rid":193186934,"uids":"105002312","positions":"0","position":-1,"giftId":11,"giftNum":1,"price":3000,"cid": %s,"ctype":"coupon","duction_money":500,"version":2,"num":1,"gift_type":"normal","star":0,"show_pac_man_guide":1,"refer":"热门_开黑:room","useCoin":-1}' % cid}
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=payload)
+        data = basicData.encodeData(payType='package', rid=193186934, uid=config.testUid, giftId=11, money=3000, package_cid=cid, ctype='coupon', duction_money=500)
+        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)

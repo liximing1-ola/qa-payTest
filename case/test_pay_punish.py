@@ -1,8 +1,7 @@
 from common.Config import config
 from common.conMysql import conMysql
-from common.params_Yaml import Yaml
 import unittest, time
-from common import Consts, Request, Assert
+from common import Consts, Request, Assert, basicData
 class TestPayCreate(unittest.TestCase):
 
     # 内网支付接口
@@ -26,12 +25,13 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, 100)
         conMysql.insertBeanSql(config.testUid, 20)
         conMysql.updateMoneySql(config.testUid, 20, money_debts=100)
-        data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_2')
+        data = basicData.encodeData(payType='package', money=100, rid=config.super_live_role['auto_rid'],
+                                    uid=config.testUid, giftId=5)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        time.sleep(2)  # 延迟处理NSQ消息
+        time.sleep(1)  # 延迟处理NSQ消息
         Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.testUid), 0)
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid, 'money'), 2)
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid, 'money_cash_b'), 0)
