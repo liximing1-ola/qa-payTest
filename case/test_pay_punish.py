@@ -30,7 +30,7 @@ class TestPayCreate(unittest.TestCase):
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
-        time.sleep(1)  # 延迟处理扣款
+        time.sleep(2)  # 延迟处理NSQ消息
         Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.testUid), 0)
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid, 'money'), 2)
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid, 'money_cash_b'), 0)
