@@ -73,7 +73,3 @@ def readGitStatus():
                 return True
         else:
             robot('icon', '代码冲突，脚本启动失败，请@lixm严查')
-
-
-if __name__=='__main__':
-    pass

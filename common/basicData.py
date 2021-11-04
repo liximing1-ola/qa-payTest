@@ -166,10 +166,27 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
         data = d.replace('+', '').replace('%27', '%22')
         return data
     elif payType=='pub-drink-buy':
-        pass
+        data = {
+            "platform": 'available',
+            "type": 'pub-drink-buy',
+            "money": money,
+            "params": {
+                "pub_club_rid": rid,
+                "menu_id": 6,
+                "num": 1,
+                "useCoin": -1,
+                "gift_type": 'bean',
+                "refer": "",
+                "exchange": 1,
+            }
+        }
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        return data
     else:
         raise Exception('payType is error')
 
 
 if __name__ == '__main__':
-    encodeData(payType='package', money=100, rid=193185408, uid=105002312, giftId=5)
+    encodeData(payType='package', rid=193185577, uid=105002319, giftId=20)
+    # encodeData(payType='pub-drink-buy', money=79900, rid=193185484)

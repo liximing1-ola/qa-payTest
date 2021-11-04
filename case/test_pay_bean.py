@@ -176,7 +176,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.deleteUserAccountSql('user_commodity', config.payUid)
         conMysql.updateMoneySql(config.payUid, 80000)
         conMysql.insertBeanSql(config.payUid, 400)
-        data = Yaml.read_yaml('Basic.yml', 'dev_gold_Combo')
+        data = basicData.encodeData(payType='pub-drink-buy', money=79900, rid=193185484)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
