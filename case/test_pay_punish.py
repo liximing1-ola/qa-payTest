@@ -8,6 +8,7 @@ class TestPayCreate(unittest.TestCase):
     # 内网支付接口
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
 
+    @unittest.skip('NSQ异常')
     def test_01_PayChangeTriggerPunish(self):
         """
         用例描述：
@@ -21,7 +22,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查消费记录表消费money（xs_pay_change_new）
         6.检查消费记录表消费方式op
         """
-        des = '收到打赏时触发罚款流程'
+        des = '打赏时触发罚款流程(未执行)'
         conMysql.updateMoneySql(config.payUid, 100)
         conMysql.insertBeanSql(config.testUid, 20)
         conMysql.updateMoneySql(config.testUid, 20, money_debts=100)
