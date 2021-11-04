@@ -84,7 +84,8 @@ class TestPayCreate(unittest.TestCase):
         des = '房间送箱子场景'
         conMysql.updateMoneySql(config.payUid, 400, 100, 100, 100)
         conMysql.updateMoneySql(config.testUid)
-        data = Yaml.read_yaml('Basic.yml', 'dev_package_giveBox')
+        data = basicData.encodeData(payType='package', money=600, rid=193185538, uid=config.testUid, giftId=46, star=4)
+        # data = Yaml.read_yaml('Basic.yml', 'dev_package_giveBox')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
@@ -102,7 +103,7 @@ class TestPayCreate(unittest.TestCase):
         2.giveBox
         3.校验【status code】和返回值【body】状态
         4.检查账户余额，预期值为：10000 - 2100*2*2 = 1600
-        5.检查收箱用户账户余额，预期值为：大于0
+        5.检查收箱用户账户余额，预期值为：大于1000
         """
         des = '房间送多人多个箱子场景'
         conMysql.updateMoneySql(config.payUid, 10000)

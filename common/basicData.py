@@ -1,7 +1,7 @@
 import urllib.parse
 
 def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, giftId=7, giftType='normal',
-               cid=5, boxType='copper', num=1, package_cid=0, ctype='', duction_money=0):
+               cid=5, boxType='copper', num=1, package_cid=0, ctype='', duction_money=0, star=0):
 
     if payType=='package':
         data = {
@@ -23,7 +23,7 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
                  "num": 1,
                  "gift_type": "{}".format(giftType),
                  "useCoin": -1,
-                 "star": 0,
+                 "star": star,
                  "show_pac_man_guide": 1,
                  "refer": "",
                  "all_mic": 0,

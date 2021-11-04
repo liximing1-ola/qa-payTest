@@ -72,11 +72,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, 3000)
         conMysql.updateMoneySql(config.testUid)
         cid = conMysql.selectUserMoneySql('id_commodity', config.payUid, cid=gift_cid)
-        payload = {'platform': 'available',
-                   'type': 'package',
-                   'money': '3000',
-                   'params': '{"rid":193186934,"uids":"105002312","positions":"0","position":-1,"giftId":11,"giftNum":1,"price":3000,"cid": %s,"ctype":"coupon","duction_money":500,"version":2,"num":1,"gift_type":"normal","star":0,"show_pac_man_guide":1,"refer":"热门_开黑:room","useCoin":-1}' % cid}
-        data = basicData.encodeData(payType='package', rid=193186934, uid=config.testUid, giftId=11, money=3000, package_cid=cid, ctype='coupon', duction_money=500)
+        data = basicData.encodeData(payType='package', rid=193186934, uid=config.testUid, giftId=11, money=3000,
+                                    package_cid=cid, ctype='coupon', duction_money=500)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
@@ -104,12 +101,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, 3000)
         conMysql.updateMoneySql(config.testUid)
         cid = conMysql.selectUserMoneySql('id_commodity', config.payUid, cid=gift_cid)
-        payload = {
-            'platform': 'available',
-            'type': 'package',
-            'money': '3000',
-            'params': '{"rid":193186934,"uids":"105002312","positions":"0","position":-1,"giftId":11,"giftNum":1,"price":3000,"cid": %s,"ctype":"coupon","duction_money":500,"version":2,"num":1,"gift_type":"normal","star":0,"show_pac_man_guide":1,"refer":"热门_开黑:room","useCoin":-1}' % cid}
-        data = basicData.encodeData(payType='package', rid=193186934, uid=config.testUid, giftId=11, money=3000, package_cid=cid, ctype='coupon', duction_money=500)
+        data = basicData.encodeData(payType='package', rid=193186934, uid=config.testUid, giftId=11, money=3000,
+                                    package_cid=cid, ctype='coupon', duction_money=500)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
