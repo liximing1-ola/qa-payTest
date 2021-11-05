@@ -37,7 +37,6 @@ class TestPayCreate(unittest.TestCase):
         des = '直播间非公会主播(非宗师)打赏分成62:38'
         conMysql.updateMoneySql(config.payUid, 30, 30, 30, 10)
         conMysql.updateMoneySql(config.testUid)
-        # data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_1')
         data = basicData.encodeData(payType='package', money=100, rid=193185408, uid=config.testUid, giftId=5)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
@@ -291,7 +290,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, 1000)
         conMysql.updateMoneySql(test_uid)
         conMysql.checkUserXsMentorLevel(test_uid, 4)  # 师父等级改为一代宗师
-        data = Yaml.read_yaml('Basic.yml', 'dev_NotLivePay_7030')  # 共用
+        # data = Yaml.read_yaml('Basic.yml', 'dev_NotLivePay_7030')
+        data = basicData.encodeData(payType='package', uid=test_uid, giftId=20)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res)
         Assert.assert_code(res['code'], 200)

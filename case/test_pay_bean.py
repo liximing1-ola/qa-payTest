@@ -29,7 +29,8 @@ class TestPayCreate(unittest.TestCase):
         # case执行前处理下数据
         conMysql.deleteUserBeanSql(config.payUid, config.testUid)
         conMysql.updateMoneySql(config.payUid)
-        data = Yaml.read_yaml('Basic.yml', 'dev_gold_NoBean')
+        # data = Yaml.read_yaml('Basic.yml', 'dev_gold_NoBean')
+        data = basicData.encodeData(payType='package', uid=config.testUid, giftId=362, giftType='bean')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res)
         Assert.assert_code(res['code'], 200)
