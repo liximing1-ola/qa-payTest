@@ -148,7 +148,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, 1000)
         conMysql.updateUserMoneyClearSql(test_uid, ceo_uid)
         conMysql.checkUserXsMentorLevel(test_uid, 4)  # 师父等级改为一代宗师
-        data = Yaml.read_yaml('Basic.yml', 'dev_livePay_602515')
+        # data = Yaml.read_yaml('Basic.yml', 'dev_livePay_602515')
+        data = basicData.encodeData(payType='package', giftId=20, rid=193185577, uid=test_uid)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res)
         Assert.assert_code(res['code'], 200)
@@ -210,7 +211,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, 1000)
         conMysql.updateUserMoneyClearSql(test_uid, ceo_uid)
         conMysql.checkUserXsMentorLevel(test_uid, 1)  # 师父等级改为非一代宗师
-        data = Yaml.read_yaml('Basic.yml', 'dev_livePay_602515')  # 共用
+        # data = Yaml.read_yaml('Basic.yml', 'dev_livePay_602515')  # 共用
+        data = basicData.encodeData(payType='package', giftId=20, rid=193185577, uid=test_uid)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res)
         Assert.assert_code(res['code'], 200)
@@ -265,7 +267,8 @@ class TestPayCreate(unittest.TestCase):
         des = '直播间打赏麦下用户分成62:38'
         conMysql.updateMoneySql(config.payUid, 100)
         conMysql.updateMoneySql(config.testUid)
-        data = Yaml.read_yaml('Basic.yml', 'dev_mentor_pay')
+        # data = Yaml.read_yaml('Basic.yml', 'dev_mentor_pay')
+        data = basicData.encodeData(payType='package', giftId=5, rid=193185577, money=100, uid=105002312)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
@@ -290,7 +293,6 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, 1000)
         conMysql.updateMoneySql(test_uid)
         conMysql.checkUserXsMentorLevel(test_uid, 4)  # 师父等级改为一代宗师
-        # data = Yaml.read_yaml('Basic.yml', 'dev_NotLivePay_7030')
         data = basicData.encodeData(payType='package', uid=test_uid, giftId=20)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res)
