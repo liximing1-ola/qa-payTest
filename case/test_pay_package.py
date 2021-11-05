@@ -45,7 +45,6 @@ class TestPayCreate(unittest.TestCase):
         des = '非直播1V1打赏场景'
         conMysql.updateMoneySql(config.payUid, 30, 30, 30, 10)
         conMysql.updateMoneySql(config.testUid)
-        # data = Yaml.read_yaml('Basic.yml', 'dev_pay_package_2')
         data = basicData.encodeData(payType='package', money=100, rid=config.super_live_role['auto_rid'], uid=config.testUid, giftId=5)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])

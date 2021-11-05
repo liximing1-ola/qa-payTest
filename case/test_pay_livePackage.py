@@ -91,7 +91,6 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(test_uid)
         conMysql.checkUserXsMentorLevel(test_uid, 4)  # 更新成一代宗师
         conMysql.updateUserInfoSql('chatroom', test_uid)  # 更新成商业房主播
-        # data = Yaml.read_yaml('Basic.yml', 'dev_livePay_7030')
         data = basicData.encodeData(payType='package', rid=config.live_role['live_rid'], uid=test_uid, giftId=20)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])

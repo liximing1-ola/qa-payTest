@@ -45,7 +45,8 @@ class TestPayCreate(unittest.TestCase):
         des = '房间打赏金币礼物的场景'
         conMysql.updateMoneySql(config.payUid, gold_coin=100)
         conMysql.updateUserMoneyClearSql(config.testUid, config.testUid_2)
-        data = Yaml.read_yaml('Basic.yml', 'dev_pay_coins')
+        # data = Yaml.read_yaml('Basic.yml', 'dev_pay_coins')
+        data = basicData.encodeData(payType='package-more', rid=193185484, num=1, money=20, giftId=62, giftType='coin')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)

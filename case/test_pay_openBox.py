@@ -107,7 +107,8 @@ class TestPayCreate(unittest.TestCase):
         des = '房间送多人多个箱子场景'
         conMysql.updateMoneySql(config.payUid, 10000)
         conMysql.updateMoneySql(config.testUid)
-        data = Yaml.read_yaml('Basic.yml', 'dev_pay_OpenBox')
+        # data = Yaml.read_yaml('Basic.yml', 'dev_pay_OpenBox')
+        data = basicData.encodeData(payType='package-more', rid=193185484, num=2, star=8, money=2100, giftId=47)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)

@@ -1,7 +1,7 @@
 import urllib.parse
 
 def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, giftId=7, giftType='normal',
-               cid=5, boxType='copper', num=1, package_cid=0, ctype='', duction_money=0, star=0):
+               cid=5, boxType='copper', num=1, package_cid=0, ctype='', duction_money=0, star=0, uids=('105002312', '100500205')):
 
     if payType=='package':
         data = {
@@ -31,6 +31,38 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
         }
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
+        return data
+    elif payType == 'package-more':
+        uid = ','.join(uids)
+        num_more = len(uids)
+        data = {
+            "platform": "available",
+            "type": "package",
+            "money": money * num * num_more,
+            "params":
+                {"rid": rid,
+                 "uids": '{}'.format(uid),
+                 "positions": "1,2",
+                 "position": -1,
+                 "giftId": giftId,
+                 "giftNum": num,
+                 "price": money,
+                 "cid": 0,
+                 "ctype": "",
+                 "duction_money": 0,
+                 "version": 2,
+                 "num": num_more * num,
+                 "gift_type": "{}".format(giftType),
+                 "useCoin": -1,
+                 "star": star,
+                 "show_pac_man_guide": 1,
+                 "refer": "",
+                 "all_mic": 0,
+                 }
+        }
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        print(data)
         return data
     elif payType == 'chat-gift':
         data = {
@@ -187,5 +219,5 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
 
 
 if __name__ == '__main__':
-    encodeData(payType='package', rid=193185484, uid=105002312, giftId=54, money=9900, package_cid=1, ctype='gift')
+    encodeData(payType='package-more', rid=193185484, num=1, money=20, giftId=62, giftType='coin')
     # encodeData(payType='pub-drink-buy', money=79900, rid=193185484)
