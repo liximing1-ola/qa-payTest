@@ -20,7 +20,7 @@ class conMysql:
                           charset='utf8',
                           autocommit=True)
     con.select_db(_dbName)
-    con.ping(reconnect=True)  # 断开重连
+    con.ping(reconnect=True)
     cur = con.cursor()
 
     # 查询用户账户信息
@@ -373,7 +373,7 @@ class conMysql:
         finally:
             conMysql.con.commit()
 
-    # 查询用户经纪人身份是否存在,没有就创建一个
+    # 查询用户经纪人身份是否存在
     @staticmethod
     def checkOnlineEarnAgent(uid, point=100):
         sql = 'select * from xs_online_earn_agent where uid={}'.format(uid)
@@ -402,7 +402,7 @@ class conMysql:
         except Exception as error:
             print(error)
 
-    # 查询用户艺人身份是否存在,没有就造一个
+    # 查询用户艺人身份是否存在
     @staticmethod
     def checkOnlineEarnArtist(uid, point=100):
         sql = 'select * from xs_online_earn_artist where uid={}'.format(uid)

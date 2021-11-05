@@ -2,6 +2,7 @@ from common.Config import config
 from common.params_Yaml import Yaml
 from common.conMysql import conMysql
 import unittest
+from common.method import reason
 from common import Assert, Consts, Request, basicData
 from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
@@ -19,23 +20,20 @@ class TestPayCreate(unittest.TestCase):
         用例描述：
         验证账户内金豆不足时打赏金豆礼物的场景
         脚本步骤：
-        1.构造打赏者和被打赏者数据（更新xs_user_money_extend）
-        2.房间内打赏金豆礼物
+        1.构造打赏者和被打赏者数据（xs_user_money_extend）
+        2.房间内打赏金豆礼物(xs_gift)
         3.校验【status code】和返回值【body】状态
         4.检查预期返回msg，预期：Toast提示 '金豆不足'
         5.检查被打赏者金豆余额,预期：0
         """
         des = '打赏金豆礼物但金豆不足的场景'
-        # case执行前处理下数据
-        conMysql.deleteUserBeanSql(config.payUid, config.testUid)
+        conMysql.deleteUserBeanSql(config.payUid, config.testUid)  # case执行前处理下数据
         conMysql.updateMoneySql(config.payUid)
-        # data = Yaml.read_yaml('Basic.yml', 'dev_gold_NoBean')
         data = basicData.encodeData(payType='package', uid=config.testUid, giftId=362, giftType='bean')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        reason = 'Depiction: {},  failReason: {}'.format(des, res)
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 0, reason)
-        Assert.assert_body(res['body'], 'msg', '金豆不足', reason)
+        Assert.assert_body(res['body'], 'success', 0, reason(des, res))
+        Assert.assert_body(res['body'], 'msg', '金豆不足', reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.testUid), 0)
         Consts.CASE_LIST[des] = Consts.result
 
@@ -54,9 +52,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.insertBeanSql(config.payUid, 6000)
         data = Yaml.read_yaml('Basic.yml', 'dev_gold_BeanEnough')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        reason = 'Depiction: {},  failReason: {}'.format(des, res)
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 0)
         Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.testUid), 3000)
         Consts.CASE_LIST[des] = Consts.result
@@ -79,9 +76,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.insertBeanSql(config.payUid, 500)
         data = Yaml.read_yaml('Basic.yml', 'dev_gold_moneyToBean')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
         Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 500)
         Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.testUid), 500)
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money'), 9000)
@@ -105,9 +101,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.insertBeanSql(config.payUid, 200)
         data = basicData.encodeData(payType='chat-gift', uid=config.testUid)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
         Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 0)
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money'), 200)
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 720)
@@ -129,12 +124,10 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, 1000)
         conMysql.updateMoneySql(config.testUid)
         conMysql.insertBeanSql(config.payUid, 400)
-        # data = Yaml.read_yaml('Basic.yml', 'dev_gold_RoomBeanDeduct')
         data = basicData. encodeData(payType='package', uid=config.testUid)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
         Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 200)
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 620)
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 200)
@@ -155,13 +148,11 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, 700)
         conMysql.updateMoneySql(config.testUid)
         conMysql.insertBeanSql(config.payUid, 400)
-        # data = Yaml.read_yaml('Basic.yml', 'dev_gold_RoomBeanDeduct')
         data = basicData. encodeData(payType='package', uid=config.testUid)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 0, reason)
-        Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason)
+        Assert.assert_body(res['body'], 'success', 0, reason(des, res['body']))
+        Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res['body']))
         Consts.CASE_LIST[des] = Consts.result
 
     def test_07_BeanPayChangeCombo(self):
@@ -181,9 +172,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.insertBeanSql(config.payUid, 400)
         data = basicData.encodeData(payType='pub-drink-buy', money=79900, rid=193185484)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
         Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 400)
         Consts.CASE_LIST[des] = Consts.result

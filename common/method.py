@@ -73,6 +73,9 @@ def getValue(res):
         print('结果：{}， 时间：{}'.format(res['body'], time.time()))
         Consts.fail_num += 1
 
+def reason(des, res):
+    return 'Depiction: {},  failReason: {}'.format(des, res)
+
 
 if __name__ == '__main__':
     case_dict = {'验证余额不足时，私聊一对一打赏': 'pass', '验证余额足够时，私聊一对一打赏': 'pass', '验证开通个人守护的收益分成': 'pass',
