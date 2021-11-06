@@ -1,5 +1,5 @@
 from common.Config import config
-from common.params_Yaml import Yaml
+from common.method import reason
 from common.conMysql import conMysql
 import unittest
 from common import Assert, Consts, Request, basicData
@@ -33,9 +33,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, 400, 100, 100, 100)
         data = basicData.encodeData(payType='shop-buy-box', money=600, num=1, boxType='copper')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_commodity', config.payUid), 2)
         Consts.CASE_LIST[des] = Consts.result
@@ -63,9 +62,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, 12600)
         data = basicData.encodeData(payType='shop-buy-box', money=2100, num=6, cid=6, boxType='silver')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_commodity', config.payUid), 12)
         Consts.CASE_LIST[des] = Consts.result
@@ -84,11 +82,10 @@ class TestPayCreate(unittest.TestCase):
         des = '房间送箱子场景'
         conMysql.updateMoneySql(config.payUid, 400, 100, 100, 100)
         conMysql.updateMoneySql(config.testUid)
-        data = basicData.encodeData(payType='package', money=600, rid=193185538, uid=config.testUid, giftId=46, star=4)
+        data = basicData.encodeData(payType='package', money=600, rid=config.live_role['cp_link_rid'], uid=config.testUid, giftId=46, star=4)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
         Assert.assert_len(conMysql.selectUserMoneySql('sum_money', config.testUid), 0)
         Consts.CASE_LIST[des] = Consts.result
@@ -107,12 +104,10 @@ class TestPayCreate(unittest.TestCase):
         des = '房间送多人多个箱子场景'
         conMysql.updateMoneySql(config.payUid, 10000)
         conMysql.updateMoneySql(config.testUid)
-        # data = Yaml.read_yaml('Basic.yml', 'dev_pay_OpenBox')
-        data = basicData.encodeData(payType='package-more', rid=193185484, num=2, star=8, money=2100, giftId=47)
+        data = basicData.encodeData(payType='package-more', num=2, star=8, money=2100, giftId=47)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 1600)
         Assert.assert_len(conMysql.selectUserMoneySql('sum_money', config.testUid), 1000)
         Consts.CASE_LIST[des] = Consts.result

@@ -1,5 +1,5 @@
 from common.Config import config
-from common.params_Yaml import Yaml
+from common.method import reason
 from common.conMysql import conMysql
 import unittest
 from common import Consts, Assert, basicData, Request
@@ -24,9 +24,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, 1000)
         data = basicData.encodeData(payType='exchange_gold')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 400)
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='gold_coin'), 600)
         Consts.CASE_LIST[des] = Consts.result
@@ -45,12 +44,10 @@ class TestPayCreate(unittest.TestCase):
         des = '房间打赏金币礼物的场景'
         conMysql.updateMoneySql(config.payUid, gold_coin=100)
         conMysql.updateUserMoneyClearSql(config.testUid, config.testUid_2)
-        # data = Yaml.read_yaml('Basic.yml', 'dev_pay_coins')
         data = basicData.encodeData(payType='package-more', rid=193185484, num=1, money=20, giftId=62, giftType='coin')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='gold_coin'), 60)
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid_2, money_type='gold_coin'), 12)
         Consts.CASE_LIST[des] = Consts.result

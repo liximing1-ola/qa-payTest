@@ -1,5 +1,5 @@
 from common.Config import config
-from common.params_Yaml import Yaml
+from common.method import reason
 from common.conMysql import conMysql
 import unittest
 from common import Consts, Assert, Request, basicData
@@ -26,9 +26,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.games_testUid)
         data = basicData.encodeData(payType='package', money=1000, rid=config.games_rid, uid=config.games_testUid)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data, tokenName='games')
-        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid), 500)
         Consts.GAME_LIST[des] = Consts.result
@@ -48,8 +47,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.testUid)
         data = basicData.encodeData(payType='chat-gift', rid=config.games_rid, uid=config.games_testUid)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data, tokenName='games')
-        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid), 500)
         Consts.CASE_LIST[des] = Consts.result

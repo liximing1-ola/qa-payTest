@@ -1,6 +1,7 @@
 from common.Config import config
 from common.conMysql import conMysql
 import unittest
+from common.method import reason
 from common import Assert, Request, Consts, basicData
 from common.runFailed import Retry
 @Retry(max_n=2)
@@ -26,9 +27,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.deleteUserAccountSql('chatroom', config.testUid)
         data = basicData.encodeData(payType='chat-gift', uid=config.testUid, money=1000, num=10, giftId=5)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 0, reason)
-        Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason)
+        Assert.assert_body(res['body'], 'success', 0, reason(des, res['body']))
+        Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res['body']))
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 0)
         Consts.CASE_LIST[des] = Consts.result

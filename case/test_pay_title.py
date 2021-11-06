@@ -1,5 +1,6 @@
 from common.Config import config
 from common import Request
+from common.method import reason
 from common.conMysql import conMysql
 import unittest
 import pytest
@@ -31,9 +32,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, 200000)
         data = basicData.encodeData(payType='title', money=100000)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money'), 160000)
         Consts.CASE_LIST[des] = Consts.result
 
@@ -53,8 +53,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, 200000)
         data = basicData.encodeData(payType='title', money=100000)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money'), 176000)
         Consts.CASE_LIST[des] = Consts.result

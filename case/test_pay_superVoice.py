@@ -1,5 +1,6 @@
 from common.Config import config
 from common.conMysql import conMysql
+from common.method import reason
 import unittest, pytest
 from common import Consts, Assert, Request, basicData
 from common.runFailed import Retry
@@ -42,9 +43,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(test_uid)
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 350)
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 350)
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
@@ -69,9 +69,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateSuperVoiceUser(test_uid, test_bid, nid=200)  # 修改用户为网赚工会用户
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 350)
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 350)
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
@@ -102,9 +101,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.checkOnlineEarnRelation(test_agent, test_uid)
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 500)
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_agent, money_type='money_cash'), 150)
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 500)
@@ -136,9 +134,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.checkOnlineEarnRelation(test_agent, test_uid)
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 500)
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_agent, money_type='money_cash'), 200)
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 500)
@@ -166,9 +163,8 @@ class TestPayCreate(unittest.TestCase):
         # conMysql.checkOnlineEarnRelation(test_agent, test_uid)
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 500)
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_agent, money_type='money_cash'), 200)
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 500)
@@ -200,9 +196,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.checkOnlineEarnRelation(test_agent, test_uid)
         data = basicData.encodeData(payType='package')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 620)
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_agent), 0)
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 620)

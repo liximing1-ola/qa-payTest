@@ -1,5 +1,6 @@
 from common.Config import config
 from common.conMysql import conMysql
+from common.method import reason
 import unittest, time
 from common import Consts, Request, Assert, basicData
 class TestPayCreate(unittest.TestCase):
@@ -28,9 +29,8 @@ class TestPayCreate(unittest.TestCase):
         data = basicData.encodeData(payType='package', money=100, rid=config.super_live_role['auto_rid'],
                                     uid=config.testUid, giftId=5)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        reason = 'Depiction: {},  failReason: {}'.format(des, res['body'])
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason)
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
         time.sleep(1)  # 延迟处理NSQ消息
         Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.testUid), 0)
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid, 'money'), 2)
