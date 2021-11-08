@@ -74,7 +74,7 @@ def getValue(res):
         Consts.fail_num += 1
 
 def reason(des, res):
-    if res['body']['success'] == 0 or not isExtend(res['body'], 'msg'):
+    if res['body']['success'] == 0 and not isExtend(res['body'], 'msg'):
         print(res['body'])
     return 'Depiction: {},  failReason: {}'.format(des, res['body'])
 

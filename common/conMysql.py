@@ -444,7 +444,7 @@ class conMysql:
                     print('insert fail', error)
             else:
                 sql = 'update xs_online_earn_relation set agent_uid={}, artist_uid={}, sign_time={}, end_time={} ' \
-                      'where id>=1'.format(agent_uid, artist_uid, sign_time, end_time)
+                      'where id=5'.format(agent_uid, artist_uid, sign_time, end_time)
                 try:
                     conMysql.cur.execute(sql)
                 except Exception as error:
