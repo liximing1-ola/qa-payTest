@@ -30,7 +30,7 @@ class TestPayCreate(unittest.TestCase):
                                     uid=config.testUid, giftId=5)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
         time.sleep(1)  # 延迟处理NSQ消息
         Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.testUid), 0)
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid, 'money'), 2)

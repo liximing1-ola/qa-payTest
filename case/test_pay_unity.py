@@ -26,6 +26,6 @@ class TestPayCreate(unittest.TestCase):
         data = basicData.encodeData(payType='unity-game-buy', money=100)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST[des] = Consts.result

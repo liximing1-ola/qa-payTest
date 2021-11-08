@@ -34,7 +34,7 @@ class TestPayCreate(unittest.TestCase):
         data = basicData.encodeData(payType='shop-buy-box', money=600, num=1, boxType='copper')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_commodity', config.payUid), 2)
         Consts.CASE_LIST[des] = Consts.result
@@ -63,7 +63,7 @@ class TestPayCreate(unittest.TestCase):
         data = basicData.encodeData(payType='shop-buy-box', money=2100, num=6, cid=6, boxType='silver')
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_commodity', config.payUid), 12)
         Consts.CASE_LIST[des] = Consts.result
@@ -85,7 +85,7 @@ class TestPayCreate(unittest.TestCase):
         data = basicData.encodeData(payType='package', money=600, rid=config.live_role['cp_link_rid'], uid=config.testUid, giftId=46, star=4)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
         Assert.assert_len(conMysql.selectUserMoneySql('sum_money', config.testUid), 0)
         Consts.CASE_LIST[des] = Consts.result
@@ -107,7 +107,7 @@ class TestPayCreate(unittest.TestCase):
         data = basicData.encodeData(payType='package-more', num=2, star=8, money=2100, giftId=47)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 1600)
         Assert.assert_len(conMysql.selectUserMoneySql('sum_money', config.testUid), 1000)
         Consts.CASE_LIST[des] = Consts.result

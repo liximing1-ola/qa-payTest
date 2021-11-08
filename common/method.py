@@ -74,7 +74,9 @@ def getValue(res):
         Consts.fail_num += 1
 
 def reason(des, res):
-    return 'Depiction: {},  failReason: {}'.format(des, res)
+    if res['body']['success'] == 0:
+        print(res['body'])
+    return 'Depiction: {},  failReason: {}'.format(des, res['body'])
 
 
 if __name__ == '__main__':

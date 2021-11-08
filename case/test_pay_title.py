@@ -33,7 +33,7 @@ class TestPayCreate(unittest.TestCase):
         data = basicData.encodeData(payType='title', money=100000)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money'), 160000)
         Consts.CASE_LIST[des] = Consts.result
 
@@ -54,6 +54,6 @@ class TestPayCreate(unittest.TestCase):
         data = basicData.encodeData(payType='title', money=100000)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
+        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money'), 176000)
         Consts.CASE_LIST[des] = Consts.result
