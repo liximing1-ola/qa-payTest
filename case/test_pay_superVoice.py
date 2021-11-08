@@ -124,14 +124,9 @@ class TestPayCreate(unittest.TestCase):
         des = '网赚房指定工会有经纪人(7j)的艺人分成50:20'
         conMysql.updateMoneySql(config.payUid, 1000)
         test_uid = config.super_live_role['agent_star_uid']
-        test_bid = config.super_live_role['super_broker']
         test_agent = config.super_live_role['super_agent_uid']
         conMysql.checkOnlineEarnAgent(test_agent, 100000)
-        conMysql.checkOnlineEarnArtist(test_uid)
         conMysql.updateUserMoneyClearSql(test_agent, test_uid)
-        conMysql.updateSuperVoiceUser(test_uid, test_bid, nid=200)  # 更新用户到指定工会
-        conMysql.checkSuperVoiceUser(test_agent, test_bid)
-        conMysql.checkOnlineEarnRelation(test_agent, test_uid)
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         Assert.assert_code(res['code'], 200)
