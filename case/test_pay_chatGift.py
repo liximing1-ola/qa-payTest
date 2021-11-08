@@ -29,6 +29,6 @@ class TestPayCreate(unittest.TestCase):
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 0, reason(des, res))
-        Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res['body']))
+        Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 0)
         Consts.CASE_LIST[des] = Consts.result
