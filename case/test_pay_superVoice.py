@@ -171,6 +171,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
+    @unittest.skip
     @pytest.mark.run(order=6)
     def test_06_SuperStarNormalRoomPay_5015(self):
         """
