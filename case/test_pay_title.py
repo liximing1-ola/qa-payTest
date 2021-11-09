@@ -1,5 +1,5 @@
 from common.Config import config
-from common import Request
+from common.Request import post_request_session
 from common.method import reason
 from common.conMysql import conMysql
 import unittest
@@ -21,7 +21,7 @@ class TestPayCreate(unittest.TestCase):
         脚本步骤：
         1.清空背包内物品，模拟开通者数据（更新xs_user_money）
         2.开通子爵
-        3.校验【status code】和返回值【body】状态
+        3.校验 statusCode和返回值数据
         4.检查剩余钱值,预期值：（200000 - 100000 + 60000 = 160000）
         """
         des = '开通爵位场景'
@@ -29,10 +29,10 @@ class TestPayCreate(unittest.TestCase):
         conMysql.deleteUserAccountSql('user_title', config.payUid)
         conMysql.deleteUserAccountSql('user_profile', config.payUid)
         conMysql.deleteUserAccountSql('user_title_new', config.payUid)
-        conMysql.updateMoneySql(config.payUid, 200000)
+        conMysql.updateMoneySql(config.payUid, money=200000)
         data = basicData.encodeData(payType='title', money=100000)
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        Assert.assert_code(res['code'], 200)
+        res = post_request_session(TestPayCreate.pay_url, data)
+        Assert.assert_code(res['code'])
         Assert.assert_body(res['body'], 'success', 1, reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money'), 160000)
         Consts.CASE_LIST[des] = Consts.result
@@ -46,14 +46,14 @@ class TestPayCreate(unittest.TestCase):
         脚本步骤：
         1.清空背包内物品，模拟开通者数据（更新xs_user_money）
         2.续费子爵
-        3.校验【status code】和返回值【body】状态
+        3.校验 statusCode和返回值数据
         4.检查剩余钱值,预期值：（200000 - 60000 + 36000 = 176000）
         """
         des = '爵位续费场景'
-        conMysql.updateMoneySql(config.payUid, 200000)
+        conMysql.updateMoneySql(config.payUid, money=200000)
         data = basicData.encodeData(payType='title', money=100000)
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        Assert.assert_code(res['code'], 200)
+        res = post_request_session(TestPayCreate.pay_url, data)
+        Assert.assert_code(res['code'])
         Assert.assert_body(res['body'], 'success', 1, reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money'), 176000)
         Consts.CASE_LIST[des] = Consts.result

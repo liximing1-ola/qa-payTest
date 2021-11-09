@@ -2,8 +2,9 @@ from common.Config import config
 from common.params_Yaml import Yaml
 from common.conMysql import conMysql
 import unittest
+from common.Request import post_request_session
 from common.method import reason
-from common import Assert, Consts, Request, basicData
+from common import Assert, Consts, basicData
 from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
 
@@ -11,8 +12,7 @@ class TestPayCreate(unittest.TestCase):
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
 
     def tearDown(self) -> None:
-        # 清理前置冗余数据
-        conMysql.deleteUserBeanSql(config.payUid, config.testUid)
+        conMysql.deleteUserBeanSql(config.payUid, config.testUid)   # 清理前置冗余数据
 
     @Retry
     def test_01_NoBeanPayBeanGift(self):
@@ -20,18 +20,18 @@ class TestPayCreate(unittest.TestCase):
         用例描述：
         验证账户内金豆不足时打赏金豆礼物的场景
         脚本步骤：
-        1.构造打赏者和被打赏者数据（xs_user_money_extend）
-        2.房间内打赏金豆礼物(xs_gift)
-        3.校验【status code】和返回值【body】状态
-        4.检查预期返回msg，预期：Toast提示 '金豆不足'
+        1.构造打赏者和被打赏者数据（xs_user_money_extend，xs_user_money）
+        2.房间内打赏金豆礼物(id=362)
+        3.校验 statusCode 和返回值数据
+        4.检查Toast，预期提示：'金豆不足'
         5.检查被打赏者金豆余额,预期：0
         """
         des = '打赏金豆礼物但金豆不足的场景'
-        conMysql.deleteUserBeanSql(config.payUid, config.testUid)  # case执行前处理下数据
+        conMysql.deleteUserBeanSql(config.payUid, config.testUid)  # 执行前处理垃圾数据
         conMysql.updateMoneySql(config.payUid)
         data = basicData.encodeData(payType='package', uid=config.testUid, giftId=362, giftType='bean')
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        Assert.assert_code(res['code'], 200)
+        res = post_request_session(TestPayCreate.pay_url, data)
+        Assert.assert_code(res['code'])
         Assert.assert_body(res['body'], 'success', 0, reason(des, res))
         Assert.assert_body(res['body'], 'msg', '金豆不足', reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.testUid), 0)
@@ -40,19 +40,19 @@ class TestPayCreate(unittest.TestCase):
     def test_02_beanPayChangeGoldGift(self):
         """
         用例描述：
-        验证打赏金豆礼物的场景（金豆足够）
+        验证打赏金豆礼物的场景
         脚本步骤：
-        1.构造打赏者和被打赏者数据（更新xs_user_money_extend）
-        2.房间内打赏金豆礼物
-        3.校验【status code】和返回值【body】状态
-        4.检查被打赏者金豆余额，预期为：0
-        5.检查打赏者剩余金豆余额，预期为：6000 * 0.5 = 3000
+        1.构造打赏者和被打赏者数据（xs_user_money_extend）
+        2.房间内打赏金豆礼物的流程（金豆足够）
+        3.校验 statusCode和返回值数据
+        4.检查打赏者金豆余额，预期为：0
+        5.检查被打赏者金豆余额，预期为：6000 * 0.5 = 3000
         """
         des = '打赏金豆礼物的场景'
-        conMysql.insertBeanSql(config.payUid, 6000)
+        conMysql.insertBeanSql(config.payUid, money_coupon=6000)
         data = Yaml.read_yaml('Basic.yml', 'dev_gold_BeanEnough')
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        Assert.assert_code(res['code'], 200)
+        res = post_request_session(TestPayCreate.pay_url, data)
+        Assert.assert_code(res['code'])
         Assert.assert_body(res['body'], 'success', 1, reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 0)
         Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.testUid), 3000)
@@ -63,24 +63,24 @@ class TestPayCreate(unittest.TestCase):
         用例描述：
         验证打赏金豆礼物时金豆不足用钻转换的场景
         脚本步骤：
-        1.构造打赏者和被打赏者数据 （更新xs_user_money, xs_user_money_extend）
-        2.房间内打赏金豆礼物
-        3.校验【status code】和返回值【body】状态
-        4.检查打赏者金豆余额，预期为：500
+        1.构造打赏者和被打赏者数据 （xs_user_money, xs_user_money_extend）
+        2.房间内打赏金豆礼物流程
+        3.校验 statusCode和返回值数据
+        4.检查打赏者金豆余额，预期为：500（不足抵扣）
         5.检查打赏者钻石余额，预期为：10000 - 1000（转换） = 9000
         6.检查被打赏者金豆余额，预期为：1000 * 0.5 = 500
         """
-        des = '打赏金豆礼物不足时用钻转换的场景'
-        conMysql.updateMoneySql(config.payUid, 10000)
+        des = '打赏金豆礼物不足用钻转换的场景'
+        conMysql.updateMoneySql(config.payUid, money=10000)
         conMysql.updateMoneySql(config.testUid)
-        conMysql.insertBeanSql(config.payUid, 500)
+        conMysql.insertBeanSql(config.payUid, money_coupon=500)
         data = Yaml.read_yaml('Basic.yml', 'dev_gold_moneyToBean')
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        Assert.assert_code(res['code'], 200)
+        res = post_request_session(TestPayCreate.pay_url, data)
+        Assert.assert_code(res['code'])
         Assert.assert_body(res['body'], 'success', 1, reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 500)
         Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.testUid), 500)
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money'), 9000)
+        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 9000)
         Consts.CASE_LIST[des] = Consts.result
 
     def test_04_ImMoneyPayChangeBeanDeduct(self):
@@ -88,20 +88,20 @@ class TestPayCreate(unittest.TestCase):
         用例描述：
         验证私聊场景打赏钻石礼物时金豆抵扣平台手续费的场景
         脚本步骤：
-        1.构造打赏者和被打赏者数据 （更新xs_user_money, xs_user_money_extend）
-        2.私聊页打赏钻石礼物
-        3.校验【status code】和返回值【body】状态
+        1.构造打赏者和被打赏者数据(xs_user_money, xs_user_money_extend)
+        2.私聊页打赏钻石礼物的流程
+        3.校验 statusCode和返回值数据
         4.检查打赏者金豆余额，预期为：200 - 200 = 0
         5.检查打赏者钻石余额，预期为：1000 - 800 = 200
         6.检查被打赏者钻石余额，预期为：1000 * 0.72 = 720
         """
         des = '私聊打赏钻石礼物时金豆抵扣平台手续费场景'
-        conMysql.updateMoneySql(config.payUid, 1000)
+        conMysql.updateMoneySql(config.payUid, money=1000)
         conMysql.updateMoneySql(config.testUid)
-        conMysql.insertBeanSql(config.payUid, 200)
+        conMysql.insertBeanSql(config.payUid, money_coupon=200)
         data = basicData.encodeData(payType='chat-gift', uid=config.testUid)
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        Assert.assert_code(res['code'], 200)
+        res = post_request_session(url=TestPayCreate.pay_url, data=data)
+        Assert.assert_code(res['code'])
         Assert.assert_body(res['body'], 'success', 1, reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 0)
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money'), 200)
@@ -113,20 +113,20 @@ class TestPayCreate(unittest.TestCase):
         用例描述：
         验证房间内打赏钻石礼物时金豆抵扣平台手续费的场景
         脚本步骤：
-        1.构造打赏者和被打赏者数据 （更新xs_user_money, xs_user_money_extend）
-        2.房间内打赏金豆礼物
-        3.校验【status code】和返回值【body】状态
+        1.构造打赏者和被打赏者数据 （xs_user_money, xs_user_money_extend）
+        2.房间内打赏金豆礼物的流程
+        3.校验 statusCode和返回值数据
         4.检查打赏者金豆余额，预期为：400 - 200 = 200
         5.检查打赏者钻石余额，预期为：1000 - 800 = 200
-        6.检查被打赏者钻石余额，预期为：1000 * 0.62 = 620
+        6.检查被打赏者账户余额，预期为：1000 * 0.62 = 620
         """
         des = '房间打赏钻石礼物时金豆抵扣平台手续费场景'
-        conMysql.updateMoneySql(config.payUid, 1000)
+        conMysql.updateMoneySql(config.payUid, money=1000)
         conMysql.updateMoneySql(config.testUid)
-        conMysql.insertBeanSql(config.payUid, 400)
-        data = basicData. encodeData(payType='package', uid=config.testUid)
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        Assert.assert_code(res['code'], 200)
+        conMysql.insertBeanSql(config.payUid, money_coupon=400)
+        data = basicData.encodeData(payType='package', uid=config.testUid)
+        res = post_request_session(TestPayCreate.pay_url, data)
+        Assert.assert_code(res['code'])
         Assert.assert_body(res['body'], 'success', 1, reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 200)
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 620)
@@ -138,21 +138,24 @@ class TestPayCreate(unittest.TestCase):
         用例描述：
         验证房间内打赏钻石礼物时金豆抵扣平台手续费的场景
         脚本步骤：
-        1.构造打赏者和被打赏者数据 （更新xs_user_money, xs_user_money_extend）
-        2.房间内打赏金豆礼物
-        3.校验【status code】和返回值【body】状态
-        4.检查预期返回msg，预期：支付失败（钻石小于当前礼物价格时，打赏失败），提示Toast
-        5.检查被打赏者余额,预期：0
+        1.构造打赏者和被打赏者数据 （xs_user_money, xs_user_money_extend）
+        2.房间内打赏金豆礼物的流程
+        3.校验 statusCode和返回值数据
+        4.检查预期：支付失败（钻石小于当前礼物价格时，打赏失败），提示Toast：‘余额不足，无法支付’
+        5.检查打赏者钻石余额,预期：700
+        6.检查打赏者金豆余额,预期：400
         """
-        des = '打赏时金豆抵扣手续费但钻石小于礼物价格场景'
-        conMysql.updateMoneySql(config.payUid, 700)
+        des = '金豆抵扣手续费但钻石余额少于礼物价格的场景'
+        conMysql.updateMoneySql(config.payUid, money=700)
         conMysql.updateMoneySql(config.testUid)
-        conMysql.insertBeanSql(config.payUid, 400)
-        data = basicData. encodeData(payType='package', uid=config.testUid)
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        Assert.assert_code(res['code'], 200)
+        conMysql.insertBeanSql(config.payUid, money_coupon=400)
+        data = basicData.encodeData(payType='package', uid=config.testUid)
+        res = post_request_session(TestPayCreate.pay_url, data)
+        Assert.assert_code(res['code'])
         Assert.assert_body(res['body'], 'success', 0, reason(des, res))
         Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
+        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 700)
+        Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 400)
         Consts.CASE_LIST[des] = Consts.result
 
     def test_07_BeanPayChangeCombo(self):
@@ -161,18 +164,18 @@ class TestPayCreate(unittest.TestCase):
         验证卡座内购买套餐的场景（钻补）
         脚本步骤：
         1.构造打赏者和被打赏者数据 （更新xs_user_money, xs_user_money_extend）
-        2.卡座内购买酒桌套餐
-        3.校验【status code】和返回值【body】状态
+        2.卡座内购买酒桌套餐的流程
+        3.校验 statusCode和返回值数据
         4.检查购买者金豆余额，预期为：400
         5.检查购买者钻石余额，预期为：80000 - 79900 = 100
         """
         des = '卡座内购买套餐场景'
         conMysql.deleteUserAccountSql('user_commodity', config.payUid)
-        conMysql.updateMoneySql(config.payUid, 80000)
-        conMysql.insertBeanSql(config.payUid, 400)
-        data = basicData.encodeData(payType='pub-drink-buy', money=79900, rid=193185484)
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        Assert.assert_code(res['code'], 200)
+        conMysql.updateMoneySql(config.payUid, money=80000)
+        conMysql.insertBeanSql(config.payUid, money_coupon=400)
+        data = basicData.encodeData(payType='pub-drink-buy', money=79900, rid=config.live_role['auto_rid'])
+        res = post_request_session(TestPayCreate.pay_url, data)
+        Assert.assert_code(res['code'])
         Assert.assert_body(res['body'], 'success', 1, reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
         Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 400)

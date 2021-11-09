@@ -3,8 +3,7 @@
 """
 import json
 from common import Consts
-
-def assert_code(actual_code, expected_code):
+def assert_code(actual_code, expected_code=200):
     """
     验证response状态码
     :param actual_code: 实际结果

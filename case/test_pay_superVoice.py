@@ -2,7 +2,8 @@ from common.Config import config
 from common.conMysql import conMysql
 from common.method import reason
 import unittest, pytest
-from common import Consts, Assert, Request, basicData
+from common.Request import post_request_session
+from common import Consts, Assert, basicData
 from common.runFailed import Retry
 @Retry
 class TestPayCreate(unittest.TestCase):
@@ -34,16 +35,16 @@ class TestPayCreate(unittest.TestCase):
         脚本步骤：
         1.构造打赏者和被打赏者数据 （更新xs_user_money）
         2.网赚房间一对一打赏（打赏1000分）
-        3.校验【status code】和返回值【body】状态
-        4.检查被打赏者余额，预期为：350(个人魅力值)
+        3.校验 statusCode和返回值数据
+        4.检查被打赏者余额，预期为：1000 * 0.35 = 350(个人魅力值)
         """
         des = '网赚房无公会无经纪人艺人收35%个人魅力值'
-        conMysql.updateMoneySql(config.payUid, 1000)
+        conMysql.updateMoneySql(config.payUid, money=1000)
         test_uid=config.super_live_role['testUid']
         conMysql.updateMoneySql(test_uid)
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        Assert.assert_code(res['code'], 200)
+        res = post_request_session(TestPayCreate.pay_url, data)
+        Assert.assert_code(res['code'])
         Assert.assert_body(res['body'], 'success', 1, reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 350)
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 350)
@@ -58,18 +59,18 @@ class TestPayCreate(unittest.TestCase):
         脚本步骤：
         1.构造打赏者和被打赏者数据 （更新xs_user_money）
         2.网赚房间一对一打赏（打赏1000分）
-        3.校验【status code】和返回值【body】状态
-        4.检查被打赏者余额，预期为：350（公会魅力值）
+        3.校验 statusCode和返回值数据
+        4.检查被打赏者余额，预期为：1000 * 0.35 = 350（公会魅力值）
         """
         des = '网赚房指定工会无经纪人艺人收35%工会魅力值'
-        conMysql.updateMoneySql(config.payUid, 1000)
+        conMysql.updateMoneySql(config.payUid, money=1000)
         test_uid = config.super_live_role['super_star_uid']
         test_bid = config.super_live_role['super_broker']
         conMysql.updateMoneySql(test_uid)  # 清空账户
         conMysql.updateSuperVoiceUser(test_uid, test_bid, nid=200)  # 修改用户为网赚工会用户
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        Assert.assert_code(res['code'], 200)
+        res = post_request_session(TestPayCreate.pay_url, data)
+        Assert.assert_code(res['code'])
         Assert.assert_body(res['body'], 'success', 1, reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 350)
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 350)
@@ -84,12 +85,12 @@ class TestPayCreate(unittest.TestCase):
         脚本步骤：
         1.构造打赏者和被打赏者数据 （更新xs_user_money）
         2.网赚房间一对一打赏（打赏1000分）
-        3.校验【status code】和返回值【body】状态
-        4.检查被打赏者余额，预期为：500（工会魅力值）
-        5.检查经纪人余额，预期为：150（工会魅力值）
+        3.校验 statusCode和返回值数据
+        4.检查被打赏者余额，预期为：1000 * 0.5 = 500（工会魅力值）
+        5.检查经纪人余额，预期为：1000 * 0.15 = 150（工会魅力值）
         """
         des = '网赚房指定工会有经纪人(1j)艺人分成50:15'
-        conMysql.updateMoneySql(config.payUid, 1000)
+        conMysql.updateMoneySql(config.payUid, money=1000)
         test_uid = config.super_live_role['agent_star_uid']
         test_bid = config.super_live_role['super_broker']
         test_agent = config.super_live_role['super_agent_uid']
@@ -100,8 +101,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.checkSuperVoiceUser(test_agent, test_bid)
         conMysql.checkOnlineEarnRelation(test_agent, test_uid)
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        Assert.assert_code(res['code'], 200)
+        res = post_request_session(TestPayCreate.pay_url, data)
+        Assert.assert_code(res['code'])
         Assert.assert_body(res['body'], 'success', 1, reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 500)
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_agent, money_type='money_cash'), 150)
@@ -117,19 +118,19 @@ class TestPayCreate(unittest.TestCase):
         脚本步骤：
         1.构造打赏者和被打赏者数据 （更新xs_user_money）
         2.网赚房间一对一打赏（打赏1000分）
-        3.校验【status code】和返回值【body】状态
-        4.检查被打赏者余额，预期为：500
-        5.检查经纪人余额，预期为：200
+        3.校验 statusCode和返回值数据
+        4.检查被打赏者余额，预期为：1000 * 0.5 = 500
+        5.检查经纪人余额，预期为：1000 * 0.2 = 200
         """
         des = '网赚房指定工会有经纪人(7j)的艺人分成50:20'
-        conMysql.updateMoneySql(config.payUid, 1000)
+        conMysql.updateMoneySql(config.payUid, money=1000)
         test_uid = config.super_live_role['agent_star_uid']
         test_agent = config.super_live_role['super_agent_uid']
-        conMysql.checkOnlineEarnAgent(test_agent, 100000)
+        conMysql.checkOnlineEarnAgent(test_agent, point=100000)
         conMysql.updateUserMoneyClearSql(test_agent, test_uid)
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        Assert.assert_code(res['code'], 200)
+        res = post_request_session(TestPayCreate.pay_url, data)
+        Assert.assert_code(res['code'])
         Assert.assert_body(res['body'], 'success', 1, reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 500)
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_agent, money_type='money_cash'), 200)
@@ -145,20 +146,21 @@ class TestPayCreate(unittest.TestCase):
         脚本步骤：
         1.构造打赏者和被打赏者数据 （更新xs_user_money）
         2.网赚房间一对一打赏（打赏1000分）
-        3.校验【status code】和返回值【body】状态
-        4.检查被打赏者余额，预期为：500
+        3.校验 statusCode和返回值数据
+        4.检查被打赏者余额，预期为：1000 * 0.5 = 500（money_cash_b）
+        5.检查经纪人余额，预期为： 1000 * 0.2 = 200(money_cash)
         """
         des = '网赚房普通工会有经纪人(7j)艺人分成50(个人):20(工会)'
-        conMysql.updateMoneySql(config.payUid, 1000)
+        conMysql.updateMoneySql(config.payUid, money=1000)
         test_uid = config.super_live_role['pack_cal_uid']  # 105002313
         # test_bid = config.super_live_role['super_broker']  # 136594717
         test_agent = config.super_live_role['super_agent_uid']  # 105002323
-        conMysql.checkOnlineEarnAgent(test_agent, 100000)  # 更新经纪人等级
+        conMysql.checkOnlineEarnAgent(test_agent, point=100000)  # 更新经纪人等级
         conMysql.updateUserMoneyClearSql(test_agent, test_uid)  # 更新余额
         conMysql.checkOnlineEarnRelation(test_agent, test_uid)  # 更新经纪人和艺人身份
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        Assert.assert_code(res['code'], 200)
+        res = post_request_session(TestPayCreate.pay_url, data)
+        Assert.assert_code(res['code'])
         Assert.assert_body(res['body'], 'success', 1, reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 500)
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_agent, money_type='money_cash'), 200)
@@ -175,12 +177,12 @@ class TestPayCreate(unittest.TestCase):
         脚本步骤：
         1.构造打赏者和被打赏者数据 （更新xs_user_money）
         2.网赚房间一对一打赏（打赏1000分）
-        3.校验【status code】和返回值【body】状态
-        4.检查被打赏者余额，预期为：500（工会魅力值）
-        5.检查经纪人余额，预期为：150（工会魅力值）
+        3.校验 statusCode和返回值数据
+        4.检查被打赏者余额，预期为：1000 * 0.62 = 620（个人魅力值）
+        5.检查经纪人余额，预期为：0
         """
         des = '普通房指定工会有经纪人(1j)只艺人收到62%'
-        conMysql.updateMoneySql(config.payUid, 1000)
+        conMysql.updateMoneySql(config.payUid, money=1000)
         test_uid = config.super_live_role['agent_star_uid']
         test_bid = config.super_live_role['super_broker']
         test_agent = config.super_live_role['super_agent_uid']
@@ -191,8 +193,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.checkSuperVoiceUser(test_agent, test_bid)
         conMysql.checkOnlineEarnRelation(test_agent, test_uid)
         data = basicData.encodeData(payType='package')
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        Assert.assert_code(res['code'], 200)
+        res = post_request_session(TestPayCreate.pay_url, data)
+        Assert.assert_code(res['code'])
         Assert.assert_body(res['body'], 'success', 1, reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 620)
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_agent), 0)

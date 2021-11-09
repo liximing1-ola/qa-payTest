@@ -308,7 +308,7 @@ class conMysql:
         finally:
             conMysql.con.commit()
 
-    # 用户背包增加测试数据@
+    # 用户背包增加测试数据
     @staticmethod
     def insertXsUserCommodity(uid, cid, num, state=0):
         sql = "insert into xs_user_commodity (uid, cid, num, state) values ({}, {}, {}, {})".format(uid, cid, num, state)
@@ -436,7 +436,6 @@ class conMysql:
             if res is None:
                 sql = 'insert into xs_online_earn_relation (agent_uid, artist_uid, sign_time, end_time) values' \
                       '({}, {}, {}, {})'.format(agent_uid, artist_uid, sign_time, end_time)
-                print(sql)
                 try:
                     conMysql.cur.execute(sql)
                 except Exception as error:

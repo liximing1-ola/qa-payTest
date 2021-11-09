@@ -2,8 +2,9 @@ from common.Config import config
 from common.params_Yaml import Yaml
 from common.method import reason
 from common.conMysql import conMysql
+from common.Request import post_request_session
 import unittest
-from common import Consts, Assert, Request, basicData
+from common import Consts, Assert, basicData
 from common.runFailed import Retry
 @Retry
 class TestPayCreate(unittest.TestCase):
@@ -17,16 +18,16 @@ class TestPayCreate(unittest.TestCase):
         验证余额不足时，房间一对一打赏
         脚本步骤：
         1.构造打赏者和被打赏者数据 （更新xs_user_money）
-        2.房间内一对一打赏
-        3.校验【status code】和返回值【body】状态
+        2.房间内一对一打赏流程
+        3.校验 statusCode和返回值数据
         4.检查预期返回msg，预期：支付失败
         5.检查被打赏者余额,预期：0
         """
         des = '房间1V1打赏但余额不足的场景'
         conMysql.updateUserMoneyClearSql(config.payUid, config.testUid)
         data = basicData.encodeData(payType='package', money=100, rid=193185408, uid=config.testUid, giftId=5)
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        Assert.assert_code(res['code'], 200)
+        res = post_request_session(TestPayCreate.pay_url, data)
+        Assert.assert_code(res['code'])
         Assert.assert_body(res['body'], 'success', 0, reason(des, res))
         Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 0)
@@ -39,15 +40,15 @@ class TestPayCreate(unittest.TestCase):
         脚本步骤：
         1.构造打赏者和被打赏者数据 （更新xs_user_money）
         2.房间内一对一打赏（打赏100分）
-        3.校验【status code】和返回值【body】状态
-        4.检查被打赏者余额，预期为：62
+        3.校验 statusCode和返回值数据
+        4.检查被打赏者余额，预期为：100 * 0.62 = 62
         """
         des = '非直播1V1打赏场景'
-        conMysql.updateMoneySql(config.payUid, 30, 30, 30, 10)
+        conMysql.updateMoneySql(config.payUid, money=30, money_cash=30, money_cash_b=30, money_b=10)
         conMysql.updateMoneySql(config.testUid)
         data = basicData.encodeData(payType='package', money=100, rid=config.super_live_role['auto_rid'], uid=config.testUid, giftId=5)
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        Assert.assert_code(res['code'], 200)
+        res = post_request_session(TestPayCreate.pay_url, data)
+        Assert.assert_code(res['code'])
         Assert.assert_body(res['body'], 'success', 1, reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid), 62)
         Consts.CASE_LIST[des] = Consts.result
@@ -59,21 +60,22 @@ class TestPayCreate(unittest.TestCase):
         脚本步骤：
         1.构造打赏者和被打赏者数据 （更新xs_user_money和xs_user_commodity）
         2.房间内打赏（券可抵扣500分）
-        3.校验【status code】和返回值【body】状态，预期结果： "msg": "余额不足，无法支付"
-        4.检查被打赏者余额和账户，预期为：0
-        5.检查打赏者余额,预期为：3000
+        3.校验 statusCode和返回值数据
+        4.预期结果： "msg": "余额不足，无法支付"
+        5.检查被打赏者余额和账户，预期为：0
+        6.检查打赏者余额,预期为：3000
         """
         des = '打赏礼物使用未激活券的场景'
         gift_cid = 54  # 老司机
         conMysql.deleteUserAccountSql('user_commodity', config.payUid)
-        conMysql.insertXsUserCommodity(config.payUid, gift_cid, 1)
-        conMysql.updateMoneySql(config.payUid, 3000)
+        conMysql.insertXsUserCommodity(config.payUid, gift_cid, num=1)
+        conMysql.updateMoneySql(config.payUid, money=3000)
         conMysql.updateMoneySql(config.testUid)
         cid = conMysql.selectUserMoneySql('id_commodity', config.payUid, cid=gift_cid)
         data = basicData.encodeData(payType='package', rid=config.live_role['auto_rid'], uid=config.testUid, giftId=11, money=3000,
                                     package_cid=cid, ctype='coupon', duction_money=500)
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        Assert.assert_code(res['code'], 200)
+        res = post_request_session(TestPayCreate.pay_url, data)
+        Assert.assert_code(res['code'])
         Assert.assert_body(res['body'], 'success', 0, reason(des, res))
         Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 0)
@@ -87,21 +89,21 @@ class TestPayCreate(unittest.TestCase):
         脚本步骤：
         1.构造打赏者和被打赏者数据 （更新xs_user_money和xs_user_commodity）
         2.房间内打赏（券可抵扣500分）
-        3.校验【status code】和返回值【body】状态
+        3.校验 statusCode和返回值数据
         4.检查被打赏者余额和账户，预期为：3000 * 0.62 = 1860
         5.检查打赏者余额,预期为：3000 -2500 = 500
         """
         des = '打赏礼物时有激活券的场景'
         gift_cid = 54  # 老司机
         conMysql.deleteUserAccountSql('user_commodity', config.payUid)
-        conMysql.insertXsUserCommodity(config.payUid, gift_cid, 1, 1)
-        conMysql.updateMoneySql(config.payUid, 3000)
+        conMysql.insertXsUserCommodity(config.payUid, gift_cid, num=1, state=1)
+        conMysql.updateMoneySql(config.payUid, money=3000)
         conMysql.updateMoneySql(config.testUid)
         cid = conMysql.selectUserMoneySql('id_commodity', config.payUid, cid=gift_cid)
         data = basicData.encodeData(payType='package', rid=config.live_role['auto_rid'], uid=config.testUid, giftId=11, money=3000,
                                     package_cid=cid, ctype='coupon', duction_money=500)
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        Assert.assert_code(res['code'], 200)
+        res = post_request_session(TestPayCreate.pay_url, data)
+        Assert.assert_code(res['code'])
         Assert.assert_body(res['body'], 'success', 1, reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 1860)
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 500)
@@ -114,15 +116,15 @@ class TestPayCreate(unittest.TestCase):
         脚本步骤：
         1.构造打赏者和被打赏者数据 （更新xs_user_money）
         2.房间内一对多打赏
-        3.校验【status code】和返回值【body】状态
+        3.校验 statusCode和返回值数据
         4.检查打赏者余额,预期为：12000-10800=1200
         5.检查被打赏者余额，预期为：600*6*0.7=2520
         """
         des = '房间内打赏多人场景'
-        conMysql.updateMoneySql(config.payUid, 3000, 3000, 3000, 3000)
+        conMysql.updateMoneySql(config.payUid, money=3000, money_cash=3000, money_cash_b=3000, money_b=3000)
         conMysql.updateMoneySql(config.testUid_2)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_more')
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
+        res = post_request_session(TestPayCreate.pay_url, data)
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid_2), 2520)

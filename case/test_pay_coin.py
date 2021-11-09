@@ -1,8 +1,9 @@
 from common.Config import config
 from common.method import reason
 from common.conMysql import conMysql
+from common.Request import post_request_session
 import unittest
-from common import Consts, Assert, basicData, Request
+from common import Consts, Assert, basicData
 from common.runFailed import Retry
 @Retry(max_n=3, func_prefix='test_02_roomChangePayCoin')
 class TestPayCreate(unittest.TestCase):
@@ -16,15 +17,16 @@ class TestPayCreate(unittest.TestCase):
         验证money兑换金币流程
         脚本步骤：
         1.构造用户数据 （更新xs_user_money）
-        2.金币兑换
-        3.校验【status code】和返回值【body】状态
-        4.检查账户余额（money, gold_coin） 1000-600=400
+        2.金币兑换流程
+        3.校验 statusCode和返回值数据
+        4.检查账户钻石余额：money=1000 - 600 = 400
+        5.检查账户金币余额：gold_coin = 600
         """
         des = '余额兑换金币场景'
-        conMysql.updateMoneySql(config.payUid, 1000)
+        conMysql.updateMoneySql(config.payUid, money=1000)
         data = basicData.encodeData(payType='exchange_gold')
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        Assert.assert_code(res['code'], 200)
+        res = post_request_session(TestPayCreate.pay_url, data)
+        Assert.assert_code(res['code'])
         Assert.assert_body(res['body'], 'success', 1, reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 400)
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='gold_coin'), 600)
@@ -36,17 +38,17 @@ class TestPayCreate(unittest.TestCase):
         验证房间内打赏金币流程
         脚本步骤：
         1.构造用户数据 （更新xs_user_money）
-        2.房间打赏金币礼物
-        3.校验【status code】和返回值【body】状态
+        2.房间打赏金币礼物流程
+        3.校验 statusCode和返回值数据
         4.检查打赏者账户余额（gold_coin） 100 - 20*3 = 40
         5.检查被打赏者账户余额（gold_coin）  20 * 0.6 = 12
         """
         des = '房间打赏金币礼物的场景'
         conMysql.updateMoneySql(config.payUid, gold_coin=100)
         conMysql.updateUserMoneyClearSql(config.testUid, config.testUid_2)
-        data = basicData.encodeData(payType='package-more', rid=193185484, num=1, money=20, giftId=62, giftType='coin')
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        Assert.assert_code(res['code'], 200)
+        data = basicData.encodeData(payType='package-more', rid=config.live_role['auto_rid'], money=20, giftId=62, giftType='coin')
+        res = post_request_session(TestPayCreate.pay_url, data)
+        Assert.assert_code(res['code'])
         Assert.assert_body(res['body'], 'success', 1, reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='gold_coin'), 60)
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid_2, money_type='gold_coin'), 12)

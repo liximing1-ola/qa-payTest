@@ -1,8 +1,9 @@
 from common.Config import config
 from common.conMysql import conMysql
+from common.Request import post_request_session
 import unittest
 from common.method import reason
-from common import Assert, Request, Consts, basicData
+from common import Assert, Consts, basicData
 from common.runFailed import Retry
 @Retry(max_n=2)
 class TestPayCreate(unittest.TestCase):
@@ -15,9 +16,9 @@ class TestPayCreate(unittest.TestCase):
         用例描述：
         检查账户余额不足时，私聊一对一打赏
         脚本步骤：
-        1.构造打赏者和被打赏者数据 （更新xs_user_money）
+        1.构造打赏者和被打赏者数据 （xs_user_money）
         2.私聊一对一打赏流程
-        3.校验【status code】和返回值【body】状态
+        3.校验 statusCode和返回值数据
         4.检查预期返回msg，预期：支付失败，提示Toast
         5.检查被打赏者余额,预期：0
         """
@@ -25,9 +26,9 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateUserMoneyClearSql(config.payUid, config.testUid)
         conMysql.deleteUserAccountSql('broker_user', config.testUid)
         conMysql.deleteUserAccountSql('chatroom', config.testUid)
-        data = basicData.encodeData(payType='chat-gift', uid=config.testUid, money=1000, num=10, giftId=5)
-        res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        Assert.assert_code(res['code'], 200)
+        data = basicData.encodeData(payType='chat-gift', uid=config.testUid, num=10, giftId=5)
+        res = post_request_session(TestPayCreate.pay_url, data)
+        Assert.assert_code(res['code'])
         Assert.assert_body(res['body'], 'success', 0, reason(des, res))
         Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 0)

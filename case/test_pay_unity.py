@@ -18,14 +18,14 @@ class TestPayCreate(unittest.TestCase):
         脚本步骤：
         1.构造用户数据（更新xs_user_money）
         2.购买流程
-        3.校验【status code】和返回值【body】状态
+        3.校验 statusCode和返回值数据
         4.检查账户余额，预期值为：100-100=0
         """
         des = 'unity道具购买场景'
-        conMysql.updateMoneySql(config.payUid, 100)
+        conMysql.updateMoneySql(config.payUid, money=100)
         data = basicData.encodeData(payType='unity-game-buy', money=100)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data)
-        Assert.assert_code(res['code'], 200)
+        Assert.assert_code(res['code'])
         Assert.assert_body(res['body'], 'success', 1, reason(des, res))
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST[des] = Consts.result
