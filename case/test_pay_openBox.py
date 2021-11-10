@@ -3,7 +3,8 @@ from common.method import reason
 from common.conMysql import conMysql
 import unittest
 from common.Request import post_request_session
-from common import Assert, Consts, basicData
+from common.Assert import assert_code, assert_body, assert_len, assert_equal
+from common import Consts, basicData
 from common.runFailed import Retry
 @Retry
 class TestPayCreate(unittest.TestCase):
@@ -32,10 +33,10 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
         data = basicData.encodeData(payType='shop-buy-box', money=600, boxType='copper')
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_commodity', config.payUid), 2)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
+        assert_equal(conMysql.selectUserMoneySql('sum_commodity', config.payUid), 2)
         Consts.CASE_LIST[des] = Consts.result
 
     def test_02_openMoreBoxPayChange(self):
@@ -61,10 +62,10 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, money=12600)
         data = basicData.encodeData(payType='shop-buy-box', money=2100, num=6, cid=6, boxType='silver')
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_commodity', config.payUid), 12)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_equal(conMysql.selectUserMoneySql('sum_commodity', config.payUid), 12)
         Consts.CASE_LIST[des] = Consts.result
 
     def test_03_giveBoxPayChange(self):
@@ -83,10 +84,10 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.testUid)
         data = basicData.encodeData(payType='package', money=600, rid=config.live_role['cp_link_rid'], uid=config.testUid, giftId=46, star=4)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
-        Assert.assert_len(conMysql.selectUserMoneySql('sum_money', config.testUid), 100)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
+        assert_len(conMysql.selectUserMoneySql('sum_money', config.testUid), 100)
         Consts.CASE_LIST[des] = Consts.result
 
     def test_04_giveBoxMorePeople(self):
@@ -105,8 +106,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.testUid)
         data = basicData.encodeData(payType='package-more', num=2, star=8, money=2100, giftId=47)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 1600)
-        Assert.assert_len(conMysql.selectUserMoneySql('sum_money', config.testUid), 1000)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 1600)
+        assert_len(conMysql.selectUserMoneySql('sum_money', config.testUid), 1000)
         Consts.CASE_LIST[des] = Consts.result

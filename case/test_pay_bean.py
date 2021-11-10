@@ -4,7 +4,8 @@ from common.conMysql import conMysql
 import unittest
 from common.Request import post_request_session
 from common.method import reason
-from common import Assert, Consts, basicData
+from common.Assert import assert_code, assert_equal, assert_body
+from common import Consts, basicData
 from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'  # 内网支付接口
@@ -29,10 +30,10 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid)
         data = basicData.encodeData(payType='package', uid=config.testUid, giftId=362, giftType='bean')
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 0, reason(des, res))
-        Assert.assert_body(res['body'], 'msg', '金豆不足', reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.testUid), 0)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 0, reason(des, res))
+        assert_body(res['body'], 'msg', '金豆不足', reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('bean', config.testUid), 0)
         Consts.CASE_LIST[des] = Consts.result
 
     def test_02_beanPayChangeGoldGift(self):
@@ -50,10 +51,10 @@ class TestPayCreate(unittest.TestCase):
         conMysql.insertBeanSql(config.payUid, money_coupon=6000)
         data = Yaml.read_yaml('Basic.yml', 'dev_gold_BeanEnough')
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 0)
-        Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.testUid), 3000)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 0)
+        assert_equal(conMysql.selectUserMoneySql('bean', config.testUid), 3000)
         Consts.CASE_LIST[des] = Consts.result
 
     def test_03_MoneyConvertGoldPayGift(self):
@@ -74,11 +75,11 @@ class TestPayCreate(unittest.TestCase):
         conMysql.insertBeanSql(config.payUid, money_coupon=500)
         data = Yaml.read_yaml('Basic.yml', 'dev_gold_moneyToBean')
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 500)
-        Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.testUid), 500)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 9000)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 500)
+        assert_equal(conMysql.selectUserMoneySql('bean', config.testUid), 500)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 9000)
         Consts.CASE_LIST[des] = Consts.result
 
     def test_04_ImMoneyPayChangeBeanDeduct(self):
@@ -99,11 +100,11 @@ class TestPayCreate(unittest.TestCase):
         conMysql.insertBeanSql(config.payUid, money_coupon=200)
         data = basicData.encodeData(payType='chat-gift', uid=config.testUid)
         res = post_request_session(url=TestPayCreate.pay_url, data=data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 0)
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money'), 200)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 720)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 0)
+        assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money'), 200)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 720)
         Consts.CASE_LIST[des] = Consts.result
 
     def test_05_RoomMoneyConvertGoldPayGift(self):
@@ -124,11 +125,11 @@ class TestPayCreate(unittest.TestCase):
         conMysql.insertBeanSql(config.payUid, money_coupon=400)
         data = basicData.encodeData(payType='package', uid=config.testUid)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 200)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 620)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 200)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 200)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 620)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 200)
         Consts.CASE_LIST[des] = Consts.result
 
     def test_06_MoneyConvertGoldPayGift(self):
@@ -149,11 +150,11 @@ class TestPayCreate(unittest.TestCase):
         conMysql.insertBeanSql(config.payUid, money_coupon=400)
         data = basicData.encodeData(payType='package', uid=config.testUid)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 0, reason(des, res))
-        Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 700)
-        Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 400)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 0, reason(des, res))
+        assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 700)
+        assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 400)
         Consts.CASE_LIST[des] = Consts.result
 
     def test_07_BeanPayChangeCombo(self):
@@ -173,8 +174,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.insertBeanSql(config.payUid, money_coupon=400)
         data = basicData.encodeData(payType='pub-drink-buy', money=79900, rid=config.live_role['auto_rid'])
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
-        Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 400)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
+        assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 400)
         Consts.CASE_LIST[des] = Consts.result

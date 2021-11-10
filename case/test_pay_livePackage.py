@@ -3,7 +3,8 @@ from common.method import reason
 from common.conMysql import conMysql
 import unittest
 from common.Request import post_request_session
-from common import Consts, Assert, basicData
+from common.Assert import assert_body, assert_code, assert_equal
+from common import Consts, basicData
 from common.runFailed import Retry
 @Retry
 class TestPayCreate(unittest.TestCase):
@@ -38,11 +39,11 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.testUid)
         data = basicData.encodeData(payType='package', money=100, rid=193185408, uid=config.testUid, giftId=5)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid), 62)
-        Assert.assert_equal(conMysql.selectUserMoneySql('pay_change', config.payUid), 100)
-        Assert.assert_equal(conMysql.selectUserMoneySql('pay_change', config.payUid, op='op'), 'consume')
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid), 62)
+        assert_equal(conMysql.selectUserMoneySql('pay_change', config.payUid), 100)
+        assert_equal(conMysql.selectUserMoneySql('pay_change', config.payUid, op='op'), 'consume')
         Consts.CASE_LIST_2[des] = Consts.result
 
     def test_02_ImPay_7228(self):
@@ -62,11 +63,11 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.testUid)
         data = basicData.encodeData(payType='chat-gift', uid=config.testUid, num=10, giftId=5)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
         # 商业房房主 or （工会会长 or 工会成员）|| 同意大神协议
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid), 720)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 400)
+        assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid), 720)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 400)
         Consts.CASE_LIST_2[des] = Consts.result
 
     def test_03_liveRoomPay_7030(self):
@@ -89,10 +90,10 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateUserInfoSql('chatroom', test_uid)  # 更新成商业房主播
         data = basicData.encodeData(payType='package', rid=config.live_role['live_rid'], uid=test_uid, giftId=20)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 700)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 700)
         Consts.CASE_LIST_2[des] = Consts.result
 
     def test_04_IMPay_8020(self):
@@ -114,11 +115,11 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateUserInfoSql('chatroom', test_uid)  # 更新成商业房主播&&直播结算频道
         data = basicData.encodeData(payType='chat-gift', uid=test_uid, giftId=20)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 300)
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 500)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 200)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 300)
+        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 500)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 200)
         Consts.CASE_LIST_2[des] = Consts.result
 
     def test_05_liveRoomPay_602515(self):
@@ -145,11 +146,11 @@ class TestPayCreate(unittest.TestCase):
         conMysql.checkUserXsMentorLevel(test_uid, 4)  # 师父等级改为一代宗师
         data = basicData.encodeData(payType='package', giftId=20, rid=config.live_role['live_rid'], uid=test_uid)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 600)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', ceo_uid), 250)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 600)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', ceo_uid), 250)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
     def test_06_IMPay_602020(self):
@@ -175,11 +176,11 @@ class TestPayCreate(unittest.TestCase):
         conMysql.checkUserXsMentorLevel(test_uid, 4)  # 师父等级改为一代宗师
         data = basicData.encodeData(payType='chat-gift', uid=test_uid, giftId=20)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 600)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', ceo_uid), 200)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 600)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', ceo_uid), 200)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
     def test_07_liveRoomPay_602515(self):
@@ -205,11 +206,11 @@ class TestPayCreate(unittest.TestCase):
         conMysql.checkUserXsMentorLevel(test_uid, 1)  # 师父等级改为非一代宗师
         data = basicData.encodeData(payType='package', giftId=20, rid=config.live_role['live_rid'], uid=test_uid)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 600)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', ceo_uid), 250)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 600)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', ceo_uid), 250)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
     def test_08_IMPay_602020(self):
@@ -235,11 +236,11 @@ class TestPayCreate(unittest.TestCase):
         conMysql.checkUserXsMentorLevel(test_uid, 1)  # 师父等级改为非一代宗师
         data = basicData.encodeData(payType='chat-gift', uid=test_uid, giftId=20)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 600)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', ceo_uid), 200)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 600)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', ceo_uid), 200)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
     def test_09_underRolePay_6238(self):
@@ -258,10 +259,10 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.testUid)
         data = basicData.encodeData(payType='package', giftId=5, rid=config.live_role['live_rid'], money=100, uid=config.testUid)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid, money_type='money_cash_b'), 62)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid, money_type='money_cash_b'), 62)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
     def test_10_NotLiveRoomPayAnchor(self):
@@ -282,8 +283,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.checkUserXsMentorLevel(test_uid, 4)  # 师父等级改为一代宗师
         data = basicData.encodeData(payType='package', uid=test_uid, giftId=20)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 700)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 700)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result

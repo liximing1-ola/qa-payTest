@@ -4,7 +4,8 @@ from common.method import reason
 import unittest
 import pytest
 from common.Request import post_request_session
-from common import Consts, Assert, basicData
+from common.Assert import assert_code, assert_body, assert_equal
+from common import Consts, basicData
 from common.runFailed import Retry
 @Retry
 class TestPayCreate(unittest.TestCase):
@@ -28,10 +29,10 @@ class TestPayCreate(unittest.TestCase):
         conMysql.deleteUserAccountSql('user_commodity', config.payUid)
         data = basicData.encodeData(payType='shop-buy', money=100, cid=cid)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_commodity', config.payUid), 1)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
+        assert_equal(conMysql.selectUserMoneySql('sum_commodity', config.payUid), 1)
         Consts.CASE_LIST[des] = Consts.result
 
     @pytest.mark.run(order=2)
@@ -51,10 +52,10 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, money=1000, money_cash=100000, money_cash_b=1000, money_b=1000)
         data = basicData.encodeData(payType='shop-buy', cid=cid, money=9900, num=10)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 4000)
-        Assert.assert_equal(conMysql.selectUserMoneySql('num_commodity', config.payUid, cid=cid), 10)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 4000)
+        assert_equal(conMysql.selectUserMoneySql('num_commodity', config.payUid, cid=cid), 10)
         Consts.CASE_LIST[des] = Consts.result
 
     @pytest.mark.run(order=3)
@@ -76,10 +77,10 @@ class TestPayCreate(unittest.TestCase):
         data = basicData.encodeData(payType='package', rid=config.super_live_role['auto_rid'], uid=config.testUid,
                                     giftId=54, money=9900, package_cid=cid, ctype='gift')
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('num_commodity', config.payUid, cid=bag_gift_cid), 9)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 6138)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('num_commodity', config.payUid, cid=bag_gift_cid), 9)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 6138)
         Consts.CASE_LIST[des] = Consts.result
 
     @pytest.mark.run(order=4)
@@ -101,9 +102,9 @@ class TestPayCreate(unittest.TestCase):
         data = basicData.encodeData(payType='package', rid=config.super_live_role['auto_rid'], uid=config.testUid,
                                     giftId=54, money=99000, package_cid=cid, ctype='gift', num=10)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 0, reason(des, res))
-        Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('num_commodity', config.payUid, cid=bag_gift_cid), 9)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 0)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 0, reason(des, res))
+        assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('num_commodity', config.payUid, cid=bag_gift_cid), 9)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 0)
         Consts.CASE_LIST[des] = Consts.result

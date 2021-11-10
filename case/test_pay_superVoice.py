@@ -3,7 +3,8 @@ from common.conMysql import conMysql
 from common.method import reason
 import unittest, pytest
 from common.Request import post_request_session
-from common import Consts, Assert, basicData
+from common.Assert import assert_body, assert_code, assert_equal
+from common import Consts, basicData
 from common.runFailed import Retry
 @Retry
 class TestPayCreate(unittest.TestCase):
@@ -42,11 +43,11 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(test_uid)
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 350)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 350)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 350)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 350)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
     @pytest.mark.run(order=2)
@@ -68,11 +69,11 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateSuperVoiceUser(test_uid, test_bid, nid=200)  # 修改用户为网赚工会用户
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 350)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 350)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 350)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 350)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
     @pytest.mark.run(order=3)
@@ -100,12 +101,12 @@ class TestPayCreate(unittest.TestCase):
         conMysql.checkOnlineEarnRelation(test_agent, test_uid)
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 500)
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_agent, money_type='money_cash'), 150)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 500)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 500)
+        assert_equal(conMysql.selectUserMoneySql('single_money', test_agent, money_type='money_cash'), 150)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 500)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
     @pytest.mark.run(order=4)
@@ -128,12 +129,12 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateUserMoneyClearSql(test_agent, test_uid)
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 500)
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_agent, money_type='money_cash'), 200)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 500)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 500)
+        assert_equal(conMysql.selectUserMoneySql('single_money', test_agent, money_type='money_cash'), 200)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 500)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
     @pytest.mark.run(order=5)
@@ -158,12 +159,12 @@ class TestPayCreate(unittest.TestCase):
         conMysql.checkOnlineEarnRelation(test_agent, test_uid)  # 更新经纪人和艺人身份
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 500)
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_agent, money_type='money_cash'), 200)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 500)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 500)
+        assert_equal(conMysql.selectUserMoneySql('single_money', test_agent, money_type='money_cash'), 200)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 500)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
     @unittest.skip
@@ -192,10 +193,10 @@ class TestPayCreate(unittest.TestCase):
         conMysql.checkOnlineEarnRelation(test_agent, test_uid)
         data = basicData.encodeData(payType='package')
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 620)
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', test_agent), 0)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 620)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 620)
+        assert_equal(conMysql.selectUserMoneySql('single_money', test_agent), 0)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 620)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result

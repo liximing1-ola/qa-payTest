@@ -5,32 +5,25 @@ from common.Config import config
 from Robot import robot
 def autoGitPull():
     Consts.startTime = time.time()
-    # 默认指定路径
-    codeDir = {'git_dir': '/home/webroot/banban', 'pt_git_dir': '/home/webroot/oversea/oversea-server'}
+    codeDir = {'git_dir': '/home/webroot/banban', 'pt_git_dir': '/home/webroot/oversea/oversea-server'}  # 默认指定路径
     git_dir = codeDir['git_dir']
     g = git.cmd.Git(git_dir)
-    # writeGitStatus(g.status())
     g.pull()
     repo = Repo(git_dir)
     writeGitStatus(repo.git.status())
-    # 更新userToken
-    Session.Session().get_session('dev')
-    # 当前线上分支
-    if str(repo.active_branch) == config.banban_git_branch:
+    Session.Session().get_session('dev')  # 更新userToken
+    if str(repo.active_branch) == config.banban_git_branch:  # 当前线上分支
         commit_log = repo.git.log('--pretty={"commit":"%h","author":"%an","summary":"%s","date":"%cd"}',
                                   max_count=3, date='format:%Y-%m-%d %H:%M:%S')
         log_list = commit_log.split("\n")
         Logs.get_log('gitCommitPull.log').info('当前分支: {}, 最新一条commit: {}'.format(repo.active_branch, log_list[0]))
         real_time = [eval(item) for item in log_list][0]['date']
         timeArray = time.strptime(real_time, "%Y-%m-%d %H:%M:%S")
-        # commit更新时间
-        times = int(time.mktime(timeArray))
-        # 上次脚本执行时间
-        lastTime = int(readUpdateTime())
+        times = int(time.mktime(timeArray))  # commit更新时间
+        lastTime = int(readUpdateTime())  # 上次脚本执行时间
         if times > lastTime:
             Logs.get_log('updateGitCode.log').info('最新代码提交时间: {}, 上次代码更新时间: {}'.format(times, lastTime))
-            # git commit update message
-            robot('success', '{}'.format(log_list[0]))
+            robot('success', '{}'.format(log_list[0]))  # git commit update message
             return True
         else:
             Logs.get_log('updateGitCode.log').info("未拉取到{}分支代码，最近代码提交时间: {}, "

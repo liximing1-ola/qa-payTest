@@ -3,7 +3,8 @@ from common.method import reason
 from common.conMysql import conMysql
 from common.Request import post_request_session
 import unittest
-from common import Consts, Assert, basicData
+from common.Assert import assert_body, assert_code, assert_equal
+from common import Consts, basicData
 from common.runFailed import Retry
 @Retry(max_n=3, func_prefix='test_02_roomChangePayCoin')
 class TestPayCreate(unittest.TestCase):
@@ -24,10 +25,10 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, money=1000)
         data = basicData.encodeData(payType='exchange_gold')
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 400)
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='gold_coin'), 600)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 400)
+        assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='gold_coin'), 600)
         Consts.CASE_LIST[des] = Consts.result
 
     def test_02_roomChangePayCoin(self):
@@ -46,8 +47,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateUserMoneyClearSql(config.testUid, config.testUid_2)
         data = basicData.encodeData(payType='package-more', rid=config.live_role['auto_rid'], money=20, giftId=62, giftType='coin')
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='gold_coin'), 60)
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid_2, money_type='gold_coin'), 12)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='gold_coin'), 60)
+        assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid_2, money_type='gold_coin'), 12)
         Consts.CASE_LIST[des] = Consts.result

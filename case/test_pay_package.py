@@ -4,7 +4,8 @@ from common.method import reason
 from common.conMysql import conMysql
 from common.Request import post_request_session
 import unittest
-from common import Consts, Assert, basicData
+from common.Assert import assert_code, assert_body, assert_equal
+from common import Consts, basicData
 from common.runFailed import Retry
 @Retry
 class TestPayCreate(unittest.TestCase):
@@ -25,10 +26,10 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateUserMoneyClearSql(config.payUid, config.testUid)
         data = basicData.encodeData(payType='package', money=100, rid=193185408, uid=config.testUid, giftId=5)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 0, reason(des, res))
-        Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 0)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 0, reason(des, res))
+        assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 0)
         Consts.CASE_LIST[des] = Consts.result
 
     def test_02_RoomPayChangeMoney(self):
@@ -46,9 +47,9 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.testUid)
         data = basicData.encodeData(payType='package', money=100, rid=config.super_live_role['auto_rid'], uid=config.testUid, giftId=5)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid), 62)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid), 62)
         Consts.CASE_LIST[des] = Consts.result
 
     def test_03_couponNoStatePayChange(self):
@@ -73,11 +74,11 @@ class TestPayCreate(unittest.TestCase):
         data = basicData.encodeData(payType='package', rid=config.live_role['auto_rid'], uid=config.testUid, giftId=11, money=3000,
                                     package_cid=cid, ctype='coupon', duction_money=500)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 0, reason(des, res))
-        Assert.assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 0)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 3000)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 0, reason(des, res))
+        assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 0)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 3000)
         Consts.CASE_LIST[des] = Consts.result
 
     def test_04_couponStatePayChange(self):
@@ -101,10 +102,10 @@ class TestPayCreate(unittest.TestCase):
         data = basicData.encodeData(payType='package', rid=config.live_role['auto_rid'], uid=config.testUid, giftId=11, money=3000,
                                     package_cid=cid, ctype='coupon', duction_money=500)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 1860)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 500)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 1860)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 500)
         Consts.CASE_LIST[des] = Consts.result
 
     def test_05_RoomToMorePayChange(self):
@@ -123,8 +124,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.testUid_2)
         data = Yaml.read_yaml('Basic.yml', 'dev_pay_more')
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'], 200)
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid_2), 2520)
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money_cash'), 1200)
+        assert_code(res['code'], 200)
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid_2), 2520)
+        assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money_cash'), 1200)
         Consts.CASE_LIST[des] = Consts.result

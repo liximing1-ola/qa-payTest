@@ -3,8 +3,9 @@ from common.conMysql import conMysql
 from common.method import reason
 import unittest
 import time
+from common.Assert import assert_body, assert_code, assert_equal
 from common.Request import post_request_session
-from common import Consts, Assert, basicData
+from common import Consts, basicData
 class TestPayCreate(unittest.TestCase):
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'  # 内网支付接口
 
@@ -29,13 +30,13 @@ class TestPayCreate(unittest.TestCase):
         data = basicData.encodeData(payType='package', money=100, rid=config.super_live_role['auto_rid'],
                                     uid=config.testUid, giftId=5)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
         time.sleep(1)  # 延迟处理NSQ消息
-        Assert.assert_equal(conMysql.selectUserMoneySql('bean', config.testUid), 0)
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid, 'money'), 2)
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid, 'money_cash_b'), 0)
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid, 'money_debts'), 0)
-        Assert.assert_equal(conMysql.selectUserMoneySql('pay_change', config.testUid, op='money'), 100)
-        Assert.assert_equal(conMysql.selectUserMoneySql('pay_change', config.testUid, op='op'), 'punish')
+        assert_equal(conMysql.selectUserMoneySql('bean', config.testUid), 0)
+        assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid, 'money'), 2)
+        assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid, 'money_cash_b'), 0)
+        assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid, 'money_debts'), 0)
+        assert_equal(conMysql.selectUserMoneySql('pay_change', config.testUid, op='money'), 100)
+        assert_equal(conMysql.selectUserMoneySql('pay_change', config.testUid, op='op'), 'punish')
         Consts.CASE_LIST[des] = Consts.result

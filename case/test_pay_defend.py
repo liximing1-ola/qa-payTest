@@ -2,7 +2,8 @@ from common.Config import config
 from common.method import reason
 import unittest
 from common.Request import post_request_session
-from common import Consts, Assert, basicData
+from common.Assert import assert_code, assert_body, assert_equal
+from common import Consts, basicData
 from common.runFailed import Retry
 from common.conMysql import conMysql
 @Retry(max_n=3)
@@ -26,8 +27,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.testUid)
         data = basicData.encodeData(payType='defend', money=52000, uid=config.testUid)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
-        Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 32240)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 32240)
         Consts.CASE_LIST[des] = Consts.result

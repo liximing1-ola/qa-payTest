@@ -4,7 +4,8 @@ from common.method import reason
 from common.conMysql import conMysql
 import unittest
 import pytest
-from common import Consts, Assert, basicData
+from common.Assert import assert_equal, assert_code, assert_body
+from common import Consts, basicData
 from common.runFailed import Retry
 @Retry
 class TestPayCreate(unittest.TestCase):
@@ -30,9 +31,9 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, money=200000)
         data = basicData.encodeData(payType='title', money=100000)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money'), 160000)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money'), 160000)
         Consts.CASE_LIST[des] = Consts.result
 
     @unittest.skip('已下线')
@@ -51,7 +52,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, money=200000)
         data = basicData.encodeData(payType='title', money=100000)
         res = post_request_session(TestPayCreate.pay_url, data)
-        Assert.assert_code(res['code'])
-        Assert.assert_body(res['body'], 'success', 1, reason(des, res))
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money'), 176000)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money'), 176000)
         Consts.CASE_LIST[des] = Consts.result
