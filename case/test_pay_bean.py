@@ -7,9 +7,7 @@ from common.method import reason
 from common import Assert, Consts, basicData
 from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
-
-    # 内网支付接口
-    pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
+    pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'  # 内网支付接口
 
     def tearDown(self) -> None:
         conMysql.deleteUserBeanSql(config.payUid, config.testUid)   # 清理前置冗余数据
@@ -23,7 +21,7 @@ class TestPayCreate(unittest.TestCase):
         1.构造打赏者和被打赏者数据（xs_user_money_extend，xs_user_money）
         2.房间内打赏金豆礼物(id=362)
         3.校验 statusCode 和返回值数据
-        4.检查Toast，预期提示：'金豆不足'
+        4.检查Toast，预期提示'金豆不足'
         5.检查被打赏者金豆余额,预期：0
         """
         des = '打赏金豆礼物但金豆不足的场景'

@@ -6,9 +6,7 @@ import time
 from common.Request import post_request_session
 from common import Consts, Assert, basicData
 class TestPayCreate(unittest.TestCase):
-
-    # 内网支付接口
-    pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
+    pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'  # 内网支付接口
 
     @unittest.skip('NSQ异常')
     def test_01_PayChangeTriggerPunish(self):
