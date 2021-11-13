@@ -29,6 +29,7 @@ def main():
         # lock = threading.Lock()
         # lock.acquire(blocking=True, timeout=-1)  # 加
         writeUpdateTime(str(int(time.time())))
+        Consts.startTime = time.time()
         test_result = unittest.TextTestRunner(verbosity=3).run(all_case())
         des = "用例总数: {}, 失败用例数: {}, 异常用例数: {}" \
             .format(test_result.testsRun, len(test_result.failures), len(test_result.errors))
