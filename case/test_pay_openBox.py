@@ -21,7 +21,7 @@ class TestPayCreate(unittest.TestCase):
          * 修改用户指定箱子礼物刷新
          * 修改用户钱包余额
         2.openBox
-        3.校验 statusCode和返回值数据
+        3.校验接口状态和返回值数据
         4.检查账户余额，预期值为：700 - 600 = 100
         5.检查背包内开出物品，预期值应为：2（赠送头像框*1 + 开出礼物个数*1）
         """
@@ -50,7 +50,7 @@ class TestPayCreate(unittest.TestCase):
             * 修改用户指定箱子礼物刷新
             * 修改用户钱包余额
         2.openBox
-        3.校验 statusCode和返回值数据
+        3.校验接口状态和返回值数据
         4.检查账户余额，预期值为：12600 - 2100*6 = 0
         5.检查背包内开出物品，预期值应为12（赠送头像框*6，开出礼物个数等于*6）
         """
@@ -75,7 +75,7 @@ class TestPayCreate(unittest.TestCase):
         脚本步骤：
         1.构造数据（更新xs_user_money，xs_user_commodity，xs_user_box）
         2.giveBox
-        3.校验 statusCode和返回值数据
+        3.校验接口状态和返回值数据
         4.检查打赏者账户余额，预期值为：700 - 600 = 100
         5.检查收箱用户账户余额，预期值为：大于100
         """
@@ -97,7 +97,7 @@ class TestPayCreate(unittest.TestCase):
         脚本步骤：
         1.构造数据（更新xs_user_money，xs_user_commodity，xs_user_box）
         2.giveBox
-        3.校验 statusCode和返回值数据
+        3.校验接口状态和返回值数据
         4.检查账户余额，预期值为：10000 - 2100*2*2 = 1600
         5.检查收箱用户账户余额，预期值为：大于1000
         """

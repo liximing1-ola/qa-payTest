@@ -7,7 +7,6 @@ from Robot import robot
 from common import Assert, Request, basicData, Consts, Logs, method, Session
 from common.method import getValue
 class TestPayConcurrent:
-
     # 内网支付接口
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
     # 物品赠送接口

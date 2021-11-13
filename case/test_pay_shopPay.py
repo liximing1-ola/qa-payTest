@@ -19,7 +19,7 @@ class TestPayCreate(unittest.TestCase):
         脚本步骤：
         1.构造购买者数据 （更新xs_user_money和xs_user_commodity）
         2.商城内购买礼物道具*1
-        3.校验【status code】和返回值【body】状态
+        3.校验接口状态和返回值数据
         4.检查购买者余额 (200-100=100)
         5.检查背包内物品
         """
@@ -43,7 +43,7 @@ class TestPayCreate(unittest.TestCase):
         脚本步骤：
         1.构造购买者数据 （更新xs_user_money和xs_user_commodity）
         2.商城内购买礼物道具*10 9900*10=99000
-        3.校验 statusCode和返回值数据
+        3.校验接口状态和返回值数据
         4.检查购买者余额：103000-99000=4000
         5.检查背包内物品：10
         """
@@ -66,7 +66,7 @@ class TestPayCreate(unittest.TestCase):
         脚本步骤：
         1.构造打赏者和被打赏者数据
         2.打赏背包道具 cid：340 * 1
-        3.校验 statusCode和返回值数据
+        3.校验接口状态和返回值数据
         4.检查背包内物品：10 - 1 = 9
         5.检查被打赏者余额：990*0.62 = 6138
         """
@@ -91,7 +91,7 @@ class TestPayCreate(unittest.TestCase):
         脚本步骤：
         1.构造打赏者和被打赏者数据
         2.打赏背包道具 cid：340 * 10
-        3.校验 statusCode和返回值数据
+        3.校验接口状态和返回值数据
         4.检查背包内物品
         5.检查被打赏者余额 预期：0
         """

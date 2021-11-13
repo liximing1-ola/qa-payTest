@@ -16,9 +16,9 @@ class TestPayCreate(unittest.TestCase):
         用例描述：
         验证unity游戏内道具购买
         脚本步骤：
-        1.构造用户数据（更新xs_user_money）
+        1.构造用户数据
         2.购买道具流程
-        3.校验 statusCode和返回值数据
+        3.校验接口状态和返回值数据
         4.检查账户余额，预期值为：100 - 100 = 0
         """
         des = 'unity道具购买场景'

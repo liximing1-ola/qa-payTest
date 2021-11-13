@@ -15,11 +15,11 @@ class TestPayCreate(unittest.TestCase):
         用例描述：
         验证money兑换金币流程
         脚本步骤：
-        1.构造用户数据 （更新xs_user_money）
+        1.构造用户数据
         2.金币兑换流程
-        3.校验 statusCode和返回值数据
-        4.检查账户钻石余额：money=1000 - 600 = 400
-        5.检查账户金币余额：gold_coin = 600
+        3.校验接口状态和返回值数据
+        4.检查账户钻石余额：money：1000 - 600 = 400
+        5.检查账户金币余额：gold_coin：600
         """
         des = '余额兑换金币场景'
         conMysql.updateMoneySql(config.payUid, money=1000)
@@ -36,9 +36,9 @@ class TestPayCreate(unittest.TestCase):
         用例描述：
         验证房间内打赏金币流程
         脚本步骤：
-        1.构造用户数据 （更新xs_user_money）
+        1.构造用户数据
         2.房间打赏金币礼物流程
-        3.校验 statusCode和返回值数据
+        3.校验接口状态和返回值数据
         4.检查打赏者账户余额（gold_coin） 100 - 20*3 = 40
         5.检查被打赏者账户余额（gold_coin）  20 * 0.6 = 12
         """
