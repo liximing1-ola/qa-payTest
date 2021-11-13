@@ -11,7 +11,7 @@ class TestPayCreate(unittest.TestCase):
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'  # 内网支付接口
 
     def setUp(self) -> None:
-        Consts.endTime = time.time()
+        Consts.startTime = time.time()
 
     def tearDown(self) -> None:
         conMysql.deleteUserBeanSql(config.payUid, config.testUid)   # 清理前置冗余数据
