@@ -39,7 +39,6 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
         for i in range(len(uids)):
             p.append(str(i+1))
         position = ','.join(p)
-        print(uid, num_more, position)
         data = {
             "platform": "available",
             "type": "package",
@@ -67,7 +66,6 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
         }
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
-        print(data)
         return data
     elif payType == 'package-exchange':
         data = {

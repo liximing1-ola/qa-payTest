@@ -122,7 +122,6 @@ class TestPayCreate(unittest.TestCase):
         des = '房间内打赏多人场景'
         conMysql.updateMoneySql(config.payUid, money=3000, money_cash=3000, money_cash_b=3000, money_b=3000)
         conMysql.updateMoneySql(config.testUid_2)
-        # data = Yaml.read_yaml('Basic.yml', 'dev_pay_more')
         data = basicData.encodeData(payType='package-more', giftId=10, num=6, money=600,
                                     uids=('105002312', '100500131', '100500205'))
         res = post_request_session(TestPayCreate.pay_url, data)

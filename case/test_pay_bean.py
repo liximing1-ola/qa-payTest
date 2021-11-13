@@ -48,7 +48,6 @@ class TestPayCreate(unittest.TestCase):
         """
         des = '打赏金豆礼物的场景'
         conMysql.insertBeanSql(config.payUid, money_coupon=6000)
-        # data = Yaml.read_yaml('Basic.yml', 'dev_gold_BeanEnough')
         data = basicData.encodeData(payType='package-more', giftId=362, giftType='bean', num=6, uids=('105002312', ))
         res = post_request_session(TestPayCreate.pay_url, data)
         assert_code(res['code'])
@@ -73,7 +72,6 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, money=10000)
         conMysql.updateMoneySql(config.testUid)
         conMysql.insertBeanSql(config.payUid, money_coupon=500)
-        # data = Yaml.read_yaml('Basic.yml', 'dev_gold_moneyToBean')
         data = basicData.encodeData(payType='package-exchange', uid=config.testUid, giftId=362, giftType='bean')
         res = post_request_session(TestPayCreate.pay_url, data)
         assert_code(res['code'])
