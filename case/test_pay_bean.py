@@ -1,6 +1,7 @@
 from common.Config import config
 from common.conMysql import conMysql
 import unittest
+import time
 from common.Request import post_request_session
 from common.method import reason
 from common.Assert import assert_code, assert_equal, assert_body
@@ -8,6 +9,9 @@ from common import Consts, basicData
 from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'  # 内网支付接口
+
+    def setUp(self) -> None:
+        Consts.endTime = time.time()
 
     def tearDown(self) -> None:
         conMysql.deleteUserBeanSql(config.payUid, config.testUid)   # 清理前置冗余数据

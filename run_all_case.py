@@ -29,14 +29,13 @@ def main():
         # lock = threading.Lock()
         # lock.acquire(blocking=True, timeout=-1)  # 加
         writeUpdateTime(str(int(time.time())))
-        Consts.startTime = time.time()
         test_result = unittest.TextTestRunner(verbosity=3).run(all_case())
+        Consts.endTime = time.time()
         des = "用例总数: {}, 失败用例数: {}, 异常用例数: {}" \
             .format(test_result.testsRun, len(test_result.failures), len(test_result.errors))
         Logs.get_log('caseResult.log').info(des)
         case_list=method.dictToList(Consts.CASE_LIST)
         case_list_2=method.dictToList(Consts.CASE_LIST_2)
-        Consts.endTime = time.time()
         use_time=str(int(Consts.endTime-Consts.startTime)) + 's'
         # lock.release()  # 解
         if len(test_result.failures) == 0 and len(test_result.errors) == 0:
