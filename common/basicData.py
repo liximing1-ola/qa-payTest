@@ -33,8 +33,13 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
         data = d.replace('+', '').replace('%27', '%22')
         return data
     elif payType == 'package-more':
+        p = []
         uid = ','.join(uids)
         num_more = len(uids)
+        for i in range(len(uids)):
+            p.append(str(i+1))
+        position = ','.join(p)
+        print(uid, num_more, position)
         data = {
             "platform": "available",
             "type": "package",
@@ -42,7 +47,7 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
             "params":
                 {"rid": rid,
                  "uids": '{}'.format(uid),
-                 "positions": "1,2",
+                 "positions": "{}".format(position),
                  "position": -1,
                  "giftId": giftId,
                  "giftNum": num,
@@ -58,6 +63,37 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
                  "show_pac_man_guide": 1,
                  "refer": "",
                  "all_mic": 0,
+                 }
+        }
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        print(data)
+        return data
+    elif payType == 'package-exchange':
+        data = {
+            "platform": "available",
+            "type": "package",
+            "money": money,
+            "params":
+                {"rid": rid,
+                 "uids": '{}'.format(uid),
+                 "positions": "1",
+                 "position": -1,
+                 "giftId": giftId,
+                 "giftNum": num,
+                 "price": money,
+                 "cid": 0,
+                 "ctype": "",
+                 "duction_money": 0,
+                 "version": 2,
+                 "num": num,
+                 "gift_type": "{}".format(giftType),
+                 "useCoin": -1,
+                 "star": star,
+                 "show_pac_man_guide": 1,
+                 "refer": "",
+                 "all_mic": 0,
+                 "exchange": 1
                  }
         }
         d = urllib.parse.urlencode(data)
@@ -218,5 +254,5 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
 
 
 if __name__ == '__main__':
-    encodeData(payType='package', uid=105002312)
+    encodeData(payType='package-more', giftId=10, num=6, money=600, uids=('105002312', '100500131', '100500205'))
     # encodeData(payType='pub-drink-buy', money=79900, rid=193185484)

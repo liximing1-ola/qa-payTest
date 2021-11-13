@@ -1,7 +1,8 @@
 from common.Config import config
 from common.conMysql import conMysql
 from common.method import reason
-import unittest, pytest
+import unittest
+import pytest
 from common.Request import post_request_session
 from common.Assert import assert_body, assert_code, assert_equal
 from common import Consts, basicData
