@@ -30,6 +30,10 @@
   <component name="ChangeListManager">
     <list default="true" id="44793b3e-09e5-4af0-a369-84e9b064bd19" name="Default Changelist" comment="‘提交修改’">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/autoGitPull.py" beforeDir="false" afterPath="$PROJECT_DIR$/autoGitPull.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/Basic.yml" beforeDir="false" afterPath="$PROJECT_DIR$/common/Basic.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/probabilityTest/egg.py" beforeDir="false" afterPath="$PROJECT_DIR$/probabilityTest/egg.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/probabilityTest/pk.py" beforeDir="false" afterPath="$PROJECT_DIR$/probabilityTest/pk.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,7 +82,7 @@
       <recent name="E:\payTest\common" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.basicData (1)">
+  <component name="RunManager" selected="Python.egg">
     <configuration name="Session" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="payTest" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -186,10 +190,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.egg" />
         <item itemvalue="Python.basicData (1)" />
         <item itemvalue="Python.pk" />
         <item itemvalue="Python.Session" />
-        <item itemvalue="Python.egg" />
         <item itemvalue="Python.testPayConcurrent" />
       </list>
     </recent_temporary>
@@ -202,13 +206,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1615801946332</updated>
-    </task>
-    <task id="LOCAL-00657" summary="‘提交修改’">
-      <created>1635758208657</created>
-      <option name="number" value="00657" />
-      <option name="presentableId" value="LOCAL-00657" />
-      <option name="project" value="LOCAL" />
-      <updated>1635758208657</updated>
     </task>
     <task id="LOCAL-00658" summary="‘提交修改’">
       <created>1635842527074</created>
@@ -546,7 +543,14 @@
       <option name="project" value="LOCAL" />
       <updated>1636791200421</updated>
     </task>
-    <option name="localTasksCounter" value="706" />
+    <task id="LOCAL-00706" summary="‘提交修改’">
+      <created>1636963160843</created>
+      <option name="number" value="00706" />
+      <option name="presentableId" value="LOCAL-00706" />
+      <option name="project" value="LOCAL" />
+      <updated>1636963160843</updated>
+    </task>
+    <option name="localTasksCounter" value="707" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -611,29 +615,29 @@
     <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1629180708709" />
     <state x="686" y="211" key="FileChooserDialogImpl/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1634732018340" />
     <state x="2469" y="50" key="FileChooserDialogImpl/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1631761740383" />
-    <state width="1899" height="348" key="GridCell.Tab.0.bottom" timestamp="1636784827452">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state width="1899" height="258" key="GridCell.Tab.0.bottom" timestamp="1636975909176">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1899" height="348" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1636784827452" />
-    <state width="1899" height="192" key="GridCell.Tab.0.bottom/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1636713055253" />
+    <state width="1899" height="258" key="GridCell.Tab.0.bottom/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1636975909176" />
     <state width="1515" height="142" key="GridCell.Tab.0.bottom/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1631537417549" />
-    <state width="1899" height="348" key="GridCell.Tab.0.center" timestamp="1636784827449">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state width="1899" height="258" key="GridCell.Tab.0.center" timestamp="1636975909175">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1899" height="348" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1636784827449" />
-    <state width="1899" height="192" key="GridCell.Tab.0.center/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1636713055253" />
+    <state width="1899" height="258" key="GridCell.Tab.0.center/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1636975909175" />
     <state width="1515" height="142" key="GridCell.Tab.0.center/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1631537417549" />
-    <state width="1899" height="348" key="GridCell.Tab.0.left" timestamp="1636784827447">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state width="1899" height="258" key="GridCell.Tab.0.left" timestamp="1636975909175">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1899" height="348" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1636784827447" />
-    <state width="1899" height="192" key="GridCell.Tab.0.left/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1636713055252" />
+    <state width="1899" height="258" key="GridCell.Tab.0.left/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1636975909175" />
     <state width="1515" height="142" key="GridCell.Tab.0.left/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1631537417549" />
-    <state width="1899" height="348" key="GridCell.Tab.0.right" timestamp="1636784827451">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state width="1899" height="258" key="GridCell.Tab.0.right" timestamp="1636975909176">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1899" height="348" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1636784827451" />
-    <state width="1899" height="192" key="GridCell.Tab.0.right/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1636713055253" />
+    <state width="1899" height="258" key="GridCell.Tab.0.right/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1636975909176" />
     <state width="1515" height="142" key="GridCell.Tab.0.right/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1631537417549" />
     <state width="1899" height="348" key="GridCell.Tab.1.bottom" timestamp="1636784827455">
       <screen x="0" y="0" width="1536" height="824" />
@@ -660,11 +664,11 @@
     </state>
     <state x="779" y="143" key="RollbackChangesDialog/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1635402575190" />
     <state x="2543" y="-5" key="RollbackChangesDialog/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1630922945672" />
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1636791201686">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state x="451" y="183" key="Vcs.Push.Dialog.v2" timestamp="1636963161941">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1636791201686" />
-    <state x="451" y="183" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1636555141659" />
+    <state x="451" y="183" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1636963161941" />
     <state x="2281" y="27" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1634280948633" />
     <state x="716" y="410" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1636358421031">
       <screen x="0" y="0" width="1920" height="1040" />

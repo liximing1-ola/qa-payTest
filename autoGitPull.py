@@ -1,8 +1,12 @@
-import git, time, os
+import git
+import os
+import time
 from git.repo import Repo
+from Robot import robot
 from common import Logs, Consts, Session
 from common.Config import config
-from Robot import robot
+
+
 def autoGitPull():
     Consts.startTime = time.time()
     codeDir = {'git_dir': '/home/webroot/banban', 'pt_git_dir': '/home/webroot/oversea/oversea-server'}  # 默认指定路径
