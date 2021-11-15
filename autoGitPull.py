@@ -4,6 +4,7 @@ from common import Logs, Consts, Session
 from common.Config import config
 from Robot import robot
 def autoGitPull():
+    Consts.startTime = time.time()
     codeDir = {'git_dir': '/home/webroot/banban', 'pt_git_dir': '/home/webroot/oversea/oversea-server'}  # 默认指定路径
     git_dir = codeDir['git_dir']
     g = git.cmd.Git(git_dir)
