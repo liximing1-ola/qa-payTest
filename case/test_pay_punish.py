@@ -11,6 +11,7 @@ class TestPayCreate(unittest.TestCase):
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'  # 内网支付接口
 
     @Retry
+    @unittest.skip('NSQ延迟')
     def test_01_PayChangeTriggerPunish(self):
         """
         用例描述：

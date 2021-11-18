@@ -57,7 +57,7 @@ def postPayCreate_ktv():
         'Content-Type': "application/x-www-form-urlencoded",
         'cache-control': "no-cache",
         'Postman-Token': "f7d705b2-cf29-4a4a-81ba-2c8c8d0f5ed5",
-        "user-token": 'c2f0tcbVfL__2FPovpcnACj4wHt4NJwXaEFbGEtn0PAYVDirlpXbFrdCHMLHN53CB__2FsSH8ql40z9tq98s1doUUD9zdQyd1AG3EWa715kQ2JMiTyDwE8j0o'}
+        "user-token": '8082HvzDK1S2DSLztpkriEyegONNJKs01X9PrgDahsEEc5KbEk__2BusZxFOtR__2BalUhDtVjvcC9LgTYtbSdCy9LFlcABHj__2B2nc2NxmSBxHu7__2B7odOfpVyoR4xGq'}
     for k, v in gift_dict.items():
         data = {
             "platform": "available",
