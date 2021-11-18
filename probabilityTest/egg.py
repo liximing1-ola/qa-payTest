@@ -57,14 +57,14 @@ def postPayCreate_ktv():
         'Content-Type': "application/x-www-form-urlencoded",
         'cache-control': "no-cache",
         'Postman-Token': "f7d705b2-cf29-4a4a-81ba-2c8c8d0f5ed5",
-        "user-token": '743d1Tu__2FuC__2FXEXOsfDVGwlyBH__2F7Wutu__2B6h8jQxOJgo1MqOCzx1MIdzUOKgEDvy__2Fpwu__2BuTX7gsDKaa__2BnS0XzKpmNZ7wIc0cgEQyyOIWV4ZAvd2BjciV7fOIdk'}
+        "user-token": 'c2f0tcbVfL__2FPovpcnACj4wHt4NJwXaEFbGEtn0PAYVDirlpXbFrdCHMLHN53CB__2FsSH8ql40z9tq98s1doUUD9zdQyd1AG3EWa715kQ2JMiTyDwE8j0o'}
     for k, v in gift_dict.items():
         data = {
             "platform": "available",
             "type": "package",
             "money": v,
             "params":
-                {"rid": 193193484,
+                {"rid": 193186810,
                  "uids": 100287189,
                  "positions": "1",
                  "position": -1,
@@ -87,7 +87,7 @@ def postPayCreate_ktv():
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
         res = requests.post(url, data=data, headers=headers)
-        time.sleep(1)
+        time.sleep(2)
         res = res.json()
         if res['success'] == 1:
             pass
@@ -112,7 +112,6 @@ def conMysql():
     cursor = con.cursor()
     return con, cursor
 
-
 def updateBeanSql(uid, coupon_money):
     con, cur = conMysql()
     sql = "update xs_user_money_extend set money_coupon={} where uid={} limit 1".format(coupon_money, uid)
@@ -124,7 +123,6 @@ def updateBeanSql(uid, coupon_money):
     finally:
         time.sleep(0.1)
         con.commit()
-
 
 def main_pay():
     i = 1
