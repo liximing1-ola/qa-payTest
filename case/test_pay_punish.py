@@ -6,9 +6,11 @@ import time
 from common.Assert import assert_body, assert_code, assert_equal
 from common.Request import post_request_session
 from common import Consts, basicData
+from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'  # 内网支付接口
 
+    @Retry
     def test_01_PayChangeTriggerPunish(self):
         """
         用例描述：
@@ -31,7 +33,7 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(TestPayCreate.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        time.sleep(1)  # 延迟处理NSQ消息
+        time.sleep(1.5)  # 延迟处理NSQ消息
         assert_equal(conMysql.selectUserMoneySql('bean', config.testUid), 0)
         assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid, 'money'), 2)
         assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid, 'money_cash_b'), 0)
