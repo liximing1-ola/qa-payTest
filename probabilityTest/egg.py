@@ -47,6 +47,7 @@ def postPayCreate(giftNum):
     else:
         raise EnvironmentError(res)
 
+
 def postPayCreate_ktv():
     gift_dict = {35: 52000, 38: 131400, 63: 20, 100: 9900, 226: 600, 286: 5200, 310: 30, 315: 20, 446: 300,
                  450: 1000, 451: 2100, 452: 6600, 455: 13400, 488: 600, 495: 1200, 496: 4000, 497: 18800, 560: 100}
@@ -95,7 +96,6 @@ def postPayCreate_ktv():
             raise EnvironmentError(res)
 
 
-
 def conMysql():
     db_config = {"dev_46_db": '192.168.11.46',
                  "dev_46_user": 'root',
@@ -112,6 +112,7 @@ def conMysql():
     cursor = con.cursor()
     return con, cursor
 
+
 def updateBeanSql(uid, coupon_money):
     con, cur = conMysql()
     sql = "update xs_user_money_extend set money_coupon={} where uid={} limit 1".format(coupon_money, uid)
@@ -124,6 +125,7 @@ def updateBeanSql(uid, coupon_money):
         time.sleep(0.1)
         con.commit()
 
+
 def main_pay():
     i = 1
     # updateBeanSql(127565486, coupon_money=1000000000)
@@ -134,6 +136,7 @@ def main_pay():
         postPayCreate(num)
         time.sleep(0.2)
         i += 1
+
 
 def main_ktv():
     i = 1

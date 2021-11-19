@@ -1,7 +1,6 @@
 from common.Config import config
 from common.conMysql import conMysql
 import unittest
-import time
 from common.Request import post_request_session
 from common.method import reason
 from common.Assert import assert_code, assert_equal, assert_body
