@@ -8,6 +8,7 @@ from common.Assert import assert_body, assert_code, assert_equal
 from common import Consts, basicData
 from common.runFailed import Retry
 @Retry
+@unittest.skip('未上线')
 class TestPayCreate(unittest.TestCase):
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'  # 内网支付接口
 
