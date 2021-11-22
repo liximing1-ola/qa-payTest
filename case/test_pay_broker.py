@@ -178,6 +178,7 @@ class TestPayCreate(unittest.TestCase):
         test_uid = config.super_live_role['agent_star_uid']  # 105002331
         test_agent = config.super_live_role['super_agent_uid']  # 105002323
         test_bid = config.super_live_role['super_broker']  # 136594717
+        conMysql.checkOnlineEarnArtist(test_uid, worth=4200)
         conMysql.checkOnlineEarnRelation(test_agent, test_uid)  # 检查经纪人艺人关系
         conMysql.updateUserMoneyClearSql(test_agent, test_uid)  # 清空用户账户
         conMysql.checkSuperVoiceUser(test_agent, test_bid)  # 加入指定公会
@@ -208,6 +209,7 @@ class TestPayCreate(unittest.TestCase):
         test_uid = config.super_live_role['pack_cal_uid']  # 105002313
         test_bid = config.super_live_role['super_broker']  # 136594717
         test_agent = config.super_live_role['super_agent_uid']  # 105002323
+        conMysql.checkOnlineEarnArtist(test_uid, worth=10001)  # 设置用户为高级艺人
         conMysql.checkOnlineEarnAgent(test_agent, point=100000)  # 更新经纪人等级
         conMysql.updateUserMoneyClearSql(test_agent, test_uid)  # 更新余额
         conMysql.checkOnlineEarnRelation(test_agent, test_uid)  # 更新经纪人和艺人身份
