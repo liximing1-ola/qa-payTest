@@ -65,7 +65,7 @@ def postPayCreate_ktv():
             "type": "package",
             "money": v,
             "params":
-                {"rid": 193186810,
+                {"rid": 193188260,
                  "uids": 100287189,
                  "positions": "1",
                  "position": -1,
