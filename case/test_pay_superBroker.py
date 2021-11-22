@@ -8,6 +8,7 @@ from common.Assert import assert_body, assert_code, assert_equal
 from common import Consts, basicData
 from common.runFailed import Retry
 @Retry
+@unittest.skip
 class TestPayCreate(unittest.TestCase):
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'  # 内网支付接口
 
@@ -239,7 +240,7 @@ class TestPayCreate(unittest.TestCase):
         des = '普通房指定工会有经纪人(1j)只艺人收到62%'
         conMysql.updateMoneySql(config.payUid, money=1000)
         test_uid = config.super_live_role['agent_star_uid']  # 105002331
-        test_bid = config.super_live_role['super_broker']  # 136594717
+        # test_bid = config.super_live_role['super_broker']  # 136594717
         test_agent = config.super_live_role['super_agent_uid']  # 105002323
         conMysql.checkOnlineEarnAgent(test_agent)
         conMysql.checkOnlineEarnArtist(test_uid, worth=4200)
