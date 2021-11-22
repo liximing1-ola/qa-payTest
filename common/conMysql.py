@@ -281,6 +281,18 @@ class conMysql:
         finally:
             conMysql.con.commit()
 
+    # 插入用户为指定工会用户
+    @staticmethod
+    def insertSuperVoiceUser(uid, bid):
+        sql = "insert into xs_broker_user(bid, uid, state) values ({}, {}, 1)".format(bid, uid)
+        try:
+            conMysql.cur.execute(sql)
+        except Exception as error:
+            conMysql.con.rollback()
+            print('insert fail', error)
+        finally:
+            conMysql.con.commit()
+
     #  检查用户是否为指定工会用户
     @staticmethod
     def checkSuperVoiceUser(uid, bid):
@@ -289,7 +301,7 @@ class conMysql:
             conMysql.cur.execute(sql)
             res = conMysql.cur.fetchone()
             if res is None:
-                conMysql.updateSuperVoiceUser(uid, bid, nid=201)
+                conMysql.updateSuperVoiceUser(uid, bid, nid=202)
             else:
                 conMysql.updateSuperVoiceUser(uid, bid, res[0])
         except Exception as error:

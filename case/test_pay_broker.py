@@ -181,7 +181,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.checkOnlineEarnArtist(test_uid, worth=4200)
         conMysql.checkOnlineEarnRelation(test_agent, test_uid)  # 检查经纪人艺人关系
         conMysql.updateUserMoneyClearSql(test_agent, test_uid)  # 清空用户账户
-        conMysql.checkSuperVoiceUser(test_uid, test_bid)  # 加入指定公会
+        conMysql.insertSuperVoiceUser(test_uid, test_bid)  # 加入指定公会
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
         res = post_request_session(TestPayCreate.pay_url, data)
         assert_code(res['code'])
@@ -192,7 +192,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
-    @unittest.skip
     @pytest.mark.run(order=7)
     def test_07_starRoomArtistAgent_7012(self):
         """
@@ -225,7 +224,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
-    @unittest.skip
     @pytest.mark.run(order=8)
     def test_08_NormalRoomPayArtist_620(self):
         """
@@ -258,7 +256,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
-    @unittest.skip
     @pytest.mark.run(order=9)
     def test_09_starRoomWhiteUserPay_70(self):
         """
