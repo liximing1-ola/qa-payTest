@@ -222,6 +222,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
+    @unittest.skip('88')
     @pytest.mark.run(order=8)
     def test_08_NormalRoomPayArtist_620(self):
         """
@@ -254,6 +255,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         Consts.CASE_LIST_2[des] = Consts.result
 
+    @unittest.skip('99')
     @pytest.mark.run(order=9)
     def test_09_starRoomWhiteUserPay_70(self):
         """
