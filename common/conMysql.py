@@ -283,15 +283,15 @@ class conMysql:
 
     #  检查用户是否为指定工会用户
     @staticmethod
-    def checkSuperVoiceUser(uid, bid, nid=9):
-        sql = 'select * from xs_broker_user where uid={} limit 1'.format(uid)
+    def checkSuperVoiceUser(uid, bid):
+        sql = 'select id from xs_broker_user where uid={} limit 1'.format(uid, bid)
         try:
             conMysql.cur.execute(sql)
             res = conMysql.cur.fetchone()
             if res is None:
                 conMysql.updateSuperVoiceUser(uid, bid, nid=201)
             else:
-                conMysql.updateSuperVoiceUser(uid, bid, nid)
+                conMysql.updateSuperVoiceUser(uid, bid, res[0])
         except Exception as error:
             print(error)
 
