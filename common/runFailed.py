@@ -48,6 +48,7 @@ class ClassD(unittest.TestCase):
             return self
 
     def __init__(self, func_or_cls=None, max_n=1, func_prefix="test"):
+        self.pay_url = None
         self._prefix = func_prefix
         self._max_n = max_n
 

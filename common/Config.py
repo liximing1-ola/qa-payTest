@@ -32,6 +32,7 @@ class config:
         'super_broker': 136594717,  # 指定工会bid
         'super-voice-fresh': 200000287,  # 网赚房间
         'pack_cal_uid': 105002313,  # 公会签约主播（打包结算）
+        'white_uid': 105002338,  # 白名单用户
     }
     # dev域名（qq登陆方式)
     dev_host = domain_host['bb_dev_58']

@@ -29,10 +29,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="44793b3e-09e5-4af0-a369-84e9b064bd19" name="Default Changelist" comment="‘提交修改’">
+      <change afterPath="$PROJECT_DIR$/case/test_pay_broker.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/case/test_pay_bean.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_bean.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/probabilityTest/egg.py" beforeDir="false" afterPath="$PROJECT_DIR$/probabilityTest/egg.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run_all_case.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_all_case.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/Config.py" beforeDir="false" afterPath="$PROJECT_DIR$/common/Config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/conMysql.py" beforeDir="false" afterPath="$PROJECT_DIR$/common/conMysql.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/runFailed.py" beforeDir="false" afterPath="$PROJECT_DIR$/common/runFailed.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -213,13 +214,6 @@
       <option name="presentableId" value="Default" />
       <updated>1615801946332</updated>
       <workItem from="1637288736860" duration="20000" />
-    </task>
-    <task id="LOCAL-00661" summary="‘提交修改’">
-      <created>1635845165191</created>
-      <option name="number" value="00661" />
-      <option name="presentableId" value="LOCAL-00661" />
-      <option name="project" value="LOCAL" />
-      <updated>1635845165191</updated>
     </task>
     <task id="LOCAL-00662" summary="‘提交修改’">
       <created>1635845346711</created>
@@ -557,7 +551,14 @@
       <option name="project" value="LOCAL" />
       <updated>1637216881223</updated>
     </task>
-    <option name="localTasksCounter" value="710" />
+    <task id="LOCAL-00710" summary="‘提交修改’">
+      <created>1637290962242</created>
+      <option name="number" value="00710" />
+      <option name="presentableId" value="LOCAL-00710" />
+      <option name="project" value="LOCAL" />
+      <updated>1637290962243</updated>
+    </task>
+    <option name="localTasksCounter" value="711" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

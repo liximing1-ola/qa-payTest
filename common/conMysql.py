@@ -26,7 +26,7 @@ class conMysql:
     # 查询用户账户信息
     @staticmethod
     def selectUserMoneySql(accountType, uid, money_type='money_cash_b', op='money', cid=263):
-        if accountType== 'bean':  # 查询用户账户扩展表金豆余额
+        if accountType == 'bean':  # 查询用户账户扩展表金豆余额
             sql = "select money_coupon from xs_user_money_extend where uid={}".format(uid)
             try:
                 conMysql.cur.execute(sql)
@@ -37,7 +37,7 @@ class conMysql:
                     return res[0]
             except Exception as error:
                 print(error)
-        elif accountType== 'cash':  # 查询用户账户扩展表现金余额
+        elif accountType == 'cash':  # 查询用户账户扩展表现金余额
             sql = "select cash from xs_user_money_extend where uid={}".format(uid)
             try:
                 conMysql.cur.execute(sql)
@@ -48,7 +48,7 @@ class conMysql:
                     return res[0]
             except Exception as error:
                 print(error)
-        elif accountType== 'sum_money':  # 查询用户所有账户数据之和
+        elif accountType == 'sum_money':  # 查询用户所有账户数据之和
             sql = "select money+money_b+money_cash_b+money_cash from xs_user_money where uid={}".format(uid)
             try:
                 conMysql.cur.execute(sql)
@@ -59,7 +59,7 @@ class conMysql:
                     return res[0]
             except Exception as error:
                 print(error)
-        elif accountType== 'single_money':  # 查询用户单个账户数据
+        elif accountType == 'single_money':  # 查询用户单个账户数据
             sql = "select {} from xs_user_money where uid={}".format(money_type, uid)
             try:
                 conMysql.cur.execute(sql)
@@ -70,7 +70,7 @@ class conMysql:
                     return None
             except Exception as error:
                 print(error)
-        elif accountType== 'pay_change':  # 查询用户消费记录数据
+        elif accountType == 'pay_change':  # 查询用户消费记录数据
             sql = "select {} from xs_pay_change_new where uid={} ORDER BY id DESC LIMIT 1".format(op, uid)
             try:
                 conMysql.cur.execute(sql)
@@ -81,7 +81,7 @@ class conMysql:
                     return 0
             except Exception as error:
                 print(error)
-        elif accountType=='sum_commodity':  # 查询用户背包物品总数
+        elif accountType == 'sum_commodity':  # 查询用户背包物品总数
             sql = 'select sum(num) from xs_user_commodity where uid ={}'.format(uid)
             try:
                 conMysql.cur.execute(sql)
@@ -89,7 +89,7 @@ class conMysql:
                 return int(res[0])
             except Exception as error:
                 print(error)
-        elif accountType=='num_commodity':  # 查询用户背包物品数量
+        elif accountType == 'num_commodity':  # 查询用户背包物品数量
             sql = "select num from xs_user_commodity where cid={} and uid={}".format(cid, uid)
             try:
                 conMysql.cur.execute(sql)
@@ -100,7 +100,7 @@ class conMysql:
                     return res[0]
             except Exception as error:
                 print(error)
-        elif accountType=='id_commodity':  # 查询用户背包物品ID
+        elif accountType == 'id_commodity':  # 查询用户背包物品ID
             sql = "select id from xs_user_commodity where cid={} and uid={}".format(cid, uid)
             try:
                 conMysql.cur.execute(sql)
@@ -115,7 +115,7 @@ class conMysql:
     # 删除用户账户数据
     @staticmethod
     def deleteUserAccountSql(tableName, uid):
-        if tableName=='user_commodity':  # 清除用户背包数据
+        if tableName == 'user_commodity':  # 清除用户背包数据
             sql = "delete from xs_user_commodity where uid={}".format(uid)
             try:
                 conMysql.cur.execute(sql)
@@ -124,7 +124,7 @@ class conMysql:
                 print('delete fail', error)
             finally:
                 conMysql.con.commit()
-        elif tableName=='user_title':  # 清除用户爵位数据
+        elif tableName == 'user_title':  # 清除用户爵位数据
             sql = "delete from xs_user_title where uid = {} limit 5".format(uid)
             try:
                 conMysql.cur.execute(sql)
@@ -133,7 +133,7 @@ class conMysql:
                 print('delete fail', error)
             finally:
                 conMysql.con.commit()
-        elif tableName=='user_profile':  # 修改用户profile爵位数据
+        elif tableName == 'user_profile':  # 修改用户profile爵位数据
             sql = "update xs_user_profile set title=0 where uid={} limit 1".format(uid)
             try:
                 conMysql.cur.execute(sql)
@@ -142,7 +142,7 @@ class conMysql:
                 print('update fail', error)
             finally:
                 conMysql.con.commit()
-        elif tableName=='broker_user':  # 删除用户工会记录
+        elif tableName == 'broker_user':  # 删除用户工会记录
             sql = "delete from xs_broker_user where uid ={} limit 1".format(uid)
             try:
                 conMysql.cur.execute(sql)
@@ -151,7 +151,7 @@ class conMysql:
                 print('delete fail', error)
             finally:
                 conMysql.con.commit()
-        elif tableName=='chatroom':  # 删除用户商业房
+        elif tableName == 'chatroom':  # 删除用户商业房
             sql = "delete from xs_chatroom where uid ={} limit 1".format(uid)
             try:
                 conMysql.cur.execute(sql)
@@ -160,7 +160,7 @@ class conMysql:
                 print('delete fail', error)
             finally:
                 conMysql.con.commit()
-        elif tableName=='user_box':  # 清除xs_user_box用户数据
+        elif tableName == 'user_box':  # 清除xs_user_box用户数据
             sql = "delete from xs_user_box where uid={} limit 1".format(uid)
             try:
                 conMysql.cur.execute(sql)
@@ -169,7 +169,7 @@ class conMysql:
                 print('delete fail', error)
             finally:
                 conMysql.con.commit()
-        elif tableName=='user_title_new':  # xs_user_title_new每次跑都清一下subscribe_time，防止数据溢出
+        elif tableName == 'user_title_new':  # xs_user_title_new每次跑都清一下subscribe_time，防止数据溢出
             sql = "update xs_user_title_new set subscribe_time=0 where uid={} limit 1".format(uid)
             try:
                 conMysql.cur.execute(sql)
@@ -183,8 +183,8 @@ class conMysql:
 
     # 更新用户数据
     @staticmethod
-    def updateUserInfoSql(tableName, uid, bid=105002314):
-        if tableName=='broker_user':  # 修改用户为打包结算主播
+    def updateUserInfoSql(tableName, uid, bid=105002314, worth=700):
+        if tableName == 'broker_user':  # 修改用户为打包结算主播
             sql = "update xs_broker_user set bid={}, uid={}, state=1, pack_cal=1 where id = 50 limit 1".format(bid, uid)
             try:
                 conMysql.cur.execute(sql)
@@ -193,7 +193,7 @@ class conMysql:
                 print('update fail', error)
             finally:
                 conMysql.con.commit()
-        elif tableName=='chatroom':  # 修改用户为房间房主
+        elif tableName == 'chatroom':  # 修改用户为房间房主
             sql = "update xs_chatroom set app_id=1, uid ={}, settlement_channel='live' where rid=193185577 limit 1".format(
                 uid)
             try:
@@ -203,7 +203,7 @@ class conMysql:
                 print('update fail', error)
             finally:
                 conMysql.con.commit()
-        elif tableName=='super_chatroom':
+        elif tableName == 'super_chatroom':
             sql = "update xs_chatroom set type='super-voice-fresh',property='business',version=737," \
                   "room_factory_type='super-voice-fresh',room_module_id=73,settlement_channel='super-voice' where rid={}".format(uid)
             try:
@@ -404,21 +404,26 @@ class conMysql:
 
     # 查询用户艺人身份是否存在
     @staticmethod
-    def checkOnlineEarnArtist(uid, point=100):
+    def checkOnlineEarnArtist(uid, worth):
         sql = 'select * from xs_online_earn_artist where uid={}'.format(uid)
         try:
             conMysql.cur.execute(sql)
             res = conMysql.cur.fetchone()
             if res is None:
-                sql = 'insert into xs_online_earn_artist (uid, point,create_time,update_time) values' \
-                      '({}, {}, 1630577931, 1630577931)'.format(uid, point)
+                sql = 'insert into xs_online_earn_artist (uid, worth,create_time,update_time) values' \
+                      '({}, {}, 1630577931, 1630577931)'.format(uid, worth)
                 try:
                     conMysql.cur.execute(sql)
                 except Exception as error:
                     conMysql.con.rollback()
                     print('insert fail', error)
             else:
-                return 1
+                sql = "update xs_online_earn_artist set worth={} where uid={} limit 1".format(worth, uid)
+                try:
+                    conMysql.cur.execute(sql)
+                except Exception as error:
+                    conMysql.con.rollback()
+                    print('update fail', error)
         except Exception as error:
             print(error)
         finally:
@@ -449,6 +454,27 @@ class conMysql:
                 except Exception as error:
                     conMysql.con.rollback()
                     print('update fail', error)
+        except Exception as error:
+            print(error)
+        finally:
+            conMysql.con.commit()
+
+    # 检查是否是白名单用户
+    @staticmethod
+    def checkWhiteUid(uid, white_type):
+        sql = 'select * from config.xsst_ktv_uid_white where type={} and uid={}'.format(white_type, uid)
+        try:
+            conMysql.cur.execute(sql)
+            res = conMysql.cur.fetchone()
+            if res is None:
+                sql = 'insert into config.xsst_ktv_uid_white(uid, type, app_id) values({}, {}, 1)'.format(uid, white_type)
+                try:
+                    conMysql.cur.execute(sql)
+                except Exception as error:
+                    conMysql.con.rollback()
+                    print('insert fail', error)
+            else:
+                return 1
         except Exception as error:
             print(error)
         finally:
