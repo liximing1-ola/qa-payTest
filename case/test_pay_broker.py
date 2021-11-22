@@ -244,7 +244,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.checkOnlineEarnAgent(test_agent)
         conMysql.checkOnlineEarnArtist(test_uid, worth=4200)
         conMysql.updateUserMoneyClearSql(test_agent, test_uid)
-        conMysql.updateSuperVoiceUser(test_uid, test_bid, nid=200)  # 更新用户到指定工会
+        # conMysql.updateSuperVoiceUser(test_uid, test_bid, nid=200)  # 更新用户到指定工会,上面case已加入
         conMysql.checkOnlineEarnRelation(test_agent, test_uid)
         data = basicData.encodeData(payType='package')
         res = post_request_session(TestPayCreate.pay_url, data)
