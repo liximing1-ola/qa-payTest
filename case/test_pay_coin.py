@@ -47,7 +47,6 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateUserMoneyClearSql(config.testUid, config.testUid_2)
         data = basicData.encodeData(payType='package-more', rid=config.live_role['auto_rid'], money=20, giftId=62, giftType='coin')
         res = post_request_session(TestPayCreate.pay_url, data)
-        print(res)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='gold_coin'), 60)
