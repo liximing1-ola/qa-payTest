@@ -38,7 +38,7 @@ def main():
         # lock.release()  # 解
         if len(test_result.failures) == 0 and len(test_result.errors) == 0:
             des = "{}\n".format(case_list)
-            des_2 = "{}\n用例数: {}, 失败数: {}, TotalTime: {}, git_branch：{}".format(case_list_2, test_result.testsRun,
+            des_2 = "{}\n用例数: {}, 失败数: {}, 总耗时: {}, 代码分支：{}".format(case_list_2, test_result.testsRun,
                                                                                 len(test_result.failures) + len(
                                                                                     test_result.errors),
                                                                                 use_time,
