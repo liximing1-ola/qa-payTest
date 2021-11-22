@@ -181,7 +181,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.checkOnlineEarnArtist(test_uid, worth=4200)
         conMysql.checkOnlineEarnRelation(test_agent, test_uid)  # 检查经纪人艺人关系
         conMysql.updateUserMoneyClearSql(test_agent, test_uid)  # 清空用户账户
-        conMysql.checkSuperVoiceUser(test_agent, test_bid)  # 加入指定公会
+        conMysql.checkSuperVoiceUser(test_uid, test_bid)  # 加入指定公会
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
         res = post_request_session(TestPayCreate.pay_url, data)
         assert_code(res['code'])
@@ -218,7 +218,7 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(TestPayCreate.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 700)
+        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 700)
         assert_equal(conMysql.selectUserMoneySql('single_money', test_agent, money_type='money_cash'), 120)
         assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 700)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
