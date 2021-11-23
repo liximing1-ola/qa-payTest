@@ -6,12 +6,10 @@ import unittest
 import pytest
 from common.Assert import assert_equal, assert_code, assert_body
 from common import Consts, basicData
-from common.runFailed import Retry
-@Retry
+@unittest.skip('下线')
 class TestPayCreate(unittest.TestCase):
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'  # 内网支付接口
 
-    @unittest.skip('已下线')
     @pytest.mark.run(order=1)
     def test_01_TitlePayChangeMoney(self):
         """
@@ -36,7 +34,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money'), 160000)
         Consts.CASE_LIST[des] = Consts.result
 
-    @unittest.skip('已下线')
     @pytest.mark.run(order=2)
     def test_02_TitlePayChangeRenew(self):
         """

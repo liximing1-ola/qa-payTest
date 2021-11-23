@@ -5,8 +5,6 @@ import unittest
 from common.Request import post_request_session
 from common.Assert import assert_body, assert_code, assert_equal
 from common import Consts, basicData
-from common.runFailed import Retry
-@Retry
 class TestPayCreate(unittest.TestCase):
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'   # 内网支付接口
 
