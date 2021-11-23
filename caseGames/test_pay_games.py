@@ -50,4 +50,4 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
         Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid), 500)
-        Consts.CASE_LIST[des] = Consts.result
+        Consts.case_list[des] = Consts.result

@@ -36,4 +36,4 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(mysql.selectAllMoneySql(config.pt_testUid), 36400)
         Assert.assert_equal(mysql.selectPayChangeSql(config.pt_payUid), 52000)
         Assert.assert_equal(mysql.selectPayChangeOpSql(config.pt_payUid), 'consume')
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.case_list[des] = 'pass'

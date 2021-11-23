@@ -5,7 +5,8 @@ import unittest
 import time
 from common.Assert import assert_body, assert_code, assert_equal
 from common.Request import post_request_session
-from common import Consts, basicData
+from common import basicData
+from common.Consts import case_list, result
 from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'  # 内网支付接口
@@ -41,4 +42,4 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid, 'money_debts'), 0)
         assert_equal(conMysql.selectUserMoneySql('pay_change', config.testUid, op='money'), 100)
         assert_equal(conMysql.selectUserMoneySql('pay_change', config.testUid, op='op'), 'punish')
-        Consts.CASE_LIST[des] = Consts.result
+        case_list[des] = result

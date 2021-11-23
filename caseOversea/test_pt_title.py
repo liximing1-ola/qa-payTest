@@ -36,7 +36,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(mysql.selectMoneySql(config.pt_payUid, 'money'), 10000)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.case_list[des] = 'pass'
 
     @unittest.skip('case取消')
     @pytest.mark.run(order=2)
@@ -58,4 +58,4 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(mysql.selectMoneySql(config.pt_payUid, 'money'), 16000)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.case_list[des] = 'pass'

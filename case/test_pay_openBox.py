@@ -4,7 +4,8 @@ from common.conMysql import conMysql
 import unittest
 from common.Request import post_request_session
 from common.Assert import assert_code, assert_body, assert_len, assert_equal
-from common import Consts, basicData
+from common import basicData
+from common.Consts import result, case_list
 from common.runFailed import Retry
 @Retry
 class TestPayCreate(unittest.TestCase):
@@ -37,7 +38,7 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
         assert_equal(conMysql.selectUserMoneySql('sum_commodity', config.payUid), 2)
-        Consts.CASE_LIST[des] = Consts.result
+        case_list[des] = result
 
     def test_02_openMoreBoxPayChange(self):
         """
@@ -66,7 +67,7 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         assert_equal(conMysql.selectUserMoneySql('sum_commodity', config.payUid), 12)
-        Consts.CASE_LIST[des] = Consts.result
+        case_list[des] = result
 
     def test_03_giveBoxPayChange(self):
         """
@@ -88,7 +89,7 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
         assert_len(conMysql.selectUserMoneySql('sum_money', config.testUid), 100)
-        Consts.CASE_LIST[des] = Consts.result
+        case_list[des] = result
 
     def test_04_giveBoxMorePeople(self):
         """
@@ -110,4 +111,4 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 1600)
         assert_len(conMysql.selectUserMoneySql('sum_money', config.testUid), 1000)
-        Consts.CASE_LIST[des] = Consts.result
+        case_list[des] = result

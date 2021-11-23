@@ -4,7 +4,8 @@ from common.method import reason
 import unittest
 from common.Request import post_request_session
 from common.Assert import assert_body, assert_code, assert_equal
-from common import Consts, basicData
+from common.Consts import case_list, result
+from common import basicData
 class TestPayCreate(unittest.TestCase):
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'   # 内网支付接口
 
@@ -26,4 +27,4 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
-        Consts.CASE_LIST[des] = Consts.result
+        case_list[des] = result

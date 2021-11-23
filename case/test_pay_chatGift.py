@@ -4,7 +4,8 @@ from common.Request import post_request_session
 import unittest
 from common.Assert import assert_code, assert_equal, assert_body
 from common.method import reason
-from common import Consts, basicData
+from common import basicData
+from common.Consts import case_list, result
 from common.runFailed import Retry
 @Retry(max_n=2)
 class TestPayCreate(unittest.TestCase):
@@ -31,4 +32,4 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', 0, reason(des, res))
         assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 0)
-        Consts.CASE_LIST[des] = Consts.result
+        case_list[des] = result

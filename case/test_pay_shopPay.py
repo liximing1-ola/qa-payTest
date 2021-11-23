@@ -5,7 +5,8 @@ import unittest
 import pytest
 from common.Request import post_request_session
 from common.Assert import assert_code, assert_body, assert_equal
-from common import Consts, basicData
+from common.Consts import case_list, result
+from common import basicData
 from common.runFailed import Retry
 @Retry
 class TestPayCreate(unittest.TestCase):
@@ -33,7 +34,7 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
         assert_equal(conMysql.selectUserMoneySql('sum_commodity', config.payUid), 1)
-        Consts.CASE_LIST[des] = Consts.result
+        case_list[des] = result
 
     @pytest.mark.run(order=2)
     def test_02_shopPayChangeBuyMore(self):
@@ -56,7 +57,7 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 4000)
         assert_equal(conMysql.selectUserMoneySql('num_commodity', config.payUid, cid=cid), 10)
-        Consts.CASE_LIST[des] = Consts.result
+        case_list[des] = result
 
     @pytest.mark.run(order=3)
     def test_03_shopGiftToUser(self):
@@ -81,7 +82,7 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('num_commodity', config.payUid, cid=bag_gift_cid), 9)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 6138)
-        Consts.CASE_LIST[des] = Consts.result
+        case_list[des] = result
 
     @pytest.mark.run(order=4)
     def test_04_shopGiftToUserNoEnough(self):
@@ -107,4 +108,4 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('num_commodity', config.payUid, cid=bag_gift_cid), 9)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 0)
-        Consts.CASE_LIST[des] = Consts.result
+        case_list[des] = result

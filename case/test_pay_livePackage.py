@@ -4,7 +4,8 @@ from common.conMysql import conMysql
 import unittest
 from common.Request import post_request_session
 from common.Assert import assert_body, assert_code, assert_equal
-from common import Consts, basicData
+from common import basicData
+from common.Consts import case_list_b, result
 from common.runFailed import Retry
 @Retry
 class TestPayCreate(unittest.TestCase):
@@ -44,7 +45,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid), 62)
         assert_equal(conMysql.selectUserMoneySql('pay_change', config.payUid), 100)
         assert_equal(conMysql.selectUserMoneySql('pay_change', config.payUid, op='op'), 'consume')
-        Consts.CASE_LIST_2[des] = Consts.result
+        case_list_b[des] = result
 
     def test_02_ImPay_7228(self):
         """
@@ -68,7 +69,7 @@ class TestPayCreate(unittest.TestCase):
         # 商业房房主 or （工会会长 or 工会成员）|| 同意大神协议
         assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid), 720)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 400)
-        Consts.CASE_LIST_2[des] = Consts.result
+        case_list_b[des] = result
 
     def test_03_liveRoomPay_7030(self):
         """
@@ -94,7 +95,7 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 700)
-        Consts.CASE_LIST_2[des] = Consts.result
+        case_list_b[des] = result
 
     def test_04_IMPay_8020(self):
         """
@@ -120,7 +121,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 300)
         assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 500)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 200)
-        Consts.CASE_LIST_2[des] = Consts.result
+        case_list_b[des] = result
 
     def test_05_liveRoomPay_602515(self):
         """
@@ -151,7 +152,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 600)
         assert_equal(conMysql.selectUserMoneySql('sum_money', ceo_uid), 250)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
-        Consts.CASE_LIST_2[des] = Consts.result
+        case_list_b[des] = result
 
     def test_06_IMPay_602020(self):
         """
@@ -181,7 +182,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 600)
         assert_equal(conMysql.selectUserMoneySql('sum_money', ceo_uid), 200)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
-        Consts.CASE_LIST_2[des] = Consts.result
+        case_list_b[des] = result
 
     def test_07_liveRoomPay_602515(self):
         """
@@ -211,7 +212,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 600)
         assert_equal(conMysql.selectUserMoneySql('sum_money', ceo_uid), 250)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
-        Consts.CASE_LIST_2[des] = Consts.result
+        case_list_b[des] = result
 
     def test_08_IMPay_602020(self):
         """
@@ -241,7 +242,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 600)
         assert_equal(conMysql.selectUserMoneySql('sum_money', ceo_uid), 200)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
-        Consts.CASE_LIST_2[des] = Consts.result
+        case_list_b[des] = result
 
     def test_09_underRolePay_6238(self):
         """
@@ -263,7 +264,7 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid, money_type='money_cash_b'), 62)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
-        Consts.CASE_LIST_2[des] = Consts.result
+        case_list_b[des] = result
 
     def test_10_NotLiveRoomPayAnchor(self):
         """
@@ -287,4 +288,4 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 700)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
-        Consts.CASE_LIST_2[des] = Consts.result
+        case_list_b[des] = result

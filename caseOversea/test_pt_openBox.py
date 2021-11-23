@@ -41,7 +41,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(mysql.selectAllMoneySql(config.pt_payUid), 100)
         Assert.assert_equal(mysql.selectUserCommodity(config.pt_payUid), 2)  # 海外购买钥匙也会赠送一个头像框
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.case_list[des] = 'pass'
 
     def test_02_openMoreBoxPayChange(self):
         """
@@ -71,7 +71,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(mysql.selectAllMoneySql(config.pt_payUid), 0)
         Assert.assert_len(mysql.selectUserCommodity(config.pt_payUid), 6)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.case_list[des] = 'pass'
 
     def test_03_giveBoxPayChange(self):
         """
@@ -97,4 +97,4 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(mysql.selectAllMoneySql(config.pt_payUid), 200)
         Assert.assert_len(mysql.selectAllMoneySql(config.pt_payUid), 100)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.case_list[des] = 'pass'

@@ -5,7 +5,8 @@ from common.conMysql import conMysql
 import unittest
 import pytest
 from common.Assert import assert_equal, assert_code, assert_body
-from common import Consts, basicData
+from common.Consts import case_list, result
+from common import basicData
 @unittest.skip('下线')
 class TestPayCreate(unittest.TestCase):
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'  # 内网支付接口
@@ -32,7 +33,7 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money'), 160000)
-        Consts.CASE_LIST[des] = Consts.result
+        case_list[des] = result
 
     @pytest.mark.run(order=2)
     def test_02_TitlePayChangeRenew(self):
@@ -52,4 +53,4 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money'), 176000)
-        Consts.CASE_LIST[des] = Consts.result
+        case_list[des] = result

@@ -37,7 +37,7 @@ class conMysql:
                     return res[0]
             except Exception as error:
                 print(error)
-        elif accountType == 'cash':  # 查询用户账户扩展表现金余额
+        elif accountType == 'cash':  # 查询用户账户扩展表 现金余额
             sql = "select cash from xs_user_money_extend where uid={}".format(uid)
             try:
                 conMysql.cur.execute(sql)
@@ -183,7 +183,7 @@ class conMysql:
 
     # 更新用户数据
     @staticmethod
-    def updateUserInfoSql(tableName, uid, bid=105002314, worth=700):
+    def updateUserInfoSql(tableName, uid, bid=105002314):
         if tableName == 'broker_user':  # 修改用户为打包结算主播
             sql = "update xs_broker_user set bid={}, uid={}, state=1, pack_cal=1 where id = 50 limit 1".format(bid, uid)
             try:

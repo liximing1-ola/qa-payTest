@@ -32,4 +32,4 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(mysql.selectAllMoneySql(config.pt_payUid), 400)
         Assert.assert_equal(mysql.selectCoinSql(config.pt_payUid), 600)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.case_list[des] = 'pass'

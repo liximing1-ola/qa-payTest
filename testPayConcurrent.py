@@ -74,7 +74,7 @@ class TestPayConcurrent:
             threads.append(thread)
         gevent.joinall(threads)
         TestPayConcurrent.endPayCreate()
-        Consts.CASE_LIST_3[d] = Consts.result
+        Consts.case_list_c[d] = Consts.result
 
     @staticmethod
     def startCommodityUseReady():
@@ -116,7 +116,7 @@ class TestPayConcurrent:
             threads.append(thread)
         gevent.joinall(threads)
         TestPayConcurrent.endCommodityUse(num_times)
-        Consts.CASE_LIST_3[d] = Consts.result
+        Consts.case_list_c[d] = Consts.result
 
     @staticmethod
     def startCommodityPresentReady():
@@ -159,15 +159,18 @@ class TestPayConcurrent:
             threads.append(thread)
         gevent.joinall(threads)
         TestPayConcurrent.endCommodityPresent()
-        Consts.CASE_LIST_3[d] = Consts.result
+        Consts.case_list_c[d] = Consts.result
+
+    @staticmethod
+    def main(num):
+        TestPayConcurrent.test_01_payCreate(num)
+        TestPayConcurrent.test_02_commodityUse(num)
+        TestPayConcurrent.test_03_commodityPresent(num)
+        case_list = method.dictToList(Consts.case_list_c)
+        des = "{}\n".format(case_list)
+        Logs.get_log('concurrentCaseResult.log').info(des)
+        robot('markdown', des, bot='test')
 
 
 if __name__=='__main__':
-    num=10
-    TestPayConcurrent.test_01_payCreate(num)
-    TestPayConcurrent.test_02_commodityUse(num)
-    TestPayConcurrent.test_03_commodityPresent(num)
-    case_list=method.dictToList(Consts.CASE_LIST_3)
-    des = "{}\n".format(case_list)
-    Logs.get_log('concurrentCaseResult.log').info(des)
-    robot('markdown', des, bot='test')
+    TestPayConcurrent.main(10)

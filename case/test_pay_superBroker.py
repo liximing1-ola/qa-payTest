@@ -5,8 +5,9 @@ import unittest
 import pytest
 from common.Request import post_request_session
 from common.Assert import assert_body, assert_code, assert_equal
-from common import Consts, basicData
+from common import basicData
 from common.runFailed import Retry
+from common.Consts import case_list_b, result
 @Retry
 class TestPayCreate(unittest.TestCase):
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'  # 内网支付接口
@@ -51,7 +52,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 350)
         assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 350)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
-        Consts.CASE_LIST_2[des] = Consts.result
+        case_list_b[des] = result
 
     @pytest.mark.run(order=2)
     def test_02_starRoomNoBrokerArtistPay_45(self):
@@ -76,7 +77,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 450)
         assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 450)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
-        Consts.CASE_LIST_2[des] = Consts.result
+        case_list_b[des] = result
 
     @pytest.mark.run(order=3)
     def test_03_starRoomNoBrokerArtistPay_55(self):
@@ -101,7 +102,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 550)
         assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 550)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
-        Consts.CASE_LIST_2[des] = Consts.result
+        case_list_b[des] = result
 
     @pytest.mark.run(order=4)
     def test_04_starRoomNoAgentPay_45(self):
@@ -128,7 +129,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 450)
         assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 450)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
-        Consts.CASE_LIST_2[des] = Consts.result
+        case_list_b[des] = result
 
     @pytest.mark.run(order=5)
     def test_05_starRoomSuperVoicePay_508(self):
@@ -159,7 +160,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('single_money', test_agent, money_type='money_cash'), 80)
         assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 500)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
-        Consts.CASE_LIST_2[des] = Consts.result
+        case_list_b[des] = result
 
     @pytest.mark.run(order=6)
     def test_06_starRoomArtistAgent_608(self):
@@ -190,7 +191,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('single_money', test_agent, money_type='money_cash'), 80)
         assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 600)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
-        Consts.CASE_LIST_2[des] = Consts.result
+        case_list_b[des] = result
 
     @pytest.mark.run(order=7)
     def test_07_starRoomArtistAgent_7012(self):
@@ -222,7 +223,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('single_money', test_agent, money_type='money_cash'), 120)
         assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 700)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
-        Consts.CASE_LIST_2[des] = Consts.result
+        case_list_b[des] = result
 
     @pytest.mark.run(order=8)
     def test_08_NormalRoomPayArtist_620(self):
@@ -254,7 +255,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('single_money', test_agent), 0)
         assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 620)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
-        Consts.CASE_LIST_2[des] = Consts.result
+        case_list_b[des] = result
 
     @pytest.mark.run(order=9)
     def test_09_starRoomWhiteUserPay_70(self):
@@ -269,7 +270,7 @@ class TestPayCreate(unittest.TestCase):
         """
         des = '网赚房无公会无经纪人白名单艺人收70%个人魅力值'
         conMysql.updateMoneySql(config.payUid, money=1000)
-        test_uid = config.super_live_role['white_uid']  # 105002338
+        test_uid = config.super_live_role['white_uid']  # 105002338 固化在Redis SADD Xs.WhiteList.SuperVoice.White 105002338
         conMysql.updateMoneySql(test_uid)
         conMysql.checkOnlineEarnArtist(test_uid, worth=700)  # 设置用户为初级艺人
         conMysql.checkWhiteUid(test_uid, white_type=105)  # type=105是网赚白名单用户
@@ -280,4 +281,4 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 700)
         assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 700)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
-        Consts.CASE_LIST_2[des] = Consts.result
+        case_list_b[des] = result

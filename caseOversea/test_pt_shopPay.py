@@ -36,7 +36,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(mysql.selectAllMoneySql(config.pt_payUid), 0)
         Assert.assert_equal(mysql.checkUserCommoditySql(cid, config.pt_payUid), 1)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.case_list[des] = 'pass'
 
     @pytest.mark.run(order=2)
     def test_02_shopPayChangeBuyMore(self):
@@ -61,4 +61,4 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 1, reason)
         Assert.assert_equal(mysql.selectAllMoneySql(config.pt_payUid), 33700)
         Assert.assert_equal(mysql.checkUserCommoditySql(cid, config.pt_payUid), 3)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.case_list[des] = 'pass'

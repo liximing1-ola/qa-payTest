@@ -33,7 +33,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_body(res['body'], 'success', 0, reason)
         Assert.assert_body(res['body'], 'msg', '餘額不足，無法支付', reason)
         Assert.assert_equal(mysql.selectAllMoneySql(config.pt_testUid), 0)
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.case_list[des] = 'pass'
 
 
     def test_02_RoomPayChangeMoney(self):
@@ -59,4 +59,4 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_equal(mysql.selectMoneySql(config.pt_testUid), 70)
         Assert.assert_equal(mysql.selectPayChangeSql(config.pt_payUid), 100)
         Assert.assert_equal(mysql.selectPayChangeOpSql(config.pt_payUid), 'consume')
-        Consts.CASE_LIST[des] = 'pass'
+        Consts.case_list[des] = 'pass'

@@ -2,11 +2,11 @@
 全局变量
 """
 # 用例名称字典1
-CASE_LIST = {}
+case_list = {}
 # 用例名称字典2
-CASE_LIST_2 = {}
+case_list_b = {}
 # 并发case
-CASE_LIST_3 = {}
+case_list_c = {}
 # gamesCase
 GAME_LIST = {}
 # 失败结果列表
