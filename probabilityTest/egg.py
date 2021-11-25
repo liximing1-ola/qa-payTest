@@ -95,6 +95,51 @@ def postPayCreate_ktv():
         else:
             raise EnvironmentError(res)
 
+def postPayCreate_live():
+    vap_dict = {629: 21, 628: 6, 621: 188, 620: 6, 614: 520, 610: 10, 607: 21, 577: 21, 572: 1, 570: 1314, 316: 3344,
+                322: 188, 330: 30}
+    url = "https://dev.iambanban.com/pay/create?package=com.imbb.banban.android"
+    headers = {
+        'Content-Type': "application/x-www-form-urlencoded",
+        'cache-control': "no-cache",
+        'Postman-Token': "f7d705b2-cf29-4a4a-81ba-2c8c8d0f5ed5",
+        "user-token": 'd3ccnXDBWkTkXLbr8PuGJegJdEPc6x9Sc__2BW32yxxuOWuNEfsEaHU1o4oKXtPNH9tylxUBv4Tt855126jdSUuZQ0eLMp__2BVLyltuTqHGSas20dOBF6__2FxPn7hc6'}
+    for k, v in vap_dict.items():
+        data = {
+            "platform": "available",
+            "type": "package",
+            "money": v*5,
+            "params":
+                {"rid": 200000934,
+                 "uids": "100287189,100010150,100010151,100010152,100010153",
+                 "positions": "0,1,2,3,4",
+                 "position": -1,
+                 "giftId": k,
+                 "giftNum": 1,
+                 "price": v,
+                 "cid": 0,
+                 "ctype": "",
+                 "duction_money": 0,
+                 "version": 2,
+                 "num": 5,
+                 "gift_type": 'normal',
+                 "useCoin": -1,
+                 "star": 0,
+                 "show_pac_man_guide": 1,
+                 "refer": "",
+                 "all_mic": 0,
+                 }
+        }
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        res = requests.post(url, data=data, headers=headers)
+        time.sleep(2)
+        res = res.json()
+        if res['success'] == 1:
+            pass
+        else:
+            raise EnvironmentError(res)
+
 
 def conMysql():
     db_config = {"dev_46_db": '192.168.11.46',
@@ -142,7 +187,7 @@ def main_ktv():
     i = 1
     while i < 10000:
         print('第{}次'.format(i))
-        postPayCreate_ktv()
+        postPayCreate_live()
         time.sleep(1)
         i += 1
 

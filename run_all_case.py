@@ -15,7 +15,6 @@ def all_case():
     testcase.addTests(discover)
     return testcase
 
-
 def main():
     if autoGitPull():
         writeUpdateTime(str(int(time.time())))
@@ -29,11 +28,11 @@ def main():
         use_time = str(int(Consts.endTime - Consts.startTime)) + 's'
         if len(test_result.failures) == 0 and len(test_result.errors) == 0:
             des = "{}\n".format(case_list)
-            des_2 = "{}\n用例数: {}, 失败数: {}, 总耗时: {}, 代码分支：{}".format(case_list_2, test_result.testsRun,
-                                                                                len(test_result.failures) + len(
-                                                                                    test_result.errors),
-                                                                                use_time,
-                                                                                Config.config.bb_user['bb_git_branch'])
+            des_2 = "{}\n用例数: {}, 失败数: {}, 总耗时: {}, 代码分支：{}".format(
+                case_list_2, test_result.testsRun,
+                len(test_result.failures) + len(test_result.errors),
+                use_time,
+                Config.config.bb_user['bb_git_branch'])
             robot('markdown', des)
             time.sleep(0.1)
             robot('markdown', des_2)

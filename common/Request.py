@@ -83,7 +83,3 @@ def pt_post_request_session(url, data):
     response_dicts['time_consuming'] = time_consuming
     response_dicts['time_total'] = time_total
     return response_dicts
-
-
-if __name__ == '__main__':
-    pass

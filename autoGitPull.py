@@ -3,10 +3,9 @@ import os
 import time
 from git.repo import Repo
 from Robot import robot
-from common import Logs, Consts, Session
+from common.Session import Session
+from common import Logs, Consts
 from common.Config import config
-
-
 def autoGitPull():
     Consts.startTime = time.time()
     codeDir = {'git_dir': '/home/webroot/banban', 'pt_git_dir': '/home/webroot/oversea/oversea-server'}  # 默认指定路径
@@ -15,7 +14,7 @@ def autoGitPull():
     g.pull()
     repo = Repo(git_dir)
     writeGitStatus(repo.git.status())
-    Session.Session().get_session('dev')  # 更新userToken
+    Session().get_session('dev')  # 更新userToken
     if str(repo.active_branch) == config.banban_git_branch:  # 当前线上分支
         commit_log = repo.git.log('--pretty={"commit":"%h","author":"%an","summary":"%s","date":"%cd"}',
                                   max_count=3, date='format:%Y-%m-%d %H:%M:%S')

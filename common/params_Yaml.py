@@ -6,7 +6,6 @@ from common import Logs
 import git
 from git.repo import Repo
 class Yaml:
-
     @staticmethod
     def read_yaml(yaml_fileName, yaml_name):
         """
