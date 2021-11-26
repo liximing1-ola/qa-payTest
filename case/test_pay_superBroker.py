@@ -10,7 +10,7 @@ from common.runFailed import Retry
 from common.Consts import case_list_b, result
 @Retry
 class TestPayCreate(unittest.TestCase):
-    pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'  # 内网支付接口
+    pay_url = config.pay_url
 
     # 角色配置BackUp
     super_live_role = {

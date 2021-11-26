@@ -5,6 +5,8 @@ class config:
     BASE_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     #  release域名
     domain_host = {'bb_dev_58': 'https://dev.iambanban.com/', 'pt': 'https://test.overseaban.com/', }
+    dev_host = domain_host['bb_dev_58']
+    pay_url = dev_host + 'pay/create?package=com.imbb.banban.android'  # 内网支付接口
     # 标准配置
     bb_user = {
         'payUid': 103273407,  # god
@@ -35,7 +37,6 @@ class config:
         'white_uid': 105002338,  # 白名单用户
     }
     # dev域名（qq登陆方式)
-    dev_host = domain_host['bb_dev_58']
     qq_login_url = dev_host + 'account/qqlogin'
     # 被打赏者
     testUid =bb_user['testUid']
@@ -74,6 +75,6 @@ class config:
 
 if __name__ == '__main__':
     print(config.BASE_PATH)
-    print(config.qq_login_url)
+    print(config.pay_url)
     print(config.mobile_login_url)
     print(config.banban_git_branch)

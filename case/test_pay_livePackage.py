@@ -9,7 +9,7 @@ from common.Consts import case_list_b, result
 from common.runFailed import Retry
 @Retry
 class TestPayCreate(unittest.TestCase):
-    pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'  # 内网支付接口
+    pay_url = config.pay_url
 
     # 角色配置BackUp
     live_role = {
@@ -31,9 +31,9 @@ class TestPayCreate(unittest.TestCase):
         1.构造打赏者和被打赏者数据
         2.直播类房间一对一打赏（打赏100分）
         3.校验接口状态和返回值数据
-        4.检查被打赏者余额，预期为：62
-        5.检查消费记录表消费money（xs_pay_change_new）
-        6.检查消费记录表消费方式op（xs_pay_change_new）
+        4.检查被打赏者余额，预期为：100 * 0.62 =62
+        5.检查消费记录表消费money（xs_pay_change_new）: pay_change = 100
+        6.检查消费记录表消费方式op（xs_pay_change_new）: consume
         """
         des = '直播间非公会主播(非宗师)打赏分成62:38'
         conMysql.updateMoneySql(config.payUid, money=30, money_cash=30, money_cash_b=30, money_b=10)

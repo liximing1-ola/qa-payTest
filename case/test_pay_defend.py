@@ -9,7 +9,7 @@ from common.runFailed import Retry
 from common.conMysql import conMysql
 @Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
-    pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'   # 内网支付接口
+    pay_url = config.pay_url
 
     def test_01_defendPayChangMoney(self):
         """

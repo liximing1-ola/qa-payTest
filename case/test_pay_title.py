@@ -9,7 +9,7 @@ from common.Consts import case_list, result
 from common import basicData
 @unittest.skip('下线')
 class TestPayCreate(unittest.TestCase):
-    pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'  # 内网支付接口
+    pay_url = config.pay_url
 
     @pytest.mark.run(order=1)
     def test_01_TitlePayChangeMoney(self):

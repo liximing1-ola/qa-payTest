@@ -9,7 +9,7 @@ from common.Consts import case_list, result
 from common.runFailed import Retry
 @Retry(max_n=3, func_prefix='test_02_roomChangePayCoin')
 class TestPayCreate(unittest.TestCase):
-    pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'  # 内网支付接口
+    pay_url = config.pay_url
 
     def test_01_moneyChangeExchangeCoin(self):
         """
