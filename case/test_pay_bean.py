@@ -14,7 +14,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.deleteUserBeanSql(config.payUid, config.testUid)   # 清理前置冗余数据
 
     @Retry
-    def test_01_NoBeanPayBeanGift(self):
+    def test_01_NoBeanPayBeanGift(self, des='打赏金豆礼物但金豆不足的场景'):
         """
         用例描述：
         验证账户内金豆不足时打赏金豆礼物的场景
@@ -25,7 +25,6 @@ class TestPayCreate(unittest.TestCase):
         4.检查Toast，预期提示'金豆不足'
         5.检查被打赏者金豆余额,预期：0
         """
-        des = '打赏金豆礼物但金豆不足的场景'
         conMysql.deleteUserBeanSql(config.payUid, config.testUid)  # 执行前处理垃圾数据
         conMysql.updateMoneySql(config.payUid)
         data = basicData.encodeData(payType='package', uid=config.testUid, giftId=362, giftType='bean')
@@ -36,7 +35,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('bean', config.testUid), 0)
         case_list[des] = result
 
-    def test_02_beanPayChangeGoldGift(self):
+    def test_02_beanPayChangeGoldGift(self, des='打赏金豆礼物的场景'):
         """
         用例描述：
         验证打赏金豆礼物的场景
@@ -47,7 +46,6 @@ class TestPayCreate(unittest.TestCase):
         4.检查打赏者金豆余额，预期为：0
         5.检查被打赏者金豆余额，预期为：6000 * 0.5 = 3000
         """
-        des = '打赏金豆礼物的场景'
         conMysql.insertBeanSql(config.payUid, money_coupon=6000)
         data = basicData.encodeData(payType='package-more', giftId=362, giftType='bean', num=6, uids=('105002312', ))
         res = post_request_session(TestPayCreate.pay_url, data)
