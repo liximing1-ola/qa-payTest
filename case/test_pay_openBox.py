@@ -11,7 +11,7 @@ from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
     pay_url = config.pay_url
 
-    def test_01_openBoxPayChange(self):
+    def test_01_openBoxPayChange(self, des='背包开箱子场景'):
         """
         用例描述：
         验证背包内开箱子得到物品
@@ -26,7 +26,6 @@ class TestPayCreate(unittest.TestCase):
         4.检查账户余额，预期值为：700 - 600 = 100
         5.检查背包内开出物品，预期值应为：2（赠送头像框*1 + 开出礼物个数*1）
         """
-        des = '背包开箱子场景'
         conMysql.deleteUserAccountSql('user_box', config.payUid)
         conMysql.deleteUserAccountSql('user_commodity', config.payUid)
         conMysql.insertXsUserCommodity(config.payUid, cid=2, num=1)
@@ -40,7 +39,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_commodity', config.payUid), 2)
         case_list[des] = result
 
-    def test_02_openMoreBoxPayChange(self):
+    def test_02_openMoreBoxPayChange(self, des='背包箱子多开场景'):
         """
         用例描述：
         验证背包内开箱子得到物品
@@ -55,7 +54,6 @@ class TestPayCreate(unittest.TestCase):
         4.检查账户余额，预期值为：12600 - 2100*6 = 0
         5.检查背包内开出物品，预期值应为12（赠送头像框*6，开出礼物个数等于*6）
         """
-        des = '背包箱子多开场景'
         conMysql.deleteUserAccountSql('user_box', config.payUid)
         conMysql.deleteUserAccountSql('user_commodity', config.payUid)
         conMysql.insertXsUserCommodity(config.payUid, cid=3, num=6)
@@ -69,7 +67,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_commodity', config.payUid), 12)
         case_list[des] = result
 
-    def test_03_giveBoxPayChange(self):
+    def test_03_giveBoxPayChange(self, des='房间送箱子场景'):
         """
         用例描述：
         验证房间内送箱子逻辑正常
@@ -80,10 +78,10 @@ class TestPayCreate(unittest.TestCase):
         4.检查打赏者账户余额，预期值为：700 - 600 = 100
         5.检查收箱用户账户余额，预期值为：大于100
         """
-        des = '房间送箱子场景'
         conMysql.updateMoneySql(config.payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
         conMysql.updateMoneySql(config.testUid)
-        data = basicData.encodeData(payType='package', money=600, rid=config.live_role['cp_link_rid'], uid=config.testUid, giftId=46, star=4)
+        data = basicData.encodeData(payType='package', money=600, rid=config.live_role['cp_link_rid'],
+                                    uid=config.testUid, giftId=46, star=4)
         res = post_request_session(TestPayCreate.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -91,7 +89,7 @@ class TestPayCreate(unittest.TestCase):
         assert_len(conMysql.selectUserMoneySql('sum_money', config.testUid), 100)
         case_list[des] = result
 
-    def test_04_giveBoxMorePeople(self):
+    def test_04_giveBoxMorePeople(self, des='房间送多人多个箱子场景'):
         """
         用例描述：
         验证房间内送箱子给多个人时逻辑正常
@@ -102,7 +100,6 @@ class TestPayCreate(unittest.TestCase):
         4.检查账户余额，预期值为：10000 - 2100*2*2 = 1600
         5.检查收箱用户账户余额，预期值为：大于1000
         """
-        des = '房间送多人多个箱子场景'
         conMysql.updateMoneySql(config.payUid, money=10000)
         conMysql.updateMoneySql(config.testUid)
         data = basicData.encodeData(payType='package-more', num=2, star=8, money=2100, giftId=47)

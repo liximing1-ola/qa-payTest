@@ -13,7 +13,7 @@ class TestPayCreate(unittest.TestCase):
 
     @Retry
     @unittest.skip('NSQ延迟')
-    def test_01_PayChangeTriggerPunish(self):
+    def test_01_PayChangeTriggerPunish(self, des='打赏时触发罚款流程'):
         """
         用例描述：
         验证收到打赏时，触发罚款流程，扣款账户：金豆 -》个人魅力值 -》现金余额 -》公会魅力值 -》伴伴币
@@ -26,7 +26,6 @@ class TestPayCreate(unittest.TestCase):
         5.检查消费记录表消费money
         6.检查消费记录表消费方式op
         """
-        des = '打赏时触发罚款流程'
         conMysql.updateMoneySql(config.payUid, money=100)
         conMysql.insertBeanSql(config.testUid, money_coupon=20)
         conMysql.updateMoneySql(config.testUid, money=20, money_debts=100)

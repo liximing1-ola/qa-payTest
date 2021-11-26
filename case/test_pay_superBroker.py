@@ -30,7 +30,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateUserInfoSql('super_chatroom', config.super_live_role['super-voice-fresh'])
 
     @pytest.mark.run(order=1)
-    def test_01_starRoomNoBrokerArtistPay_35(self):
+    def test_01_starRoomNoBrokerArtistPay_35(self, des='网赚房无公会无经纪人初级艺人收35%个人魅力值'):
         """
         用例描述：
         tdr：网赚频道非公会无经纪人的初级艺人（0-3500）被打赏后收到35%的个人魅力值（此类房间不走师徒分成）
@@ -40,12 +40,12 @@ class TestPayCreate(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：1000 * 0.35 = 350(个人魅力值)
         """
-        des = '网赚房无公会无经纪人初级艺人收35%个人魅力值'
         conMysql.updateMoneySql(config.payUid, money=1000)
         test_uid = config.super_live_role['testUid']  # 105002312
         conMysql.updateMoneySql(test_uid)
         conMysql.checkOnlineEarnArtist(test_uid, worth=700)  # 设置用户为初级艺人
-        data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
+        data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'],
+                                    uid=test_uid)
         res = post_request_session(TestPayCreate.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -55,7 +55,7 @@ class TestPayCreate(unittest.TestCase):
         case_list_b[des] = result
 
     @pytest.mark.run(order=2)
-    def test_02_starRoomNoBrokerArtistPay_45(self):
+    def test_02_starRoomNoBrokerArtistPay_45(self, des='网赚房无公会无经纪人中级艺人收45%个人魅力值'):
         """
         用例描述：
         tdr：网赚频道非公会无经纪人的中级艺人（3501-10000）被打赏后收到45%的个人魅力值
@@ -65,12 +65,12 @@ class TestPayCreate(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：1000 * 0.45 = 450(个人魅力值)
         """
-        des = '网赚房无公会无经纪人中级艺人收45%个人魅力值'
         conMysql.updateMoneySql(config.payUid, money=1000)
         test_uid = config.super_live_role['testUid']
         conMysql.updateMoneySql(test_uid)
         conMysql.checkOnlineEarnArtist(test_uid, worth=3501)  # 设置一个中级艺人
-        data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
+        data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'],
+                                    uid=test_uid)
         res = post_request_session(TestPayCreate.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -80,7 +80,7 @@ class TestPayCreate(unittest.TestCase):
         case_list_b[des] = result
 
     @pytest.mark.run(order=3)
-    def test_03_starRoomNoBrokerArtistPay_55(self):
+    def test_03_starRoomNoBrokerArtistPay_55(self, des='网赚房无公会无经纪人高级艺人收55%个人魅力值'):
         """
         用例描述：
         tdr：网赚频道非公会无经纪人的高级艺人（>10001）被打赏后收到55%的个人魅力值
@@ -90,12 +90,12 @@ class TestPayCreate(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：1000 * 0.55 = 550(个人魅力值)
         """
-        des = '网赚房无公会无经纪人高级艺人收55%个人魅力值'
         conMysql.updateMoneySql(config.payUid, money=1000)
         test_uid = config.super_live_role['testUid']
         conMysql.updateMoneySql(test_uid)
         conMysql.checkOnlineEarnArtist(test_uid, worth=10001)
-        data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
+        data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'],
+                                    uid=test_uid)
         res = post_request_session(TestPayCreate.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -105,7 +105,7 @@ class TestPayCreate(unittest.TestCase):
         case_list_b[des] = result
 
     @pytest.mark.run(order=4)
-    def test_04_starRoomNoAgentPay_45(self):
+    def test_04_starRoomNoAgentPay_45(self, des='网赚指定工会无经纪人中级艺人收45%公会魅力值'):
         """
         用例描述：
         tdr：网赚频道有公会无经纪人的中级艺人（3501-10000）被打赏后收到45%的公会魅力值
@@ -115,14 +115,14 @@ class TestPayCreate(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：1000 * 0.45 = 450（公会魅力值）
         """
-        des = '网赚指定工会无经纪人中级艺人收45%公会魅力值'
         conMysql.updateMoneySql(config.payUid, money=1000)
         test_uid = config.super_live_role['super_star_uid']  # 105002325
         test_bid = config.super_live_role['super_broker']
         conMysql.updateMoneySql(test_uid)  # 清空账户
         conMysql.updateSuperVoiceUser(test_uid, test_bid, nid=200)  # 修改用户为网赚工会用户
         conMysql.checkOnlineEarnArtist(test_uid, worth=5000)  # 设置为中级艺人
-        data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
+        data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'],
+                                    uid=test_uid)
         res = post_request_session(TestPayCreate.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -132,7 +132,7 @@ class TestPayCreate(unittest.TestCase):
         case_list_b[des] = result
 
     @pytest.mark.run(order=5)
-    def test_05_starRoomSuperVoicePay_508(self):
+    def test_05_starRoomSuperVoicePay_508(self, des='网赚无工会有经纪人(1j)初级艺人分成50:8'):
         """
         用例描述：
         tdr：网赚频道无公会有经纪人的初级艺人（0-3500）被打赏后收到50%的个人魅力值，初级经纪人（公会）收到8%公会魅力值
@@ -143,7 +143,6 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：1000 * 0.5 = 500（个人魅力值）
         5.检查经纪人余额，预期为：1000 * 0.8 = 80（个人魅力值）
         """
-        des = '网赚无工会有经纪人(1j)初级艺人分成50:8'
         conMysql.updateMoneySql(config.payUid, money=1000)
         test_uid = config.super_live_role['agent_star_uid']  # 105002331
         test_agent = config.super_live_role['super_agent_uid']  # 105002323
@@ -152,7 +151,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateUserMoneyClearSql(test_agent, test_uid)  # 清空用户账户
         conMysql.checkOnlineEarnRelation(test_agent, test_uid)  # 检查艺人经纪人关联关系
         conMysql.deleteUserAccountSql('broker_user', test_uid)  # 删除用户工会数据
-        data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
+        data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'],
+                                    uid=test_uid)
         res = post_request_session(TestPayCreate.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -163,7 +163,7 @@ class TestPayCreate(unittest.TestCase):
         case_list_b[des] = result
 
     @pytest.mark.run(order=6)
-    def test_06_starRoomArtistAgent_608(self):
+    def test_06_starRoomArtistAgent_608(self, des='网赚指定工会有经纪人(1j)的中级艺人分成60:8'):
         """
         用例描述：
         tdr：网赚频道有公会有经纪人的中级艺人（3501-10000）被打赏后收到60%的公会魅力值，初级经纪人（公会）收到8%公会魅力值
@@ -174,7 +174,6 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：1000 * 0.6 = 600
         5.检查经纪人余额，预期为：1000 * 0.08 = 80
         """
-        des = '网赚指定工会有经纪人(1j)的中级艺人分成60:8'
         conMysql.updateMoneySql(config.payUid, money=1000)
         test_uid = config.super_live_role['agent_star_uid']  # 105002331
         test_agent = config.super_live_role['super_agent_uid']  # 105002323
@@ -183,7 +182,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.checkOnlineEarnRelation(test_agent, test_uid)  # 检查经纪人艺人关系
         conMysql.updateUserMoneyClearSql(test_agent, test_uid)  # 清空用户账户
         conMysql.insertSuperVoiceUser(test_uid, test_bid)  # 加入指定公会
-        data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
+        data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'],
+                                    uid=test_uid)
         res = post_request_session(TestPayCreate.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -194,7 +194,7 @@ class TestPayCreate(unittest.TestCase):
         case_list_b[des] = result
 
     @pytest.mark.run(order=7)
-    def test_07_starRoomArtistAgent_7012(self):
+    def test_07_starRoomArtistAgent_7012(self, des='网赚有工会有经纪人(7j)高级艺人分成70:12'):
         """
         用例描述：
         tdr：网赚频道有公会有经纪人的高级艺人（>10001）被打赏后收到70%的公会魅力值，高级经纪人（公会）收到12%公会魅力值
@@ -205,7 +205,6 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：1000 * 0.7 = 700（money_cash）
         5.检查经纪人余额，预期为： 1000 * 0.12 = 120(money_cash)
         """
-        des = '网赚有工会有经纪人(7j)高级艺人分成70:12'
         conMysql.updateMoneySql(config.payUid, money=1000)
         test_uid = config.super_live_role['pack_cal_uid']  # 105002313
         test_bid = config.super_live_role['super_broker']  # 136594717
@@ -215,7 +214,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateUserMoneyClearSql(test_agent, test_uid)  # 更新余额
         conMysql.checkOnlineEarnRelation(test_agent, test_uid)  # 更新经纪人和艺人身份
         conMysql.checkSuperVoiceUser(test_uid, test_bid)  # 加入公会
-        data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
+        data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'],
+                                    uid=test_uid)
         res = post_request_session(TestPayCreate.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -226,7 +226,7 @@ class TestPayCreate(unittest.TestCase):
         case_list_b[des] = result
 
     @pytest.mark.run(order=8)
-    def test_08_NormalRoomPayArtist_620(self):
+    def test_08_NormalRoomPayArtist_620(self, des='普通房指定工会有经纪人(1j)只艺人收到62%'):
         """
         用例描述：
         tdr：非网赚频道王牌公会中有经纪人的艺人被打赏后收到62%的个人魅力值，经纪人无收入
@@ -237,7 +237,6 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：1000 * 0.62 = 620（个人魅力值）
         5.检查经纪人余额，预期为：0
         """
-        des = '普通房指定工会有经纪人(1j)只艺人收到62%'
         conMysql.updateMoneySql(config.payUid, money=1000)
         test_uid = config.super_live_role['agent_star_uid']  # 105002331
         # test_bid = config.super_live_role['super_broker']  # 136594717
@@ -258,7 +257,7 @@ class TestPayCreate(unittest.TestCase):
         case_list_b[des] = result
 
     @pytest.mark.run(order=9)
-    def test_09_starRoomWhiteUserPay_70(self):
+    def test_09_starRoomWhiteUserPay_70(self, des='网赚房无公会无经纪人白名单艺人收70%个人魅力值'):
         """
         用例描述：
         tdr：网赚频道非公会无经纪人的白名单初级艺人（0-3500）被打赏后收到70%的个人魅力值
@@ -268,13 +267,13 @@ class TestPayCreate(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：1000 * 0.7 = 700(个人魅力值)
         """
-        des = '网赚房无公会无经纪人白名单艺人收70%个人魅力值'
         conMysql.updateMoneySql(config.payUid, money=1000)
         test_uid = config.super_live_role['white_uid']  # 105002338 固化在Redis SADD Xs.WhiteList.SuperVoice.White 105002338
         conMysql.updateMoneySql(test_uid)
         conMysql.checkOnlineEarnArtist(test_uid, worth=700)  # 设置用户为初级艺人
         conMysql.checkWhiteUid(test_uid, white_type=105)  # type=105是网赚白名单用户
-        data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'], uid=test_uid)
+        data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'],
+                                    uid=test_uid)
         res = post_request_session(TestPayCreate.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))

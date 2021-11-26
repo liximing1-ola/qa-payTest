@@ -10,7 +10,7 @@ class TestPayCreate(unittest.TestCase):
     pay_url = config.pay_url
 
     @unittest.skip('暂无入口')
-    def test_01_unityGamePayChange(self):
+    def test_01_unityGamePayChange(self, des='unity道具购买场景'):
         """
         用例描述：
         验证unity游戏内道具购买
@@ -20,7 +20,6 @@ class TestPayCreate(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查账户余额，预期值为：100 - 100 = 0
         """
-        des = 'unity道具购买场景'
         conMysql.updateMoneySql(config.payUid, money=100)
         data = basicData.encodeData(payType='unity-game-buy', money=100)
         res = post_request_session(TestPayCreate.pay_url, data)

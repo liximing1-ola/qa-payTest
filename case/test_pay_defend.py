@@ -11,7 +11,7 @@ from common.conMysql import conMysql
 class TestPayCreate(unittest.TestCase):
     pay_url = config.pay_url
 
-    def test_01_defendPayChangMoney(self):
+    def test_01_defendPayChangMoney(self, des='开通个人守护场景'):
         """
         用例描述：
         开通个人守护，收益分成在师父收益的基础上为 62:38
@@ -23,7 +23,6 @@ class TestPayCreate(unittest.TestCase):
         5.检查被打赏者余额,预期：52000 * 0.62 = 32240
         6.检查消费记录
         """
-        des = '开通个人守护场景'
         conMysql.updateMoneySql(config.payUid, money=52000)
         conMysql.updateMoneySql(config.testUid)
         data = basicData.encodeData(payType='defend', money=52000, uid=config.testUid)

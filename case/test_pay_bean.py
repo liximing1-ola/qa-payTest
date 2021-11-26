@@ -55,7 +55,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('bean', config.testUid), 3000)
         case_list[des] = result
 
-    def test_03_MoneyConvertGoldPayGift(self):
+    def test_03_MoneyConvertGoldPayGift(self, des='打赏金豆礼物不足用钻转换的场景'):
         """
         用例描述：
         验证打赏金豆礼物时金豆不足用钻转换的场景
@@ -67,7 +67,6 @@ class TestPayCreate(unittest.TestCase):
         5.检查打赏者钻石余额，预期为：10000 - 1000（转换） = 9000
         6.检查被打赏者金豆余额，预期为：1000 * 0.5 = 500
         """
-        des = '打赏金豆礼物不足用钻转换的场景'
         conMysql.updateMoneySql(config.payUid, money=10000)
         conMysql.updateMoneySql(config.testUid)
         conMysql.insertBeanSql(config.payUid, money_coupon=500)
@@ -80,7 +79,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 9000)
         case_list[des] = result
 
-    def test_04_ImMoneyPayChangeBeanDeduct(self):
+    def test_04_ImMoneyPayChangeBeanDeduct(self, des='私聊打赏钻石礼物时金豆抵扣平台手续费场景'):
         """
         用例描述：
         验证私聊场景打赏钻石礼物时金豆抵扣平台手续费的场景
@@ -92,7 +91,6 @@ class TestPayCreate(unittest.TestCase):
         5.检查打赏者钻石余额，预期为：1000 - 800 = 200
         6.检查被打赏者钻石余额，预期为：1000 * 0.72 = 720
         """
-        des = '私聊打赏钻石礼物时金豆抵扣平台手续费场景'
         conMysql.updateMoneySql(config.payUid, money=1000)
         conMysql.updateMoneySql(config.testUid)
         conMysql.insertBeanSql(config.payUid, money_coupon=200)
@@ -105,7 +103,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 720)
         case_list[des] = result
 
-    def test_05_RoomMoneyConvertGoldPayGift(self):
+    def test_05_RoomMoneyConvertGoldPayGift(self, des='房间打赏钻石礼物时金豆抵扣平台手续费场景'):
         """
         用例描述：
         验证房间内打赏钻石礼物时金豆抵扣平台手续费的场景
@@ -117,7 +115,6 @@ class TestPayCreate(unittest.TestCase):
         5.检查打赏者钻石余额，预期为：1000 - 800 = 200
         6.检查被打赏者账户余额，预期为：1000 * 0.62 = 620
         """
-        des = '房间打赏钻石礼物时金豆抵扣平台手续费场景'
         conMysql.updateMoneySql(config.payUid, money=1000)
         conMysql.updateMoneySql(config.testUid)
         conMysql.insertBeanSql(config.payUid, money_coupon=400)
@@ -130,7 +127,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 200)
         case_list[des] = result
 
-    def test_06_MoneyConvertGoldPayGift(self):
+    def test_06_MoneyConvertGoldPayGift(self, des='金豆抵扣手续费但钻石余额少于礼物价格的场景'):
         """
         用例描述：
         验证房间内打赏钻石礼物时金豆抵扣平台手续费的场景
@@ -142,7 +139,6 @@ class TestPayCreate(unittest.TestCase):
         5.检查打赏者钻石余额,预期：700
         6.检查打赏者金豆余额,预期：400
         """
-        des = '金豆抵扣手续费但钻石余额少于礼物价格的场景'
         conMysql.updateMoneySql(config.payUid, money=700)
         conMysql.updateMoneySql(config.testUid)
         conMysql.insertBeanSql(config.payUid, money_coupon=400)
@@ -155,7 +151,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 400)
         case_list[des] = result
 
-    def test_07_BeanPayChangeCombo(self):
+    def test_07_BeanPayChangeCombo(self, des='卡座内购买套餐场景'):
         """
         用例描述：
         验证卡座内购买套餐的场景（钻补）
@@ -166,7 +162,6 @@ class TestPayCreate(unittest.TestCase):
         4.检查购买者金豆余额，预期为：400
         5.检查购买者钻石余额，预期为：80000 - 79900 = 100
         """
-        des = '卡座内购买套餐场景'
         conMysql.deleteUserAccountSql('user_commodity', config.payUid)
         conMysql.updateMoneySql(config.payUid, money=80000)
         conMysql.insertBeanSql(config.payUid, money_coupon=400)

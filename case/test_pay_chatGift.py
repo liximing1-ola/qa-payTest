@@ -11,7 +11,7 @@ from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
     pay_url = config.pay_url
 
-    def test_01_IMPayNoMoney(self):
+    def test_01_IMPayNoMoney(self, des='私聊打赏余额不足的场景'):
         """
         用例描述：
         检查账户余额不足时，私聊一对一打赏
@@ -22,7 +22,6 @@ class TestPayCreate(unittest.TestCase):
         4.检查预期返回msg，预期：支付失败，提示Toast
         5.检查被打赏者余额,预期：0
         """
-        des = '私聊打赏余额不足的场景'
         conMysql.updateUserMoneyClearSql(config.payUid, config.testUid)
         conMysql.deleteUserAccountSql('broker_user', config.testUid)
         conMysql.deleteUserAccountSql('chatroom', config.testUid)

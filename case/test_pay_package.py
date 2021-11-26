@@ -11,7 +11,7 @@ from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
     pay_url = config.pay_url
 
-    def test_01_RoomPayNoMoney(self):
+    def test_01_RoomPayNoMoney(self, des='房间1V1打赏但余额不足的场景'):
         """
         用例描述：
         验证余额不足时，房间一对一打赏
@@ -22,7 +22,6 @@ class TestPayCreate(unittest.TestCase):
         4.检查预期返回msg，预期：支付失败
         5.检查被打赏者余额,预期：0
         """
-        des = '房间1V1打赏但余额不足的场景'
         conMysql.updateUserMoneyClearSql(config.payUid, config.testUid)
         data = basicData.encodeData(payType='package', money=100, rid=193185408, uid=config.testUid, giftId=5)
         res = post_request_session(TestPayCreate.pay_url, data)
@@ -32,7 +31,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 0)
         case_list[des] = result
 
-    def test_02_RoomPayChangeMoney(self):
+    def test_02_RoomPayChangeMoney(self, des='非直播1V1打赏场景'):
         """
         用例描述：
         验证余额足够时，非直播类型房间一对一打赏,打赏分成满足师徒收益的基础上为：62:38
@@ -42,7 +41,6 @@ class TestPayCreate(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：100 * 0.62 = 62
         """
-        des = '非直播1V1打赏场景'
         conMysql.updateMoneySql(config.payUid, money=30, money_cash=30, money_cash_b=30, money_b=10)
         conMysql.updateMoneySql(config.testUid)
         data = basicData.encodeData(payType='package', money=100, rid=config.super_live_role['auto_rid'], uid=config.testUid, giftId=5)
@@ -52,7 +50,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid), 62)
         case_list[des] = result
 
-    def test_03_couponNoStatePayChange(self):
+    def test_03_couponNoStatePayChange(self, des='打赏礼物使用未激活券的场景'):
         """
         用例描述：
         有未激活券(state=0)的情况下，验证打赏
@@ -64,7 +62,6 @@ class TestPayCreate(unittest.TestCase):
         5.检查被打赏者余额和账户，预期为：0
         6.检查打赏者余额,预期为：3000
         """
-        des = '打赏礼物使用未激活券的场景'
         gift_cid = 54  # 老司机
         conMysql.deleteUserAccountSql('user_commodity', config.payUid)
         conMysql.insertXsUserCommodity(config.payUid, gift_cid, num=1)
@@ -81,7 +78,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 3000)
         case_list[des] = result
 
-    def test_04_couponStatePayChange(self):
+    def test_04_couponStatePayChange(self, des='打赏礼物时有激活券的场景'):
         """
         用例描述：
         有激活券(state=1)的情况下，验证打赏流程
@@ -92,7 +89,6 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：3000 * 0.62 = 1860
         5.检查打赏者余额,预期为：3000 -2500 = 500
         """
-        des = '打赏礼物时有激活券的场景'
         gift_cid = 54  # 老司机
         conMysql.deleteUserAccountSql('user_commodity', config.payUid)
         conMysql.insertXsUserCommodity(config.payUid, gift_cid, num=1, state=1)
@@ -108,7 +104,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 500)
         case_list[des] = result
 
-    def test_05_RoomToMorePayChange(self):
+    def test_05_RoomToMorePayChange(self, des='房间内打赏多人场景'):
         """
         用例描述：
         验证非直播类型房间内一对多打赏场景
@@ -116,10 +112,9 @@ class TestPayCreate(unittest.TestCase):
         1.构造打赏者和被打赏者数据
         2.房间内一对多打赏流畅
         3.校验接口状态和返回值数据
-        4.检查打赏者余额,预期为：12000-10800=1200
-        5.检查被打赏者余额，预期为：600*6*0.7=2520
+        4.检查打赏者余额,预期为：12000-10800 = 1200
+        5.检查被打赏者余额，预期为：600*6*0.7 = 2520
         """
-        des = '房间内打赏多人场景'
         conMysql.updateMoneySql(config.payUid, money=3000, money_cash=3000, money_cash_b=3000, money_b=3000)
         conMysql.updateMoneySql(config.testUid_2)
         data = basicData.encodeData(payType='package-more', giftId=10, num=6, money=600,

@@ -22,7 +22,7 @@ class TestPayCreate(unittest.TestCase):
         'cp_link_rid': 193185538  # 商业连连看房间
     }
 
-    def test_01_liveRoomPay_6238(self):
+    def test_01_liveRoomPay_6238(self, des='直播间非公会主播(非宗师)打赏分成62:38'):
         """
         用例描述：
         tdr:直播间内非公会非一代宗师主播打赏后分成比：62:38
@@ -35,7 +35,6 @@ class TestPayCreate(unittest.TestCase):
         5.检查消费记录表消费money（xs_pay_change_new）: pay_change = 100
         6.检查消费记录表消费方式op（xs_pay_change_new）: consume
         """
-        des = '直播间非公会主播(非宗师)打赏分成62:38'
         conMysql.updateMoneySql(config.payUid, money=30, money_cash=30, money_cash_b=30, money_b=10)
         conMysql.updateMoneySql(config.testUid)
         data = basicData.encodeData(payType='package', money=100, rid=193185408, uid=config.testUid, giftId=5)
@@ -47,7 +46,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('pay_change', config.payUid, op='op'), 'consume')
         case_list_b[des] = result
 
-    def test_02_ImPay_7228(self):
+    def test_02_ImPay_7228(self, des='非公会主播(非宗师)私聊打赏分成72:28'):
         """
         用例描述：
         tdr：私聊非公会非一代宗师主播：72:28
@@ -59,7 +58,6 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：1000 * 0.72 = 720
         5.检查打赏者剩余余额，预期为：1400 - 1000 = 400
         """
-        des = '非公会主播(非宗师)私聊打赏分成72:28'
         conMysql.updateMoneySql(config.payUid, money=1100, money_cash=100, money_cash_b=100, money_b=100)
         conMysql.updateMoneySql(config.testUid)
         data = basicData.encodeData(payType='chat-gift', uid=config.testUid, num=10, giftId=5)
@@ -71,7 +69,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 400)
         case_list_b[des] = result
 
-    def test_03_liveRoomPay_7030(self):
+    def test_03_liveRoomPay_7030(self, des='直播间非公会主播(宗师)打赏分成7:3'):
         """
         用例描述：
         tdr:直播间内非公会一代宗师主播打赏后分成比：70:30
@@ -83,7 +81,6 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：1000 * 0.7 = 700(账户：money_cash，商业房房主进工会魅力值)
         5.检查打赏者余额，预期为：1000 - 1000 = 0
         """
-        des = '直播间非公会主播(宗师)打赏分成7:3'
         test_uid=config.live_role['pack_master_NoPack']  # 非公会一代宗师主播
         conMysql.updateMoneySql(config.payUid, money=900, money_cash=30, money_cash_b=30, money_b=40)
         conMysql.updateMoneySql(test_uid)
@@ -97,7 +94,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 700)
         case_list_b[des] = result
 
-    def test_04_IMPay_8020(self):
+    def test_04_IMPay_8020(self, des='非公会的主播(宗师)私聊打赏分成8:2'):
         """
         用例描述：
         tdr:私聊非公会一代宗师主播：80:20, 50%进工会魅力值，30%进个人魅力值
@@ -108,7 +105,6 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：money_cash=500, money_cash_b=30
         5.检查打赏者余额，预期为：1100 - 1000 = 100
         """
-        des = '非公会的主播(宗师)私聊打赏分成8:2'
         test_uid = config.live_role['pack_master_NoPack']  # 非公会一代宗师主播
         conMysql.updateMoneySql(config.payUid, money=900, money_cash=100, money_cash_b=100, money_b=100)
         conMysql.updateMoneySql(test_uid)
@@ -123,7 +119,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 200)
         case_list_b[des] = result
 
-    def test_05_liveRoomPay_602515(self):
+    def test_05_liveRoomPay_602515(self, des='直播间公会主播(宗师)/公会长分成60:25:15'):
         """
         用例描述：
         tdr:直播间内工会一代宗师主播-公会长-官方抽成：60:25:15,且打包结算频道是直播
@@ -136,7 +132,6 @@ class TestPayCreate(unittest.TestCase):
         5.检查公会长余额，预期为：1000 * 0.25 = 250
         6.检查打赏者余额.预期为：1000 - 1000 = 0
         """
-        des = '直播间公会主播(宗师)/公会长分成60:25:15'
         test_uid = config.live_role['pack_cal_uid']
         ceo_uid = config.live_role['pack_ceo']
         conMysql.updateUserInfoSql('chatroom', test_uid)  # 商业房房主
@@ -154,7 +149,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
-    def test_06_IMPay_602020(self):
+    def test_06_IMPay_602020(self, des='公会主播(宗师)/公会长私聊分成6:2:2'):
         """
         用例描述：
         tdr:私聊打赏公会一代宗师主播-公会长-官方抽成：60:20:20
@@ -166,7 +161,6 @@ class TestPayCreate(unittest.TestCase):
         5.检查公会长余额，预期为：1000 * 0.2 = 200
         6.检查打赏者余额.预期为：1000 - 1000 = 0
         """
-        des = '公会主播(宗师)/公会长私聊分成6:2:2'
         test_uid = config.live_role['pack_cal_uid']
         ceo_uid = config.live_role['pack_ceo']
         conMysql.updateUserInfoSql('chatroom', test_uid)  # 商业房房主
@@ -184,7 +178,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
-    def test_07_liveRoomPay_602515(self):
+    def test_07_liveRoomPay_602515(self, des='直播公会主播(非宗师)/公会长打赏分成60:25:15'):
         """
         用例描述：
         tdr:直播间内工会非一代宗师主播-公会长-官方：60:25:15
@@ -196,7 +190,6 @@ class TestPayCreate(unittest.TestCase):
         5.检查公会长余额，预期为：1000 * 0.25 = 250
         6.检查打赏者余额.预期为：1000 - 1000 = 0
         """
-        des = '直播公会主播(非宗师)/公会长打赏分成60:25:15'
         test_uid = config.live_role['pack_cal_uid']
         ceo_uid = config.live_role['pack_ceo']
         conMysql.updateUserInfoSql('chatroom', test_uid)  # 商业房房主
@@ -214,7 +207,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
-    def test_08_IMPay_602020(self):
+    def test_08_IMPay_602020(self, des='公会主播(非宗师)/公会长私聊分成60:20:20'):
         """
         用例描述：
         tdr:私聊工会非一代宗师主播-公会长-官方：60:20:20
@@ -226,7 +219,6 @@ class TestPayCreate(unittest.TestCase):
         5.检查公会长余额，预期为：1000 * 0.2 = 200
         6.检查打赏者余额.预期为：1000 - 1000 = 0
         """
-        des = '公会主播(非宗师)/公会长私聊分成60:20:20'
         test_uid = config.live_role['pack_cal_uid']
         ceo_uid = config.live_role['pack_ceo']
         conMysql.updateUserInfoSql('chatroom', test_uid)  # 商业房房主
@@ -244,7 +236,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
-    def test_09_underRolePay_6238(self):
+    def test_09_underRolePay_6238(self, des='直播间打赏麦下用户分成62:38'):
         """
         用例描述：
         验证直播间内打赏麦下用户，在师徒收益基础上，分成比例应为62:38
@@ -255,7 +247,6 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：100 * 0.62 = 62
         5.检查打赏者余额,预期为：100 - 100 = 0
         """
-        des = '直播间打赏麦下用户分成62:38'
         conMysql.updateMoneySql(config.payUid, money=100)
         conMysql.updateMoneySql(config.testUid)
         data = basicData.encodeData(payType='package', giftId=5, rid=config.live_role['live_rid'], money=100, uid=config.testUid)
@@ -266,7 +257,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
-    def test_10_NotLiveRoomPayAnchor(self):
+    def test_10_NotLiveRoomPayAnchor(self, des='主播在非直播间被打赏70%进个人魅力'):
         """
         用例描述：
         tdr:非直播频道主播被打赏金额70进个人魅力值（money_cash_b）
@@ -277,7 +268,6 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：1000 * 0.7 = 700(money_cash_b)
         6.检查打赏者余额.预期为：1000 - 1000 = 0
         """
-        des = '主播在非直播间被打赏70%进个人魅力'
         test_uid = config.live_role['pack_cal_uid']
         conMysql.updateMoneySql(config.payUid, money=1000)
         conMysql.updateMoneySql(test_uid)

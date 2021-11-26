@@ -12,7 +12,7 @@ class TestPayCreate(unittest.TestCase):
     pay_url = config.pay_url
 
     @pytest.mark.run(order=1)
-    def test_01_TitlePayChangeMoney(self):
+    def test_01_TitlePayChangeMoney(self, des='开通爵位场景'):
         """
         用例描述：
         验证爵位开通及返钱到余额（money）
@@ -22,7 +22,6 @@ class TestPayCreate(unittest.TestCase):
         3.校验接口和返回值数据
         4.检查剩余钱值,预期值：（200000 - 100000 + 60000 = 160000）
         """
-        des = '开通爵位场景'
         conMysql.deleteUserAccountSql('user_commodity', config.payUid)
         conMysql.deleteUserAccountSql('user_title', config.payUid)
         conMysql.deleteUserAccountSql('user_profile', config.payUid)
@@ -36,7 +35,7 @@ class TestPayCreate(unittest.TestCase):
         case_list[des] = result
 
     @pytest.mark.run(order=2)
-    def test_02_TitlePayChangeRenew(self):
+    def test_02_TitlePayChangeRenew(self, des='爵位续费场景'):
         """
         用例描述：
         续01步骤，验证爵位续费及返钱到余额（money）
@@ -46,7 +45,6 @@ class TestPayCreate(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查剩余钱值,预期值：（200000 - 60000 + 36000 = 176000）
         """
-        des = '爵位续费场景'
         conMysql.updateMoneySql(config.payUid, money=200000)
         data = basicData.encodeData(payType='title', money=100000)
         res = post_request_session(TestPayCreate.pay_url, data)
