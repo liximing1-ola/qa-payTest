@@ -268,7 +268,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：1000 * 0.7 = 700(个人魅力值)
         """
         conMysql.updateMoneySql(config.payUid, money=1000)
-        test_uid = config.super_live_role['white_uid']  # 105002338 固化在Redis SADD Xs.WhiteList.SuperVoice.White 105002338
+        test_uid = config.super_live_role['white_uid']  # Redis-cli SADD Xs.WhiteList.SuperVoice.White 105002338
         conMysql.updateMoneySql(test_uid)
         conMysql.checkOnlineEarnArtist(test_uid, worth=700)  # 设置用户为初级艺人
         conMysql.checkWhiteUid(test_uid, white_type=105)  # type=105是网赚白名单用户

@@ -8,7 +8,8 @@ from common import Logs, Consts
 from common.Config import config
 def autoGitPull():
     Consts.startTime = time.time()
-    codeDir = {'git_dir': '/home/webroot/banban', 'pt_git_dir': '/home/webroot/oversea/oversea-server'}  # 默认指定路径
+    codeDir = {'git_dir': '/home/webroot/banban',
+               'pt_git_dir': '/home/webroot/oversea/oversea-server'}  # 默认指定路径
     git_dir = codeDir['git_dir']
     g = git.cmd.Git(git_dir)
     g.pull()
@@ -19,7 +20,8 @@ def autoGitPull():
         commit_log = repo.git.log('--pretty={"commit":"%h","author":"%an","summary":"%s","date":"%cd"}',
                                   max_count=3, date='format:%Y-%m-%d %H:%M:%S')
         log_list = commit_log.split("\n")
-        Logs.get_log('gitCommitPull.log').info('当前分支: {}, 最新一条commit: {}'.format(repo.active_branch, log_list[0]))
+        Logs.get_log('gitCommitPull.log').info('当前分支: {}, 最新一条commit: {}'
+                                               .format(repo.active_branch, log_list[0]))
         real_time = [eval(item) for item in log_list][0]['date']
         timeArray = time.strptime(real_time, "%Y-%m-%d %H:%M:%S")
         times = int(time.mktime(timeArray))  # commit更新时间

@@ -25,7 +25,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查Toast，预期提示'金豆不足'
         5.检查被打赏者金豆余额,预期：0
         """
-        conMysql.deleteUserBeanSql(config.payUid, config.testUid)  # 执行前处理垃圾数据
+        conMysql.deleteUserBeanSql(config.payUid, config.testUid)  # 执行前处理数据
         conMysql.updateMoneySql(config.payUid)
         data = basicData.encodeData(payType='package', uid=config.testUid, giftId=362, giftType='bean')
         res = post_request_session(TestPayCreate.pay_url, data)

@@ -8,8 +8,7 @@ def all_case():
     case_dir = {"bb_dir": '/home/banban-1/payTest/case',
                 "pt_dir": '/root/payTest/case'}
     testcase = unittest.TestSuite()
-    # 指定待执行用例的目录
-    discover = unittest.defaultTestLoader.discover(case_dir['bb_dir'],
+    discover = unittest.defaultTestLoader.discover(case_dir['bb_dir'],  # 指定待执行用例的目录
                                                    pattern="test_*.py",
                                                    top_level_dir=None)
     testcase.addTests(discover)
