@@ -31,21 +31,7 @@
     <list default="true" id="44793b3e-09e5-4af0-a369-84e9b064bd19" name="Default Changelist" comment="‘提交修改’">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Robot.py" beforeDir="false" afterPath="$PROJECT_DIR$/Robot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/case/test_pay_bean.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_bean.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/case/test_pay_chatGift.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_chatGift.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/case/test_pay_coin.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_coin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/case/test_pay_defend.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_defend.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/case/test_pay_livePackage.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_livePackage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/case/test_pay_openBox.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_openBox.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/case/test_pay_package.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_package.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/case/test_pay_punish.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_punish.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/case/test_pay_shopPay.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_shopPay.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/case/test_pay_superBroker.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_superBroker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/case/test_pay_title.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_title.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/case/test_pay_unity.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_unity.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/Config.py" beforeDir="false" afterPath="$PROJECT_DIR$/common/Config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/basicData.py" beforeDir="false" afterPath="$PROJECT_DIR$/common/basicData.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/conMysql.py" beforeDir="false" afterPath="$PROJECT_DIR$/common/conMysql.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -225,13 +211,6 @@
       <option name="presentableId" value="Default" />
       <updated>1615801946332</updated>
       <workItem from="1637288736860" duration="20000" />
-    </task>
-    <task id="LOCAL-00666" summary="‘提交修改’">
-      <created>1636017145651</created>
-      <option name="number" value="00666" />
-      <option name="presentableId" value="LOCAL-00666" />
-      <option name="project" value="LOCAL" />
-      <updated>1636017145651</updated>
     </task>
     <task id="LOCAL-00667" summary="‘提交修改’">
       <created>1636017450038</created>
@@ -569,7 +548,14 @@
       <option name="project" value="LOCAL" />
       <updated>1637991261986</updated>
     </task>
-    <option name="localTasksCounter" value="715" />
+    <task id="LOCAL-00715" summary="‘提交修改’">
+      <created>1637998026380</created>
+      <option name="number" value="00715" />
+      <option name="presentableId" value="LOCAL-00715" />
+      <option name="project" value="LOCAL" />
+      <updated>1637998026380</updated>
+    </task>
+    <option name="localTasksCounter" value="716" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
