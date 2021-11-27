@@ -3,7 +3,7 @@ import urllib.parse
 def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, giftId=7, giftType='normal',
                cid=5, boxType='copper', num=1, package_cid=0, ctype='', duction_money=0, star=0, uids=('105002312', '100500205')):
 
-    if payType=='package':
+    if payType == 'package':
         data = {
             "platform": "available",
             "type": "package",

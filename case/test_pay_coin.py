@@ -34,21 +34,21 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='gold_coin'), 600)
         case_list[des] = result
 
-    def test_02_roomChangePayCoin(self, des='房间打赏金币礼物的场景'):
+    def test_02_roomChangePayCoin(self, des='房间打赏金币礼物的场景', gift_id=62):
         """
         用例描述：
         验证房间内打赏金币流程
         脚本步骤：
         1.构造用户数据
-        2.房间打赏金币礼物流程
+        2.房间打赏金币礼物流程(礼物：人气券)
         3.校验接口状态和返回值数据
-        4.检查打赏者账户余额（gold_coin） 100 - 20*3 = 40
-        5.检查被打赏者账户余额（gold_coin）  20 * 0.6 = 12
+        4.检查打赏者账户余额（gold_coin） 100 - 20*2 = 60
+        5.检查所有被打赏者账户余额（gold_coin）  20 * 0.6 = 12
         """
         conMysql.updateMoneySql(config.payUid, gold_coin=100)
         conMysql.updateUserMoneyClearSql(config.testUid, config.testUid_2)
         data = basicData.encodeData(payType='package-more', rid=config.live_role['auto_rid'], money=20,
-                                    giftId=62, giftType='coin')
+                                    giftId=gift_id, giftType='coin')
         res = post_request_session(TestPayCreate.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
