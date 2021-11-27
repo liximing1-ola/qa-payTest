@@ -11,13 +11,13 @@ from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
     pay_url = config.pay_url
 
-    def test_01_IMPayNoMoney(self, des='私聊打赏余额不足的场景'):
+    def test_01_IMPayNoMoney(self, des='私聊打赏余额不足的场景', gift_id=5):
         """
         用例描述：
         检查账户余额不足时，私聊一对一打赏
         脚本步骤：
         1.构造打赏者和被打赏者数据
-        2.私聊一对一打赏流程
+        2.私聊一对一打赏流程(礼物:棒棒糖)
         3.校验接口和返回值数据
         4.检查预期返回msg，预期：支付失败，提示Toast
         5.检查被打赏者余额,预期：0
@@ -25,7 +25,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateUserMoneyClearSql(config.payUid, config.testUid)
         conMysql.deleteUserAccountSql('broker_user', config.testUid)
         conMysql.deleteUserAccountSql('chatroom', config.testUid)
-        data = basicData.encodeData(payType='chat-gift', uid=config.testUid, num=10, giftId=5)
+        data = basicData.encodeData(payType='chat-gift', uid=config.testUid, num=10, giftId=gift_id)
         res = post_request_session(TestPayCreate.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 0, reason(des, res))

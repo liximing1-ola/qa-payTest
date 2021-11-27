@@ -1,3 +1,5 @@
+import pytest
+
 from common.Config import config
 from common.method import reason
 from common.conMysql import conMysql
@@ -11,6 +13,7 @@ from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
     pay_url = config.pay_url
 
+    @unittest.skip
     def test_01_moneyChangeExchangeCoin(self, des='余额兑换金币场景'):
         """
         用例描述：
