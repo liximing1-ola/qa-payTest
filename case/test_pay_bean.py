@@ -8,13 +8,12 @@ from common import basicData
 from common.Consts import result, case_list
 from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
-    pay_url = config.pay_url
 
     def tearDown(self) -> None:
         conMysql.deleteUserBeanSql(config.payUid, config.testUid)   # 清理前置冗余数据
 
     @Retry
-    def test_01_NoBeanPayBeanGift(self, des='打赏金豆礼物但金豆不足的场景', gift_id=362):
+    def test_01_NoBeanPayBeanGift(self, des='打赏金豆礼物但金豆不足的场景'):
         """
         用例描述：
         验证账户内金豆不足时打赏金豆礼物的场景
@@ -27,15 +26,16 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.deleteUserBeanSql(config.payUid, config.testUid)  # 执行前处理数据
         conMysql.updateMoneySql(config.payUid)
-        data = basicData.encodeData(payType='package', uid=config.testUid, giftId=gift_id, giftType='bean')
-        res = post_request_session(TestPayCreate.pay_url, data)
+        data = basicData.encodeData(payType='package', uid=config.testUid, giftId=config.giftId['362'],
+                                    giftType='bean')
+        res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 0, reason(des, res))
         assert_body(res['body'], 'msg', '金豆不足', reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('bean', config.testUid), 0)
         case_list[des] = result
 
-    def test_02_beanPayChangeGoldGift(self, des='打赏金豆礼物的场景', gift_id=362):
+    def test_02_beanPayChangeGoldGift(self, des='打赏金豆礼物的场景'):
         """
         用例描述：
         验证金豆足够时打赏金豆礼物的场景
@@ -47,15 +47,16 @@ class TestPayCreate(unittest.TestCase):
         5.检查被打赏者金豆余额，预期为：6000 * 0.5 = 3000
         """
         conMysql.insertBeanSql(config.payUid, money_coupon=6000)
-        data = basicData.encodeData(payType='package-more', giftId=gift_id, giftType='bean', num=6, uids=('105002312', ))
-        res = post_request_session(TestPayCreate.pay_url, data)
+        data = basicData.encodeData(payType='package-more', giftId=config.giftId['362'],
+                                    giftType='bean', num=6, uids=('105002312', ))
+        res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 0)
         assert_equal(conMysql.selectUserMoneySql('bean', config.testUid), 3000)
         case_list[des] = result
 
-    def test_03_MoneyConvertGoldPayGift(self, des='打赏金豆礼物不足用钻转换的场景', gift_id=362):
+    def test_03_MoneyConvertGoldPayGift(self, des='打赏金豆礼物不足用钻转换的场景'):
         """
         用例描述：
         验证打赏金豆礼物时金豆不足用钻转换的场景
@@ -70,8 +71,9 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, money=10000)
         conMysql.updateMoneySql(config.testUid)
         conMysql.insertBeanSql(config.payUid, money_coupon=500)
-        data = basicData.encodeData(payType='package-exchange', uid=config.testUid, giftId=gift_id, giftType='bean')
-        res = post_request_session(TestPayCreate.pay_url, data)
+        data = basicData.encodeData(payType='package-exchange', uid=config.testUid,
+                                    giftId=config.giftId['362'], giftType='bean')
+        res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 500)
@@ -95,7 +97,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.testUid)
         conMysql.insertBeanSql(config.payUid, money_coupon=200)
         data = basicData.encodeData(payType='chat-gift', uid=config.testUid)
-        res = post_request_session(url=TestPayCreate.pay_url, data=data)
+        res = post_request_session(config.pay_url, data=data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 0)
@@ -119,7 +121,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.testUid)
         conMysql.insertBeanSql(config.payUid, money_coupon=400)
         data = basicData.encodeData(payType='package', uid=config.testUid)
-        res = post_request_session(TestPayCreate.pay_url, data)
+        res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 200)
@@ -143,7 +145,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.testUid)
         conMysql.insertBeanSql(config.payUid, money_coupon=400)
         data = basicData.encodeData(payType='package', uid=config.testUid)
-        res = post_request_session(TestPayCreate.pay_url, data)
+        res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 0, reason(des, res))
         assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
@@ -166,7 +168,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, money=80000)
         conMysql.insertBeanSql(config.payUid, money_coupon=400)
         data = basicData.encodeData(payType='pub-drink-buy', money=79900, rid=config.live_role['auto_rid'])
-        res = post_request_session(TestPayCreate.pay_url, data)
+        res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)

@@ -9,9 +9,8 @@ from common.Consts import case_list, result
 from common.runFailed import Retry
 @Retry(max_n=2)
 class TestPayCreate(unittest.TestCase):
-    pay_url = config.pay_url
 
-    def test_01_IMPayNoMoney(self, des='私聊打赏余额不足的场景', gift_id=5):
+    def test_01_IMPayNoMoney(self, des='私聊打赏余额不足的场景'):
         """
         用例描述：
         检查账户余额不足时，私聊一对一打赏
@@ -25,8 +24,9 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateUserMoneyClearSql(config.payUid, config.testUid)
         conMysql.deleteUserAccountSql('broker_user', config.testUid)
         conMysql.deleteUserAccountSql('chatroom', config.testUid)
-        data = basicData.encodeData(payType='chat-gift', uid=config.testUid, num=10, giftId=gift_id)
-        res = post_request_session(TestPayCreate.pay_url, data)
+        data = basicData.encodeData(payType='chat-gift', uid=config.testUid, num=10,
+                                    giftId=config.giftId['5'])
+        res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 0, reason(des, res))
         assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))

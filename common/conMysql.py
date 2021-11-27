@@ -309,9 +309,9 @@ class conMysql:
 
     # 更新箱子刷新物品
     @staticmethod
-    def insertXsUserBox(gift_type, uid, box_type):
+    def insertXsUserBox(uid, gift_cid=9, box_type='copper'):
         sql = "insert into xs_user_box (last_refresh_cid, last_refresh_sub_cid, uid, type) values ({},{},{},'{}')"\
-            .format(gift_type, gift_type, uid, box_type)
+            .format(gift_cid, gift_cid, uid, box_type)
         try:
             conMysql.cur.execute(sql)
         except Exception as error:

@@ -9,7 +9,6 @@ from common.Consts import case_list, result
 from common import basicData
 @unittest.skip('下线')
 class TestPayCreate(unittest.TestCase):
-    pay_url = config.pay_url
 
     @pytest.mark.run(order=1)
     def test_01_TitlePayChangeMoney(self, des='开通爵位场景'):
@@ -28,7 +27,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.deleteUserAccountSql('user_title_new', config.payUid)
         conMysql.updateMoneySql(config.payUid, money=200000)
         data = basicData.encodeData(payType='title', money=100000)
-        res = post_request_session(TestPayCreate.pay_url, data)
+        res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money'), 160000)
@@ -47,7 +46,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.payUid, money=200000)
         data = basicData.encodeData(payType='title', money=100000)
-        res = post_request_session(TestPayCreate.pay_url, data)
+        res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money'), 176000)

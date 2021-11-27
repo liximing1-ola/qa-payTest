@@ -9,7 +9,6 @@ from common.Consts import result, case_list
 from common.runFailed import Retry
 @Retry
 class TestPayCreate(unittest.TestCase):
-    pay_url = config.pay_url
 
     def test_01_openBoxPayChange(self, des='背包开箱子场景'):
         """
@@ -18,7 +17,7 @@ class TestPayCreate(unittest.TestCase):
         脚本步骤：
         1.构造数据（更新xs_user_money，xs_user_commodity，xs_user_box）
          * 清空用户背包内所有物品
-         * 用户背包内插入箱子
+         * 用户背包内插入箱子(cid=2 铜箱子)
          * 修改用户指定箱子礼物刷新
          * 修改用户钱包余额
         2.openBox
@@ -28,11 +27,11 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.deleteUserAccountSql('user_box', config.payUid)
         conMysql.deleteUserAccountSql('user_commodity', config.payUid)
-        conMysql.insertXsUserCommodity(config.payUid, cid=2, num=1)
-        conMysql.insertXsUserBox(9, config.payUid, 'copper')
+        conMysql.insertXsUserCommodity(config.payUid, cid=2, num=1)  # 背包插入1个铜箱子
+        conMysql.insertXsUserBox(config.payUid)
         conMysql.updateMoneySql(config.payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
         data = basicData.encodeData(payType='shop-buy-box', money=600, boxType='copper')
-        res = post_request_session(TestPayCreate.pay_url, data)
+        res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
@@ -56,11 +55,11 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.deleteUserAccountSql('user_box', config.payUid)
         conMysql.deleteUserAccountSql('user_commodity', config.payUid)
-        conMysql.insertXsUserCommodity(config.payUid, cid=3, num=6)
-        conMysql.insertXsUserBox(9, config.payUid, 'silver')
+        conMysql.insertXsUserCommodity(config.payUid, cid=3, num=6)  # 背包插入6个银箱子
+        conMysql.insertXsUserBox(config.payUid, box_type='silver')
         conMysql.updateMoneySql(config.payUid, money=12600)
         data = basicData.encodeData(payType='shop-buy-box', money=2100, num=6, cid=6, boxType='silver')
-        res = post_request_session(TestPayCreate.pay_url, data)
+        res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
@@ -81,8 +80,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
         conMysql.updateMoneySql(config.testUid)
         data = basicData.encodeData(payType='package', money=600, rid=config.live_role['cp_link_rid'],
-                                    uid=config.testUid, giftId=46, star=4)
-        res = post_request_session(TestPayCreate.pay_url, data)
+                                    uid=config.testUid, giftId=config.giftId['46'], star=4)
+        res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
@@ -102,8 +101,8 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.payUid, money=10000)
         conMysql.updateMoneySql(config.testUid)
-        data = basicData.encodeData(payType='package-more', num=2, star=8, money=2100, giftId=47)
-        res = post_request_session(TestPayCreate.pay_url, data)
+        data = basicData.encodeData(payType='package-more', num=2, star=8, money=2100, giftId=config.giftId['47'])
+        res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 1600)

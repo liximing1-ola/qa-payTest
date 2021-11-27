@@ -36,10 +36,21 @@ class config:
         'pack_cal_uid': 105002313,  # 公会签约主播（打包结算）
         'white_uid': 105002338,  # 白名单用户
     }
+    #  礼物配置
+    giftId = {
+        "5": 5,  # 棒棒糖礼物*1币
+        "7": 7,  # 大宝剑*10币
+        "11": 11,  # 老司机*30币(券-5)
+        "46": 46,  # 幸运星*6币
+        "47": 47,  # 五色星*21币
+        "54": 54,  # 小天使*99币（商城购买）
+        "62": 62,  # 人气券*20（金币）
+        "362": 362,  # 啵啵奶茶*1000（金豆）
+    }
     # dev域名（qq登陆方式)
     qq_login_url = dev_host + 'account/qqlogin'
     # 被打赏者
-    testUid =bb_user['testUid']
+    testUid = bb_user['testUid']
     testUid_2 = 100500205
     # 打赏者
     payUid = bb_user['payUid']
@@ -49,7 +60,7 @@ class config:
     banban_git_branch = bb_user['bb_git_branch']
 
     # PT
-    pt_user= {
+    pt_user = {
         'payUid': 800240376,
         'testUid': 800000116,
         'pt_git_branch': 'main'}
@@ -62,7 +73,7 @@ class config:
     pt_git_branch = pt_user['pt_git_branch']
 
     # 谁是凶手
-    games_user= {
+    games_user = {
         'payUid': 105000291,
         'testUid': 128440025,
         'gameRid': 200000799,

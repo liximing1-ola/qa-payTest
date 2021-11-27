@@ -122,7 +122,7 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
         return data
-    elif payType=='shop-buy-box':
+    elif payType == 'shop-buy-box':
         data = {
             "platform": 'available',
             "type": 'shop-buy',
@@ -144,7 +144,7 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
         return data
-    elif payType=='shop-buy':
+    elif payType == 'shop-buy':
         data = {
             "platform": 'available',
             "type": 'shop-buy',
@@ -163,7 +163,7 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
         return data
-    elif payType=='defend':
+    elif payType == 'defend':
         data = {
             "platform": 'available',
             "type": 'defend',
@@ -180,7 +180,7 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
         return data
-    elif payType=='title':
+    elif payType == 'title':
         data = {
             "platform": "available",
             "type": "title",
@@ -198,7 +198,7 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
         return data
-    elif payType=='exchange_gold':
+    elif payType == 'exchange_gold':
         data = {
             "platform": 'available',
             "type": 'exchange_gold',
@@ -210,7 +210,7 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
         return data
-    elif payType=='unity-game-buy':
+    elif payType == 'unity-game-buy':
         data = {
             "platform": 'available',
             "type": 'unity-game-buy',
@@ -229,7 +229,7 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
         return data
-    elif payType=='pub-drink-buy':
+    elif payType == 'pub-drink-buy':
         data = {
             "platform": 'available',
             "type": 'pub-drink-buy',

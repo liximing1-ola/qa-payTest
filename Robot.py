@@ -6,8 +6,8 @@ def robot(mode, reason, title='', bot='BB'):
     robot_dict = {'BB': 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=f9d916cb-6b93-4389-8aa4-f51c755faa0e',
                   'test': 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=0179d8d1-2078-41ba-a8da-0fb11bd51880',
                   'PT': 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=b05a239e-3cc3-4faf-a3cc-c77e200ae1e6'}
-    url = robot_dict[bot]
-    #  url = robot_dict['test']  # 调试
+    # url = robot_dict[bot]
+    url = robot_dict['test']  # 调试
     if mode == 'fail':
         content = "警告! 失败用例: {}, 失败原因: {}".format(title, reason)
         data = {

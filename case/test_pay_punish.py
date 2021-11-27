@@ -9,7 +9,6 @@ from common import basicData
 from common.Consts import case_list, result
 from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
-    pay_url = config.pay_url
 
     @Retry
     @unittest.skip('NSQ延迟')
@@ -30,8 +29,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.insertBeanSql(config.testUid, money_coupon=20)
         conMysql.updateMoneySql(config.testUid, money=20, money_debts=100)
         data = basicData.encodeData(payType='package', money=100, rid=config.super_live_role['auto_rid'],
-                                    uid=config.testUid, giftId=5)
-        res = post_request_session(TestPayCreate.pay_url, data)
+                                    uid=config.testUid, giftId=config.giftId['5'])
+        res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         time.sleep(1.5)  # 延迟处理NSQ消息

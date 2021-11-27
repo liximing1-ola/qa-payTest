@@ -10,20 +10,6 @@ from common.runFailed import Retry
 from common.Consts import case_list_b, result
 @Retry
 class TestPayCreate(unittest.TestCase):
-    pay_url = config.pay_url
-
-    # 角色配置BackUp
-    super_live_role = {
-        'testUid': 105002312,  # 非公会用户
-        'auto_rid': 193185484,  # 商业8坑位房间
-        'super_star_uid': 105002325,  # 指定工会艺人
-        'super_agent_uid': 105002323,  # 指定工会经纪人
-        'agent_star_uid': 105002331,  # 指定工会内有经纪人(105002323)的艺人
-        'super_broker': 136594717,  # 指定工会bid
-        'super-voice-fresh': 200000287,  # 网赚房间
-        'pack_cal_uid': 105002313,  # 公会签约主播（打包结算）
-        'white_uid': 105002338,  # 白名单用户
-    }
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -46,7 +32,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.checkOnlineEarnArtist(test_uid, worth=700)  # 设置用户为初级艺人
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'],
                                     uid=test_uid)
-        res = post_request_session(TestPayCreate.pay_url, data)
+        res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 350)
@@ -65,18 +51,18 @@ class TestPayCreate(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：1000 * 0.45 = 450(个人魅力值)
         """
-        conMysql.updateMoneySql(config.payUid, money=1000)
+        conMysql.updateMoneySql(config.payUid, money=1200)
         test_uid = config.super_live_role['testUid']
         conMysql.updateMoneySql(test_uid)
         conMysql.checkOnlineEarnArtist(test_uid, worth=3501)  # 设置一个中级艺人
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'],
                                     uid=test_uid)
-        res = post_request_session(TestPayCreate.pay_url, data)
+        res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 450)
         assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 450)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 200)
         case_list_b[des] = result
 
     @pytest.mark.run(order=3)
@@ -90,18 +76,18 @@ class TestPayCreate(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：1000 * 0.55 = 550(个人魅力值)
         """
-        conMysql.updateMoneySql(config.payUid, money=1000)
+        conMysql.updateMoneySql(config.payUid, money=1300)
         test_uid = config.super_live_role['testUid']
         conMysql.updateMoneySql(test_uid)
         conMysql.checkOnlineEarnArtist(test_uid, worth=10001)
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'],
                                     uid=test_uid)
-        res = post_request_session(TestPayCreate.pay_url, data)
+        res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 550)
         assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 550)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 300)
         case_list_b[des] = result
 
     @pytest.mark.run(order=4)
@@ -123,7 +109,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.checkOnlineEarnArtist(test_uid, worth=5000)  # 设置为中级艺人
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'],
                                     uid=test_uid)
-        res = post_request_session(TestPayCreate.pay_url, data)
+        res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 450)
@@ -153,7 +139,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.deleteUserAccountSql('broker_user', test_uid)  # 删除用户工会数据
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'],
                                     uid=test_uid)
-        res = post_request_session(TestPayCreate.pay_url, data)
+        res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash_b'), 500)
@@ -184,7 +170,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.insertSuperVoiceUser(test_uid, test_bid)  # 加入指定公会
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'],
                                     uid=test_uid)
-        res = post_request_session(TestPayCreate.pay_url, data)
+        res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 600)
@@ -216,7 +202,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.checkSuperVoiceUser(test_uid, test_bid)  # 加入公会
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'],
                                     uid=test_uid)
-        res = post_request_session(TestPayCreate.pay_url, data)
+        res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 700)
@@ -247,7 +233,7 @@ class TestPayCreate(unittest.TestCase):
         # conMysql.updateSuperVoiceUser(test_uid, test_bid, nid=200)  # 更新用户到指定工会,上面case已加入
         conMysql.checkOnlineEarnRelation(test_agent, test_uid)
         data = basicData.encodeData(payType='package')
-        res = post_request_session(TestPayCreate.pay_url, data)
+        res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 620)
@@ -267,17 +253,17 @@ class TestPayCreate(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：1000 * 0.7 = 700(个人魅力值)
         """
-        conMysql.updateMoneySql(config.payUid, money=1000)
+        conMysql.updateMoneySql(config.payUid, money=2000)
         test_uid = config.super_live_role['white_uid']  # Redis-cli SADD Xs.WhiteList.SuperVoice.White 105002338
         conMysql.updateMoneySql(test_uid)
         conMysql.checkOnlineEarnArtist(test_uid, worth=700)  # 设置用户为初级艺人
         conMysql.checkWhiteUid(test_uid, white_type=105)  # type=105是网赚白名单用户
         data = basicData.encodeData(payType='package', rid=config.super_live_role['super-voice-fresh'],
                                     uid=test_uid)
-        res = post_request_session(TestPayCreate.pay_url, data)
+        res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 700)
         assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 700)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 1000)
         case_list_b[des] = result

@@ -7,7 +7,6 @@ from common.Assert import assert_body, assert_code, assert_equal
 from common.Consts import case_list, result
 from common import basicData
 class TestPayCreate(unittest.TestCase):
-    pay_url = config.pay_url
 
     @unittest.skip('暂无入口')
     def test_01_unityGamePayChange(self, des='unity道具购买场景'):
@@ -22,7 +21,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.payUid, money=100)
         data = basicData.encodeData(payType='unity-game-buy', money=100)
-        res = post_request_session(TestPayCreate.pay_url, data)
+        res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)

@@ -9,7 +9,6 @@ from common.runFailed import Retry
 from common.conMysql import conMysql
 @Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
-    pay_url = config.pay_url
 
     def test_01_defendPayChangMoney(self, des='开通个人守护场景'):
         """
@@ -17,16 +16,15 @@ class TestPayCreate(unittest.TestCase):
         开通个人守护，收益分成在师父收益的基础上为 62:38
         脚本步骤：
         1.构造开通者和被守护者数据
-        2.开通价值520元守护
+        2.开通价值52000钻守护
         3.校验接口状态和返回值数据
         4.检查打赏者余额
         5.检查被打赏者余额,预期：52000 * 0.62 = 32240
-        6.检查消费记录
         """
         conMysql.updateMoneySql(config.payUid, money=52000)
         conMysql.updateMoneySql(config.testUid)
         data = basicData.encodeData(payType='defend', money=52000, uid=config.testUid)
-        res = post_request_session(TestPayCreate.pay_url, data)
+        res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)

@@ -30,8 +30,22 @@
   <component name="ChangeListManager">
     <list default="true" id="44793b3e-09e5-4af0-a369-84e9b064bd19" name="Default Changelist" comment="‘提交修改’">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Robot.py" beforeDir="false" afterPath="$PROJECT_DIR$/Robot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case/test_pay_bean.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_bean.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case/test_pay_chatGift.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_chatGift.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/case/test_pay_coin.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_coin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case/test_pay_defend.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_defend.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case/test_pay_livePackage.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_livePackage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case/test_pay_openBox.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_openBox.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case/test_pay_package.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_package.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case/test_pay_punish.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_punish.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case/test_pay_shopPay.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_shopPay.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case/test_pay_superBroker.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_superBroker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case/test_pay_title.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_title.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case/test_pay_unity.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_unity.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/Config.py" beforeDir="false" afterPath="$PROJECT_DIR$/common/Config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/basicData.py" beforeDir="false" afterPath="$PROJECT_DIR$/common/basicData.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/conMysql.py" beforeDir="false" afterPath="$PROJECT_DIR$/common/conMysql.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +96,28 @@
       <recent name="E:\payTest\common" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.egg">
+  <component name="RunManager" selected="Python.Config">
+    <configuration name="Config" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="payTest" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/common" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/common/Config.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="Session" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="payTest" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -171,35 +206,13 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="testPayConcurrent" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="payTest" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/testPayConcurrent.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.Config" />
         <item itemvalue="Python.egg" />
         <item itemvalue="Python.basicData (1)" />
         <item itemvalue="Python.pk" />
         <item itemvalue="Python.Session" />
-        <item itemvalue="Python.testPayConcurrent" />
       </list>
     </recent_temporary>
   </component>
@@ -212,13 +225,6 @@
       <option name="presentableId" value="Default" />
       <updated>1615801946332</updated>
       <workItem from="1637288736860" duration="20000" />
-    </task>
-    <task id="LOCAL-00665" summary="‘提交修改’">
-      <created>1636016753661</created>
-      <option name="number" value="00665" />
-      <option name="presentableId" value="LOCAL-00665" />
-      <option name="project" value="LOCAL" />
-      <updated>1636016753661</updated>
     </task>
     <task id="LOCAL-00666" summary="‘提交修改’">
       <created>1636017145651</created>
@@ -556,7 +562,14 @@
       <option name="project" value="LOCAL" />
       <updated>1637990625886</updated>
     </task>
-    <option name="localTasksCounter" value="714" />
+    <task id="LOCAL-00714" summary="‘提交修改’">
+      <created>1637991261986</created>
+      <option name="number" value="00714" />
+      <option name="presentableId" value="LOCAL-00714" />
+      <option name="project" value="LOCAL" />
+      <updated>1637991261986</updated>
+    </task>
+    <option name="localTasksCounter" value="715" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
