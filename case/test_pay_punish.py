@@ -28,7 +28,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, money=100)
         conMysql.insertBeanSql(config.testUid, money_coupon=20)
         conMysql.updateMoneySql(config.testUid, money=20, money_debts=100)
-        data = basicData.encodeData(payType='package', money=100, rid=config.super_live_role['auto_rid'],
+        data = basicData.encodeData(payType='package', money=100, rid=config.star_role['auto_rid'],
                                     uid=config.testUid, giftId=config.giftId['5'])
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])

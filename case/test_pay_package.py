@@ -43,7 +43,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.payUid, money=30, money_cash=30, money_cash_b=30, money_b=10)
         conMysql.updateMoneySql(config.testUid)
-        data = basicData.encodeData(payType='package', money=100, rid=config.super_live_role['auto_rid'],
+        data = basicData.encodeData(payType='package', money=100, rid=config.star_role['auto_rid'],
                                     uid=config.testUid, giftId=config.giftId['5'])
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])

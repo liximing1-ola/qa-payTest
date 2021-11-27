@@ -25,7 +25,7 @@ class config:
         'cp_link_rid': 193185538  # 商业连连看房间
     }
     # 网赚房角色配置
-    super_live_role = {
+    star_role = {
         'testUid': 105002312,  # 非公会用户
         'auto_rid': 193185484,  # 商业8坑位房间
         'super_star_uid': 105002325,  # 指定工会艺人

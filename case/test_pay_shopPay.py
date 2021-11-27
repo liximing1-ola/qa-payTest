@@ -68,7 +68,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateUserMoneyClearSql(config.payUid, config.testUid)
         cid = int(conMysql.selectUserMoneySql('id_commodity', config.payUid, cid=bag_gift_cid))
-        data = basicData.encodeData(payType='package', rid=config.super_live_role['auto_rid'], uid=config.testUid,
+        data = basicData.encodeData(payType='package', rid=config.star_role['auto_rid'], uid=config.testUid,
                                     giftId=config.giftId['54'], money=9900, package_cid=cid, ctype='gift')
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
@@ -91,7 +91,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateUserMoneyClearSql(config.payUid, config.testUid)
         cid = int(conMysql.selectUserMoneySql('id_commodity', config.payUid, cid=bag_gift_cid))
-        data = basicData.encodeData(payType='package', rid=config.super_live_role['auto_rid'], uid=config.testUid,
+        data = basicData.encodeData(payType='package', rid=config.star_role['auto_rid'], uid=config.testUid,
                                     giftId=config.giftId['54'], money=99000, package_cid=cid, ctype='gift', num=10)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
