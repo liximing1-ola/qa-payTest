@@ -50,7 +50,7 @@ class TestPayConcurrent:
         """
         bag_gift_cid = 340
         mysql.updateMoneySql(config.payUid)
-        mysql.updateMoneySql(config.testUid)
+        mysql.updateMoneySql(config.rewardUid)
         cid = int(mysql.getUserCommodityIdSql(bag_gift_cid, config.payUid))
         payload = 'platform=available&type=package&money=9900&params=%7B%22rid%22%3A193185484%2C%22uids%22%3A%22105002312%22%2C%22positions%22%3A%220%22%2C%22position%22%3A-1%2C%22giftId%22%3A54%2C%22giftNum%22%3A1%2C%22price%22%3A9900%2C%22cid%22%3A{}%2C%22ctype%22%3A%22gift%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A1%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22refer%22%3A%22%E7%83%AD%E9%97%A8%3Aroom%22%2C%22useCoin%22%3A-1%7D'.format(cid)
         res = Request.post_request_session(url=TestPayConcurrent.pay_url, data=payload)
@@ -60,7 +60,7 @@ class TestPayConcurrent:
     @staticmethod
     def endPayCreate():
         Assert.assert_equal(mysql.checkUserCommoditySql(config.payUid, 340), 0)
-        Assert.assert_equal(mysql.selectAllMoneySql(config.testUid), 6138)
+        Assert.assert_equal(mysql.selectAllMoneySql(config.rewardUid), 6138)
         Assert.assert_equal(Consts.success_num, 1)
         Consts.fail_num=0
 
@@ -129,16 +129,16 @@ class TestPayConcurrent:
         3.检查背包内物品
         """
         mysql.updateMoneySql(config.payUid)
-        mysql.updateMoneySql(config.testUid)
+        mysql.updateMoneySql(config.rewardUid)
         mysql.deleteUserCommoditySql(config.payUid)
-        mysql.deleteUserCommoditySql(config.testUid)
+        mysql.deleteUserCommoditySql(config.rewardUid)
         mysql.insertXsUserCommodity(config.payUid, 263, 2)
         Assert.assert_equal(mysql.checkUserCommoditySql(config.payUid, 263), 2)
 
     @staticmethod
     def commodityPresentConcurrent():
         cid = int(mysql.getUserCommodityIdSql(263, config.payUid))
-        payload = 'id={}&num=1&targetId={}'.format(cid, config.testUid)
+        payload = 'id={}&num=1&targetId={}'.format(cid, config.rewardUid)
         res = Request.post_request_session(url=TestPayConcurrent.commodity_present, data=payload)
         Assert.assert_code(res['code'], 200)
         getValue(res)
@@ -146,7 +146,7 @@ class TestPayConcurrent:
     @staticmethod
     def endCommodityPresent():
         Assert.assert_equal(mysql.checkUserCommoditySql(config.payUid, 263), 0)
-        Assert.assert_equal(mysql.checkUserCommoditySql(config.testUid, 263), 2)
+        Assert.assert_equal(mysql.checkUserCommoditySql(config.rewardUid, 263), 2)
         Assert.assert_equal(Consts.success_num, 2)
 
     @staticmethod

@@ -26,18 +26,18 @@ class TestPayCreate(unittest.TestCase):
         6.检查消费记录表消费方式op
         """
         conMysql.updateMoneySql(config.payUid, money=100)
-        conMysql.insertBeanSql(config.testUid, money_coupon=20)
-        conMysql.updateMoneySql(config.testUid, money=20, money_debts=100)
+        conMysql.insertBeanSql(config.rewardUid, money_coupon=20)
+        conMysql.updateMoneySql(config.rewardUid, money=20, money_debts=100)
         data = basicData.encodeData(payType='package', money=100, rid=config.star_role['auto_rid'],
-                                    uid=config.testUid, giftId=config.giftId['5'])
+                                    uid=config.rewardUid, giftId=config.giftId['5'])
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         time.sleep(1.5)  # 延迟处理NSQ消息
-        assert_equal(conMysql.selectUserMoneySql('bean', config.testUid), 0)
-        assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid, 'money'), 2)
-        assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid, 'money_cash_b'), 0)
-        assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid, 'money_debts'), 0)
-        assert_equal(conMysql.selectUserMoneySql('pay_change', config.testUid, op='money'), 100)
-        assert_equal(conMysql.selectUserMoneySql('pay_change', config.testUid, op='op'), 'punish')
+        assert_equal(conMysql.selectUserMoneySql('bean', config.rewardUid), 0)
+        assert_equal(conMysql.selectUserMoneySql('single_money', config.rewardUid, 'money'), 2)
+        assert_equal(conMysql.selectUserMoneySql('single_money', config.rewardUid, 'money_cash_b'), 0)
+        assert_equal(conMysql.selectUserMoneySql('single_money', config.rewardUid, 'money_debts'), 0)
+        assert_equal(conMysql.selectUserMoneySql('pay_change', config.rewardUid, op='money'), 100)
+        assert_equal(conMysql.selectUserMoneySql('pay_change', config.rewardUid, op='op'), 'punish')
         case_list[des] = result

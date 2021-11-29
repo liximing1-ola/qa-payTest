@@ -21,14 +21,14 @@ class TestPayCreate(unittest.TestCase):
         4.检查预期返回msg，预期：支付失败，提示Toast
         5.检查被打赏者余额,预期：0
         """
-        conMysql.updateUserMoneyClearSql(config.payUid, config.testUid)
-        conMysql.deleteUserAccountSql('broker_user', config.testUid)
-        conMysql.deleteUserAccountSql('chatroom', config.testUid)
-        data = basicData.encodeData(payType='chat-gift', uid=config.testUid, num=10,
+        conMysql.updateUserMoneyClearSql(config.payUid, config.rewardUid)
+        conMysql.deleteUserAccountSql('broker_user', config.rewardUid)
+        conMysql.deleteUserAccountSql('chatroom', config.rewardUid)
+        data = basicData.encodeData(payType='chat-gift', uid=config.rewardUid, num=10,
                                     giftId=config.giftId['5'])
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 0, reason(des, res))
         assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 0)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.rewardUid), 0)
         case_list[des] = result

@@ -78,14 +78,14 @@ class TestPayCreate(unittest.TestCase):
         5.检查收箱用户账户余额，预期值为：大于100
         """
         conMysql.updateMoneySql(config.payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
-        conMysql.updateMoneySql(config.testUid)
+        conMysql.updateMoneySql(config.rewardUid)
         data = basicData.encodeData(payType='package', money=600, rid=config.live_role['cp_link_rid'],
-                                    uid=config.testUid, giftId=config.giftId['46'], star=4)
+                                    uid=config.rewardUid, giftId=config.giftId['46'], star=4)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
-        assert_len(conMysql.selectUserMoneySql('sum_money', config.testUid), 100)
+        assert_len(conMysql.selectUserMoneySql('sum_money', config.rewardUid), 100)
         case_list[des] = result
 
     def test_04_giveBoxMorePeople(self, des='房间送多人多个箱子场景'):
@@ -100,11 +100,11 @@ class TestPayCreate(unittest.TestCase):
         5.检查收箱用户账户余额，预期值为：大于1000
         """
         conMysql.updateMoneySql(config.payUid, money=10000)
-        conMysql.updateMoneySql(config.testUid)
+        conMysql.updateMoneySql(config.rewardUid)
         data = basicData.encodeData(payType='package-more', num=2, star=8, money=2100, giftId=config.giftId['47'])
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 1600)
-        assert_len(conMysql.selectUserMoneySql('sum_money', config.testUid), 1000)
+        assert_len(conMysql.selectUserMoneySql('sum_money', config.rewardUid), 1000)
         case_list[des] = result

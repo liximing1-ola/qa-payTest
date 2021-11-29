@@ -22,11 +22,11 @@ class TestPayCreate(unittest.TestCase):
         5.检查被打赏者余额,预期：52000 * 0.62 = 32240
         """
         conMysql.updateMoneySql(config.payUid, money=52000)
-        conMysql.updateMoneySql(config.testUid)
-        data = basicData.encodeData(payType='defend', money=52000, uid=config.testUid)
+        conMysql.updateMoneySql(config.rewardUid)
+        data = basicData.encodeData(payType='defend', money=52000, uid=config.rewardUid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 32240)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.rewardUid), 32240)
         case_list[des] = result

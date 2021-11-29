@@ -29,7 +29,7 @@ class TestPayCreate(unittest.TestCase):
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
         Assert.assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid), 500)
+        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.rewardUid), 500)
         Consts.GAME_LIST[des] = Consts.result
 
     def test_02_gamesChatPayDivide_55(self):
@@ -44,10 +44,10 @@ class TestPayCreate(unittest.TestCase):
         """
         des = '桌游私聊1V1打赏分成比5:5'
         conMysql.updateMoneySql(config.payUid, 1000)
-        conMysql.updateMoneySql(config.testUid)
+        conMysql.updateMoneySql(config.rewardUid)
         data = basicData.encodeData(payType='chat-gift', rid=config.games_rid, uid=config.games_testUid)
         res = Request.post_request_session(url=TestPayCreate.pay_url, data=data, tokenName='games')
         Assert.assert_code(res['code'], 200)
         Assert.assert_body(res['body'], 'success', 1, reason(des, res['body']))
-        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid), 500)
+        Assert.assert_equal(conMysql.selectUserMoneySql('single_money', config.rewardUid), 500)
         Consts.case_list[des] = Consts.result

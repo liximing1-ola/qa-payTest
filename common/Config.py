@@ -47,17 +47,12 @@ class config:
         "62": 62,  # 人气券*20（金币）
         "362": 362,  # 啵啵奶茶*1000（金豆）
     }
-    # dev域名（qq登陆方式)
-    qq_login_url = dev_host + 'account/qqlogin'
-    # 被打赏者
-    testUid = bb_user['testUid']
-    testUid2 = 100500205
-    # 打赏者
-    payUid = bb_user['payUid']
-    # 打包结算主播
-    pack_cal_uid = bb_user['pack_cal_uid']
-    # git branch
-    banban_git_branch = bb_user['bb_git_branch']
+    qq_login_url = dev_host + 'account/qqlogin'  # dev域名（qq登陆方式)
+    rewardUid = bb_user['testUid']  # 被打赏者
+    rewardUid2 = 100500205  # 被打赏者
+    payUid = bb_user['payUid']  # 打赏者
+    pack_cal_uid = bb_user['pack_cal_uid']  # 打包结算主播
+    banban_git_branch = bb_user['bb_git_branch']  # git branch
 
     # PT
     pt_user = {

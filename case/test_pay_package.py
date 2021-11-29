@@ -21,14 +21,14 @@ class TestPayCreate(unittest.TestCase):
         4.检查预期返回msg，预期：支付失败
         5.检查被打赏者余额,预期：0
         """
-        conMysql.updateUserMoneyClearSql(config.payUid, config.testUid)
-        data = basicData.encodeData(payType='package', money=100, rid=193185408, uid=config.testUid,
+        conMysql.updateUserMoneyClearSql(config.payUid, config.rewardUid)
+        data = basicData.encodeData(payType='package', money=100, rid=193185408, uid=config.rewardUid,
                                     giftId=config.giftId['5'])
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 0, reason(des, res))
         assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 0)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.rewardUid), 0)
         case_list[des] = result
 
     def test_02_RoomPayChangeMoney(self, des='非直播1V1打赏场景'):
@@ -42,13 +42,13 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：100 * 0.62 = 62
         """
         conMysql.updateMoneySql(config.payUid, money=30, money_cash=30, money_cash_b=30, money_b=10)
-        conMysql.updateMoneySql(config.testUid)
+        conMysql.updateMoneySql(config.rewardUid)
         data = basicData.encodeData(payType='package', money=100, rid=config.star_role['auto_rid'],
-                                    uid=config.testUid, giftId=config.giftId['5'])
+                                    uid=config.rewardUid, giftId=config.giftId['5'])
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid), 62)
+        assert_equal(conMysql.selectUserMoneySql('single_money', config.rewardUid), 62)
         case_list[des] = result
 
     def test_03_couponNoStatePayChange(self, des='打赏礼物使用未激活券的场景', gift_cid=54):
@@ -66,15 +66,15 @@ class TestPayCreate(unittest.TestCase):
         conMysql.deleteUserAccountSql('user_commodity', config.payUid)
         conMysql.insertXsUserCommodity(config.payUid, gift_cid, num=1)
         conMysql.updateMoneySql(config.payUid, money=3000)
-        conMysql.updateMoneySql(config.testUid)
+        conMysql.updateMoneySql(config.rewardUid)
         cid = conMysql.selectUserMoneySql('id_commodity', config.payUid, cid=gift_cid)
-        data = basicData.encodeData(payType='package', rid=config.live_role['auto_rid'], uid=config.testUid,
+        data = basicData.encodeData(payType='package', rid=config.live_role['auto_rid'], uid=config.rewardUid,
                                     giftId=config.giftId['11'], money=3000, package_cid=cid, ctype='coupon', duction_money=500)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 0, reason(des, res))
         assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 0)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.rewardUid), 0)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 3000)
         case_list[des] = result
 
@@ -92,15 +92,15 @@ class TestPayCreate(unittest.TestCase):
         conMysql.deleteUserAccountSql('user_commodity', config.payUid)
         conMysql.insertXsUserCommodity(config.payUid, gift_cid, num=1, state=1)
         conMysql.updateMoneySql(config.payUid, money=3000)
-        conMysql.updateMoneySql(config.testUid)
+        conMysql.updateMoneySql(config.rewardUid)
         cid = conMysql.selectUserMoneySql('id_commodity', config.payUid, cid=gift_cid)
-        data = basicData.encodeData(payType='package', rid=config.live_role['auto_rid'], uid=config.testUid,
+        data = basicData.encodeData(payType='package', rid=config.live_role['auto_rid'], uid=config.rewardUid,
                                     giftId=config.giftId['11'], money=3000,
                                     package_cid=cid, ctype='coupon', duction_money=500)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 1860)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.rewardUid), 1860)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 500)
         case_list[des] = result
 
@@ -117,12 +117,12 @@ class TestPayCreate(unittest.TestCase):
         6.检查被打赏者余额，预期为：1000*6*0.62 = 3720(非一代宗师)
         """
         conMysql.updateMoneySql(config.payUid, money=5000, money_cash=5000, money_cash_b=5000, money_b=5000)
-        conMysql.updateUserMoneyClearSql(config.testUid2, config.testUid)
+        conMysql.updateUserMoneyClearSql(config.rewardUid2, config.rewardUid)
         data = basicData.encodeData(payType='package-more', num=6, uids=('105002312', '100500131', '100500205'))
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'], 200)
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid2), 4200)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 3720)
+        assert_equal(conMysql.selectUserMoneySql('single_money', config.rewardUid2), 4200)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.rewardUid), 3720)
         assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money_cash'), 2000)
         case_list[des] = result
