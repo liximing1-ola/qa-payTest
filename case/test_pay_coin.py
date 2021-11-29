@@ -42,12 +42,12 @@ class TestPayCreate(unittest.TestCase):
         5.检查所有被打赏者账户余额（gold_coin）  20 * 0.6 = 12
         """
         conMysql.updateMoneySql(config.payUid, gold_coin=100)
-        conMysql.updateUserMoneyClearSql(config.testUid, config.testUid_2)
+        conMysql.updateUserMoneyClearSql(config.testUid, config.testUid2)
         data = basicData.encodeData(payType='package-more', rid=config.live_role['auto_rid'], money=20,
                                     giftId=config.giftId['62'], giftType='coin')
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='gold_coin'), 60)
-        assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid_2, money_type='gold_coin'), 12)
+        assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid2, money_type='gold_coin'), 12)
         case_list[des] = result

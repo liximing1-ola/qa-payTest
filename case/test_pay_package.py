@@ -117,12 +117,12 @@ class TestPayCreate(unittest.TestCase):
         6.检查被打赏者余额，预期为：1000*6*0.62 = 3720(非一代宗师)
         """
         conMysql.updateMoneySql(config.payUid, money=5000, money_cash=5000, money_cash_b=5000, money_b=5000)
-        conMysql.updateUserMoneyClearSql(config.testUid_2, config.testUid)
+        conMysql.updateUserMoneyClearSql(config.testUid2, config.testUid)
         data = basicData.encodeData(payType='package-more', num=6, uids=('105002312', '100500131', '100500205'))
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'], 200)
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid_2), 4200)
+        assert_equal(conMysql.selectUserMoneySql('single_money', config.testUid2), 4200)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.testUid), 3720)
         assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money_cash'), 2000)
         case_list[des] = result
