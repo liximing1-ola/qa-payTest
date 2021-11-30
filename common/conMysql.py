@@ -216,6 +216,18 @@ class conMysql:
         else:
             print('{} Error'.format(tableName))
 
+    # 检查xs_gift配置
+    @staticmethod
+    def checkXsGiftConfig():
+        sql = "update xs_gift set deleted=0 where id=7 or id=5 or id=11 limit 1"
+        try:
+            conMysql.cur.execute(sql)
+        except Exception as error:
+            conMysql.con.rollback()
+            print('update fail', error)
+        finally:
+            conMysql.con.commit()
+
     # 清空用户账户
     @staticmethod
     def updateUserMoneyClearSql(*uids):

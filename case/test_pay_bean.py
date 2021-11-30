@@ -9,6 +9,10 @@ from common.Consts import result, case_list
 from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
 
+    @classmethod
+    def setUpClass(cls) -> None:
+        conMysql.checkXsGiftConfig()
+
     def tearDown(self) -> None:
         conMysql.deleteUserBeanSql(config.payUid, config.rewardUid)   # 清理前置冗余数据
 
