@@ -6,7 +6,7 @@ class conRedis:
     @staticmethod
     def getConn():
         redis_config = {
-            'host': '127.0.0.1',
+            'host': '192.168.11.46',
             'port': 6379
         }
         pool = redis.ConnectionPool(host=redis_config['host'], port=redis_config['port'], decode_responses=True)
