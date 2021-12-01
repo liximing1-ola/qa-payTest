@@ -8,6 +8,7 @@ from common.Assert import assert_body, assert_code, assert_equal
 from common import basicData
 from common.runFailed import Retry
 from common.Consts import case_list_b, result
+from common.conRedis import conRedis
 @Retry
 class TestPayCreate(unittest.TestCase):
 
@@ -255,6 +256,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.payUid, money=2000)
         test_uid = config.star_role['white_uid']  # Redis-cli SADD Xs.WhiteList.SuperVoice.White 105002338
+        conRedis.checkSetKey('Xs.WhiteList.SuperVoice.White', test_uid)
         conMysql.updateMoneySql(test_uid)
         conMysql.checkOnlineEarnArtist(test_uid, worth=700)  # 设置用户为初级艺人
         conMysql.checkWhiteUid(test_uid, white_type=105)  # type=105是网赚白名单用户

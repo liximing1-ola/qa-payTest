@@ -18,8 +18,6 @@ class conRedis:
         r = conRedis.getConn()
         if r.scard(key) == 0:
             r.sadd(key, value)
-        else:
-            print('had')
 
 
 if __name__=='__main__':
