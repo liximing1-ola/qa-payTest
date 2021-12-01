@@ -16,7 +16,7 @@ class conRedis:
     @staticmethod
     def checkSetKey(key, value):
         r = conRedis.getConn()
-        if len(r.smembers(key)) == 0:
+        if r.scard(key) == 0:
             r.sadd(key, value)
         else:
             print('had')
