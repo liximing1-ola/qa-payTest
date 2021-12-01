@@ -219,7 +219,7 @@ class conMysql:
     # 检查xs_gift配置
     @staticmethod
     def checkXsGiftConfig():
-        sql = "update xs_gift set deleted=0 where id=7 or id=5 or id=11 limit 1"
+        sql = "update xs_gift set deleted=0 where id in (5,7,11) limit 1"
         try:
             conMysql.cur.execute(sql)
         except Exception as error:
