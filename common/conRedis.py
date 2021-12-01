@@ -14,12 +14,13 @@ class conRedis:
         return r
 
     @staticmethod
-    def getSmebers(name):
+    def checkSetKey(key):
         r = conRedis.getConn()
-        print(r.smembers(name))
+        print(r.smembers(key))
+        print(type(r.smembers(key)))
 
 
 if __name__=='__main__':
-    conRedis.getSmebers('Xs.WhiteList.SuperVoice.White')
+    conRedis.checkSetKey('Xs.WhiteList.SuperVoice.White')
 
 
