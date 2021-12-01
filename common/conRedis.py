@@ -1,8 +1,5 @@
-# coding=utf-8
 import redis
-
 class conRedis:
-
     @staticmethod
     def getConn():
         redis_config = {
@@ -22,5 +19,3 @@ class conRedis:
 
 if __name__=='__main__':
     conRedis.checkSetKey('Xs.WhiteList.SuperVoice.White', 105002338)
-
-
