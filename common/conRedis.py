@@ -15,8 +15,8 @@ class conRedis:
 
     @staticmethod
     def getSmebers(name):
-        r = getConn()
-        print(r.smember(name))
+        r = conRedis.getConn()
+        print(r.smembers(name))
 
 
 if __name__=='__main__':
