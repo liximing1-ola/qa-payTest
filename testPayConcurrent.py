@@ -27,7 +27,7 @@ class TestPayConcurrent:
         5.检查背包内物品
         """
         cid=340  # 小天使
-        Session.Session().get_session('dev')
+        Session.Session().getSession('dev')
         mysql.updateMoneySql(config.payUid, 10000)
         mysql.deleteUserCommoditySql(config.payUid)
         data = basicData.encodeData(payType='shop-buy', cid=cid, money=9900, num=1)

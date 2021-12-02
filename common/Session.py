@@ -13,7 +13,7 @@ class Session:
         self.config = config
 
     @staticmethod
-    def get_session(env):
+    def getSession(env):
         """
         获取qq登陆session
         :param env: 环境
