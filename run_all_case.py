@@ -2,7 +2,7 @@
 import unittest
 import time
 from common import Logs, method, Consts, Config
-from autoGitPull import autoGitPull, writeUpdateTime
+from autoGitPull import autoGitPull, updateTime
 from Robot import robot
 def all_case():
     case_dir = {"bb_dir": '/home/banban-1/payTest/case',
@@ -16,7 +16,7 @@ def all_case():
 
 def main():
     if autoGitPull():
-        writeUpdateTime(str(int(time.time())))
+        updateTime('write', now=str(int(time.time())))
         test_result = unittest.TextTestRunner(verbosity=3).run(all_case())
         Consts.endTime = time.time()
         des = "用例总数: {}, 失败用例数: {}, 异常用例数: {}" \

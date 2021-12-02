@@ -31,18 +31,11 @@ class Yaml:
             print(e)
 
 def checkBranch(git_branch):
-    # 默认指定路径
-    codeDir = '/home/banban-1/payTest'
+    codeDir = '/home/banban-1/payTest'  # 默认指定路径
     g = git.cmd.Git(codeDir)
     g.pull()
     repo = Repo(codeDir)
-    # 当前线上分支
-    if str(repo.active_branch) != git_branch:
+    if str(repo.active_branch) != git_branch:  # 当前线上分支
         Logs.get_log('gitBranchError.log').error("git branch error： {}".format(repo.active_branch))
         return False
     return True
-
-
-if __name__ == '__main__':
-    y = Yaml.read_yaml('Basic.yml', 'dev_normalRoom_6215')
-    print(y)

@@ -35,7 +35,7 @@ class Session:
                 if not method.isExtend(res, 'token') or res['success'] != 1:
                     print('failReason： {}'.format(res['msg']))
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
-                writeUserToken(tokenDict['token'], env)
+                checkUserToken('write', token=tokenDict['token'])
                 return tokenDict
             except Exception as error:
                 Logs.get_log('getSession.log').error('session异常，原因： {}'.format(error))
@@ -52,7 +52,7 @@ class Session:
                 if not method.isExtend(res, 'token') or res['success'] != 1:
                     print('failReason： {}'.format(res['msg']))
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
-                writeUserToken(tokenDict['token'], env)
+                checkUserToken('write', app_name='games', token=tokenDict['token'])
                 return tokenDict
             except Exception as error:
                 Logs.get_log('getSession.log').error('session异常，原因： {}'.format(error))
@@ -73,23 +73,18 @@ class Session:
         else:
             print("env input error")
 
-def writeUserToken(t, app_name):
+def checkUserToken(operate, app_name='env', token=''):
     txtPath = os.path.split(os.path.realpath(__file__))[0] + '/{}UserToken.txt'.format(app_name)
-    with open(txtPath, 'w') as f:
-        f.write(t)
-        f.flush()
-
-def readUserToken(app_name):
-    txtPath = os.path.split(os.path.realpath(__file__))[0] + '/{}UserToken.txt'.format(app_name)
-    if not os.path.exists(txtPath):
-        os.system(r"touch {}".format(txtPath))
-        with open(txtPath, 'r+') as f:
-            f.write('')
+    if operate == 'write':
+        with open(txtPath, 'w') as f:
+            f.write(token)
             f.flush()
-    with open(txtPath, 'r') as f:
-        f = f.read()
-        return f
-
-
-if __name__ == '__main__':
-    print(os.path.split(os.path.realpath(__file__))[0] + '/{}UserToken.txt'.format('env'))
+    elif operate == 'read':
+        if not os.path.exists(txtPath):
+            os.system(r"touch {}".format(txtPath))
+            with open(txtPath, 'r+') as f:
+                f.write('')
+                f.flush()
+        with open(txtPath, 'r') as f:
+            f = f.read()
+            return f

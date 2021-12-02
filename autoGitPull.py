@@ -8,13 +8,10 @@ from common import Logs, Consts
 from common.Config import config
 def autoGitPull():
     Consts.startTime = time.time()
-    codeDir = {'git_dir': '/home/webroot/banban',
-               'pt_git_dir': '/home/webroot/oversea/oversea-server'}  # 默认指定路径
-    git_dir = codeDir['git_dir']
-    g = git.cmd.Git(git_dir)
+    gtr = '/home/webroot/banban'  # 默认指定路径
+    g = git.cmd.Git(gtr)
     g.pull()
-    repo = Repo(git_dir)
-    writeGitStatus(repo.git.status())
+    repo = Repo(gtr)
     Session().get_session('dev')  # 更新userToken
     if str(repo.active_branch) == config.banban_git_branch:  # 当前线上分支
         commit_log = repo.git.log('--pretty={"commit":"%h","author":"%an","summary":"%s","date":"%cd"}',
@@ -25,7 +22,7 @@ def autoGitPull():
         real_time = [eval(item) for item in log_list][0]['date']
         timeArray = time.strptime(real_time, "%Y-%m-%d %H:%M:%S")
         times = int(time.mktime(timeArray))  # commit更新时间
-        lastTime = int(readUpdateTime())  # 上次脚本执行时间
+        lastTime = int(updateTime('read'))  # 上次脚本执行时间
         if times > lastTime:
             Logs.get_log('updateGitCode.log').info('最新代码提交时间: {}, 上次代码更新时间: {}'.format(times, lastTime))
             robot('success', '{}'.format(log_list[0]))  # git commit update message
@@ -38,36 +35,18 @@ def autoGitPull():
         Logs.get_log('gitBranchError.log').error("git branch error： {}".format(repo.active_branch))
         return False
 
-def writeUpdateTime(now):
+def updateTime(operate, now=''):
     txtPath = os.path.split(os.path.realpath(__file__))[0] + '/time.txt'
-    with open(txtPath, 'w') as f:
-        f.write(now)
-        f.flush()
-
-def readUpdateTime():
-    txtPath = os.path.split(os.path.realpath(__file__))[0] + '/time.txt'
-    if not os.path.exists(txtPath):
-        os.system(r"touch {}".format(txtPath))
-        with open(txtPath, 'r+') as f:
-            f.write('1600000000')  # 创建txt文件，并默认写入一个时间戳
+    if operate == 'write':
+        with open(txtPath, 'w') as f:
+            f.write(now)
             f.flush()
-    with open(txtPath, 'r') as f:
-        f = f.read()
-        return f
-
-def writeGitStatus(file):
-    txtPath = os.path.split(os.path.realpath(__file__))[0] + '/gitStatus.txt'
-    with open(txtPath, 'w') as f:
-        f.write(file)
-        f.flush()
-
-def readGitStatus():
-    txtPath = os.path.split(os.path.realpath(__file__))[0] + '/gitStatus.txt'
-    now = time.strftime('%Y-%m-%d %H:%M', time.localtime(time.time()))
-    with open(txtPath, 'r') as f:
-        for line in f.readlines():
-            if line.startswith("Your branch is up to date with 'origin/{}'.".format(config.banban_git_branch)):
-                Logs.get_log('gitStatus.log').info(now)
-                return True
-        else:
-            robot('icon', '代码冲突，脚本启动失败，请@lixm严查')
+    elif operate == 'read':
+        if not os.path.exists(txtPath):
+            os.system(r"touch {}".format(txtPath))
+            with open(txtPath, 'r+') as f:
+                f.write('1600000000')  # 创建txt文件，并默认写入一个时间戳
+                f.flush()
+        with open(txtPath, 'r') as f:
+            f = f.read()
+            return f
