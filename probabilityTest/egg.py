@@ -12,7 +12,7 @@ def postPayCreate(giftNum):
         'Content-Type': "application/x-www-form-urlencoded",
         'cache-control': "no-cache",
         'Postman-Token': "f7d705b2-cf29-4a4a-81ba-2c8c8d0f5ed5",
-        "user-token": '743d1Tu__2FuC__2FXEXOsfDVGwlyBH__2F7Wutu__2B6h8jQxOJgo1MqOCzx1MIdzUOKgEDvy__2Fpwu__2BuTX7gsDKaa__2BnS0XzKpmNZ7wIc0cgEQyyOIWV4ZAvd2BjciV7fOIdk'}
+        "user-token": '8a2ekYGSBGzQGaeDDD__2FtXwt7q1ZaWC2r7eZViTdlGPPzJ__2FOCEtkXnkzbWnjgkZD8LlEwDsk9ZeanifS5wli8XrqnxZE35cfMCaZw1T10sTWSQgK__2FoDrIAd5H'}
     data = {
         "platform": "available",
         "type": "package",
@@ -173,8 +173,8 @@ def updateBeanSql(uid, coupon_money):
 
 def main_pay():
     i = 1
-    # updateBeanSql(127565486, coupon_money=1000000000)
-    # updateBeanSql(100287189, 0)
+    updateBeanSql(128440017, coupon_money=1000000000)
+    updateBeanSql(100287189, 0)
     while i < 10000:
         num = int(random.choice('136'))
         print('第{}次, 开蛋数为{}'.format(i, num))
@@ -193,4 +193,4 @@ def main_ktv():
 
 
 if __name__ == '__main__':
-    main_ktv()
+    main_pay()
