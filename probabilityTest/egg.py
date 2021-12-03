@@ -18,7 +18,7 @@ def postPayCreate(giftNum):
         "type": "package",
         "money": 200 * giftNum,
         "params":
-            {"rid": 193193484,
+            {"rid": 200000930,
              "uids": 100287189,
              "positions": "1",
              "position": -1,
