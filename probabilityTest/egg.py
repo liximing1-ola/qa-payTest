@@ -19,7 +19,7 @@ def postPayCreate(giftNum):
         "money": 200 * giftNum,
         "params":
             {"rid": 200000945,
-             "uids": '100287189',
+             "uids": "105002315",
              "positions": "1",
              "position": -1,
              "giftId": 558,
@@ -172,7 +172,7 @@ def updateBeanSql(uid, coupon_money):
 def main_pay():
     i = 1
     updateBeanSql(128440017, coupon_money=1000000000)
-    updateBeanSql(100287189, 0)
+    updateBeanSql(105002315, 0)
     while i < 10000:
         num = int(random.choice('136'))
         print('第{}次, 开蛋数为{}'.format(i, num))
