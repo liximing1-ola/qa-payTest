@@ -145,9 +145,7 @@ def conMysql():
     db_config = {"dev_46_db": '192.168.11.46',
                  "dev_46_user": 'root',
                  "dev_46_pas": '123456',
-                 "ali_db": 'rm-bp1nfl3dp096d5o39.mysql.rds.aliyuncs.com',
-                 "ali_user": 'super',
-                 "ali_pas": 'dev123456'}
+                 }
     con = pymysql.connect(host=db_config['dev_46_db'],
                           port=3306,
                           user=db_config['dev_46_user'],
@@ -173,13 +171,13 @@ def updateBeanSql(uid, coupon_money):
 
 def main_pay():
     i = 1
-    updateBeanSql(128440017, coupon_money=1000000000)
-    updateBeanSql(100287189, 0)
+    # updateBeanSql(128440017, coupon_money=1000000000)
+    # updateBeanSql(100287189, 0)
     while i < 10000:
         num = int(random.choice('136'))
         print('第{}次, 开蛋数为{}'.format(i, num))
         postPayCreate(num)
-        time.sleep(0.2)
+        time.sleep(1)
         i += 1
 
 
