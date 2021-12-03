@@ -186,7 +186,7 @@ def main_ktv():
     while i < 10000:
         print('第{}次'.format(i))
         postPayCreate_live()
-        time.sleep(1)
+        time.sleep(0.5)
         i += 1
 
 

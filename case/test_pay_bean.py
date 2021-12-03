@@ -178,3 +178,25 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
         assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 400)
         case_list[des] = result
+
+    def test_08_BeanPayChangePresentDeco(self, des='赠送金豆装扮的场景'):
+        """
+        用例描述：
+        赠送金豆装扮的场景
+        脚本步骤：
+        1.构造打赏者和被打赏者数据
+        2.礼物面板赠送金豆装扮的流程
+        3.校验接口状态和返回值数据
+        4.检查打赏者金豆余额，预期为：
+        5.检查购买者钻石余额，预期为：80000 - 79900 = 100
+        """
+        conMysql.deleteUserAccountSql('user_commodity', config.payUid)
+        conMysql.updateMoneySql(config.payUid, money=80000)
+        conMysql.insertBeanSql(config.payUid, money_coupon=400)
+        data = basicData.encodeData(payType='pub-drink-buy', money=79900, rid=config.live_role['auto_rid'])
+        res = post_request_session(config.pay_url, data)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
+        assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 400)
+        case_list[des] = result

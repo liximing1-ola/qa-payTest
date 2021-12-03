@@ -247,6 +247,26 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
         return data
+    elif payType == 'deco-present':
+        data = {
+            "platform": 'available',
+            "type": 'deco-present',
+            "money": money,
+            "params": {
+                "num": 1,
+                "uids": uid,
+                "money_type": "bean",
+                "cid": cid,  # 1269
+                "price": money,
+                "coupon_id": 0,
+                "duction_money": 0,
+                "version": 2,
+                "useCoin": -1
+            }
+        }
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        return data
     else:
         raise Exception('payType is error')
 
