@@ -231,12 +231,12 @@ def main_ktv():
 
 def main_pay_600():
     i = 1
-    updateBeanSql(128440017, coupon_money=200000000)
-    updateBeanSql(105002315, 0)
+    # updateBeanSql(128440017, coupon_money=200000000)
+    # updateBeanSql(105002315, 0)
     while i < 20000:
         num = int(random.randint(1, 50))
         print('第{}次, 开箱数为{}'.format(i, num))
-        postPayCreate(num)
+        postPayCreate_600(num)
         time.sleep(1)
         i += 1
 
