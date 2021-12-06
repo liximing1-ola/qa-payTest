@@ -47,6 +47,47 @@ def postPayCreate(giftNum):
     else:
         raise EnvironmentError(res)
 
+def postPayCreate_600(giftNum):
+    url = "https://dev.iambanban.com/pay/create?package=com.imbb.banban.android"
+    headers = {
+        'Content-Type': "application/x-www-form-urlencoded",
+        'cache-control': "no-cache",
+        'Postman-Token': "f7d705b2-cf29-4a4a-81ba-2c8c8d0f5ed5",
+        "user-token": '8a2ekYGSBGzQGaeDDD__2FtXwt7q1ZaWC2r7eZViTdlGPPzJ__2FOCEtkXnkzbWnjgkZD8LlEwDsk9ZeanifS5wli8XrqnxZE35cfMCaZw1T10sTWSQgK__2FoDrIAd5H'}
+    data = {
+        "platform": "available",
+        "type": "package",
+        "money": 600 * giftNum,
+        "params":
+            {"rid": 200000945,
+             "uids": "105002315",
+             "positions": "1",
+             "position": -1,
+             "giftId": 488,
+             "giftNum": giftNum,
+             "price": 600,
+             "cid": 0,
+             "ctype": "",
+             "duction_money": 0,
+             "version": 2,
+             "num": giftNum,
+             "gift_type": 'bean',
+             "useCoin": -1,
+             "star": 0,
+             "show_pac_man_guide": 1,
+             "refer": "",
+             "all_mic": 0,
+             }
+    }
+    d = urllib.parse.urlencode(data)
+    data = d.replace('+', '').replace('%27', '%22')
+    res = requests.post(url, data=data, headers=headers)
+    res = res.json()
+    if res['success'] == 1:
+        pass
+    else:
+        raise EnvironmentError(res)
+
 
 def postPayCreate_ktv():
     gift_dict = {35: 52000, 38: 131400, 63: 20, 100: 9900, 226: 600, 286: 5200, 310: 30, 315: 20, 446: 300,
@@ -168,7 +209,6 @@ def updateBeanSql(uid, coupon_money):
         time.sleep(0.1)
         con.commit()
 
-
 def main_pay():
     i = 1
     # updateBeanSql(128440017, coupon_money=1000000000)
@@ -180,7 +220,6 @@ def main_pay():
         time.sleep(1)
         i += 1
 
-
 def main_ktv():
     i = 1
     while i < 10000:
@@ -190,5 +229,17 @@ def main_ktv():
         i += 1
 
 
+def main_pay_600():
+    i = 1
+    updateBeanSql(128440017, coupon_money=200000000)
+    updateBeanSql(105002315, 0)
+    while i < 20000:
+        num = int(random.randint(1, 50))
+        print('第{}次, 开箱数为{}'.format(i, num))
+        postPayCreate(num)
+        time.sleep(1)
+        i += 1
+
+
 if __name__ == '__main__':
-    main_pay()
+    main_pay_600()
