@@ -256,7 +256,7 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
                 "num": 1,
                 "uids": uid,
                 "money_type": "bean",
-                "cid": cid,  # 1269
+                "cid": cid,  # 1629
                 "price": money,
                 "coupon_id": 0,
                 "duction_money": 0,

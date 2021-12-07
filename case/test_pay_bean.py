@@ -192,7 +192,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.deleteUserAccountSql('user_commodity', config.rewardUid)
         conMysql.insertBeanSql(config.payUid, money_coupon=1000)
-        data = basicData.encodeData(payType='deco-present', uid=config.rewardUid, cid=1269)
+        data = basicData.encodeData(payType='deco-present', uid=config.rewardUid, cid=1629)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
