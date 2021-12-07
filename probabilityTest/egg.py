@@ -88,7 +88,6 @@ def postPayCreate_600(giftNum):
     else:
         raise EnvironmentError(res)
 
-
 def postPayCreate_ktv():
     gift_dict = {35: 52000, 38: 131400, 63: 20, 100: 9900, 226: 600, 286: 5200, 310: 30, 315: 20, 446: 300,
                  450: 1000, 451: 2100, 452: 6600, 455: 13400, 488: 600, 495: 1200, 496: 4000, 497: 18800, 560: 100}
@@ -181,7 +180,6 @@ def postPayCreate_live():
         else:
             raise EnvironmentError(res)
 
-
 def conMysql():
     db_config = {"dev_46_db": '192.168.11.46',
                  "dev_46_user": 'root',
@@ -195,7 +193,6 @@ def conMysql():
     con.select_db('xianshi')
     cursor = con.cursor()
     return con, cursor
-
 
 def updateBeanSql(uid, coupon_money):
     con, cur = conMysql()
@@ -227,7 +224,6 @@ def main_ktv():
         postPayCreate_live()
         time.sleep(0.5)
         i += 1
-
 
 def main_pay_600():
     i = 1
