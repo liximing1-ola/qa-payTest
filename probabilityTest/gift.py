@@ -80,6 +80,8 @@ def checkGiftSql():
         cur.execute(sql)
         res = cur.fetchall()
         print(res)
+        print(res[0])
+        print(res[0][0], res[0][1])
     except Exception as error:
         con.rollback()
         print('update fail', error)
@@ -95,7 +97,7 @@ def main_pay():
     while i < 10000:
         num = int(random.choice('136'))
         print('第{}次, 开蛋数为{}'.format(i, num))
-        postPayCreate_gift(num)
+        postPayCreate_gift()
         time.sleep(1)
         i += 1
 
