@@ -7,7 +7,6 @@ import time
 def postPayCreate_gift(num):
     url = "https://dev.iambanban.com/pay/create?package=com.imbb.banban.android"
     gift_dict = checkGiftSql()
-    print(gift_dict)
     headers = {
         'Content-Type': "application/x-www-form-urlencoded",
         'cache-control': "no-cache",
@@ -17,6 +16,7 @@ def postPayCreate_gift(num):
         print(i)
         for j in i:
             print(j)
+            print(j[0], j[1])
             data = {
                 "platform": "available",
                 "type": "package",
