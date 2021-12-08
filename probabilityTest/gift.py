@@ -79,7 +79,7 @@ def updateMoneySql(uid, money):
 
 def checkGiftSql():
     con, cur = conMysql()
-    sql = "select id,price from xs_gift where gift_type='normal' and deleted=0 and price>=1"
+    sql = "select id,price from xs_gift where gift_type='normal' and deleted=0 and price>=1 and display='room,chat'"
     try:
         cur.execute(sql)
         res = cur.fetchall()
@@ -99,7 +99,7 @@ def main_pay():
     updateMoneySql(128440017, money=1000000000)
     while i < 10000:
         postPayCreate_gift(1)
-        time.sleep(1)
+        time.sleep(3)
         i += 1
 
 
