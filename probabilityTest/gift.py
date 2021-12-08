@@ -13,7 +13,7 @@ def postPayCreate_gift(num):
         'Postman-Token': "f7d705b2-cf29-4a4a-81ba-2c8c8d0f5ed5",
         "user-token": '0ee5fmt4__2FI5C4hAjxM8QqGmrLVQpzsrNdu1fKNQyGDBj9pXxNpQrvgsBJdddWFiAVwRZ__2BTlFv7C4O6sq0y6Yf5WjdxRKNsJp63WGbfYpbajc3mkftXHpJznn'}
     for i in gift_dict:
-        print(i[0], i[1])
+        print(i[0], i[1], type(i[1]))
         data = {
             "platform": "available",
             "type": "package",
