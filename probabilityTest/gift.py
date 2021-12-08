@@ -13,11 +13,11 @@ def postPayCreate_gift(num):
         'Postman-Token': "f7d705b2-cf29-4a4a-81ba-2c8c8d0f5ed5",
         "user-token": '0ee5fmt4__2FI5C4hAjxM8QqGmrLVQpzsrNdu1fKNQyGDBj9pXxNpQrvgsBJdddWFiAVwRZ__2BTlFv7C4O6sq0y6Yf5WjdxRKNsJp63WGbfYpbajc3mkftXHpJznn'}
     for i in gift_dict:
-        print(i[0], i[1], type(i[1]))
+        print(i[0], i[1])
         data = {
             "platform": "available",
             "type": "package",
-            "money": i[1] * 100 * num,
+            "money": int(i[1]) * 100 * num,
             "params":
                 {"rid": 200000930,
                  "uids": "105002315",
@@ -25,7 +25,7 @@ def postPayCreate_gift(num):
                  "position": -1,
                  "giftId": i[0],
                  "giftNum": num,
-                 "price": i[1] * 100,
+                 "price": int(i[1]) * 100,
                  "cid": 0,
                  "ctype": "",
                  "duction_money": 0,
