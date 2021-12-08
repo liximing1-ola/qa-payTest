@@ -6,12 +6,14 @@ import random
 import time
 def postPayCreate_gift():
     url = "https://dev.iambanban.com/pay/create?package=com.imbb.banban.android"
+    gift_dict = checkGiftSql()
+    print(gift_dict)
     headers = {
         'Content-Type': "application/x-www-form-urlencoded",
         'cache-control': "no-cache",
         'Postman-Token': "f7d705b2-cf29-4a4a-81ba-2c8c8d0f5ed5",
         "user-token": 'd3ccnXDBWkTkXLbr8PuGJegJdEPc6x9Sc__2BW32yxxuOWuNEfsEaHU1o4oKXtPNH9tylxUBv4Tt855126jdSUuZQ0eLMp__2BVLyltuTqHGSas20dOBF6__2FxPn7hc6'}
-    for k, v in vap_dict.items():
+    for i in gift_dict:
         data = {
             "platform": "available",
             "type": "package",
@@ -75,13 +77,14 @@ def updateBeanSql(uid, coupon_money):
 
 def checkGiftSql():
     con, cur = conMysql()
-    sql = "select id,price from xs_gift where gift_type='normal' and deleted =0"
+    sql = "select id,price from xs_gift where gift_type='normal' and deleted=0 and price>=1"
     try:
         cur.execute(sql)
         res = cur.fetchall()
-        print(res)
-        print(res[0])
-        print(res[0][0], res[0][1])
+        if res is None:
+            return ()
+        else:
+            return res
     except Exception as error:
         con.rollback()
         print('update fail', error)
@@ -103,4 +106,4 @@ def main_pay():
 
 
 if __name__=='__main__':
-    checkGiftSql()
+    postPayCreate_gift()
