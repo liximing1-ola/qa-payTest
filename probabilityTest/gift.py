@@ -13,44 +13,42 @@ def postPayCreate_gift(num):
         'Postman-Token': "f7d705b2-cf29-4a4a-81ba-2c8c8d0f5ed5",
         "user-token": '0ee5fmt4__2FI5C4hAjxM8QqGmrLVQpzsrNdu1fKNQyGDBj9pXxNpQrvgsBJdddWFiAVwRZ__2BTlFv7C4O6sq0y6Yf5WjdxRKNsJp63WGbfYpbajc3mkftXHpJznn'}
     for i in gift_dict:
-        print(i)
-        for j in i:
-            print(j)
-            print(j[0], j[1])
-            data = {
-                "platform": "available",
-                "type": "package",
-                "money": j[1] * 100 * num,
-                "params":
-                    {"rid": 200000930,
-                     "uids": "105002315",
-                     "positions": "0",
-                     "position": -1,
-                     "giftId": j[0],
-                     "giftNum": num,
-                     "price": j[1] * 100,
-                     "cid": 0,
-                     "ctype": "",
-                     "duction_money": 0,
-                     "version": 2,
-                     "num": 5,
-                     "gift_type": 'normal',
-                     "useCoin": -1,
-                     "star": 0,
-                     "show_pac_man_guide": 1,
-                     "refer": "",
-                     "all_mic": 0,
-                     }
-            }
-            d = urllib.parse.urlencode(data)
-            data = d.replace('+', '').replace('%27', '%22')
-            res = requests.post(url, data=data, headers=headers)
-            time.sleep(2)
-            res = res.json()
-            if res['success'] == 1:
-                pass
-            else:
-                raise EnvironmentError(res)
+        print(i[0], i[1])
+        data = {
+            "platform": "available",
+            "type": "package",
+            "money": i[1] * 100 * num,
+            "params":
+                {"rid": 200000930,
+                 "uids": "105002315",
+                 "positions": "0",
+                 "position": -1,
+                 "giftId": i[0],
+                 "giftNum": num,
+                 "price": i[1] * 100,
+                 "cid": 0,
+                 "ctype": "",
+                 "duction_money": 0,
+                 "version": 2,
+                 "num": 5,
+                 "gift_type": 'normal',
+                 "useCoin": -1,
+                 "star": 0,
+                 "show_pac_man_guide": 1,
+                 "refer": "",
+                 "all_mic": 0,
+                 }
+        }
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        res = requests.post(url, data=data, headers=headers)
+        time.sleep(2)
+        res = res.json()
+        if res['success'] == 1:
+            pass
+        else:
+            raise EnvironmentError(res)
+
 
 
 def conMysql():
