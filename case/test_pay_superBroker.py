@@ -138,6 +138,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateUserMoneyClearSql(test_agent, test_uid)  # 清空用户账户
         conMysql.checkOnlineEarnRelation(test_agent, test_uid)  # 检查艺人经纪人关联关系
         conMysql.deleteUserAccountSql('broker_user', test_uid)  # 删除用户工会数据
+        conMysql.checkUserBroker(test_agent)
         data = basicData.encodeData(payType='package', rid=config.star_role['super-voice-fresh'],
                                     uid=test_uid)
         res = post_request_session(config.pay_url, data)
