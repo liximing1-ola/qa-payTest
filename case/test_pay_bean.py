@@ -157,6 +157,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 400)
         case_list[des] = result
 
+    @unittest.skip('已下线')
     def test_07_BeanPayChangeCombo(self, des='卡座内购买套餐场景'):
         """
         用例描述：
