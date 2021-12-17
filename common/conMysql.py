@@ -504,7 +504,7 @@ class conMysql:
         finally:
             conMysql.con.commit()
 
-    # 工会
+    # 查询工会用户
     @staticmethod
     def checkUserBroker(uid, bid=136594717):
         sql = 'select id from xs_broker_user where uid={}'.format(uid)
@@ -515,6 +515,32 @@ class conMysql:
                 conMysql.insertSuperVoiceUser(uid, bid)
             else:
                 sql = 'update xs_broker_user set uid={}, bid={} where id={}'.format(uid, bid, res[0])
+                try:
+                    conMysql.cur.execute(sql)
+                except Exception as error:
+                    conMysql.con.rollback()
+                    print('update fail', error)
+        except Exception as error:
+            print(error)
+        finally:
+            conMysql.con.commit()
+
+    # 查询用户分成比
+    @staticmethod
+    def checkBrokerUserRate(uid, creater, rate=100):
+        sql = 'select * from config.bbc_broker_user_rate where uid={}'.format(uid)
+        try:
+            conMysql.cur.execute(sql)
+            res = conMysql.cur.fetchone()
+            if res is None:
+                sql = 'insert into config.bbc_broker_user_rate (uid, broker_creater, rate) values({}, {}, {})'.format(uid, creater, rate)
+                try:
+                    conMysql.cur.execute(sql)
+                except Exception as error:
+                    conMysql.con.rollback()
+                    print('insert fail', error)
+            else:
+                sql = "update config.bbc_broker_user_rate set rate={}, broker_creater={} where uid={} limit 1".format(rate, creater, uid)
                 try:
                     conMysql.cur.execute(sql)
                 except Exception as error:
