@@ -114,7 +114,7 @@ class TestPayCreate(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查打赏者余额,预期为：20000-1000*6*3 = 2000
         5.检查被打赏者余额，预期为：1000*6*0.7 = 4200(一代宗师)
-        6.检查被打赏者余额，预期为：1000*6*0.62 = 3720(非一代宗师)
+        6.检查被打赏者余额，预期为：1000*6*0.7 = 4200(公会成员，工会魅力值)
         """
         conMysql.updateMoneySql(config.payUid, money=5000, money_cash=5000, money_cash_b=5000, money_b=5000)
         conMysql.updateUserMoneyClearSql(config.rewardUid2, config.rewardUid)
@@ -123,6 +123,6 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'], 200)
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('single_money', config.rewardUid2), 4200)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.rewardUid), 3720)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.rewardUid, money_type='money_cash'), 4200)
         assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money_cash'), 2000)
         case_list[des] = result
