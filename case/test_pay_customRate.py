@@ -15,17 +15,17 @@ class TestPayCreate(unittest.TestCase):
         'pack_ceo': 105002314,  # 公会长
     }
 
-    def test_01_RoomPayCustomRate_(self, des='商业房打赏自定义分成:50'):
+    def test_01_roomPayCustomRate_50(self, des='商业房打赏自定义分成:50'):
         """
         用例描述：
-        tdr:后台自定义分成比例为50%（所得公会魅力值部分与公会长按照比例分成）
+        tdr:后台自定义分成比例为50%（所得公会魅力值部分-70%与公会长按照比例分成）
         脚本步骤：
         1.构造打赏者，被打赏者和公会长数据
         2.房间内打赏（打赏100分）
         3.校验接口状态和返回值数据
         4.检查打赏者余额，预期为：100 - 100 = 0
         5.检查被打赏者余额，预期为：100 * 0.7 * 0.5 = 35
-        6.检查被打赏者公会长余额，预期为：100 * 0.7 * 0.5 = 35
+        6.检查被打赏者公会长余额，预期为：100 * 0.7 *（1-0.5） = 35
         """
         conMysql.updateMoneySql(config.payUid, money=30, money_cash=30, money_cash_b=30, money_b=10)
         testUid = config.rewardUid2  # 被打赏者
@@ -41,4 +41,33 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         assert_equal(conMysql.selectUserMoneySql('single_money', testUid, money_type='money_cash'), 35)
         assert_equal(conMysql.selectUserMoneySql('single_money', ceoUid, money_type='money_cash'), 35)
+        case_list_b[des] = result
+
+    def test_02_chatPayCustomRate_80(self, des='私聊打赏自定义分成:80'):
+        """
+        用例描述：
+        tdr:后台自定义分成比例为80%（所得公会魅力值部分-50%与公会长按照比例分成）
+        脚本步骤：
+        1.构造打赏者，被打赏者和公会长数据
+        2.私聊打赏（打赏1000分）
+        3.校验接口状态和返回值数据
+        4.检查打赏者余额，预期为：1000 - 1000 = 0
+        5.检查被打赏者总余额，预期为：1000 * 0.5 * 0.8 + 1000 * 0.3 = 700
+        6.检查被打赏者公会魅力值余额,预期为：1000 * 0.5 * 0.8 = 400（公会魅力值）
+        6.检查被打赏者公会长余额，预期为：1000 * 0.5 *（1-0.8) = 100(公会魅力值)
+        """
+        conMysql.updateMoneySql(config.payUid, money=930, money_cash=30, money_cash_b=30, money_b=10)
+        testUid = config.rewardUid2  # 被打赏者
+        ceoUid = config.live_role['pack_ceo']  # 关联公会长
+        conMysql.updateUserMoneyClearSql(testUid, ceoUid)
+        conMysql.checkUserBroker(testUid, bid=ceoUid)  # bid=105002314 被打赏者加入工会
+        conMysql.checkBrokerUserRate(testUid, ceoUid, rate=80)  # config.bbc_broker_user_rate 设置分成比
+        data = basicData.encodeData(payType='chat-gift', uid=testUid)
+        res = post_request_session(config.pay_url, data)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', testUid), 700)
+        assert_equal(conMysql.selectUserMoneySql('single_money', testUid, money_type='money_cash'), 400)
+        assert_equal(conMysql.selectUserMoneySql('single_money', ceoUid, money_type='money_cash'), 100)
         case_list_b[des] = result
