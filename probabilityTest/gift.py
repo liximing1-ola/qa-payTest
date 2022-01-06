@@ -11,7 +11,7 @@ def postPayCreate_gift(num):
         'Content-Type': "application/x-www-form-urlencoded",
         'cache-control': "no-cache",
         'Postman-Token': "f7d705b2-cf29-4a4a-81ba-2c8c8d0f5ed5",
-        "user-token": '0ee5fmt4__2FI5C4hAjxM8QqGmrLVQpzsrNdu1fKNQyGDBj9pXxNpQrvgsBJdddWFiAVwRZ__2BTlFv7C4O6sq0y6Yf5WjdxRKNsJp63WGbfYpbajc3mkftXHpJznn'}
+        "user-token": '7796hnNwlGXJgzkyF5yi8uouKidK0xHPoHTpPniAB6vpkT__2FHBM1HvfRNhaCXt2__2FhB4kWH4xcALvKPXrP__2FWz5mj1RLHiD8lR8KYNRcdAXEjzFLlD8TRmL__2B31z'}
     for i in gift_dict:
         print(i[0], i[1])
         data = {
@@ -19,8 +19,8 @@ def postPayCreate_gift(num):
             "type": "package",
             "money": int(i[1]) * 100 * num,
             "params":
-                {"rid": 200000930,
-                 "uids": "105002315",
+                {"rid": 200000968,
+                 "uids": "100010152",
                  "positions": "0",
                  "position": -1,
                  "giftId": i[0],
@@ -94,9 +94,9 @@ def checkGiftSql():
         time.sleep(0.1)
         con.commit()
 
-def main_pay():
+def main_pay(uid):
     i = 1
-    updateMoneySql(128440017, money=1000000000)
+    updateMoneySql(uid, money=1000000000)
     while i < 10000:
         postPayCreate_gift(1)
         time.sleep(3)
@@ -104,4 +104,4 @@ def main_pay():
 
 
 if __name__=='__main__':
-    postPayCreate_gift(1)
+    main_pay(100287189)

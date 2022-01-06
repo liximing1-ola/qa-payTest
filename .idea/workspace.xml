@@ -30,7 +30,8 @@
   <component name="ChangeListManager">
     <list default="true" id="44793b3e-09e5-4af0-a369-84e9b064bd19" name="Default Changelist" comment="‘提交修改’">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/case/test_pay_customRate.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_customRate.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/case/test_pay_livePackage.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_livePackage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/probabilityTest/gift.py" beforeDir="false" afterPath="$PROJECT_DIR$/probabilityTest/gift.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -211,20 +212,6 @@
       <option name="presentableId" value="Default" />
       <updated>1615801946332</updated>
       <workItem from="1637288736860" duration="20000" />
-    </task>
-    <task id="LOCAL-00720" summary="‘提交修改’">
-      <created>1638272853527</created>
-      <option name="number" value="00720" />
-      <option name="presentableId" value="LOCAL-00720" />
-      <option name="project" value="LOCAL" />
-      <updated>1638272853527</updated>
-    </task>
-    <task id="LOCAL-00721" summary="‘提交修改’">
-      <created>1638346526678</created>
-      <option name="number" value="00721" />
-      <option name="presentableId" value="LOCAL-00721" />
-      <option name="project" value="LOCAL" />
-      <updated>1638346526678</updated>
     </task>
     <task id="LOCAL-00722" summary="‘提交修改’">
       <created>1638346680726</created>
@@ -555,7 +542,21 @@
       <option name="project" value="LOCAL" />
       <updated>1639997157098</updated>
     </task>
-    <option name="localTasksCounter" value="769" />
+    <task id="LOCAL-00769" summary="‘提交修改’">
+      <created>1639999039872</created>
+      <option name="number" value="00769" />
+      <option name="presentableId" value="LOCAL-00769" />
+      <option name="project" value="LOCAL" />
+      <updated>1639999039872</updated>
+    </task>
+    <task id="LOCAL-00770" summary="‘提交修改’">
+      <created>1639999116036</created>
+      <option name="number" value="00770" />
+      <option name="presentableId" value="LOCAL-00770" />
+      <option name="project" value="LOCAL" />
+      <updated>1639999116036</updated>
+    </task>
+    <option name="localTasksCounter" value="771" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -628,12 +629,12 @@
       <screen x="1920" y="-119" width="1536" height="832" />
     </state>
     <state x="2534" y="206" key="VCS.ChangelistChooser/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1638869691654" />
-    <state x="2281" y="26" key="Vcs.Push.Dialog.v2" timestamp="1639997158111">
+    <state x="2281" y="26" key="Vcs.Push.Dialog.v2" timestamp="1639999116939">
       <screen x="1920" y="-119" width="1536" height="832" />
     </state>
     <state x="361" y="144" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1639798498858" />
     <state x="451" y="181" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1639973460875" />
-    <state x="2281" y="26" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1639997158111" />
+    <state x="2281" y="26" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1639999116939" />
     <state x="539" y="191" width="840" height="848" key="search.everywhere.popup" timestamp="1639715380055">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

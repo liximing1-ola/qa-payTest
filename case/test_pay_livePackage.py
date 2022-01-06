@@ -53,7 +53,7 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        # 商业房房主 or （工会会长 or 工会成员）|| 同意大神协议 (insert into xs_user_settings (uid, agreement_version) values(100500205, 1))
+        # 商业房房主 or (（工会会长 or 工会成员）&& 同意大神协议 )(insert into xs_user_settings (uid, agreement_version) values(100500205, 1))
         assert_equal(conMysql.selectUserMoneySql('single_money', config.rewardUid), 720)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 400)
         case_list_b[des] = result
