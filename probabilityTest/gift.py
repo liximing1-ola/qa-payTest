@@ -99,7 +99,7 @@ def main_pay(uid):
     updateMoneySql(uid, money=1000000000)
     while i < 10000:
         postPayCreate_gift(1)
-        time.sleep(2)
+        time.sleep(1.5)
         i += 1
 
 
