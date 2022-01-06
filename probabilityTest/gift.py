@@ -41,7 +41,7 @@ def postPayCreate_gift(num):
         }
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
-        time.sleep(5)
+        time.sleep(2.5)
         res = requests.post(url, data=data, headers=headers)
         res = res.json()
         if res['success'] == 1:
