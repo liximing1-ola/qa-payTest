@@ -67,7 +67,7 @@ def conMysql():
 
 def updateMoneySql(uid, money):
     con, cur = conMysql()
-    sql = "update xs_user_money set money{} where uid={}".format(money, uid)
+    sql = "update xs_user_money set money={} where uid={}".format(money, uid)
     try:
         cur.execute(sql)
     except Exception as error:
