@@ -67,7 +67,7 @@ def conMysql():
 
 def updateMoneySql(uid, money):
     con, cur = conMysql()
-    sql = "update xs_user_money set money{} where uid={} limit 1".format(money, uid)
+    sql = "update xs_user_money set money{} where uid={}".format(money, uid)
     try:
         cur.execute(sql)
     except Exception as error:
@@ -99,7 +99,7 @@ def main_pay(uid):
     updateMoneySql(uid, money=1000000000)
     while i < 10000:
         postPayCreate_gift(1)
-        time.sleep(3)
+        time.sleep(2)
         i += 1
 
 
