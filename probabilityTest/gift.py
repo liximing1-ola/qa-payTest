@@ -79,7 +79,7 @@ def updateMoneySql(uid, money):
 
 def checkGiftSql():
     con, cur = conMysql()
-    sql = "select id,price from xs_gift where gift_type='normal' and deleted=0 and price>=1 and display='room,chat'"
+    sql = "select id,price from xs_gift where gift_type='normal' and deleted=0 and price>=1 and display='room,chat' and app_id=1"
     try:
         cur.execute(sql)
         res = cur.fetchall()
