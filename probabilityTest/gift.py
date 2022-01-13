@@ -49,8 +49,6 @@ def postPayCreate_gift(num):
         else:
             raise EnvironmentError(res)
 
-
-
 def conMysql():
     db_config = {"dev_46_db": '192.168.11.46',
                  "dev_46_user": 'root',
