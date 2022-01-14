@@ -1,7 +1,6 @@
 from common.Config import config
 from common.conMysql import conMysql
 import unittest
-import time
 from common.Request import post_request_session
 from common.method import reason
 from common.Assert import assert_code, assert_equal, assert_body
@@ -130,12 +129,10 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 200)
-        time.sleep(1)  # 适配rpc
         assert_equal(conMysql.selectUserMoneySql('single_money', config.rewardUid), 620)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 200)
         case_list[des] = result
 
-    @unittest.skip
     def test_06_MoneyConvertGoldPayGift(self, des='金豆抵扣手续费但钻石余额少于礼物价格的场景'):
         """
         用例描述：
@@ -183,7 +180,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 400)
         case_list[des] = result
 
-    @unittest.skip
     def test_08_BeanPayChangePresentDeco(self, des='赠送金豆装扮的场景'):
         """
         用例描述：

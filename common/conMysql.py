@@ -38,6 +38,7 @@ class conMysql:
             except Exception as error:
                 print(error)
         elif accountType == 'cash':  # 查询用户账户扩展表 现金余额
+            time.sleep(0.5)
             sql = "select cash from xs_user_money_extend where uid={}".format(uid)
             try:
                 conMysql.cur.execute(sql)
@@ -49,6 +50,7 @@ class conMysql:
             except Exception as error:
                 print(error)
         elif accountType == 'sum_money':  # 查询用户所有账户数据之和
+            time.sleep(0.5)
             sql = "select money+money_b+money_cash_b+money_cash from xs_user_money where uid={}".format(uid)
             try:
                 conMysql.cur.execute(sql)
@@ -60,6 +62,7 @@ class conMysql:
             except Exception as error:
                 print(error)
         elif accountType == 'single_money':  # 查询用户单个账户数据
+            time.sleep(0.5)
             sql = "select {} from xs_user_money where uid={}".format(money_type, uid)
             try:
                 conMysql.cur.execute(sql)
@@ -71,6 +74,7 @@ class conMysql:
             except Exception as error:
                 print(error)
         elif accountType == 'pay_change':  # 查询用户消费记录数据
+            time.sleep(0.5)
             sql = "select {} from xs_pay_change_new where uid={} ORDER BY id DESC LIMIT 1".format(op, uid)
             try:
                 conMysql.cur.execute(sql)
