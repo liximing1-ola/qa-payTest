@@ -209,20 +209,6 @@
       <updated>1615801946332</updated>
       <workItem from="1637288736860" duration="20000" />
     </task>
-    <task id="LOCAL-00734" summary="‘提交修改’">
-      <created>1638504570674</created>
-      <option name="number" value="00734" />
-      <option name="presentableId" value="LOCAL-00734" />
-      <option name="project" value="LOCAL" />
-      <updated>1638504570674</updated>
-    </task>
-    <task id="LOCAL-00735" summary="‘提交修改’">
-      <created>1638504697496</created>
-      <option name="number" value="00735" />
-      <option name="presentableId" value="LOCAL-00735" />
-      <option name="project" value="LOCAL" />
-      <updated>1638504697496</updated>
-    </task>
     <task id="LOCAL-00736" summary="‘提交修改’">
       <created>1638505134108</created>
       <option name="number" value="00736" />
@@ -552,7 +538,21 @@
       <option name="project" value="LOCAL" />
       <updated>1642145999322</updated>
     </task>
-    <option name="localTasksCounter" value="783" />
+    <task id="LOCAL-00783" summary="‘提交修改’">
+      <created>1642146193932</created>
+      <option name="number" value="00783" />
+      <option name="presentableId" value="LOCAL-00783" />
+      <option name="project" value="LOCAL" />
+      <updated>1642146193932</updated>
+    </task>
+    <task id="LOCAL-00784" summary="‘提交修改’">
+      <created>1642146393194</created>
+      <option name="number" value="00784" />
+      <option name="presentableId" value="LOCAL-00784" />
+      <option name="project" value="LOCAL" />
+      <updated>1642146393194</updated>
+    </task>
+    <option name="localTasksCounter" value="785" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -625,11 +625,11 @@
       <screen x="1920" y="-119" width="1536" height="832" />
     </state>
     <state x="2534" y="206" key="VCS.ChangelistChooser/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1638869691654" />
-    <state x="451" y="181" key="Vcs.Push.Dialog.v2" timestamp="1642146000169">
+    <state x="451" y="181" key="Vcs.Push.Dialog.v2" timestamp="1642146394192">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="361" y="144" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1639798498858" />
-    <state x="451" y="181" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1642146000169" />
+    <state x="451" y="181" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1642146394192" />
     <state x="2281" y="26" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1642072433748" />
     <state x="539" y="191" width="840" height="848" key="search.everywhere.popup" timestamp="1639715380055">
       <screen x="0" y="0" width="1920" height="1040" />
