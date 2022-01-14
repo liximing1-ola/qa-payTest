@@ -129,7 +129,7 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 200)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.rewardUid), 620)
+        assert_equal(conMysql.selectUserMoneySql('single_money', config.rewardUid), 620)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 200)
         case_list[des] = result
 
