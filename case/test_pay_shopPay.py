@@ -71,6 +71,7 @@ class TestPayCreate(unittest.TestCase):
         data = basicData.encodeData(payType='package', rid=config.star_role['auto_rid'], uid=config.rewardUid,
                                     giftId=config.giftId['54'], money=9900, package_cid=cid, ctype='gift')
         res = post_request_session(config.pay_url, data)
+        print(res)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('num_commodity', config.payUid, cid=bag_gift_cid), 9)
@@ -94,6 +95,7 @@ class TestPayCreate(unittest.TestCase):
         data = basicData.encodeData(payType='package', rid=config.star_role['auto_rid'], uid=config.rewardUid,
                                     giftId=config.giftId['54'], money=99000, package_cid=cid, ctype='gift', num=10)
         res = post_request_session(config.pay_url, data)
+        print(res)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 0, reason(des, res))
         assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
