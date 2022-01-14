@@ -39,7 +39,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('bean', config.rewardUid), 0)
         case_list[des] = result
 
-    @unittest.skip
     def test_02_beanPayChangeGoldGift(self, des='打赏金豆礼物的场景'):
         """
         用例描述：
@@ -61,7 +60,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('bean', config.rewardUid), 3000)
         case_list[des] = result
 
-    @unittest.skip
     def test_03_MoneyConvertGoldPayGift(self, des='打赏金豆礼物不足用钻转换的场景'):
         """
         用例描述：
@@ -87,7 +85,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 9000)
         case_list[des] = result
 
-    @unittest.skip
     def test_04_ImMoneyPayChangeBeanDeduct(self, des='私聊打赏钻石礼物时金豆抵扣平台手续费场景'):
         """
         用例描述：
@@ -132,6 +129,7 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 200)
+        print(conMysql.selectUserMoneySql('sum_money', config.rewardUid))
         assert_equal(conMysql.selectUserMoneySql('single_money', config.rewardUid), 620)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 200)
         case_list[des] = result
