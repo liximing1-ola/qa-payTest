@@ -2,6 +2,7 @@
 封装assert方法
 """
 import json
+import time
 from common import Consts
 def assert_code(actual_code, expected_code=200):
     """
@@ -10,6 +11,7 @@ def assert_code(actual_code, expected_code=200):
     :param expected_code: 预期结果
     """
     try:
+        time.sleep(1)
         assert actual_code == expected_code
         return True
     except:
