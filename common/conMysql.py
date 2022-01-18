@@ -221,7 +221,6 @@ class conMysql:
     @staticmethod
     def checkXsGiftConfig():
         gift_list = tuple(i for i in config.giftId.values())
-        print(gift_list)
         sql = "update xs_gift set deleted=0 where id in {}".format(gift_list)
         try:
             conMysql.cur.execute(sql)
