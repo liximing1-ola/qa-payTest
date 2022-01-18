@@ -220,7 +220,7 @@ class conMysql:
     # 检查xs_gift配置
     @staticmethod
     def checkXsGiftConfig():
-        gift_list = [i for i in config.giftId.values()]
+        gift_list = tuple(i for i in config.giftId.values())
         print(gift_list)
         sql = "update xs_gift set deleted=0 where id in {}".format(gift_list)
         try:
