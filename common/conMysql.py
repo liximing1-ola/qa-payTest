@@ -1,6 +1,7 @@
 # coding=utf-8
 import pymysql
 import time
+from common.Config import config
 class conMysql:
     db_config = {"dev_46_db": '192.168.11.46',
                  "dev_46_user": 'root',
@@ -219,7 +220,9 @@ class conMysql:
     # 检查xs_gift配置
     @staticmethod
     def checkXsGiftConfig():
-        sql = "update xs_gift set deleted=0 where id in (5,7,11)"
+        gift_list = [i for i in config.giftId.values()]
+        print(gift_list)
+        sql = "update xs_gift set deleted=0 where id in {}".format(gift_list)
         try:
             conMysql.cur.execute(sql)
         except Exception as error:
