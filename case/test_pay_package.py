@@ -98,7 +98,6 @@ class TestPayCreate(unittest.TestCase):
                                     giftId=config.giftId['11'], money=3000,
                                     package_cid=cid, ctype='coupon', duction_money=500)
         res = post_request_session(config.pay_url, data)
-        print(res)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.rewardUid), 1860)
