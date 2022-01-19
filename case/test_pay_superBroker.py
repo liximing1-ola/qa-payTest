@@ -92,7 +92,7 @@ class TestPayCreate(unittest.TestCase):
         case_list_b[des] = result
 
     @pytest.mark.run(order=4)
-    def test_04_starRoomNoAgentPay_45(self, des='网赚指定工会无经纪人中级艺人收45%公会魅力值'):
+    def test_05_starRoomNoAgentPay_45(self, des='网赚指定工会无经纪人中级艺人收45%公会魅力值'):
         """
         用例描述：
         tdr：网赚频道有公会无经纪人的中级艺人（3501-10000）被打赏后收到45%的公会魅力值
@@ -118,7 +118,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
-    @unittest.skip
     @pytest.mark.run(order=5)
     def test_05_starRoomSuperVoicePay_508(self, des='网赚无工会有经纪人(1j)初级艺人分成50:8'):
         """
@@ -151,7 +150,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
-    @unittest.skip
     @pytest.mark.run(order=6)
     def test_06_starRoomArtistAgent_608(self, des='网赚指定工会有经纪人(1j)的中级艺人分成60:8'):
         """
@@ -183,7 +181,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
-    @unittest.skip
     @pytest.mark.run(order=7)
     def test_07_starRoomArtistAgent_7012(self, des='网赚有工会有经纪人(7j)高级艺人分成70:12'):
         """
@@ -216,7 +213,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
-    @unittest.skip
     @pytest.mark.run(order=8)
     def test_08_NormalRoomPayArtist_620(self, des='普通房指定工会有经纪人(1j)只艺人收到62%'):
         """
@@ -248,7 +244,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
-    @unittest.skip
     @pytest.mark.run(order=9)
     def test_09_starRoomWhiteUserPay_70(self, des='网赚房无公会无经纪人白名单艺人收70%个人魅力值'):
         """
