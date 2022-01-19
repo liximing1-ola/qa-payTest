@@ -9,7 +9,7 @@ def all_case():
                 "pt_dir": '/root/payTest/case'}
     testcase = unittest.TestSuite()
     discover = unittest.defaultTestLoader.discover(case_dir['bb_dir'],  # 指定待执行用例的目录
-                                                   pattern="test_pay_livePackage.py",
+                                                   pattern="test_pay_superBroker.py",
                                                    top_level_dir=None)
     testcase.addTests(discover)
     return testcase
