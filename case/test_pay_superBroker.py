@@ -244,6 +244,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
+    @unittest.skip
     @pytest.mark.run(order=9)
     def test_09_starRoomWhiteUserPay_70(self, des='网赚房无公会无经纪人白名单艺人收70%个人魅力值'):
         """
