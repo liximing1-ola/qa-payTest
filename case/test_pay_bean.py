@@ -180,6 +180,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 400)
         case_list[des] = result
 
+    @unittest.skip
     def test_08_BeanPayChangePresentDeco(self, des='赠送金豆装扮的场景'):
         """
         用例描述：
