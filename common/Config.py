@@ -12,7 +12,7 @@ class config:
         'payUid': 103273407,  # god
         'testUid': 105002312,  # 非一代宗师
         'pack_cal_uid': 105002313,  # 打包结算签约主播
-        'bb_git_branch': 'chenbin/ft_go_consume',  # 线上代码分支
+        'bb_git_branch': 'release-for-vpc',  # 线上代码分支
     }
     # 直播间角色配置
     live_role = {
