@@ -10,7 +10,7 @@ def autoGitPull():
     Consts.startTime = time.time()
     gtr = '/home/webroot/banban'  # 默认指定路径
     g = git.cmd.Git(gtr)
-    # g.pull()
+    g.pull()
     repo = Repo(gtr)
     Session().getSession('dev')  # 更新userToken
     if str(repo.active_branch) == config.banban_git_branch:  # 当前线上分支

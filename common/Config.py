@@ -1,13 +1,13 @@
 # coding=utf-8
 import os
 class config:
-    #  工程目录
+    # 工程目录
     BASE_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-    #  release域名
+    # release域名
     domain_host = {'bb_dev_58': 'https://dev.iambanban.com/', 'pt': 'https://test.overseaban.com/', }
     dev_host = domain_host['bb_dev_58']
     pay_url = dev_host + 'pay/create?package=com.imbb.banban.android'  # 内网支付接口
-    # 标准配置
+    # 配置
     bb_user = {
         'payUid': 103273407,  # god
         'testUid': 105002312,  # 非一代宗师
@@ -36,7 +36,7 @@ class config:
         'pack_cal_uid': 105002313,  # 公会签约主播（打包结算）
         'white_uid': 105002338,  # 白名单用户
     }
-    #  礼物配置
+    # 礼物配置
     giftId = {
         "5": 5,  # 棒棒糖*1币
         "7": 7,  # 大宝剑*10币
@@ -84,3 +84,5 @@ if __name__ == '__main__':
     print(config.pay_url)
     print(config.mobile_login_url)
     print(config.banban_git_branch)
+    gift_list = tuple(i for i in config.giftId.values())
+    print(gift_list)
