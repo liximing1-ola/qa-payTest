@@ -93,8 +93,8 @@ class TestPayCreate(unittest.TestCase):
         1.构造打赏者和被打赏者数据
         2.私聊页打赏钻石礼物的流程
         3.校验接口状态和返回值数据
-        4.检查打赏者金豆余额，预期为：200 - 200 = 0
-        5.检查打赏者钻石余额，预期为：1000 - 800 = 200
+        4.检查打赏者金豆余额，预期为：200 - 0 = 200（2022.2.24 金豆不再抵扣20%）
+        5.检查打赏者钻石余额，预期为：1000 - 1000 = 0
         6.检查被打赏者钻石余额，预期为：1000 * 0.72 = 720
         """
         conMysql.updateMoneySql(config.payUid, money=1000)
@@ -104,8 +104,8 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data=data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 0)
-        assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money'), 200)
+        assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 200)
+        assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money'), 0)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.rewardUid), 720)
         case_list[des] = result
 
@@ -117,8 +117,8 @@ class TestPayCreate(unittest.TestCase):
         1.构造打赏者和被打赏者数据
         2.房间内打赏金豆礼物的流程
         3.校验接口状态和返回值数据
-        4.检查打赏者金豆余额，预期为：400 - 200 = 200
-        5.检查打赏者钻石余额，预期为：1000 - 800 = 200
+        4.检查打赏者金豆余额，预期为：400 - 0 = 400
+        5.检查打赏者钻石余额，预期为：1000 - 1000 = 0
         6.检查被打赏者账户余额，预期为：1000 * 0.62 = 620
         """
         conMysql.updateMoneySql(config.payUid, money=1000)
@@ -128,9 +128,9 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 200)
+        assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 400)
         assert_equal(conMysql.selectUserMoneySql('single_money', config.rewardUid), 620)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 200)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         case_list[des] = result
 
     def test_06_MoneyConvertGoldPayGift(self, des='金豆抵扣手续费但钻石余额少于礼物价格的场景'):
@@ -180,7 +180,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 400)
         case_list[des] = result
 
-    @unittest.skip
+    @unittest.skip('装扮改成钻石货币')
     def test_08_BeanPayChangePresentDeco(self, des='赠送金豆装扮的场景'):
         """
         用例描述：
