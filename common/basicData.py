@@ -169,7 +169,7 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
             "type": 'defend',
             "money": money,
             "params":
-                {"defend": 1,
+                {"defend": 2,
                  "to": uid,
                  "cid": 0,
                  "duction_money": 0,
