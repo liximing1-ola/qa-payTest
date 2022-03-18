@@ -36,6 +36,7 @@ def autoGitPull():
         return False
 
 def updateTime(operate, now=''):
+    default_time = '1600000000'  # 默认时间戳
     txtPath = os.path.split(os.path.realpath(__file__))[0] + '/time.txt'
     if operate == 'write':
         with open(txtPath, 'w') as f:
@@ -45,14 +46,14 @@ def updateTime(operate, now=''):
         if not os.path.exists(txtPath):
             os.system(r"touch {}".format(txtPath))
             with open(txtPath, 'r+') as f:
-                f.write('1600000000')  # 创建txt文件，并默认写入一个时间戳
+                f.write(default_time)
                 f.flush()
         with open(txtPath, 'r') as f:
             f = f.read()
             return f
     elif operate == 'change':
         with open(txtPath, 'w') as f:
-            f.write('1600000000')
+            f.write(default_time)
             f.flush()
 
 

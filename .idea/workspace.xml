@@ -210,13 +210,6 @@
       <updated>1615801946332</updated>
       <workItem from="1637288736860" duration="20000" />
     </task>
-    <task id="LOCAL-00773" summary="‘提交修改’">
-      <created>1641452225823</created>
-      <option name="number" value="00773" />
-      <option name="presentableId" value="LOCAL-00773" />
-      <option name="project" value="LOCAL" />
-      <updated>1641452225824</updated>
-    </task>
     <task id="LOCAL-00774" summary="‘提交修改’">
       <created>1641452277325</created>
       <option name="number" value="00774" />
@@ -553,7 +546,14 @@
       <option name="project" value="LOCAL" />
       <updated>1646992679933</updated>
     </task>
-    <option name="localTasksCounter" value="822" />
+    <task id="LOCAL-00822" summary="‘提交修改’">
+      <created>1647575488460</created>
+      <option name="number" value="00822" />
+      <option name="presentableId" value="LOCAL-00822" />
+      <option name="project" value="LOCAL" />
+      <updated>1647575488460</updated>
+    </task>
+    <option name="localTasksCounter" value="823" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -626,16 +626,16 @@
       <screen x="1920" y="-119" width="1536" height="832" />
     </state>
     <state x="2534" y="206" key="VCS.ChangelistChooser/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1638869691654" />
-    <state x="2281" y="26" key="Vcs.Push.Dialog.v2" timestamp="1646992681027">
-      <screen x="1920" y="-119" width="1536" height="832" />
-    </state>
-    <state x="361" y="144" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1645700363504" />
-    <state x="451" y="181" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1642147505320" />
-    <state x="2281" y="26" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1646992681027" />
-    <state x="573" y="325" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1647575478590">
+    <state x="361" y="144" key="Vcs.Push.Dialog.v2" timestamp="1647575489723">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="573" y="325" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1647575478590" />
+    <state x="361" y="144" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1647575489723" />
+    <state x="451" y="181" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1642147505320" />
+    <state x="2281" y="26" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1646992681027" />
+    <state x="573" y="325" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1647587782802">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="573" y="325" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1647587782802" />
     <state x="431" y="151" width="672" height="672" key="search.everywhere.popup" timestamp="1647575332042">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
