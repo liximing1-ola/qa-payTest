@@ -50,3 +50,11 @@ def updateTime(operate, now=''):
         with open(txtPath, 'r') as f:
             f = f.read()
             return f
+    elif operate == 'change':
+        with open(txtPath, 'w') as f:
+            f.write('1600000000')
+            f.flush()
+
+
+if __name__=='__main__':
+    updateTime('change')
