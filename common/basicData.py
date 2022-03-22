@@ -105,7 +105,7 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
             "params":
                 {"price": money,
                  "knight_level": 2,
-                 "duration_level": 1,
+                 "duration_level": 2,
                  "rid": rid,
                  "uids": "{}".format(uid),
                  "useCoin": -1,

@@ -47,6 +47,7 @@ class TestPayCreate(unittest.TestCase):
         data = basicData.encodeData(payType='package-knightDefend', money=28800, uids=config.pack_cal_uid,
                                     rid=config.live_role['live_rid'])
         res = post_request_session(config.pay_url, data)
+        print(res)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 1200)
