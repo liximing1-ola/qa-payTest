@@ -34,13 +34,13 @@ class TestPayCreate(unittest.TestCase):
     def test_02_knightDefendPayChangeMoney(self, des='开通房间守护团场景'):
         """
          用例描述：
-         开通直播间守护团，收益分成在师父收益（一代宗师）的基础上为 70:30
+         开通直播间守护团，收益分成在师父收益（一代宗师）的基础上为 60:25:15
          脚本步骤：
          1.构造开通者和被守护者数据
          2.开通真爱守护
          3.校验接口状态和返回值数据
          4.检查打赏者余额，预期：100000 - 99900 = 100
-         5.检查被打赏者余额,预期：99900 * 0.7 = 69930
+         5.检查被打赏者余额,预期：99900 * 0.6 = 59940
          """
         conMysql.updateMoneySql(config.payUid, money=100000)
         conMysql.updateMoneySql(config.pack_cal_uid)
@@ -50,7 +50,7 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.pack_cal_uid), 69930)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.pack_cal_uid), 59940)
         case_list[des] = result
 
     @unittest.skip('未完成')
