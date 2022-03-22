@@ -81,6 +81,7 @@ class config:
 
 if __name__ == '__main__':
     print(config.BASE_PATH)
+    print(config.pack_cal_uid)
     print(config.pay_url)
     print(config.mobile_login_url)
     print(config.banban_git_branch)
