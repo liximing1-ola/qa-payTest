@@ -97,6 +97,23 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
         return data
+    elif payType == 'package-knightDefend':
+        data = {
+            "platform": "available",
+            "type": "package",
+            "money": money,
+            "params":
+                {"price": money,
+                 "knight_level": 2,
+                 "duration_level": 1,
+                 "rid": rid,
+                 "uids": "{}".format(uid),
+                 "useCoin": -1,
+                 }
+        }
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        return data
     elif payType == 'chat-gift':
         data = {
             "platform": "available",
