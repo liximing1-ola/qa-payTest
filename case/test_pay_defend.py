@@ -39,18 +39,18 @@ class TestPayCreate(unittest.TestCase):
          1.构造开通者和被守护者数据
          2.开通真爱守护
          3.校验接口状态和返回值数据
-         4.检查打赏者余额，预期：110000 - 109900 = 100
-         5.检查被打赏者余额,预期：109900 * 0.7 = 76930
+         4.检查打赏者余额，预期：100000 - 99900 = 100
+         5.检查被打赏者余额,预期：99900 * 0.7 = 69930
          """
-        conMysql.updateMoneySql(config.payUid, money=110000)
+        conMysql.updateMoneySql(config.payUid, money=100000)
         conMysql.updateMoneySql(config.pack_cal_uid)
-        data = basicData.encodeData(payType='package-knightDefend', money=109900, uids=105002313,
-                                    rid=193185577)
+        data = basicData.encodeData(payType='package-knightDefend', money=99900, uids=config.pack_cal_uid,
+                                    rid=config.live_role['live_rid'])
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.pack_cal_uid), 76930)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.pack_cal_uid), 69930)
         case_list[des] = result
 
     @unittest.skip('未完成')

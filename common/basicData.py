@@ -289,5 +289,5 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
 
 
 if __name__ == '__main__':
-    print(encodeData(payType='package-knightDefend', money=109900, uids=100000000,
-                                    rid=100000000))
+    print(encodeData(payType='package-knightDefend', money=109900, uids=105002313,
+                                    rid=193185577))
