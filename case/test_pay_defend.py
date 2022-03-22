@@ -42,12 +42,11 @@ class TestPayCreate(unittest.TestCase):
          4.检查打赏者余额，预期：110000 - 109900 = 100
          5.检查被打赏者余额,预期：109900 * 0.7 = 76930
          """
-        conMysql.updateMoneySql(config.payUid, money=200000)
+        conMysql.updateMoneySql(config.payUid, money=110000)
         conMysql.updateMoneySql(config.pack_cal_uid)
-        data = basicData.encodeData(payType='package-knightDefend', money=109900, uids=config.pack_cal_uid,
-                                    rid=config.live_role['live_rid'])
+        data = basicData.encodeData(payType='package-knightDefend', money=109900, uids=105002313,
+                                    rid=193185577)
         res = post_request_session(config.pay_url, data)
-        print(res)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
