@@ -133,14 +133,12 @@ class TestPayConcurrent:
         mysql.updateMoneySql(config.rewardUid)
         mysql.deleteUserCommoditySql(config.payUid)
         mysql.deleteUserCommoditySql(config.rewardUid)
-        mysql.insertXsUserCommodity(config.payUid, 263, 2)
-        Assert.assert_equal(mysql.checkUserCommoditySql(config.payUid, 263), 2)
+        mysql.insertXsUserCommodity(config.payUid, 264, 2)
+        Assert.assert_equal(mysql.checkUserCommoditySql(config.payUid, 264), 2)
 
     @staticmethod
     def commodityPresentConcurrent():
-        cid = int(mysql.getUserCommodityIdSql(263, config.payUid))
-        print(cid)
-        time.sleep(30)
+        cid = int(mysql.getUserCommodityIdSql(264, config.payUid))
         payload = 'id={}&num=1&targetId={}'.format(cid, config.rewardUid)
         res = Request.post_request_session(url=TestPayConcurrent.commodity_present, data=payload)
         Assert.assert_code(res['code'], 200)
@@ -148,8 +146,8 @@ class TestPayConcurrent:
 
     @staticmethod
     def endCommodityPresent():
-        Assert.assert_equal(mysql.checkUserCommoditySql(config.payUid, 263), 0)
-        Assert.assert_equal(mysql.checkUserCommoditySql(config.rewardUid, 263), 2)
+        Assert.assert_equal(mysql.checkUserCommoditySql(config.payUid, 264), 0)
+        Assert.assert_equal(mysql.checkUserCommoditySql(config.rewardUid, 264), 2)
         Assert.assert_equal(Consts.success_num, 2)
 
     @staticmethod
