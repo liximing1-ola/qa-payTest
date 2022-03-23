@@ -141,6 +141,7 @@ class TestPayConcurrent:
         payload = 'id={}&num=1&targetId={}'.format(cid, config.rewardUid)
         res = Request.post_request_session(url=TestPayConcurrent.commodity_present, data=payload)
         Assert.assert_code(res['code'], 200)
+        print(res)
         getValue(res)
 
     @staticmethod
