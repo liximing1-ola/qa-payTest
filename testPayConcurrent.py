@@ -164,7 +164,7 @@ class TestPayConcurrent:
     @staticmethod
     def main(num):
         TestPayConcurrent.test_01_payCreate(num)
-        TestPayConcurrent.test_02_commodityUse(num)
+        # TestPayConcurrent.test_02_commodityUse(num)
         TestPayConcurrent.test_03_commodityPresent(num)
         case_list = method.dictToList(Consts.case_list_c)
         des = "{}\n".format(case_list)
