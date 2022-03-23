@@ -6,6 +6,7 @@ from common.sqlScript import mysql
 from Robot import robot
 from common import Assert, Request, basicData, Consts, Logs, method, Session
 from common.method import getValue
+import time
 class TestPayConcurrent:
     # 内网支付接口
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
@@ -138,10 +139,11 @@ class TestPayConcurrent:
     @staticmethod
     def commodityPresentConcurrent():
         cid = int(mysql.getUserCommodityIdSql(263, config.payUid))
+        print(cid)
+        time.sleep(30)
         payload = 'id={}&num=1&targetId={}'.format(cid, config.rewardUid)
         res = Request.post_request_session(url=TestPayConcurrent.commodity_present, data=payload)
         Assert.assert_code(res['code'], 200)
-        print(res)
         getValue(res)
 
     @staticmethod
