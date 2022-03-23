@@ -6,7 +6,6 @@ from common.sqlScript import mysql
 from Robot import robot
 from common import Assert, Request, basicData, Consts, Logs, method, Session
 from common.method import getValue
-import time
 class TestPayConcurrent:
     # 内网支付接口
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
@@ -165,7 +164,7 @@ class TestPayConcurrent:
     @staticmethod
     def main(num):
         TestPayConcurrent.test_01_payCreate(num)
-        # TestPayConcurrent.test_02_commodityUse(num)
+        TestPayConcurrent.test_02_commodityUse(num)
         TestPayConcurrent.test_03_commodityPresent(num)
         case_list = method.dictToList(Consts.case_list_c)
         des = "{}\n".format(case_list)
