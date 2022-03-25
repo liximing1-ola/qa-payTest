@@ -203,7 +203,7 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
             "type": 'defend-upgrade',
             "money": money,
             "params":
-                {"id": "52",
+                {"id": "244",
                  "useCoin": -1
                  }
         }
@@ -216,7 +216,7 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
             "type": 'defend-break',
             "money": money,
             "params":
-                {"id": "52",
+                {"id": "244",
                  "useCoin": -1
                  }
         }
