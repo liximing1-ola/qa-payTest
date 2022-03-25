@@ -45,7 +45,6 @@ class TestPayCreate(unittest.TestCase):
          4.检查打赏者余额，预期：100000 - 99900 = 100钻
          5.检查被打赏者余额,预期： 99900 * 0.62 = 61938
          """
-        time.sleep(60)
         conMysql.updateMoneySql(config.payUid, money=100000)
         conMysql.updateMoneySql(config.rewardUid)
         data = basicData.encodeData(payType='defend-upgrade', money=99900)
