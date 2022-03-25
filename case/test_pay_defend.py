@@ -7,7 +7,6 @@ from common import basicData
 from common.Consts import case_list, result
 from common.runFailed import Retry
 from common.conMysql import conMysql
-import time
 @Retry(max_n=1)
 class TestPayCreate(unittest.TestCase):
 
@@ -74,7 +73,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 4000)
         case_list[des] = result
 
-    @unittest.skip
     def test_04_knightDefendPayChangeMoney(self, des='开通房间守护团场景'):
         """
          用例描述：
