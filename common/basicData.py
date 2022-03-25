@@ -197,6 +197,32 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
         return data
+    elif payType == 'defend-upgrade':
+        data = {
+            "platform": 'available',
+            "type": 'defend-upgrade',
+            "money": money,
+            "params":
+                {"id": 52,
+                 "useCoin": -1
+                 }
+        }
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        return data
+    elif payType == 'defend-break':
+        data = {
+            "platform": 'available',
+            "type": 'defend-break',
+            "money": money,
+            "params":
+                {"id": 52,
+                 "useCoin": -1
+                 }
+        }
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        return data
     elif payType == 'title':
         data = {
             "platform": "available",
