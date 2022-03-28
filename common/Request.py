@@ -4,7 +4,7 @@
 """
 import requests
 from common import Session
-from common.Session import checkUserToken
+from common.Session import Session
 from requests.packages.urllib3.exceptions import InsecureRequestWarning  # 使用requests库请求HTTPS时,因为忽略证书验证,导致每次运行时都会报错
 def post_request_session(url, data, tokenName='dev'):
     """
@@ -20,7 +20,7 @@ def post_request_session(url, data, tokenName='dev'):
                             Chrome/67.0.3396.99 Safari/537.36",
         "Content-Type": "application/x-www-form-urlencoded",
         'Connection': 'close',
-        "user-token": checkUserToken(operate='read', token=tokenName)
+        "user-token": Session.checkUserToken(operate='read', token=tokenName)
     }
     if not url.startswith('https://'):
         url = '%s%s' % ('https://', url)
