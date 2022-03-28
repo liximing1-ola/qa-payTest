@@ -33,7 +33,7 @@ class TestPayCreate(unittest.TestCase):
         case_list[des] = result
 
     @pytest.mark.run(order=2)
-    def test_02_defendUpgradePayChangeMoney(self, des='个人守护进阶场景'):
+    def test_02_defendUpgradePayChangeMoney(self, des='守护进阶场景'):
         """
          用例描述：
          个人守护关系开通后，购买进阶版特权，收益分成在师父收益（非一代宗师）的基础上为：62:38

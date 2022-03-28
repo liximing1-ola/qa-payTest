@@ -35,7 +35,7 @@ def post_request_session(url, data, tokenName='dev'):
     except Exception as e:
         print(e)
         return ()
-    time_consuming = response.elapsed.microseconds / 1000
+    time_consuming = response.elapsed.microseconds/1000
     time_total = response.elapsed.total_seconds()
     response_dicts = dict()
     response_dicts['code'] = response.status_code
@@ -71,7 +71,7 @@ def pt_post_request_session(url, data):
     except Exception as e:
         print(e)
         return ()
-    time_consuming = response.elapsed.microseconds / 1000
+    time_consuming = response.elapsed.microseconds/1000
     time_total = response.elapsed.total_seconds()
     response_dicts = dict()
     response_dicts['code'] = response.status_code

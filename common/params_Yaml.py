@@ -18,7 +18,7 @@ class Yaml:
         try:
             if not os.path.exists(yaml_path):
                 return FileExistsError
-            if checkBranch('master'):
+            if Yaml.checkBranch('master'):
                 yaml_data = yaml.load(open(yaml_path, 'r', encoding='utf-8'))
             else:
                 yaml_data = yaml.load(open(yaml_path, 'r', encoding='utf-8'), Loader=yaml.FullLoader)  # 添加后不会报warning
@@ -29,12 +29,13 @@ class Yaml:
         except Exception as e:
             print(e)
 
-def checkBranch(git_branch):
-    codeDir = '/home/banban-1/payTest'  # 默认指定路径
-    g = git.cmd.Git(codeDir)
-    g.pull()
-    repo = Repo(codeDir)
-    if str(repo.active_branch) != git_branch:  # 当前线上分支
-        Logs.get_log('gitBranchError.log').error("git branch error： {}".format(repo.active_branch))
-        return False
-    return True
+    @staticmethod
+    def checkBranch(git_branch):
+        codeDir = '/home/banban-1/payTest'  # 默认指定路径
+        g = git.cmd.Git(codeDir)
+        g.pull()
+        repo = Repo(codeDir)
+        if str(repo.active_branch) != git_branch:  # 当前线上分支
+            Logs.get_log('gitBranchError.log').error("git branch error： {}".format(repo.active_branch))
+            return False
+        return True
