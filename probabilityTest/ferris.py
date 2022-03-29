@@ -6,7 +6,7 @@ from common.Config import config
 from common.basicData import encodeData
 from common.sqlScript import mysql
 def ferrisData():
-    uids = mysql.getUids(3)
+    uids = mysql.getUids(50)
     print(uids)
     headers = {
         'Content-Type': "application/x-www-form-urlencoded",
