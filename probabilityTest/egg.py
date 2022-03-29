@@ -1,10 +1,12 @@
 # coding=utf-8
-import requests
-import urllib.parse
-import json
-import pymysql
 import random
 import time
+import urllib.parse
+
+import pymysql
+import requests
+
+
 # 个人房幸运蛋概率测试
 def postPayCreate(giftNum):
     url = "https://dev.iambanban.com/pay/create?package=com.imbb.banban.android"

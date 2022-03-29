@@ -1,10 +1,10 @@
 # coding=utf-8
-import requests
-import urllib.parse
-import json
-import pymysql
-import random
 import time
+import urllib.parse
+
+import requests
+
+
 # 个人房幸运蛋概率测试
 def postPayCreate():
     url = "http://192.168.11.46/rooms/broadcastercontent/giveStar?package=com.imbb.banban.android"

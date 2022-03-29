@@ -1,9 +1,11 @@
 # coding=utf-8
-import requests
-import urllib.parse
-import pymysql
-import random
 import time
+import urllib.parse
+
+import pymysql
+import requests
+
+
 def postPayCreate_gift(num):
     url = "https://dev.iambanban.com/pay/create?package=com.imbb.banban.android"
     gift_dict = checkGiftSql()

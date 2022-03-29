@@ -1,7 +1,10 @@
 # coding=utf-8
-import requests
-import urllib.parse
 import time
+import urllib.parse
+
+import requests
+
+
 # PK房
 def postPayCreate():
     url = "https://dev.iambanban.com/pay/create?package=com.imbb.banban.android"

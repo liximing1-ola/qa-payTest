@@ -1,6 +1,9 @@
+import requests
+
 from common.Config import config
 from common.basicData import encodeData
-import requests
+
+
 def ferrisData():
     uids=('131565025', '131564957', '131542117', '128439987', '105002120', '105002231')
     headers = {
