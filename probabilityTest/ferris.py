@@ -9,6 +9,7 @@ def ferrisData():
     uid = ('131565025', '131564957', '131542117', '128439987', '105002120', '105002231', '131541046', '131541047',
             '131542035', '131542036', '131542037', '131542038', '131542039', '131542040')
     uids = mysql.getUids(20)
+    print(uids)
     headers = {
         'Content-Type': "application/x-www-form-urlencoded",
         'cache-control': "no-cache",
