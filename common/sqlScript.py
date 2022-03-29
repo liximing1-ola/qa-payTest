@@ -54,54 +54,11 @@ class mysql:
         except Exception as error:
             print(error)
 
-    # 查询用户当前金币账户余额
-    @staticmethod
-    def selectCoinSql(uid):
-        con, cur = mysql.conMysql()
-        sql = "select gold_coin from xs_user_money where uid={}".format(uid)
-        try:
-            cur.execute(sql)
-            res = cur.fetchone()
-            if len(res) > 0:
-                return res[0]
-            else:
-                return None
-        except Exception as error:
-            print(error)
-
-    # 查询某个账户的余额
-    @staticmethod
-    def selectMoneySql(uid, money_type='money_cash_b'):
-        con, cur = mysql.conMysql()
-        sql = "select {} from xs_user_money where uid={}".format(money_type, uid)
-        try:
-            cur.execute(sql)
-            res = cur.fetchone()
-            if len(res) > 0:
-                return res[0]
-            else:
-                return None
-        except Exception as error:
-            print(error)
-
     # 查询消费记录的money
     @staticmethod
     def selectPayChangeSql(uid):
         con, cur = mysql.conMysql()
         sql = "select money from xs_pay_change_new where uid={} ORDER BY id DESC LIMIT 1".format(uid)
-        try:
-            cur.execute(sql)
-            res = cur.fetchone()
-            if len(res) > 0:
-                return res[0]
-        except Exception as error:
-            print(error)
-
-    # 查询消费记录的消费方式
-    @staticmethod
-    def selectPayChangeOpSql(uid):
-        con, cur = mysql.conMysql()
-        sql = "select op from xs_pay_change_new where uid={} ORDER BY id DESC LIMIT 1".format(uid)
         try:
             cur.execute(sql)
             res = cur.fetchone()
@@ -120,32 +77,6 @@ class mysql:
         except Exception as error:
             con.rollback()
             print('delete fail', error)
-        finally:
-            con.commit()
-
-    # 删除用户爵位信息
-    @staticmethod
-    def deleteUserTitleSql(uid):
-        con, cur = mysql.conMysql()
-        sql = "delete from xs_user_title where uid = {} limit 5".format(uid)
-        try:
-            cur.execute(sql)
-        except Exception as error:
-            con.rollback()
-            print('delete fail', error)
-        finally:
-            con.commit()
-
-    # 删除用户爵位信息 profile
-    @staticmethod
-    def updateUserTitleSql(uid):
-        con, cur = mysql.conMysql()
-        sql = "update xs_user_profile set title=0 where uid={} limit 1".format(uid)
-        try:
-            cur.execute(sql)
-        except Exception as error:
-            con.rollback()
-            print('update fail', error)
         finally:
             con.commit()
 
@@ -189,60 +120,6 @@ class mysql:
         except Exception as error:
             print(error)
 
-    # 修改用户为打包结算主播
-    @staticmethod
-    def updateBrokerUser(uid):
-        con, cur = mysql.conMysql()
-        sql = "update xs_broker_user set uid={}, state=1, pack_cal=1 where id = 50 limit 1".format(uid)
-        try:
-            cur.execute(sql)
-        except Exception as error:
-            con.rollback()
-            print('update fail', error)
-        finally:
-            con.commit()
-
-    # 修改用户为房间房主
-    @staticmethod
-    def updateChatroomUid(uid):
-        con, cur = mysql.conMysql()
-        sql = "update xs_chatroom set app_id=1, uid ={} where rid=193185577 limit 1".format(uid)
-        try:
-            cur.execute(sql)
-        except Exception as error:
-            con.rollback()
-            print('update fail', error)
-        finally:
-            con.commit()
-
-    # 删除用户工会记录
-    @staticmethod
-    def deleteXsBrokerUser(uid):
-        con, cur = mysql.conMysql()
-        sql = "delete from xs_broker_user where uid ={} limit 1".format(uid)
-        try:
-            cur.execute(sql)
-        except Exception as error:
-            con.rollback()
-            print('delete fail', error)
-        finally:
-            con.commit()
-
-    # 更新箱子刷新物品
-    @staticmethod
-    def insertXsUserBox(gift_type, uid, box_type):
-        con, cur = mysql.conMysql()
-        sql = "insert into xs_user_box (last_refresh_cid, last_refresh_sub_cid, uid, type) values ({},{},{},'{}')"\
-            .format(gift_type, gift_type, uid, box_type)
-        try:
-            cur.execute(sql)
-        except Exception as error:
-            con.rollback()
-            fail_case_reason.append(error)
-            print('update fail', error)
-        finally:
-            con.commit()
-
     # 用户背包增加测试数据
     @staticmethod
     def insertXsUserCommodity(uid, cid, num, state=0):
@@ -256,38 +133,12 @@ class mysql:
         finally:
             con.commit()
 
-    # 查询箱子开出物品
-    @staticmethod
-    def selectUserCommodity(uid):
-        con, cur = mysql.conMysql()
-        sql = 'select sum(num) from xs_user_commodity where uid ={}'.format(uid)
-        try:
-            cur.execute(sql)
-            res = cur.fetchone()
-            return int(res[0])
-        except Exception as error:
-            print(error)
-
-    # 清除xs_user_box用户数据
-    @staticmethod
-    def deleteUserBox(uid):
-        con, cur = mysql.conMysql()
-        sql = "delete from xs_user_box where uid={} limit 1".format(uid)
-        try:
-            cur.execute(sql)
-        except Exception as error:
-            con.rollback()
-            fail_case_reason.append(error)
-            print('delete fail', error)
-        finally:
-            con.commit()
-
     #  生成一批uid
     @staticmethod
-    def getUids(num):
+    def getUids(limit_num):
         con, cur = mysql.conMysql()
-        sql = "select uid from xs_user_profile where uid>131542080 and app_id=1 limit {}".format(num)
-        t = []
+        sql = "select uid from xs_user_profile where uid>131542080 and app_id=1 limit {}".format(limit_num)
+        uids = []
         try:
             cur.execute(sql)
             res = cur.fetchall()
@@ -295,8 +146,8 @@ class mysql:
                 print('error')
             else:
                 for i in res:
-                    t.append(str(i[0]))
-                return tuple(t)
+                    uids.append(str(i[0]))
+                return tuple(uids)
         except Exception as error:
             print('fail', error)
         finally:
