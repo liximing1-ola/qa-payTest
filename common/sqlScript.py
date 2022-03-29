@@ -287,7 +287,7 @@ class mysql:
     def getUids(num):
         con, cur = mysql.conMysql()
         sql = "select uid from xs_user_profile where uid>130000000 and app_id=1 limit {}".format(num)
-        t = ()
+        t = []
         try:
             cur.execute(sql)
             res = cur.fetchall()
@@ -295,9 +295,8 @@ class mysql:
                 print('error')
             else:
                 for i in res:
-                    print(i[0])
-                    t.__add__(i[0])
-                return t
+                    t.append(i[0])
+                return tuple(t)
         except Exception as error:
             print('fail', error)
         finally:
