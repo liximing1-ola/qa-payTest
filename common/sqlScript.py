@@ -281,3 +281,22 @@ class mysql:
             print('delete fail', error)
         finally:
             con.commit()
+
+    #  生成一批uid
+    @staticmethod
+    def getUids(num):
+        con, cur = mysql.conMysql()
+        sql = "select uid from xs_user_profile where uid>130000000 and app_id=1 limit {}".format(num)
+        try:
+            cur.execute(sql)
+            res = con.cursor.fetchall()
+            if res is None:
+                print('error')
+            else:
+                return res
+        except Exception as error:
+            con.rollback()
+            fail_case_reason.append(error)
+            print('delete fail', error)
+        finally:
+            con.commit()
