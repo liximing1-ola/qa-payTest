@@ -296,7 +296,7 @@ class mysql:
             else:
                 for i in res:
                     print(i[0])
-                    t += str(i[0])
+                    t.__add__(i[0])
                 return t
         except Exception as error:
             print('fail', error)
