@@ -1,11 +1,13 @@
 import requests
-
+import sys
+import os
+sys.path.append(os.path.split(os.path.abspath(os.path.dirname(__file__)))[0])
 from common.Config import config
 from common.basicData import encodeData
 
 
 def ferrisData():
-    uids=('131565025', '131564957', '131542117', '128439987', '105002120', '105002231')
+    uids = ('131565025', '131564957', '131542117', '128439987', '105002120', '105002231')
     headers = {
         'Content-Type': "application/x-www-form-urlencoded",
         'cache-control': "no-cache",
@@ -16,5 +18,5 @@ def ferrisData():
     print(res)
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     ferrisData()

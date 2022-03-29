@@ -49,6 +49,7 @@ def postPayCreate(giftNum):
     else:
         raise EnvironmentError(res)
 
+
 def postPayCreate_600(giftNum):
     url = "https://dev.iambanban.com/pay/create?package=com.imbb.banban.android"
     headers = {
@@ -89,6 +90,7 @@ def postPayCreate_600(giftNum):
         pass
     else:
         raise EnvironmentError(res)
+
 
 def postPayCreate_ktv():
     gift_dict = {35: 52000, 38: 131400, 63: 20, 100: 9900, 226: 600, 286: 5200, 310: 30, 315: 20, 446: 300,
@@ -137,6 +139,7 @@ def postPayCreate_ktv():
         else:
             raise EnvironmentError(res)
 
+
 def postPayCreate_live():
     vap_dict = {629: 21, 628: 6, 621: 188, 620: 6, 614: 520, 610: 10, 607: 21, 577: 21, 572: 1, 570: 1314, 316: 3344,
                 322: 188, 330: 30}
@@ -150,7 +153,7 @@ def postPayCreate_live():
         data = {
             "platform": "available",
             "type": "package",
-            "money": v*5,
+            "money": v * 5,
             "params":
                 {"rid": 200000934,
                  "uids": "100287189,100010150,100010151,100010152,100010153",
@@ -182,6 +185,7 @@ def postPayCreate_live():
         else:
             raise EnvironmentError(res)
 
+
 def conMysql():
     db_config = {"dev_46_db": '192.168.11.46',
                  "dev_46_user": 'root',
@@ -196,6 +200,7 @@ def conMysql():
     cursor = con.cursor()
     return con, cursor
 
+
 def updateBeanSql(uid, coupon_money):
     con, cur = conMysql()
     sql = "update xs_user_money_extend set money_coupon={} where uid={} limit 1".format(coupon_money, uid)
@@ -208,6 +213,7 @@ def updateBeanSql(uid, coupon_money):
         time.sleep(0.1)
         con.commit()
 
+
 def main_pay():
     i = 1
     # updateBeanSql(128440017, coupon_money=1000000000)
@@ -219,6 +225,7 @@ def main_pay():
         time.sleep(1)
         i += 1
 
+
 def main_ktv():
     i = 1
     while i < 10000:
@@ -226,6 +233,7 @@ def main_ktv():
         postPayCreate_live()
         time.sleep(0.5)
         i += 1
+
 
 def main_pay_600():
     i = 1

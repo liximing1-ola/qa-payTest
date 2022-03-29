@@ -25,6 +25,7 @@ def postPayCreate():
     else:
         raise EnvironmentError(res)
 
+
 def main():
     i = 1
     while i < 10000:
@@ -34,5 +35,5 @@ def main():
         i += 1
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     main()

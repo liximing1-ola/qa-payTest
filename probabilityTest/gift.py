@@ -51,6 +51,7 @@ def postPayCreate_gift(num):
         else:
             raise EnvironmentError(res)
 
+
 def conMysql():
     db_config = {"dev_46_db": '192.168.11.46',
                  "dev_46_user": 'root',
@@ -65,6 +66,7 @@ def conMysql():
     cursor = con.cursor()
     return con, cursor
 
+
 def updateMoneySql(uid, money):
     con, cur = conMysql()
     sql = "update xs_user_money set money={} where uid={}".format(money, uid)
@@ -76,6 +78,7 @@ def updateMoneySql(uid, money):
     finally:
         time.sleep(0.1)
         con.commit()
+
 
 def checkGiftSql():
     con, cur = conMysql()
@@ -94,6 +97,7 @@ def checkGiftSql():
         time.sleep(0.1)
         con.commit()
 
+
 def main_pay(uid):
     i = 1
     updateMoneySql(uid, money=1000000000)
@@ -103,5 +107,5 @@ def main_pay(uid):
         i += 1
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     main_pay(100287189)

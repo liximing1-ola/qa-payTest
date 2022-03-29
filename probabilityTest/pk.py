@@ -48,6 +48,7 @@ def postPayCreate():
     else:
         raise EnvironmentError('error')
 
+
 def postPayCreate_ktv():
     url = "https://dev.iambanban.com/pay/create?package=com.imbb.banban.android"
     headers = {
@@ -100,5 +101,5 @@ def main():
         print(num)
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     main()
