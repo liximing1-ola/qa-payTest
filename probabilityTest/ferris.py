@@ -16,7 +16,7 @@ def ferrisData():
         "user-token": '441dYCJG63WGikAgmAg17KtlHsSZyCagZABGIAi3iykaK76GvwGi8xwuFgYdWZLgdup8dOD03bX2HzCbskOoFR2XH6mX5hDuWEJKPXEKKx__2FWbJb5HuSt3U6F'}
     data = encodeData(payType='package-more', uids=uids, rid='200022564')
     res = requests.post(url=config.pay_url, headers=headers, data=data)
-    print(res)
+    print(res.text)
 
 
 if __name__ == '__main__':
