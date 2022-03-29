@@ -295,11 +295,10 @@ class mysql:
                 print('error')
             else:
                 for i in res:
+                    print(i)
                     t += i[0]
                 return t
         except Exception as error:
-            con.rollback()
-            fail_case_reason.append(error)
-            print('delete fail', error)
+            print('fail', error)
         finally:
             con.commit()
