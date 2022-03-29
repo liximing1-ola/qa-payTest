@@ -289,7 +289,7 @@ class mysql:
         sql = "select uid from xs_user_profile where uid>130000000 and app_id=1 limit {}".format(num)
         try:
             cur.execute(sql)
-            res = con.cursor.fetchall()
+            res = cur.fetchall()
             if res is None:
                 print('error')
             else:
