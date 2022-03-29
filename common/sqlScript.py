@@ -295,7 +295,7 @@ class mysql:
                 print('error')
             else:
                 for i in res:
-                    t.append(i[0])
+                    t.append(str(i[0]))
                 return tuple(t)
         except Exception as error:
             print('fail', error)
