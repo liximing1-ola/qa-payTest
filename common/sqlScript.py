@@ -295,8 +295,8 @@ class mysql:
                 print('error')
             else:
                 for i in res:
-                    print(i)
-                    t += i[0]
+                    print(i[0])
+                    t += str(i[0])
                 return t
         except Exception as error:
             print('fail', error)
