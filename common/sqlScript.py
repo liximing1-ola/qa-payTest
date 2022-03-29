@@ -287,13 +287,16 @@ class mysql:
     def getUids(num):
         con, cur = mysql.conMysql()
         sql = "select uid from xs_user_profile where uid>130000000 and app_id=1 limit {}".format(num)
+        t = ()
         try:
             cur.execute(sql)
             res = cur.fetchall()
             if res is None:
                 print('error')
             else:
-                return res
+                for i in res:
+                    t += i[0]
+                return t
         except Exception as error:
             con.rollback()
             fail_case_reason.append(error)
