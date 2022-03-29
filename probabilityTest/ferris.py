@@ -1,4 +1,3 @@
-from common.Request import post_request_session
 from common.Config import config
 from common.basicData import encodeData
 import requests
