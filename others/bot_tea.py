@@ -3,12 +3,12 @@ import time
 
 def robot():
     url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e317861a-d1ec-4ac4-af96-9d4b8f12d9d6'
-    url1= 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=0179d8d1-2078-41ba-a8da-0fb11bd51880'
+    # url1= 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=0179d8d1-2078-41ba-a8da-0fb11bd51880'
     headers = {'Content-Type': 'application/json'}
-    reason = {'伴伴项目组感谢猫女提供的零食': '提神咖啡只有20杯！（手快有手慢无）'}
+    reason = {'【蜘蛛侠】正能量': '成年人的世界，似乎只有赚到足够的钱，才能过上简单、安逸、自由的生活，才能让自己活得更有底气些'}
     now = time.strftime('%H:%M', time.localtime(time.time()))
-    title = "下午茶时间到:当前时间-{}, 放松一下，马上回来".format(now)
-    des = '谢谢榜一大哥倾情赞助'
+    title = "下午茶时间到:当前时间-{}, 放松一下，放空自己".format(now)
+    des = '诚邀榜上大哥赞助'
     data = {
         "msgtype": "news",
         "news": {
