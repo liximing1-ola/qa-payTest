@@ -8,7 +8,7 @@ def robot():
     now = time.strftime('%H:%M', time.localtime(time.time()))
     title = "{}-点餐时间到,上微信【丰食】预约晚餐".format(now)
     des = '点餐截止到下午17:00，供餐时间19:30'
-    icon = getImage()
+    icon = getImage(mode=1)
     data = {
         "msgtype": "news",
         "news": {
