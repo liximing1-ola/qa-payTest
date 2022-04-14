@@ -4,7 +4,7 @@ def robot():
     url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e317861a-d1ec-4ac4-af96-9d4b8f12d9d6'
     # url1= 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=0179d8d1-2078-41ba-a8da-0fb11bd51880'
     headers = {'Content-Type': 'application/json'}
-    reason = {'【快银】': '人的一生,总是难免有浮沉。不会永远如旭日东升,也不会永远痛苦潦倒。反复地一浮一沉,对于一个人来说,正是磨练。因此,浮在上面的,不必骄傲;沉在底下的,更用不着悲观'}
+    reason = {'【刀锋战士】': '收二手手机'}
     now = time.strftime('%H:%M', time.localtime(time.time()))
     title = "下午茶时间到:当前时间-{}, 放松一下".format(now)
     des = '诚邀榜上大哥赞助'
