@@ -7,6 +7,7 @@ from common.Assert import assert_code, assert_equal, assert_body
 from common import basicData
 from common.Consts import result, case_list
 from common.runFailed import Retry
+import time
 class TestPayCreate(unittest.TestCase):
 
     @classmethod
@@ -124,6 +125,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, money=1000)
         conMysql.updateMoneySql(config.rewardUid)
         conMysql.insertBeanSql(config.payUid, money_coupon=400)
+        time.sleep(60)
         data = basicData.encodeData(payType='package', uid=config.rewardUid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
