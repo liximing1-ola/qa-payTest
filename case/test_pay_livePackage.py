@@ -167,6 +167,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
+    @unittest.skip
     def test_07_liveRoomPay_602515(self, des='直播公会主播(非宗师)/公会长打赏分成60:25:15'):
         """
         用例描述：
@@ -225,6 +226,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
+    @unittest.skip
     def test_09_underRolePay_6238(self, des='直播间打赏麦下用户分成62:38'):
         """
         用例描述：
@@ -247,6 +249,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
+    @unittest.skip
     def test_10_NotLiveRoomPayAnchor(self, des='主播在非直播间被打赏70%进个人魅力'):
         """
         用例描述：
