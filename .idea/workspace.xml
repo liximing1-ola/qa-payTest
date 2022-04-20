@@ -30,8 +30,8 @@
   <component name="ChangeListManager">
     <list default="true" id="44793b3e-09e5-4af0-a369-84e9b064bd19" name="Default Changelist" comment="‘提交修改’">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/case/test_pay_bean.py" beforeDir="false" afterPath="$PROJECT_DIR$/case/test_pay_bean.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run_all_case.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_all_case.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/others/bot_dinner.py" beforeDir="false" afterPath="$PROJECT_DIR$/others/bot_dinner.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/probabilityTest/pk.py" beforeDir="false" afterPath="$PROJECT_DIR$/probabilityTest/pk.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -210,41 +210,6 @@
       <option name="presentableId" value="Default" />
       <updated>1615801946332</updated>
       <workItem from="1637288736860" duration="20000" />
-    </task>
-    <task id="LOCAL-00838" summary="‘提交修改’">
-      <created>1648021565313</created>
-      <option name="number" value="00838" />
-      <option name="presentableId" value="LOCAL-00838" />
-      <option name="project" value="LOCAL" />
-      <updated>1648021565313</updated>
-    </task>
-    <task id="LOCAL-00839" summary="‘提交修改’">
-      <created>1648023532331</created>
-      <option name="number" value="00839" />
-      <option name="presentableId" value="LOCAL-00839" />
-      <option name="project" value="LOCAL" />
-      <updated>1648023532331</updated>
-    </task>
-    <task id="LOCAL-00840" summary="‘提交修改’">
-      <created>1648025426358</created>
-      <option name="number" value="00840" />
-      <option name="presentableId" value="LOCAL-00840" />
-      <option name="project" value="LOCAL" />
-      <updated>1648025426358</updated>
-    </task>
-    <task id="LOCAL-00841" summary="‘提交修改’">
-      <created>1648031261593</created>
-      <option name="number" value="00841" />
-      <option name="presentableId" value="LOCAL-00841" />
-      <option name="project" value="LOCAL" />
-      <updated>1648031261593</updated>
-    </task>
-    <task id="LOCAL-00842" summary="‘提交修改’">
-      <created>1648194059501</created>
-      <option name="number" value="00842" />
-      <option name="presentableId" value="LOCAL-00842" />
-      <option name="project" value="LOCAL" />
-      <updated>1648194059501</updated>
     </task>
     <task id="LOCAL-00843" summary="‘提交修改’">
       <created>1648195016355</created>
@@ -554,7 +519,42 @@
       <option name="project" value="LOCAL" />
       <updated>1649751020340</updated>
     </task>
-    <option name="localTasksCounter" value="887" />
+    <task id="LOCAL-00887" summary="‘提交修改’">
+      <created>1649903799587</created>
+      <option name="number" value="00887" />
+      <option name="presentableId" value="LOCAL-00887" />
+      <option name="project" value="LOCAL" />
+      <updated>1649903799588</updated>
+    </task>
+    <task id="LOCAL-00888" summary="‘提交修改’">
+      <created>1649904185755</created>
+      <option name="number" value="00888" />
+      <option name="presentableId" value="LOCAL-00888" />
+      <option name="project" value="LOCAL" />
+      <updated>1649904185755</updated>
+    </task>
+    <task id="LOCAL-00889" summary="‘提交修改’">
+      <created>1649905482334</created>
+      <option name="number" value="00889" />
+      <option name="presentableId" value="LOCAL-00889" />
+      <option name="project" value="LOCAL" />
+      <updated>1649905482334</updated>
+    </task>
+    <task id="LOCAL-00890" summary="‘提交修改’">
+      <created>1649920278751</created>
+      <option name="number" value="00890" />
+      <option name="presentableId" value="LOCAL-00890" />
+      <option name="project" value="LOCAL" />
+      <updated>1649920278751</updated>
+    </task>
+    <task id="LOCAL-00891" summary="‘提交修改’">
+      <created>1649922643294</created>
+      <option name="number" value="00891" />
+      <option name="presentableId" value="LOCAL-00891" />
+      <option name="project" value="LOCAL" />
+      <updated>1649922643294</updated>
+    </task>
+    <option name="localTasksCounter" value="892" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -599,11 +599,11 @@
     <option name="LAST_COMMIT_MESSAGE" value="‘提交修改’" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="686" y="211" key="FileChooserDialogImpl" timestamp="1649835686711">
+    <state x="686" y="211" key="FileChooserDialogImpl" timestamp="1650253840236">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1646037159842" />
-    <state x="686" y="211" key="FileChooserDialogImpl/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1649835686711" />
+    <state x="686" y="211" key="FileChooserDialogImpl/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1650253840236" />
     <state width="1515" height="192" key="GridCell.Tab.0.bottom" timestamp="1647951457906">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -624,12 +624,12 @@
       <screen x="1920" y="-119" width="1536" height="832" />
     </state>
     <state x="2551" y="13" key="RollbackChangesDialog/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1648193113531" />
-    <state x="451" y="181" key="Vcs.Push.Dialog.v2" timestamp="1649751021378">
+    <state x="451" y="181" key="Vcs.Push.Dialog.v2" timestamp="1649922644477">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="361" y="144" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1648031263120" />
-    <state x="451" y="181" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1649751021378" />
-    <state x="2281" y="26" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1648627077287" />
+    <state x="451" y="181" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1649922644477" />
+    <state x="2281" y="26" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1649905483477" />
     <state x="573" y="325" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1647587782802">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
