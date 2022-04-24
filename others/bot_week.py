@@ -5,8 +5,8 @@ def robot():
     headers = {'Content-Type': 'application/json'}
     # reason = {'【雷鸟】': '所有的不甘,都是因为还心存梦想,在你放弃之前,好好拼一把,只怕心老,不怕路长'}
     now = time.strftime('%m-%d', time.localtime(time.time()))
-    title = "查看质量周报_{}".format(now)
-    des = '点击图片查看文档'
+    title = "质量周报_{}".format(now)
+    des = '点击图片查看本周质量文档统计'
     data = {
         "msgtype": "news",
         "news": {
