@@ -210,13 +210,6 @@
       <updated>1615801946332</updated>
       <workItem from="1637288736860" duration="20000" />
     </task>
-    <task id="LOCAL-00846" summary="‘提交修改’">
-      <created>1648197128016</created>
-      <option name="number" value="00846" />
-      <option name="presentableId" value="LOCAL-00846" />
-      <option name="project" value="LOCAL" />
-      <updated>1648197128016</updated>
-    </task>
     <task id="LOCAL-00847" summary="‘提交修改’">
       <created>1648197365125</created>
       <option name="number" value="00847" />
@@ -553,7 +546,14 @@
       <option name="project" value="LOCAL" />
       <updated>1650453232233</updated>
     </task>
-    <option name="localTasksCounter" value="895" />
+    <task id="LOCAL-00895" summary="‘提交修改’">
+      <created>1650527750533</created>
+      <option name="number" value="00895" />
+      <option name="presentableId" value="LOCAL-00895" />
+      <option name="project" value="LOCAL" />
+      <updated>1650527750533</updated>
+    </task>
+    <option name="localTasksCounter" value="896" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -623,11 +623,11 @@
       <screen x="1920" y="-119" width="1536" height="832" />
     </state>
     <state x="2551" y="13" key="RollbackChangesDialog/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1648193113531" />
-    <state x="451" y="181" key="Vcs.Push.Dialog.v2" timestamp="1650453233008">
+    <state x="451" y="181" key="Vcs.Push.Dialog.v2" timestamp="1650527754799">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="361" y="144" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1648031263120" />
-    <state x="451" y="181" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1650453233008" />
+    <state x="451" y="181" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1650527754799" />
     <state x="2281" y="26" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1649905483477" />
     <state x="573" y="325" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1647587782802">
       <screen x="0" y="0" width="1536" height="824" />
