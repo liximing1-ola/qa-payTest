@@ -1,7 +1,18 @@
 import requests
+import datetime
 import time
 import random
-from others.getHoliday import getHoliday
+from chinese_calendar import is_holiday
+
+def getHoliday():
+    now_year = int(time.strftime('%Y', time.localtime(time.time())))
+    now_month = int(time.strftime('%m', time.localtime(time.time())))
+    now_day = int(time.strftime('%d', time.localtime(time.time())))
+    holiday = datetime.date(now_year, now_month, now_day)
+    print(holiday)
+    print(is_holiday(holiday))
+    return is_holiday(holiday)
+
 def robot():
     url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e317861a-d1ec-4ac4-af96-9d4b8f12d9d6'
     # url1= 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=0179d8d1-2078-41ba-a8da-0fb11bd51880'
