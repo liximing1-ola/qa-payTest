@@ -1,6 +1,8 @@
 import requests
 import time
 from others.getHoliday import getHoliday
+import os
+BASE_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 def robot():
     # url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e317861a-d1ec-4ac4-af96-9d4b8f12d9d6'
     url= 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=ddf98ffd-fd35-42be-8362-5e485b08226a'  # 测试用
