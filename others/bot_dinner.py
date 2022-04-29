@@ -1,6 +1,7 @@
 import requests
 import time
 import random
+from others.getHoliday import getHoliday
 def robot():
     url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e317861a-d1ec-4ac4-af96-9d4b8f12d9d6'
     # url1= 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=0179d8d1-2078-41ba-a8da-0fb11bd51880'
@@ -20,6 +21,8 @@ def robot():
             ]
         }
     }
+    if getHoliday():
+        return False
     r = requests.post(
         url,
         headers=headers, json=data)

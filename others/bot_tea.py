@@ -1,10 +1,11 @@
 import requests
 import time
+from others.getHoliday import getHoliday
 def robot():
     url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e317861a-d1ec-4ac4-af96-9d4b8f12d9d6'
-    # url1= 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=0179d8d1-2078-41ba-a8da-0fb11bd51880'
+    # url= 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=ddf98ffd-fd35-42be-8362-5e485b08226a'  # 测试用
     headers = {'Content-Type': 'application/json'}
-    reason = {'【贾维斯】': '三十而立'}
+    reason = {'【Peter】': '身体是自己的'}
     now = time.strftime('%H:%M', time.localtime(time.time()))
     title = "下午茶时间到:当前时间-{}, 放松一下".format(now)
     des = '诚邀榜上大哥赞助'
@@ -19,6 +20,8 @@ def robot():
             ]
         }
     }
+    if getHoliday():
+        return False
     requests.post(
         url,
         headers=headers, json=data)
