@@ -10,9 +10,7 @@ from common.conMysql import conMysql
 @Retry(max_n=1)
 class TestPayCreate(unittest.TestCase):
 
-    @classmethod
-    def setUpClass(cls) -> None:
-        conMysql.selectUserMoneySql('relation_config', uid=2)  # uid=id
+    dict_config = conMysql.selectUserMoneySql('relation_config', uid=2)  # uid=id
 
     @pytest.mark.run(order=1)
     def test_01_defendPayChangMoney(self, des='开通个人守护场景'):
@@ -28,7 +26,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.payUid, money=52000)
         conMysql.updateMoneySql(config.rewardUid)
-        data = basicData.encodeData(payType='defend', money=52000, uid=config.rewardUid)
+        data = basicData.encodeData(payType='defend', money=TestPayCreate.dict_config['money_value'], uid=config.rewardUid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -51,7 +49,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, money=100000)
         conMysql.updateMoneySql(config.rewardUid)
         defend_id = conMysql.selectUserMoneySql('relation_id', config.rewardUid)
-        data = basicData.encodeData(payType='defend-upgrade', money=99900, defend_id=defend_id)
+        data = basicData.encodeData(payType='defend-upgrade', money=TestPayCreate.dict_config['upgrade_money'], defend_id=defend_id)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -72,7 +70,7 @@ class TestPayCreate(unittest.TestCase):
          """
         conMysql.updateMoneySql(config.payUid, money=40000)
         defend_id = conMysql.selectUserMoneySql('relation_id', config.rewardUid)
-        data = basicData.encodeData(payType='defend-break', money=36000, defend_id=defend_id)
+        data = basicData.encodeData(payType='defend-break', money=TestPayCreate.dict_config['break_money'], defend_id=defend_id)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))

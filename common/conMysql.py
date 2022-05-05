@@ -125,7 +125,7 @@ class conMysql:
             res = conMysql.cur.fetchall()
             column = [index[0] for index in conMysql.cur.description]  # 列名
             data_dict = [dict(zip(column, row)) for row in res]
-            print(data_dict)
+            return data_dict[0]
         else:
             print('{} Error'.format(accountType))
 
