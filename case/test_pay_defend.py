@@ -10,6 +10,10 @@ from common.conMysql import conMysql
 @Retry(max_n=1)
 class TestPayCreate(unittest.TestCase):
 
+    @classmethod
+    def setUpClass(cls) -> None:
+        conMysql.selectUserMoneySql('relation_config', uid=2)  # uid=id
+
     @pytest.mark.run(order=1)
     def test_01_defendPayChangMoney(self, des='开通个人守护场景'):
         """
@@ -17,9 +21,9 @@ class TestPayCreate(unittest.TestCase):
         开通个人守护，收益分成在师父收益(非一代宗师)的基础上为 62:38
         脚本步骤：
         1.构造开通者和被守护者数据
-        2.开通价值52000钻守护
+        2.开通价值52000钻小宝贝守护（xs_relation_config id=2）
         3.校验接口状态和返回值数据
-        4.检查打赏者余额
+        4.检查打赏者余额`
         5.检查被打赏者余额,预期：52000 * 0.62 = 32240
         """
         conMysql.updateMoneySql(config.payUid, money=52000)
@@ -47,7 +51,6 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, money=100000)
         conMysql.updateMoneySql(config.rewardUid)
         defend_id = conMysql.selectUserMoneySql('relation_id', config.rewardUid)
-        print(defend_id)
         data = basicData.encodeData(payType='defend-upgrade', money=99900, defend_id=defend_id)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
@@ -56,7 +59,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.rewardUid), 61938)
         case_list[des] = result
 
-    @unittest.skip
     @pytest.mark.run(order=3)
     def test_03_defendBreakPayChangeMoney(self, des='守护解除场景'):
         """
@@ -69,14 +71,14 @@ class TestPayCreate(unittest.TestCase):
          4.检查打赏者余额，预期：40000 - 36000 = 4000
          """
         conMysql.updateMoneySql(config.payUid, money=40000)
-        data = basicData.encodeData(payType='defend-break', money=36000)
+        defend_id = conMysql.selectUserMoneySql('relation_id', config.rewardUid)
+        data = basicData.encodeData(payType='defend-break', money=36000, defend_id=defend_id)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 4000)
         case_list[des] = result
 
-    @unittest.skip
     def test_04_knightDefendPayChangeMoney(self, des='开通房间守护团场景'):
         """
          用例描述：

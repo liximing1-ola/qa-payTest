@@ -119,6 +119,13 @@ class conMysql:
                     return res[0]
             except Exception as error:
                 print(error)
+        elif accountType == 'relation_config':  # 查询守护关系配置
+            sql = "select id, name, money_value, break_money, upgrade_money from xs_relation_defend where id={}".format(uid)
+            conMysql.cur.execute(sql)
+            res = conMysql.cur.fetchall()
+            column = [index[0] for index in conMysql.cur.description]  # 列名
+            data_dict = [dict(zip(column, row)) for row in res]
+            print(data_dict)
         else:
             print('{} Error'.format(accountType))
 
