@@ -11,6 +11,7 @@ from common.conMysql import conMysql
 class TestPayCreate(unittest.TestCase):
 
     dict_config = conMysql.selectUserMoneySql('relation_config', uid=2)  # uid=id
+    #  {'id': 2, 'name': '小宝贝', 'money_value': 52000, 'break_money': 28800, 'upgrade_money': 99900}
 
     @pytest.mark.run(order=1)
     def test_01_defendPayChangMoney(self, des='开通个人守护场景'):
@@ -74,7 +75,7 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 4000)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 11200)
         case_list[des] = result
 
     def test_04_knightDefendPayChangeMoney(self, des='开通房间守护团场景'):
