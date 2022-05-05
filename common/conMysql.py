@@ -110,6 +110,15 @@ class conMysql:
                     return res[0]
             except Exception as error:
                 print(error)
+        elif accountType == 'relation_id':  # 查询用户守护关系id
+            sql = "select id from xs_relation_defend where uid={} and defend_uid={}".format(config.payUid, uid)
+            try:
+                conMysql.cur.execute(sql)
+                res = conMysql.cur.fetchone()
+                if len(res) > 0:
+                    return res[0]
+            except Exception as error:
+                print(error)
         else:
             print('{} Error'.format(accountType))
 

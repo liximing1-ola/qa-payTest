@@ -32,7 +32,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.rewardUid), 32240)
         case_list[des] = result
 
-    @unittest.skip
     @pytest.mark.run(order=2)
     def test_02_defendUpgradePayChangeMoney(self, des='守护进阶场景'):
         """
@@ -47,7 +46,9 @@ class TestPayCreate(unittest.TestCase):
          """
         conMysql.updateMoneySql(config.payUid, money=100000)
         conMysql.updateMoneySql(config.rewardUid)
-        data = basicData.encodeData(payType='defend-upgrade', money=99900)
+        defend_id = conMysql.selectUserMoneySql('relation_id', config.rewardUid)
+        print(defend_id)
+        data = basicData.encodeData(payType='defend-upgrade', money=99900, defend_id=defend_id)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
