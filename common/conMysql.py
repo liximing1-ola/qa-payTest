@@ -123,7 +123,7 @@ class conMysql:
             sql = "select id, name, money_value, break_money, upgrade_money from xs_relation_config where id={}".format(uid)
             conMysql.cur.execute(sql)
             res = conMysql.cur.fetchall()
-            column = [index[0] for index in conMysql.cur.description]  # 列名
+            column = [index[0] for index in conMysql.cur.description]
             data_dict = [dict(zip(column, row)) for row in res]
             return data_dict[0]
         else:
