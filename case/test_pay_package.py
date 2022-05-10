@@ -125,10 +125,10 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money_cash'), 2000)
         case_list[des] = result
 
-    def test_06_liveBrokerInUnionRoomPayCreate(self, des='打包结算用户联盟房分成'):
+    def test_06_packCalInUnionRoomPayCreate(self, des='打包结算用户联盟房分成'):
         """
         用例描述：
-        验证联盟房间内直播工会成员打赏分成为6:4
+        验证联盟房间内打包结算用户成员打赏分成为60%（工会魅力值）
         脚本步骤：
         1.构造打赏者和被打赏者数据
         2.联盟房间内打赏直播工会成员
@@ -144,4 +144,25 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         assert_equal(conMysql.selectUserMoneySql('single_money', config.pack_cal_uid, money_type='money_cash'), 600)
+        case_list[des] = result
+
+    def test_06_normalUserInUnionRoomPayCreate(self, des='普通用户联盟房分成'):
+        """
+        用例描述：
+        验证联盟房间内普通用户打赏分成为62%（个人魅力值，非一代宗师）
+        脚本步骤：
+        1.构造打赏者和被打赏者数据
+        2.联盟房间内打赏直播工会成员
+        3.校验接口状态和返回值数据
+        4.检查打赏者余额,预期为：1000-1000 = 0
+        5.检查被打赏者余额，预期为：1000 * 0.62 = 620（个人魅力值）
+        """
+        conMysql.updateMoneySql(config.payUid, money=1000)
+        conMysql.updateMoneySql(config.rewardUid)
+        data = basicData.encodeData(payType='package', rid=100010402, uid=config.rewardUid)  # 联盟房rid
+        res = post_request_session(config.pay_url, data)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_equal(conMysql.selectUserMoneySql('single_money', config.pack_cal_uid, money_type='money_cash_b'), 620)
         case_list[des] = result
