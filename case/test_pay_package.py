@@ -146,7 +146,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('single_money', config.pack_cal_uid, money_type='money_cash'), 600)
         case_list[des] = result
 
-    def test_06_normalUserInUnionRoomPayCreate(self, des='普通用户联盟房分成'):
+    def test_07_normalUserInUnionRoomPayCreate(self, des='普通用户联盟房分成'):
         """
         用例描述：
         验证联盟房间内普通用户打赏分成为62%（个人魅力值，非一代宗师）
