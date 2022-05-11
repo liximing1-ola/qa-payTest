@@ -167,7 +167,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('single_money', config.rewardUid), 620)
         case_list[des] = result
 
-    def test_08_couponNoStatePayChange(self, des='电台使用青铜体验券', gift_cid=219810):
+    def test_08_couponNoStatePayChange(self, des='电台使用青铜体验券', gift_cid=21981):
         """
         用例描述：
         在电台房使用24小时体验青铜坑位券，不分成
