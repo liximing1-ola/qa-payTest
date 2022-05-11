@@ -356,6 +356,7 @@ class conMysql:
     # 用户背包增加测试数据
     @staticmethod
     def insertXsUserCommodity(uid, cid, num, state=0):
+        conMysql.checkXsCommodity(cid)
         sql = "insert into xs_user_commodity (uid, cid, num, state) values ({}, {}, {}, {})".format(uid, cid, num, state)
         try:
             conMysql.cur.execute(sql)
@@ -364,6 +365,14 @@ class conMysql:
             print('insert fail', error)
         finally:
             conMysql.con.commit()
+
+    @staticmethod
+    def checkXsCommodity(cid):
+        sql = "select name from xs_commodity where cid={}".format(cid)
+        conMysql.cur.execute(sql)
+        res = conMysql.cur.fetchone()
+        if res is None:
+            raise Exception('xs_commodity 物品不存在')
 
     # 查询工会是否存在
     @staticmethod

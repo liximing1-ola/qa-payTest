@@ -13,6 +13,7 @@ class config:
         'testUid': 105002312,  # 非一代宗师
         'pack_cal_uid': 105002313,  # 打包结算签约主播
         'bb_git_branch': 'release-for-vpc',  # 线上代码分支
+        'bb_git_go_branch': 'master',  # 线上go代码分支
     }
     # 直播间角色配置
     live_role = {
@@ -53,6 +54,7 @@ class config:
     payUid = bb_user['payUid']  # 打赏者
     pack_cal_uid = bb_user['pack_cal_uid']  # 打包结算主播
     banban_git_branch = bb_user['bb_git_branch']  # git branch
+    banban_go_git_branch = bb_user['bb_git_go_branch']  # go branch
 
     # PT
     pt_user = {

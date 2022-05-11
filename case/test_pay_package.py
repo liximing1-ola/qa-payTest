@@ -166,3 +166,28 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         assert_equal(conMysql.selectUserMoneySql('single_money', config.rewardUid), 620)
         case_list[des] = result
+
+    def test_08_couponNoStatePayChange(self, des='电台使用青铜体验券', gift_cid=21981):
+        """
+        用例描述：
+        在电台房使用24小时体验青铜坑位券，不分成
+        脚本步骤：
+        1.构造打赏者和被打赏者数据(commodity_cid=21981 青铜物品)
+        2.房间内开通坑位
+        3.校验接口状态和返回值数据
+        4.预期结果：开通青铜坑位成功
+        5.检查被打赏者余额和账户，预期为：0
+        6.检查打赏者余额,预期为：0
+        """
+        conMysql.deleteUserAccountSql('user_commodity', config.payUid)
+        conMysql.insertXsUserCommodity(config.payUid, gift_cid, num=1)
+        conMysql.updateUserMoneyClearSql(config.payUid, config.rewardUid)
+        cid = conMysql.selectUserMoneySql('id_commodity', config.payUid, cid=gift_cid)
+        data = basicData.encodeData(payType='package-radioDefend', rid=200022566, uid=config.rewardUid,
+                                    money=520, package_cid=cid)  # rid=200022566
+        res = post_request_session(config.pay_url, data)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.rewardUid), 0)
+        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_equal(conMysql.selectUserMoneySql('num_commodity', config.payUid, cid=gift_cid), 0)
