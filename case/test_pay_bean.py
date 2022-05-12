@@ -133,7 +133,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         case_list[des] = result
 
-    @unittest.skip
+    @unittest.skip('金豆不再抵扣手续费')
     def test_06_MoneyConvertGoldPayGift(self, des='金豆抵扣手续费但钻石余额少于礼物价格的场景'):
         """
         用例描述：
@@ -158,7 +158,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 400)
         case_list[des] = result
 
-    @unittest.skip('已下线')
+    @unittest.skip('卡座玩法已下线')
     def test_07_BeanPayChangeCombo(self, des='卡座内购买套餐场景'):
         """
         用例描述：

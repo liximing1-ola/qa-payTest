@@ -11,7 +11,7 @@ from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
 
     @Retry
-    @unittest.skip('NSQ延迟')
+    @unittest.skip('NSQ延迟不执行')
     def test_01_PayChangeTriggerPunish(self, des='打赏时触发罚款流程'):
         """
         用例描述：

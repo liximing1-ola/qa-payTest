@@ -99,7 +99,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('single_money', ceoUid, money_type='money_cash'), 27300)
         case_list_b[des] = result
 
-    @unittest.skip('未完成')
+    @unittest.skip('')
     def test_04_fleetRoomPayCustomRate_100(self, des='本家族房打赏自定义分成:100'):
         """
         用例描述：
@@ -112,22 +112,9 @@ class TestPayCreate(unittest.TestCase):
         5.检查被打赏者总余额，预期为：52000 * 0.7 * 0.25 = 9100
         6.检查被打赏者公会长余额，预期为：52000 * 0.7 *（1-0.25) = 27300
         """
-        conMysql.updateMoneySql(config.payUid, money=52000)
-        testUid = config.rewardUid2  # 被打赏者
-        ceoUid = config.live_role['pack_ceo']  # 关联公会长
-        conMysql.updateUserMoneyClearSql(testUid, ceoUid)
-        conMysql.checkUserBroker(testUid, bid=ceoUid)  # bid=105002314 被打赏者加入工会
-        conMysql.checkBrokerUserRate(testUid, ceoUid, rate=25)  # config.bbc_broker_user_rate 设置分成比
-        data = basicData.encodeData(payType='defend', uid=testUid, money=52000)
-        res = post_request_session(config.pay_url, data)
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
-        assert_equal(conMysql.selectUserMoneySql('single_money', testUid, money_type='money_cash'), 9100)
-        assert_equal(conMysql.selectUserMoneySql('single_money', ceoUid, money_type='money_cash'), 27300)
-        case_list_b[des] = result
+        pass
 
-    @unittest.skip('未完成')
+    @unittest.skip('')
     def test_05_unFleetRomePayCustomRate_0(self, des='非本家族房打赏自定义分成:0'):
         """
         用例描述：
@@ -140,17 +127,4 @@ class TestPayCreate(unittest.TestCase):
         5.检查被打赏者总余额，预期为：52000 * 0.7 * 0.25 = 9100
         6.检查被打赏者公会长余额，预期为：52000 * 0.7 *（1-0.25) = 27300
         """
-        conMysql.updateMoneySql(config.payUid, money=52000)
-        testUid = config.rewardUid2  # 被打赏者
-        ceoUid = config.live_role['pack_ceo']  # 关联公会长
-        conMysql.updateUserMoneyClearSql(testUid, ceoUid)
-        conMysql.checkUserBroker(testUid, bid=ceoUid)  # bid=105002314 被打赏者加入工会
-        conMysql.checkBrokerUserRate(testUid, ceoUid, rate=25)  # config.bbc_broker_user_rate 设置分成比
-        data = basicData.encodeData(payType='defend', uid=testUid, money=52000)
-        res = post_request_session(config.pay_url, data)
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
-        assert_equal(conMysql.selectUserMoneySql('single_money', testUid, money_type='money_cash'), 9100)
-        assert_equal(conMysql.selectUserMoneySql('single_money', ceoUid, money_type='money_cash'), 27300)
-        case_list_b[des] = result
+        pass
