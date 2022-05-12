@@ -138,7 +138,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.payUid, money=1000)
         conMysql.updateMoneySql(config.pack_cal_uid)
-        data = basicData.encodeData(payType='package', rid=100010402, uid=config.pack_cal_uid)  # 联盟房rid
+        data = basicData.encodeData(payType='package', rid=100010402, uid=config.pack_cal_uid)  # 联盟房rid，error先检查联盟房在不在
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -167,7 +167,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('single_money', config.rewardUid), 620)
         case_list[des] = result
 
-    def test_08_couponNoStatePayChange(self, des='电台使用青铜体验券', gift_cid=21981):
+    def test_08_couponNoStatePayChange(self, des='电台使用青铜体验券', gift_cid=21980):
         """
         用例描述：
         在电台房使用24小时体验青铜坑位券，不分成
@@ -184,10 +184,11 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateUserMoneyClearSql(config.payUid, config.rewardUid)
         cid = conMysql.selectUserMoneySql('id_commodity', config.payUid, cid=gift_cid)
         data = basicData.encodeData(payType='package-radioDefend', rid=200022566, uid=config.rewardUid,
-                                    money=520, package_cid=cid)  # rid=200022566
+                                    money=520, package_cid=cid)  # rid=200022566， error先检查电台房在不在
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.rewardUid), 0)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         assert_equal(conMysql.selectUserMoneySql('num_commodity', config.payUid, cid=gift_cid), 0)
+        case_list[des] = result

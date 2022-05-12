@@ -367,12 +367,12 @@ class conMysql:
             conMysql.con.commit()
 
     @staticmethod
-    def checkXsCommodity(cid):
-        sql = "select name from xs_commodity where cid={}".format(cid)
+    def checkXsCommodity(cid, name='青铜体验券'):
+        sql = "select name from xs_commodity where cid={} and name={}".format(cid, name)
         conMysql.cur.execute(sql)
         res = conMysql.cur.fetchone()
         if res is None:
-            raise Exception('xs_commodity 物品不存在')
+            raise Exception('xs_commodity {}不存在'.format(name))
 
     # 查询工会是否存在
     @staticmethod

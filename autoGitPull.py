@@ -37,7 +37,7 @@ def autoGitPull():
 
 def autoGitPull_go():
     Consts.startTime = time.time()
-    # 默认指定路径 git clone http://e0630bd049b06c0dc93b852fba85a16cf60d8b91@114.55.7.123:3000/ees-server-go/banban-consume
+    # 默认指定路径 git clone http://token@114.55.7.123:3000/ees-server-go/banban-consume
     gtr = '/home/webroot/banban-go/banban-consume'
     g = git.cmd.Git(gtr)
     g.pull()
