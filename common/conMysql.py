@@ -368,7 +368,7 @@ class conMysql:
 
     @staticmethod
     def checkXsCommodity(cid, name='青铜体验券'):
-        sql = "select name from xs_commodity where cid={} and name={}".format(cid, name)
+        sql = "select name from xs_commodity where cid={} and name='{}'".format(cid, name)
         conMysql.cur.execute(sql)
         res = conMysql.cur.fetchone()
         if res is None:
