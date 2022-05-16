@@ -27,7 +27,7 @@ def robot():
             "articles": [{
                 "title": title,
                 "description": des,
-                "url": "https://meican.com/",
+                "url": "http://iambanban.com/recharge/",
                 "picurl": icon, }
             ]
         }
