@@ -14,6 +14,7 @@ class Yaml:
         """
         # yaml_path = config.BASE_PATH + '/common/' + yaml_fileName
         yaml_path = os.getcwd() + yaml_fileName
+        print(yaml_path)
         try:
             if not os.path.exists(yaml_path):
                 return FileExistsError
