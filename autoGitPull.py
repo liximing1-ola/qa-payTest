@@ -36,8 +36,7 @@ def autoGitPull():
         return False
 
 def autoGitPull_go():
-    # 默认路径 git clone http://token@114.55.7.123:3000/ees-server-go/banban-consume
-    gtr = config.code_path['go']
+    gtr = config.code_path['go']  # git clone http://token@114.55.7.123:3000/ees-server-go/banban-consume
     g = git.cmd.Git(gtr)
     g.pull()
     repo = Repo(gtr)
