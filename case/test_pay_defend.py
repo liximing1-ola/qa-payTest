@@ -30,6 +30,7 @@ class TestPayCreate(unittest.TestCase):
         data = basicData.encodeData(payType='defend', money=TestPayCreate.dict_config['money_value'],
                                     uid=config.rewardUid)
         res = post_request_session(config.pay_url, data)
+        print(res)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
