@@ -42,7 +42,7 @@ def autoGitPull_go():
     g = git.cmd.Git(gtr)
     g.pull()
     repo = Repo(gtr)
-    Session().getSession('dev')  # 更新userToken
+    # Session().getSession('dev')  # 更新userToken
     if str(repo.active_branch) == config.banban_go_git_branch:  # 当前线上分支
         commit_log = repo.git.log('--pretty={"commit":"%h","author":"%an","summary":"%s","date":"%cd"}',
                                   max_count=3, date='format:%Y-%m-%d %H:%M:%S')

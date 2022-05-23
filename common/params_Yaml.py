@@ -20,12 +20,13 @@ class Yaml:
                 yaml_data = yaml.load(open(yaml_path, 'r', encoding='utf-8'))
             else:
                 yaml_data = yaml.load(open(yaml_path, 'r', encoding='utf-8'), Loader=yaml.FullLoader)  # 添加后不会报warning
+
             if yaml_data[yaml_name] is None:
                 return TypeError
             else:
                 return yaml_data[yaml_name]
-        except Exception as e:
-            print(e)
+        except Exception as error:
+            print(error)
 
     @staticmethod
     def checkBranch(git_branch):
