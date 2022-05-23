@@ -30,13 +30,13 @@ class TestPayCreate(unittest.TestCase):
         data = basicData.encodeData(payType='defend', money=TestPayCreate.dict_config['money_value'],
                                     uid=config.rewardUid)
         res = post_request_session(config.pay_url, data)
-        print(res)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.rewardUid), 32240)
         case_list[des] = result
 
+    @unittest.skip
     @pytest.mark.run(order=2)
     def test_02_defendUpgradePayChangeMoney(self, des='守护进阶场景'):
         """
@@ -61,6 +61,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.rewardUid), 61938)
         case_list[des] = result
 
+    @unittest.skip
     @pytest.mark.run(order=3)
     def test_03_defendBreakPayChangeMoney(self, des='守护解除场景'):
         """
@@ -82,6 +83,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 11200)
         case_list[des] = result
 
+    @unittest.skip
     def test_04_knightDefendPayChangeMoney(self, des='开通房间守护团场景'):
         """
          用例描述：
