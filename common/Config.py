@@ -89,3 +89,4 @@ if __name__ == '__main__':
     print(config.banban_git_branch)
     gift_list = tuple(i for i in config.giftId.values())
     print(gift_list)
+    print(os.getcwd())

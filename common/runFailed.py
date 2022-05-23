@@ -35,7 +35,6 @@ class ClassD(unittest.TestCase):
         raise AttributeError
     def test_102(self):
         raise AttributeError
-
     """
     def __new__(cls, func_or_cls=None, max_n=1, func_prefix="test"):
         self = object.__new__(cls)

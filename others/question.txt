@@ -20,7 +20,7 @@
 # 3-看消费日志 /var/log/nginx/access.log
 
 # 代码仓库
-# 现在gitlab 新建一个代码仓库
+# gitlab 新建一个代码仓库
 # git init 这个⽬录就变成了git可以管理的仓库
 # git remote add origin 代码仓库.git
 # git add .
