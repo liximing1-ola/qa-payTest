@@ -5,6 +5,7 @@ class config:
     BASE_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     # release域名
     domain_host = {'bb_dev_58': 'https://dev.iambanban.com/', 'pt': 'https://test.overseaban.com/', }
+    code_path = {'php': '/home/webroot/banban', 'go': '/home/webroot/banban-go/banban-consume'}
     dev_host = domain_host['bb_dev_58']
     pay_url = dev_host + 'pay/create?package=com.imbb.banban.android'  # 内网支付接口
     # 配置

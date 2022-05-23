@@ -8,12 +8,11 @@ from common import Logs, Consts
 from common.Config import config
 def autoGitPull():
     Consts.startTime = time.time()
-    gtr = '/home/webroot/banban'  # 默认指定路径
+    gtr = config.code_path['php']  # 默认指定路径
     g = git.cmd.Git(gtr)
     g.pull()
     repo = Repo(gtr)
     Session().getSession('dev')  # 更新userToken
-    print(1)
     if str(repo.active_branch) == config.banban_git_branch:  # 当前线上分支
         commit_log = repo.git.log('--pretty={"commit":"%h","author":"%an","summary":"%s","date":"%cd"}',
                                   max_count=3, date='format:%Y-%m-%d %H:%M:%S')
@@ -37,15 +36,11 @@ def autoGitPull():
         return False
 
 def autoGitPull_go():
-    Consts.startTime = time.time()
-    # 默认指定路径 git clone http://token@114.55.7.123:3000/ees-server-go/banban-consume
-    gtr = '/home/webroot/banban-go/banban-consume'
+    # 默认路径 git clone http://token@114.55.7.123:3000/ees-server-go/banban-consume
+    gtr = config.code_path['go']
     g = git.cmd.Git(gtr)
     g.pull()
     repo = Repo(gtr)
-    # Session().getSession('dev')  # 更新userToken
-    print(repo.active_branch)
-    print(2)
     if str(repo.active_branch) == config.banban_go_git_branch:  # 当前线上分支
         commit_log = repo.git.log('--pretty={"commit":"%h","author":"%an","summary":"%s","date":"%cd"}',
                                   max_count=3, date='format:%Y-%m-%d %H:%M:%S')
