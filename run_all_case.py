@@ -10,8 +10,7 @@ def all_case(appInfo):
     if appInfo == 'banban':
         case_dir = config.BASE_PATH + '/case'
     else:  # pt
-        print(5)
-        case_dir = config.BASE_PATH = '/caseOversea'
+        case_dir = config.BASE_PATH + '/caseOversea'
 
     testcase = unittest.TestSuite()
     discover = unittest.defaultTestLoader.discover(case_dir,  # 指定待执行用例的目录
@@ -57,7 +56,6 @@ def main(appInfo):
             Logs.get_log('runCode.log').info('NoRun')
     elif appInfo == 'pt':
         if updateCode.autoGitPull(appInfo):
-            print(2)
             updateTime('write', now=str(int(time.time())))
             test_result = unittest.TextTestRunner(verbosity=3).run(all_case(appInfo))
             Consts.endTime = time.time()
@@ -89,7 +87,6 @@ def main(appInfo):
                     robot('fail', reason, case.id(), bot='PT')
                     break
         else:
-            print(4)
             Logs.get_log('ptRunCode.log').info('NoRun')
     else:
         print('{} 錯誤'.format(appInfo))
