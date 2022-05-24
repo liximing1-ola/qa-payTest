@@ -2,7 +2,7 @@
 import unittest
 import time
 from common import Logs, method
-from pt_autoGitPull import autoGitPull, updateVersion
+from pt_autoGitPull import autoGitPull, updateTime
 from Robot import robot
 from common import Consts
 def all_case():
@@ -17,7 +17,7 @@ def all_case():
 def main():
     if autoGitPull():
         test_result = unittest.TextTestRunner(verbosity=3).run(all_case())
-        updateVersion('write')
+        updateTime('write', now=str(int(time.time())))
         des = "PT:执行用例数: {}, 失败用例数: {}, 异常用例数: {}" \
             .format(test_result.testsRun, len(test_result.failures), len(test_result.errors))
         Logs.get_log('caseResult.log').info(des)
