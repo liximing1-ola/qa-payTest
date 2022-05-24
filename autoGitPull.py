@@ -5,62 +5,57 @@ from git.repo import Repo
 from Robot import robot
 from common.Session import Session
 from common import Logs, Consts
-from common.Config import config
-def autoGitPull():
-    Consts.startTime = time.time()
-    gtr = config.code_path['php']  # 默认指定路径
-    g = git.cmd.Git(gtr)
-    g.pull()
-    repo = Repo(gtr)
-    Session().getSession('dev')  # 更新userToken
-    if str(repo.active_branch) == config.banban_git_branch:  # 当前线上分支
-        commit_log = repo.git.log('--pretty={"commit":"%h","author":"%an","summary":"%s","date":"%cd"}',
-                                  max_count=3, date='format:%Y-%m-%d %H:%M:%S')
-        log_list = commit_log.split("\n")
-        Logs.get_log('gitCommitPull.log').info('当前分支: {}, 最新一条commit: {}'
-                                               .format(repo.active_branch, log_list[0]))
-        real_time = [eval(item) for item in log_list][0]['date']
-        timeArray = time.strptime(real_time, "%Y-%m-%d %H:%M:%S")
-        times = int(time.mktime(timeArray))  # commit更新时间
-        lastTime = int(updateTime('read'))  # 上次脚本执行时间
-        if times > lastTime:
-            Logs.get_log('updateGitCode.log').info('最新代码提交时间: {}, 上次代码更新时间: {}'.format(times, lastTime))
-            robot('success', '{}'.format(log_list[0]))  # git commit update message
-            return True
-        else:
-            Logs.get_log('updateGitCode.log').info("未拉取到{}分支代码，最近代码提交时间: {}, "
-                                                   "上次代码更新时间: {}".format(repo.active_branch, times, lastTime))
-            return False
-    else:
-        Logs.get_log('gitBranchError.log').error("git branch error： {}".format(repo.active_branch))
-        return False
+class updateCode:
+    code_path = {'bb_php_path': '/home/webroot/banban',
+                 'bb_go_path': '/home/webroot/banban-go/banban-consume',
+                 'pt_php_path': '/home/webroot/release_oversea/oversea-server',
+                 'bb_git_branch': 'release-for-vpc',
+                 'bb_go_git_branch': 'master',
+                 'pt_git_branch': 'main'}
 
-def autoGitPull_go():
-    gtr = config.code_path['go']  # git clone http://token@114.55.7.123:3000/ees-server-go/banban-consume
-    g = git.cmd.Git(gtr)
-    g.pull()
-    repo = Repo(gtr)
-    if str(repo.active_branch) == config.banban_go_git_branch:  # 当前线上分支
-        commit_log = repo.git.log('--pretty={"commit":"%h","author":"%an","summary":"%s","date":"%cd"}',
-                                  max_count=3, date='format:%Y-%m-%d %H:%M:%S')
-        log_list = commit_log.split("\n")
-        Logs.get_log('gitCommitPull.log').info('当前分支: {}, 最新一条commit: {}'
-                                               .format(repo.active_branch, log_list[0]))
-        real_time = [eval(item) for item in log_list][0]['date']
-        timeArray = time.strptime(real_time, "%Y-%m-%d %H:%M:%S")
-        times = int(time.mktime(timeArray))  # commit更新时间
-        lastTime = int(updateTime('read'))  # 上次脚本执行时间
-        if times > lastTime:
-            Logs.get_log('updateGitCode.log').info('最新代码提交时间: {}, 上次代码更新时间: {}'.format(times, lastTime))
-            robot('success', '{}'.format(log_list[0]))  # git commit update message
-            return True
+    @staticmethod
+    def autoGitPull(appInfo):
+        if appInfo == 'bb_php':
+            gtr_path = updateCode.code_path['bb_php_path']
+            git_branch = updateCode.code_path['bb_git_branch']
+            env = 'dev'
+            bot = 'BB'
+        elif appInfo == 'bb_go':
+            gtr_path = updateCode.code_path['bb_go_path']
+            git_branch = updateCode.code_path['bb_git_go_branch']
+            env = 'dev'
+            bot = 'BB'
+        else:  # PT
+            gtr_path = updateCode.code_path['pt_php_path']
+            git_branch = updateCode.code_path['pt_git_branch']
+            env = 'pt'
+            bot = 'PT'
+        g = git.cmd.Git(gtr_path)
+        g.pull()
+        repo = Repo(gtr_path)
+        Consts.startTime = time.time()
+        Session().getSession(env)  # 更新userToken
+        if str(repo.active_branch) == git_branch:  # 当前线上分支
+            commit_log = repo.git.log('--pretty={"commit":"%h","author":"%an","summary":"%s","date":"%cd"}',
+                                      max_count=3, date='format:%Y-%m-%d %H:%M:%S')
+            log_list = commit_log.split("\n")
+            Logs.get_log('gitCommitPull.log').info('当前分支: {}, 最新一条commit: {}'
+                                                   .format(repo.active_branch, log_list[0]))
+            real_time = [eval(item) for item in log_list][0]['date']
+            timeArray = time.strptime(real_time, "%Y-%m-%d %H:%M:%S")
+            times = int(time.mktime(timeArray))  # commit更新时间
+            lastTime = int(updateTime('read'))  # 上次脚本执行时间
+            if times > lastTime:
+                Logs.get_log('updateGitCode.log').info('最新代码提交时间: {}, 上次代码更新时间: {}'.format(times, lastTime))
+                robot('success', '{}'.format(log_list[0]), bot=bot)  # git commit update message
+                return True
+            else:
+                Logs.get_log('updateGitCode.log').info("未拉取到{}分支代码，最近代码提交时间: {}, "
+                                                       "上次代码更新时间: {}".format(repo.active_branch, times, lastTime))
+                return False
         else:
-            Logs.get_log('updateGitCode.log').info("未拉取到{}分支代码，最近代码提交时间: {}, "
-                                                   "上次代码更新时间: {}".format(repo.active_branch, times, lastTime))
+            Logs.get_log('gitBranchError.log').error("git branch error： {}".format(repo.active_branch))
             return False
-    else:
-        Logs.get_log('goGitBranchError.log').error("go branch error： {}".format(repo.active_branch))
-        return False
 
 def updateTime(operate, now=''):
     default_time = '1600000000'  # 默认时间戳

@@ -25,7 +25,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.deleteUserAccountSql('broker_user', config.pt_testUid)
         conMysql.deleteUserAccountSql('chatroom', config.pt_testUid)
         data = basicData.encodePtData(payType='chat-gift', uid=config.pt_testUid, giftId=config.pt_giftId['10'], money=600)
-        res = pt_post_request_session(config.pay_url, data)
+        res = pt_post_request_session(config.pt_pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 0, reason(des, res))
         assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
