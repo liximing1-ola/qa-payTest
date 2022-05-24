@@ -30,13 +30,12 @@ class updateCode:
             git_branch = updateCode.code_path['pt_git_branch']
             env = 'pt'
             bot = 'PT'
-        else:  # PT
+        else:
             raise Exception('{} 錯誤'.format(appInfo))
 
         g = git.cmd.Git(gtr_path)
-        g.pull()
+        # g.pull()
         repo = Repo(gtr_path)
-        print(repo)
         Consts.startTime = time.time()
         Session().getSession(env)  # 更新userToken
 

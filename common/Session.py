@@ -80,7 +80,7 @@ class Session:
                 res = session.post(config.mobile_login_url, data=body, headers=headers)
                 res.raise_for_status()
                 res = res.json()
-                print(res)
+                print(headers, body, res)
                 if not method.isExtend(res, 'token') or res['success'] != 1:
                     return res['msg']
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
