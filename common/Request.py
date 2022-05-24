@@ -48,14 +48,13 @@ def post_request_session(url, data, tokenName='dev'):
     response_dicts['time_total'] = time_total
     return response_dicts
 
-def pt_post_request_session(url, data):
-    get_session = Session.getSession('pt')
+def pt_post_request_session(url, data, tokenName='pt'):
     requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
     header = {
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko)\
                             Chrome/67.0.3396.99 Safari/537.36",
         "Content-Type": "application/x-www-form-urlencoded",
-        "user-token": get_session['token']
+        "user-token": Session.checkUserToken(operate='read', token=tokenName)
     }
     if not url.startswith('https://'):
         url = '%s%s' % ('https://', url)
