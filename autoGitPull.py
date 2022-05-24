@@ -26,13 +26,14 @@ class updateCode:
             env = 'dev'
             bot = 'BB'
         elif appInfo == 'pt':
-            print(1)
             gtr_path = updateCode.code_path['pt_php_path']
             git_branch = updateCode.code_path['pt_git_branch']
             env = 'pt'
             bot = 'PT'
         else:  # PT
             raise Exception('{} 錯誤'.format(appInfo))
+
+        print(gtr_path, git_branch)
         g = git.cmd.Git(gtr_path)
         g.pull()
         repo = Repo(gtr_path)
