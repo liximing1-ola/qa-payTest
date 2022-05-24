@@ -16,16 +16,19 @@ class updateCode:
     @staticmethod
     def autoGitPull(appInfo):
         if appInfo == 'bb_php':
+            print(1)
             gtr_path = updateCode.code_path['bb_php_path']
             git_branch = updateCode.code_path['bb_git_branch']
             env = 'dev'
             bot = 'BB'
         elif appInfo == 'bb_go':
+            print(2)
             gtr_path = updateCode.code_path['bb_go_path']
             git_branch = updateCode.code_path['bb_git_go_branch']
             env = 'dev'
             bot = 'BB'
         elif appInfo == 'pt':
+            print(3)
             gtr_path = updateCode.code_path['pt_php_path']
             git_branch = updateCode.code_path['pt_git_branch']
             env = 'pt'
@@ -36,10 +39,11 @@ class updateCode:
         print(gtr_path, git_branch)
         g = git.cmd.Git(gtr_path)
         g.pull()
+        print(gtr_path, git_branch)
         repo = Repo(gtr_path)
         Consts.startTime = time.time()
         Session().getSession(env)  # 更新userToken
-        print(gtr_path, git_branch)
+
         if str(repo.active_branch) == git_branch:  # 当前线上分支
             commit_log = repo.git.log('--pretty={"commit":"%h","author":"%an","summary":"%s","date":"%cd"}',
                                       max_count=3, date='format:%Y-%m-%d %H:%M:%S')
