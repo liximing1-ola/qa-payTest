@@ -4,16 +4,14 @@ class config:
     # 工程目录
     BASE_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     domain_host = {'bb_dev_58': 'https://dev.iambanban.com/', 'pt': 'https://test.overseaban.com/', }
-    code_path = {'php': '/home/webroot/banban', 'go': '/home/webroot/banban-go/banban-consume'}
     dev_host = domain_host['bb_dev_58']
     pay_url = dev_host + 'pay/create?package=com.imbb.banban.android'  # 内网支付接口
+    pt_pay_url = domain_host['pt'] + 'pay/create?package=com.ola.chat'
     # 配置
     bb_user = {
         'payUid': 103273407,  # god
         'testUid': 105002312,  # 非一代宗师
         'pack_cal_uid': 105002313,  # 打包结算签约主播
-        'bb_git_branch': 'release-for-vpc',  # 线上代码分支
-        'bb_git_go_branch': 'master',  # 线上go代码分支
     }
     # 直播间角色配置
     live_role = {
@@ -53,21 +51,16 @@ class config:
     rewardUid2 = 100500205  # 被打赏者
     payUid = bb_user['payUid']  # 打赏者
     pack_cal_uid = bb_user['pack_cal_uid']  # 打包结算主播
-    banban_git_branch = bb_user['bb_git_branch']  # git branch
-    banban_go_git_branch = bb_user['bb_git_go_branch']  # go branch
 
     # PT
     pt_user = {
         'payUid': 800240376,
-        'testUid': 800000116,
-        'pt_git_branch': 'main'}
+        'testUid': 800000116}
     # pt域名-（PT登陆方式）
     pt_host = domain_host['pt']
     mobile_login_url = pt_host + 'account/passwordLogin'
     pt_payUid = pt_user['payUid']
     pt_testUid = pt_user['testUid']
-    # git branch
-    pt_git_branch = pt_user['pt_git_branch']
 
     # 礼物配置
     pt_giftId = {
@@ -77,10 +70,3 @@ class config:
 
 if __name__ == '__main__':
     print(config.BASE_PATH)
-    print(config.pack_cal_uid)
-    print(config.pay_url)
-    print(config.mobile_login_url)
-    print(config.banban_git_branch)
-    gift_list = tuple(i for i in config.giftId.values())
-    print(gift_list)
-    print(os.getcwd())
