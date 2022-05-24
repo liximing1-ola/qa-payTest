@@ -32,10 +32,11 @@ class updateCode:
             bot = 'PT'
         else:  # PT
             raise Exception('{} 錯誤'.format(appInfo))
-        gtr_path = updateCode.code_path['pt_php_path']
+
         g = git.cmd.Git(gtr_path)
         g.pull()
         repo = Repo(gtr_path)
+        print(repo)
         Consts.startTime = time.time()
         Session().getSession(env)  # 更新userToken
 
