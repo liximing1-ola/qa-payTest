@@ -332,6 +332,128 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
     else:
         raise Exception('payType is error')
 
+def encodePtData(payType='package', money=1000, rid=193185484, uid=105002331, giftId=7, giftType='normal',
+                 num=1, package_cid=0, ctype='', duction_money=0, star=0, uids=('105002312', '100500205')):
+
+    if payType == 'package':
+        data = {
+            "platform": "available",
+            "type": "package",
+            "money": money,
+            "params":
+                {"rid": rid,
+                 "uids": '{}'.format(uid),
+                 "positions": "1",
+                 "position": -1,
+                 "giftId": giftId,
+                 "giftNum": num,
+                 "price": money,
+                 "cid": package_cid,
+                 "ctype": ctype,
+                 "duction_money": duction_money,
+                 "version": 2,
+                 "num": num,
+                 "gift_type": "{}".format(giftType),
+                 "useCoin": -1,
+                 "star": star,
+                 "show_pac_man_guide": 1,
+                 "refer": "",
+                 "all_mic": 0,
+                 }
+        }
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        return data
+    elif payType == 'package-more':
+        p = []
+        uid = ','.join(uids)
+        num_more = len(uids)
+        for i in range(len(uids)):
+            p.append(str(i+1))
+        position = ','.join(p)
+        data = {
+            "platform": "available",
+            "type": "package",
+            "money": money * num * num_more,
+            "params":
+                {"rid": rid,
+                 "uids": '{}'.format(uid),
+                 "positions": "{}".format(position),
+                 "position": -1,
+                 "giftId": giftId,
+                 "giftNum": num,
+                 "price": money,
+                 "cid": 0,
+                 "ctype": "",
+                 "duction_money": 0,
+                 "version": 2,
+                 "num": num_more * num,
+                 "gift_type": "{}".format(giftType),
+                 "useCoin": -1,
+                 "star": star,
+                 "show_pac_man_guide": 1,
+                 "refer": "",
+                 "all_mic": 0,
+                 }
+        }
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        return data
+    elif payType == 'package-exchange':
+        data = {
+            "platform": "available",
+            "type": "package",
+            "money": money,
+            "params":
+                {"rid": rid,
+                 "uids": '{}'.format(uid),
+                 "positions": "1",
+                 "position": -1,
+                 "giftId": giftId,
+                 "giftNum": num,
+                 "price": money,
+                 "cid": 0,
+                 "ctype": "",
+                 "duction_money": 0,
+                 "version": 2,
+                 "num": num,
+                 "gift_type": "{}".format(giftType),
+                 "useCoin": -1,
+                 "star": star,
+                 "show_pac_man_guide": 1,
+                 "refer": "",
+                 "all_mic": 0,
+                 "exchange": 1
+                 }
+        }
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        return data
+    elif payType == 'chat-gift':
+        data = {
+            "platform": "available",
+            "type": "chat-gift",
+            "money": money,
+            "params":
+                {"to": '{}'.format(uid),
+                 "giftId": giftId,
+                 "giftNum": num,
+                 "cid": 0,
+                 "ctype": "",
+                 "duction_money": 0,
+                 "version": 2,
+                 "num": num,
+                 "gift_type": "normal",
+                 "star": 0,
+                 "hideErrorToast": 1,
+                 "all_mic": 0,
+                 "useCoin": -1
+                 }
+        }
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        return data
+
 
 if __name__ == '__main__':
     print(encodeData(payType='package-knightDefend', money=109900, uids=105002313,

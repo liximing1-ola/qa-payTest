@@ -11,7 +11,7 @@ def assert_code(actual_code, expected_code=200):
     :param expected_code: 预期结果
     """
     try:
-        time.sleep(0.6)  # rpc接口延迟下，防止结果失败！！！
+        time.sleep(0.5)  # rpc接口延迟下，防止结果失败！！！
         assert actual_code == expected_code
         return True
     except:

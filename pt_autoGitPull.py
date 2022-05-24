@@ -7,11 +7,12 @@ from Robot import robot
 import requests
 def autoGitPull():
     # 默认指定路径
-    codeDir = {'pt_git_dir': '/home/webroot/oversea/oversea-server'}
+    codeDir = {'pt_git_dir': '/home/webroot/release_oversea/oversea-server'}
     git_dir = codeDir['pt_git_dir']
     g = git.cmd.Git(git_dir)
     g.pull()
     repo = Repo(git_dir)
+    print(repo.active_branch)
     if str(repo.active_branch) == config.pt_git_branch:
         commit_log = repo.git.log('--pretty={"commit":"%h","author":"%an","summary":"%s","date":"%cd"}',
                                   max_count=3, date='format:%Y-%m-%d %H:%M:%S')

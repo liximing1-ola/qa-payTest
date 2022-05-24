@@ -3,7 +3,6 @@ import os
 class config:
     # 工程目录
     BASE_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-    # release域名
     domain_host = {'bb_dev_58': 'https://dev.iambanban.com/', 'pt': 'https://test.overseaban.com/', }
     code_path = {'php': '/home/webroot/banban', 'go': '/home/webroot/banban-go/banban-consume'}
     dev_host = domain_host['bb_dev_58']
@@ -70,16 +69,10 @@ class config:
     # git branch
     pt_git_branch = pt_user['pt_git_branch']
 
-    # 谁是凶手
-    games_user = {
-        'payUid': 105000291,
-        'testUid': 128440025,
-        'gameRid': 200000799,
-        'games_git_branch': 'release-for-vpc',  # 线上代码分支
+    # 礼物配置
+    pt_giftId = {
+        "10": 10,  # 么么哒*60钻）
     }
-    games_payUid = games_user['payUid']
-    games_testUid = games_user['testUid']
-    games_rid = games_user['gameRid']
 
 
 if __name__ == '__main__':
