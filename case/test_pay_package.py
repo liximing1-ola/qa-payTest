@@ -138,7 +138,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.payUid, money=1000)
         conMysql.updateMoneySql(config.pack_cal_uid)
-        data = basicData.encodeData(payType='package', rid=100010402, uid=config.pack_cal_uid)  # 联盟房rid，error先检查联盟房在不在
+        data = basicData.encodeData(payType='package', rid=200054972, uid=config.pack_cal_uid)  # 联盟房rid，error先检查联盟房在不在
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
