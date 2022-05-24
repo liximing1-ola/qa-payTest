@@ -40,7 +40,7 @@ def main():
                 robot('fail', reason, case.id(), bot='PT')
                 break
     else:
-        pass
+        Logs.get_log('runPtCode.log').info('NoRun')
 
 
 if __name__ == "__main__":
