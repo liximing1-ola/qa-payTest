@@ -34,7 +34,7 @@ class updateCode:
             raise Exception('{} 錯誤'.format(appInfo))
 
         g = git.cmd.Git(gtr_path)
-        # g.pull()
+        g.pull()
         repo = Repo(gtr_path)
         Consts.startTime = time.time()
         Session().getSession(env)  # 更新userToken
