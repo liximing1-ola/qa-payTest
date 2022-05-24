@@ -24,7 +24,7 @@ def autoGitPull():
         lastTime = int(updateTime('read'))  # 上次脚本执行时间
         if times > lastTime:
             Logs.get_log('ptUpdateGitCode.log').info('最新代码提交时间: {}, 上次代码更新时间: {}'.format(times, lastTime))
-            robot('success', '{}'.format(log_list[0]))  # git commit update message
+            robot('success', '{}'.format(log_list[0]), bot='PT')  # git commit update message
             return True
         else:
             Logs.get_log('ptUpdateGitCode.log').info("未拉取到{}分支代码，最近代码提交时间: {}, "
