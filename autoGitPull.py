@@ -16,30 +16,25 @@ class updateCode:
     @staticmethod
     def autoGitPull(appInfo):
         if appInfo == 'bb_php':
-            print(1)
             gtr_path = updateCode.code_path['bb_php_path']
             git_branch = updateCode.code_path['bb_git_branch']
             env = 'dev'
             bot = 'BB'
         elif appInfo == 'bb_go':
-            print(2)
             gtr_path = updateCode.code_path['bb_go_path']
             git_branch = updateCode.code_path['bb_git_go_branch']
             env = 'dev'
             bot = 'BB'
         elif appInfo == 'pt':
-            print(3)
             gtr_path = updateCode.code_path['pt_php_path']
             git_branch = updateCode.code_path['pt_git_branch']
             env = 'pt'
             bot = 'PT'
         else:  # PT
             raise Exception('{} 錯誤'.format(appInfo))
-
-        print(gtr_path, git_branch)
+        gtr_path = gtr_path
         g = git.cmd.Git(gtr_path)
         g.pull()
-        print(gtr_path, git_branch)
         repo = Repo(gtr_path)
         Consts.startTime = time.time()
         Session().getSession(env)  # 更新userToken
