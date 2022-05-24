@@ -26,6 +26,7 @@ class updateCode:
             env = 'dev'
             bot = 'BB'
         else:  # PT
+            print(1)
             gtr_path = updateCode.code_path['pt_php_path']
             git_branch = updateCode.code_path['pt_git_branch']
             env = 'pt'

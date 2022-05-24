@@ -10,6 +10,7 @@ def all_case(appInfo):
     if appInfo == 'banban':
         case_dir = config.BASE_PATH + '/case'
     else:  # pt
+        print(2)
         case_dir = config.BASE_PATH = '/caseOversea'
 
     testcase = unittest.TestSuite()
@@ -93,7 +94,6 @@ def main(appInfo):
 
 
 if __name__ == "__main__":
-    print(platform.node())
     if platform.node() == 'iZj6c7cxmmtvxr9kuetoizZ':
         main('pt')
     else:
