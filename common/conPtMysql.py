@@ -6,9 +6,9 @@ class conMysql:
     db_config = {"ali_db": 'localhost',
                  "ali_user": 'root',
                  "ali_pas": '123456'}
-    _dbUrl = db_config['dev_46_db']
-    _user = db_config['dev_46_user']
-    _password = db_config['dev_46_pas']
+    _dbUrl = db_config['ali_db']
+    _user = db_config['ali_user']
+    _password = db_config['ali_pas']
     _dbName = 'xianshi'
     _dbPort = 3306
     con = pymysql.connect(host=_dbUrl,
