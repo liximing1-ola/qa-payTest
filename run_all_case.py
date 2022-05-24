@@ -94,4 +94,7 @@ def main(appInfo):
 
 if __name__ == "__main__":
     print(platform.node())
-    #main()
+    if platform.node() == 'iZj6c7cxmmtvxr9kuetoizZ':
+        main('pt')
+    else:
+        main('banban')
