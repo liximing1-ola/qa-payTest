@@ -30,5 +30,5 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 0, reason(des, res))
         assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.rewardUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.rewardUid), 0)
         case_list[des] = result

@@ -26,8 +26,8 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 400)
-        assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='gold_coin'), 600)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 400)
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.payUid, money_type='gold_coin'), 600)
         case_list[des] = result
 
     def test_02_roomChangePayCoin(self, des='房间打赏金币礼物的场景'):
@@ -48,6 +48,6 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='gold_coin'), 60)
-        assert_equal(conMysql.selectUserMoneySql('single_money', config.rewardUid2, money_type='gold_coin'), 12)
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.payUid, money_type='gold_coin'), 60)
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid2, money_type='gold_coin'), 12)
         case_list[des] = result

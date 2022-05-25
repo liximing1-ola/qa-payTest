@@ -29,8 +29,8 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
-        assert_equal(conMysql.selectUserMoneySql('sum_commodity', config.payUid), 1)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 100)
+        assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.payUid), 1)
         case_list[des] = result
 
     @pytest.mark.run(order=2)
@@ -50,8 +50,8 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 4000)
-        assert_equal(conMysql.selectUserMoneySql('num_commodity', config.payUid, cid=cid), 10)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 4000)
+        assert_equal(conMysql.selectUserInfoSql('num_commodity', config.payUid, cid=cid), 10)
         case_list[des] = result
 
     @pytest.mark.run(order=3)
@@ -67,14 +67,14 @@ class TestPayCreate(unittest.TestCase):
         5.检查被打赏者余额：990*0.62 = 6138
         """
         conMysql.updateUserMoneyClearSql(config.payUid, config.rewardUid)
-        cid = int(conMysql.selectUserMoneySql('id_commodity', config.payUid, cid=bag_gift_cid))
+        cid = int(conMysql.selectUserInfoSql('id_commodity', config.payUid, cid=bag_gift_cid))
         data = basicData.encodeData(payType='package', rid=config.star_role['auto_rid'], uid=config.rewardUid,
                                     giftId=config.giftId['54'], money=9900, package_cid=cid, ctype='gift')
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('num_commodity', config.payUid, cid=bag_gift_cid), 9)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.rewardUid), 6138)
+        assert_equal(conMysql.selectUserInfoSql('num_commodity', config.payUid, cid=bag_gift_cid), 9)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.rewardUid), 6138)
         case_list[des] = result
 
     @pytest.mark.run(order=4)
@@ -90,13 +90,13 @@ class TestPayCreate(unittest.TestCase):
         5.检查被打赏者余额 预期：0
         """
         conMysql.updateUserMoneyClearSql(config.payUid, config.rewardUid)
-        cid = int(conMysql.selectUserMoneySql('id_commodity', config.payUid, cid=bag_gift_cid))
+        cid = int(conMysql.selectUserInfoSql('id_commodity', config.payUid, cid=bag_gift_cid))
         data = basicData.encodeData(payType='package', rid=config.star_role['auto_rid'], uid=config.rewardUid,
                                     giftId=config.giftId['54'], money=99000, package_cid=cid, ctype='gift', num=10)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 0, reason(des, res))
         assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('num_commodity', config.payUid, cid=bag_gift_cid), 9)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.rewardUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('num_commodity', config.payUid, cid=bag_gift_cid), 9)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.rewardUid), 0)
         case_list[des] = result

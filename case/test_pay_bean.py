@@ -36,7 +36,7 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 0, reason(des, res))
         assert_body(res['body'], 'msg', '金豆不足', reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('bean', config.rewardUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('bean', config.rewardUid), 0)
         case_list[des] = result
 
     def test_02_beanPayChangeGoldGift(self, des='打赏金豆礼物的场景'):
@@ -56,8 +56,8 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 0)
-        assert_equal(conMysql.selectUserMoneySql('bean', config.rewardUid), 3000)
+        assert_equal(conMysql.selectUserInfoSql('bean', config.payUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('bean', config.rewardUid), 3000)
         case_list[des] = result
 
     def test_03_MoneyConvertGoldPayGift(self, des='打赏金豆礼物不足用钻转换的场景'):
@@ -80,9 +80,9 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 500)
-        assert_equal(conMysql.selectUserMoneySql('bean', config.rewardUid), 500)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 9000)
+        assert_equal(conMysql.selectUserInfoSql('bean', config.payUid), 500)
+        assert_equal(conMysql.selectUserInfoSql('bean', config.rewardUid), 500)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 9000)
         case_list[des] = result
 
     def test_04_ImMoneyPayChangeBeanDeduct(self, des='私聊打赏钻石礼物时金豆抵扣平台手续费场景'):
@@ -104,9 +104,9 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data=data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 200)
-        assert_equal(conMysql.selectUserMoneySql('single_money', config.payUid, money_type='money'), 0)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.rewardUid), 720)
+        assert_equal(conMysql.selectUserInfoSql('bean', config.payUid), 200)
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.payUid, money_type='money'), 0)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.rewardUid), 720)
         case_list[des] = result
 
     def test_05_RoomMoneyConvertGoldPayGift(self, des='房间打赏钻石礼物时金豆抵扣平台手续费场景'):
@@ -128,9 +128,9 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 400)
-        assert_equal(conMysql.selectUserMoneySql('single_money', config.rewardUid), 620)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('bean', config.payUid), 400)
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid), 620)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list[des] = result
 
     @unittest.skip('金豆不再抵扣手续费')
@@ -154,8 +154,8 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 0, reason(des, res))
         assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 700)
-        assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 400)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 700)
+        assert_equal(conMysql.selectUserInfoSql('bean', config.payUid), 400)
         case_list[des] = result
 
     @unittest.skip('卡座玩法已下线')
@@ -177,8 +177,8 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
-        assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 400)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 100)
+        assert_equal(conMysql.selectUserInfoSql('bean', config.payUid), 400)
         case_list[des] = result
 
     @unittest.skip('装扮改成钻石货币')
@@ -199,6 +199,6 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('sum_commodity', config.rewardUid), 1)
-        assert_equal(conMysql.selectUserMoneySql('bean', config.payUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.rewardUid), 1)
+        assert_equal(conMysql.selectUserInfoSql('bean', config.payUid), 0)
         case_list[des] = result

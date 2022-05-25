@@ -34,10 +34,10 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         time.sleep(1.5)  # 延迟处理NSQ消息
-        assert_equal(conMysql.selectUserMoneySql('bean', config.rewardUid), 0)
-        assert_equal(conMysql.selectUserMoneySql('single_money', config.rewardUid, 'money'), 2)
-        assert_equal(conMysql.selectUserMoneySql('single_money', config.rewardUid, 'money_cash_b'), 0)
-        assert_equal(conMysql.selectUserMoneySql('single_money', config.rewardUid, 'money_debts'), 0)
-        assert_equal(conMysql.selectUserMoneySql('pay_change', config.rewardUid, op='money'), 100)
-        assert_equal(conMysql.selectUserMoneySql('pay_change', config.rewardUid, op='op'), 'punish')
+        assert_equal(conMysql.selectUserInfoSql('bean', config.rewardUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid, 'money'), 2)
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid, 'money_cash_b'), 0)
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid, 'money_debts'), 0)
+        assert_equal(conMysql.selectUserInfoSql('pay_change', config.rewardUid, op='money'), 100)
+        assert_equal(conMysql.selectUserInfoSql('pay_change', config.rewardUid, op='op'), 'punish')
         case_list[des] = result

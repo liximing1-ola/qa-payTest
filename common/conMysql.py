@@ -26,7 +26,7 @@ class conMysql:
 
     # 查询用户账户信息
     @staticmethod
-    def selectUserMoneySql(accountType, uid, money_type='money_cash_b', op='money', cid=263):
+    def selectUserInfoSql(accountType, uid=config.rewardUid, money_type='money_cash_b', op='money', cid=263):
         if accountType == 'bean':  # 查询用户账户扩展表金豆余额
             sql = "select money_coupon from xs_user_money_extend where uid={}".format(uid)
             try:
@@ -127,6 +127,17 @@ class conMysql:
                 column = [index[0] for index in conMysql.cur.description]
                 data_dict = [dict(zip(column, row)) for row in res]
                 return data_dict[0]
+            except Exception as error:
+                print(error)
+        elif accountType == 'union':
+            sql = " select rid from xs_chatroom where property='{}' limit 1".format(accountType)
+            try:
+                conMysql.cur.execute(sql)
+                res = conMysql.cur.fetchone()
+                if res is None:
+                    raise EnvironmentError('库表无联盟房')
+                else:
+                    return res[0]
             except Exception as error:
                 print(error)
         else:

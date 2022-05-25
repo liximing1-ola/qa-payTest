@@ -36,9 +36,9 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 350)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 350)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('single_money', test_uid), 350)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', test_uid), 350)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
     @pytest.mark.run(order=2)
@@ -61,9 +61,9 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 450)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 450)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 200)
+        assert_equal(conMysql.selectUserInfoSql('single_money', test_uid), 450)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', test_uid), 450)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 200)
         case_list_b[des] = result
 
     @pytest.mark.run(order=3)
@@ -86,9 +86,9 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 550)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 550)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 300)
+        assert_equal(conMysql.selectUserInfoSql('single_money', test_uid), 550)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', test_uid), 550)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 300)
         case_list_b[des] = result
 
     @pytest.mark.run(order=4)
@@ -113,9 +113,9 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 450)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 450)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('single_money', test_uid, money_type='money_cash'), 450)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', test_uid), 450)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
     @pytest.mark.run(order=5)
@@ -144,10 +144,10 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash_b'), 500)
-        assert_equal(conMysql.selectUserMoneySql('single_money', test_agent, money_type='money_cash'), 80)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 500)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('single_money', test_uid, money_type='money_cash_b'), 500)
+        assert_equal(conMysql.selectUserInfoSql('single_money', test_agent, money_type='money_cash'), 80)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', test_uid), 500)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
     @pytest.mark.run(order=6)
@@ -175,10 +175,10 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 600)
-        assert_equal(conMysql.selectUserMoneySql('single_money', test_agent, money_type='money_cash'), 80)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 600)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('single_money', test_uid, money_type='money_cash'), 600)
+        assert_equal(conMysql.selectUserInfoSql('single_money', test_agent, money_type='money_cash'), 80)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', test_uid), 600)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
     @pytest.mark.run(order=7)
@@ -207,10 +207,10 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 700)
-        assert_equal(conMysql.selectUserMoneySql('single_money', test_agent, money_type='money_cash'), 120)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 700)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('single_money', test_uid, money_type='money_cash'), 700)
+        assert_equal(conMysql.selectUserInfoSql('single_money', test_agent, money_type='money_cash'), 120)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', test_uid), 700)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
     @pytest.mark.run(order=8)
@@ -238,10 +238,10 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 620)
-        assert_equal(conMysql.selectUserMoneySql('single_money', test_agent), 0)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 620)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('single_money', test_uid), 620)
+        assert_equal(conMysql.selectUserInfoSql('single_money', test_agent), 0)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', test_uid), 620)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
     @pytest.mark.run(order=9)
@@ -266,7 +266,7 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 700)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', test_uid), 700)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 1000)
+        assert_equal(conMysql.selectUserInfoSql('single_money', test_uid), 700)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', test_uid), 700)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 1000)
         case_list_b[des] = result

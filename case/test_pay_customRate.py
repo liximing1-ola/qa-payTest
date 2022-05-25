@@ -38,9 +38,9 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
-        assert_equal(conMysql.selectUserMoneySql('single_money', testUid, money_type='money_cash'), 35)
-        assert_equal(conMysql.selectUserMoneySql('single_money', ceoUid, money_type='money_cash'), 35)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('single_money', testUid, money_type='money_cash'), 35)
+        assert_equal(conMysql.selectUserInfoSql('single_money', ceoUid, money_type='money_cash'), 35)
         case_list_b[des] = result
 
     def test_02_chatPayCustomRate_80(self, des='私聊打赏自定义分成:80'):
@@ -66,10 +66,10 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', testUid), 700)
-        assert_equal(conMysql.selectUserMoneySql('single_money', testUid, money_type='money_cash'), 400)
-        assert_equal(conMysql.selectUserMoneySql('single_money', ceoUid, money_type='money_cash'), 100)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', testUid), 700)
+        assert_equal(conMysql.selectUserInfoSql('single_money', testUid, money_type='money_cash'), 400)
+        assert_equal(conMysql.selectUserInfoSql('single_money', ceoUid, money_type='money_cash'), 100)
         case_list_b[des] = result
 
     def test_03_defendPayCustomRate_25(self, des='个人守护打赏自定义分成:25'):
@@ -94,9 +94,9 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
-        assert_equal(conMysql.selectUserMoneySql('single_money', testUid, money_type='money_cash'), 9100)
-        assert_equal(conMysql.selectUserMoneySql('single_money', ceoUid, money_type='money_cash'), 27300)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('single_money', testUid, money_type='money_cash'), 9100)
+        assert_equal(conMysql.selectUserInfoSql('single_money', ceoUid, money_type='money_cash'), 27300)
         case_list_b[des] = result
 
     @unittest.skip('')

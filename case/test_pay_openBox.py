@@ -34,8 +34,8 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
-        assert_equal(conMysql.selectUserMoneySql('sum_commodity', config.payUid), 2)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 100)
+        assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.payUid), 2)
         case_list[des] = result
 
     def test_02_openMoreBoxPayChange(self, des='背包箱子多开场景'):
@@ -62,8 +62,8 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
-        assert_equal(conMysql.selectUserMoneySql('sum_commodity', config.payUid), 12)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.payUid), 12)
         case_list[des] = result
 
     def test_03_giveBoxPayChange(self, des='房间送箱子场景'):
@@ -84,8 +84,8 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 100)
-        assert_len(conMysql.selectUserMoneySql('sum_money', config.rewardUid), 100)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 100)
+        assert_len(conMysql.selectUserInfoSql('sum_money', config.rewardUid), 100)
         case_list[des] = result
 
     def test_04_giveBoxMorePeople(self, des='房间送多人多个箱子场景'):
@@ -105,6 +105,6 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 1600)
-        assert_len(conMysql.selectUserMoneySql('sum_money', config.rewardUid), 1000)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 1600)
+        assert_len(conMysql.selectUserInfoSql('sum_money', config.rewardUid), 1000)
         case_list[des] = result

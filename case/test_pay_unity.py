@@ -24,5 +24,5 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list[des] = result

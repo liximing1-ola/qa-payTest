@@ -30,9 +30,9 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('single_money', config.rewardUid), 62)
-        assert_equal(conMysql.selectUserMoneySql('pay_change', config.payUid), 100)
-        assert_equal(conMysql.selectUserMoneySql('pay_change', config.payUid, op='op'), 'consume')
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid), 62)
+        assert_equal(conMysql.selectUserInfoSql('pay_change', config.payUid), 100)
+        assert_equal(conMysql.selectUserInfoSql('pay_change', config.payUid, op='op'), 'consume')
         case_list_b[des] = result
 
     def test_02_ImPay_7228(self, des='非公会主播(非宗师)私聊打赏分成72:28'):
@@ -54,8 +54,8 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         # 商业房房主 or (（工会会长 or 工会成员）&& 同意大神协议 )(insert into xs_user_settings (uid, agreement_version) values(100500205, 1))
-        assert_equal(conMysql.selectUserMoneySql('single_money', config.rewardUid), 720)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 400)
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid), 720)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 400)
         case_list_b[des] = result
 
     def test_03_liveRoomPay_7030(self, des='直播间非公会主播(宗师)打赏分成7:3'):
@@ -79,8 +79,8 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
-        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 700)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('single_money', test_uid, money_type='money_cash'), 700)
         case_list_b[des] = result
 
     def test_04_IMPay_8020(self, des='非公会的主播(宗师)私聊打赏分成8:2'):
@@ -103,9 +103,9 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 300)
-        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 500)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 200)
+        assert_equal(conMysql.selectUserInfoSql('single_money', test_uid), 300)
+        assert_equal(conMysql.selectUserInfoSql('single_money', test_uid, money_type='money_cash'), 500)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 200)
         case_list_b[des] = result
 
     def test_05_liveRoomPay_602515(self, des='直播间公会主播(宗师)/公会长分成60:25:15'):
@@ -133,9 +133,9 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 600)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', ceo_uid), 250)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('single_money', test_uid, money_type='money_cash'), 600)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', ceo_uid), 250)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
     def test_06_IMPay_602020(self, des='公会主播(宗师)/公会长私聊分成6:2:2'):
@@ -162,9 +162,9 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 600)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', ceo_uid), 200)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('single_money', test_uid, money_type='money_cash'), 600)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', ceo_uid), 200)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
     def test_07_liveRoomPay_602515(self, des='直播公会主播(非宗师)/公会长打赏分成60:25:15'):
@@ -191,9 +191,9 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 600)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', ceo_uid), 250)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('single_money', test_uid, money_type='money_cash'), 600)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', ceo_uid), 250)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
     def test_08_IMPay_602020(self, des='公会主播(非宗师)/公会长私聊分成60:20:20'):
@@ -220,9 +220,9 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid, money_type='money_cash'), 600)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', ceo_uid), 200)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('single_money', test_uid, money_type='money_cash'), 600)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', ceo_uid), 200)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
     def test_09_underRolePay_6238(self, des='直播间打赏麦下用户分成62:38'):
@@ -243,8 +243,8 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('single_money', config.rewardUid, money_type='money_cash_b'), 62)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid, money_type='money_cash_b'), 62)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
     def test_10_NotLiveRoomPayAnchor(self, des='主播在非直播间被打赏70%进个人魅力'):
@@ -266,6 +266,6 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('single_money', test_uid), 700)
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.payUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('single_money', test_uid), 700)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
