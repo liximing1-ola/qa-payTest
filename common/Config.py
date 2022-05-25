@@ -70,3 +70,5 @@ class config:
 
 if __name__ == '__main__':
     print(config.BASE_PATH)
+    txtPath = os.path.split(os.path.realpath(__file__))[0]
+    print(txtPath)

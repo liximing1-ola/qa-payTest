@@ -34,7 +34,7 @@ class Session:
                 if not method.isExtend(res, 'token') or res['success'] != 1:
                     print('failReason： {}'.format(res['msg']))
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
-                Session.checkUserToken('write', token=tokenDict['token'])
+                Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
                 return tokenDict
             except Exception as error:
                 Logs.get_log('getSession.log').error('session异常，原因： {}'.format(error))
@@ -51,7 +51,7 @@ class Session:
                 if not method.isExtend(res, 'token') or res['success'] != 1:
                     print('failReason： {}'.format(res['msg']))
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
-                Session.checkUserToken('write', app_name='havefun', token=tokenDict['token'])
+                Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
                 return tokenDict
             except Exception as error:
                 Logs.get_log('getSession.log').error('session异常，原因： {}'.format(error))
@@ -68,7 +68,7 @@ class Session:
                 if not method.isExtend(res, 'token') or res['success'] != 1:
                     print('failReason： {}'.format(res['msg']))
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
-                Session.checkUserToken('write', app_name='games', token=tokenDict['token'])
+                Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
                 return tokenDict
             except Exception as error:
                 Logs.get_log('getSession.log').error('session异常，原因： {}'.format(error))
@@ -83,6 +83,7 @@ class Session:
                 if not method.isExtend(res, 'token') or res['success'] != 1:
                     return res['msg']
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
+                Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
                 return tokenDict
             except Exception as error:
                 Logs.get_log('ptGetSession.log').error('session获取异常，原因： {}'.format(error))
@@ -90,18 +91,15 @@ class Session:
             print("env input error")
 
     @staticmethod
-    def checkUserToken(operate, app_name='env', token=''):
+    def checkUserToken(operate, app_name='dev', token=''):
         txtPath = os.path.split(os.path.realpath(__file__))[0] + '/{}UserToken.txt'.format(app_name)
+        if not os.path.exists(txtPath):
+            os.system(r"touch {}".format(txtPath))
         if operate == 'write':
             with open(txtPath, 'w') as f:
                 f.write(token)
                 f.flush()
         elif operate == 'read':
-            if not os.path.exists(txtPath):
-                os.system(r"touch {}".format(txtPath))
-                with open(txtPath, 'r+') as f:
-                    f.write('')
-                    f.flush()
             with open(txtPath, 'r') as f:
                 f = f.read()
                 return f
