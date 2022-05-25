@@ -93,7 +93,7 @@ def main(appInfo):
 
 
 if __name__ == "__main__":
-    if platform.node() == 'iZj6c7cxmmtvxr9kuetoizZ':
+    if platform.node() == config.linux_node['ali']:
         main('pt')
     else:
         main('banban')

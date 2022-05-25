@@ -2,6 +2,7 @@
 import yaml
 from common.Config import config
 import os
+import platform
 class Yaml:
     @staticmethod
     def read_yaml(yaml_fileName, yaml_name):
@@ -13,7 +14,10 @@ class Yaml:
         try:
             if not os.path.exists(yaml_path):
                 return FileExistsError
-            yaml_data = yaml.load(open(yaml_path, 'r', encoding='utf-8'))  # 添加后不会报warning
+            if platform.node() == config.linux_node['ali']:
+                yaml_data = yaml.load(open(yaml_path, 'r', encoding='utf-8'), loader=yaml.FullLoader)  # 添加后不会报warning
+            else:
+                yaml_data = yaml.load(open(yaml_path, 'r', encoding='utf-8'))
             if yaml_data[yaml_name] is None:
                 return TypeError
             else:

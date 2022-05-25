@@ -7,6 +7,7 @@ class config:
     dev_host = domain_host['bb_dev_58']
     pay_url = dev_host + 'pay/create?package=com.imbb.banban.android'  # 内网支付接口
     pt_pay_url = domain_host['pt'] + 'pay/create?package=com.ola.chat'
+    linux_node = {'ali': 'iZj6c7cxmmtvxr9kuetoizZ', }
     # 配置
     bb_user = {
         'payUid': 103273407,  # god
