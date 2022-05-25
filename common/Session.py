@@ -34,6 +34,7 @@ class Session:
                 if not method.isExtend(res, 'token') or res['success'] != 1:
                     print('failReason： {}'.format(res['msg']))
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
+                print(tokenDict['token'])
                 Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
                 return tokenDict
             except Exception as error:
@@ -93,6 +94,7 @@ class Session:
     @staticmethod
     def checkUserToken(operate, app_name='dev', token=''):
         txtPath = os.path.split(os.path.realpath(__file__))[0] + '/{}UserToken.txt'.format(app_name)
+        print(txtPath)
         if not os.path.exists(txtPath):
             os.system(r"touch {}".format(txtPath))
         if operate == 'write':
@@ -102,4 +104,5 @@ class Session:
         elif operate == 'read':
             with open(txtPath, 'r') as f:
                 f = f.read()
+                print(f)
                 return f
