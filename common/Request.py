@@ -15,7 +15,7 @@ def post_request_session(url, data, tokenName='dev'):
     :return:
     """
     requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
-    print(Session.checkUserToken(operate='read', token=tokenName))
+    print(4, Session.checkUserToken(operate='read', token=tokenName))
     header = {
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko)\
                             Chrome/67.0.3396.99 Safari/537.36",
