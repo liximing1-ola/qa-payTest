@@ -15,7 +15,7 @@ class Yaml:
             if not os.path.exists(yaml_path):
                 return FileExistsError
             if platform.node() == config.linux_node['ali']:
-                yaml_data = yaml.load(open(yaml_path, 'r', encoding='utf-8'), loader=yaml.FullLoader)  # 添加后不会报warning
+                yaml_data = yaml.load(open(yaml_path, 'r', encoding='utf-8'), yaml.FullLoader)  # 添加后不会报warning
             else:
                 yaml_data = yaml.load(open(yaml_path, 'r', encoding='utf-8'))
             if yaml_data[yaml_name] is None:
