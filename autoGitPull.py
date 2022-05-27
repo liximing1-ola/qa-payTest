@@ -22,7 +22,7 @@ class updateCode:
             bot = 'BB'
         elif appInfo == 'bb_go':
             gtr_path = updateCode.code_path['bb_go_path']
-            git_branch = updateCode.code_path['bb_git_go_branch']
+            git_branch = updateCode.code_path['bb_go_git_branch']
             env = 'dev'
             bot = 'BB'
         elif appInfo == 'pt':
