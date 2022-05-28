@@ -6,6 +6,7 @@ from common.sqlScript import mysql
 from Robot import robot
 from common import Assert, Request, basicData, Consts, Logs, method, Session
 from common.method import getValue
+import time
 class TestPayConcurrent:
     # 内网支付接口
     pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
@@ -21,7 +22,7 @@ class TestPayConcurrent:
         构造背包内购买礼物场景
         脚本步骤：
         1.构造购买者数据 （更新xs_user_money和xs_user_commodity）
-        2.商城内购买礼物道具*10（9900*1=9900）
+        2.商城内购买礼物道具*1（9900*1=9900）
         3.校验【status code】和返回值【body】状态
         4.检查购买者余额 (10000-9900=100)
         5.检查背包内物品
@@ -60,6 +61,7 @@ class TestPayConcurrent:
     @staticmethod
     def endPayCreate():
         Assert.assert_equal(mysql.checkUserCommoditySql(config.payUid, 340), 0)
+        time.sleep(1)
         Assert.assert_equal(mysql.selectAllMoneySql(config.rewardUid), 6138)
         Assert.assert_equal(Consts.success_num, 1)
         Consts.fail_num=0
