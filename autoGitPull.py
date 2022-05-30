@@ -14,9 +14,7 @@ class updateCode:
                  'pt_git_branch': 'main'}
 
     @staticmethod
-    def autoGitPull(appInfo):
-        env = 'dev'
-        bot = 'BB'
+    def autoGitPull(appInfo, env='dev', bot='BB'):
         if appInfo == 'bb_php':
             gtr_path = updateCode.code_path['bb_php_path']
             git_branch = updateCode.code_path['bb_git_branch']
@@ -37,7 +35,6 @@ class updateCode:
         repo = Repo(gtr_path)
         Consts.startTime = time.time()
         Session().getSession(env)  # 更新userToken
-
         if str(repo.active_branch) == git_branch:  # 当前线上分支
             commit_log = repo.git.log('--pretty={"commit":"%h","author":"%an","summary":"%s","date":"%cd"}',
                                       max_count=3, date='format:%Y-%m-%d %H:%M:%S')
