@@ -5,25 +5,20 @@ from git.repo import Repo
 from Robot import robot
 from common.Session import Session
 from common import Logs, Consts
+from common.Config import config
 class updateCode:
-    code_path = {'bb_php_path': '/home/webroot/banban',
-                 'bb_go_path': '/home/webroot/banban-go/banban-consume',
-                 'pt_php_path': '/home/webroot/release_oversea/oversea-server',
-                 'bb_git_branch': 'release-for-vpc',
-                 'bb_go_git_branch': 'master',
-                 'pt_git_branch': 'main'}
 
     @staticmethod
     def autoGitPull(appInfo, env='dev', bot='BB'):
         if appInfo == 'bb_php':
-            gtr_path = updateCode.code_path['bb_php_path']
-            git_branch = updateCode.code_path['bb_git_branch']
+            gtr_path = config.codeInfo['bb_php_path']
+            git_branch = config.codeInfo['bb_git_branch']
         elif appInfo == 'bb_go':
-            gtr_path = updateCode.code_path['bb_go_path']
-            git_branch = updateCode.code_path['bb_go_git_branch']
+            gtr_path = config.codeInfo['bb_go_path']
+            git_branch = config.codeInfo['bb_go_git_branch']
         elif appInfo == 'pt':
-            gtr_path = updateCode.code_path['pt_php_path']
-            git_branch = updateCode.code_path['pt_git_branch']
+            gtr_path = config.codeInfo['pt_php_path']
+            git_branch = config.codeInfo['pt_git_branch']
             env = 'pt'
             bot = 'PT'
         else:

@@ -4,8 +4,13 @@ class config:
     # 工程目录
     BASE_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     appInfo = {'bb_dev_58': 'https://dev.iambanban.com/', 'pt_ali': 'https://test.overseaban.com/',
-                'banban': 'com.imbb.banban.android', 'pt': 'com.ola.chat',
-               }
+                'banban': 'com.imbb.banban.android', 'pt': 'com.ola.chat', }
+    codeInfo = {'bb_php_path': '/home/webroot/banban',
+                'bb_go_path': '/home/webroot/banban-go/banban-consume',
+                'pt_php_path': '/home/webroot/release_oversea/oversea-server',
+                'bb_git_branch': 'release-for-vpc',
+                'bb_go_git_branch': 'master',
+                'pt_git_branch': 'main'}
     # 测试域名
     bb_host = appInfo['bb_dev_58']
     pt_host = appInfo['pt_ali']
@@ -74,6 +79,5 @@ class config:
 
 
 if __name__ == '__main__':
-    print(config.BASE_PATH)
-    txtPath = os.path.split(os.path.realpath(__file__))[0]
-    print(txtPath)
+    print(config.appInfo.items())
+    print(config.appInfo.get('banban'))

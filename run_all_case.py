@@ -37,7 +37,7 @@ def main(appInfo):
                     case_list_2, test_result.testsRun,
                     len(test_result.failures) + len(test_result.errors),
                     use_time,
-                    updateCode.code_path['bb_git_branch'])
+                    config.codeInfo['bb_git_branch'])
                 robot('markdown', des)
                 time.sleep(0.1)
                 robot('markdown', des_2)
@@ -71,7 +71,7 @@ def main(appInfo):
                     case_list_2, test_result.testsRun,
                     len(test_result.failures) + len(test_result.errors),
                     use_time,
-                    updateCode.code_path['pt_git_branch'])
+                    config.codeInfo['pt_git_branch'])
                 robot('markdown', des, bot='PT')
                 time.sleep(0.1)
                 robot('markdown', des_2, bot='PT')
