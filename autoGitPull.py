@@ -15,16 +15,14 @@ class updateCode:
 
     @staticmethod
     def autoGitPull(appInfo):
+        env = 'dev'
+        bot = 'BB'
         if appInfo == 'bb_php':
             gtr_path = updateCode.code_path['bb_php_path']
             git_branch = updateCode.code_path['bb_git_branch']
-            env = 'dev'
-            bot = 'BB'
         elif appInfo == 'bb_go':
             gtr_path = updateCode.code_path['bb_go_path']
             git_branch = updateCode.code_path['bb_go_git_branch']
-            env = 'dev'
-            bot = 'BB'
         elif appInfo == 'pt':
             gtr_path = updateCode.code_path['pt_php_path']
             git_branch = updateCode.code_path['pt_git_branch']
