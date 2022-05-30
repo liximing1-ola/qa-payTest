@@ -12,11 +12,11 @@ from common.Assert import assert_equal, assert_code
 import time
 class TestPayConcurrent:
     # 内网支付接口
-    pay_url = config.dev_host + 'pay/create?package=com.imbb.banban.android'
+    pay_url = config.bb_host + 'pay/create?package=com.imbb.banban.android'
     # 物品赠送接口
-    commodity_present = config.dev_host + 'commodity/present?package=com.imbb.banban.android'
+    commodity_present = config.bb_host + 'commodity/present?package=com.imbb.banban.android'
     # 物品使用接口
-    commodity_use = config.dev_host + 'commodity/use?package=com.imbb.banban.android'
+    commodity_use = config.bb_host + 'commodity/use?package=com.imbb.banban.android'
 
     @staticmethod
     def startPayCreateReady():

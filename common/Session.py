@@ -25,7 +25,7 @@ class Session:
             try:
                 headers = Yaml.read_yaml('Basic.yml', 'header_dev')
                 params = Yaml.read_yaml('Basic.yml', 'params_dev_qq')
-                login_url = config.qq_login_url + '?' + params + '&package=com.imbb.banban.android'  # 7.22修改，请求接口加包名限制
+                login_url = config.bb_qqLogin_url + '?' + params + '&package=com.imbb.banban.android'  # 7.22修改，请求接口加包名限制
                 body = Yaml.read_yaml('Basic.yml', 'data_dev_qq')
                 session = requests.session()
                 res = session.post(login_url, data=body, headers=headers)
@@ -42,7 +42,7 @@ class Session:
             try:
                 headers = Yaml.read_yaml('Basic.yml', 'header_dev')
                 params = Yaml.read_yaml('', '')
-                login_url = config.qq_login_url + '?' + params + '&package=com.havefun.android'  # 7.22修改，请求接口加包名限制
+                login_url = config.bb_qqLogin_url + '?' + params + '&package=com.havefun.android'  # 7.22修改，请求接口加包名限制
                 body = Yaml.read_yaml('', '')
                 session = requests.session()
                 res = session.post(login_url, data=body, headers=headers)
@@ -59,7 +59,7 @@ class Session:
             try:
                 headers = Yaml.read_yaml('Basic.yml', 'header_dev')
                 params = Yaml.read_yaml('Basic.yml', 'params_games_qq')
-                login_url = config.qq_login_url + '?' + params + '&package=com.who.android'
+                login_url = config.bb_qqLogin_url + '?' + params + '&package=com.who.android'
                 body = Yaml.read_yaml('Basic.yml', 'data_games_qq')
                 session = requests.session()
                 res = session.post(login_url, data=body, headers=headers)
@@ -77,7 +77,7 @@ class Session:
                 headers = Yaml.read_yaml('Basic_pt.yml', 'header_pt')
                 body = Yaml.read_yaml('Basic_pt.yml', 'data_pt_mobile')
                 session = requests.session()
-                res = session.post(config.mobile_login_url, data=body, headers=headers)
+                res = session.post(config.pt_mobile_login_url, data=body, headers=headers)
                 res.raise_for_status()
                 res = res.json()
                 if not method.isExtend(res, 'token') or res['success'] != 1:

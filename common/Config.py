@@ -3,12 +3,22 @@ import os
 class config:
     # 工程目录
     BASE_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-    domain_host = {'bb_dev_58': 'https://dev.iambanban.com/', 'pt': 'https://test.overseaban.com/', }
-    dev_host = domain_host['bb_dev_58']
-    pay_url = dev_host + 'pay/create?package=com.imbb.banban.android'  # 内网支付接口
-    pt_pay_url = domain_host['pt'] + 'pay/create?package=com.ola.chat'
+    appInfo = {'bb_dev_58': 'https://dev.iambanban.com/', 'pt_ali': 'https://test.overseaban.com/',
+                'banban': 'com.imbb.banban.android', 'pt': 'com.ola.chat',
+               }
+    # 测试域名
+    bb_host = appInfo['bb_dev_58']
+    pt_host = appInfo['pt_ali']
+    # 内网支付接口
+    pay_url = bb_host + 'pay/create?package=com.imbb.banban.android'
+    pt_pay_url = pt_host + 'pay/create?package=com.ola.chat'
+    # 服务器标识
     linux_node = {'ali': 'iZj6c7cxmmtvxr9kuetoizZ', }
-    # 配置
+    # app登录方式
+    bb_qqLogin_url = bb_host + 'account/qqlogin'
+    pt_mobile_login_url = pt_host + 'account/passwordLogin'
+
+    # banban用户配置
     bb_user = {
         'payUid': 103273407,  # god
         'testUid': 105002312,  # 非一代宗师
@@ -47,25 +57,19 @@ class config:
         "62": 62,  # 人气券*20（金币）
         "362": 362,  # 啵啵奶茶*1000（金豆）
     }
-    qq_login_url = dev_host + 'account/qqlogin'  # dev域名（qq登陆方式)
     rewardUid = bb_user['testUid']  # 被打赏者
     rewardUid2 = 100500205  # 被打赏者
     payUid = bb_user['payUid']  # 打赏者
     pack_cal_uid = bb_user['pack_cal_uid']  # 打包结算主播
 
     # PT
-    pt_user = {
-        'payUid': 800240376,
-        'testUid': 800000116}
-    # pt域名-（PT登陆方式）
-    pt_host = domain_host['pt']
-    mobile_login_url = pt_host + 'account/passwordLogin'
+    pt_user = {'payUid': 800240376, 'testUid': 800000116}
     pt_payUid = pt_user['payUid']
     pt_testUid = pt_user['testUid']
 
     # 礼物配置
     pt_giftId = {
-        "10": 10,  # 么么哒*60钻）
+        "10": 10,  # 么么哒*60钻
     }
 
 

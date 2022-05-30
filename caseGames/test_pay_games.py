@@ -8,7 +8,7 @@ from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
 
     # 内网支付接口
-    pay_url = config.dev_host + 'pay/create?package=com.who.android'
+    pay_url = config.bb_host + 'pay/create?package=com.who.android'
 
     def test_01_gamesRoomPayDivide_55(self):
         """
