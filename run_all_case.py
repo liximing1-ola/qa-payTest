@@ -21,7 +21,7 @@ def all_case(appInfo):
 
 def main(appInfo):
     if appInfo == 'banban':
-        if updateCode.autoGitPull('bb_go') or updateCode.autoGitPull('bb_php'):
+        if updateCode.autoGitPull('bb_go') | updateCode.autoGitPull('bb_php'):
             updateTime('write', now=str(int(time.time())))
             test_result = unittest.TextTestRunner(verbosity=3).run(all_case(appInfo))
             Consts.endTime = time.time()
