@@ -6,9 +6,9 @@ class conMysql:
     db_config = {"dev_46_db": '192.168.11.46',
                  "dev_46_user": 'root',
                  "dev_46_pas": '123456',
-                 "ali_db": 'rm-bp1nfl3dp096d5o39.mysql.rds.aliyuncs.com',
-                 "ali_user": 'super',
-                 "ali_pas": 'dev123456'}
+                 "ali_db": 'localhost',
+                 "ali_user": 'root',
+                 "ali_pas": '123456'}
     _dbUrl = db_config['dev_46_db']
     _user = db_config['dev_46_user']
     _password = db_config['dev_46_pas']
