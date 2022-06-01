@@ -38,7 +38,7 @@ class Session:
                 return tokenDict
             except Exception as error:
                 Logs.get_log('getSession.log').error('session异常，原因： {}'.format(error))
-        elif env == 'havefun':  # 嗨歌
+        elif env == config.appName['嗨歌']:
             try:
                 headers = Yaml.read_yaml('Basic.yml', 'header_dev')
                 params = Yaml.read_yaml('', '')
@@ -55,7 +55,7 @@ class Session:
                 return tokenDict
             except Exception as error:
                 Logs.get_log('getSession.log').error('session异常，原因： {}'.format(error))
-        elif env == 'games':  # 凶手
+        elif env == config.appName['谁是凶手']:  # 凶手
             try:
                 headers = Yaml.read_yaml('Basic.yml', 'header_dev')
                 params = Yaml.read_yaml('Basic.yml', 'params_games_qq')
@@ -72,7 +72,7 @@ class Session:
                 return tokenDict
             except Exception as error:
                 Logs.get_log('getSession.log').error('session异常，原因： {}'.format(error))
-        elif env == 'pt':  # Parting
+        elif env == config.appName['Partying']:
             try:
                 headers = Yaml.read_yaml('Basic_pt.yml', 'header_pt')
                 body = Yaml.read_yaml('Basic_pt.yml', 'data_pt_mobile')

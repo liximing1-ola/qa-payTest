@@ -6,21 +6,8 @@ from common.Config import config
 from autoGitPull import updateTime, updateCode
 from Robot import robot
 import platform
-def all_case(appInfo):
-    if appInfo == 'banban':
-        case_dir = config.BASE_PATH + '/case'
-    else:  # pt
-        case_dir = config.BASE_PATH + '/caseOversea'
-
-    testcase = unittest.TestSuite()
-    discover = unittest.defaultTestLoader.discover(case_dir,  # 指定待执行用例的目录
-                                                   pattern="test_*.py",
-                                                   top_level_dir=None)
-    testcase.addTests(discover)
-    return testcase
-
 def main(appInfo):
-    if appInfo == 'banban':
+    if appInfo == config.appName['伴伴']:
         if updateCode.autoGitPull('bb_php') | updateCode.autoGitPull('bb_go'):
             updateTime('write', now=str(int(time.time())))
             test_result = unittest.TextTestRunner(verbosity=3).run(all_case(appInfo))
@@ -54,7 +41,7 @@ def main(appInfo):
                     break
         else:
             Logs.get_log('runCode.log').info('NoRun')
-    elif appInfo == 'pt':
+    elif appInfo == config.appName['Partying']:
         if updateCode.autoGitPull(appInfo):
             updateTime('write', now=str(int(time.time())))
             test_result = unittest.TextTestRunner(verbosity=3).run(all_case(appInfo))
@@ -91,9 +78,28 @@ def main(appInfo):
     else:
         print('{} 錯誤'.format(appInfo))
 
+def all_case(appInfo):
+    if appInfo == config.appName['伴伴']:
+        case_dir = config.BASE_PATH + '/case'
+    elif appInfo == config.appName['嗨歌']:
+        case_dir = config.BASE_PATH + '/caseHavefun'
+    elif appInfo == config.appName['Partying']:
+        case_dir = config.BASE_PATH + '/caseOversea'
+    elif appInfo == config.appName['谁是凶手']:
+        case_dir = config.BASE_PATH + '/caseGames'
+    else:
+        return
+
+    testcase = unittest.TestSuite()
+    discover = unittest.defaultTestLoader.discover(case_dir,  # 指定待执行用例的目录
+                                                   pattern="test_*.py",
+                                                   top_level_dir=None)
+    testcase.addTests(discover)
+    return testcase
+
 
 if __name__ == "__main__":
     if platform.node() == config.linux_node['ali']:
-        main('pt')
+        main(config.appName['Partying'])
     else:
-        main('banban')
+        main(config.appName['伴伴'])

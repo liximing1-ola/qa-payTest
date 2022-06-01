@@ -11,6 +11,13 @@ class config:
                 'bb_git_branch': 'release-for-vpc',
                 'bb_go_git_branch': 'master',
                 'pt_git_branch': 'main'}
+    appName = {
+        "伴伴": 'banban',
+        "Partying": 'pt',
+        "谁是凶手": 'games',
+        "嗨歌": 'havefun',
+        "皮队友": 'teammate',
+    }
     # 测试域名
     bb_host = appInfo['bb_dev_58']
     pt_host = appInfo['pt_ali']
@@ -81,3 +88,4 @@ class config:
 if __name__ == '__main__':
     print(config.appInfo.items())
     print(config.appInfo.get('banban'))
+    print(config.appName['谁是凶手'])
