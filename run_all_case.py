@@ -74,19 +74,20 @@ def main(appInfo):
                     robot('fail', reason, case.id(), bot='PT')
                     break
         else:
-            Logs.get_log('ptRunCode.log').info('NoRun')
+            Logs.get_log('RunCode.log').info('NoRun')
     else:
-        print('{} 錯誤'.format(appInfo))
+        Logs.get_log('RunCode.log').error('{} 执行异常'.format(appInfo))
 
 def all_case(appInfo):
+    case_dir = config.BASE_PATH
     if appInfo == config.appName['伴伴']:
-        case_dir = config.BASE_PATH + '/case'
+        case_dir += '/case'
     elif appInfo == config.appName['嗨歌']:
-        case_dir = config.BASE_PATH + '/caseHavefun'
+        case_dir += '/caseHavefun'
     elif appInfo == config.appName['Partying']:
-        case_dir = config.BASE_PATH + '/caseOversea'
+        case_dir += '/caseOversea'
     elif appInfo == config.appName['谁是凶手']:
-        case_dir = config.BASE_PATH + '/caseGames'
+        case_dir += '/caseGames'
     else:
         return
 
