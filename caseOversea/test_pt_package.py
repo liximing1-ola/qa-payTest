@@ -23,7 +23,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateUserMoneyClearSql(config.pt_payUid, config.pt_testUid)
         data = encodePtData(payType='package')
-        res = post_request_session(config.pt_pay_url, data, tokenName=config.appName['Partying'])
+        res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 0, reason(des, res))
         assert_body(res['body'], 'msg', '餘額不足，無法支付', reason(des, res))
@@ -42,7 +42,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, 700)
         data = encodePtData(payType='package')
-        res = post_request_session(config.pt_pay_url, data, tokenName=config.appName['Partying'])
+        res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 100)
