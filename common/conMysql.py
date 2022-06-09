@@ -265,7 +265,7 @@ class conMysql:
     def updateUserMoneyClearSql(*uids):
         try:
             for uid in uids:
-                sql = "update xs_user_money set money=0, money_b=0, money_cash=0, money_cash_b=0,gold_coin=0, money_debts=0 where uid={} limit 1" \
+                sql = "update xs_user_money set money=0, money_b=0, money_cash=0, money_cash_b=0,gold_coin=0, money_debts=0 where uid={}" \
                     .format(uid)
                 conMysql.cur.execute(sql)
         except Exception as error:
