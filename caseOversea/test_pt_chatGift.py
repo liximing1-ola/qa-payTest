@@ -7,7 +7,6 @@ from common.method import reason
 from common.basicData import encodePtData
 from common.Consts import case_list, result
 from common.runFailed import Retry
-import time
 @Retry(max_n=2)
 class TestPayCreate(unittest.TestCase):
 
@@ -23,7 +22,6 @@ class TestPayCreate(unittest.TestCase):
         5.检查被打赏者余额,预期：0
         """
         conMysql.updateUserMoneyClearSql(config.pt_payUid, config.pt_testUid)
-        time.sleep(60)
         conMysql.deleteUserAccountSql('broker_user', config.pt_testUid)
         conMysql.deleteUserAccountSql('chatroom', config.pt_testUid)
         data = encodePtData(payType='chat-gift')

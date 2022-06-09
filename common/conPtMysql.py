@@ -203,10 +203,8 @@ class conMysql:
     def updateUserMoneyClearSql(*uids):
         try:
             for uid in uids:
-                print(uid)
                 sql = "update xs_user_money set money=0, money_b=0, money_cash=0, money_cash_b=0, gold_coin=0, money_debts=0, money_order=0, money_order_b=0 where uid={}" \
                     .format(uid)
-                print(sql)
                 conMysql.cur.execute(sql)
         except Exception as error:
             conMysql.con.rollback()
