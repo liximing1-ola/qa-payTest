@@ -7,6 +7,7 @@ from common.method import reason
 from common.basicData import encodePtData
 from common.Consts import case_list, result
 from common.runFailed import Retry
+import time
 @Retry(max_n=2)
 class TestPayCreate(unittest.TestCase):
 
@@ -22,9 +23,10 @@ class TestPayCreate(unittest.TestCase):
         5.检查被打赏者余额,预期：0
         """
         conMysql.updateUserMoneyClearSql(config.pt_payUid, config.pt_testUid)
+        time.sleep(60)
         conMysql.deleteUserAccountSql('broker_user', config.pt_testUid)
         conMysql.deleteUserAccountSql('chatroom', config.pt_testUid)
-        data = encodePtData(payType='chat-gift', uid=config.pt_testUid)
+        data = encodePtData(payType='chat-gift')
         res = post_request_session(config.pt_pay_url, data, tokenName=config.appName['Partying'])
         assert_code(res['code'])
         assert_body(res['body'], 'success', 0, reason(des, res))
@@ -45,7 +47,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, money=600)
         conMysql.updateMoneySql(config.pt_testUid)
-        data = encodePtData(payType='chat-gift', uid=config.pt_testUid)
+        data = encodePtData(payType='chat-gift')
         res = post_request_session(config.pt_pay_url, data, tokenName=config.appName['Partying'])
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
