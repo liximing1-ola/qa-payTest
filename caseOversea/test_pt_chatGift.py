@@ -49,5 +49,5 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pt_pay_url, data, tokenName=config.appName['Partying'])
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('single_money', config.pt_testUid), 480)
+        assert_equal(conMysql.selectUserMoneySql('single_money', config.pt_testUid, money_type='money_cash'), 480)
         case_list[des] = result
