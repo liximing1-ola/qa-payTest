@@ -74,9 +74,9 @@ def main(appInfo):
                     robot('fail', reason, case.id(), bot='PT')
                     break
         else:
-            Logs.get_log('RunCode.log').info('NoRun')
+            Logs.get_log('runCode.log').info('NoRun')
     else:
-        Logs.get_log('RunCode.log').error('{} 执行异常'.format(appInfo))
+        Logs.get_log('runCode.log').error('{} 执行异常'.format(appInfo))
 
 def all_case(appInfo):
     case_dir = config.BASE_PATH

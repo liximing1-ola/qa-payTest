@@ -332,9 +332,8 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
     else:
         raise Exception('payType is error')
 
-def encodePtData(payType='package', money=1000, rid=193185484, uid=105002331, giftId=7, giftType='normal',
-                 num=1, package_cid=0, ctype='', duction_money=0, star=0, uids=('105002312', '100500205')):
-
+def encodePtData(payType='package', money=600, rid=193185484, uid=105002331, giftId=10, giftType='normal',
+                 num=1, package_cid=0, ctype='', duction_money=0, star=0, uids=('', '')):
     if payType == 'package':
         data = {
             "platform": "available",
@@ -356,7 +355,6 @@ def encodePtData(payType='package', money=1000, rid=193185484, uid=105002331, gi
                  "gift_type": "{}".format(giftType),
                  "useCoin": -1,
                  "star": star,
-                 "show_pac_man_guide": 1,
                  "refer": "",
                  "all_mic": 0,
                  }

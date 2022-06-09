@@ -3,8 +3,10 @@ import os
 class config:
     # 工程目录
     BASE_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-    appInfo = {'bb_dev_58': 'https://dev.iambanban.com/', 'pt_ali': 'https://test.overseaban.com/',
-                'banban': 'com.imbb.banban.android', 'pt': 'com.ola.chat', }
+    appInfo = {'bb_dev_58': 'https://dev.iambanban.com/',
+               'pt_ali': 'https://test.overseaban.com/',
+               'banban': 'com.imbb.banban.android',
+               'pt': 'com.ola.chat', }
     codeInfo = {'bb_php_path': '/home/webroot/banban',
                 'bb_go_path': '/home/webroot/banban-go/banban-consume',
                 'pt_php_path': '/home/webroot/release_oversea/oversea-server',
@@ -75,9 +77,15 @@ class config:
     pack_cal_uid = bb_user['pack_cal_uid']  # 打包结算主播
 
     # PT
-    pt_user = {'payUid': 800240376, 'testUid': 800000116}
+    pt_user = {'payUid': 800240376,
+               'testUid': 800000116}
     pt_payUid = pt_user['payUid']
     pt_testUid = pt_user['testUid']
+
+    # 房间类型
+    pt_room = {
+        ''
+    }
 
     # 礼物配置
     pt_giftId = {
