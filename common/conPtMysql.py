@@ -372,7 +372,7 @@ class conMysql:
 
     # 更新箱子刷新物品
     @staticmethod
-    def insertXsUserBox(uid, gift_cid=1694, box_type='copper'):
+    def insertXsUserBox(uid, gift_cid=2505, box_type='copper'):
         sql = "insert into xs_user_box (last_refresh_cid, last_refresh_sub_cid, uid, type) values ({},{},{},'{}')"\
             .format(gift_cid, gift_cid, uid, box_type)
         try:
