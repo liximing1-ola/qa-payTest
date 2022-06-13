@@ -38,6 +38,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.pt_payUid), 1)
         case_list[des] = result
 
+    @unittest.skip
     def test_02_openMoreBoxPayChange(self, des='背包箱子多开场景'):
         """
         用例描述：
