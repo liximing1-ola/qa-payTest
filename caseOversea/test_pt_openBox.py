@@ -24,7 +24,7 @@ class TestPayCreate(unittest.TestCase):
         2.openBox
         3.校验接口状态和返回值数据
         4.检查账户余额，预期值为：700 - 600 = 100
-        5.检查背包内开出物品，预期值应为：1（开出礼物个数*1）
+        5.检查背包内开出物品，预期值应为：2（开出礼物个数*1 + 赠送头框*1）
         """
         conMysql.deleteUserAccountSql('user_box', config.pt_payUid)
         conMysql.deleteUserAccountSql('user_commodity', config.pt_payUid)
@@ -32,12 +32,11 @@ class TestPayCreate(unittest.TestCase):
         conMysql.insertXsUserBox(config.pt_payUid)
         conMysql.updateMoneySql(config.pt_payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
         data = encodePtData(payType='shop-buy-box')
-        time.sleep(60)
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 100)
-        assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.pt_payUid), 1)
+        assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.pt_payUid), 2)
         case_list[des] = result
 
     @unittest.skip
@@ -54,7 +53,7 @@ class TestPayCreate(unittest.TestCase):
         2.openBox
         3.校验接口状态和返回值数据
         4.检查账户余额，预期值为：12600 - 2100*6 = 0
-        5.检查背包内开出物品，预期值应为6（开出礼物个数等于*6）
+        5.检查背包内开出物品，预期值应为6（开出礼物个数等于*6 + 赠送头框*6）
         """
         conMysql.deleteUserAccountSql('user_box', config.pt_payUid)
         conMysql.deleteUserAccountSql('user_commodity', config.pt_payUid)
@@ -66,7 +65,7 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 0)
-        assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.pt_payUid), 6)
+        assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.pt_payUid), 12)
         case_list[des] = result
 
     def test_03_giveBoxPayChange(self, des='房间送箱子场景'):
