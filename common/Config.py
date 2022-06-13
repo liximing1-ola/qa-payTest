@@ -84,7 +84,7 @@ class config:
 
     # 房间类型
     pt_room = {
-        ''
+        'business_joy': 105697423,
     }
 
     # 礼物配置

@@ -1,8 +1,9 @@
 import urllib.parse
 from common.Config import config
 
-def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, giftId=7, giftType='normal',
-               cid=5, boxType='copper', num=1, package_cid=0, ctype='', duction_money=0, star=0, defend_id=244, uids=('105002312', '100500205')):
+def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, giftId=7, giftType='normal', cid=5,
+               boxType='copper', num=1, package_cid=0, ctype='', duction_money=0, star=0, defend_id=244,
+               uids=('105002312', '100500205')):
 
     if payType == 'package':
         data = {
@@ -333,8 +334,9 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
     else:
         raise Exception('payType is error')
 
-def encodePtData(payType='package', money=600, rid=193185484, uid=config.pt_testUid, giftId=10, giftType='normal', cid=5,
-                 boxType='copper', num=1, package_cid=0, ctype='', duction_money=0, star=0, uids=('800000116', '800018895')):
+def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'], uid=config.pt_testUid, giftId=10,
+                 giftType='normal', cid=5, boxType='copper', num=1, package_cid=0, ctype='', duction_money=0, star=0,
+                 uids=('800000116', '800018895')):
     if payType == 'package':
         data = {
             "platform": "available",
