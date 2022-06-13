@@ -523,6 +523,23 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
         return data
+    elif payType == 'defend':
+        data = {
+            "platform": 'available',
+            "type": 'defend',
+            "money": money,
+            "params":
+                {"defend": 2,
+                 "to": uid,
+                 "cid": 0,
+                 "duction_money": 0,
+                 "unified_relation_version": 1,
+                 "useCoin": -1
+                 }
+        }
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        return data
 
 
 if __name__ == '__main__':

@@ -1,6 +1,7 @@
 from common.Config import config
 from common.method import reason
-import unittest, pytest
+import unittest
+import pytest
 from common.Request import post_request_session
 from common.Assert import assert_code, assert_body, assert_equal
 from common import basicData
@@ -22,7 +23,7 @@ class TestPayCreate(unittest.TestCase):
         1.构造开通者和被守护者数据
         2.开通价值52000钻小宝贝守护（xs_relation_config id=2）
         3.校验接口状态和返回值数据
-        4.检查打赏者余额`
+        4.检查打赏者余额
         5.检查被打赏者余额,预期：52000 * 0.62 = 32240
         """
         conMysql.updateMoneySql(config.payUid, money=52000)
