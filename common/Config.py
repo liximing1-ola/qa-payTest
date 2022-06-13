@@ -90,6 +90,8 @@ class config:
     # 礼物配置
     pt_giftId = {
         "10": 10,  # 么么哒*60钻
+        "46": 46,  # 幸运星*6币
+        "47": 47,  # 五色星*21币
     }
 
 
@@ -97,3 +99,5 @@ if __name__ == '__main__':
     print(config.appInfo.items())
     print(config.appInfo.get('banban'))
     print(config.appName['谁是凶手'])
+    print(config.pt_giftId.values())
+    print(tuple(i for i in config.pt_giftId.values()))
