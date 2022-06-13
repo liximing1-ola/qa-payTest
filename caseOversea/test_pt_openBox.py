@@ -7,6 +7,7 @@ from common.Assert import assert_code, assert_body, assert_len, assert_equal
 from common.basicData import encodePtData
 from common.Consts import result, case_list
 from common.runFailed import Retry
+import time
 @Retry
 class TestPayCreate(unittest.TestCase):
 
@@ -31,6 +32,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.insertXsUserBox(config.pt_payUid)
         conMysql.updateMoneySql(config.pt_payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
         data = encodePtData(payType='shop-buy-box')
+        time.sleep(60)
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
