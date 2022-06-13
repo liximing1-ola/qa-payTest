@@ -485,7 +485,7 @@ def encodePtData(payType='package', money=600, rid=193185484, uid=config.pt_test
                  "duction_money": 0,
                  "version": 2,
                  "star": 0,
-                 "scene": "shop_box'",
+                 "scene": "shop_box",
                  "useCoin": -1
                  }
         }
