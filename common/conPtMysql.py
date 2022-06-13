@@ -298,7 +298,7 @@ class conMysql:
             finally:
                 conMysql.con.commit()
         elif tableName == 'user_box':  # 清除xs_user_box用户数据
-            sql = "delete from xs_user_box where uid={} limit 1".format(uid)
+            sql = "delete from xs_user_box where uid={}".format(uid)
             try:
                 conMysql.cur.execute(sql)
             except Exception as error:
