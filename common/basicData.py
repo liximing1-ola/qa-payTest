@@ -334,7 +334,7 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
         raise Exception('payType is error')
 
 def encodePtData(payType='package', money=600, rid=193185484, uid=config.pt_testUid, giftId=10, giftType='normal', cid=5,
-                 boxType='copper', num=1, package_cid=0, ctype='', duction_money=0, star=0, uids=('', '')):
+                 boxType='copper', num=1, package_cid=0, ctype='', duction_money=0, star=0, uids=('800000116', '800018895')):
     if payType == 'package':
         data = {
             "platform": "available",
@@ -466,6 +466,28 @@ def encodePtData(payType='package', money=600, rid=193185484, uid=config.pt_test
                  "version": 2,
                  "gift_scene": "shop",
                  "useCoin": -1}
+        }
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        return data
+    elif payType == 'shop-buy-box':
+        data = {
+            "platform": 'available',
+            "type": 'shop-buy',
+            "money": money*num,
+            "params":
+                {"num": num,
+                 "cid": cid,
+                 "price": money,
+                 "type": "{}".format(boxType),
+                 "opennum": num,
+                 "coupon_id": 0,
+                 "duction_money": 0,
+                 "version": 2,
+                 "star": 0,
+                 "scene": "shop_box'",
+                 "useCoin": -1
+                 }
         }
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
