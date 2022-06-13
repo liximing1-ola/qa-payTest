@@ -344,3 +344,16 @@ class conMysql:
             print('update fail', error)
         finally:
             conMysql.con.commit()
+
+    # 检查xs_gift配置
+    @staticmethod
+    def checkXsGiftConfig():
+        gift_list = tuple(i for i in config.pt_giftId.values())
+        sql = "update xs_gift set deleted=0 where id in {}".format(gift_list)
+        try:
+            conMysql.cur.execute(sql)
+        except Exception as error:
+            conMysql.con.rollback()
+            print('update fail', error)
+        finally:
+            conMysql.con.commit()

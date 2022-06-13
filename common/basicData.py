@@ -333,8 +333,8 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
     else:
         raise Exception('payType is error')
 
-def encodePtData(payType='package', money=600, rid=193185484, uid=config.pt_testUid, giftId=10, giftType='normal',
-                 num=1, package_cid=0, ctype='', duction_money=0, star=0, uids=('', '')):
+def encodePtData(payType='package', money=600, rid=193185484, uid=config.pt_testUid, giftId=10, giftType='normal', cid=5,
+                 boxType='copper', num=1, package_cid=0, ctype='', duction_money=0, star=0, uids=('', '')):
     if payType == 'package':
         data = {
             "platform": "available",
@@ -448,6 +448,53 @@ def encodePtData(payType='package', money=600, rid=193185484, uid=config.pt_test
                  "all_mic": 0,
                  "useCoin": -1
                  }
+        }
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        return data
+    elif payType == 'shop-buy':
+        data = {
+            "platform": 'available',
+            "type": 'shop-buy',
+            "money": money*num,
+            "params":
+                {"num": num,
+                 "cid": cid,
+                 "price": money,
+                 "coupon_id": 0,
+                 "duction_money": 0,
+                 "version": 2,
+                 "gift_scene": "shop",
+                 "useCoin": -1}
+        }
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        return data
+    elif payType == 'coin-shop-buy':
+        data = {
+            "platform": 'available',
+            "type": 'coin-shop-buy',
+            "money": money*num,
+            "params":
+                {"num": num,
+                 "cid": cid,
+                 "price": money,
+                 "coupon_id": 0,
+                 "duction_money": 0,
+                 "version": 2,
+                 "useCoin": -1}
+        }
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        return data
+    elif payType == 'exchange_gold':
+        data = {
+            "platform": 'available',
+            "type": 'exchange_gold',
+            "money": 600,
+            "params": {
+                "type": "exchange_gold"
+            }
         }
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
