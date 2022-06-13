@@ -529,7 +529,7 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
             "type": 'defend',
             "money": money,
             "params":
-                {"defend": 2,
+                {"defend": 8,
                  "to": uid,
                  "cid": 0,
                  "duction_money": 0,
