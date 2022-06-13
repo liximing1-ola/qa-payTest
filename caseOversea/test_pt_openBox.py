@@ -38,7 +38,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.pt_payUid), 2)
         case_list[des] = result
 
-    @unittest.skip
     def test_02_openMoreBoxPayChange(self, des='背包箱子多开场景'):
         """
         用例描述：
@@ -67,7 +66,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.pt_payUid), 12)
         case_list[des] = result
 
-    @unittest.skip
     def test_03_giveBoxPayChange(self, des='房间送箱子场景'):
         """
         用例描述：
@@ -89,7 +87,6 @@ class TestPayCreate(unittest.TestCase):
         assert_len(conMysql.selectUserInfoSql('sum_money', config.pt_testUid), 100)
         case_list[des] = result
 
-    @unittest.skip
     def test_04_giveBoxMorePeople(self, des='房间送多人多个箱子场景'):
         """
         用例描述：
