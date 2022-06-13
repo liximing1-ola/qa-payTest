@@ -24,7 +24,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.pt_payUid, money=66600)
         conMysql.updateMoneySql(config.pt_testUid)
         data = encodePtData(payType='defend', money=66600)
-        res = post_request_session(config.pt_pay_url, data)
+        res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 0)
