@@ -46,7 +46,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('single_money', config.pt_testUid, money_type='money_cash'), 180)
         case_list[des] = result
 
-    @unittest.skip
     def test_02_thaiUnionRoomGiveBox(self, des='泰区联盟房送箱子场景'):
         """
         用例描述：
