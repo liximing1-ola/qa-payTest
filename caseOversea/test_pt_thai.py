@@ -7,7 +7,6 @@ from common.Assert import assert_code, assert_body, assert_len, assert_equal
 from common.basicData import encodePtData
 from common.Consts import result, case_list
 from common.runFailed import Retry
-import time
 @Retry
 class TestPayCreate(unittest.TestCase):
 
@@ -23,7 +22,6 @@ class TestPayCreate(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls) -> None:
-        time.sleep(60)
         conMysql.updateUserInfoSql('user_bigarea', config.pt_payUid)
         conMysql.updateUserInfoSql('user_bigarea', config.pt_testUid)
 
@@ -66,5 +64,5 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 100)
-        assert_len(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash'), 90)
+        assert_len(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash_b'), 90)
         case_list[des] = result
