@@ -22,8 +22,9 @@ class TestPayCreate(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls) -> None:
-        conMysql.updateUserInfoSql('user_bigarea', config.pt_payUid)
-        conMysql.updateUserInfoSql('user_bigarea', config.pt_testUid)
+        pass
+        #conMysql.updateUserInfoSql('user_bigarea', config.pt_payUid)
+        #conMysql.updateUserInfoSql('user_bigarea', config.pt_testUid)
 
     def test_01_thaiUnionRoomPay(self, des='泰区联盟房礼物打赏场景'):
         """
