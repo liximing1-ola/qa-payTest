@@ -321,7 +321,7 @@ class conMysql:
     @staticmethod
     def updateUserInfoSql(tableName, uid, bigarea_id=2):
         # 1=en 2=cn 3=ar 4=ko 5=id 6=th 7=vi 8=tr 9=ms
-        if tableName == 'user_bigarea':  # 修改用户d大区,默认华语大区
+        if tableName == 'user_bigarea':  # 修改用户大区,默认华语大区
             sql = "update xs_user_bigarea set bigarea_id={} where uid={}".format(bigarea_id, uid)
             try:
                 conMysql.cur.execute(sql)
@@ -407,7 +407,7 @@ class conMysql:
 
     # 更新箱子刷新物品
     @staticmethod
-    def insertXsUserBox(uid, gift_cid=9, box_type='copper'):
+    def insertXsUserBox(uid, gift_cid=2505, box_type='copper'):
         sql = "insert into xs_user_box (last_refresh_cid, last_refresh_sub_cid, uid, type) values ({},{},{},'{}')"\
             .format(gift_cid, gift_cid, uid, box_type)
         try:
