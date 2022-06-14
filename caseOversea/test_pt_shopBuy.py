@@ -16,7 +16,7 @@ class TestPayCreate(unittest.TestCase):
         1.构造购买者数据 （更新xs_user_money和xs_user_commodity）
         2.商城内购买礼物道具*1 (cid:694是坐骑小摩托)
         3.校验接口状态和返回值数据
-        4.检查购买者金豆余额：
+        4.检查购买者金豆余额：30000 - 21000 = 9000
         5.检查背包内物品
         """
         conMysql.updateMoneySql(config.pt_payUid, gold_coin=30000)
@@ -37,7 +37,7 @@ class TestPayCreate(unittest.TestCase):
         1.构造购买者数据 （更新xs_user_money和xs_user_commodity）
         2.商城内购买礼物道具*1 (cid:2158是30天男爵道具)
         3.校验接口状态和返回值数据
-        4.检查购买者钻石余额：
+        4.检查购买者钻石余额：18000 - 18000 = 0
         5.检查背包内物品
         """
         conMysql.updateMoneySql(config.pt_payUid, money=10000, money_cash=2000, money_b=2000, money_cash_b=4000)

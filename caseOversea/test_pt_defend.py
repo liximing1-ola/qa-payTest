@@ -7,7 +7,7 @@ from common.method import reason
 from common.basicData import encodePtData
 from common.Consts import case_list, result
 from common.runFailed import Retry
-@Retry()
+@Retry
 class TestPayCreate(unittest.TestCase):
 
     def test_01_defendPayChangMoney(self, des='开通个人守护场景'):

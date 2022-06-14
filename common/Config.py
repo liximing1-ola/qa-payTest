@@ -84,7 +84,8 @@ class config:
 
     # 房间类型
     pt_room = {
-        'business_joy': 105697423,
+        'business_joy': 105697423,  # 商业房
+        'th_union': 105708881,  # 泰区联盟房
     }
 
     # 礼物配置
