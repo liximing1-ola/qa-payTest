@@ -37,6 +37,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查打赏者余额，预期为： 700 - 600 = 100
         """
         conMysql.updateMoneySql(config.pt_payUid, 700)
+        conMysql.updateMoneySql(config.pt_testUid)
         data = encodePtData(payType='package',  rid=config.pt_room['th_union'])
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
