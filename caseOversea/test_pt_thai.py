@@ -7,6 +7,7 @@ from common.Assert import assert_code, assert_body, assert_len, assert_equal
 from common.basicData import encodePtData
 from common.Consts import result, case_list
 from common.runFailed import Retry
+import time
 @Retry
 class TestPayCreate(unittest.TestCase):
 
@@ -22,9 +23,9 @@ class TestPayCreate(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls) -> None:
-        pass
-        #conMysql.updateUserInfoSql('user_bigarea', config.pt_payUid)
-        #conMysql.updateUserInfoSql('user_bigarea', config.pt_testUid)
+        time.sleep(60)
+        conMysql.updateUserInfoSql('user_bigarea', config.pt_payUid)
+        conMysql.updateUserInfoSql('user_bigarea', config.pt_testUid)
 
     def test_01_thaiUnionRoomPay(self, des='泰区联盟房礼物打赏场景'):
         """
@@ -55,7 +56,7 @@ class TestPayCreate(unittest.TestCase):
         2.giveBox
         3.校验接口状态和返回值数据
         4.检查打赏者账户余额，预期值为：700 - 600 = 100
-        5.检查收箱用户账户余额，预期值为：大于100
+        5.检查收箱用户账户余额，预期值为：大于90
         """
         conMysql.updateMoneySql(config.pt_payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
         conMysql.updateMoneySql(config.pt_testUid)
@@ -64,6 +65,6 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_payUid, money_type='money'), 100)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 100)
         assert_len(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash'), 90)
         case_list[des] = result
