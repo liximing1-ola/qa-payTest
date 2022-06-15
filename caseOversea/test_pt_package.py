@@ -30,7 +30,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_testUid), 0)
         case_list[des] = result
 
-    def test_02_RoomPayChangeMoney(self, des='非直播1V1打赏场景'):
+    def test_02_RoomPayChangeMoney(self, des='商业房1V1打赏场景'):
         """
         用例描述：
         验证余额足够时，非直播类型房间一对一打赏,打赏分成满足师徒收益(一代宗师)的基础上为：70:30

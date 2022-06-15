@@ -12,7 +12,7 @@ class TestPayCreate(unittest.TestCase):
 
     """
     泰语区消费差异化验证：
-    1.泰语区联盟房消费分成为30%
+    1.非华语区联盟房消费分成为30%(礼物打赏，箱子)
     """
     @classmethod
     def setUpClass(cls) -> None:
@@ -38,7 +38,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, 700)
         conMysql.updateMoneySql(config.pt_testUid)
-        data = encodePtData(payType='package',  rid=config.pt_room['th_union'])
+        data = encodePtData(payType='package', rid=config.pt_room['th_union'])
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))

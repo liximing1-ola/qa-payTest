@@ -2,7 +2,7 @@ from common.Config import config
 from common.conPtMysql import conMysql
 from common.Request import post_request_session
 import unittest
-from common.Assert import assert_code, assert_equal, assert_body
+from common.Assert import assert_code, assert_equal, assert_body, assert_len
 from common.method import reason
 from common.basicData import encodePtData
 from common.Consts import case_list, result
@@ -10,7 +10,7 @@ from common.runFailed import Retry
 @Retry(max_n=2)
 class TestPayCreate(unittest.TestCase):
 
-    def test_01_IMPayNoMoney(self, des='私聊打赏余额不足的场景'):
+    def test_01_IMPayNoMoney(self, des='私聊打赏余额不足场景'):
         """
         用例描述：
         检查账户余额不足时，私聊一对一打赏
@@ -32,10 +32,10 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserMoneySql('sum_money', config.pt_testUid), 0)
         case_list[des] = result
 
-    def test_02_IMPayChangeMoney(self, des='私聊打赏场景'):
+    def test_02_IMPayChangeMoney(self, des='私聊打赏礼物场景'):
         """
         用例描述：
-        检查账户余额充足时，私聊一对一打赏
+        检查账户余额充足时，私聊一对一打赏礼物
         脚本步骤：
         1.构造打赏者和被打赏者数据
         2.私聊一对一打赏流程
@@ -50,4 +50,25 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserMoneySql('single_money', config.pt_testUid, money_type='money_cash'), 480)
+        case_list[des] = result
+
+    def test_03_IMPayGiveBox(self, des='私聊打赏箱子场景'):
+        """
+        用例描述：
+        检查账户余额充足时，私聊一对一打赏箱子
+        脚本步骤：
+        1.构造打赏者和被打赏者数据
+        2.私聊一对一打赏流程
+        3.校验接口和返回值数据
+        4.检查打赏者数据，预期：600 - 600 = 0
+        5.检查被打赏者余额,预期：不小于240
+        """
+        conMysql.updateMoneySql(config.pt_payUid, money=600)
+        conMysql.updateMoneySql(config.pt_testUid)
+        data = encodePtData(payType='chat-gift', giftId=config.giftId['46'])
+        res = post_request_session(config.pt_pay_url, data, tokenName='pt')
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 0)
+        assert_len(conMysql.selectUserInfoSql('sum_money', config.pt_testUid), 240)
         case_list[des] = result

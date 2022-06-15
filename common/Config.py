@@ -86,6 +86,7 @@ class config:
     pt_room = {
         'business_joy': 105697423,  # 商业房
         'th_union': 105708881,  # 泰区联盟房
+        'en_fleet': 105701176,  # 英语区家族房
     }
 
     # 礼物配置

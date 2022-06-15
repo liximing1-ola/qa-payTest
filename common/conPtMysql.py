@@ -320,7 +320,7 @@ class conMysql:
     # 更新用户数据
     @staticmethod
     def updateUserInfoSql(tableName, uid, bigarea_id=2):
-        # 1=en 2=cn 3=ar 4=ko 5=id 6=th 7=vi 8=tr 9=ms
+        # 1=en 2=cn 3=ar 4=ko 5=id 6=th 7=vi 8=tr 9=ms 10=ja
         if tableName == 'user_bigarea':  # 修改用户大区,默认华语大区
             sql = "update xs_user_bigarea set bigarea_id={} where uid={}".format(bigarea_id, uid)
             try:
@@ -349,7 +349,15 @@ class conMysql:
                 print('update fail', error)
             finally:
                 conMysql.con.commit()
-
+        elif tableName == 'fleet':  # 更改房间为家族房
+            sql = "update xs_chatroom set property='fleet', area='en' where rid={}".format(uid)
+            try:
+                conMysql.cur.execute(sql)
+            except Exception as error:
+                conMysql.con.rollback()
+                print('update fail', error)
+            finally:
+                conMysql.con.commit()
         else:
             print('{} Error'.format(tableName))
 
