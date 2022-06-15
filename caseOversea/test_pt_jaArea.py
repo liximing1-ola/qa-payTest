@@ -63,7 +63,7 @@ class TestPayCreate(unittest.TestCase):
         assert_len(conMysql.selectUserInfoSql('sum_money', config.pt_brokerUid), 360)
         case_list[des] = result
 
-    def test_02_jaAreaNoBrokerMemberRoomPay(self, des='日区非公会成员房间分成52:48'):
+    def test_03_jaAreaNoBrokerMemberRoomPay(self, des='日区非公会成员房间分成52:48'):
         """
         用例描述：
         验证日语区商业房打赏礼物，非公会成员收到打赏的52%
@@ -83,7 +83,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash'), 312)
         case_list[des] = result
 
-    def test_03_jaAreaBrokerMemberGiveBoxPay(self, des='日区公会成员房间分成60:40'):
+    def test_04_jaAreaBrokerMemberGiveBoxPay(self, des='日区公会成员房间分成60:40'):
         """
         用例描述：
         验证日语区商业房打赏箱子，公会成员收到打赏的60%
