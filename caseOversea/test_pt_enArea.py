@@ -66,6 +66,7 @@ class TestPayCreate(unittest.TestCase):
         assert_len(conMysql.selectUserInfoSql('sum_money', config.pt_testUid), 150)
         case_list[des] = result
 
+    @unittest.skip
     def test_03_enAreaFleetRoomPay(self, des='英语区家族房礼物打赏55分成场景'):
         """
         用例描述：
@@ -87,6 +88,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash'), 300)
         case_list[des] = result
 
+    @unittest.skip
     def test_04_enAreaFleetRoomGiveBox(self, des='英语区家族房送箱子55分成场景'):
         """
         用例描述：
