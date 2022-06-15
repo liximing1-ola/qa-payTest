@@ -119,7 +119,7 @@ class conMysql:
     def updateUserBigArea(*uids, bigarea_id=2):
         try:
             for uid in uids:
-                sql = "update xs_user_bigarea set bigarea_id={} where uid={}".format(bigarea_id, uid)
+                sql = "update xs_user_bigarea set bigarea_id={} where uid in {}".format(bigarea_id, uid)
                 print(sql)
                 conMysql.cur.execute(sql)
         except Exception as error:
