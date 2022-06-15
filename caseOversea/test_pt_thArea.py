@@ -7,6 +7,7 @@ from common.Assert import assert_code, assert_body, assert_len, assert_equal
 from common.basicData import encodePtData
 from common.Consts import result, case_list
 from common.runFailed import Retry
+import time
 @Retry
 class TestPayCreate(unittest.TestCase):
 
@@ -22,6 +23,7 @@ class TestPayCreate(unittest.TestCase):
     @classmethod
     def tearDownClass(cls) -> None:
         conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()))
+        time.sleep(1)
 
     def test_01_thaiUnionRoomPay(self, des='泰区联盟房礼物打赏场景'):
         """
