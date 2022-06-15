@@ -79,7 +79,7 @@ class config:
     # PT
     pt_user = {'payUid': 800240376, 'testUid': 800022872, 'brokerUid': 800018895}
     pt_payUid = pt_user['payUid']
-    pt_testUid = pt_user['testUid']  # 非公会成员
+    pt_testUid = pt_user['testUid']  # 非公会成员，是一代宗师
     pt_brokerUid = pt_user['brokerUid']  # 公会成员
 
     # 房间类型

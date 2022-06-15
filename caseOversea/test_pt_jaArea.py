@@ -13,6 +13,7 @@ class TestPayCreate(unittest.TestCase):
     """
     日语区消费差异化验证：
     1.日语区：非公会成员：52% /公会成员：60% （礼物打赏，箱子打赏）
+    2.先判断是否公会，再判断师徒体系，如果是一代宗师：60分成
     """
     @classmethod
     def setUpClass(cls) -> None:
@@ -20,19 +21,18 @@ class TestPayCreate(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls) -> None:
-        pass
-        #conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()))
+        conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()))
 
-    def test_01_jaAreaNoBrokerMemberIMPay(self, des='日区非公会成员私聊分成52:48'):
+    def test_01_jaAreaNoBrokerMemberIMPay(self, des='日区非公会一代宗师私聊分成60:40'):
         """
         用例描述：
-        检查日语区私聊一对一打赏礼物，非公会成员收到打赏的52%
+        检查日语区私聊一对一打赏礼物，非公会成员是一代宗师的用户收到打赏的60%
         脚本步骤：
         1.构造打赏者和被打赏者数据
         2.私聊一对一打赏流程
         3.校验接口和返回值数据
         4.检查打赏者数据，预期：600 - 600 = 0
-        5.检查被打赏者余额,预期：600 * 0.52 = 312
+        5.检查被打赏者余额,预期：600 * 0.60 = 360
         """
         conMysql.updateMoneySql(config.pt_payUid, money=600)
         conMysql.updateMoneySql(config.pt_testUid)
@@ -40,7 +40,7 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash'), 312)
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash'), 360)
         case_list[des] = result
 
     def test_02_jaAreaBrokerMemberIMPayGiveBox(self, des='日区公会成员私聊分成60:40'):
@@ -52,7 +52,7 @@ class TestPayCreate(unittest.TestCase):
         2.私聊一对一打赏流程
         3.校验接口和返回值数据
         4.检查打赏者数据，预期：600 - 600 = 0
-        5.检查被打赏者余额,预期：600 * 0.6 = 360
+        5.检查被打赏者余额,预期：不小于180
         """
         conMysql.updateMoneySql(config.pt_payUid, money=600)
         conMysql.updateMoneySql(config.pt_brokerUid)
@@ -61,18 +61,18 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 0)
-        assert_len(conMysql.selectUserInfoSql('sum_money', config.pt_brokerUid), 360)
+        assert_len(conMysql.selectUserInfoSql('sum_money', config.pt_brokerUid), 180)
         case_list[des] = result
 
-    def test_03_jaAreaNoBrokerMemberRoomPay(self, des='日区非公会成员房间分成52:48'):
+    def test_03_jaAreaNoBrokerMemberRoomPay(self, des='日区非公会一代宗师房间分成60:40'):
         """
         用例描述：
-        验证日语区商业房打赏礼物，非公会成员收到打赏的52%
+        验证日语区商业房打赏礼物，非公会成员是一代宗师的用户收到打赏的60%
         脚本步骤：
         1.构造打赏者和被打赏者数据
         2.房间内一对一打赏（打赏600分）
         3.校验接口状态和返回值数据
-        4.检查被打赏者余额，预期为：600 * 0.52 = 312
+        4.检查被打赏者余额，预期为：600 * 0.6 = 360
         """
         conMysql.updateMoneySql(config.pt_payUid, 600)
         conMysql.updateMoneySql(config.pt_testUid)
@@ -81,7 +81,7 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 0)
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash'), 312)
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash'), 360)
         case_list[des] = result
 
     @unittest.skip
