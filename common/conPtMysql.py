@@ -349,7 +349,7 @@ class conMysql:
                 print('update fail', error)
             finally:
                 conMysql.con.commit()
-        elif tableName == 'fleet':  # 更改房间为家族房
+        elif tableName == 'fleet':  # 更改房间为家族房(判断条件为：property为家族房，房主所在大区为英语区)
             sql = "update xs_chatroom set property='fleet', area='en' where rid={}".format(uid)
             try:
                 conMysql.cur.execute(sql)
