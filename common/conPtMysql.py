@@ -116,10 +116,9 @@ class conMysql:
     # 1=en 2=cn 3=ar 4=ko 5=id 6=th 7=vi 8=tr 9=ms 10=ja
     # 默认中文大区
     @staticmethod
-    def updateUserBigArea(bigarea_id, **uids):
+    def updateUserBigArea(*uids, bigarea_id=2):
         try:
-            for uid in uids.values():
-                print(uid)
+            for uid in uids:
                 sql = "update xs_user_bigarea set bigarea_id={} where uid={}".format(bigarea_id, uid)
                 conMysql.cur.execute(sql)
         except Exception as error:

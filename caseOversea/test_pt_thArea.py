@@ -16,12 +16,12 @@ class TestPayCreate(unittest.TestCase):
     """
     @classmethod
     def setUpClass(cls) -> None:
-        conMysql.updateUserBigArea(6, config.pt_user)
+        conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()), bigarea_id=6)
         conMysql.updateUserInfoSql('union', config.pt_room['th_union'])
 
     @classmethod
     def tearDownClass(cls) -> None:
-        conMysql.updateUserBigArea(2, config.pt_user)
+        conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()))
 
     def test_01_thaiUnionRoomPay(self, des='泰区联盟房礼物打赏场景'):
         """

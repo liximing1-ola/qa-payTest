@@ -16,11 +16,11 @@ class TestPayCreate(unittest.TestCase):
     """
     @classmethod
     def setUpClass(cls) -> None:
-        conMysql.updateUserBigArea(10, config.pt_user)
+        conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()), bigarea_id=10)
 
     @classmethod
     def tearDownClass(cls) -> None:
-        conMysql.updateUserBigArea(2, config.pt_user)
+        conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()))
 
     def test_01_jaAreaNoBrokerMemberIMPay(self, des='日区非公会成员私聊分成52:48'):
         """
