@@ -78,7 +78,7 @@ class config:
 
     # PT
     pt_user = {'payUid': 800240376,
-               'testUid': 800000116}
+               'testUid': 800022872}
     pt_payUid = pt_user['payUid']
     pt_testUid = pt_user['testUid']
 

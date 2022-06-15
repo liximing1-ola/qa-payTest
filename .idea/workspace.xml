@@ -29,16 +29,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="44793b3e-09e5-4af0-a369-84e9b064bd19" name="Default Changelist" comment="‘提交修改’">
-      <change afterPath="$PROJECT_DIR$/caseOversea/test_pt_enArea.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/caseOversea/test_pt_jaArea.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/caseOversea/test_pt_chatGift.py" beforeDir="false" afterPath="$PROJECT_DIR$/caseOversea/test_pt_chatGift.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/caseOversea/test_pt_openBox.py" beforeDir="false" afterPath="$PROJECT_DIR$/caseOversea/test_pt_openBox.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/caseOversea/test_pt_package.py" beforeDir="false" afterPath="$PROJECT_DIR$/caseOversea/test_pt_package.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/caseOversea/test_pt_shopBuy.py" beforeDir="false" afterPath="$PROJECT_DIR$/caseOversea/test_pt_shopBuy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/caseOversea/test_pt_thai.py" beforeDir="false" afterPath="$PROJECT_DIR$/caseOversea/test_pt_thArea.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/Config.py" beforeDir="false" afterPath="$PROJECT_DIR$/common/Config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/conPtMysql.py" beforeDir="false" afterPath="$PROJECT_DIR$/common/conPtMysql.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -215,13 +207,6 @@
       <option name="presentableId" value="Default" />
       <updated>1615801946332</updated>
       <workItem from="1637288736860" duration="20000" />
-    </task>
-    <task id="LOCAL-00989" summary="‘提交修改’">
-      <created>1653885039315</created>
-      <option name="number" value="00989" />
-      <option name="presentableId" value="LOCAL-00989" />
-      <option name="project" value="LOCAL" />
-      <updated>1653885039315</updated>
     </task>
     <task id="LOCAL-00990" summary="‘提交修改’">
       <created>1653891039787</created>
@@ -559,7 +544,14 @@
       <option name="project" value="LOCAL" />
       <updated>1655188908355</updated>
     </task>
-    <option name="localTasksCounter" value="1038" />
+    <task id="LOCAL-01038" summary="‘提交修改’">
+      <created>1655265281972</created>
+      <option name="number" value="01038" />
+      <option name="presentableId" value="LOCAL-01038" />
+      <option name="project" value="LOCAL" />
+      <updated>1655265281972</updated>
+    </task>
+    <option name="localTasksCounter" value="1039" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -615,10 +607,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="690" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1653384848508" />
-    <state x="249" y="84" width="1536" height="860" key="DiffContextDialog" timestamp="1655188168097">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="78" y="48" width="1536" height="860" key="DiffContextDialog" timestamp="1655265324998">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="78" y="48" key="DiffContextDialog/0.0.1536.824@0.0.1536.824" timestamp="1653379531699" />
+    <state x="78" y="48" key="DiffContextDialog/0.0.1536.824@0.0.1536.824" timestamp="1655265324998" />
     <state x="249" y="84" width="1536" height="860" key="DiffContextDialog/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1655188168097" />
     <state x="1920" y="-119" key="DiffContextDialog/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1652261683932" />
     <state x="686" y="211" key="FileChooserDialogImpl" timestamp="1654659282805">
@@ -654,10 +646,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="813" y="216" key="VCS.ChangeListViewerDialog/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1655187391925" />
-    <state x="451" y="181" key="Vcs.Push.Dialog.v2" timestamp="1655188909440">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="361" y="144" key="Vcs.Push.Dialog.v2" timestamp="1655265326420">
+      <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="144" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1655116421054" />
+    <state x="361" y="144" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1655265326420" />
     <state x="451" y="181" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1655188909440" />
     <state x="2281" y="26" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1652262030170" />
     <state x="716" y="410" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1654089318216">
