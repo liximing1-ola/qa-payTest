@@ -20,7 +20,8 @@ class TestPayCreate(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls) -> None:
-        conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()))
+        pass
+        #conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()))
 
     def test_01_jaAreaNoBrokerMemberIMPay(self, des='日区非公会成员私聊分成52:48'):
         """
@@ -83,6 +84,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash'), 312)
         case_list[des] = result
 
+    @unittest.skip
     def test_04_jaAreaBrokerMemberGiveBoxPay(self, des='日区公会成员房间分成60:40'):
         """
         用例描述：
