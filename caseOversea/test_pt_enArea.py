@@ -14,6 +14,9 @@ class TestPayCreate(unittest.TestCase):
     英语区消费差异化验证：
     1.英语区私聊分成比例50%（礼物打赏，箱子打赏）
     2.英语区家族房分成50%（礼物打赏，箱子打赏）
+    英语大区家族房开箱子分两种情况
+     1 被打赏的人属于家族成员，8成
+     2 被打赏的人不属于家族成员，7成
     """
     @classmethod
     def setUpClass(cls) -> None:
@@ -22,8 +25,7 @@ class TestPayCreate(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls) -> None:
-        pass
-        # conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()))
+        conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()))
 
     def test_01_enAreaIMPayGift(self, des='英语区私聊打赏礼物55分成场景'):
         """
@@ -66,7 +68,6 @@ class TestPayCreate(unittest.TestCase):
         assert_len(conMysql.selectUserInfoSql('sum_money', config.pt_testUid), 150)
         case_list[des] = result
 
-    @unittest.skip
     def test_03_enAreaFleetRoomPay(self, des='英语区家族房礼物打赏55分成场景'):
         """
         用例描述：
@@ -88,7 +89,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash'), 300)
         case_list[des] = result
 
-    @unittest.skip
     def test_04_enAreaFleetRoomGiveBox(self, des='英语区家族房送箱子55分成场景'):
         """
         用例描述：
@@ -107,9 +107,5 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 100)
-        assert_len(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash_b'), 150)
+        assert_len(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash_b'), 210)
         case_list[des] = result
-
-
-
-
