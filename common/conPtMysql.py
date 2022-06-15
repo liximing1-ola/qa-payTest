@@ -120,6 +120,7 @@ class conMysql:
         try:
             for uid in uids:
                 sql = "update xs_user_bigarea set bigarea_id={} where uid in {}".format(bigarea_id, uid)
+                print(sql)
                 conMysql.cur.execute(sql)
         except Exception as error:
             conMysql.con.rollback()
