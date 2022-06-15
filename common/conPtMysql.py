@@ -116,7 +116,7 @@ class conMysql:
     # 1=en 2=cn 3=ar 4=ko 5=id 6=th 7=vi 8=tr 9=ms 10=ja
     # 默认中文大区
     @staticmethod
-    def updateUserMoneyClearSql(bigarea_id, **uids):
+    def updateUserBigArea(bigarea_id, **uids):
         try:
             for uid in uids.values():
                 print(uid)
@@ -128,9 +128,9 @@ class conMysql:
         finally:
             conMysql.con.commit()
 
-    #  更新用户大区
+    #  清空用户账户余额
     @staticmethod
-    def updateUserBigArea(*uids):
+    def updateUserMoneyClearSql(*uids):
         try:
             for uid in uids:
                 sql = "update xs_user_money set money=0, money_b=0, money_cash=0, money_cash_b=0, gold_coin=0, money_debts=0, money_order=0, money_order_b=0 where uid={}" \
