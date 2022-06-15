@@ -4,14 +4,17 @@
 import json
 import time
 from common import Consts
+import platform
+from common.Config import config
 def assert_code(actual_code, expected_code=200):
     """
     验证response状态码
     :param actual_code: 实际结果
     :param expected_code: 预期结果
     """
-    try:
+    if platform.node() != config.linux_node['ali']:
         time.sleep(0.5)  # rpc接口延迟下，防止结果失败！！！
+    try:
         assert actual_code == expected_code
         return True
     except:
