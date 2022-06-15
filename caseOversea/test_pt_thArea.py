@@ -16,14 +16,12 @@ class TestPayCreate(unittest.TestCase):
     """
     @classmethod
     def setUpClass(cls) -> None:
-        conMysql.updateUserInfoSql('user_bigarea', config.pt_payUid, bigarea_id=6)
-        conMysql.updateUserInfoSql('user_bigarea', config.pt_testUid, bigarea_id=6)
+        conMysql.updateUserBigArea(6, config.pt_user)
         conMysql.updateUserInfoSql('union', config.pt_room['th_union'])
 
     @classmethod
     def tearDownClass(cls) -> None:
-        conMysql.updateUserInfoSql('user_bigarea', config.pt_payUid)
-        conMysql.updateUserInfoSql('user_bigarea', config.pt_testUid)
+        conMysql.updateUserBigArea(2, config.pt_user)
 
     def test_01_thaiUnionRoomPay(self, des='泰区联盟房礼物打赏场景'):
         """
@@ -43,7 +41,7 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 100)
-        assert_equal(conMysql.selectUserMoneySql('single_money', config.pt_testUid, money_type='money_cash'), 180)
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash'), 180)
         case_list[des] = result
 
     def test_02_thaiUnionRoomGiveBox(self, des='泰区联盟房送箱子场景'):

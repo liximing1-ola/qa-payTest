@@ -336,7 +336,7 @@ def encodeData(payType='package', money=1000, rid=193185484, uid=105002331, gift
 
 def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'], uid=config.pt_testUid, giftId=10,
                  giftType='normal', cid=5, boxType='copper', num=1, package_cid=0, ctype='', duction_money=0, star=0,
-                 uids=('800000116', '800018895')):
+                 uids=('{}'.format(config.pt_testUid), '{}'.format(config.pt_brokerUid))):
     if payType == 'package':
         data = {
             "platform": "available",

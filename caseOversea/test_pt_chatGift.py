@@ -22,14 +22,12 @@ class TestPayCreate(unittest.TestCase):
         5.检查被打赏者余额,预期：0
         """
         conMysql.updateUserMoneyClearSql(config.pt_payUid, config.pt_testUid)
-        conMysql.deleteUserAccountSql('broker_user', config.pt_testUid)
-        conMysql.deleteUserAccountSql('chatroom', config.pt_testUid)
         data = encodePtData(payType='chat-gift')
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 0, reason(des, res))
         assert_body(res['body'], 'msg', '餘額不足，無法支付', reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('sum_money', config.pt_testUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_testUid), 0)
         case_list[des] = result
 
     def test_02_IMPayChangeMoney(self, des='私聊打赏礼物场景'):
@@ -49,7 +47,7 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserMoneySql('single_money', config.pt_testUid, money_type='money_cash'), 480)
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash'), 480)
         case_list[des] = result
 
     def test_03_IMPayGiveBox(self, des='私聊打赏箱子场景'):
