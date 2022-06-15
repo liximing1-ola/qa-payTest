@@ -14,9 +14,6 @@ class TestPayCreate(unittest.TestCase):
     英语区消费差异化验证：
     1.英语区私聊分成比例50%（礼物打赏，箱子打赏）
     2.英语区家族房分成50%（礼物打赏，箱子打赏）
-    英语大区家族房开箱子分两种情况
-     1 被打赏的人属于家族成员，8成
-     2 被打赏的人不属于家族成员，7成
     """
     @classmethod
     def setUpClass(cls) -> None:
