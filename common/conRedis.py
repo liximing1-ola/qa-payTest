@@ -1,5 +1,4 @@
 import redis
-from common.Config import config
 class conRedis:
     redis_config = {
         'host_46': '192.168.11.46',  # 46 redis
