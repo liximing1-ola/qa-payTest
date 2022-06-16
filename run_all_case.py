@@ -101,8 +101,6 @@ def all_case(appInfo):
 
 if __name__ == "__main__":
     if platform.node() == config.linux_node['ali']:
-        print('partying')
         main(config.appName['Partying'])
     else:
-        print('banban')
         main(config.appName['伴伴'])
