@@ -28,5 +28,5 @@
 # git pull --rebase origin master
 # git push -u origin master
 
-# ps -aux | grep python\
+# ps -aux | grep python
 # ps -ef | grep python | grep -v grep | awk '{print $2}' | xargs kill -9
