@@ -50,7 +50,6 @@ class Greedy:
                 greed_counter = random.choice([10, 50, 100, 1000])
                 bet_money = bet_money + greed_counter
                 Greedy.greedy_stake(config.pt_payUid, greed_vid, greed_counter, greed_round_id)
-                print(Greedy)
 
             # 获取开奖数据
             greed_counter_all = 0
