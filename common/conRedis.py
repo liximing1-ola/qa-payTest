@@ -24,8 +24,9 @@ class conRedis:
     def delKey(key, *values):
         r = conRedis.getConn(conRedis.redis_config['host_ali'])
         for value in values:
-            print(value)
-            r.hdel(key, value)
+            for k in value:
+                print(k)
+                r.hdel(key, k)
 
 
 if __name__=='__main__':
