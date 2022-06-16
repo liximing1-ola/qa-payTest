@@ -6,8 +6,6 @@ class conRedis:
         'port': 6379
     }
 
-    pt_user = {'payUid': 800240376, 'testUid': 800022872, 'brokerUid': 800018895}
-
     @staticmethod
     def getConn(host):
         pool = redis.ConnectionPool(host=host, port=conRedis.redis_config['port'], decode_responses=True)
@@ -25,10 +23,9 @@ class conRedis:
         r = conRedis.getConn(conRedis.redis_config['host_ali'])
         for value in values:
             for k in value:
-                print(k)
                 r.hdel(key, k)
 
 
 if __name__=='__main__':
-    # conRedis.checkSetKey('Xs.WhiteList.SuperVoice.White', 105002338)
-    conRedis.delKey('User.Big.Area.Id', tuple(i for i in conRedis.pt_user.values()))
+    conRedis.checkSetKey('Xs.WhiteList.SuperVoice.White', 105002338)
+    # conRedis.delKey('User.Big.Area.Id', tuple(i for i in conRedis.pt_user.values()))

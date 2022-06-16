@@ -25,6 +25,8 @@ class TestPayCreate(unittest.TestCase):
     def tearDownClass(cls) -> None:
         conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()))
         time.sleep(1)
+        conRedis.delKey('User.Big.Area.Id', config.pt_user.values())
+        conRedis.delKey('User.Big.Area', config.pt_user.values())
 
     def test_01_thaiUnionRoomPay(self, des='泰区联盟房礼物打赏场景'):
         """
