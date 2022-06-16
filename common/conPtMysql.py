@@ -45,6 +45,17 @@ class conMysql:
                     return None
             except Exception as error:
                 print(error)
+        elif accountType == 'pay_change':  # 查询用户消费记录数据
+            sql = "select money from xs_pay_change_new where uid={} ORDER BY id DESC LIMIT 1".format(uid)
+            try:
+                conMysql.cur.execute(sql)
+                res = conMysql.cur.fetchone()
+                if len(res) > 0:
+                    return res[0]
+                else:
+                    return 0
+            except Exception as error:
+                print(error)
         elif accountType == 'sum_commodity':  # 查询用户背包物品总数
             sql = 'select sum(num) from xs_user_commodity where uid ={}'.format(uid)
             try:
@@ -81,17 +92,7 @@ class conMysql:
     # 更新用户数据
     @staticmethod
     def updateUserInfoSql(tableName, uid):
-        if tableName == 'chatroom':  # 修改用户为房间房主
-            sql = "update xs_chatroom set app_id=1, uid ={}, settlement_channel='live' where rid=193185577 limit 1".format(
-                uid)
-            try:
-                conMysql.cur.execute(sql)
-            except Exception as error:
-                conMysql.con.rollback()
-                print('update fail', error)
-            finally:
-                conMysql.con.commit()
-        elif tableName == 'union':  # 更改房间为联盟房
+        if tableName == 'union':  # 更改房间为联盟房
             sql = "update xs_chatroom set property='union', area='th' where rid={}".format(uid)
             try:
                 conMysql.cur.execute(sql)
@@ -132,8 +133,8 @@ class conMysql:
     def updateUserMoneyClearSql(*uids):
         try:
             for uid in uids:
-                sql = "update xs_user_money set money=0, money_b=0, money_cash=0, money_cash_b=0, gold_coin=0, money_debts=0, money_order=0, money_order_b=0 where uid={}" \
-                    .format(uid)
+                sql = "update xs_user_money set money=0, money_b=0, money_cash=0, money_cash_b=0, gold_coin=0, " \
+                      "money_debts=0, money_order=0, money_order_b=0 where uid={}".format(uid)
                 conMysql.cur.execute(sql)
         except Exception as error:
             conMysql.con.rollback()
@@ -144,8 +145,8 @@ class conMysql:
     # 更新用户账户余额
     @staticmethod
     def updateMoneySql(uid, money=0, money_cash=0, money_cash_b=0, money_b=0, gold_coin=0, money_debts=0):
-        sql = "update xs_user_money set money={}, money_b={}, money_cash={}, money_cash_b={},gold_coin={}, money_debts={} where uid={} limit 1" \
-            .format(money, money_b, money_cash, money_cash_b, gold_coin, money_debts, uid)
+        sql = "update xs_user_money set money={}, money_b={}, money_cash={}, money_cash_b={},gold_coin={}, " \
+              "money_debts={} where uid={} limit 1".format(money, money_b, money_cash, money_cash_b, gold_coin, money_debts, uid)
         try:
             conMysql.cur.execute(sql)
         except Exception as error:
@@ -157,8 +158,7 @@ class conMysql:
     # 检查xs_gift配置
     @staticmethod
     def checkXsGiftConfig():
-        gift_list = tuple(i for i in config.pt_giftId.values())
-        sql = "update xs_gift set deleted=0 where id in {}".format(gift_list)
+        sql = "update xs_gift set deleted=0 where id in {}".format(tuple(i for i in config.pt_giftId.values()))
         try:
             conMysql.cur.execute(sql)
         except Exception as error:

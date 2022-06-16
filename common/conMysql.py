@@ -250,8 +250,7 @@ class conMysql:
     # 检查xs_gift配置
     @staticmethod
     def checkXsGiftConfig():
-        gift_list = tuple(i for i in config.giftId.values())
-        sql = "update xs_gift set deleted=0 where id in {}".format(gift_list)
+        sql = "update xs_gift set deleted=0 where id in {}".format(tuple(i for i in config.giftId.values()))
         try:
             conMysql.cur.execute(sql)
         except Exception as error:
@@ -277,8 +276,8 @@ class conMysql:
     # 更新用户账户余额
     @staticmethod
     def updateMoneySql(uid, money=0, money_cash=0, money_cash_b=0, money_b=0, gold_coin=0, money_debts=0):
-        sql = "update xs_user_money set money={}, money_b={}, money_cash={}, money_cash_b={},gold_coin={}, money_debts={} where uid={} limit 1"\
-            .format(money, money_b, money_cash, money_cash_b, gold_coin, money_debts, uid)
+        sql = "update xs_user_money set money={}, money_b={}, money_cash={}, money_cash_b={},gold_coin={}, money_debts={} " \
+              "where uid={} limit 1".format(money, money_b, money_cash, money_cash_b, gold_coin, money_debts, uid)
         try:
             conMysql.cur.execute(sql)
         except Exception as error:
