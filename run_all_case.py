@@ -53,11 +53,7 @@ def main(appInfo):
             case_list_2 = method.dictToList(Consts.case_list_b)
             use_time = str(int(Consts.endTime - Consts.startTime)) + 's'
             if len(test_result.failures) == 0 and len(test_result.errors) == 0:
-                des = "{}\n用例数: {}, 失败数: {}, 总耗时: {}, 代码分支：{}".format(
-                    case_list, test_result.testsRun,
-                    len(test_result.failures) + len(test_result.errors),
-                    use_time,
-                    config.codeInfo['pt_git_branch'])
+                des = "{}\n".format(case_list)
                 des_2 = "{}\n用例数: {}, 失败数: {}, 总耗时: {}, 代码分支：{}".format(
                     case_list_2, test_result.testsRun,
                     len(test_result.failures) + len(test_result.errors),
