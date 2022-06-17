@@ -33,11 +33,13 @@ class Greedy:
         try:
             # 获取摩天轮信息
             greed_round_id = 0
+            greed_counter = []
             for i in range(10):
                 greed_index = Greedy.greedy_index(config.pt_payUid)
                 greed_state = greed_index['body']['data']['state']
                 if greed_state == '1':
                     greed_round_id = greed_index['body']['data']['round_id']
+                    greed_counter = greed_index['body']['data']['counter_range']
                     break
                 else:
                     time.sleep(5)  # 等待摩天轮变为可投注状态
@@ -47,8 +49,8 @@ class Greedy:
             bet_money = 0
             for i in range(6):
                 greed_vid = random.randint(1, 8)
-                greed_counter = random.choice([10, 50, 100, 1000])
-                bet_money = bet_money + greed_counter
+                greed_counter_choice = random.choice(greed_counter)
+                bet_money = bet_money + greed_counter_choice
                 Greedy.greedy_stake(config.pt_payUid, greed_vid, greed_counter, greed_round_id)
 
             # 获取开奖数据
