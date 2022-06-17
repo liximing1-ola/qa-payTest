@@ -128,6 +128,19 @@ class conMysql:
         finally:
             conMysql.con.commit()
 
+    # 更新用户语言
+    @staticmethod
+    def updateUserLanguage(*uids, language='zh_CN', area_code='CN'):
+        try:
+            for uid in uids:
+                sql = "update xs_user_settings set language='{}',area_code='{}' where uid in {}".format(language, area_code, uid)
+                conMysql.cur.execute(sql)
+        except Exception as error:
+            conMysql.con.rollback()
+            print('update fail', error)
+        finally:
+            conMysql.con.commit()
+
     #  清空用户账户余额
     @staticmethod
     def updateUserMoneyClearSql(*uids):
@@ -205,3 +218,4 @@ class conMysql:
                 return res
         except Exception as error:
             print(error)
+
