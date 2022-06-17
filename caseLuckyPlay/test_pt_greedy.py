@@ -10,8 +10,6 @@ from common.Assert import assert_equal
 from common.Consts import case_list, result
 import time
 from common.conRedis import conRedis
-
-
 class TestPayCreate(unittest.TestCase):
 
     @classmethod
@@ -62,4 +60,3 @@ class TestPayCreate(unittest.TestCase):
         diamond_calculation = 100000 - bet_data[0] + bet_data[1]
         assert_equal(money_balance, diamond_calculation)
         case_list[des] = result
-
