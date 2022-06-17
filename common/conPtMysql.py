@@ -191,3 +191,17 @@ class conMysql:
             print('update fail', error)
         finally:
             conMysql.con.commit()
+
+    # 查询摩天轮开奖数据
+    @staticmethod
+    def select_greedy_prize(uid, round_id):
+        sql = "select counter, prize from xs_greedy_round_player_v2 where uid={} and round_id={}".format(uid, round_id)
+        try:
+            conMysql.cur.execute(sql)
+            res = conMysql.cur.fetchone()
+            if res is None:
+                return 0
+            else:
+                return res
+        except Exception as error:
+            print(error)
