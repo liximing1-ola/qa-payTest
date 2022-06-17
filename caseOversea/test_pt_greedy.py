@@ -6,7 +6,7 @@ import unittest
 from common.Config import config
 from common.Greedy import Greedy
 from common.Assert import assert_equal
-from common.Consts import case_list, result
+from common.Consts import case_list_b, result
 class TestPayCreate(unittest.TestCase):
 
     def test_01_greedy_bet(self, des='摩天轮下注开奖场景'):
@@ -26,5 +26,4 @@ class TestPayCreate(unittest.TestCase):
         # 计算的金豆余额
         gold_coin_calculation = 10000 - bet_data[0] + bet_data[1]
         assert_equal(gold_coin_balance, gold_coin_calculation)
-        case_list[des] = result
-
+        case_list_b[des] = result
