@@ -1,14 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #  @author: WuBingBing
-
 from common.Config import config
 from common.Request import post_request_session
 from common.conPtMysql import conMysql
 import time
 import random
-
-
 class Greedy:
 
     @staticmethod
@@ -70,4 +67,3 @@ class Greedy:
                 print('下注失败')
         except Exception as e:
             print(e)
-
