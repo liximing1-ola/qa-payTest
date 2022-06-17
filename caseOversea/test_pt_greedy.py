@@ -9,6 +9,7 @@ from common.Assert import assert_equal
 from common.Consts import case_list_b, result
 class TestPayCreate(unittest.TestCase):
 
+    @unittest.skip
     def test_01_greedy_bet(self, des='摩天轮下注开奖场景'):
         """
         用例描述：
