@@ -20,8 +20,8 @@ def main():
     if len(test_result.failures) == 0 and len(test_result.errors) == 0:
         des = "{}, 用例数:{}, 失败数:{}, 分支:{}".format(now, test_result.testsRun,
                                                  len(test_result.failures) + len(test_result.errors),
-                                                 config.bb_user['bb_git_branch'])
-        robot('markdown', des, bot='test')
+                                                 config.codeInfo['bb_git_branch'])
+        robot('markdown', des, bot='pt')
     elif len(test_result.failures) >= 1:
         Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
         for case, reason in test_result.failures:
