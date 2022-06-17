@@ -6,6 +6,8 @@ from common.Request import post_request_session
 from common.conPtMysql import conMysql
 import time
 import random
+
+
 class Greedy:
 
     @staticmethod
@@ -14,7 +16,7 @@ class Greedy:
         return post_request_session(config.pt_host+url, None, tokenName='pt')
 
     @staticmethod
-    def greedy_stake(uid, vid, counter, round_id, money_type='gold_coin', notice=False):
+    def greedy_stake(uid, vid, counter, round_id, money_type, notice=False):
         url = 'greedy/stake?uid={}'.format(uid)
         params = {
             'vid': vid,
@@ -23,10 +25,10 @@ class Greedy:
             'money_type': money_type,
             'notice': notice
         }
-        return post_request_session(config.pt_host+url, params)
+        return post_request_session(config.pt_host+url, params, tokenName='pt')
 
     @staticmethod
-    def bet():
+    def bet(money_type):
         try:
             # 获取摩天轮信息
             greed_round_id = 0
@@ -43,12 +45,9 @@ class Greedy:
                     continue
 
             # 下注
-            bet_money = 0
             for i in range(6):
                 greed_vid = random.randint(1, 8)
-                greed_counter_choice = random.choice(greed_counter)
-                bet_money = bet_money + greed_counter_choice
-                Greedy.greedy_stake(config.pt_payUid, greed_vid, greed_counter, greed_round_id)
+                Greedy.greedy_stake(config.pt_payUid, greed_vid, greed_counter, greed_round_id, money_type)
 
             # 获取开奖数据
             greed_counter_all = 0
@@ -61,9 +60,12 @@ class Greedy:
                 else:
                     greed_counter_all = greedy_player_data[0]
                     greedy_prize = greedy_player_data[1]
-            if bet_money == greed_counter_all > 0:
+                    break
+            if greed_counter_all > 0:
                 return [greed_counter_all, greedy_prize]
             else:
+                return [0, 0]
                 print('下注失败')
         except Exception as e:
             print(e)
+
