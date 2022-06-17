@@ -1,14 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #  @author: WuBingBing
-
 from common.Config import config
 from common.Request import post_request_session
 from common.conPtMysql import conMysql
 import time
 import random
-
-
 class Greedy:
 
     @staticmethod
@@ -48,7 +45,7 @@ class Greedy:
             for i in range(6):
                 greed_vid = random.randint(1, 8)
                 greed_counter = random.choice([10, 50, 100, 1000])
-                bet_money = bet_money + greed_counter
+                bet_money += greed_counter
                 Greedy.greedy_stake(config.pt_payUid, greed_vid, greed_counter, greed_round_id)
 
             # 获取开奖数据
@@ -68,4 +65,3 @@ class Greedy:
                 print('下注失败')
         except Exception as e:
             print(e)
-
