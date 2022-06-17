@@ -21,15 +21,15 @@ def main():
         des = "{}, 用例数:{}, 失败数:{}, 分支:{}".format(now, test_result.testsRun,
                                                  len(test_result.failures) + len(test_result.errors),
                                                  config.codeInfo['bb_git_branch'])
-        robot('markdown', des, bot='pt')
+        robot('markdown', des, bot='PT')
     elif len(test_result.failures) >= 1:
         Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
         for case, reason in test_result.failures:
-            robot('icon', case.id().split('.')[2], bot='pt')
+            robot('icon', case.id().split('.')[2], bot='PT')
     elif len(test_result.errors) >= 1:
         Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
         for case, reason in test_result.errors:
-            robot('icon', case.id().split('.')[2], bot='pt')
+            robot('icon', case.id().split('.')[2], bot='PT')
 
 
 if __name__ == "__main__":
