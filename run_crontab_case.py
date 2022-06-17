@@ -1,7 +1,7 @@
 # coding=utf-8
 import unittest
 import time
-from common import Logs
+from common import Logs, method, Consts
 from Robot import robot
 from common.Config import config
 def all_case():
@@ -17,10 +17,12 @@ def main():
     des = "用例总数: {}, 失败用例数: {}, 异常用例数: {}" \
         .format(test_result.testsRun, len(test_result.failures), len(test_result.errors))
     Logs.get_log('caseResult_2.log').info(des)
+    case_list = method.dictToList(Consts.case_list)
     if len(test_result.failures) == 0 and len(test_result.errors) == 0:
-        des = "{}, 用例数:{}, 失败数:{}, 分支:{}".format(now, test_result.testsRun,
-                                                 len(test_result.failures) + len(test_result.errors),
-                                                 config.codeInfo['bb_git_branch'])
+        des = "{}\n用例数: {}, 失败数: {}, 代码分支：{}".format(
+            case_list, test_result.testsRun,
+            len(test_result.failures) + len(test_result.errors),
+            config.codeInfo['pt_git_branch'])
         robot('markdown', des, bot='PT')
     elif len(test_result.failures) >= 1:
         Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
