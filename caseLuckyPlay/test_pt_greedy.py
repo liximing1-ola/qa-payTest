@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #  @author: WuBingBing
-
 from common.conPtMysql import conMysql
 import unittest
 from common.Config import config

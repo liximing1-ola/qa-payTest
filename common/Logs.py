@@ -46,10 +46,3 @@ def get_log(log_name, level=logging.DEBUG, when='midnight', back_count=0):
     logs.addHandler(ch)
     logs.addHandler(fh)
     return logs
-
-
-if __name__ == '__main__':
-    logger = get_log('my.log')
-    logger.debug("debug")
-    logger.info("info")
-    logger.error('error')

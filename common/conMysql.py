@@ -214,7 +214,7 @@ class conMysql:
 
     # 更新用户数据
     @staticmethod
-    def updateUserInfoSql(tableName, uid, bid=105002314):
+    def updateUserInfoSql(tableName, uid, bid=config.live_role['pack_ceo']):
         if tableName == 'broker_user':  # 修改用户为打包结算主播
             sql = "update xs_broker_user set bid={}, uid={}, state=1, pack_cal=1 where id = 50 limit 1".format(bid, uid)
             try:
@@ -235,8 +235,8 @@ class conMysql:
             finally:
                 conMysql.con.commit()
         elif tableName == 'super_chatroom':
-            sql = "update xs_chatroom set type='super-voice-fresh',property='business',version=737," \
-                  "room_factory_type='super-voice-fresh',room_module_id=73,settlement_channel='super-voice' where rid={}".format(uid)
+            sql = "update xs_chatroom set type='super-voice-fresh',property='business',version=737,room_factory_type='super-voice-fresh'," \
+                  "room_module_id=73,settlement_channel='super-voice' where rid={}".format(uid)
             try:
                 conMysql.cur.execute(sql)
             except Exception as error:
@@ -264,8 +264,8 @@ class conMysql:
     def updateUserMoneyClearSql(*uids):
         try:
             for uid in uids:
-                sql = "update xs_user_money set money=0, money_b=0, money_cash=0, money_cash_b=0,gold_coin=0, money_debts=0 where uid={}" \
-                    .format(uid)
+                sql = "update xs_user_money set money=0, money_b=0, money_cash=0, money_cash_b=0,gold_coin=0, " \
+                      "money_debts=0 where uid={}".format(uid)
                 conMysql.cur.execute(sql)
         except Exception as error:
             conMysql.con.rollback()
@@ -302,7 +302,8 @@ class conMysql:
     # 插入用户金豆余额
     @staticmethod
     def insertBeanSql(uid, money_coupon, cash=0, cash_lock=0):
-        sql = "insert into xs_user_money_extend(uid, money_coupon, cash, cash_lock) values({},{},{},{})".format(uid, money_coupon, cash, cash_lock)
+        sql = "insert into xs_user_money_extend(uid, money_coupon, cash, cash_lock) values({},{},{},{})"\
+            .format(uid, money_coupon, cash, cash_lock)
         try:
             conMysql.cur.execute(sql)
         except Exception as error:
@@ -573,14 +574,16 @@ class conMysql:
             conMysql.cur.execute(sql)
             res = conMysql.cur.fetchone()
             if res is None:
-                sql = 'insert into config.bbc_broker_user_rate (uid, broker_creater, rate) values({}, {}, {})'.format(uid, creater, rate)
+                sql = 'insert into config.bbc_broker_user_rate (uid, broker_creater, rate) values({}, {}, {})'\
+                    .format(uid, creater, rate)
                 try:
                     conMysql.cur.execute(sql)
                 except Exception as error:
                     conMysql.con.rollback()
                     print('insert fail', error)
             else:
-                sql = "update config.bbc_broker_user_rate set rate={}, broker_creater={} where uid={} limit 1".format(rate, creater, uid)
+                sql = "update config.bbc_broker_user_rate set rate={}, broker_creater={} where uid={} limit 1"\
+                    .format(rate, creater, uid)
                 try:
                     conMysql.cur.execute(sql)
                 except Exception as error:

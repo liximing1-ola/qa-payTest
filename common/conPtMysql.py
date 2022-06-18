@@ -218,4 +218,3 @@ class conMysql:
                 return res
         except Exception as error:
             print(error)
-

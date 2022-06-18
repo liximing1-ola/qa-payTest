@@ -1,6 +1,5 @@
 # coding=utf-8
 import unittest
-import time
 from common import Logs, method, Consts
 from Robot import robot
 from common.Config import config
@@ -13,7 +12,6 @@ def all_case():
 
 def main():
     test_result = unittest.TextTestRunner(verbosity=3).run(all_case())
-    now = time.strftime('%Y-%m-%d %H:%M', time.localtime(time.time()))
     des = "用例总数: {}, 失败用例数: {}, 异常用例数: {}" \
         .format(test_result.testsRun, len(test_result.failures), len(test_result.errors))
     Logs.get_log('caseResult_2.log').info(des)

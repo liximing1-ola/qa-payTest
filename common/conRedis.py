@@ -3,7 +3,7 @@ class conRedis:
     redis_config = {
         'host_46': '192.168.11.46',  # 46 redis
         'host_ali': '127.0.0.1',  # PT测试服务器 redis
-        'port': 6379
+        'port': 6379  # 端口
     }
 
     @staticmethod

@@ -540,8 +540,5 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
         return data
-
-
-if __name__ == '__main__':
-    print(encodeData(payType='package-knightDefend', money=109900, uids=105002313,
-                                    rid=193185577))
+    else:
+        raise Exception('payType is error')
