@@ -51,8 +51,8 @@ class TestPayCreate(unittest.TestCase):
         5.检查被打赏者金豆余额，预期为：6000 * 0.5 = 3000
         """
         conMysql.insertBeanSql(config.payUid, money_coupon=6000)
-        data = basicData.encodeData(payType='package-more', giftId=config.giftId['362'],
-                                    giftType='bean', num=6, uids=('105002312', ))
+        data = basicData.encodeData(payType='package-more', giftId=config.giftId['362'], giftType='bean', num=6,
+                                    uids=('{}'.format(config.rewardUid), ))
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -75,8 +75,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, money=10000)
         conMysql.updateMoneySql(config.rewardUid)
         conMysql.insertBeanSql(config.payUid, money_coupon=500)
-        data = basicData.encodeData(payType='package-exchange', uid=config.rewardUid,
-                                    giftId=config.giftId['362'], giftType='bean')
+        data = basicData.encodeData(payType='package-exchange', uid=config.rewardUid, giftId=config.giftId['362'],
+                                    giftType='bean')
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))

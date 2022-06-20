@@ -18,7 +18,7 @@ def assert_code(actual_code, expected_code=200):
         assert actual_code == expected_code
         return True
     except:
-        reason = 'Actual Code: {}, Expected Code: {}, 对比结果不一致，望严查!'.format(actual_code, expected_code)
+        reason = 'Actual Code: {}, Expected Code: {}, 验证结果不一致，估计服务器开小差啦!'.format(actual_code, expected_code)
         Consts.fail_case_reason.append(reason)
         raise
 
@@ -31,7 +31,7 @@ def assert_len(actual_len, expect_len):
         assert actual_len >= expect_len
         return True
     except:
-        reason = '实际结果: {}, 预期结果: {}, 对比结果不一致，用例执行失败，望严查!'.format(actual_len, expect_len)
+        reason = '实际结果: {}, 预期结果: {}, 验证结果不一致，用例执行失败，望严查!'.format(actual_len, expect_len)
         Consts.fail_case_reason.append(reason)
         raise
 
@@ -44,7 +44,7 @@ def assert_equal(actual_result, expect_result):
         assert actual_result == expect_result
         return True
     except:
-        reason = '实际结果: {}, 预期结果: {}, 对比结果不一致，用例执行失败，望严查!'.format(actual_result, expect_result)
+        reason = '实际结果: {}, 预期结果: {}, 验证结果不一致，用例执行失败，望严查!'.format(actual_result, expect_result)
         Consts.fail_case_reason.append(reason)
         raise
 

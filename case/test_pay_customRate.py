@@ -33,8 +33,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateUserMoneyClearSql(testUid, ceoUid)
         conMysql.checkUserBroker(testUid, bid=ceoUid)  # bid=105002314 被打赏者加入工会
         conMysql.checkBrokerUserRate(testUid, ceoUid, rate=50)  # config.bbc_broker_user_rate 设置分成比
-        data = basicData.encodeData(payType='package', money=100, rid=config.live_role['auto_rid'], uid=testUid,
-                                    giftId=config.giftId['5'])
+        data = basicData.encodeData(payType='package', money=100, uid=testUid, giftId=config.giftId['5'])
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))

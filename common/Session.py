@@ -32,7 +32,7 @@ class Session:
                 res.raise_for_status()
                 res = res.json()
                 if not method.isExtend(res, 'token') or res['success'] != 1:
-                    print('failReason： {}'.format(res['msg']))
+                    return res['msg']
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
                 Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
                 return tokenDict
@@ -42,7 +42,7 @@ class Session:
             try:
                 headers = Yaml.read_yaml('Basic.yml', 'header_dev')
                 params = Yaml.read_yaml('', '')
-                login_url = config.bb_qqLogin_url + '?' + params + '&package=com.havefun.android'  # 7.22修改，请求接口加包名限制
+                login_url = config.bb_qqLogin_url + '?' + params + '&package=com.havefun.android'
                 body = Yaml.read_yaml('', '')
                 session = requests.session()
                 res = session.post(login_url, data=body, headers=headers)
@@ -86,7 +86,7 @@ class Session:
                 Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
                 return tokenDict
             except Exception as error:
-                Logs.get_log('ptGetSession.log').error('session获取异常，原因： {}'.format(error))
+                Logs.get_log('getSession.log').error('session获取异常，原因： {}'.format(error))
         else:
             print("env input error")
 
