@@ -30,3 +30,5 @@
 
 # ps -aux | grep python
 # ps -ef | grep python | grep -v grep | awk '{print $2}' | xargs kill -9
+
+# git clone http://be1bef6103d75ed87a7bcc6fe8981ea1801eb6ed@http://114.55.7.123:3000/ee-test/payTest.git
