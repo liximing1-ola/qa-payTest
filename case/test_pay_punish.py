@@ -6,7 +6,7 @@ import time
 from common.Assert import assert_body, assert_code, assert_equal
 from common.Request import post_request_session
 from common import basicData
-from common.Consts import case_list, result
+from common.Consts import case_list_c, result
 from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
 
