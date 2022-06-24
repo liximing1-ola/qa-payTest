@@ -29,7 +29,8 @@ def main(appInfo):
         Logs.get_log('caseResult_2.log').info(des)
         case_list = method.dictToList(Consts.case_list_c)
         if len(test_result.failures) == 0 and len(test_result.errors) == 0:
-            des = "{}\n用例数: {}, 失败数: {}, 代码分支：{}".format(
+            des = "{}\n{}\n用例数: {}, 失败数: {}, 代码分支：{}".format(
+                '定时任务',
                 case_list, test_result.testsRun,
                 len(test_result.failures) + len(test_result.errors),
                 config.codeInfo['pt_git_branch'])
