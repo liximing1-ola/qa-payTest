@@ -46,7 +46,7 @@ def main(appInfo):
             updateTime('write', now=str(int(time.time())))
             test_result = unittest.TextTestRunner(verbosity=3).run(all_case(appInfo))
             Consts.endTime = time.time()
-            des = "用例总数: {}, 失败用例数: {}, 异常用例数: {}" \
+            des = "Total: {}, failures: {}, errors: {}" \
                 .format(test_result.testsRun, len(test_result.failures), len(test_result.errors))
             Logs.get_log('caseResult.log').info(des)
             case_list = method.dictToList(Consts.case_list)
@@ -54,7 +54,7 @@ def main(appInfo):
             use_time = str(int(Consts.endTime - Consts.startTime)) + 's'
             if len(test_result.failures) == 0 and len(test_result.errors) == 0:
                 des = "{}\n".format(case_list)
-                des_2 = "{}\n用例数: {}, 失败数: {}, 总耗时: {}, 代码分支：{}".format(
+                des_2 = "{}\nTotal: {}, Failures: {}, Times: {}, Branch：{}".format(
                     case_list_2, test_result.testsRun,
                     len(test_result.failures) + len(test_result.errors),
                     use_time,
