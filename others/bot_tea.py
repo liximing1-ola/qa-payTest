@@ -16,7 +16,7 @@ def robot():
     url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e317861a-d1ec-4ac4-af96-9d4b8f12d9d6'
     # url= 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=ddf98ffd-fd35-42be-8362-5e485b08226a'  # 测试用
     headers = {'Content-Type': 'application/json'}
-    reason = {'【Tony】': '扎实稳就业 全力惠民生'}
+    reason = {'【Tony】': '以更优营商环境护航高质量发展'}
     now = time.strftime('%H:%M', time.localtime(time.time()))
     title = "下午茶时间到:当前时间-{}, 放松一下".format(now)
     des = '诚邀榜上大哥赞助'
