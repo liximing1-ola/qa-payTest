@@ -64,6 +64,14 @@ class conMysql:
                 return int(res[0])
             except Exception as error:
                 print(error)
+        elif accountType == 'sum_commodity_32':  # 查询用户背包某个物品总数 举例cid= 32--欢乐券
+            sql = 'select sum(num) from xs_user_commodity where uid ={} and cid = 32'.format(uid)
+            try:
+                conMysql.cur.execute(sql)
+                res = conMysql.cur.fetchone()
+                return int(res[0])
+            except Exception as error:
+                print(error)
 
     # 删除用户账户数据
     @staticmethod
@@ -218,3 +226,4 @@ class conMysql:
                 return res
         except Exception as error:
             print(error)
+
