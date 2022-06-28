@@ -1,6 +1,6 @@
 import time
 import requests
-from common.method import getImage
+from common import method
 def robot(mode, reason, title='', bot='BB'):
     headers = {'Content-Type': 'application/json'}
     robot_dict = {'BB': 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=f9d916cb-6b93-4389-8aa4-f51c755faa0e',
@@ -48,7 +48,7 @@ def robot(mode, reason, title='', bot='BB'):
         now = time.strftime('%m-%d %H:%M', time.localtime(time.time()))
         title = "{}, Execution is abnormal.Please check the status!".format(now)
         des = reason
-        icon = getImage(mode=1)
+        icon = method.getImage(mode=1)
         data = {
             "msgtype": "news",
             "news": {
