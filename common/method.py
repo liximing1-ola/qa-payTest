@@ -3,7 +3,7 @@ import random
 import time
 import os
 from common import Consts
-from Robot import robot
+import Robot
 
 # 将列表生成支持markdown的形式
 def dictToList(result_dict):
@@ -82,5 +82,5 @@ def reason(des, res):
 
 def checkPath(path):
     if not os.path.exists(path):
-        robot('markdown', 'php代码路径异常'.format(path), bot='PT')
+        Robot.robot('markdown', 'php代码路径异常'.format(path), bot='PT')
         raise EnvironmentError('代码路径异常')
