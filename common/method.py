@@ -81,4 +81,5 @@ def reason(des, res):
 
 def checkPath(path):
     if not os.path.exists(path):
+        print(1)
         raise EnvironmentError('代码路径异常')
