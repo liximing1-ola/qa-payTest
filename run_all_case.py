@@ -43,7 +43,7 @@ def main(appInfo):
         else:
             Logs.get_log('runCode.log').info('NoRun')
     elif appInfo == config.appName['Partying']:
-        checkPath('/hme')
+        checkPath('/home/webroot/release_oversea/oversea-serve')
         if updateCode.autoGitPull(appInfo):
             updateTime('write', now=str(int(time.time())))
             test_result = unittest.TextTestRunner(verbosity=3).run(all_case(appInfo))
