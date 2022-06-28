@@ -11,6 +11,7 @@ from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
 
     @Retry
+    @unittest.skip
     def test_01_PayChangeTriggerPunish(self, des='打赏时触发罚款流程'):
         """
         用例描述：

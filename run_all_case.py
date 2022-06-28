@@ -3,6 +3,7 @@ import unittest
 import time
 from common import Logs, method, Consts
 from common.Config import config
+from common.method import checkPath
 from autoGitPull import updateTime, updateCode
 from Robot import robot
 import platform
@@ -42,6 +43,7 @@ def main(appInfo):
         else:
             Logs.get_log('runCode.log').info('NoRun')
     elif appInfo == config.appName['Partying']:
+        checkPath('/home')
         if updateCode.autoGitPull(appInfo):
             updateTime('write', now=str(int(time.time())))
             test_result = unittest.TextTestRunner(verbosity=3).run(all_case(appInfo))

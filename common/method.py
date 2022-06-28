@@ -1,6 +1,7 @@
 import requests
 import random
 import time
+import os
 from common import Consts
 
 # 将列表生成支持markdown的形式
@@ -77,3 +78,7 @@ def reason(des, res):
     if res['body']['success'] == 0 and not isExtend(res['body'], 'msg'):
         print(res['body'])
     return 'Depiction: {},  failReason: {}'.format(des, res['body'])
+
+def checkPath(path):
+    if not os.path.exists(path):
+        raise EnvironmentError('代码路径异常')
