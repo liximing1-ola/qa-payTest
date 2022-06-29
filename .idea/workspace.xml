@@ -28,7 +28,10 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="44793b3e-09e5-4af0-a369-84e9b064bd19" name="Default Changelist" comment="‘提交修改’" />
+    <list default="true" id="44793b3e-09e5-4af0-a369-84e9b064bd19" name="Default Changelist" comment="‘提交修改’">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/method.py" beforeDir="false" afterPath="$PROJECT_DIR$/common/method.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -204,27 +207,6 @@
       <option name="presentableId" value="Default" />
       <updated>1615801946332</updated>
       <workItem from="1637288736860" duration="20000" />
-    </task>
-    <task id="LOCAL-01060" summary="‘提交修改’">
-      <created>1655286914417</created>
-      <option name="number" value="01060" />
-      <option name="presentableId" value="LOCAL-01060" />
-      <option name="project" value="LOCAL" />
-      <updated>1655286914417</updated>
-    </task>
-    <task id="LOCAL-01061" summary="‘提交修改’">
-      <created>1655287575686</created>
-      <option name="number" value="01061" />
-      <option name="presentableId" value="LOCAL-01061" />
-      <option name="project" value="LOCAL" />
-      <updated>1655287575686</updated>
-    </task>
-    <task id="LOCAL-01062" summary="‘提交修改’">
-      <created>1655287597477</created>
-      <option name="number" value="01062" />
-      <option name="presentableId" value="LOCAL-01062" />
-      <option name="project" value="LOCAL" />
-      <updated>1655287597477</updated>
     </task>
     <task id="LOCAL-01063" summary="‘提交修改’">
       <created>1655287913756</created>
@@ -548,7 +530,28 @@
       <option name="project" value="LOCAL" />
       <updated>1656422773535</updated>
     </task>
-    <option name="localTasksCounter" value="1109" />
+    <task id="LOCAL-01109" summary="‘提交修改’">
+      <created>1656422964338</created>
+      <option name="number" value="01109" />
+      <option name="presentableId" value="LOCAL-01109" />
+      <option name="project" value="LOCAL" />
+      <updated>1656422964339</updated>
+    </task>
+    <task id="LOCAL-01110" summary="‘提交修改’">
+      <created>1656423068250</created>
+      <option name="number" value="01110" />
+      <option name="presentableId" value="LOCAL-01110" />
+      <option name="project" value="LOCAL" />
+      <updated>1656423068250</updated>
+    </task>
+    <task id="LOCAL-01111" summary="‘提交修改’">
+      <created>1656423156345</created>
+      <option name="number" value="01111" />
+      <option name="presentableId" value="LOCAL-01111" />
+      <option name="project" value="LOCAL" />
+      <updated>1656423156345</updated>
+    </task>
+    <option name="localTasksCounter" value="1112" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -650,12 +653,12 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="813" y="216" key="VCS.ChangeListViewerDialog/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1655187391925" />
-    <state x="2281" y="26" key="Vcs.Push.Dialog.v2" timestamp="1656422774645">
+    <state x="2281" y="26" key="Vcs.Push.Dialog.v2" timestamp="1656423157427">
       <screen x="1920" y="-119" width="1536" height="832" />
     </state>
     <state x="361" y="144" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1655436043990" />
     <state x="451" y="181" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1656062855042" />
-    <state x="2281" y="26" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1656422774645" />
+    <state x="2281" y="26" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1656423157427" />
     <state x="716" y="410" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1655784786613">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
