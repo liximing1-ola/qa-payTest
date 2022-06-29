@@ -1,4 +1,3 @@
-import time
 from common.Config import config
 from common.method import reason
 from common.conPtMysql import conMysql
@@ -9,8 +8,6 @@ from common.basicData import encodePtData
 from common.Consts import result, case_list
 from common.runFailed import Retry
 from common.Crazyspin import crazySpin
-import json
-
 @Retry
 class TestPayCreate(unittest.TestCase):
 
@@ -38,7 +35,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_commodity_32', config.pt_payUid), 10)
         case_list[des] = result
 
-    def test_02_playCrazyspin(self, des='开启大转盘抽奖场景'):
+    def test_02_playCrazySpin(self, des='开启大转盘抽奖场景'):
         """
         用例描述：
         验证玩大转盘，背包先正常扣券。以及背包得到新增物品
