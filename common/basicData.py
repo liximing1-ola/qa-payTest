@@ -4,6 +4,7 @@ from common.Config import config
 def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], uid=config.star_role['agent_star_uid'],
                giftId=config.giftId['7'], giftType='normal', cid=5, boxType='copper', num=1, package_cid=0, ctype='',
                duction_money=0, star=0, defend_id=244, uids=('{}'.format(config.rewardUid), '{}'.format(config.rewardUid2))):
+
     if payType == 'package':
         data = {
             "platform": "available",
@@ -539,5 +540,35 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
         return data
+    elif payType == 'shop-buy-crazyspin':
+        data = {
+            "platform": 'available',
+            "type": 'shop-buy',
+            "money": 1000,
+            "params":
+                {"num": 10,
+                 "cid": 32,
+                 "price": 100,
+                 "coupon_id": 0,
+                 "duction_money": 0,
+                 "version": 2,
+                 "gift_scene": "shop",
+                 "rid": rid,
+                 "useCoin": -1}
+        }
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        return data
+
+    elif payType == 'play-crazyspin':
+        data = {
+            "rid": rid,
+            "draw_type": 10,
+            "turntable_type": 1,
+        }
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        return data
+
     else:
         raise Exception('payType is error')
