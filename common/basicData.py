@@ -4,7 +4,6 @@ from common.Config import config
 def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], uid=config.star_role['agent_star_uid'],
                giftId=config.giftId['7'], giftType='normal', cid=5, boxType='copper', num=1, package_cid=0, ctype='',
                duction_money=0, star=0, defend_id=244, uids=('{}'.format(config.rewardUid), '{}'.format(config.rewardUid2))):
-
     if payType == 'package':
         data = {
             "platform": "available",
@@ -559,7 +558,6 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
         return data
-
     elif payType == 'play-crazyspin':
         data = {
             "rid": rid,
@@ -569,6 +567,5 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
         return data
-
     else:
         raise Exception('payType is error')

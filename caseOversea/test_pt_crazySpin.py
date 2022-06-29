@@ -6,9 +6,7 @@ from common.Request import post_request_session
 from common.Assert import assert_code, assert_body, assert_equal
 from common.basicData import encodePtData
 from common.Consts import result, case_list
-from common.runFailed import Retry
 from common.Crazyspin import crazySpin
-@Retry
 class TestPayCreate(unittest.TestCase):
 
     def test_01_crazySpinExchange(self, des='扣除钻石购买大转盘欢乐券'):
@@ -58,6 +56,3 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.pt_payUid), 100)
         assert_equal(conMysql.selectUserInfoSql('sum_commodity_32', config.pt_payUid), 90)
         case_list[des] = result
-
-
-
