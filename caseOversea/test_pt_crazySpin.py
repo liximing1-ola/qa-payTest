@@ -7,8 +7,10 @@ from common.Assert import assert_code, assert_body, assert_equal
 from common.basicData import encodePtData
 from common.Consts import result, case_list
 from common.Crazyspin import crazySpin
-class TestPayCreate(unittest.TestCase):
+import time
 
+class TestPayCreate(unittest.TestCase):
+    
     def test_01_crazySpinExchange(self, des='扣除钻石购买大转盘欢乐券'):
         """
         用例描述：
@@ -50,6 +52,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.deleteUserAccountSql('user_commodity', config.pt_payUid)
         conMysql.insertXsUserCommodity(config.pt_payUid, cid=32, num=100)  # 背包插入100个欢乐券
         data = encodePtData(payType='play-crazyspin')
+        time.sleep(0.1)
         res = post_request_session(url=crazySpin.spinPlay(uid=config.pt_payUid), data=data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
