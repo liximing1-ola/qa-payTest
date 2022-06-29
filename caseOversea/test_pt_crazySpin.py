@@ -3,7 +3,7 @@ from common.method import reason
 from common.conPtMysql import conMysql
 import unittest
 from common.Request import post_request_session
-from common.Assert import assert_code, assert_body, assert_len, assert_equal
+from common.Assert import assert_code, assert_body, assert_equal
 from common.basicData import encodePtData
 from common.Consts import result, case_list
 from common.runFailed import Retry
