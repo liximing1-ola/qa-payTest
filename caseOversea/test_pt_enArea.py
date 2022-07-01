@@ -22,7 +22,8 @@ class TestPayCreate(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls) -> None:
-        conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()))
+        pass
+        #conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()))
 
     def test_01_enAreaIMPayGift(self, des='英语区私聊打赏礼物55分成场景'):
         """
@@ -44,7 +45,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash'), 300)
         case_list[des] = result
 
-    @unittest.skip
     def test_02_enAreaIMPayGiveBox(self, des='英语区私聊打赏箱子55分成场景'):
         """
         用例描述：
