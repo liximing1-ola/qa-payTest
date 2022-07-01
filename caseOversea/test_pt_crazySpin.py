@@ -1,3 +1,5 @@
+import json
+
 from common.Config import config
 from common.method import reason
 from common.conPtMysql import conMysql
@@ -6,7 +8,11 @@ from common.Request import post_request_session
 from common.Assert import assert_code, assert_body, assert_equal
 from common.basicData import encodePtData
 from common.Consts import result, case_list
+from common.runFailed import Retry
 from common.Crazyspin import crazySpin
+import time
+
+@Retry
 class TestPayCreate(unittest.TestCase):
 
     def test_01_crazySpinExchange(self, des='扣除钻石购买大转盘欢乐券'):
@@ -42,6 +48,8 @@ class TestPayCreate(unittest.TestCase):
          * 清空用户背包内所有物品
          * 用户背包内插入抽奖券(cid=32 欢乐券，cid=33，惊喜券)
          * 修改用户背包券数(xs_user_commodity)
+         * 打开大转盘面板数据正常，达到重置奖池的目的 /go/party/turntable/list
+         * 大转盘跑马灯功能服务正常 /go/party/turntable/horn
         2.play crazy spin
         3.校验接口状态和返回值数据
         4.检查账户背包惊喜券/欢乐券余额，预期值为：100 - 10 = 90
@@ -49,6 +57,10 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.deleteUserAccountSql('user_commodity', config.pt_payUid)
         conMysql.insertXsUserCommodity(config.pt_payUid, cid=32, num=100)  # 背包插入100个欢乐券
+        res1 = crazySpin.turntablelist(config.pt_room['business_joy'], config.pt_payUid, tokenName='pt')
+        time.sleep(0.1)
+        res2 = crazySpin.turntablehorn(config.pt_payUid, tokenName='pt')
+        time.sleep(3)
         data = encodePtData(payType='play-crazyspin')
         res = post_request_session(url=crazySpin.spinPlay(uid=config.pt_payUid), data=data, tokenName='pt')
         assert_code(res['code'])

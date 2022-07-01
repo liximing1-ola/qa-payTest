@@ -1,5 +1,8 @@
 import urllib.parse
+import requests
 from common.Config import config
+from common.Session import Session
+from requests.packages.urllib3.exceptions import InsecureRequestWarning  # 使用requests库请求HTTPS时,因为忽略证书验证,导致每次运行时都会报错
 
 class crazySpin:
     @staticmethod
@@ -19,7 +22,7 @@ class crazySpin:
         }
         url2 = url1+'pay/create'+'?'+urllib.parse.urlencode(params)
         return url2
-        print(crazySpin.spinBuy())
+        print(crazySpin.spinBuy(uid))
 
     @staticmethod
     def spinPlay(uid):
@@ -39,4 +42,60 @@ class crazySpin:
         url4 = url3+'?'+urllib.parse.urlencode(params)
         return url4
         print(crazySpin.spinPlay(uid))
+
+    @staticmethod
+    def turntablelist(rid,uid,tokenName='dev'):
+        url5 = config.pt_host + '/go/party/turntable/list'
+        params = {
+            'rid': rid,
+            'package': 'com.imbb.oversea.android',
+            '_ipv': '0',
+            '_platform': 'android',
+            '_index': '878',
+            '_model': 'Pixel 3a',
+            '_timestamp': '1656067298',
+            '_abi': 'arm64-v8a',
+            'format': 'json',
+            '_sign': '12c5970528bf21e8aac9586534606432',
+            '_blid': uid,
+        }
+        url6 = url5+'?'+urllib.parse.urlencode(params)
+        requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+        header = {
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko)\
+                                Chrome/67.0.3396.99 Safari/537.36",
+            "Content-Type": "application/x-www-form-urlencoded",
+            'Connection': 'close',
+            "user-token": Session.checkUserToken(operate='read', app_name=tokenName)
+        }
+        return requests.get(url5, params=params, headers =header)
+
+    @staticmethod
+    def turntablehorn(uid,tokenName='dev'):
+        url7 = config.pt_host + '/go/party/turntable/horn'
+        params = {
+            'turntable_type': 1,
+            'package': 'com.imbb.oversea.android',
+            '_ipv': '0',
+            '_platform': 'android',
+            '_index': '878',
+            '_model': 'Pixel 3a',
+            '_timestamp': '1656067298',
+            '_abi': 'arm64-v8a',
+            'format': 'json',
+            '_sign': '12c5970528bf21e8aac9586534606432',
+            '_blid': uid,
+        }
+        # url8 = url7+'?'+urllib.parse.urlencode(params)
+        requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+        header = {
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko)\
+                                Chrome/67.0.3396.99 Safari/537.36",
+            "Content-Type": "application/x-www-form-urlencoded",
+            'Connection': 'close',
+            "user-token": Session.checkUserToken(operate='read', app_name=tokenName)
+        }
+        return requests.get(url7, params=params, headers=header)
+
+
 
