@@ -24,7 +24,7 @@ class TestPayCreate(unittest.TestCase):
     @classmethod
     def tearDownClass(cls) -> None:
         conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()))
-        time.sleep(0.6)
+        time.sleep(0.3)
         conRedis.delKey('User.Big.Area.Id', config.pt_user.values())
         conRedis.delKey('User.Big.Area', config.pt_user.values())
 
