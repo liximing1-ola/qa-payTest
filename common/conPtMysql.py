@@ -100,7 +100,7 @@ class conMysql:
     # 更新用户数据
     @staticmethod
     def updateUserRidInfoSql(property_rid, rid, area='en'):
-        sql = "update xs_chatroom set property='{}', area='{}' where rid={}".format(property_rid, rid, area)
+        sql = "update xs_chatroom set property='{}', area='{}' where rid={}".format(property_rid, area, rid)
         try:
             conMysql.cur.execute(sql)
         except Exception as error:
