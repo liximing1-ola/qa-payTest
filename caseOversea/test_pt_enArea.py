@@ -7,7 +7,6 @@ from common.Assert import assert_code, assert_body, assert_len, assert_equal
 from common.basicData import encodePtData
 from common.Consts import result, case_list
 from common.runFailed import Retry
-from common.conRedis import conRedis
 @Retry
 class TestPayCreate(unittest.TestCase):
 
@@ -20,13 +19,10 @@ class TestPayCreate(unittest.TestCase):
     def setUpClass(cls) -> None:
         conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()), bigarea_id=1)
         conMysql.updateUserInfoSql('fleet', config.pt_room['en_fleet'])
-        conRedis.delKey('User.Big.Area.Id', config.pt_user.values())
-        conRedis.delKey('User.Big.Area', config.pt_user.values())
 
     @classmethod
     def tearDownClass(cls) -> None:
-        pass
-        #conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()))
+        conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()))
 
     def test_01_enAreaIMPayGift(self, des='英语区私聊打赏礼物55分成场景'):
         """
@@ -92,7 +88,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash'), 300)
         case_list[des] = result
 
-    @unittest.skip
     def test_04_enAreaFleetRoomGiveBox(self, des='英语区家族房送箱子55分成场景'):
         """
         用例描述：

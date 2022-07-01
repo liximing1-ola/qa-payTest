@@ -81,6 +81,7 @@ class config:
     pt_payUid = pt_user['payUid']
     pt_testUid = pt_user['testUid']  # 非公会成员，是一代宗师
     pt_brokerUid = pt_user['brokerUid']  # 公会成员
+    pt_fleetUid = pt_user['fleet_uid']
 
     # 房间类型
     pt_room = {
