@@ -83,11 +83,12 @@ class config:
     pt_brokerUid = pt_user['brokerUid']  # 公会成员
     pt_fleetUid = pt_user['fleet_uid']
 
-    # 房间类型
+    # 房间类型41
     pt_room = {
         'business_joy': 105697423,  # 商业房
         'th_union': 105708881,  # 泰区联盟房
         'en_fleet': 105701176,  # 家族房
+        'vip_rid': 105698376,  # 个人房
     }
 
     # 礼物配置

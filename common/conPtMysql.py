@@ -99,27 +99,15 @@ class conMysql:
 
     # 更新用户数据
     @staticmethod
-    def updateUserInfoSql(tableName, rid, area='en'):
-        if tableName == 'union':  # 更改房间为联盟房
-            sql = "update xs_chatroom set property='union', area='th' where rid={}".format(rid)
-            try:
-                conMysql.cur.execute(sql)
-            except Exception as error:
-                conMysql.con.rollback()
-                print('update fail', error)
-            finally:
-                conMysql.con.commit()
-        elif tableName == 'fleet':  # 更改房间为家族房(判断条件为：property为家族房，房主所在大区为英语区)
-            sql = "update xs_chatroom set property='fleet', area='{}' where rid={}".format(rid, area)
-            try:
-                conMysql.cur.execute(sql)
-            except Exception as error:
-                conMysql.con.rollback()
-                print('update fail', error)
-            finally:
-                conMysql.con.commit()
-        else:
-            print('{} Error'.format(tableName))
+    def updateUserRidInfoSql(property_rid, rid, area='en'):
+        sql = "update xs_chatroom set property='{}', area='{}' where rid={}".format(property_rid, rid, area)
+        try:
+            conMysql.cur.execute(sql)
+        except Exception as error:
+            conMysql.con.rollback()
+            print('update fail', error)
+        finally:
+            conMysql.con.commit()
 
     # 更新用户大区
     # 1=en 2=cn 3=ar 4=ko 5=id 6=th 7=vi 8=tr 9=ms 10=ja

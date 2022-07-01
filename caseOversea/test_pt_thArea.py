@@ -19,7 +19,7 @@ class TestPayCreate(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()), bigarea_id=6)
-        conMysql.updateUserInfoSql('union', config.pt_room['th_union'])
+        conMysql.updateUserRidInfoSql('union', config.pt_room['th_union'], area='th')
 
     @classmethod
     def tearDownClass(cls) -> None:
