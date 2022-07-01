@@ -99,9 +99,9 @@ class conMysql:
 
     # 更新用户数据
     @staticmethod
-    def updateUserInfoSql(tableName, uid):
+    def updateUserInfoSql(tableName, rid, area='en'):
         if tableName == 'union':  # 更改房间为联盟房
-            sql = "update xs_chatroom set property='union', area='th' where rid={}".format(uid)
+            sql = "update xs_chatroom set property='union', area='th' where rid={}".format(rid)
             try:
                 conMysql.cur.execute(sql)
             except Exception as error:
@@ -110,7 +110,7 @@ class conMysql:
             finally:
                 conMysql.con.commit()
         elif tableName == 'fleet':  # 更改房间为家族房(判断条件为：property为家族房，房主所在大区为英语区)
-            sql = "update xs_chatroom set property='fleet', area='en' where rid={}".format(uid)
+            sql = "update xs_chatroom set property='fleet', area='{}' where rid={}".format(rid, area)
             try:
                 conMysql.cur.execute(sql)
             except Exception as error:

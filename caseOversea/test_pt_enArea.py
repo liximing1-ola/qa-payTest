@@ -96,8 +96,8 @@ class TestPayCreate(unittest.TestCase):
         1.构造数据（更新xs_user_money，xs_user_commodity，xs_user_box）
         2.giveBox
         3.校验接口状态和返回值数据
-        4.检查打赏者账户余额，预期值为：600 - 600 = 0
-        5.检查收箱用户账户余额，预期值为：大于150
+        4.检查打赏者账户余额，预期值为：700 - 600 = 100
+        5.检查收箱用户账户余额，预期值为：不小于150
         """
         conMysql.updateMoneySql(config.pt_payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
         conMysql.updateMoneySql(config.pt_testUid)
@@ -106,7 +106,7 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 100)
-        assert_len(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash_b'), 210)
+        assert_len(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash_b'), 150)
         assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash_b'),
                      conMysql.selectUserInfoSql(accountType='pay_change', uid=config.pt_testUid))
         case_list[des] = result
