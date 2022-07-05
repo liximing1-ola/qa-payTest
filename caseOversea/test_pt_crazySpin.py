@@ -1,5 +1,3 @@
-import json
-
 from common.Config import config
 from common.method import reason
 from common.conPtMysql import conMysql
@@ -57,10 +55,8 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.deleteUserAccountSql('user_commodity', config.pt_payUid)
         conMysql.insertXsUserCommodity(config.pt_payUid, cid=32, num=100)  # 背包插入100个欢乐券
-        res1 = crazySpin.turntablelist(config.pt_room['business_joy'], config.pt_payUid, tokenName='pt')
-        time.sleep(0.1)
-        res2 = crazySpin.turntablehorn(config.pt_payUid, tokenName='pt')
-        time.sleep(3)
+        crazySpin.turntablelist(config.pt_room['business_joy'], config.pt_payUid, tokenName='pt')
+        crazySpin.turntablehorn(config.pt_payUid, tokenName='pt')
         data = encodePtData(payType='play-crazyspin')
         res = post_request_session(url=crazySpin.spinPlay(uid=config.pt_payUid), data=data, tokenName='pt')
         assert_code(res['code'])

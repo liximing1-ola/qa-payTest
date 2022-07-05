@@ -22,7 +22,6 @@ class crazySpin:
         }
         url2 = url1+'pay/create'+'?'+urllib.parse.urlencode(params)
         return url2
-        print(crazySpin.spinBuy(uid))
 
     @staticmethod
     def spinPlay(uid):
@@ -41,10 +40,9 @@ class crazySpin:
         }
         url4 = url3+'?'+urllib.parse.urlencode(params)
         return url4
-        print(crazySpin.spinPlay(uid))
 
     @staticmethod
-    def turntablelist(rid,uid,tokenName='dev'):
+    def turntablelist(rid, uid, tokenName='dev'):
         url5 = config.pt_host + '/go/party/turntable/list'
         params = {
             'rid': rid,
@@ -68,10 +66,10 @@ class crazySpin:
             'Connection': 'close',
             "user-token": Session.checkUserToken(operate='read', app_name=tokenName)
         }
-        return requests.get(url5, params=params, headers =header)
+        return requests.get(url5, params=params, headers=header)
 
     @staticmethod
-    def turntablehorn(uid,tokenName='dev'):
+    def turntablehorn(uid, tokenName='dev'):
         url7 = config.pt_host + '/go/party/turntable/horn'
         params = {
             'turntable_type': 1,
@@ -96,6 +94,3 @@ class crazySpin:
             "user-token": Session.checkUserToken(operate='read', app_name=tokenName)
         }
         return requests.get(url7, params=params, headers=header)
-
-
-
