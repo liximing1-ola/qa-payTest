@@ -89,7 +89,7 @@ class config:
     pt_room = {
         'business_joy': 105697423,  # 商业房
         'th_union': 105708881,  # 泰区联盟房
-        'en_fleet': 105701176,  # 家族房
+        'en_fleet': 105717544,  # 家族房105701176
         'vip_rid': 105698376,  # 个人房
     }
 
