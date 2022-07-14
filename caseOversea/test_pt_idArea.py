@@ -19,7 +19,7 @@ class TestPayCreate(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()), bigarea_id=5)
-        conMysql.updateUserRidInfoSql('fleet', config.pt_room['en_fleet'], area='id')
+        conMysql.updateUserRidInfoSql('fleet', config.pt_room['id_fleet'], area='id')
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -38,7 +38,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, 700)
         conMysql.updateMoneySql(config.pt_testUid)
-        data = encodePtData(payType='package', rid=config.pt_room['en_fleet'])
+        data = encodePtData(payType='package', rid=config.pt_room['id_fleet'])
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -59,7 +59,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
         conMysql.updateMoneySql(config.pt_testUid)
-        data = encodePtData(payType='package', giftId=config.giftId['46'], rid=config.pt_room['en_fleet'])
+        data = encodePtData(payType='package', giftId=config.giftId['46'], rid=config.pt_room['id_fleet'])
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
