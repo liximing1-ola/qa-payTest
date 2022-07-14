@@ -7,6 +7,8 @@ from common.Assert import assert_code, assert_body, assert_len, assert_equal
 from common.basicData import encodePtData
 from common.Consts import result, case_list
 from common.runFailed import Retry
+from common.conRedis import conRedis
+
 @Retry
 class TestPayCreate(unittest.TestCase):
 
@@ -19,6 +21,8 @@ class TestPayCreate(unittest.TestCase):
     def setUpClass(cls) -> None:
         conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()), bigarea_id=1)
         conMysql.updateUserRidInfoSql('fleet', config.pt_room['en_fleet'])
+        conRedis.delKey('User.Big.Area.Id', config.pt_user.values())
+        conRedis.delKey('User.Big.Area', config.pt_user.values())
 
     @classmethod
     def tearDownClass(cls) -> None:
