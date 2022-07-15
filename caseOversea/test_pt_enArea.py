@@ -7,8 +7,6 @@ from common.Assert import assert_code, assert_body, assert_len, assert_equal
 from common.basicData import encodePtData
 from common.Consts import result, case_list
 from common.runFailed import Retry
-from common.conRedis import conRedis
-
 @Retry
 class TestPayCreate(unittest.TestCase):
 
@@ -20,9 +18,6 @@ class TestPayCreate(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()), bigarea_id=1)
-        conMysql.updateUserRidInfoSql('fleet', config.pt_room['en_fleet'])
-        conRedis.delKey('User.Big.Area.Id', config.pt_user.values())
-        conRedis.delKey('User.Big.Area', config.pt_user.values())
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -84,8 +79,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, 700)
         conMysql.updateMoneySql(config.pt_testUid)
-        rid1 = conMysql.select_xs_chatroom(property='fleet', bigarea_id=1)
-        data = encodePtData(payType='package', rid=rid1)
+        data = encodePtData(payType='package', rid=conMysql.select_user_chatroom('fleet'))
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -106,8 +100,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
         conMysql.updateMoneySql(config.pt_testUid)
-        rid1 = conMysql.select_xs_chatroom(property='fleet', bigarea_id=1)
-        data = encodePtData(payType='package', giftId=config.giftId['46'], rid=rid1)
+        data = encodePtData(payType='package', giftId=config.giftId['46'], rid=conMysql.select_user_chatroom('fleet'))
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
