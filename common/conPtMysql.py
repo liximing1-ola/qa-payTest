@@ -218,7 +218,7 @@ class conMysql:
     # 查询房间信息xs_chatrooom
     @staticmethod
     def select_xs_chatroom(area,property):
-        sql = "select rid, area, property from xs_chatroom where area= {}} and property ={} limit 1".format(area,
+        sql = "select rid, area, property from xs_chatroom where area= {} and property ={} limit 1".format(area,
                                                                                                          property)
         try:
             conMysql.cur.execute(sql)
