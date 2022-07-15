@@ -225,6 +225,6 @@ class conMysql:
             if res is None:
                 return 0
             else:
-                return res
+                return res[0]
         except Exception as error:
             print(error)
