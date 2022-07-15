@@ -84,7 +84,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, 700)
         conMysql.updateMoneySql(config.pt_testUid)
-        rid1 = conMysql.select_xs_chatroom(area='en', property='fleet')[0]
+        rid1 = conMysql.select_xs_chatroom(property='fleet', bigarea_id=1)[0]
         data = encodePtData(payType='package', rid=rid1)
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
@@ -106,7 +106,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
         conMysql.updateMoneySql(config.pt_testUid)
-        rid1 = conMysql.select_xs_chatroom(area='en', property='fleet')[0]
+        rid1 = conMysql.select_xs_chatroom(property='fleet',bigarea_id=1)[0]
         data = encodePtData(payType='package', giftId=config.giftId['46'], rid=rid1)
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
