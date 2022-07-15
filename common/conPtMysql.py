@@ -214,3 +214,18 @@ class conMysql:
                 return res
         except Exception as error:
             print(error)
+
+    # 查询房间信息xs_chatrooom
+    @staticmethod
+    def select_xs_chatroom(area,property):
+        sql = "select rid, area, property from xs_chatroom where area= {}} and property ={} limit 1".format(area,
+                                                                                                         property)
+        try:
+            conMysql.cur.execute(sql)
+            res = conMysql.cur.fetchone()
+            if res is None:
+                return 0
+            else:
+                return res
+        except Exception as error:
+            print(error)
