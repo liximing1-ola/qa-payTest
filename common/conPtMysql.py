@@ -217,9 +217,8 @@ class conMysql:
 
     # 查询房间信息xs_chatrooom
     @staticmethod
-    def select_xs_chatroom(area,property):
-        sql = "select rid, area, property from xs_chatroom where area= {} and property ={} limit 1".format(area,
-                                                                                                         property)
+    def select_xs_chatroom(property, bigarea_id):
+        sql = "select rid,property,,a.uid from xs_chatroom a left join xs_user_bigarea b on a.uid = b.uid where  a.property = {}  and b.bigarea_id = {} limit 1".format(property, bigarea_id)
         try:
             conMysql.cur.execute(sql)
             res = conMysql.cur.fetchone()
