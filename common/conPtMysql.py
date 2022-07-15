@@ -215,7 +215,7 @@ class conMysql:
         except Exception as error:
             print(error)
 
-    # 查询房间信息
+    # 查询大区房间信息
     @staticmethod
     def select_user_chatroom(property, bigarea_id=1):
         sql = "select rid from xs_chatroom a left join xs_user_bigarea b on a.uid = b.uid where a.property = '{}' and b.bigarea_id = {} limit 1".format(property, bigarea_id)
