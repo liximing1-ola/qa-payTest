@@ -79,6 +79,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, 700)
         conMysql.updateMoneySql(config.pt_testUid)
+        print(conMysql.select_user_chatroom('fleet'))
         data = encodePtData(payType='package', rid=conMysql.select_user_chatroom('fleet'))
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
