@@ -28,7 +28,7 @@ class Session:
                 login_url = config.bb_qqLogin_url + '?' + params + '&package=com.imbb.banban.android'  # 7.22修改，请求接口加包名限制
                 body = Yaml.read_yaml('Basic.yml', 'data_dev_qq')
                 session = requests.session()
-                res = session.post(login_url, data=body, headers=headers)
+                res = session.post(login_url, data=body, headers=headers, verify=False)
                 res.raise_for_status()
                 res = res.json()
                 if not method.isExtend(res, 'token') or res['success'] != 1:
@@ -45,7 +45,7 @@ class Session:
                 login_url = config.bb_qqLogin_url + '?' + params + '&package=com.havefun.android'
                 body = Yaml.read_yaml('', '')
                 session = requests.session()
-                res = session.post(login_url, data=body, headers=headers)
+                res = session.post(login_url, data=body, headers=headers, verify=False)
                 res.raise_for_status()
                 res = res.json()
                 if not method.isExtend(res, 'token') or res['success'] != 1:
@@ -62,7 +62,7 @@ class Session:
                 login_url = config.bb_qqLogin_url + '?' + params + '&package=com.who.android'
                 body = Yaml.read_yaml('Basic.yml', 'data_games_qq')
                 session = requests.session()
-                res = session.post(login_url, data=body, headers=headers)
+                res = session.post(login_url, data=body, headers=headers, verify=False)
                 res.raise_for_status()
                 res = res.json()
                 if not method.isExtend(res, 'token') or res['success'] != 1:
@@ -77,7 +77,7 @@ class Session:
                 headers = Yaml.read_yaml('Basic_pt.yml', 'header_pt')
                 body = Yaml.read_yaml('Basic_pt.yml', 'data_pt_mobile')
                 session = requests.session()
-                res = session.post(config.pt_mobile_login_url, data=body, headers=headers)
+                res = session.post(config.pt_mobile_login_url, data=body, headers=headers, verify=False)
                 res.raise_for_status()
                 res = res.json()
                 if not method.isExtend(res, 'token') or res['success'] != 1:
