@@ -6,6 +6,8 @@ import requests
 from common.Config import config
 from common.params_Yaml import Yaml
 from common import Logs, method
+import urllib3
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
 import os
 class Session:
     def __init__(self):
@@ -18,6 +20,8 @@ class Session:
         :param env: 环境
         :return: 登陆token
         """
+        urllib3.disable_warnings()
+        requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
         if env == "release":
             pass
         elif env == "dev":  # 伴伴
