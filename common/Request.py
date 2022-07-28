@@ -18,8 +18,7 @@ def post_request_session(url, data, tokenName='dev'):
     urllib3.disable_warnings()
     requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
     header = {
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko)\
-                            Chrome/67.0.3396.99 Safari/537.36",
+        "User-Agent": "Mozilla/5.0 (Linux; Android 11; HD1900 Build/RKQ1.201022.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/87.0.4280.141 Mobile Safari/537.36 / Xs android V1.1.0.0 / Js V1.0.0.0 / Login V1658980709",
         "Content-Type": "application/x-www-form-urlencoded",
         'Connection': 'close',
         "user-token": Session.checkUserToken(operate='read', app_name=tokenName)
