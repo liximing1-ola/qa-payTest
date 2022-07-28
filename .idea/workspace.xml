@@ -28,10 +28,7 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="44793b3e-09e5-4af0-a369-84e9b064bd19" name="Default Changelist" comment="‘提交修改’">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/Session.py" beforeDir="false" afterPath="$PROJECT_DIR$/common/Session.py" afterDir="false" />
-    </list>
+    <list default="true" id="44793b3e-09e5-4af0-a369-84e9b064bd19" name="Default Changelist" comment="‘提交修改’" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -206,27 +203,6 @@
       <option name="presentableId" value="Default" />
       <updated>1615801946332</updated>
       <workItem from="1637288736860" duration="20000" />
-    </task>
-    <task id="LOCAL-01099" summary="‘提交修改’">
-      <created>1656061530797</created>
-      <option name="number" value="01099" />
-      <option name="presentableId" value="LOCAL-01099" />
-      <option name="project" value="LOCAL" />
-      <updated>1656061530797</updated>
-    </task>
-    <task id="LOCAL-01100" summary="‘提交修改’">
-      <created>1656061587747</created>
-      <option name="number" value="01100" />
-      <option name="presentableId" value="LOCAL-01100" />
-      <option name="project" value="LOCAL" />
-      <updated>1656061587747</updated>
-    </task>
-    <task id="LOCAL-01101" summary="‘提交修改’">
-      <created>1656061944320</created>
-      <option name="number" value="01101" />
-      <option name="presentableId" value="LOCAL-01101" />
-      <option name="project" value="LOCAL" />
-      <updated>1656061944320</updated>
     </task>
     <task id="LOCAL-01102" summary="‘提交修改’">
       <created>1656062246916</created>
@@ -550,7 +526,28 @@
       <option name="project" value="LOCAL" />
       <updated>1658986443436</updated>
     </task>
-    <option name="localTasksCounter" value="1148" />
+    <task id="LOCAL-01148" summary="‘提交修改’">
+      <created>1658986948859</created>
+      <option name="number" value="01148" />
+      <option name="presentableId" value="LOCAL-01148" />
+      <option name="project" value="LOCAL" />
+      <updated>1658986948859</updated>
+    </task>
+    <task id="LOCAL-01149" summary="‘提交修改’">
+      <created>1658986971479</created>
+      <option name="number" value="01149" />
+      <option name="presentableId" value="LOCAL-01149" />
+      <option name="project" value="LOCAL" />
+      <updated>1658986971479</updated>
+    </task>
+    <task id="LOCAL-01150" summary="‘提交修改’">
+      <created>1658987092118</created>
+      <option name="number" value="01150" />
+      <option name="presentableId" value="LOCAL-01150" />
+      <option name="project" value="LOCAL" />
+      <updated>1658987092118</updated>
+    </task>
+    <option name="localTasksCounter" value="1151" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -655,10 +652,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="813" y="216" key="VCS.ChangeListViewerDialog/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1655187391925" />
-    <state x="361" y="144" key="Vcs.Push.Dialog.v2" timestamp="1658986444483">
+    <state x="361" y="144" key="Vcs.Push.Dialog.v2" timestamp="1658987094944">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="144" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1658986444483" />
+    <state x="361" y="144" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1658987094944" />
     <state x="451" y="181" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1657507658133" />
     <state x="2281" y="26" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1656675260712" />
     <state x="573" y="325" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1658986078074">
