@@ -29,7 +29,7 @@ class updateCode:
         g.pull()
         repo = Repo(gtr_path)
         Consts.startTime = time.time()
-        Session().getSession(env)  # 更新userToken
+        Session.getSession(env)  # 更新userToken
         commit_log = repo.git.log('--pretty={"commit":"%h","author":"%an","summary":"%s","date":"%cd"}', max_count=3,
                                   date='format:%Y-%m-%d %H:%M:%S')
         log_list = commit_log.split("\n")
