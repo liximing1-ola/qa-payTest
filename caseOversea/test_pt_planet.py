@@ -10,7 +10,7 @@ from common.runFailed import Retry
 @Retry
 class TestPayCreate(unittest.TestCase):
 
-    def test_01_journey_planet(self, des='扣除钻石玩星球之旅玩法'):
+    def test_01_journey_planet(self, des='星球之旅扣钻石获取礼物玩法'):
         """
         用例描述：
         验证钻石扣除正常，调用星球之旅正常，背包正常得到对应礼物
