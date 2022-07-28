@@ -94,8 +94,27 @@ class conMysql:
                 print('delete fail', error)
             finally:
                 conMysql.con.commit()
+        elif tableName == 'user_journey_planet_draw_record':  # 清除xs_user_journey_planet_draw_record用户数据
+            sql = "delete from xs_user_journey_planet_draw_record where uid={}".format(uid)
+            try:
+                conMysql.cur.execute(sql)
+            except Exception as error:
+                conMysql.con.rollback()
+                print('delete fail', error)
+            finally:
+                conMysql.con.commit()
+        elif tableName == 'user_journey_planet_record':  # 清除xs_user_journey_planet_record用户数据
+            sql = "delete from xs_user_journey_planet_record where uid={}".format(uid)
+            try:
+                conMysql.cur.execute(sql)
+            except Exception as error:
+                conMysql.con.rollback()
+                print('delete fail', error)
+            finally:
+                conMysql.con.commit()
         else:
             print('{} Error'.format(tableName))
+
 
     # 更新用户数据
     @staticmethod
