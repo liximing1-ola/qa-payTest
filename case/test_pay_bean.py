@@ -33,6 +33,7 @@ class TestPayCreate(unittest.TestCase):
         data = basicData.encodeData(payType='package', uid=config.rewardUid, giftId=config.giftId['362'],
                                     giftType='bean')
         res = post_request_session(config.pay_url, data)
+        print(res)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 0, reason(des, res))
         assert_body(res['body'], 'msg', '金豆不足', reason(des, res))
