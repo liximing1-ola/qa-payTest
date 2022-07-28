@@ -20,13 +20,14 @@ class Session:
         :param env: 环境
         :return: 登陆token
         """
-        # urllib3.disable_warnings()
-        # requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+        urllib3.disable_warnings()
+        requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
         if env == "release":
             pass
         elif env == "dev":  # 伴伴
             # noinspection PyBroadException
             try:
+                print(1)
                 headers = Yaml.read_yaml('Basic.yml', 'header_dev')
                 params = Yaml.read_yaml('Basic.yml', 'params_dev_qq')
                 login_url = config.bb_qqLogin_url + '?' + params + '&package=com.imbb.banban.android'  # 7.22修改，请求接口加包名限制
