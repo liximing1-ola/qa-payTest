@@ -27,7 +27,6 @@ class Session:
         elif env == "dev":  # 伴伴
             # noinspection PyBroadException
             try:
-                print(1)
                 headers = Yaml.read_yaml('Basic.yml', 'header_dev')
                 params = Yaml.read_yaml('Basic.yml', 'params_dev_qq')
                 login_url = config.bb_qqLogin_url + '?' + params + '&package=com.imbb.banban.android'  # 7.22修改，请求接口加包名限制
@@ -36,11 +35,10 @@ class Session:
                 res = session.post(login_url, data=body, headers=headers, verify=False)
                 res.raise_for_status()
                 res = res.json()
-                print(res)
                 if not method.isExtend(res, 'token') or res['success'] != 1:
-                    return res['msg']
+                    print(res)
+                    return res
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
-                print(tokenDict)
                 Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
                 return tokenDict
             except Exception as error:
