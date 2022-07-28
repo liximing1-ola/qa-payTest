@@ -38,6 +38,7 @@ class Session:
                 if not method.isExtend(res, 'token') or res['success'] != 1:
                     return res['msg']
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
+                print(tokenDict)
                 Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
                 return tokenDict
             except Exception as error:
