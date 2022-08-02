@@ -575,7 +575,7 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
             "platform": "available",
             "type": "journey-planet-draw",
             "money": 1500,
-            "params": {"jp_id": 2, "floor": 1, "price": 1500, "rid": rid, "useCoin": -1}
+            "params": {"jp_id": 2, "floor": 1, "price": 1500, "rid": config.pt_room['vip_rid'], "useCoin": -1}
         }
         d = urllib.parse.urlencode ( data )
         data = d.replace ( '+', '' ).replace ( '%27', '%22' )
