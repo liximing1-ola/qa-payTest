@@ -1,9 +1,11 @@
 import urllib.parse
 from common.Config import config
 
+
 def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], uid=config.star_role['agent_star_uid'],
                giftId=config.giftId['7'], giftType='normal', cid=5, boxType='copper', num=1, package_cid=0, ctype='',
-               duction_money=0, star=0, defend_id=244, uids=('{}'.format(config.rewardUid), '{}'.format(config.rewardUid2))):
+               duction_money=0, star=0, defend_id=244,
+               uids=('{}'.format ( config.rewardUid ), '{}'.format ( config.rewardUid2 ))):
     if payType == 'package':
         data = {
             "platform": "available",
@@ -11,7 +13,7 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], 
             "money": money,
             "params":
                 {"rid": rid,
-                 "uids": '{}'.format(uid),
+                 "uids": '{}'.format ( uid ),
                  "positions": "1",
                  "position": -1,
                  "giftId": giftId,
@@ -22,7 +24,7 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], 
                  "duction_money": duction_money,
                  "version": 2,
                  "num": num,
-                 "gift_type": "{}".format(giftType),
+                 "gift_type": "{}".format ( giftType ),
                  "useCoin": -1,
                  "star": star,
                  "show_pac_man_guide": 1,
@@ -30,24 +32,24 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], 
                  "all_mic": 0,
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
+        d = urllib.parse.urlencode ( data )
+        data = d.replace ( '+', '' ).replace ( '%27', '%22' )
         return data
     elif payType == 'package-more':
         p = []
-        uid = ','.join(uids)
-        num_more = len(uids)
-        for i in range(len(uids)):
-            p.append(str(i+1))
-        position = ','.join(p)
+        uid = ','.join ( uids )
+        num_more = len ( uids )
+        for i in range ( len ( uids ) ):
+            p.append ( str ( i + 1 ) )
+        position = ','.join ( p )
         data = {
             "platform": "available",
             "type": "package",
             "money": money * num * num_more,
             "params":
                 {"rid": rid,
-                 "uids": '{}'.format(uid),
-                 "positions": "{}".format(position),
+                 "uids": '{}'.format ( uid ),
+                 "positions": "{}".format ( position ),
                  "position": -1,
                  "giftId": giftId,
                  "giftNum": num,
@@ -57,7 +59,7 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], 
                  "duction_money": 0,
                  "version": 2,
                  "num": num_more * num,
-                 "gift_type": "{}".format(giftType),
+                 "gift_type": "{}".format ( giftType ),
                  "useCoin": -1,
                  "star": star,
                  "show_pac_man_guide": 1,
@@ -65,8 +67,8 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], 
                  "all_mic": 0,
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
+        d = urllib.parse.urlencode ( data )
+        data = d.replace ( '+', '' ).replace ( '%27', '%22' )
         return data
     elif payType == 'package-exchange':
         data = {
@@ -75,7 +77,7 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], 
             "money": money,
             "params":
                 {"rid": rid,
-                 "uids": '{}'.format(uid),
+                 "uids": '{}'.format ( uid ),
                  "positions": "1",
                  "position": -1,
                  "giftId": giftId,
@@ -86,7 +88,7 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], 
                  "duction_money": 0,
                  "version": 2,
                  "num": num,
-                 "gift_type": "{}".format(giftType),
+                 "gift_type": "{}".format ( giftType ),
                  "useCoin": -1,
                  "star": star,
                  "show_pac_man_guide": 1,
@@ -95,8 +97,8 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], 
                  "exchange": 1
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
+        d = urllib.parse.urlencode ( data )
+        data = d.replace ( '+', '' ).replace ( '%27', '%22' )
         return data
     elif payType == 'package-knightDefend':
         data = {
@@ -108,12 +110,12 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], 
                  "knight_level": 2,
                  "duration_level": 2,
                  "rid": rid,
-                 "uids": "{}".format(uid),
+                 "uids": "{}".format ( uid ),
                  "useCoin": -1,
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
+        d = urllib.parse.urlencode ( data )
+        data = d.replace ( '+', '' ).replace ( '%27', '%22' )
         return data
     elif payType == 'package-radioDefend':
         data = {
@@ -123,7 +125,7 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], 
             "params":
                 {"price": money,
                  "rid": rid,  # business-radio
-                 "uids": '{}'.format(uid),
+                 "uids": '{}'.format ( uid ),
                  "positions": "0",
                  "defend": 3,
                  "cid": package_cid,
@@ -131,8 +133,8 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], 
                  "useCoin": -1,
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
+        d = urllib.parse.urlencode ( data )
+        data = d.replace ( '+', '' ).replace ( '%27', '%22' )
         return data
     elif payType == 'chat-gift':
         data = {
@@ -141,7 +143,7 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], 
             "money": money,
             "params":
                 {"notify_group_id": 0,
-                 "to": '{}'.format(uid),
+                 "to": '{}'.format ( uid ),
                  "giftId": giftId,
                  "giftNum": num,
                  "cid": 0,
@@ -156,19 +158,19 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], 
                  "useCoin": -1
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
+        d = urllib.parse.urlencode ( data )
+        data = d.replace ( '+', '' ).replace ( '%27', '%22' )
         return data
     elif payType == 'shop-buy-box':
         data = {
             "platform": 'available',
             "type": 'shop-buy',
-            "money": money*num,
+            "money": money * num,
             "params":
                 {"num": num,
                  "cid": cid,
                  "price": money,
-                 "type": "{}".format(boxType),
+                 "type": "{}".format ( boxType ),
                  "opennum": num,
                  "coupon_id": 0,
                  "duction_money": 0,
@@ -178,14 +180,14 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], 
                  "useCoin": -1
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
+        d = urllib.parse.urlencode ( data )
+        data = d.replace ( '+', '' ).replace ( '%27', '%22' )
         return data
     elif payType == 'shop-buy':
         data = {
             "platform": 'available',
             "type": 'shop-buy',
-            "money": money*num,
+            "money": money * num,
             "params":
                 {"num": num,
                  "cid": cid,
@@ -197,8 +199,8 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], 
                  "money_type": "money",
                  "useCoin": -1}
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
+        d = urllib.parse.urlencode ( data )
+        data = d.replace ( '+', '' ).replace ( '%27', '%22' )
         return data
     elif payType == 'defend':
         data = {
@@ -214,8 +216,8 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], 
                  "useCoin": -1
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
+        d = urllib.parse.urlencode ( data )
+        data = d.replace ( '+', '' ).replace ( '%27', '%22' )
         return data
     elif payType == 'defend-upgrade':
         data = {
@@ -223,12 +225,12 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], 
             "type": 'defend-upgrade',
             "money": money,
             "params":
-                {"id": "{}".format(defend_id),  # xs_relation_defend  id
+                {"id": "{}".format ( defend_id ),  # xs_relation_defend  id
                  "useCoin": -1
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
+        d = urllib.parse.urlencode ( data )
+        data = d.replace ( '+', '' ).replace ( '%27', '%22' )
         return data
     elif payType == 'defend-break':
         data = {
@@ -236,12 +238,12 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], 
             "type": 'defend-break',
             "money": money,
             "params":
-                {"id": "{}".format(defend_id),  # xs_relation_defend  id
+                {"id": "{}".format ( defend_id ),  # xs_relation_defend  id
                  "useCoin": -1
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
+        d = urllib.parse.urlencode ( data )
+        data = d.replace ( '+', '' ).replace ( '%27', '%22' )
         return data
     elif payType == 'title':
         data = {
@@ -258,8 +260,8 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], 
                  "useCoin": -1,
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
+        d = urllib.parse.urlencode ( data )
+        data = d.replace ( '+', '' ).replace ( '%27', '%22' )
         return data
     elif payType == 'exchange_gold':
         data = {
@@ -270,8 +272,8 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], 
                 "type": "exchange_gold"
             }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
+        d = urllib.parse.urlencode ( data )
+        data = d.replace ( '+', '' ).replace ( '%27', '%22' )
         return data
     elif payType == 'unity-game-buy':
         data = {
@@ -289,8 +291,8 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], 
                 "rid": 105707946
             }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
+        d = urllib.parse.urlencode ( data )
+        data = d.replace ( '+', '' ).replace ( '%27', '%22' )
         return data
     elif payType == 'pub-drink-buy':
         data = {
@@ -307,8 +309,8 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], 
                 "exchange": 1,
             }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
+        d = urllib.parse.urlencode ( data )
+        data = d.replace ( '+', '' ).replace ( '%27', '%22' )
         return data
     elif payType == 'deco-present':
         data = {
@@ -327,15 +329,16 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], 
                 "useCoin": -1
             }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
+        d = urllib.parse.urlencode ( data )
+        data = d.replace ( '+', '' ).replace ( '%27', '%22' )
         return data
     else:
-        raise Exception('payType is error')
+        raise Exception ( 'payType is error' )
+
 
 def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'], uid=config.pt_testUid, giftId=10,
                  giftType='normal', cid=5, boxType='copper', num=1, package_cid=0, ctype='', duction_money=0, star=0,
-                 uids=('{}'.format(config.pt_testUid), '{}'.format(config.pt_brokerUid))):
+                 uids=('{}'.format ( config.pt_testUid ), '{}'.format ( config.pt_brokerUid ))):
     if payType == 'package':
         data = {
             "platform": "available",
@@ -343,7 +346,7 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
             "money": money,
             "params":
                 {"rid": rid,
-                 "uids": '{}'.format(uid),
+                 "uids": '{}'.format ( uid ),
                  "positions": "1",
                  "position": -1,
                  "giftId": giftId,
@@ -354,31 +357,31 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
                  "duction_money": duction_money,
                  "version": 2,
                  "num": num,
-                 "gift_type": "{}".format(giftType),
+                 "gift_type": "{}".format ( giftType ),
                  "useCoin": -1,
                  "star": star,
                  "refer": "",
                  "all_mic": 0,
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
+        d = urllib.parse.urlencode ( data )
+        data = d.replace ( '+', '' ).replace ( '%27', '%22' )
         return data
     elif payType == 'package-more':
         p = []
-        uid = ','.join(uids)
-        num_more = len(uids)
-        for i in range(len(uids)):
-            p.append(str(i+1))
-        position = ','.join(p)
+        uid = ','.join ( uids )
+        num_more = len ( uids )
+        for i in range ( len ( uids ) ):
+            p.append ( str ( i + 1 ) )
+        position = ','.join ( p )
         data = {
             "platform": "available",
             "type": "package",
             "money": money * num * num_more,
             "params":
                 {"rid": rid,
-                 "uids": '{}'.format(uid),
-                 "positions": "{}".format(position),
+                 "uids": '{}'.format ( uid ),
+                 "positions": "{}".format ( position ),
                  "position": -1,
                  "giftId": giftId,
                  "giftNum": num,
@@ -388,7 +391,7 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
                  "duction_money": 0,
                  "version": 2,
                  "num": num_more * num,
-                 "gift_type": "{}".format(giftType),
+                 "gift_type": "{}".format ( giftType ),
                  "useCoin": -1,
                  "star": star,
                  "show_pac_man_guide": 1,
@@ -396,8 +399,8 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
                  "all_mic": 0,
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
+        d = urllib.parse.urlencode ( data )
+        data = d.replace ( '+', '' ).replace ( '%27', '%22' )
         return data
     elif payType == 'package-exchange':
         data = {
@@ -406,7 +409,7 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
             "money": money,
             "params":
                 {"rid": rid,
-                 "uids": '{}'.format(uid),
+                 "uids": '{}'.format ( uid ),
                  "positions": "1",
                  "position": -1,
                  "giftId": giftId,
@@ -417,7 +420,7 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
                  "duction_money": 0,
                  "version": 2,
                  "num": num,
-                 "gift_type": "{}".format(giftType),
+                 "gift_type": "{}".format ( giftType ),
                  "useCoin": -1,
                  "star": star,
                  "show_pac_man_guide": 1,
@@ -426,8 +429,8 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
                  "exchange": 1
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
+        d = urllib.parse.urlencode ( data )
+        data = d.replace ( '+', '' ).replace ( '%27', '%22' )
         return data
     elif payType == 'chat-gift':
         data = {
@@ -435,7 +438,7 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
             "type": "chat-gift",
             "money": money,
             "params":
-                {"to": '{}'.format(uid),
+                {"to": '{}'.format ( uid ),
                  "giftId": giftId,
                  "giftNum": num,
                  "cid": 0,
@@ -450,14 +453,14 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
                  "useCoin": -1
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
+        d = urllib.parse.urlencode ( data )
+        data = d.replace ( '+', '' ).replace ( '%27', '%22' )
         return data
     elif payType == 'shop-buy':
         data = {
             "platform": 'available',
             "type": 'shop-buy',
-            "money": money*num,
+            "money": money * num,
             "params":
                 {"num": num,
                  "cid": cid,
@@ -468,19 +471,19 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
                  "gift_scene": "shop",
                  "useCoin": -1}
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
+        d = urllib.parse.urlencode ( data )
+        data = d.replace ( '+', '' ).replace ( '%27', '%22' )
         return data
     elif payType == 'shop-buy-box':
         data = {
             "platform": 'available',
             "type": 'shop-buy',
-            "money": money*num,
+            "money": money * num,
             "params":
                 {"num": num,
                  "cid": cid,
                  "price": money,
-                 "type": "{}".format(boxType),
+                 "type": "{}".format ( boxType ),
                  "opennum": num,
                  "coupon_id": 0,
                  "duction_money": 0,
@@ -490,14 +493,14 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
                  "useCoin": -1
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
+        d = urllib.parse.urlencode ( data )
+        data = d.replace ( '+', '' ).replace ( '%27', '%22' )
         return data
     elif payType == 'coin-shop-buy':
         data = {
             "platform": 'available',
             "type": 'coin-shop-buy',
-            "money": money*num,
+            "money": money * num,
             "params":
                 {"num": num,
                  "cid": cid,
@@ -507,8 +510,8 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
                  "version": 2,
                  "useCoin": -1}
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
+        d = urllib.parse.urlencode ( data )
+        data = d.replace ( '+', '' ).replace ( '%27', '%22' )
         return data
     elif payType == 'exchange_gold':
         data = {
@@ -519,8 +522,8 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
                 "type": "exchange_gold"
             }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
+        d = urllib.parse.urlencode ( data )
+        data = d.replace ( '+', '' ).replace ( '%27', '%22' )
         return data
     elif payType == 'defend':
         data = {
@@ -536,8 +539,8 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
                  "useCoin": -1
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
+        d = urllib.parse.urlencode ( data )
+        data = d.replace ( '+', '' ).replace ( '%27', '%22' )
         return data
     elif payType == 'shop-buy-crazyspin':
         data = {
@@ -555,8 +558,8 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
                  "rid": rid,
                  "useCoin": -1}
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
+        d = urllib.parse.urlencode ( data )
+        data = d.replace ( '+', '' ).replace ( '%27', '%22' )
         return data
     elif payType == 'play-crazyspin':
         data = {
@@ -564,8 +567,18 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
             "draw_type": 10,
             "turntable_type": 1,
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
+        d = urllib.parse.urlencode ( data )
+        data = d.replace ( '+', '' ).replace ( '%27', '%22' )
+        return data
+    elif payType == 'journey_planet_draw':
+        data = {
+            "platform": "available",
+            "type": "journey-planet-draw",
+            "money": 1500,
+            "params": {"jp_id": 1, "floor": 1, "price": 1500, "rid": rid, "useCoin": -1}
+        }
+        d = urllib.parse.urlencode ( data )
+        data = d.replace ( '+', '' ).replace ( '%27', '%22' )
         return data
     else:
-        raise Exception('payType is error')
+        raise Exception ( 'payType is error' )
