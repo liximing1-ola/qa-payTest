@@ -7,7 +7,7 @@ from common.Assert import assert_code, assert_body, assert_equal
 from common.basicData import encodePtData
 from common.Consts import result, case_list
 from common.runFailed import Retry
-@Retry
+@unittest.skip('修复')
 class TestPayCreate(unittest.TestCase):
 
     def test_01_journey_planet(self, des='星球之旅扣钻石获取礼物玩法'):
