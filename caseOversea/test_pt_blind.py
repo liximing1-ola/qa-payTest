@@ -7,8 +7,22 @@ from common.Assert import assert_code, assert_body, assert_len, assert_equal
 from common.basicData import encodePtData
 from common.Consts import result, case_list
 from common.runFailed import Retry
+from common.conRedis import conRedis
+import time
 @Retry
 class TestPayCreate(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()), bigarea_id=6)
+        conMysql.updateUserRidInfoSql('union', config.pt_room['th_union'], area='th')
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()))
+        time.sleep(0.3)
+        conRedis.delKey('User.Big.Area.Id', config.pt_user.values())
+        conRedis.delKey('User.Big.Area', config.pt_user.values())
 
     def test_01_giveBlindPayChange(self, des='房间送盲盒场景'):
         """
@@ -19,16 +33,16 @@ class TestPayCreate(unittest.TestCase):
         2.giveBlind
         3.校验接口状态和返回值数据
         4.检查打赏者账户余额，预期值为：400 - 300 = 100
-        5.检查收盲盒用户账户余额，预期值为：大于50
+        5.检查收盲盒用户账户余额，预期值为：大于30
         """
         conMysql.updateMoneySql(config.pt_payUid, money=100, money_cash=100, money_cash_b=100, money_b=100)
         conMysql.updateMoneySql(config.pt_testUid)
-        data = encodePtData(payType='package', money=300, giftId=config.giftId['773'])
+        data = encodePtData(payType='package', money=300, rid=config.pt_room['th_union'], giftId=config.giftId['773'])
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 100)
-        assert_len(conMysql.selectUserInfoSql('sum_money', config.pt_testUid), 50)
+        assert_len(conMysql.selectUserInfoSql('sum_money', config.pt_testUid), 30)
         assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash_b'),
                      conMysql.selectUserInfoSql(accountType='pay_change', uid=config.pt_testUid))
         case_list[des] = result
@@ -42,16 +56,16 @@ class TestPayCreate(unittest.TestCase):
         2.giveBox
         3.校验接口状态和返回值数据
         4.检查账户余额，预期值为：10000 - 1200*2*2 = 5200
-        5.检查收盲盒用户账户余额，预期值为：大于500
+        5.检查收盲盒用户账户余额，预期值为：大于60
         """
         conMysql.updateMoneySql(config.pt_payUid, money=10000)
         conMysql.updateMoneySql(config.pt_testUid)
-        data = encodePtData(payType='package-more', num=2, money=1200, giftId=config.giftId['774'])
+        data = encodePtData(payType='package-more', num=2, money=1200, rid=config.pt_room['th_union'], giftId=config.giftId['774'])
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 5200)
-        assert_len(conMysql.selectUserInfoSql('sum_money', config.pt_testUid), 500)
+        assert_len(conMysql.selectUserInfoSql('sum_money', config.pt_testUid), 60)
         assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash_b'),
                      conMysql.selectUserInfoSql(accountType='pay_change', uid=config.pt_testUid))
         case_list[des] = result
