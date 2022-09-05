@@ -1,7 +1,7 @@
 import urllib.parse
 from common.Config import config
 
-
+# 国内消费
 def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], uid=config.star_role['agent_star_uid'],
                giftId=config.giftId['7'], giftType='normal', cid=5, boxType='copper', num=1, package_cid=0, ctype='',
                duction_money=0, star=0, defend_id=244,
@@ -336,6 +336,7 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], 
         raise Exception('payType is error')
 
 
+# 海外消费
 def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'], uid=config.pt_testUid, giftId=10,
                  giftType='normal', cid=5, boxType='copper', num=1, package_cid=0, ctype='', duction_money=0, star=0,
                  uids=('{}'.format(config.pt_testUid), '{}'.format(config.pt_brokerUid))):

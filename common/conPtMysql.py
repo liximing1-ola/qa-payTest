@@ -115,7 +115,6 @@ class conMysql:
         else:
             print('{} Error'.format(tableName))
 
-
     # 更新用户数据
     @staticmethod
     def updateUserRidInfoSql(property_rid, rid, area='en'):

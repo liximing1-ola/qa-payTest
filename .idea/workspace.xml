@@ -30,7 +30,8 @@
   <component name="ChangeListManager">
     <list default="true" id="44793b3e-09e5-4af0-a369-84e9b064bd19" name="Default Changelist" comment="‘提交修改’">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/others/bot_tea.py" beforeDir="false" afterPath="$PROJECT_DIR$/others/bot_tea.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/basicData.py" beforeDir="false" afterPath="$PROJECT_DIR$/common/basicData.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/conPtMysql.py" beforeDir="false" afterPath="$PROJECT_DIR$/common/conPtMysql.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,7 +66,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../perfCode" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
@@ -82,7 +83,7 @@
       <recent name="E:\payTest\caseGames" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.login">
+  <component name="RunManager" selected="Python.domain_ping">
     <configuration name="Config" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="payTest" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -104,7 +105,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="GitRepository" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="domain_ping" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="payTest" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -112,11 +113,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/common" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/domain_watch" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/common/GitRepository.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/domain_watch/domain_ping.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -125,7 +126,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="bot_tea" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="domain_ssl_check" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="payTest" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -133,11 +134,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/others" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/domain_watch" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/others/bot_tea.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/domain_watch/domain_ssl_check.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -146,7 +147,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="getHoliday" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="domian_vaild" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="payTest" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -154,11 +155,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/others" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/domain_watch" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/others/getHoliday.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/domain_watch/domian_vaild.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -190,11 +191,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.domain_ping" />
+        <item itemvalue="Python.domian_vaild" />
+        <item itemvalue="Python.domain_ssl_check" />
         <item itemvalue="Python.login" />
         <item itemvalue="Python.Config" />
-        <item itemvalue="Python.GitRepository" />
-        <item itemvalue="Python.bot_tea" />
-        <item itemvalue="Python.getHoliday" />
       </list>
     </recent_temporary>
   </component>
@@ -207,13 +208,6 @@
       <option name="presentableId" value="Default" />
       <updated>1615801946332</updated>
       <workItem from="1637288736860" duration="20000" />
-    </task>
-    <task id="LOCAL-01114" summary="‘提交修改’">
-      <created>1656470131603</created>
-      <option name="number" value="01114" />
-      <option name="presentableId" value="LOCAL-01114" />
-      <option name="project" value="LOCAL" />
-      <updated>1656470131603</updated>
     </task>
     <task id="LOCAL-01115" summary="‘提交修改’">
       <created>1656470381651</created>
@@ -551,7 +545,14 @@
       <option name="project" value="LOCAL" />
       <updated>1660128837286</updated>
     </task>
-    <option name="localTasksCounter" value="1163" />
+    <task id="LOCAL-01163" summary="‘提交修改’">
+      <created>1661246577359</created>
+      <option name="number" value="01163" />
+      <option name="presentableId" value="LOCAL-01163" />
+      <option name="project" value="LOCAL" />
+      <updated>1661246577360</updated>
+    </task>
+    <option name="localTasksCounter" value="1164" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -618,30 +619,30 @@
     <state x="78" y="48" width="1228" height="687" key="DiffContextDialog/0.0.1536.824@0.0.1536.824" timestamp="1660117767917" />
     <state x="249" y="84" width="1536" height="860" key="DiffContextDialog/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1657018853392" />
     <state x="1920" y="-119" width="1536" height="860" key="DiffContextDialog/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1656471049992" />
-    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1660813349616">
+    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1662087607889">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1660813349616" />
+    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1662087607889" />
     <state x="686" y="211" key="FileChooserDialogImpl/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1657010498531" />
-    <state width="1899" height="338" key="GridCell.Tab.0.bottom" timestamp="1657685994850">
+    <state width="1515" height="253" key="GridCell.Tab.0.bottom" timestamp="1662371803345">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1899" height="338" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1657685994850" />
+    <state width="1515" height="253" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1662371803345" />
     <state width="1899" height="338" key="GridCell.Tab.0.bottom/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1657272388455" />
-    <state width="1899" height="338" key="GridCell.Tab.0.center" timestamp="1657685994850">
+    <state width="1515" height="253" key="GridCell.Tab.0.center" timestamp="1662371803345">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1899" height="338" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1657685994850" />
+    <state width="1515" height="253" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1662371803345" />
     <state width="1899" height="338" key="GridCell.Tab.0.center/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1657272388455" />
-    <state width="1899" height="338" key="GridCell.Tab.0.left" timestamp="1657685994850">
+    <state width="1515" height="253" key="GridCell.Tab.0.left" timestamp="1662371803345">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1899" height="338" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1657685994850" />
+    <state width="1515" height="253" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1662371803345" />
     <state width="1899" height="338" key="GridCell.Tab.0.left/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1657272388455" />
-    <state width="1899" height="338" key="GridCell.Tab.0.right" timestamp="1657685994850">
+    <state width="1515" height="253" key="GridCell.Tab.0.right" timestamp="1662371803345">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1899" height="338" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1657685994850" />
+    <state width="1515" height="253" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1662371803345" />
     <state width="1899" height="338" key="GridCell.Tab.0.right/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1657272388455" />
     <state x="789" y="165" key="RollbackChangesDialog" timestamp="1655727276871">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -656,22 +657,22 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="813" y="216" key="VCS.ChangeListViewerDialog/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1655187391925" />
-    <state x="361" y="144" key="Vcs.Push.Dialog.v2" timestamp="1660128838758">
+    <state x="361" y="144" key="Vcs.Push.Dialog.v2" timestamp="1661246578668">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="144" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1660128838758" />
+    <state x="361" y="144" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1661246578668" />
     <state x="451" y="181" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1657507658133" />
     <state x="2281" y="26" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1656675260712" />
-    <state x="573" y="325" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1659598503557">
+    <state x="573" y="325" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1662371837278">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="573" y="325" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1659598503557" />
+    <state x="573" y="325" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1662371837278" />
     <state x="716" y="410" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1657507634334" />
     <state x="2493" y="209" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1656666484617" />
-    <state x="431" y="151" width="672" height="673" key="search.everywhere.popup" timestamp="1659434910239">
+    <state x="431" y="151" width="672" height="673" key="search.everywhere.popup" timestamp="1661949057634">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="431" y="151" width="672" height="673" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1659434910239" />
+    <state x="431" y="151" width="672" height="673" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1661949057634" />
     <state x="539" y="190" width="840" height="849" key="search.everywhere.popup/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1655720124748" />
   </component>
   <component name="XDebuggerManager">
