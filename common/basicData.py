@@ -1,10 +1,11 @@
 import urllib.parse
 from common.Config import config
 
-# 国内消费
-def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], uid=config.star_role['agent_star_uid'],
-               giftId=config.giftId['7'], giftType='normal', cid=5, boxType='copper', num=1, package_cid=0, ctype='',
-               duction_money=0, star=0, defend_id=244,
+# 国内消费场景
+def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'],
+               uid=config.star_role['agent_star_uid'], giftId=config.giftId['7'],
+               giftType='normal', cid=5, boxType='copper', num=1, package_cid=0,
+               ctype='', duction_money=0, star=0, defend_id=244,
                uids=('{}'.format(config.rewardUid), '{}'.format(config.rewardUid2))):
     if payType == 'package':
         data = {
@@ -336,9 +337,10 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'], 
         raise Exception('payType is error')
 
 
-# 海外消费
-def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'], uid=config.pt_testUid, giftId=10,
-                 giftType='normal', cid=5, boxType='copper', num=1, package_cid=0, ctype='', duction_money=0, star=0,
+# 海外消费场景
+def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'],
+                 uid=config.pt_testUid, giftId=10, giftType='normal', cid=5,
+                 boxType='copper', num=1, package_cid=0, ctype='', duction_money=0, star=0,
                  uids=('{}'.format(config.pt_testUid), '{}'.format(config.pt_brokerUid))):
     if payType == 'package':
         data = {
@@ -576,7 +578,11 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
             "platform": "available",
             "type": "journey-planet-draw",
             "money": 1500,
-            "params": {"jp_id": 1, "floor": 1, "price": 1500, "rid": rid, "useCoin": -1}
+            "params": {"jp_id": 1,
+                       "floor": 1,
+                       "price": 1500,
+                       "rid": rid,
+                       "useCoin": -1}
         }
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
