@@ -54,3 +54,26 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid, money_type='money_cash_b'), 620)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
+
+    @pytest.mark.run(order=3)
+    def test_03_singerRoomNormalBrokerUser_70(self, des='歌友房普通公会收70%工会魅力值'):
+        """
+        用例描述：
+        tdr：歌友房内，普通公会成员收70%公会魅力值
+        脚本步骤：
+        1.构造打赏者和被打赏者数据
+        2.网赚房间一对一打赏（打赏1000分）
+        3.校验接口状态和返回值数据
+        4.检查被打赏者余额，预期为：1000 * 0.7 = 700(公会魅力值)
+        """
+        conMysql.updateMoneySql(config.payUid, money=1000)
+        test_uid = config.star_role['super_star_uid']
+        conMysql.updateMoneySql(test_uid)
+        singer_rid = conMysql.selectUserInfoSql('union')
+        data = basicData.encodeData(payType='package', rid=singer_rid, uid=test_uid)
+        res = post_request_session(config.pay_url, data)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserInfoSql('single_money', test_uid, money_type='money_cash'), 700)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
+        case_list_b[des] = result
