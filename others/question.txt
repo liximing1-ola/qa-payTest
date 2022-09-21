@@ -33,3 +33,22 @@
 
 # git clone http://be1bef6103d75ed87a7bcc6fe8981ea1801eb6ed@http://114.55.7.123:3000/ee-test/payTest.git
 # git clone https://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@github.com/liximing-ola/qa-payTest.git
+# git clone http://fc81d1271c05206031bf42cd29cba1ffa0ef7a93@114.55.7.123:3000/ees-server-go/banban-consume
+
+# service cron start
+# */3 * * * * python3 /home/banban-1/qa-payTest/run_all_case.py
+# */10 1-9 * * * python3 /home/banban-1/payTest/run_crontab_case.py
+# 20 8 * * * python3 rmtree.py
+# 0 16 * * 1,2,3,4,5 python3 /home/banban-1/qa-payTest/others/bot_dinner.py
+# 30 11 * * 1,2,3,4,5 python3 /home/banban-1/qa-payTest/others/bot_dinner.py
+#
+# 28 15 * * 1,2,3,4,5 python3 /home/banban-1/qa-payTest/others/bot_tea.py
+
+# /etc/host
+#192.168.11.58 dev.iambanban.com
+#192.168.11.46 mysql
+#172.19.200.10 www.github.com github.com api.github.com github.githubassets.com
+#172.19.200.10 collector.github.com avatars.githubusercontent.com raw.githubusercontent.com
+
+# apt install python3
+# apt install python3-pip
