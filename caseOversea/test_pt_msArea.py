@@ -17,7 +17,7 @@ class TestPayCreate(unittest.TestCase):
     """
     @classmethod
     def setUpClass(cls) -> None:
-        conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()), bigarea_id=5)
+        conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()), bigarea_id=9)
         conMysql.updateUserRidInfoSql('vip', config.pt_room['vip_rid'], area='ms')
 
     @classmethod
@@ -48,7 +48,7 @@ class TestPayCreate(unittest.TestCase):
     def test_02_enAreaFleetRoomGiveBox(self, des='马来区家族房送箱子37分成场景'):
         """
         用例描述：
-        验证余额足够时，印尼区家族房1对1打赏箱子,打赏分成满足师徒收益(一代宗师)的基础上为3:7
+        验证余额足够时，马来区家族房1对1打赏箱子,打赏分成满足师徒收益(一代宗师)的基础上为3:7
         脚本步骤：
         1.构造数据（更新xs_user_money，xs_user_commodity，xs_user_box）
         2.giveBox
