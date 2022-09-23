@@ -9,7 +9,7 @@ class config:
                'pt': 'com.ola.chat', }
     codeInfo = {'bb_php_path': '/home/webroot/banban',
                 'bb_go_path': '/home/webroot/banban-go/banban-consume',
-                'pt_php_path': '/home/webroot/release_oversea/oversea-server',
+                'pt_php_path': '/home/webroot/release_oversea/banban',
                 'bb_git_branch': 'release-for-vpc',
                 'bb_go_git_branch': 'master',
                 'pt_git_branch': 'main'}
