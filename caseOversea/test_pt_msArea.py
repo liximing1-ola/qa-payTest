@@ -17,14 +17,14 @@ class TestPayCreate(unittest.TestCase):
     """
     @classmethod
     def setUpClass(cls) -> None:
-        conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()), bigarea_id=5)
+        conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()), bigarea_id=9)
         conMysql.updateUserRidInfoSql('vip', config.pt_room['vip_rid'], area='ms')
 
     @classmethod
     def tearDownClass(cls) -> None:
         conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()))
 
-    def test_01_idAreaFleetRoomPay(self, des='马来区个人房礼物打赏37分成场景'):
+    def test_01_msAreaFleetRoomPay(self, des='马来区家族房礼物打赏37分成场景'):
         """
         用例描述：
         验证余额足够时，马来区家族房1对1打赏礼物,打赏分成满足师徒收益(一代宗师)的基础上为3:7
@@ -37,7 +37,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, 700)
         conMysql.updateMoneySql(config.pt_testUid)
-        data = encodePtData(payType='package', rid=config.pt_room['vip_rid'])
+        data = encodePtData(payType='package', rid=config.pt_room['ms_fleet'])
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -45,10 +45,10 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash'), 180)
         case_list[des] = result
 
-    def test_02_enAreaFleetRoomGiveBox(self, des='马来区家族房送箱子37分成场景'):
+    def test_02_msAreaFleetRoomGiveBox(self, des='马来区个人房送箱子37分成场景'):
         """
         用例描述：
-        验证余额足够时，印尼区家族房1对1打赏箱子,打赏分成满足师徒收益(一代宗师)的基础上为3:7
+        验证余额足够时，马来区家族房1对1打赏箱子,打赏分成满足师徒收益(一代宗师)的基础上为3:7
         脚本步骤：
         1.构造数据（更新xs_user_money，xs_user_commodity，xs_user_box）
         2.giveBox

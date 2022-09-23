@@ -9,7 +9,7 @@ class config:
                'pt': 'com.ola.chat', }
     codeInfo = {'bb_php_path': '/home/webroot/banban',
                 'bb_go_path': '/home/webroot/banban-go/banban-consume',
-                'pt_php_path': '/home/webroot/release_oversea/oversea-server',
+                'pt_php_path': '/home/webroot/release_oversea/banban',
                 'bb_git_branch': 'release-for-vpc',
                 'bb_go_git_branch': 'master',
                 'pt_git_branch': 'main'}
@@ -89,7 +89,9 @@ class config:
     pt_room = {
         'business_joy': 105697423,  # 商业房
         'th_union': 105708881,  # 泰区联盟房
+        'en_fleet': 105717544,  # 英语大区家族房
         'id_fleet': 105711999,  # 印尼大区家族房
+        'ms_fleet': 105725790,  # 马来大区家族房
         'vip_rid': 105698376,  # 个人房
     }
 

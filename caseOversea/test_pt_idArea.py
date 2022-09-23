@@ -7,6 +7,8 @@ from common.Assert import assert_code, assert_body, assert_len, assert_equal
 from common.basicData import encodePtData
 from common.Consts import result, case_list
 from common.runFailed import Retry
+from common.conRedis import conRedis
+
 @Retry
 class TestPayCreate(unittest.TestCase):
 
@@ -20,6 +22,8 @@ class TestPayCreate(unittest.TestCase):
     def setUpClass(cls) -> None:
         conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()), bigarea_id=5)
         conMysql.updateUserRidInfoSql('fleet', config.pt_room['id_fleet'], area='id')
+        conRedis.delKey('User.Big.Area.Id', config.pt_user.values())
+        conRedis.delKey('User.Big.Area', config.pt_user.values())
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -46,7 +50,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash'), 180)
         case_list[des] = result
 
-    def test_02_enAreaFleetRoomGiveBox(self, des='印尼区家族房送箱子37分成场景'):
+    def test_02_idAreaFleetRoomGiveBox(self, des='印尼区家族房送箱子37分成场景'):
         """
         用例描述：
         验证余额足够时，印尼区家族房1对1打赏箱子,打赏分成满足师徒收益(一代宗师)的基础上为3:7
