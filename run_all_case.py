@@ -97,7 +97,7 @@ def main(appInfo):
                     case_list_2, test_result.testsRun,
                     len(test_result.failures) + len(test_result.errors),
                     use_time,
-                    config.codeInfo['bb_git_branch'])
+                    config.codeInfo['starify_git_branch'])
                 robot('markdown', des, bot='starify')
                 time.sleep(0.1)
                 robot('markdown', des_2, bot='starify')

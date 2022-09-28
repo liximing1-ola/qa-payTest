@@ -16,7 +16,8 @@ header_starify = {
 	'user-language': 'zh_CN',
 	'accept-encoding': 'gzip',
 	'host': '47.243.83.154',
-	'content-type': 'application/x-www-form-urlencoded; charset=utf-8'}
+	'content-type': 'application/x-www-form-urlencoded; charset=utf-8'
+}
 
 query_starify = {
 	'package': "com.starify.ola.android",
@@ -24,12 +25,13 @@ query_starify = {
 	'_platform': "android",
 	'_index': '1',
 	'_model': "vivo 1915",
-	'_timestamp': "1577808000",  # 20200101
+	'_timestamp': "1577808000",
 	'_abi': "arm64-v8a",
 	'format': 'json',
 	'_versionName': '1.0.4.0',
 	'_versionCode': '100004000',
 }
+
 body_starify = {
 	"mobile": "15071176826",
 	"area": "886",
