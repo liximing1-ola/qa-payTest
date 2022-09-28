@@ -103,7 +103,7 @@ class Session:
                 from urllib.parse import urlencode, urlunparse, unquote
                 # 不去除sign验证,必须自己计算
                 headers = header_starify
-                query = query_starify
+                query = query_starify.copy()
                 query['_timestamp'] = str(int(time()))
                 body = body_starify
                 sign = create_sign(query)

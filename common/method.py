@@ -1,9 +1,12 @@
-import requests
+import os
 import random
 import time
-import os
-from common import Consts
+
+import requests
+
 import Robot
+from common import Consts
+
 
 # 将列表生成支持markdown的形式
 def dictToList(result_dict):
@@ -77,6 +80,11 @@ def getValue(res):
 
 def reason(des, res):
     if res['body']['success'] == 0 and not isExtend(res['body'], 'msg'):
+        print(res['body'])
+    return 'Depiction: {},  failReason: {}'.format(des, res['body'])
+
+def reason_starify(des, res):
+    if res['body'].get("success", None) is True and not isExtend(res['body'], 'msg'):
         print(res['body'])
     return 'Depiction: {},  failReason: {}'.format(des, res['body'])
 

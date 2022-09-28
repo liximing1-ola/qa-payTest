@@ -33,6 +33,7 @@ class config:
     # 内网支付接口
     pay_url = bb_host + 'pay/create?package=com.imbb.banban.android'
     pt_pay_url = pt_host + 'pay/create?package=com.ola.chat'
+    starify_pay_url = starify_host + 'go/starify/pay/create'
     # 服务器标识
     linux_node = {'ali': 'iZj6c7cxmmtvxr9kuetoizZ', }
     # app登录方式

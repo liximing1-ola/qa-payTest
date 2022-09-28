@@ -27,6 +27,8 @@ query_starify = {
 	'_timestamp': "1577808000",  # 20200101
 	'_abi': "arm64-v8a",
 	'format': 'json',
+	'_versionName': '1.0.4.0',
+	'_versionCode': '100004000',
 }
 body_starify = {
 	"mobile": "15071176826",

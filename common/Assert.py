@@ -2,10 +2,13 @@
 封装assert方法
 """
 import json
-import time
-from common import Consts
 import platform
+import time
+
+from common import Consts
 from common.Config import config
+
+
 def assert_code(actual_code, expected_code=200):
     """
     验证response状态码
@@ -70,7 +73,8 @@ def assert_body(body, body_msg, expected_msg, reason):
     :param reason: 原因
     """
     try:
-        msg = body[body_msg]
+        # msg = body[body_msg]
+        msg = body.get(body_msg, None)
         assert msg == expected_msg
         return True
     except:

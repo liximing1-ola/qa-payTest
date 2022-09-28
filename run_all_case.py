@@ -1,12 +1,15 @@
 # coding=utf-8
-import unittest
+import platform
 import time
+import unittest
+
+from Robot import robot
+from autoGitPull import updateTime, updateCode
 from common import Logs, method, Consts
 from common.Config import config
 from common.method import checkPath
-from autoGitPull import updateTime, updateCode
-from Robot import robot
-import platform
+
+
 def main(appInfo):
     if appInfo == config.appName['伴伴']:
         if updateCode.autoGitPull('bb_php') | updateCode.autoGitPull('bb_go'):
@@ -95,19 +98,19 @@ def main(appInfo):
                     len(test_result.failures) + len(test_result.errors),
                     use_time,
                     config.codeInfo['bb_git_branch'])
-                robot('markdown', des)
+                robot('markdown', des, bot='starify')
                 time.sleep(0.1)
-                robot('markdown', des_2)
+                robot('markdown', des_2, bot='starify')
             elif len(test_result.failures) >= 1:
                 Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
-                robot('success', des)
+                robot('success', des, bot='starify')
                 for case, reason in test_result.failures:
-                    robot('fail', Consts.fail_case_reason[0], title=case.id())
+                    robot('fail', Consts.fail_case_reason[0], title=case.id(), bot='starify')
                     break
             elif len(test_result.errors) >= 1:
                 Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
                 for case, reason in test_result.errors:
-                    robot('fail', reason, case.id())
+                    robot('fail', reason, case.id(), bot='starify')
                     break
         else:
             Logs.get_log('runCode.log').info('NoRun')
