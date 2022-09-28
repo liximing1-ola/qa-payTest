@@ -2,13 +2,17 @@
 """
 封装获取cookie方法
 """
+import os
+
 import requests
-from common.Config import config
-from common.params_Yaml import Yaml
-from common import Logs, method
 import urllib3
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
-import os
+
+from common import Logs, method
+from common.Config import config
+from common.params_Yaml import Yaml
+
+
 class Session:
     def __init__(self):
         self.config = config
@@ -91,6 +95,32 @@ class Session:
                 return tokenDict
             except Exception as error:
                 Logs.get_log('getSession.log').error('session获取异常，原因： {}'.format(error))
+        elif env == config.appName['starify']:
+            try:
+                from common.Basic_starify import header_starify, query_starify, body_starify
+                from caseStarify.tools import create_sign
+                from time import time
+                from urllib.parse import urlencode, urlunparse, unquote
+                # 不去除sign验证,必须自己计算
+                headers = header_starify
+                query = query_starify
+                query['_timestamp'] = str(int(time()))
+                body = body_starify
+                sign = create_sign(query)
+                query['_sign'] = sign
+                url = config.starify_mobile_login_url+"?"+unquote(urlencode(query))
+                session = requests.session()
+                res = session.post(url, data=body, headers=headers, timeout=30)
+                res.raise_for_status()
+                res = res.json()
+                if not method.isExtend(res, 'token') or res['success'] != 1:
+                    print('failReason： {}'.format(res['msg']))
+                tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
+                Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
+                return tokenDict
+            except Exception as error:
+                Logs.get_log('getSession.log').error('session获取异常，原因： {}'.format(error))
+
         else:
             print("env input error")
 

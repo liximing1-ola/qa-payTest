@@ -29,8 +29,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="44793b3e-09e5-4af0-a369-84e9b064bd19" name="Default Changelist" comment="‘提交修改’">
+      <change afterPath="$PROJECT_DIR$/caseStarify/api.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/caseStarify/tools.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/Basic_starify.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/Basic_starify.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/time.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Robot.py" beforeDir="false" afterPath="$PROJECT_DIR$/Robot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/autoGitPull.py" beforeDir="false" afterPath="$PROJECT_DIR$/autoGitPull.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/caseStarify/test_starify_roomGift.py" beforeDir="false" afterPath="$PROJECT_DIR$/caseStarify/test_starify_roomGift.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/Config.py" beforeDir="false" afterPath="$PROJECT_DIR$/common/Config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/Session.py" beforeDir="false" afterPath="$PROJECT_DIR$/common/Session.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run_all_case.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_all_case.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,15 +75,11 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../qa-apiAutoTest" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/common" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="E:\payTest\tdr" />
-      <recent name="E:\payTest\common" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="E:\payTest\others" />
       <recent name="E:\payTest\probabilityTest" />
@@ -80,21 +87,27 @@
       <recent name="E:\payTest\caseLuckyPlay" />
       <recent name="E:\payTest\caseGames" />
     </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\code\qa-payTest\common" />
+      <recent name="E:\payTest\tdr" />
+      <recent name="E:\payTest\common" />
+    </key>
   </component>
-  <component name="RunManager" selected="Python.leeCode">
-    <configuration name="bot_tea" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="payTest" />
+  <component name="RunManager" selected="Python.run_all_case">
+    <configuration name="Session" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="qa-payTest" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/others" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/common" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/others/bot_tea.py" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/common/Session.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -103,61 +116,20 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="domain_ping" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="payTest" />
+    <configuration name="aaa" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="qa-payTest" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/domain_watch" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/caseStarify" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/domain_watch/domain_ping.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="domain_ssl_check" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="payTest" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/domain_watch" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/domain_watch/domain_ssl_check.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="domian_vaild" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="payTest" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/domain_watch" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/domain_watch/domian_vaild.py" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/caseStarify/aaa.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -178,7 +150,52 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/others/leeCode.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="params_Yaml" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="qa-payTest" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/common" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/common/params_Yaml.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="run_all_case" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="qa-payTest" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run_all_case.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -189,15 +206,18 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.run_all_case" />
+        <item itemvalue="Python.aaa" />
+        <item itemvalue="Python.params_Yaml" />
+        <item itemvalue="Python.Session" />
         <item itemvalue="Python.leeCode" />
-        <item itemvalue="Python.bot_tea" />
-        <item itemvalue="Python.domain_ping" />
-        <item itemvalue="Python.domian_vaild" />
-        <item itemvalue="Python.domain_ssl_check" />
       </list>
     </recent_temporary>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SpellCheckerSettings" BundledDictionaries="0" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="44793b3e-09e5-4af0-a369-84e9b064bd19" name="Default Changelist" comment="" />
@@ -599,10 +619,14 @@
     <option name="LAST_COMMIT_MESSAGE" value="‘提交修改’" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="411" y="0" key="CommitChangelistDialog2" timestamp="1655435677920">
+    <state x="524" y="114" width="869" height="595" key="#xdebugger.evaluate" timestamp="1664338727358">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="411" y="0" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1655435677920" />
+    <state x="524" y="114" width="869" height="595" key="#xdebugger.evaluate/0.0.1536.824@0.0.1536.824" timestamp="1664338727358" />
+    <state x="367" y="0" key="CommitChangelistDialog2" timestamp="1664262114000">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="367" y="0" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1664262114000" />
     <state x="78" y="48" width="1228" height="687" key="DiffContextDialog" timestamp="1660117767917">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -614,51 +638,70 @@
     </state>
     <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1663654163926" />
     <state x="686" y="211" key="FileChooserDialogImpl/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1657010498531" />
-    <state width="1515" height="253" key="GridCell.Tab.0.bottom" timestamp="1663035877809">
+    <state width="1493" height="215" key="GridCell.Tab.0.bottom" timestamp="1664339811287">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="253" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1663035877809" />
+    <state width="1493" height="215" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1664339811287" />
     <state width="1899" height="338" key="GridCell.Tab.0.bottom/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1657272388455" />
-    <state width="1515" height="253" key="GridCell.Tab.0.center" timestamp="1663035877809">
+    <state width="1493" height="215" key="GridCell.Tab.0.center" timestamp="1664339811287">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="253" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1663035877809" />
+    <state width="1493" height="215" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1664339811287" />
     <state width="1899" height="338" key="GridCell.Tab.0.center/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1657272388455" />
-    <state width="1515" height="253" key="GridCell.Tab.0.left" timestamp="1663035877809">
+    <state width="1493" height="215" key="GridCell.Tab.0.left" timestamp="1664339811286">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="253" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1663035877809" />
+    <state width="1493" height="215" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1664339811286" />
     <state width="1899" height="338" key="GridCell.Tab.0.left/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1657272388455" />
-    <state width="1515" height="253" key="GridCell.Tab.0.right" timestamp="1663035877809">
+    <state width="1493" height="215" key="GridCell.Tab.0.right" timestamp="1664339811287">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="253" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1663035877809" />
+    <state width="1493" height="215" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1664339811287" />
     <state width="1899" height="338" key="GridCell.Tab.0.right/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1657272388455" />
+    <state width="1493" height="215" key="GridCell.Tab.1.bottom" timestamp="1664339811288">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="215" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1664339811288" />
+    <state width="1493" height="215" key="GridCell.Tab.1.center" timestamp="1664339811287">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="215" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1664339811287" />
+    <state width="1493" height="215" key="GridCell.Tab.1.left" timestamp="1664339811287">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="215" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1664339811287" />
+    <state width="1493" height="215" key="GridCell.Tab.1.right" timestamp="1664339811288">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="215" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1664339811288" />
     <state x="789" y="165" key="RollbackChangesDialog" timestamp="1655727276871">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="631" y="131" key="RollbackChangesDialog/0.0.1536.824@0.0.1536.824" timestamp="1655287446077" />
     <state x="789" y="165" key="RollbackChangesDialog/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1655727276871" />
     <state x="2190" y="-62" key="SettingsEditor" timestamp="1656665753000">
       <screen x="1920" y="-119" width="1536" height="832" />
     </state>
     <state x="2190" y="-62" key="SettingsEditor/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1656665753000" />
-    <state x="813" y="216" key="VCS.ChangeListViewerDialog" timestamp="1655187391925">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="813" y="216" key="VCS.ChangeListViewerDialog/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1655187391925" />
     <state x="361" y="144" key="Vcs.Push.Dialog.v2" timestamp="1663814251115">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="361" y="144" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1663814251115" />
     <state x="451" y="181" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1657507658133" />
     <state x="2281" y="26" key="Vcs.Push.Dialog.v2/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1656675260712" />
+    <state width="775" height="419" key="XDebugger.FullValuePopup" timestamp="1664338460140">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="775" height="419" key="XDebugger.FullValuePopup/0.0.1536.824@0.0.1536.824" timestamp="1664338460140" />
     <state x="573" y="325" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1662718516559">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="573" y="325" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1662718516559" />
     <state x="716" y="410" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.-119.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1657507634334" />
     <state x="2493" y="209" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1920.-119.1536.832/0.0.1920.1040@1920.-119.1536.832" timestamp="1656666484617" />
+    <state x="468" y="144" width="600" height="536" key="find.popup" timestamp="1664339437574">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="468" y="144" width="600" height="536" key="find.popup/0.0.1536.824@0.0.1536.824" timestamp="1664339437574" />
     <state x="431" y="151" width="672" height="673" key="search.everywhere.popup" timestamp="1662433548406">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -667,6 +710,13 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/run_all_case.py</url>
+          <line>82</line>
+          <option name="timeStamp" value="41" />
+        </line-breakpoint>
+      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">
@@ -675,5 +725,11 @@
         </breakpoint>
       </default-breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/qa_payTest$Session.coverage" NAME="Session Coverage Results" MODIFIED="1664335650129" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/common" />
+    <SUITE FILE_PATH="coverage/qa_payTest$aaa.coverage" NAME="aaa Coverage Results" MODIFIED="1664337841724" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/caseStarify" />
+    <SUITE FILE_PATH="coverage/qa_payTest$params_Yaml.coverage" NAME="params_Yaml Coverage Results" MODIFIED="1664335989440" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/common" />
+    <SUITE FILE_PATH="coverage/qa_payTest$run_all_case.coverage" NAME="run_all_case Coverage Results" MODIFIED="1664339755701" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

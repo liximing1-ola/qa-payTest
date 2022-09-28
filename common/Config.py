@@ -6,23 +6,30 @@ class config:
     appInfo = {'bb_dev_58': 'https://dev.iambanban.com/',
                'pt_ali': 'https://test.overseaban.com/',
                'banban': 'com.imbb.banban.android',
-               'pt': 'com.ola.chat', }
+               'pt': 'com.ola.chat',
+               'starify': 'http://47.243.83.154/',
+               }
     codeInfo = {'bb_php_path': '/home/webroot/banban',
                 'bb_go_path': '/home/webroot/banban-go/banban-consume',
                 'pt_php_path': '/home/webroot/release_oversea/banban',
                 'bb_git_branch': 'release-for-vpc',
                 'bb_go_git_branch': 'master',
-                'pt_git_branch': 'main'}
+                'pt_git_branch': 'main',
+                'starify_path': r"D:\code\qa-payTest",  # todo
+                'starify_git_branch': "master",  # todo
+                }
     appName = {
         "伴伴": 'banban',
         "Partying": 'pt',
         "谁是凶手": 'games',
         "嗨歌": 'havefun',
         "皮队友": 'teammate',
+        "starify": 'starify',
     }
     # 测试域名
     bb_host = appInfo['bb_dev_58']
     pt_host = appInfo['pt_ali']
+    starify_host = appInfo['starify']
     # 内网支付接口
     pay_url = bb_host + 'pay/create?package=com.imbb.banban.android'
     pt_pay_url = pt_host + 'pay/create?package=com.ola.chat'
@@ -31,6 +38,7 @@ class config:
     # app登录方式
     bb_qqLogin_url = bb_host + 'account/qqlogin'
     pt_mobile_login_url = pt_host + 'account/passwordLogin'
+    starify_mobile_login_url = starify_host + 'go/starify/login/mobileLogin'
 
     # banban用户配置
     bb_user = {

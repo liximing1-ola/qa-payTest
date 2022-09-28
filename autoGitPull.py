@@ -1,11 +1,15 @@
-import git
 import os
 import time
+
+import git
 from git.repo import Repo
+
 from Robot import robot
-from common.Session import Session
 from common import Logs, Consts
 from common.Config import config
+from common.Session import Session
+
+
 class updateCode:
 
     @staticmethod
@@ -21,12 +25,17 @@ class updateCode:
             git_branch = config.codeInfo['pt_git_branch']
             env = 'pt'
             bot = 'PT'
+        elif appInfo == 'starify': #todo
+            gtr_path = config.codeInfo['starify_path']
+            git_branch = config.codeInfo['starify_git_branch']
+            env = 'starify'
+            bot = 'starify'
         else:
             Logs.get_log('gitBranchError.log').error("{} error".format(appInfo))
             return
 
         g = git.cmd.Git(gtr_path)
-        g.pull()
+        g.pull() if appInfo != 'starify' else print(f"{appInfo}不拉代码!")
         repo = Repo(gtr_path)
         Consts.startTime = time.time()
         Session.getSession(env)  # 更新userToken
