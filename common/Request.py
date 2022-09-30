@@ -9,10 +9,11 @@ import requests
 import urllib3
 from requests.packages.urllib3.exceptions import InsecureRequestWarning  # 使用requests库请求HTTPS时,因为忽略证书验证,导致每次运行时都会报错
 
+from caseStarify.need_data import starify_payUid
 from caseStarify.tools import create_sign
 from common import Session
 from common.Basic_starify import header_starify
-from common.Basic_starify import query_starify, body_starify
+from common.Basic_starify import query_starify
 from common.Session import Session
 
 
@@ -78,8 +79,8 @@ def post_request_session_starify(url, data, tokenName='starify'):
     deal_query['_timestamp'] = str(int(time()))
     sign = create_sign(deal_query)
     deal_query['_sign'] = sign
-    deal_query['_blid'] = "124313"#todo
-    url = url+"?"+unquote(urlencode(deal_query))
+    deal_query['_blid'] = starify_payUid
+    url = url + "?" + unquote(urlencode(deal_query))
 
     # if not url.startswith('https://'):
     #     url = '%s%s' % ('https://', url)
@@ -106,7 +107,3 @@ def post_request_session_starify(url, data, tokenName='starify'):
     response_dicts['time_consuming'] = time_consuming
     response_dicts['time_total'] = time_total
     return response_dicts
-"""
-{'success': True, 'data': {'star_coin': 1002010}}
-{'msg': '同一个星币礼物只能打赏同一个作品一次'}
-"""

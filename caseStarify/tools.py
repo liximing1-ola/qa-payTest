@@ -1,4 +1,7 @@
 import hashlib
+from time import time
+
+from common.Basic_starify import query_starify
 
 
 def merge_dicts(*args):
@@ -31,3 +34,19 @@ def create_sign(query, salt="!rilegoule#"):
 	content = '&'.join(hashArgs) + salt
 	_sign = hashlib.md5(bytes(content, encoding='utf-8')).hexdigest()
 	return _sign
+
+
+def hash_key():
+	"""生成连击key"""
+	return hashlib.md5(str(int(time())).encode()).hexdigest()
+
+
+if __name__ == '__main__':
+	deal_query = query_starify.copy()
+	t = str(int(time()))
+	deal_query['_timestamp'] = t
+	# deal_query['_timestamp'] = 1664435210
+	deal_query['_index'] = 250
+	deal_query['format'] = "json"
+	print(deal_query['_timestamp'])
+	print(create_sign(deal_query))

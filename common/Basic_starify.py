@@ -1,3 +1,5 @@
+from caseStarify.need_data import starify_payPhone
+
 header_starify = {
 	'user-agent': 'Mozilla/5.0 (Linux; Android 12; vivo 1915 Build/SP1A.210812.003; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/103.0.5060.129 Mobile Safari/537.36 / Xs android V1.0.3.0 / Js V1.0.0.0 / Login V0',
 	'user-brand': 'vivo',
@@ -33,7 +35,7 @@ query_starify = {
 }
 
 body_starify = {
-	"mobile": "15071176826",
+	"mobile": starify_payPhone,
 	"area": "886",
 	"code": "1234",
 	"password": "",

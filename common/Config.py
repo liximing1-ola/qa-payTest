@@ -16,7 +16,7 @@ class config:
                 'bb_go_git_branch': 'master',
                 'pt_git_branch': 'main',
                 'starify_path': r"D:\code\qa-payTest",  # todo
-                'starify_git_branch': "master",  # todo
+                'starify_git_branch': "wzx",  # todo
                 }
     appName = {
         "伴伴": 'banban',
