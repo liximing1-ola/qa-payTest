@@ -79,7 +79,10 @@ class config:
     pack_cal_uid = bb_user['pack_cal_uid']  # 打包结算主播
 
     # PT
-    pt_user = {'payUid': 800240376, 'testUid': 800022872, 'brokerUid': 800018895, 'fleet_uid': 800041062}
+    pt_user = {'payUid': 800240376,
+               'testUid': 800022872,
+               'brokerUid': 800018895,
+               'fleet_uid': 800041062}
     pt_payUid = pt_user['payUid']
     pt_testUid = pt_user['testUid']  # 非公会成员，是一代宗师
     pt_brokerUid = pt_user['brokerUid']  # 公会成员
