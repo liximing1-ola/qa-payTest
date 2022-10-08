@@ -58,11 +58,15 @@ starify_room_gift_config = {
 		"id": 9,
 		"name": "聲霸天下",
 		"price": 5200,
+		"reward_down": 0.10,  # 返奖下限
+		"reward_top": 0.15  # 返奖上限
 	},
 	"10": {
 		"id": 10,
 		"name": "摩登派對",
 		"price": 19999,
+		"reward_down": 0.15,
+		"reward_top": 0.20
 	},
 	"11": {
 		"id": 11,
@@ -73,6 +77,6 @@ starify_room_gift_config = {
 
 # 作品id
 starify_work_state = {
-	"todo": 510,  # 未打赏的作品
-	"done": 613,  # 已打赏的作品
+	"todo": 510,  # todo 未打赏的作品
+	"done": 613,  # todo 已打赏的作品
 }

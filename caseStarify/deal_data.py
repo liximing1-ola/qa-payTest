@@ -4,7 +4,7 @@ from caseStarify.need_data import *
 from caseStarify.tools import hash_key
 
 
-def deal_pay_data(op_type, gift_id, work_state="todo", to_uids=None, is_use_bag=False, hit_num=1, combo_key=None, gistarify_work_gift_config=None):
+def deal_pay_data(op_type, gift_id, work_state="todo", to_uids=None, is_use_bag=False, hit_num=1, combo_key=None):
 	"""
 	处理pay的data
 	:param op_type: 打赏类型 work/room
@@ -19,8 +19,6 @@ def deal_pay_data(op_type, gift_id, work_state="todo", to_uids=None, is_use_bag=
 
 	if to_uids is None:
 		to_uids = []
-	if combo_key is None:
-		combo_key = hash_key()
 	gift_id = str(gift_id)
 	params_work = {
 		"gift_id": gifts[gift_id]['id'],
@@ -40,7 +38,7 @@ def deal_pay_data(op_type, gift_id, work_state="todo", to_uids=None, is_use_bag=
 		"gift_num": 1,
 		"is_use_bag": is_use_bag,
 		"money": gifts[gift_id]['price'],
-		"combo_key": combo_key,
+		"combo_key": combo_key if combo_key is not None else hash_key(),
 		"hit_num": hit_num
 	}
 	if op_type == "work":

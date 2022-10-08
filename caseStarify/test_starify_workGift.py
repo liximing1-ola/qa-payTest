@@ -14,7 +14,7 @@ from common.runFailed import Retry
 @Retry(max_n=1)
 class TestPayCreate(unittest.TestCase):
 
-    def test_work_01(self, des='星币充足,打赏作品,礼物=安可'):
+    def test_work_001(self, des='星币余额充足,作品打赏,礼物类型=安可'):
         # todo sql:清除作品已被打赏的标记
         # todo sql:starify_payUid 修改余额
         data = deal_pay_data("work", "2", "todo")
@@ -24,16 +24,7 @@ class TestPayCreate(unittest.TestCase):
         # todo sql:starify_payUid 查询余额
         case_list[des] = result
 
-    def test_work_02(self, des='重复打赏作品'):
-        # todo sql:starify_payUid 修改余额
-        data = deal_pay_data("work", "2", "done")
-        res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
-        assert_code(res['code'])
-        assert_body(res['body'], 'msg', '同一个星币礼物只能打赏同一个作品一次', reason_starify(des, res))
-        # todo sql:starify_payUid 查询余额
-        case_list[des] = result
-
-    def test_work_03(self, des='打赏作品,星币不足,星币=0'):
+    def test_work_002(self, des='作品打赏,星币余额=0'):
         # todo sql:清除作品已被打赏的标记
         # todo sql:starify_payUid 修改余额
         data = deal_pay_data("work", "2", work_state="todo")
@@ -43,7 +34,7 @@ class TestPayCreate(unittest.TestCase):
         # todo sql:starify_payUid 查询余额
         case_list[des] = result
 
-    def test_work_04(self, des='打赏作品,星币不足,星币=礼物价值'):
+    def test_work_003(self, des='作品打赏,星币余额<礼物价值'):
         # todo sql:清除作品已被打赏的标记
         # todo sql:starify_payUid 修改余额
         data = deal_pay_data("work", "2", "todo")
@@ -53,7 +44,16 @@ class TestPayCreate(unittest.TestCase):
         # todo sql:starify_payUid 查询余额
         case_list[des] = result
 
-    def test_work_05(self, des='星币充足,打赏作品,礼物=星币'):
+    def test_work_004(self, des='作品打赏,重复打赏'):
+        # todo sql:starify_payUid 修改余额
+        data = deal_pay_data("work", "2", "done")
+        res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+        assert_code(res['code'])
+        assert_body(res['body'], 'msg', '同一个星币礼物只能打赏同一个作品一次', reason_starify(des, res))
+        # todo sql:starify_payUid 查询余额
+        case_list[des] = result
+
+    def test_work_005(self, des='星币余额充足,作品打赏,礼物类型=星币'):
         # todo sql:清除作品已被打赏的标记
         # todo sql:starify_payUid 修改余额
         data = deal_pay_data("work", "1", "todo")

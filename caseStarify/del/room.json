@@ -1,0 +1,80 @@
+[
+  // 不连击
+  {
+    "gift_id": 10,
+    "gift_num": 1,
+    "from_uid": 124313,
+    "to_uids": [
+      124314,
+      121578
+    ],
+    "rid": 10000024,
+    "cid": 0,
+    "is_use_bag": false,
+    "money": 19999,
+    "combo_key": "be01e0364c6caec38ace62da8057897e",
+    "hit_num": 1
+  },
+  //连击 1
+  {
+    "from_uid": 124313,
+    "to_uids": [
+      124314,
+      121578
+    ],
+    "rid": 10000024,
+    "gift_id": 10,
+    "cid": 0,
+    "gift_num": 1,
+    "is_use_bag": false,
+    "money": 19999,
+    "combo_key": "9eee58be5e529dee8e3430927c17ba94",
+    "hit_num": 1
+  },
+  //连击 2
+  {
+    "from_uid": 124313,
+    "to_uids": [
+      124314,
+      121578
+    ],
+    "rid": 10000024,
+    "gift_id": 10,
+    "cid": 0,
+    "gift_num": 1,
+    "is_use_bag": false,
+    "money": 19999,
+    "combo_key": "9eee58be5e529dee8e3430927c17ba94",
+    "hit_num": 2
+  },
+  //  背包有礼物,从礼物面板打赏
+  {
+    "from_uid": 124313,
+    "to_uids": [
+      124314
+    ],
+    "rid": 10000024,
+    "gift_id": 6,
+    "cid": 0,
+    "gift_num": 1,
+    "is_use_bag": false,
+    "money": 520,
+    "combo_key": "a7e516eb5a8eaff0f6fc315e550450d1",
+    "hit_num": 1
+  },
+  //背包有礼物,从背包面板打赏
+  {
+    "from_uid": 124313,
+    "to_uids": [
+      124314
+    ],
+    "rid": 10000024,
+    "gift_id": 6,
+    "cid": 20,
+    "gift_num": 1,
+    "is_use_bag": true,
+    "money": 520,
+    "combo_key": "f97e6df854cf843231084007cad3be22",
+    "hit_num": 1
+  }
+]
