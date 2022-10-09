@@ -40,9 +40,9 @@ def robot():
                "color": "#36a64f",
         "fields": [
             {
-                "title": "Required Field Title",
-                "value": "Text value of the field. May contain standard message markup and must be escaped as normal. May be multi-line.",
-                "short": 'false'
+                "title": "哈哈",
+                "value": "呵呵",
+                "short": False
             }
         ]
     }
