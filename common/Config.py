@@ -7,7 +7,7 @@ class config:
                'pt_ali': 'https://test.overseaban.com/',
                'banban': 'com.imbb.banban.android',
                'pt': 'com.ola.chat', }
-    codeInfo = {'bb_php_path': '/home/webroot/bb-php',
+    codeInfo = {'bb_php_path': '/home/webroot/banban',
                 'bb_go_path': '/home/webroot/bb-consume',
                 'pt_php_path': '/home/webroot/release_oversea/banban',
                 'bb_git_branch': 'release-for-vpc',
