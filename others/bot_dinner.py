@@ -34,9 +34,9 @@ def robot():
         }
     }
     data = {
-               "fallback": "Required text summary of the attachment that is shown by clients that understand attachments but choose not to show them.",
-               "text": "Optional text that should appear within the attachment",
-               "pretext": "Optional text that should appear above the formatted data",
+               "fallback": "干饭人.",
+               "text": "干饭魂",
+               "pretext": "干饭都是人上人",
                "color": "#36a64f",
         "fields": [
             {
