@@ -16,7 +16,7 @@ def getHoliday():
 def robot():
     url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e317861a-d1ec-4ac4-af96-9d4b8f12d9d6'
     # url1= 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=0179d8d1-2078-41ba-a8da-0fb11bd51880'
-    url = 'https://hooks.slack.com/services/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'
+    # url_slack = 'https://hooks.slack.com/services/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'
     headers = {'Content-Type': 'application/json'}
     now = time.strftime('%H:%M', time.localtime(time.time()))
     title = "{}-点餐时间到,上微信【丰食】预约晚餐".format(now)
@@ -32,19 +32,6 @@ def robot():
                 "picurl": icon, }
             ]
         }
-    }
-    data = {
-               "fallback": "干饭人.",
-               "text": "干饭魂",
-               "pretext": "干饭都是人上人",
-               "color": "#36a64f",
-        "fields": [
-            {
-                "title": "哈哈",
-                "value": "呵呵",
-                "short": False
-            }
-        ]
     }
     if getHoliday():
         return False
