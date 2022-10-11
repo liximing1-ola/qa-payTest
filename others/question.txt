@@ -48,7 +48,6 @@
 # 20 8 * * * python3 rmtree.py
 # 0 16 * * 1,2,3,4,5 python3 /home/banban-1/qa-payTest/others/bot_dinner.py
 # 30 11 * * 1,2,3,4,5 python3 /home/banban-1/qa-payTest/others/bot_dinner.py
-#
 # 28 15 * * 1,2,3,4,5 python3 /home/banban-1/qa-payTest/others/bot_tea.py
 
 # /etc/host
