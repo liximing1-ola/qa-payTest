@@ -6,7 +6,7 @@ def robot(mode, reason, title='', bot='BB'):
     robot_dict = {'BB': 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=f9d916cb-6b93-4389-8aa4-f51c755faa0e',
                   'test': 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=0179d8d1-2078-41ba-a8da-0fb11bd51880',
                   'PT': 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=b05a239e-3cc3-4faf-a3cc-c77e200ae1e6',
-                  'starify': 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=03e72a59-9039-44fe-b07f-2766f5d0210c',#todo
+                  'starify': 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=03e72a59-9039-44fe-b07f-2766f5d0210c',#todo 机器人key
                   }
     url = robot_dict[bot]
     # url = robot_dict['test']  # 调试

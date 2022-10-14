@@ -16,7 +16,7 @@ class TestPayCreate(unittest.TestCase):
 
     def test_work_001(self, des='星币余额充足,作品打赏,礼物类型=安可'):
         # todo sql:清除作品已被打赏的标记
-        # todo sql:starify_payUid 修改余额
+        # todo sql:starify_payUid 修改余额=2
         data = deal_pay_data("work", "2", "todo")
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
@@ -26,7 +26,7 @@ class TestPayCreate(unittest.TestCase):
 
     def test_work_002(self, des='作品打赏,星币余额=0'):
         # todo sql:清除作品已被打赏的标记
-        # todo sql:starify_payUid 修改余额
+        # todo sql:starify_payUid 修改余额=0
         data = deal_pay_data("work", "2", work_state="todo")
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
@@ -36,7 +36,7 @@ class TestPayCreate(unittest.TestCase):
 
     def test_work_003(self, des='作品打赏,星币余额<礼物价值'):
         # todo sql:清除作品已被打赏的标记
-        # todo sql:starify_payUid 修改余额
+        # todo sql:starify_payUid 修改余额=1
         data = deal_pay_data("work", "2", "todo")
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
