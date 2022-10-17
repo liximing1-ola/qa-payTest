@@ -1,15 +1,21 @@
 # 房间号
-starify_rid = 10000024
+starify_rid = 10000184
 # 打赏人
-# starify_payPhone = "15009633001"
-# starify_payUid = 124313
-starify_payPhone = "15009633010"  # todo 没钱的账户 临时使用
-starify_payUid = 124360
+starify_payPhone = "15008520850"
+starify_payUid = 124458
 # 被打赏人 01
-starify_rewardUid01 = 124315
+starify_rewardUid01 = 124461  # 手机 15008520851
 # 被打赏人 02
-starify_rewardUid02 = 121578
-# 作品礼物
+starify_rewardUid02 = 124460  # 手机 15008520852
+
+
+# 作品id
+starify_work_state = {
+	"todo": 733,  #未打赏
+	"done": 734,  #已打赏
+}
+
+# 礼物配置
 gift_config = {
 	"1": {
 		"gift_id": 1,  # 礼物id
@@ -77,8 +83,3 @@ gift_config = {
 	}
 }
 
-# 作品id
-starify_work_state = {
-	"todo": 510,  # todo 未打赏的作品
-	"done": 613,  # todo 已打赏的作品
-}

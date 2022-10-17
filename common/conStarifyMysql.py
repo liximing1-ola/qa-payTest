@@ -5,10 +5,11 @@ import pymysql
 
 
 class conMysql:
-    db_config = {"ali_db": 'localhost',
-                 "ali_user": 'root',  # todo
-                 "ali_pas": '123456'  # todo
-                 }
+    db_config = {
+        "ali_db": 'localhost',
+        "ali_user": 'root',  # todo
+        "ali_pas": 'root'  # todo
+    }
     _dbUrl = db_config['ali_db']
     _user = db_config['ali_user']
     _password = db_config['ali_pas']
@@ -38,7 +39,7 @@ class conMysql:
             except Exception as error:
                 print(error)
         elif accountType == 'gift_num':  # 查询用户背包某个物品总数
-            sql = f'select sum(num) from xs_user_commodity where uid ={uid} and cid = {cid}'
+            sql = f'select sum(num) from xs_user_commodity where uid ={uid} and cid = {cid};'
             try:
                 conMysql.cur.execute(sql)
                 res = conMysql.cur.fetchone()
@@ -61,7 +62,7 @@ class conMysql:
     @staticmethod
     def deleteUserAccountSql(tableName, uid, wid=0):
         if tableName == 'user_commodity':  # 清除用户背包数据
-            sql = "delete from xs_user_commodity where uid={}".format(uid)
+            sql = f"delete from xs_user_commodity where uid={uid}"
             try:
                 conMysql.cur.execute(sql)
             except Exception as error:
@@ -70,7 +71,7 @@ class conMysql:
             finally:
                 conMysql.con.commit()
         if tableName == 'user_work_reward':  # 清除用户打赏作品的标记
-            sql = f"delete from xs_user_work_reward where uid={uid} and wid={wid}"
+            sql = f"delete from xs_user_work_reward where uid={uid} and wid={wid};"
             try:
                 conMysql.cur.execute(sql)
             except Exception as error:

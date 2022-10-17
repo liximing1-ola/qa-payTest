@@ -81,7 +81,7 @@ def main(appInfo):
         else:
             Logs.get_log('runCode.log').info('NoRun')
     elif appInfo == config.appName['starify']:
-        if updateCode.autoGitPull('starify'): #todo
+        if updateCode.autoGitPull('starify'):
             updateTime('write', now=str(int(time.time())))
             test_result = unittest.TextTestRunner(verbosity=3).run(all_case(appInfo))
             Consts.endTime = time.time()
@@ -143,7 +143,7 @@ def all_case(appInfo):
 if __name__ == "__main__":
     if platform.node() == config.linux_node['ali']:
         main(config.appName['Partying'])
-    elif platform.node() == "wuzhenxing": #todo 修改
+    elif platform.node() == "wuzhenxing": #todo 修改 调试用 wuzhenxing
         main(config.appName['starify'])
     else:
         main(config.appName['伴伴'])
