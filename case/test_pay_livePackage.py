@@ -108,17 +108,17 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 200)
         case_list_b[des] = result
 
-    def test_05_liveRoomPay_602515(self, des='直播间公会主播(宗师)/公会长分成60:25:15'):
+    def test_05_liveRoomPay_602119(self, des='直播间公会主播(宗师)/公会长分成60:21:19'):
         """
         用例描述：
-        tdr:直播间内工会一代宗师主播-公会长-官方抽成：60:25:15,且打包结算频道是直播
-        验证直播间打赏一代宗师主播（打包结算主播pack_cal=1），打赏分成满足：60:25:15，且收入在money_cash账户
+        tdr:直播间内工会一代宗师主播-公会长-官方抽成：60:21:19,且打包结算频道是直播
+        验证直播间打赏一代宗师主播（打包结算主播pack_cal=1），打赏分成满足：60:21:19，且收入在money_cash账户
         脚本步骤：
         1.构造打赏者和主播数据
         2.房间内一对一打赏（打赏1000分）
         3.校验接口状态和返回值数据
         4.检查被打赏者余额和账户，预期为：1000 * 0.6 = 600(money_cash)
-        5.检查公会长余额，预期为：1000 * 0.25 = 250
+        5.检查公会长余额，预期为：1000 * 0.21 = 210
         6.检查打赏者余额.预期为：1000 - 1000 = 0
         """
         test_uid = config.live_role['pack_cal_uid']
@@ -134,7 +134,7 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('single_money', test_uid, money_type='money_cash'), 600)
-        assert_equal(conMysql.selectUserInfoSql('sum_money', ceo_uid), 250)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', ceo_uid), 210)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
@@ -167,16 +167,16 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
-    def test_07_liveRoomPay_602515(self, des='直播公会主播(非宗师)/公会长打赏分成60:25:15'):
+    def test_07_liveRoomPay_602119(self, des='直播公会主播(非宗师)/公会长打赏分成60:21:19'):
         """
         用例描述：
-        tdr:直播间内工会非一代宗师主播-公会长-官方：60:25:15
+        tdr:直播间内工会非一代宗师主播-公会长-官方：60:21:19
         脚本步骤：
         1.构造打赏者和主播数据
         2.房间内一对一打赏（打赏1000分）
         3.校验接口状态和返回值数据
         4.检查被打赏者余额和账户，预期为：1000 * 0.6 = 600（money_cash）
-        5.检查公会长余额，预期为：1000 * 0.25 = 250
+        5.检查公会长余额，预期为：1000 * 0.21 = 210
         6.检查打赏者余额.预期为：1000 - 1000 = 0
         """
         test_uid = config.live_role['pack_cal_uid']
@@ -192,7 +192,7 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('single_money', test_uid, money_type='money_cash'), 600)
-        assert_equal(conMysql.selectUserInfoSql('sum_money', ceo_uid), 250)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', ceo_uid), 210)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 

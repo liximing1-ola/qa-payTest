@@ -31,9 +31,16 @@
 # ps -aux | grep python
 # ps -ef | grep python | grep -v grep | awk '{print $2}' | xargs kill -9
 
+# gogs（废弃）
 # git clone http://be1bef6103d75ed87a7bcc6fe8981ea1801eb6ed@http://114.55.7.123:3000/ee-test/payTest.git
-# git clone https://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@github.com/liximing-ola/qa-payTest.git
 # git clone http://fc81d1271c05206031bf42cd29cba1ffa0ef7a93@114.55.7.123:3000/ees-server-go/banban-consume
+
+# github
+# git clone https://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@github.com/liximing-ola/qa-payTest.git
+# git clone https://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@github.com/olaola-chat/bb-php.git
+# git clone https://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@github.com/olaola-chat/bb-consume.git
+#git remote set-url origin git@github.com:olaola-chat/bb-php.git
+#git pull origin release-for-vpc --allow-unrelated-histories
 
 # service cron start
 # */3 * * * * python3 /home/banban-1/qa-payTest/run_all_case.py
@@ -41,7 +48,6 @@
 # 20 8 * * * python3 rmtree.py
 # 0 16 * * 1,2,3,4,5 python3 /home/banban-1/qa-payTest/others/bot_dinner.py
 # 30 11 * * 1,2,3,4,5 python3 /home/banban-1/qa-payTest/others/bot_dinner.py
-#
 # 28 15 * * 1,2,3,4,5 python3 /home/banban-1/qa-payTest/others/bot_tea.py
 
 # /etc/host

@@ -8,7 +8,7 @@ from common.Consts import case_list, result
 from common import basicData
 class TestPayCreate(unittest.TestCase):
 
-    @unittest.skip('已下架支付入口')
+    @unittest.skip('unity已下线')
     def test_01_unityGamePayChange(self, des='unity道具购买场景'):
         """
         用例描述：
