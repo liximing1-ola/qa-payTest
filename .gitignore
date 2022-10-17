@@ -6,4 +6,4 @@
 __pycache__/
 caseStarify/__pycache__/
 common/__pycache__/
-!/caseStarify/del/
+/caseStarify/del/
