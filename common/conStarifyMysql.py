@@ -7,8 +7,8 @@ import pymysql
 class conMysql:
     db_config = {
         "ali_db": 'localhost',
-        "ali_user": 'root',  # todo
-        "ali_pas": 'root'  # todo
+        "ali_user": 'root',
+        "ali_pas": 'root'
     }
     _dbUrl = db_config['ali_db']
     _user = db_config['ali_user']
