@@ -42,11 +42,12 @@ def hash_key():
 
 
 if __name__ == '__main__':
-	deal_query = query_starify.copy()
-	t = str(int(time()))
-	deal_query['_timestamp'] = t
-	# deal_query['_timestamp'] = 1664435210
-	deal_query['_index'] = 250
-	deal_query['format'] = "json"
-	print(deal_query['_timestamp'])
-	print(create_sign(deal_query))
+	# deal_query = query_starify.copy()
+	# t = str(int(time()))
+	# deal_query['_timestamp'] = t
+	# # deal_query['_timestamp'] = 1664435210
+	# deal_query['_index'] = 250
+	# deal_query['format'] = "json"
+	# print(deal_query['_timestamp'])
+	# print(create_sign(deal_query))
+	print(int(time()+3600*24))

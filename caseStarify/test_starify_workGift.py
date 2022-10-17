@@ -5,7 +5,7 @@ from common.Assert import assert_code, assert_body
 from common.Config import config
 from common.Consts import case_list, result
 from common.Request import post_request_session_starify
-# from common.conPtMysql import conMysql
+# from common.conStarifyMysql import conMysql
 # from common.method import reason
 from common.method import reason_starify
 from common.runFailed import Retry

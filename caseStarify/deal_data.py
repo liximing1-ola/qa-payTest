@@ -15,7 +15,7 @@ def deal_pay_data(op_type, gift, work_state="todo", to_uids=None, is_use_bag=Fal
 	:param hit_offset: 合并请求的连击数
 	:return:
 	"""
-	gifts = starify_work_gift_config if op_type == "work" else starify_room_gift_config
+	gifts = gift_config if op_type == "work" else gift_config
 
 	if to_uids is None:
 		to_uids = []

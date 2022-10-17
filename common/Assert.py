@@ -80,3 +80,13 @@ def assert_body(body, body_msg, expected_msg, reason):
     except:
         Consts.fail_case_reason.append(reason)
         raise
+
+
+def assert_between(actual_result, lower_limit, upper_limit):
+    try:
+        assert lower_limit <= actual_result <= upper_limit
+        return True
+    except:
+        reason = f'实际结果: {actual_result}, 预期结果: {lower_limit} 至 {upper_limit}, 验证结果不一致，用例执行失败，望严查!'
+        Consts.fail_case_reason.append(reason)
+        raise

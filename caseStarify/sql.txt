@@ -7,11 +7,14 @@ dbName:
 Port:
 charset:
 
-账户余额的
-改:
+账户余额:xs_user_money
+改:UPDATE `xs_user_money` SET `star_coin`='19999' WHERE uid='124270';
+查:SELECT * FROM `xs_user_money` WHERE uid='124270'
+
+道具配置信息:xs_commodity
 查:
 
-礼物配置信息:
+礼物配置信息:xs_gift
 查:
 
 
@@ -19,12 +22,12 @@ charset:
 改:
 删:
 
-账户背包礼物/装扮等
-改:
+账户背包礼物/装扮等:xs_user_commodity
+增:INSERT INTO `xs_user_commodity` (`uid`, `cid`, `num`, `period_end`) VALUES(124270, 23, 10, 1666077659);
 查:
-删:
+删:DELETE FROM `xs_user_commodity` WHERE uid=124270;
 
-用户的作品id
+用户的作品id:
 查:
 
 消费记录流水:
