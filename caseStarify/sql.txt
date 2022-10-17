@@ -18,7 +18,7 @@ charset:
 查:
 
 
-作品已被打赏的标记:
+作品已被打赏的标记:xs_user_work_reward
 改:
 删:
 

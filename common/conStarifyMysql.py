@@ -59,9 +59,18 @@ class conMysql:
             conMysql.con.commit()
 
     @staticmethod
-    def deleteUserAccountSql(tableName, uid):
+    def deleteUserAccountSql(tableName, uid, wid=0):
         if tableName == 'user_commodity':  # 清除用户背包数据
             sql = "delete from xs_user_commodity where uid={}".format(uid)
+            try:
+                conMysql.cur.execute(sql)
+            except Exception as error:
+                conMysql.con.rollback()
+                print('delete fail', error)
+            finally:
+                conMysql.con.commit()
+        if tableName == 'user_work_reward':  # 清除用户打赏作品的标记
+            sql = f"delete from xs_user_work_reward where uid={uid} and wid={wid}"
             try:
                 conMysql.cur.execute(sql)
             except Exception as error:
@@ -81,6 +90,7 @@ class conMysql:
             print('insert fail', error)
         finally:
             conMysql.con.commit()
+
     # # 查询用户账户信息
     # @staticmethod
     # def selectUserInfoSql(accountType, uid=config.pt_payUid, money_type='money_cash_b'):
