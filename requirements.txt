@@ -89,3 +89,11 @@ zope.interface        5.4.0
 
 [notice] A new release of pip available: 22.1.2 -> 22.3
 [notice] To update, run: pip install --upgrade pip
+
+pytest~=6.1.0
+requests~=2.23.0
+urllib3~=1.26.12
+PyMySQL~=0.9.3
+redis~=3.5.3
+PyYAML~=5.3.1
+gevent~=21.8.0
