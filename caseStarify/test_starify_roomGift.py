@@ -13,7 +13,7 @@ from common.method import reason_starify
 from common.runFailed import Retry
 
 
-@Retry(max_n=1)
+@Retry(max_n=2)
 class TestPayCreate(unittest.TestCase):
 
     def test_room_001(self, des='房间打赏,星币余额充足,礼物=摩登派对,返奖15%～20%'):

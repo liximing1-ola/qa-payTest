@@ -6,7 +6,7 @@ import pymysql
 
 class conMysql:
     db_config = {
-        "ali_db": 'localhost',
+        "ali_db": '127.0.0.1',
         "ali_user": 'root',
         "ali_pas": 'root'
     }
@@ -318,3 +318,6 @@ class conMysql:
     #             return res[0]
     #     except Exception as error:
     #         print(error)
+if __name__ == '__main__':
+    # conMysql.updateMoneySql(124458, 19999)
+    print(conMysql.selectUserInfoSql('star_coin', 124458))

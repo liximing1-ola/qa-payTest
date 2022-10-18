@@ -143,7 +143,7 @@ def all_case(appInfo):
 if __name__ == "__main__":
     if platform.node() == config.linux_node['ali']:
         main(config.appName['Partying'])
-    elif platform.node() == "wuzhenxing": #todo 修改 调试用 wuzhenxing
+    elif platform.node() == "ubuntu": #todo 修改 调试用 ubuntu,dev=iZj6cig35upuwmdws5sec2Z
         main(config.appName['starify'])
     else:
         main(config.appName['伴伴'])
