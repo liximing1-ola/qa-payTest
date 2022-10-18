@@ -15,8 +15,9 @@ class config:
                 'bb_git_branch': 'release-for-vpc',
                 'bb_go_git_branch': 'master',
                 'pt_git_branch': 'main',
-                'starify_path': r"/home/spirit/code/qa-payTest",  # todo dev项目代码路径 调试 用 r"/home/spirit/code/qa-payTest"
-                'starify_git_branch': "wzx",  # todo dev分支  调试 用 "wzx"
+                'starify_go_path': r"/var/www/sta-go",  # todo dev项目代码路径 调试 用 r"/home/spirit/code/qa-payTest" / dev "/var/www/sta-go"
+                'starify_room_path': r"/var/www/sta-room",  # todo dev项目代码路径 调试 用 r"/home/spirit/code/qa-payTest" / dev "/var/www/sta-go"
+                'starify_git_branch': "dev",  # todo dev分支  调试 用 "wzx"
                 }
     appName = {
         "伴伴": 'banban',

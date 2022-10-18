@@ -100,7 +100,7 @@ def post_request_session_starify(url, data, tokenName='starify'):
     response_dicts = dict()
     response_dicts['code'] = response.status_code
     try:
-        response_dicts['body']= response.json()
+        response_dicts['body'] = response.json()
     except Exception as e:
         print(e)
         response_dicts['body'] = ''

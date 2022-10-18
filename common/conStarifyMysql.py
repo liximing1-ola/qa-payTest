@@ -46,7 +46,17 @@ class conMysql:
                 return int(res[0])
             except Exception as error:
                 print(error)
-
+        # elif accountType == 'pay_change':  # todo 查询用户消费记录数据
+        #     sql = "select money from xs_pay_change_new where uid={} ORDER BY id DESC LIMIT 1".format(uid)
+        #     try:
+        #         conMysql.cur.execute(sql)
+        #         res = conMysql.cur.fetchone()
+        #         if len(res) > 0:
+        #             return res[0]
+        #         else:
+        #             return 0
+        #     except Exception as error:
+        #         print(error)
     @staticmethod
     def updateMoneySql(uid, money):
         """更新用户账户余额"""
