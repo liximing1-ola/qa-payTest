@@ -70,8 +70,8 @@ gift_config = {
 		"name": "聲霸天下",
 		"price": 5200,
 		"cid": 23,
-		"reward_lower": 0.10,  # 返奖下限
-		"reward_upper": 0.15  # 返奖上限
+		"reward_lower": 0.05,  # 返奖下限
+		"reward_upper": 0.10  # 返奖上限
 	},
 	"10": {
 		"gift_id": 10,
