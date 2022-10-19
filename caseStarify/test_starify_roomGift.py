@@ -384,7 +384,7 @@ class TestPayCreate(unittest.TestCase):
         #  sql:打赏者starify_payUid 背包礼物=空,摩登派對-1
         assert_equal(conMysql.selectUserInfoSql('gift_num', starify_payUid, gift['cid']), 0)
         #  sql:被打赏者starify_rewardUid01 查询余额=19999*1*15% ~ 19999*1*20%
-        assert_between(conMysql.selectUserInfoSql('star_coin', starify_rewardUid02), gift['price'] * gift['reward_lower'] * 1,
+        assert_between(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01), gift['price'] * gift['reward_lower'] * 1,
                        gift['price'] * gift['reward_upper'] * 1)
         # 2 连击
         data = deal_pay_data("room", gift['gift_id'], to_uids=[starify_rewardUid01], hit_offset=2, combo_key=combo_key)
