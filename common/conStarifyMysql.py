@@ -40,7 +40,10 @@ class conMysql:
             try:
                 conMysql.cur.execute(sql)
                 res = conMysql.cur.fetchone()
-                return int(res[0])
+                if res[0] is None:
+                    return 0
+                else:
+                    return res[0]
             except Exception as error:
                 print(error)
 
