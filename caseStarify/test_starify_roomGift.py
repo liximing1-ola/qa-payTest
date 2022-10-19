@@ -65,7 +65,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01), 0)
         case_list[des] = result
 
-    def test_room_004(self, des='房间打赏,星币余额充足,打赏多人,礼物=聲霸天下,返奖10%～15%'):
+    def test_room_004(self, des='房间打赏,星币余额充足,打赏多人,礼物=聲霸天下,返奖5%～10%'):
         gift = gift_config['9']
         #  sql:打赏者starify_payUid 修改余额=5200*2(人数)=10400
         conMysql.updateMoneySql(starify_payUid, 10400)
