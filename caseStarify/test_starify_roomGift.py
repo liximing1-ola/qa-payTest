@@ -451,8 +451,8 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
         assert_body(res['body'], 'success', True, reason_starify(des, res))
-        #  sql:打赏者starify_payUid 查询余额=19999*1*2
-        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 19999 * 1 * 2)
+        #  sql:打赏者starify_payUid 查询余额=19999*2*2
+        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 19999 * (3-1) * 2)
         #  sql:打赏者starify_payUid 背包礼物=空
         assert_equal(conMysql.selectUserInfoSql('gift_num', starify_payUid, gift['cid']), 0)
         #  sql:被打赏者starify_rewardUid01 查询余额=19999*1*15% ~ 19999*1*20%
