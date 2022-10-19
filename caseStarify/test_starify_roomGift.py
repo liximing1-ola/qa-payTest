@@ -291,7 +291,7 @@ class TestPayCreate(unittest.TestCase):
         data = deal_pay_data("room", gift['gift_id'], to_uids=[starify_rewardUid01, starify_rewardUid02], )
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
-        assert_body(res['body'], 'success', True, reason_starify(des, res))
+        assert_body(res['body'], 'msg', "支付或打赏失败", reason_starify(des, res))
         #  sql:打赏者starify_payUid 查询余额=0
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
         #  sql:打赏者starify_payUid 背包礼物=空
