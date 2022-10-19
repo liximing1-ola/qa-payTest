@@ -69,7 +69,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 2)
         case_list[des] = result
 
-    def test_work_005(self, des='星币余额充足,作品打赏,礼物类型=星币'):
+    def test_work_005(self, des='作品打赏,星币余额充足,礼物类型=星币'):
         gift = gift_config['1']
         #  sql:清除作品已被打赏的标记
         conMysql.deleteUserAccountSql("user_work_reward", starify_payUid, starify_work_state['todo'])

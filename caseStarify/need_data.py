@@ -11,8 +11,8 @@ starify_rewardUid02 = 124460  # 手机 15008520852
 
 # 作品id
 starify_work_state = {
-	"todo": 733,  #未打赏
-	"done": 734,  #已打赏
+	"todo": 733,  # 未打赏
+	"done": 734,  # 已打赏
 }
 
 # 礼物配置
@@ -70,8 +70,8 @@ gift_config = {
 		"name": "聲霸天下",
 		"price": 5200,
 		"cid": 23,
-		"reward_lower": 0.10,  # 返奖下限
-		"reward_upper": 0.15  # 返奖上限
+		"reward_lower": 0.05,  # 返奖下限
+		"reward_upper": 0.10  # 返奖上限
 	},
 	"10": {
 		"gift_id": 10,

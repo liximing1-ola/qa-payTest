@@ -1,9 +1,6 @@
 # coding=utf-8
 import time
-
 import pymysql
-
-
 class conMysql:
     db_config = {
         "ali_db": '127.0.0.1',
@@ -43,20 +40,13 @@ class conMysql:
             try:
                 conMysql.cur.execute(sql)
                 res = conMysql.cur.fetchone()
-                return int(res[0])
+                if res[0] is None:
+                    return 0
+                else:
+                    return res[0]
             except Exception as error:
                 print(error)
-        # elif accountType == 'pay_change':  # todo 查询用户消费记录数据
-        #     sql = "select money from xs_pay_change_new where uid={} ORDER BY id DESC LIMIT 1".format(uid)
-        #     try:
-        #         conMysql.cur.execute(sql)
-        #         res = conMysql.cur.fetchone()
-        #         if len(res) > 0:
-        #             return res[0]
-        #         else:
-        #             return 0
-        #     except Exception as error:
-        #         print(error)
+
     @staticmethod
     def updateMoneySql(uid, money):
         """更新用户账户余额"""
@@ -328,6 +318,8 @@ class conMysql:
     #             return res[0]
     #     except Exception as error:
     #         print(error)
+
+
 if __name__ == '__main__':
     # conMysql.updateMoneySql(124458, 19999)
     print(conMysql.selectUserInfoSql('star_coin', 124458))
