@@ -7,9 +7,9 @@ from common import method
 
 def robot_slack(mode, reason, title='', bot='BB'):
     headers = {'Content-Type': 'application/json'}
-    robot_dict = {'BB': 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=f9d916cb-6b93-4389-8aa4-f51c755faa0e',
-                  'test': 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=0179d8d1-2078-41ba-a8da-0fb11bd51880',
-                  'PT': 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=b05a239e-3cc3-4faf-a3cc-c77e200ae1e6',
+    robot_dict = {'BB': '',
+                  'test': '',
+                  'PT': '',
                   'starify': 'https://hooks.slack.com/services/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',  # todo 机器人key
                   }
     url = robot_dict[bot]
