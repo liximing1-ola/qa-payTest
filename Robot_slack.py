@@ -44,7 +44,7 @@ def robot_slack(mode, reason, title='', bot='BB'):
     elif mode == 'attachments':
         data = {
             "username": "支付回归",
-            "icon_emoji": ":白色的对钩:",
+            "icon_emoji": ":lady_beetle:",
             "attachments": [
                 {
                     "fallback": f"运行于:{time.strftime('%m-%d %H:%M', time.localtime(time.time()))}",
