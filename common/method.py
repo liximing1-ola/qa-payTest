@@ -8,6 +8,19 @@ import Robot
 from common import Consts
 
 
+def dictToListSlack(result_dict):
+    """slack机器人使用"""
+    case = []
+    for k, v in result_dict.items():
+        field = {
+            "title": f"Scene:{k}",
+            "value": f"执行结果:{v}",
+            "short": False
+        }
+        case.append(field)
+    return case
+
+
 # 将列表生成支持markdown的形式
 def dictToList(result_dict):
     list_case = []

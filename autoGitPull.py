@@ -5,6 +5,7 @@ import git
 from git.repo import Repo
 
 from Robot import robot
+from Robot_slack import robot_slack
 from common import Logs, Consts
 from common.Config import config
 from common.Session import Session

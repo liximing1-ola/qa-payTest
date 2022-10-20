@@ -3,7 +3,7 @@ from gevent import monkey
 monkey.patch_all()
 from common.Config import config
 from common.sqlScript import mysql
-from Robot import robot
+from Robot_slack import robot
 from common import basicData, Consts, Logs, method
 from common.method import getValue
 from common.Session import Session
@@ -171,7 +171,7 @@ class TestPayConcurrent:
         TestPayConcurrent.test_01_payCreate(num)
         TestPayConcurrent.test_02_commodityUse(num)
         TestPayConcurrent.test_03_commodityPresent(num)
-        case_list = method.dictToList(Consts.case_list_c)
+        case_list = method.dictToListSlack(Consts.case_list_c)
         des = "{}\n".format(case_list)
         Logs.get_log('concurrentCaseResult.log').info(des)
         robot('markdown', des, bot='test')
