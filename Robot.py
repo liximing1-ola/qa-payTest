@@ -9,7 +9,7 @@ def robot(mode, reason, title='', bot='BB'):
         'BB': 'https://hooks.slack.com/services/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',
         'test': 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=0179d8d1-2078-41ba-a8da-0fb11bd51880',
         'PT': 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=b05a239e-3cc3-4faf-a3cc-c77e200ae1e6',
-        'starify': 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=03e72a59-9039-44fe-b07f-2766f5d0210c',
+        'starify': 'https://hooks.slack.com/services/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',
     }
     url = robot_dict[bot]
     # url = robot_dict['test']  # 调试

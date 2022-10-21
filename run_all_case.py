@@ -2,6 +2,7 @@
 import platform
 import time
 import unittest
+
 from Robot import robot
 from autoGitPull import updateTime, updateCode
 from common import Logs, method, Consts
@@ -86,30 +87,31 @@ def main(appInfo):
             Consts.endTime = time.time()
             des = "用例总数: {}, 失败用例数: {}, 异常用例数: {}" \
                 .format(test_result.testsRun, len(test_result.failures), len(test_result.errors))
+
             Logs.get_log('caseResult.log').info(des)
-            case_list = method.dictToListSlack(Consts.case_list)
-            case_list_2 = method.dictToListSlack(Consts.case_list_b)
+            case_list = method.dictToList(Consts.case_list)
+            case_list_2 = method.dictToList(Consts.case_list_b)
             use_time = str(int(Consts.endTime - Consts.startTime)) + 's'
             if len(test_result.failures) == 0 and len(test_result.errors) == 0:
-                # des = "{}\n".format(case_list)
-                des_2 = "用例数: {}, 失败数: {}, 总耗时: {}, 代码分支：{}".format(
-                    test_result.testsRun,
+                des = "{}\n".format(case_list)
+                des_2 = "{}\n用例数: {}, 失败数: {}, 总耗时: {}, 代码分支：{}".format(
+                    case_list_2, test_result.testsRun,
                     len(test_result.failures) + len(test_result.errors),
                     use_time,
-                    config.codeInfo['starify_git_branch'])
-                robot_slack('attachments', case_list, bot='starify')
+                    config.codeInfo['bb_git_branch'])
+                robot('slack', des, bot='starify')
                 time.sleep(0.1)
-                robot_slack('success', des_2, bot='starify')
+                robot('slack', des_2, bot='starify')
             elif len(test_result.failures) >= 1:
                 Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
-                robot_slack('success', des, bot='starify')
+                robot('slack', des, bot='starify')
                 for case, reason in test_result.failures:
-                    robot_slack('fail', Consts.fail_case_reason[0], title=case.id(), bot='starify')
+                    robot('slack', Consts.fail_case_reason[0], title=case.id(), bot='starify')
                     break
             elif len(test_result.errors) >= 1:
                 Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
                 for case, reason in test_result.errors:
-                    robot_slack('fail', reason, case.id(), bot='starify')
+                    robot('slack', reason, case.id(), bot='starify')
                     break
         else:
             Logs.get_log('runCode.log').info('NoRun')
@@ -142,7 +144,7 @@ def all_case(appInfo):
 if __name__ == "__main__":
     if platform.node() == config.linux_node['ali']:
         main(config.appName['Partying'])
-    elif platform.node() == config.linux_node['ali-starify']:  # todo 修改 调试用 ubuntu / dev=iZj6cig35upuwmdws5sec2Z
+    elif platform.node() == config.linux_node['ali-starify']:
         main(config.appName['starify'])
     else:
         main(config.appName['伴伴'])

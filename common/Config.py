@@ -15,9 +15,9 @@ class config:
                 'bb_git_branch': 'release-for-vpc',
                 'bb_go_git_branch': 'master',
                 'pt_git_branch': 'main',
-                'starify_go_path': r"/var/www/sta-go",  # todo 调试用 r"/home/spirit/code/qa-payTest" / dev r"/var/www/sta-go"
-                'starify_room_path': r"/var/www/sta-room",  # todo 调试 用 r"/home/spirit/code/qa-payTest" / dev r"/var/www/sta-room"
-                'starify_git_branch': "dev",  # todo 调试用 "wzx" / dev分支  dev
+                'starify_go_path': r"/home/spirit/code/qa-payTest",  # todo 调试用 r"/home/spirit/code/qa-payTest" / dev r"/var/www/sta-go"
+                'starify_room_path': r"/home/spirit/code/qa-payTest",  # todo 调试 用 r"/home/spirit/code/qa-payTest" / dev r"/var/www/sta-room"
+                'starify_git_branch': "wzx",  # todo 调试用 "wzx" / dev分支  dev
                 }
     appName = {
         "伴伴": 'banban',
@@ -38,7 +38,7 @@ class config:
     # 服务器标识
     linux_node = {
         'ali': 'iZj6c7cxmmtvxr9kuetoizZ',
-        'ali-starify': 'iZj6cig35upuwmdws5sec2Z', # todo 修改 调试用 ubuntu / dev=iZj6cig35upuwmdws5sec2Z
+        'ali-starify': 'ubuntu',  # todo 修改 调试用 ubuntu / dev=iZj6cig35upuwmdws5sec2Z
     }
     # app登录方式
     bb_qqLogin_url = bb_host + 'account/qqlogin'

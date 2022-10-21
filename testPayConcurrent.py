@@ -3,7 +3,6 @@ from gevent import monkey
 monkey.patch_all()
 from common.Config import config
 from common.sqlScript import mysql
-from Robot_slack import robot
 from common import basicData, Consts, Logs, method
 from common.method import getValue
 from common.Session import Session
