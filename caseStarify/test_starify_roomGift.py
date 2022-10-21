@@ -661,7 +661,7 @@ class TestPayCreate(unittest.TestCase):
     def test_room_023(self, des='房间打赏,打赏3~8号礼物种类,不返奖'):
         money = 100000
         #  sql:打赏者starify_payUid 修改余额=100000
-        conMysql.updateMoneySql(starify_payUid, start_money)
+        conMysql.updateMoneySql(starify_payUid, money)
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         # 打赏编号3~8的礼物,不返奖
