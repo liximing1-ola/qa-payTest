@@ -36,7 +36,7 @@ class config:
     pt_pay_url = pt_host + 'pay/create?package=com.ola.chat'
     starify_pay_url = starify_host + 'go/starify/pay/create'
     # 服务器标识
-    linux_node = {'ali': 'iZj6c7cxmmtvxr9kuetoizZ', }
+    linux_node = {'ali': 'iZj6c7cxmmtvxr9kuetoizZ', 'starify': 'iZj6cig35upuwmdws5sec2Z'}
     # app登录方式
     bb_qqLogin_url = bb_host + 'account/qqlogin'
     pt_mobile_login_url = pt_host + 'account/passwordLogin'

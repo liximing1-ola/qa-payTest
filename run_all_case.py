@@ -2,7 +2,6 @@
 import platform
 import time
 import unittest
-
 from Robot import robot
 from autoGitPull import updateTime, updateCode
 from common import Logs, method, Consts
@@ -143,7 +142,7 @@ def all_case(appInfo):
 if __name__ == "__main__":
     if platform.node() == config.linux_node['ali']:
         main(config.appName['Partying'])
-    elif platform.node() == "iZj6cig35upuwmdws5sec2Z":  # todo 修改 调试用 ubuntu / dev=iZj6cig35upuwmdws5sec2Z
+    elif platform.node() == config.linux_node['starify']:  # todo 修改 调试用 ubuntu / dev=iZj6cig35upuwmdws5sec2Z
         main(config.appName['starify'])
     else:
         main(config.appName['伴伴'])

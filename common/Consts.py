@@ -12,7 +12,7 @@ GAME_LIST = {}
 # 失败结果列表
 fail_case_reason = []
 # pass
-result = 'P'
+result = '✅'
 # 记录时间
 startTime=0
 endTime=0

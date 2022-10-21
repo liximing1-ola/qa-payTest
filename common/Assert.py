@@ -4,7 +4,6 @@
 import json
 import platform
 import time
-
 from common import Consts
 from common.Config import config
 
