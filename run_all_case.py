@@ -28,7 +28,7 @@ def main(appInfo):
                     case_list_2, test_result.testsRun,
                     len(test_result.failures) + len(test_result.errors),
                     use_time,
-                    config.codeInfo['bb_git_branch'])
+                    config.codeInfo['starify_git_branch'])
                 robot('slack', des)
                 time.sleep(0.1)
                 robot('slack', des_2)
@@ -102,17 +102,17 @@ def main(appInfo):
                 robot('slack', des, bot='starify')
                 time.sleep(0.1)
                 robot('slack', des_2, bot='starify')
-            elif len(test_result.failures) >= 1:
+            if len(test_result.failures) >= 1:
                 Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
-                robot('slack', des, bot='starify')
+                robot('slack', des, bot='starify', color="danger")
                 for case, reason in test_result.failures:
-                    robot('slack', Consts.fail_case_reason[0], title=case.id(), bot='starify')
-                    break
-            elif len(test_result.errors) >= 1:
+                    robot('slack', Consts.fail_case_reason[0], title=case.id(), bot='starify', color="danger")
+                    # break
+            if len(test_result.errors) >= 1:
                 Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
                 for case, reason in test_result.errors:
-                    robot('slack', reason, case.id(), bot='starify')
-                    break
+                    robot('slack', reason, case.id(), bot='starify', color="danger")
+                    # break
         else:
             Logs.get_log('runCode.log').info('NoRun')
     else:

@@ -1,9 +1,11 @@
 import time
+
 import requests
+
 from common import method
 
 
-def robot(mode, reason, title='', bot='BB'):
+def robot(mode, reason, title='', bot='BB', color="good"):
     headers = {'Content-Type': 'application/json'}
     robot_dict = {  # 'BB': 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=f9d916cb-6b93-4389-8aa4-f51c755faa0e',
         'BB': 'https://hooks.slack.com/services/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',
@@ -83,7 +85,7 @@ def robot(mode, reason, title='', bot='BB'):
                 {
                     "fallback": "",
                     "pretext": "",
-                    "color": "#36a64f",
+                    "color": color,
                     "fields": [
                         {
                             "title": title,
