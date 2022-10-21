@@ -1,17 +1,16 @@
 import time
-
 import requests
-
 from common import method
 
 
 def robot(mode, reason, title='', bot='BB'):
     headers = {'Content-Type': 'application/json'}
-    robot_dict = {'BB': 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=f9d916cb-6b93-4389-8aa4-f51c755faa0e',
-                  'test': 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=0179d8d1-2078-41ba-a8da-0fb11bd51880',
-                  'PT': 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=b05a239e-3cc3-4faf-a3cc-c77e200ae1e6',
-                  'starify': 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=03e72a59-9039-44fe-b07f-2766f5d0210c',
-                  }
+    robot_dict = {  # 'BB': 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=f9d916cb-6b93-4389-8aa4-f51c755faa0e',
+        'BB': 'https://hooks.slack.com/services/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',
+        'test': 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=0179d8d1-2078-41ba-a8da-0fb11bd51880',
+        'PT': 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=b05a239e-3cc3-4faf-a3cc-c77e200ae1e6',
+        'starify': 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=03e72a59-9039-44fe-b07f-2766f5d0210c',
+    }
     url = robot_dict[bot]
     # url = robot_dict['test']  # 调试
     if mode == 'fail':
@@ -77,9 +76,28 @@ def robot(mode, reason, title='', bot='BB'):
                 }
             }
             requests.post(url, headers=headers, json=data)
+
+    elif mode == 'slack':
+        data = {
+            "attachments": [
+                {
+                    "fallback": "",
+                    "pretext": "",
+                    "color": "#36a64f",
+                    "fields": [
+                        {
+                            "title": title,
+                            "value": reason,
+                            "short": 0
+                        }
+                    ]
+                }
+            ]
+        }
+        requests.post(url, headers=headers, json=data)
     else:
         print('robot over gg')
 
 
 if __name__ == '__main__':
-    robot('', '')
+    robot('slack', reason='commit')

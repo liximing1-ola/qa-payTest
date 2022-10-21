@@ -1,9 +1,8 @@
 import os
 import random
+from common.Config import config
 import time
-
 import requests
-
 import Robot
 from common import Consts
 
@@ -25,9 +24,15 @@ def dictToListSlack(result_dict):
 def dictToList(result_dict):
     list_case = []
     for k, v in result_dict.items():
-        list_case.append(
-            'Scene: <font color="comment">{}</font>,  result: <font color=\"info\">{}</font>'.format(k, v))
+        # list_case.append('<font color="comment">{}-</font>,<font color=\"info\">{}</font>'.format(v, k))
+        list_case.append('scene-{}:{}'.format(k, v))
     case = '\n'.join(list_case)
+    # 注释生成md文件
+    # path = config.BASE_PATH + '/markdown2Html/'
+    # if not os.path.exists(path):
+    #    os.mkdir(path)
+    # with open(path + 'result.md', 'a', encoding='utf-8') as r:
+    #    r.writelines(case)
     return case
 
 # 随机获取图片
@@ -105,3 +110,9 @@ def checkPath(path):
     if not os.path.exists(path):
         Robot.robot('icon', 'php代码路径异常: {}'.format(path), bot='PT')
         raise EnvironmentError('代码路径异常')
+
+
+if __name__=='__main__':
+    text = {'房间打赏,星币余额充足,礼物=摩登派对,返奖15%～20%': '✅',
+            '房间打赏,星币余额=0': '✅'}
+    print(dictToList(text))
