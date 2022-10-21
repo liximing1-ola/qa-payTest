@@ -659,7 +659,7 @@ class TestPayCreate(unittest.TestCase):
         case_list[des] = result
 
     def test_room_023(self, des='房间打赏,打赏3~8号礼物种类,不返奖'):
-        start_money = 100000
+        money = 100000
         #  sql:打赏者starify_payUid 修改余额=100000
         conMysql.updateMoneySql(starify_payUid, start_money)
         #  sql:被打赏者starify_rewardUid01 修改余额=0
@@ -672,7 +672,8 @@ class TestPayCreate(unittest.TestCase):
             assert_code(res['code'])
             assert_body(res['body'], 'success', True, reason_starify(des, res))
             #  sql:打赏者starify_payUid 查询余额=100000-gift['price']
-            assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), start_money - gift['price'])
+            money -= gift['price']
+            assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), money)
             #  sql:被打赏者starify_rewardUid01 查询余额=0
             assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01), 0)
 
