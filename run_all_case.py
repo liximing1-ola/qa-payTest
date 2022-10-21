@@ -28,19 +28,19 @@ def main(appInfo):
                     len(test_result.failures) + len(test_result.errors),
                     use_time,
                     config.codeInfo['bb_git_branch'])
-                robot('markdown', des)
+                robot('slack', des)
                 time.sleep(0.1)
-                robot('markdown', des_2)
+                robot('slack', des_2)
             elif len(test_result.failures) >= 1:
                 Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
-                robot('success', des)
+                robot('slack', des)
                 for case, reason in test_result.failures:
-                    robot('fail', Consts.fail_case_reason[0], title=case.id())
+                    robot('slack', Consts.fail_case_reason[0], title=case.id())
                     break
             elif len(test_result.errors) >= 1:
                 Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
                 for case, reason in test_result.errors:
-                    robot('fail', reason, case.id())
+                    robot('slack', reason, case.id())
                     break
         else:
             Logs.get_log('runCode.log').info('NoRun')
