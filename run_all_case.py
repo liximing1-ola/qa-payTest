@@ -2,7 +2,6 @@
 import platform
 import time
 import unittest
-
 from Robot import robot
 from autoGitPull import updateTime, updateCode
 from common import Logs, method, Consts
@@ -64,19 +63,19 @@ def main(appInfo):
                     len(test_result.failures) + len(test_result.errors),
                     use_time,
                     config.codeInfo['pt_git_branch'])
-                robot('markdown', des, bot='PT')
+                robot('slack_pt', des, bot='PT')
                 time.sleep(0.1)
-                robot('markdown', des_2, bot='PT')
+                robot('slack_pt', des_2, bot='PT')
             elif len(test_result.failures) >= 1:
                 Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
-                robot('success', des, bot='PT')
+                robot('slack_pt', des, bot='PT')
                 for case, reason in test_result.failures:
-                    robot('fail', Consts.fail_case_reason[0], title=case.id(), bot='PT')
+                    robot('slack_pt', Consts.fail_case_reason[0], title=case.id(), bot='PT')
                     break
             elif len(test_result.errors) >= 1:
                 Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
                 for case, reason in test_result.errors:
-                    robot('fail', reason, case.id(), bot='PT')
+                    robot('slack_pt', reason, case.id(), bot='PT')
                     break
         else:
             Logs.get_log('runCode.log').info('NoRun')
