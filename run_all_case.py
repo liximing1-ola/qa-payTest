@@ -28,7 +28,7 @@ def main(appInfo):
                     case_list_2, test_result.testsRun,
                     len(test_result.failures) + len(test_result.errors),
                     use_time,
-                    config.codeInfo['starify_git_branch'])
+                    config.codeInfo['bb_git_branch'])
                 robot('slack', des)
                 time.sleep(0.1)
                 robot('slack', des_2)
