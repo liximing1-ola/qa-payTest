@@ -9,15 +9,15 @@ from common import Consts
 
 # 将列表生成支持markdown的形式
 def dictToList(result_dict):
-    # 注释生成md文件
-    # path = config.BASE_PATH + '/markdown2Html/'
-    # if not os.path.exists(path):
-    #    os.mkdir(path)
     list_case = []
     for k, v in result_dict.items():
         # list_case.append('<font color="comment">{}-</font>,<font color=\"info\">{}</font>'.format(v, k))
         list_case.append('scene-{}:{}'.format(k, v))
     case = '\n'.join(list_case)
+    # 注释生成md文件
+    # path = config.BASE_PATH + '/markdown2Html/'
+    # if not os.path.exists(path):
+    #    os.mkdir(path)
     # with open(path + 'result.md', 'a', encoding='utf-8') as r:
     #    r.writelines(case)
     return case
