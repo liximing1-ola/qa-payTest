@@ -674,6 +674,6 @@ class TestPayCreate(unittest.TestCase):
             #  sql:打赏者starify_payUid 查询余额=100000-gift['price']
             assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), start_money - gift['price'])
             #  sql:被打赏者starify_rewardUid01 查询余额=0
-            assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
+            assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01), 0)
 
         case_list[des] = result
