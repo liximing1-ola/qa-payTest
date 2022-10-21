@@ -52,62 +52,71 @@ if __name__ == '__main__':
 	# print(create_sign(deal_query))
 	# print(int(time()+3600*24))
 	url = "https://hooks.slack.com/services/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"
-	# data ={"text": "This is a line of text in a channel.And this is another line of text."}
 	# data = {
 	# 	"username": "BUG提醒机器人",
 	# 	"icon_emoji": ":lady_beetle:",
 	# 	# "channel": "#调试机器人bug通知",#频道 or 人
 	# 	"attachments": [
 	# 		{
-	# 			"fallback": "v1.0.4.4: <https://github.com/orgs/olaola-chat/projects/9/views/5?v=wq1R93UMqlk|点击跳转bug列表>",
-	# 			"pretext": "v1.0.4.4: <https://github.com/orgs/olaola-chat/projects/9/views/5?v=wq1R93UMqlk|点击跳转bug列表>",
-	# 			"color": "#D00000",
+	# 			"fallback": "Plain-text summary of the attachment.",
+	# 			"color": "#2eb886",
+	# 			"pretext": "Optional text that appears above the attachment block",
+	# 			"author_name": "Bobby Tables",
+	# 			"author_link": "http://flickr.com/bobby/",
+	# 			"author_icon": "http://flickr.com/icons/bobby.jpg",
+	# 			"title": "Slack API Documentation",
+	# 			"title_link": "https://api.slack.com/",
+	# 			"text": "Optional text that appears within the attachment",
 	# 			"fields": [
 	# 				{
-	# 					"title": "1",
-	# 					"value": "1",
+	# 					"title": "Priority",
+	# 					"value": "High",
 	# 					"short": False
-	# 				},
-	# 				{
-	# 					"title": "2",
-	# 					"value": "2",
-	# 					"short": False
-	# 				},
-	# 			]
+	# 				}
+	# 			],
+	# 			"image_url": "http://my-website.com/path/to/image.jpg",
+	# 			"thumb_url": "http://example.com/path/to/thumb.png",
+	# 			"footer": "Slack API",
+	# 			"footer_icon": "https://platform.slack-edge.com/img/default_application_icon.png",
+	# 			"ts": 123456789
 	# 		}
 	# 	]
 	# }
-
-	# branch = {
-	# 	"commit": "8abcad6",
-	# 	"author": "wzx",
-	# 	"summary": "Merge branch 'master' of https://github.com/liximing-ola/qa-payTest into wzx",
-	# 	"date": "2022-10-19 14:38:57"
-	# }
-	# data = {
-	# 	"username": "starify支付回归",
-	# 	"icon_emoji": ":lady_beetle:",
-	# 	"text": json.dumps(branch),
-	# }
-	result_dict = {'星币余额充足,作品打赏,礼物类型=安可': 'P', '作品打赏,星币余额=0': 'P'}
-	fields = []
-	for k, v in result_dict.items():
-		field = {
-			"title": f"Scene:{k}",
-			"value": f"执行结果:{v}",
-			"short": False
-		}
-		fields.append(field)
 	data = {
-		"username": "starify支付回归",
-		"icon_emoji": ":lady_beetle:",
-		# "channel": "#调试机器人bug通知",#频道 or 人
+		# 	"username": "BUG提醒机器人",
+		# 	"icon_emoji": ":lady_beetle:",
 		"attachments": [
 			{
-				"fallback":  f"运行于:{time.strftime('%m-%d %H:%M', time.localtime(time.time()))}",
-				"pretext": f"运行于:{time.strftime('%m-%d %H:%M', time.localtime(time.time()))}",
-				"color": "#11d000",
-				"fields": fields
+				# "mrkdwn_in": ["text"],
+				"color": "#36a64f",
+				# "pretext": "",
+				# "author_name": "author_name",
+				# "author_link": "http://flickr.com/bobby/",
+				# "author_icon": "https://placeimg.com/16/16/people",
+				"title": "starify蒲公英下载",
+				"title_link": "https://api.slack.com/",
+				"text": "更新日志:\n1.111\n2.222",
+				# "fields": [
+				# 	{
+				# 		"title": "A field's title",
+				# 		"value": "This field's value",
+				# 		"short": False
+				# 	},
+				# 	{
+				# 		"title": "A short field's title",
+				# 		"value": "A short field's value",
+				# 		"short": True
+				# 	},
+				# 	{
+				# 		"title": "A second short field's title",
+				# 		"value": "A second short field's value",
+				# 		"short": True
+				# 	}
+				# ],
+				"image_url": "http://placekitten.com/g/200/200",
+				# "footer": "footer",
+				# "footer_icon": "https://platform.slack-edge.com/img/default_application_icon.png",
+				"ts": 123456789
 			}
 		]
 	}

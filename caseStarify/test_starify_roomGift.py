@@ -79,10 +79,10 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', True, reason_starify(des, res))
         #  sql:打赏者starify_payUid 查询余额=0
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
-        #  sql:被打赏者starify_rewardUid01 查询余额=5200*10% ～ 5200*15%
+        #  sql:被打赏者starify_rewardUid01 查询余额=5200*5% ～ 5200*10%
         assert_between(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01), gift['price'] * gift['reward_lower'],
                        gift['price'] * gift['reward_upper'])
-        #  sql:被打赏者starify_rewardUid02 查询余额=5200*10% ～ 5200*15%
+        #  sql:被打赏者starify_rewardUid02 查询余额=5200*5% ～ 5200*10%
         assert_between(conMysql.selectUserInfoSql('star_coin', starify_rewardUid02), gift['price'] * gift['reward_lower'],
                        gift['price'] * gift['reward_upper'])
         case_list[des] = result
@@ -207,7 +207,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid02), 0)
         case_list[des] = result
 
-    def test_room_010(self, des='房间打赏,背包支付,剩余礼物数充足,礼物=聲霸天下,返奖10%～15%'):
+    def test_room_010(self, des='房间打赏,背包支付,剩余礼物数充足,礼物=聲霸天下,返奖5%～10%'):
         gift = gift_config['9']
         #  sql:打赏者starify_payUid 修改余额=0
         conMysql.updateMoneySql(starify_payUid, 0)
@@ -225,7 +225,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
         #  sql:打赏者starify_payUid 背包礼物=空,聲霸天下-1
         assert_equal(conMysql.selectUserInfoSql('gift_num', starify_payUid, gift['cid']), 0)
-        #  sql:被打赏者starify_rewardUid01 查询余额=5200*10% ～ 5200*15%
+        #  sql:被打赏者starify_rewardUid01 查询余额=5200*5% ～ 5200*10%
         assert_between(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01), gift['price'] * gift['reward_lower'],
                        gift['price'] * gift['reward_upper'])
         case_list[des] = result
@@ -656,4 +656,24 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid02 查询余额=19999*2*15% ~ 19999*2*20%
         assert_between(conMysql.selectUserInfoSql('star_coin', starify_rewardUid02), gift['price'] * gift['reward_lower'] * 3,
                        gift['price'] * gift['reward_upper'] * 3)
+        case_list[des] = result
+
+    def test_room_023(self, des='房间打赏,打赏3~8号礼物种类,不返奖'):
+        start_money = 100000
+        #  sql:打赏者starify_payUid 修改余额=100000
+        conMysql.updateMoneySql(starify_payUid, start_money)
+        #  sql:被打赏者starify_rewardUid01 修改余额=0
+        conMysql.updateMoneySql(starify_rewardUid01, 0)
+        # 打赏编号3~8的礼物,不返奖
+        for i in range(3, 9):
+            gift = gift_config[i]
+            data = deal_pay_data("room", gift['gift_id'], to_uids=[starify_rewardUid01], )
+            res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+            assert_code(res['code'])
+            assert_body(res['body'], 'success', True, reason_starify(des, res))
+            #  sql:打赏者starify_payUid 查询余额=100000-gift['price']
+            assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), start_money - gift['price'])
+            #  sql:被打赏者starify_rewardUid01 查询余额=0
+            assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
+
         case_list[des] = result
