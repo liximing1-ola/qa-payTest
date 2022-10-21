@@ -666,7 +666,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         # 打赏编号3~8的礼物,不返奖
         for i in range(3, 9):
-            gift = gift_config[i]
+            gift = gift_config[str(i)]
             data = deal_pay_data("room", gift['gift_id'], to_uids=[starify_rewardUid01], )
             res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
             assert_code(res['code'])
