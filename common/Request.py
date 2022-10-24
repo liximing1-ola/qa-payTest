@@ -82,8 +82,6 @@ def post_request_session_starify(url, data, tokenName='starify'):
     deal_query['_blid'] = starify_payUid
     url = url + "?" + unquote(urlencode(deal_query))
 
-    # if not url.startswith('https://'):
-    #     url = '%s%s' % ('https://', url)
     try:
         if data is None:
             response = requests.post(url=url, headers=header, verify=False)

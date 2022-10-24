@@ -19,13 +19,12 @@ def dictToListSlack(result_dict):
         case.append(field)
     return case
 
-
 # 将列表生成支持markdown的形式
 def dictToList(result_dict):
     list_case = []
     for k, v in result_dict.items():
         # list_case.append('<font color="comment">{}-</font>,<font color=\"info\">{}</font>'.format(v, k))
-        list_case.append('scene-{}:{}'.format(k, v))
+        list_case.append('scene-{}：{}'.format(k, v))
     case = '\n'.join(list_case)
     # 注释生成md文件
     # path = config.BASE_PATH + '/markdown2Html/'
@@ -110,9 +109,3 @@ def checkPath(path):
     if not os.path.exists(path):
         Robot.robot('icon', 'php代码路径异常: {}'.format(path), bot='PT')
         raise EnvironmentError('代码路径异常')
-
-
-if __name__=='__main__':
-    text = {'房间打赏,星币余额充足,礼物=摩登派对,返奖15%～20%': '✅',
-            '房间打赏,星币余额=0': '✅'}
-    print(dictToList(text))

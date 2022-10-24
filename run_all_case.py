@@ -121,12 +121,8 @@ def all_case(appInfo):
     case_dir = config.BASE_PATH
     if appInfo == config.appName['伴伴']:
         case_dir += '/case'
-    elif appInfo == config.appName['嗨歌']:
-        case_dir += '/caseHavefun'
     elif appInfo == config.appName['Partying']:
         case_dir += '/caseOversea'
-    elif appInfo == config.appName['谁是凶手']:
-        case_dir += '/caseGames'
     elif appInfo == config.appName['starify']:
         case_dir += '/caseStarify'
     else:
