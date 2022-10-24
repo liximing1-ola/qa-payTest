@@ -1,18 +1,15 @@
-import time
-
+from time import time, strftime, localtime
 import requests
-
 from common import method
-
-
 def robot(mode, reason, title='', bot='BB', color="good"):
     headers = {'Content-Type': 'application/json'}
+    #  企微
     robot_dict_wechat = {
         'BB': 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=f9d916cb-6b93-4389-8aa4-f51c755faa0e',
         'test': 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=0179d8d1-2078-41ba-a8da-0fb11bd51880',
         'PT': 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=b05a239e-3cc3-4faf-a3cc-c77e200ae1e6',
     }
-
+    #  slack
     robot_dict = {
         'BB': 'https://hooks.slack.com/services/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',
         'PT': 'https://hooks.slack.com/workflows/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',
@@ -56,7 +53,7 @@ def robot(mode, reason, title='', bot='BB', color="good"):
         requests.post(url, headers=headers, json=data)
 
     elif mode == 'icon':
-        now = time.strftime('%m-%d %H:%M', time.localtime(time.time()))
+        now = strftime('%m-%d %H:%M', localtime(time()))
         title = "{}, Execution is abnormal.Please check the status!".format(now)
         des = reason
         icon = method.getImage(mode=1)
@@ -106,7 +103,6 @@ def robot(mode, reason, title='', bot='BB', color="good"):
         data = {
                 "title": title,
                 "value": reason,
-
         }
         requests.post(url, headers=headers, json=data)
 

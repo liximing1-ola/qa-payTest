@@ -1,6 +1,6 @@
 import os
-import time
 import git
+from time import time, mktime, strptime
 from git.repo import Repo
 from Robot import robot
 from common import Logs, Consts
@@ -40,14 +40,14 @@ class updateCode:
         g = git.cmd.Git(gtr_path)
         g.pull() if not appInfo.startswith("starify") else print(f"{appInfo}不拉代码!")
         repo = Repo(gtr_path)
-        Consts.startTime = time.time()
+        Consts.startTime = time()
         Session.getSession(env)  # 更新userToken
         commit_log = repo.git.log('--pretty={"commit":"%h","author":"%an","summary":"%s","date":"%cd"}', max_count=3,
                                   date='format:%Y-%m-%d %H:%M:%S')
         log_list = commit_log.split("\n")
         Logs.get_log('gitCommitPull.log').info('当前分支: {}, 最新一条commit: {}'.format(repo.active_branch, log_list[0]))
         if str(repo.active_branch) == git_branch:  # 当前线上分支
-            times = int(time.mktime(time.strptime([eval(item) for item in log_list][0]['date'], "%Y-%m-%d %H:%M:%S")))  # commit更新时间
+            times = int(mktime(strptime([eval(item) for item in log_list][0]['date'], "%Y-%m-%d %H:%M:%S")))  # commit更新时间
             lastTime = int(updateTime('read'))  # 上次脚本执行时间
             if times > lastTime:
                 Logs.get_log('updateGitCode.log').info('最新代码提交时间: {}, 上次代码更新时间: {}'.format(times, lastTime))

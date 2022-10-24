@@ -1,6 +1,6 @@
 # coding=utf-8
 import platform
-import time
+from time import time, sleep
 import unittest
 from Robot import robot
 from autoGitPull import updateTime, updateCode
@@ -12,9 +12,9 @@ from common.method import checkPath
 def main(appInfo):
     if appInfo == config.appName['伴伴']:
         if updateCode.autoGitPull('bb_php') | updateCode.autoGitPull('bb_go'):
-            updateTime('write', now=str(int(time.time())))
+            updateTime('write', now=str(int(time())))
             test_result = unittest.TextTestRunner(verbosity=3).run(all_case(appInfo))
-            Consts.endTime = time.time()
+            Consts.endTime = time()
             des = "用例总数: {}, 失败用例数: {}, 异常用例数: {}" \
                 .format(test_result.testsRun, len(test_result.failures), len(test_result.errors))
             Logs.get_log('caseResult.log').info(des)
@@ -29,7 +29,7 @@ def main(appInfo):
                     use_time,
                     config.codeInfo['bb_git_branch'])
                 robot('slack', des)
-                time.sleep(0.1)
+                sleep(0.1)
                 robot('slack', des_2)
             elif len(test_result.failures) >= 1:
                 Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
@@ -47,9 +47,9 @@ def main(appInfo):
     elif appInfo == config.appName['Partying']:
         checkPath(config.codeInfo['pt_php_path'])
         if updateCode.autoGitPull(appInfo):
-            updateTime('write', now=str(int(time.time())))
+            updateTime('write', now=str(int(time())))
             test_result = unittest.TextTestRunner(verbosity=3).run(all_case(appInfo))
-            Consts.endTime = time.time()
+            Consts.endTime = time()
             des = "Total: {}, failures: {}, errors: {}" \
                 .format(test_result.testsRun, len(test_result.failures), len(test_result.errors))
             Logs.get_log('caseResult.log').info(des)
@@ -64,7 +64,7 @@ def main(appInfo):
                     use_time,
                     config.codeInfo['pt_git_branch'])
                 robot('slack_pt', des, bot='PT')
-                time.sleep(0.1)
+                sleep(0.1)
                 robot('slack_pt', des_2, bot='PT')
             elif len(test_result.failures) >= 1:
                 Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
@@ -81,12 +81,11 @@ def main(appInfo):
             Logs.get_log('runCode.log').info('NoRun')
     elif appInfo == config.appName['starify']:
         if updateCode.autoGitPull('starify_go') | updateCode.autoGitPull('starify_room'):
-            updateTime('write', now=str(int(time.time())))
+            updateTime('write', now=str(int(time())))
             test_result = unittest.TextTestRunner(verbosity=3).run(all_case(appInfo))
-            Consts.endTime = time.time()
+            Consts.endTime = time()
             des = "用例总数: {}, 失败用例数: {}, 异常用例数: {}" \
                 .format(test_result.testsRun, len(test_result.failures), len(test_result.errors))
-
             Logs.get_log('caseResult.log').info(des)
             case_list = method.dictToList(Consts.case_list)
             case_list_2 = method.dictToList(Consts.case_list_b)
@@ -99,7 +98,7 @@ def main(appInfo):
                     use_time,
                     config.codeInfo['starify_git_branch'])
                 robot('slack', des, bot='starify')
-                time.sleep(0.1)
+                sleep(0.1)
                 robot('slack', des_2, bot='starify')
             elif len(test_result.failures) >= 1:
                 Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))

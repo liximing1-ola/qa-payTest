@@ -35,7 +35,7 @@ def deal_pay_data(op_type, gift, work_state="todo", to_uids=None, is_use_bag=Fal
 		"rid": starify_rid,
 		"gift_id": gifts[gift]['gift_id'],
 		"cid": 0,  # todo 从礼物面板发起=0,从背包发起=cid
-		"gift_num": 1,# 无用参数
+		"gift_num": 1,  # 无用参数
 		"is_use_bag": is_use_bag,
 		"money": gifts[gift]['price'],
 		"combo_key": combo_key if combo_key is not None else hash_key(),
