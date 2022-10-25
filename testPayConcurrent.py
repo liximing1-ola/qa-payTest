@@ -116,8 +116,7 @@ class TestPayConcurrent:
         self.endCommodityUse(num_times)
         Consts.case_list_c[des] = Consts.result
 
-    @staticmethod
-    def startCommodityPresentReady():
+    def startCommodityPresentReady(self):
         """
         用例描述：
         赠送商城购买的道具
@@ -130,39 +129,35 @@ class TestPayConcurrent:
         mysql.updateMoneySql(config.rewardUid)
         mysql.deleteUserCommoditySql(config.payUid)
         mysql.deleteUserCommoditySql(config.rewardUid)
-        mysql.insertXsUserCommodity(config.payUid, 264, 2)
-        assert_equal(mysql.checkUserCommoditySql(config.payUid, 264), 2)
+        mysql.insertXsUserCommodity(config.payUid, self.commodity_id['cid_264'], 2)
+        assert_equal(mysql.checkUserCommoditySql(config.payUid, self.commodity_id['cid_264']), 2)
 
-    @staticmethod
-    def commodityPresentConcurrent():
-        cid = int(mysql.getUserCommodityIdSql(264, config.payUid))
+    def commodityPresentConcurrent(self):
+        cid = int(mysql.getUserCommodityIdSql(self.commodity_id['cid_264'], config.payUid))
         payload = 'id={}&num=1&targetId={}'.format(cid, config.rewardUid)
-        res = post_request_session(url=TestPayConcurrent.commodity_present, data=payload)
+        res = post_request_session(url=self.php_urL['commodity_present'], data=payload)
         assert_code(res['code'], 200)
         getValue(res)
 
-    @staticmethod
-    def endCommodityPresent():
-        assert_equal(mysql.checkUserCommoditySql(config.payUid, 264), 0)
-        assert_equal(mysql.checkUserCommoditySql(config.rewardUid, 264), 2)
+    def endCommodityPresent(self):
+        assert_equal(mysql.checkUserCommoditySql(config.payUid, self.commodity_id['cid_264']), 0)
+        assert_equal(mysql.checkUserCommoditySql(config.rewardUid, self.commodity_id['cid_264']), 2)
         assert_equal(Consts.success_num, 2)
 
-    @staticmethod
-    def test_03_commodityPresent(num_times):
-        d = '并发赠送用户物品的场景'
-        TestPayConcurrent.startCommodityPresentReady()
+    def test_03_commodityPresent(self, num_times, des='并发赠送用户物品的场景'):
+        self.startCommodityPresentReady()
         threads = []
         for i in range(num_times):
-            thread = gevent.spawn(TestPayConcurrent.commodityPresentConcurrent)
+            thread = gevent.spawn(self.commodityPresentConcurrent)
             threads.append(thread)
         gevent.joinall(threads)
-        TestPayConcurrent.endCommodityPresent()
-        Consts.case_list_c[d] = Consts.result
+        self.endCommodityPresent()
+        Consts.case_list_c[des] = Consts.result
 
     def main(self, num):
         self.test_01_payCreate(num)
-        self.test_02_commodityUse(num)
-        # self.test_03_commodityPresent(num)
+        # self.test_02_commodityUse(num)
+        self.test_03_commodityPresent(num)
         case_list = method.dictToListSlack(Consts.case_list_c)
         des = "{}\n".format(case_list)
         Logs.get_log('concurrentCaseResult.log').info(des)
