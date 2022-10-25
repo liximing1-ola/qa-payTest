@@ -10,7 +10,7 @@ from common.method import getValue
 from common.Session import Session
 from common.Request import post_request_session
 from common.Assert import assert_equal, assert_code
-from time import time, sleep
+from time import sleep
 class TestPayConcurrent:
     php_urL = {
         'pay_url': config.bb_host + 'pay/create?package=com.imbb.banban.android',  # 内网支付接口
@@ -18,7 +18,8 @@ class TestPayConcurrent:
         'commodity_use': config.bb_host + 'commodity/use?package=com.imbb.banban.android',  # 物品使用接口
     }
     commodity_id = {
-        'cid_340': 340  # 小天使
+        'cid_340': 340,  # 小天使
+        'cid_264': 264,  # 头像框（5h）
     }
     Session().getSession('dev')
 
@@ -68,8 +69,7 @@ class TestPayConcurrent:
         assert_equal(Consts.success_num, 1)
         Consts.fail_num = 0
 
-    def test_01_payCreate(self, num_times):
-        d = '并发打赏背包礼物的场景'
+    def test_01_payCreate(self, num_times, des='并发打赏背包礼物的场景'):
         self.startPayCreateReady()
         threads = []
         for i in range(num_times):
@@ -77,10 +77,9 @@ class TestPayConcurrent:
             threads.append(thread)
         gevent.joinall(threads)
         self.endPayCreate()
-        Consts.case_list_c[d] = Consts.result
+        Consts.case_list_c[des] = Consts.result
 
-    @staticmethod
-    def startCommodityUseReady():
+    def startCommodityUseReady(self):
         """
         用例描述：
         使用商城购买的道具
@@ -91,35 +90,31 @@ class TestPayConcurrent:
         """
         mysql.updateMoneySql(config.payUid)
         mysql.deleteUserCommoditySql(config.payUid)
-        mysql.insertXsUserCommodity(config.payUid, 264, 1)
-        assert_equal(mysql.checkUserCommoditySql(config.payUid, 264), 1)
+        mysql.insertXsUserCommodity(config.payUid, self.commodity_id['cid_264'], 1)
+        assert_equal(mysql.checkUserCommoditySql(config.payUid, self.commodity_id['cid_264']), 1)
 
-    @staticmethod
-    def commodityUseConcurrent():
-        cid = int(mysql.getUserCommodityIdSql(264, config.payUid))
+    def commodityUseConcurrent(self):
+        cid = int(mysql.getUserCommodityIdSql(self.commodity_id['cid_264'], config.payUid))
         payload = 'id={}&num=1'.format(cid)
-        res = post_request_session(url=TestPayConcurrent.commodity_use, data=payload)
+        res = post_request_session(url=self.php_urL['commodity_use'], data=payload)
         assert_code(res['code'], 200)
         getValue(res)
-        assert_equal(mysql.checkUserCommoditySql(config.payUid, 264), 0)
+        assert_equal(mysql.checkUserCommoditySql(config.payUid, self.commodity_id['cid_264']), 0)
 
-    @staticmethod
-    def endCommodityUse(num_times):
-        assert_equal(mysql.checkUserCommoditySql(config.payUid, 264), 0)
+    def endCommodityUse(self, num_times):
+        assert_equal(mysql.checkUserCommoditySql(config.payUid, self.commodity_id['cid_264']), 0)
         assert_equal(Consts.fail_num, num_times - 1)
         Consts.success_num = 0
 
-    @staticmethod
-    def test_02_commodityUse(num_times):
-        d = '并发使用背包物品的场景'
-        TestPayConcurrent.startCommodityUseReady()
+    def test_02_commodityUse(self, num_times, des='并发使用背包物品的场景'):
+        self.startCommodityUseReady()
         threads = []
         for i in range(num_times):
-            thread = gevent.spawn(TestPayConcurrent.commodityUseConcurrent)
+            thread = gevent.spawn(self.commodityUseConcurrent)
             threads.append(thread)
         gevent.joinall(threads)
-        TestPayConcurrent.endCommodityUse(num_times)
-        Consts.case_list_c[d] = Consts.result
+        self.endCommodityUse(num_times)
+        Consts.case_list_c[des] = Consts.result
 
     @staticmethod
     def startCommodityPresentReady():
@@ -166,7 +161,7 @@ class TestPayConcurrent:
 
     def main(self, num):
         self.test_01_payCreate(num)
-        # self.test_02_commodityUse(num)
+        self.test_02_commodityUse(num)
         # self.test_03_commodityPresent(num)
         case_list = method.dictToListSlack(Consts.case_list_c)
         des = "{}\n".format(case_list)
