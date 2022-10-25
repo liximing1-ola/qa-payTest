@@ -1,21 +1,26 @@
 import gevent
 from gevent import monkey
+
 monkey.patch_all()
 from common.Config import config
 from common.sqlScript import mysql
-from common import basicData, Consts, Logs, method
+from common import Consts, Logs, method
+from common.basicData import encodeData
 from common.method import getValue
 from common.Session import Session
 from common.Request import post_request_session
 from common.Assert import assert_equal, assert_code
-import time
+from time import time, sleep
 class TestPayConcurrent:
-    # 内网支付接口
-    pay_url = config.bb_host + 'pay/create?package=com.imbb.banban.android'
-    # 物品赠送接口
-    commodity_present = config.bb_host + 'commodity/present?package=com.imbb.banban.android'
-    # 物品使用接口
-    commodity_use = config.bb_host + 'commodity/use?package=com.imbb.banban.android'
+    php_urL = {
+        'pay_url': config.bb_host + 'pay/create?package=com.imbb.banban.android',  # 内网支付接口
+        'commodity_present': config.bb_host + 'commodity/present?package=com.imbb.banban.android',  # 物品赠送接口
+        'commodity_use': config.bb_host + 'commodity/use?package=com.imbb.banban.android',  # 物品使用接口
+    }
+    commodity_id = {
+        'cid_340': 340  # 小天使
+    }
+    Session().getSession('dev')
 
     def startPayCreateReady(self):
         """
@@ -28,12 +33,10 @@ class TestPayConcurrent:
         4.检查购买者余额 (10000-9900=100)
         5.检查背包内物品
         """
-        cid=340  # 小天使
-        Session().getSession('dev')
         mysql.updateMoneySql(config.payUid, 10000)
         mysql.deleteUserCommoditySql(config.payUid)
-        data = basicData.encodeData(payType='shop-buy', cid=cid, money=9900, num=1)
-        res = post_request_session(url=self.pay_url, data=data)
+        data = encodeData(payType='shop-buy', cid=self.commodity_id['cid_340'], money=9900, num=1)
+        res = post_request_session(url=self.php_urL['pay_url'], data=data)
         assert_code(res['code'], 200)
         assert_equal(mysql.selectAllMoneySql(config.payUid), 100)
         assert_equal(mysql.checkUserAllCommoditySql(config.payUid), 1)
@@ -49,22 +52,21 @@ class TestPayConcurrent:
         4.检查背包内物品
         5.检查被打赏者余额 990*0.62 = 6138
         """
-        bag_gift_cid = 340
         mysql.updateMoneySql(config.payUid)
         mysql.updateMoneySql(config.rewardUid)
-        cid = int(mysql.getUserCommodityIdSql(bag_gift_cid, config.payUid))
-        payload = 'platform=available&type=package&money=9900&params=%7B%22rid%22%3A193185484%2C%22uids%22%3A%22105002312%22%2C%22positions%22%3A%220%22%2C%22position%22%3A-1%2C%22giftId%22%3A54%2C%22giftNum%22%3A1%2C%22price%22%3A9900%2C%22cid%22%3A{}%2C%22ctype%22%3A%22gift%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A1%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22refer%22%3A%22%E7%83%AD%E9%97%A8%3Aroom%22%2C%22useCoin%22%3A-1%7D'.format(cid)
-        res = post_request_session(url=self.pay_url, data=payload)
+        cid = int(mysql.getUserCommodityIdSql(self.commodity_id['cid_340'], config.payUid))
+        payload = 'platform=available&type=package&money=9900&params=%7B%22rid%22%3A193185484%2C%22uids%22%3A%22105002312%22%2C%22positions%22%3A%220%22%2C%22position%22%3A-1%2C%22giftId%22%3A54%2C%22giftNum%22%3A1%2C%22price%22%3A9900%2C%22cid%22%3A{}%2C%22ctype%22%3A%22gift%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A1%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22refer%22%3A%22%E7%83%AD%E9%97%A8%3Aroom%22%2C%22useCoin%22%3A-1%7D'.format(
+            cid)
+        res = post_request_session(url=self.php_urL['pay_url'], data=payload)
         assert_code(res['code'], 200)
         getValue(res)
 
-    @staticmethod
-    def endPayCreate():
-        assert_equal(mysql.checkUserCommoditySql(config.payUid, 340), 0)
-        time.sleep(1)
+    def endPayCreate(self):
+        assert_equal(mysql.checkUserCommoditySql(config.payUid, self.commodity_id['cid_340']), 0)
+        sleep(1)
         assert_equal(mysql.selectAllMoneySql(config.rewardUid), 6138)
         assert_equal(Consts.success_num, 1)
-        Consts.fail_num=0
+        Consts.fail_num = 0
 
     def test_01_payCreate(self, num_times):
         d = '并发打赏背包礼物的场景'
@@ -74,7 +76,7 @@ class TestPayConcurrent:
             thread = gevent.spawn(self.payCreateConcurrent)
             threads.append(thread)
         gevent.joinall(threads)
-        TestPayConcurrent.endPayCreate()
+        self.endPayCreate()
         Consts.case_list_c[d] = Consts.result
 
     @staticmethod
@@ -105,7 +107,7 @@ class TestPayConcurrent:
     def endCommodityUse(num_times):
         assert_equal(mysql.checkUserCommoditySql(config.payUid, 264), 0)
         assert_equal(Consts.fail_num, num_times - 1)
-        Consts.success_num=0
+        Consts.success_num = 0
 
     @staticmethod
     def test_02_commodityUse(num_times):
@@ -172,6 +174,6 @@ class TestPayConcurrent:
         # robot('markdown', des, bot='test')
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     p = TestPayConcurrent()
     p.main(10)
