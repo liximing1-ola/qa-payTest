@@ -6,7 +6,6 @@ import os
 import requests
 import urllib3
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
-
 from common import Logs, method
 from common.Config import config
 from common.params_Yaml import Yaml
@@ -34,6 +33,24 @@ class Session:
                 params = Yaml.read_yaml('Basic.yml', 'params_dev_qq')
                 login_url = config.bb_qqLogin_url + '?' + params + '&package=com.imbb.banban.android'  # 7.22修改，请求接口加包名限制
                 body = Yaml.read_yaml('Basic.yml', 'data_dev_qq')
+                session = requests.session()
+                res = session.post(login_url, data=body, headers=headers, verify=False)
+                res.raise_for_status()
+                res = res.json()
+                if not method.isExtend(res, 'token') or res['success'] != 1:
+                    print('failReason： {}'.format(res['msg']))
+                tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
+                Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
+                return tokenDict
+            except Exception as error:
+                Logs.get_log('getSession.log').error('session异常，原因： {}'.format(error))
+        elif env == config.appName['皮队友']:
+            # noinspection PyBroadException
+            try:
+                headers = Yaml.read_yaml('Basic.yml', 'header_dev')
+                params = Yaml.read_yaml('Basic.yml', 'params_teammate_qq')
+                login_url = config.bb_qqLogin_url + '?' + params + '&package=com.im.teammate.ios'  # 7.22修改，请求接口加包名限制
+                body = Yaml.read_yaml('Basic.yml', 'data_teammate_qq')
                 session = requests.session()
                 res = session.post(login_url, data=body, headers=headers, verify=False)
                 res.raise_for_status()
