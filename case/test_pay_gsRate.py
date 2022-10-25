@@ -83,7 +83,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查被打赏者余额，预期为：100 * 0.6 = 60
         """
         testUid = self.rate_role["rewardedUid"]  # 被打赏者
-        payUid = self.rate_role["rewardUid"]
+        payUid = self.rate_role["rewardUid"] #打赏
         conMysql.updateUserMoneyClearSql(testUid, payUid)
         conMysql.updateMoneySql(payUid, money=100)  # 打赏者
         conMysql.checkUserBroker(testUid, bid=self.rate_role["bid"])  # 被打赏者加入工会
