@@ -51,7 +51,10 @@ class updateCode:
             lastTime = int(updateTime('read'))  # 上次脚本执行时间
             if times > lastTime:
                 Logs.get_log('updateGitCode.log').info('最新代码提交时间: {}, 上次代码更新时间: {}'.format(times, lastTime))
-                robot('slack', log_list[0], bot=bot)  # git commit update message
+                if appInfo == 'pt':
+                    robot('slack_pt', log_list[0], bot=bot)  # partying git commit update message
+                else:
+                    robot('slack', log_list[0], bot=bot)  # git commit update message
                 return True
             else:
                 Logs.get_log('updateGitCode.log').info("未拉取到{}分支代码，最近代码提交时间: {}, 上次代码更新时间: {}"
