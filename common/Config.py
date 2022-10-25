@@ -1,5 +1,7 @@
 # coding=utf-8
 import os
+
+
 class config:
     # 工程目录
     BASE_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -8,6 +10,7 @@ class config:
                'banban': 'com.imbb.banban.android',
                'pt': 'com.ola.chat',
                'starify': 'http://47.243.83.154/',
+               "rush": 'https://192.168.11.55/',
                }
     codeInfo = {'bb_php_path': '/home/webroot/banban',
                 'bb_go_path': '/home/webroot/bb-consume',
@@ -15,8 +18,10 @@ class config:
                 'bb_git_branch': 'release-for-vpc',
                 'bb_go_git_branch': 'master',
                 'pt_git_branch': 'main',
-                'starify_go_path': r"/var/www/sta-go",  # todo 调试用 r"/home/spirit/code/qa-payTest" / dev r"/var/www/sta-go"
-                'starify_room_path': r"/var/www/sta-room",  # todo 调试 用 r"/home/spirit/code/qa-payTest" / dev r"/var/www/sta-room"
+                'starify_go_path': r"/var/www/sta-go",
+                # todo 调试用 r"/home/spirit/code/qa-payTest" / dev r"/var/www/sta-go"
+                'starify_room_path': r"/var/www/sta-room",
+                # todo 调试 用 r"/home/spirit/code/qa-payTest" / dev r"/var/www/sta-room"
                 'starify_git_branch': "dev",  # todo 调试用 "wzx" / dev分支  dev
                 }
     appName = {
@@ -26,15 +31,19 @@ class config:
         "嗨歌": 'havefun',
         "皮队友": 'teammate',
         "starify": 'starify',
+        "冲鸭": "rush",
     }
     # 测试域名
     bb_host = appInfo['bb_dev_58']
     pt_host = appInfo['pt_ali']
     starify_host = appInfo['starify']
+    rush_host = appInfo['rush']
     # 内网支付接口
     pay_url = bb_host + 'pay/create?package=com.imbb.banban.android'
     pt_pay_url = pt_host + 'pay/create?package=com.ola.chat'
     starify_pay_url = starify_host + 'go/starify/pay/create'
+    rush_pay_url = rush_host + "pay/create?package=com.im.duck.android"
+
     # 服务器标识
     linux_node = {
         'ali': 'iZj6c7cxmmtvxr9kuetoizZ',

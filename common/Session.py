@@ -44,7 +44,7 @@ class Session:
                 return tokenDict
             except Exception as error:
                 Logs.get_log('getSession.log').error('session异常，原因： {}'.format(error))
-        elif env == config.appName['皮队友']:
+        elif env == config.appName['冲鸭']:
             # noinspection PyBroadException
             try:
                 headers = Yaml.read_yaml('Basic.yml', 'header_dev')

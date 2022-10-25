@@ -9,9 +9,10 @@ from common.Request import post_request_session
 from common.conMysql import conMysql
 from common.method import reason
 from common.runFailed import Retry
+
+
 @Retry
 class TestPayCreate(unittest.TestCase):
-
     rate_role = {
         "bid": 100011021,  # 公会的bid
         'rewardUid': 131554725,  # 打赏者
@@ -83,7 +84,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查被打赏者余额，预期为：100 * 0.6 = 60
         """
         testUid = self.rate_role["rewardedUid"]  # 被打赏者
-        payUid = self.rate_role["rewardUid"] #打赏
+        payUid = self.rate_role["rewardUid"]  # 打赏
         conMysql.updateUserMoneyClearSql(testUid, payUid)
         conMysql.updateMoneySql(payUid, money=100)  # 打赏者
         conMysql.checkUserBroker(testUid, bid=self.rate_role["bid"])  # 被打赏者加入工会
@@ -91,8 +92,7 @@ class TestPayCreate(unittest.TestCase):
 
         data = basicData.encodeData(payType='package', money=100, rid=200064778, uid=testUid, giftId=config.giftId['5'])
         # 内网支付接口
-        pay_url = self.get_url(self.rate_role["host"])
-        res = post_request_session(pay_url, data)
+        res = post_request_session(config.rush_pay_url, data, tokenName='rush')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', payUid), 0)  # 打赏者金额剩余
@@ -117,8 +117,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.checkUserBroker(testUid, bid=self.rate_role["bid"])  # 被打赏者加入工会
         self.join_white_name(testUid)  # 被打赏者加入白名单，分成为60%
         data = basicData.encodeData(payType='chat-gift', uid=testUid, giftId=20)
-        pay_url = self.get_url(self.rate_role["host"])
-        res = post_request_session(pay_url, data)
+        res = post_request_session(config.rush_pay_url, data, tokenName='rush')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', payUid), 0)  # 打赏者金额剩余
@@ -143,10 +142,15 @@ class TestPayCreate(unittest.TestCase):
         conMysql.checkUserBroker(testUid, bid=self.rate_role["bid"])  # 被打赏者加入工会
         self.join_white_name(testUid)  # 被打赏者加入白名单，分成为60%
         data = basicData.encodeData(payType='defend', uid=testUid, money=52000)
-        pay_url = self.get_url(self.rate_role["host"])
-        res = post_request_session(pay_url, data)
+        res = post_request_session(config.rush_pay_url, data, tokenName='rush')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', payUid), 0)
         assert_equal(conMysql.selectUserInfoSql('sum_money', testUid), 31200)
         case_list_b[des] = result
+
+
+if __name__ == '__main__':
+    suite = unittest.TestSuite()
+    suite.addTest(TestPayCreate("test_03_defendPayCustomRate_60"))
+    unittest.TextTestRunner().run(suite)
