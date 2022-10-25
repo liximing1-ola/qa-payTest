@@ -20,5 +20,5 @@ data_dev_qq:
 
 # 皮队友
 data_teammate_qq:
-    "type":
-    "dtoken":'eb4epfrrA5D11B54hdqHBW8CUl4qFtuOR4tXlEMUzUx8ryHz2DXesrU5G9KAvCtx7uR7GAQeY8cL1DJABrZDcotV0Z1agNfk__2BlL70oDeYm48HWXXW9MhSaDBe9X4__2FaDK8wu4Pj8Dvx1S9Q'
+    "type": 'login'
+    "dtoken": 'eb4epfrrA5D11B54hdqHBW8CUl4qFtuOR4tXlEMUzUx8ryHz2DXesrU5G9KAvCtx7uR7GAQeY8cL1DJABrZDcotV0Z1agNfk__2BlL70oDeYm48HWXXW9MhSaDBe9X4__2FaDK8wu4Pj8Dvx1S9Q'
