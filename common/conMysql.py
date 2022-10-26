@@ -2,6 +2,8 @@
 import pymysql
 import time
 from common.Config import config
+
+
 class conMysql:
     db_config = {"dev_46_db": '192.168.11.46',
                  "dev_46_user": 'root',
@@ -120,7 +122,8 @@ class conMysql:
             except Exception as error:
                 print(error)
         elif accountType == 'relation_config':  # 查询守护关系配置
-            sql = "select id, name, money_value, break_money, upgrade_money from xs_relation_config where id={}".format(uid)
+            sql = "select id, name, money_value, break_money, upgrade_money from xs_relation_config where id={}".format(
+                uid)
             try:
                 conMysql.cur.execute(sql)
                 res = conMysql.cur.fetchall()
@@ -302,7 +305,7 @@ class conMysql:
     # 插入用户金豆余额
     @staticmethod
     def insertBeanSql(uid, money_coupon, cash=0, cash_lock=0):
-        sql = "insert into xs_user_money_extend(uid, money_coupon, cash, cash_lock) values({},{},{},{})"\
+        sql = "insert into xs_user_money_extend(uid, money_coupon, cash, cash_lock) values({},{},{},{})" \
             .format(uid, money_coupon, cash, cash_lock)
         try:
             conMysql.cur.execute(sql)
@@ -354,7 +357,7 @@ class conMysql:
     # 更新箱子刷新物品
     @staticmethod
     def insertXsUserBox(uid, gift_cid=9, box_type='copper'):
-        sql = "insert into xs_user_box (last_refresh_cid, last_refresh_sub_cid, uid, type) values ({},{},{},'{}')"\
+        sql = "insert into xs_user_box (last_refresh_cid, last_refresh_sub_cid, uid, type) values ({},{},{},'{}')" \
             .format(gift_cid, gift_cid, uid, box_type)
         try:
             conMysql.cur.execute(sql)
@@ -368,7 +371,8 @@ class conMysql:
     @staticmethod
     def insertXsUserCommodity(uid, cid, num, state=0):
         conMysql.checkXsCommodity(cid)
-        sql = "insert into xs_user_commodity (uid, cid, num, state) values ({}, {}, {}, {})".format(uid, cid, num, state)
+        sql = "insert into xs_user_commodity (uid, cid, num, state) values ({}, {}, {}, {})".format(uid, cid, num,
+                                                                                                    state)
         try:
             conMysql.cur.execute(sql)
         except Exception as error:
@@ -499,7 +503,8 @@ class conMysql:
     def checkOnlineEarnRelation(agent_uid, artist_uid):
         sign_time = int(time.time())
         end_time = sign_time + 604800
-        sql = 'select id from xs_online_earn_relation where agent_uid={} and artist_uid={}'.format(agent_uid, artist_uid)
+        sql = 'select id from xs_online_earn_relation where agent_uid={} and artist_uid={}'.format(agent_uid,
+                                                                                                   artist_uid)
         try:
             conMysql.cur.execute(sql)
             res = conMysql.cur.fetchone()
@@ -532,7 +537,8 @@ class conMysql:
             conMysql.cur.execute(sql)
             res = conMysql.cur.fetchone()
             if res is None:
-                sql = 'insert into config.xsst_ktv_uid_white(uid, type, app_id) values({}, {}, 1)'.format(uid, white_type)
+                sql = 'insert into config.xsst_ktv_uid_white(uid, type, app_id) values({}, {}, 1)'.format(uid,
+                                                                                                          white_type)
                 try:
                     conMysql.cur.execute(sql)
                 except Exception as error:
@@ -574,7 +580,7 @@ class conMysql:
             conMysql.cur.execute(sql)
             res = conMysql.cur.fetchone()
             if res is None:
-                sql = 'insert into config.bbc_broker_user_rate (uid, broker_creater, rate) values({}, {}, {})'\
+                sql = 'insert into config.bbc_broker_user_rate (uid, broker_creater, rate) values({}, {}, {})' \
                     .format(uid, creater, rate)
                 try:
                     conMysql.cur.execute(sql)
@@ -582,8 +588,41 @@ class conMysql:
                     conMysql.con.rollback()
                     print('insert fail', error)
             else:
-                sql = "update config.bbc_broker_user_rate set rate={}, broker_creater={} where uid={} limit 1"\
+                sql = "update config.bbc_broker_user_rate set rate={}, broker_creater={} where uid={} limit 1" \
                     .format(rate, creater, uid)
+                try:
+                    conMysql.cur.execute(sql)
+                except Exception as error:
+                    conMysql.con.rollback()
+                    print('update fail', error)
+        except Exception as error:
+            print(error)
+        finally:
+            conMysql.con.commit()
+
+    # 插入uid分成白名单
+    @staticmethod
+    def insert_white_uid(uid):
+        sql = "insert into config.xsst_ktv_uid_white (uid,app_id,`type`) values ({},2,127);".format(uid)
+        try:
+            conMysql.cur.execute(sql)
+        except Exception as error:
+            conMysql.con.rollback()
+            print('insert fail', error)
+        finally:
+            conMysql.con.commit()
+
+    @staticmethod
+    # 查询是否在uid分成白名单
+    def check_uid_white(uid):
+        sql = 'select id from config.xsst_ktv_uid_white where uid={}'.format(uid)
+        try:
+            conMysql.cur.execute(sql)
+            res = conMysql.cur.fetchone()
+            if res is None:
+                conMysql.insert_white_uid(uid)
+            else:
+                sql = 'update config.xsst_ktv_uid_white set app_id={},`type`={} where id={}'.format(2, 127, res[0])
                 try:
                     conMysql.cur.execute(sql)
                 except Exception as error:

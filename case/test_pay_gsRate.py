@@ -1,5 +1,3 @@
-import hashlib
-import time
 import unittest
 from common import basicData
 from common.Assert import assert_body, assert_code, assert_equal
@@ -9,67 +7,15 @@ from common.Request import post_request_session
 from common.conMysql import conMysql
 from common.method import reason
 from common.runFailed import Retry
+
+
 @Retry
-@unittest.skip('teammate调试')
 class TestPayCreate(unittest.TestCase):
     rate_role = {
         "bid": 100011021,  # 公会的bid
         'rewardUid': 131554725,  # 打赏者
         'rewardedUid': 131564968,  # 被打赏者
     }
-
-    # 刷新url的加密数据
-    @staticmethod
-    def get_url(url0):
-        second = str(int(time.time()))
-        pms = {
-            "_index": 302,
-            "_ipv": 0,
-            "_model": "iPhone",
-            "_platform": "ios",
-            "_timestamp": second,
-            "format": "json",
-            "package": "com.im.teammate.ios",
-        }
-        url = ""
-        for k, v in pms.items():
-            url = url + k + "=" + str(v) + "&"
-        url = url.rstrip('&')
-        md5 = hashlib.md5()
-        _sign0 = url + '!rilegoule#'
-        md5.update(_sign0.encode('utf-8'))
-        _sign = md5.hexdigest()
-        url = url + "&_sign=" + _sign
-        url = url0 + url
-        return url
-
-    # 查询uid是否在分成白名单并更新或者插入
-    @staticmethod
-    def join_white_name(uid):
-        sql = 'select id from config.xsst_ktv_uid_white where uid={}'.format(uid)
-        try:
-            conMysql.cur.execute(sql)
-            res = conMysql.cur.fetchone()
-            if res is None:
-                sql = "insert into config.xsst_ktv_uid_white (uid,app_id,`type`) values ({},2,127);".format(uid)
-                try:
-                    conMysql.cur.execute(sql)
-                except Exception as error:
-                    conMysql.con.rollback()
-                    print('insert fail', error)
-                finally:
-                    conMysql.con.commit()
-            else:
-                sql = 'update config.xsst_ktv_uid_white set app_id={},`type`={} where id={}'.format(2, 127, res[0])
-                try:
-                    conMysql.cur.execute(sql)
-                except Exception as error:
-                    conMysql.con.rollback()
-                    print('update fail', error)
-                finally:
-                    conMysql.con.commit()
-        except Exception as error:
-            print(error)
 
     def test_01_roomPayCustomRate_60(self, des='商业房打赏自定义分成:60'):
         """
@@ -87,7 +33,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateUserMoneyClearSql(testUid, payUid)
         conMysql.updateMoneySql(payUid, money=100)  # 打赏者
         conMysql.checkUserBroker(testUid, bid=self.rate_role["bid"])  # 被打赏者加入工会
-        self.join_white_name(testUid)  # 被打赏者加入白名单，分成为60%
+        conMysql.check_uid_white(testUid)  # 被打赏者加入白名单，分成为60%
 
         data = basicData.encodeData(payType='package', money=100, rid=200064778, uid=testUid, giftId=config.giftId['5'])
         # 内网支付接口
@@ -114,7 +60,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateUserMoneyClearSql(testUid, payUid)
         conMysql.updateMoneySql(payUid, money=1000)  # 打赏者
         conMysql.checkUserBroker(testUid, bid=self.rate_role["bid"])  # 被打赏者加入工会
-        self.join_white_name(testUid)  # 被打赏者加入白名单，分成为60%
+        conMysql.check_uid_white(testUid)  # 被打赏者加入白名单，分成为60%
         data = basicData.encodeData(payType='chat-gift', uid=testUid, giftId=20)
         res = post_request_session(config.rush_pay_url, data, tokenName='rush')
         assert_code(res['code'])
@@ -139,7 +85,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateUserMoneyClearSql(testUid, payUid)
         conMysql.updateMoneySql(payUid, money=52000)  # 打赏者
         conMysql.checkUserBroker(testUid, bid=self.rate_role["bid"])  # 被打赏者加入工会
-        self.join_white_name(testUid)  # 被打赏者加入白名单，分成为60%
+        conMysql.check_uid_white(testUid) # 被打赏者加入白名单，分成为60%
         data = basicData.encodeData(payType='defend', uid=testUid, money=52000)
         res = post_request_session(config.rush_pay_url, data, tokenName='rush')
         assert_code(res['code'])
