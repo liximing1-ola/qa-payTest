@@ -42,7 +42,7 @@ class config:
     pay_url = bb_host + 'pay/create?package=com.imbb.banban.android'
     pt_pay_url = pt_host + 'pay/create?package=com.ola.chat'
     starify_pay_url = starify_host + 'go/starify/pay/create'
-    rush_pay_url = rush_host + "pay/create?package=com.im.duck.android"
+    rush_pay_url = bb_host + "pay/create?package=com.im.duck.android"
 
     # 服务器标识
     linux_node = {

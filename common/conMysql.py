@@ -537,8 +537,7 @@ class conMysql:
             conMysql.cur.execute(sql)
             res = conMysql.cur.fetchone()
             if res is None:
-                sql = 'insert into config.xsst_ktv_uid_white(uid, type, app_id) values({}, {}, 1)'.format(uid,
-                                                                                                          white_type)
+                sql = 'insert into config.xsst_ktv_uid_white(uid, type, app_id) values({}, {}, 1)'.format(uid,                                                                                               white_type)
                 try:
                     conMysql.cur.execute(sql)
                 except Exception as error:
