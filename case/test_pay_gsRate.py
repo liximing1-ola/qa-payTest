@@ -7,8 +7,6 @@ from common.Request import post_request_session
 from common.conMysql import conMysql
 from common.method import reason
 from common.runFailed import Retry
-
-
 @Retry
 class TestPayCreate(unittest.TestCase):
     rate_role = {
@@ -34,9 +32,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(payUid, money=100)  # 打赏者
         conMysql.checkUserBroker(testUid, bid=self.rate_role["bid"])  # 被打赏者加入工会
         conMysql.check_uid_white(testUid)  # 被打赏者加入白名单，分成为60%
-
         data = basicData.encodeData(payType='package', money=100, rid=200064778, uid=testUid, giftId=config.giftId['5'])
-        # 内网支付接口
         res = post_request_session(config.rush_pay_url, data, tokenName='rush')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -93,9 +89,3 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_money', payUid), 0)
         assert_equal(conMysql.selectUserInfoSql('sum_money', testUid), 31200)
         case_list_b[des] = result
-
-
-if __name__ == '__main__':
-    suite = unittest.TestSuite()
-    suite.addTest(TestPayCreate("test_03_defendPayCustomRate_60"))
-    unittest.TextTestRunner().run(suite)

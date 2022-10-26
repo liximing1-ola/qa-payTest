@@ -16,7 +16,7 @@ def all_case(appInfo):
         return
     testcase = unittest.TestSuite()
     discover = unittest.defaultTestLoader.discover(case_dir,  # 指定待执行用例的目录
-                                                   pattern='test_pay_gsRate.py',
+                                                   pattern=case_name,
                                                    top_level_dir=None)
     testcase.addTests(discover)
     return testcase
@@ -69,8 +69,8 @@ def main(appInfo):
 
 
 if __name__ == "__main__":
-    # if platform.node() == config.linux_node['ali']:
-    #     main(config.appName['Partying'])
-    # else:
-    #     main(config.appName['伴伴'])
+    if platform.node() == config.linux_node['ali']:
+        main(config.appName['Partying'])
+    else:
+        main(config.appName['伴伴'])
     main(config.appName['伴伴'])
