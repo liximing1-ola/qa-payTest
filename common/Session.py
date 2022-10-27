@@ -52,6 +52,7 @@ class Session:
                 login_url = config.bb_qqLogin_url + '?' + params + '&package=com.im.duck.android'  # 7.22修改，请求接口加包名限制
                 body = Yaml.read_yaml('Basic.yml', 'data_teammate_qq')
                 session = requests.session()
+                print(1)
                 print(headers)
                 print(params)
                 print(login_url)
