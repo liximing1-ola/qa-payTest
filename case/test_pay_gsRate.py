@@ -42,7 +42,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_money', testUid), 60)  # 被打赏者金额总数
         case_list_b[des] = result
 
-    @unittest.skip
     def test_02_chatPayCustomRate_60(self, des='私聊打赏自定义分成:60'):
         """
         用例描述：
@@ -68,7 +67,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_money', testUid), 600)  # 被打赏者金额总数
         case_list_b[des] = result
 
-    @unittest.skip
     def test_03_defendPayCustomRate_60(self, des='个人守护打赏自定义分成:60'):
         """
         用例描述：
