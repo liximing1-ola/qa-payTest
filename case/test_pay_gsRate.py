@@ -33,9 +33,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.checkUserBroker(testUid, bid=self.rate_role["bid"])  # 被打赏者加入工会
         conMysql.check_uid_white(testUid)  # 被打赏者加入白名单，分成为60%
         data = encodeData(money=100, rid=200064778, uid=testUid, giftId=config.giftId['5'])
-        print(1)
         res = post_request_session(config.rush_pay_url, data, tokenName='rush')
-        print(3)
+        print(res)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', payUid), 0)  # 打赏者金额剩余
