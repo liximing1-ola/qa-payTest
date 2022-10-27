@@ -33,6 +33,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.checkUserBroker(testUid, bid=self.rate_role["bid"])  # 被打赏者加入工会
         conMysql.check_uid_white(testUid)  # 被打赏者加入白名单，分成为60%
         data = basicData.encodeData(payType='package', money=100, rid=200064778, uid=testUid, giftId=config.giftId['5'])
+        print('1111111111111111111111111')
         res = post_request_session(config.pay_url, data, tokenName='rush')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))

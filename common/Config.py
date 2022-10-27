@@ -29,7 +29,6 @@ class config:
         "Partying": 'pt',
         "谁是凶手": 'games',
         "嗨歌": 'havefun',
-        "皮队友": 'teammate',
         "starify": 'starify',
         "冲鸭": 'rush',
     }
