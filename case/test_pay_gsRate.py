@@ -8,7 +8,6 @@ from common.conMysql import conMysql
 from common.method import reason
 from common.runFailed import Retry
 @Retry
-@unittest.skip
 class TestPayCreate(unittest.TestCase):
     rate_role = {
         "bid": 100011021,  # 公会的bid
