@@ -31,7 +31,7 @@ class config:
         "嗨歌": 'havefun',
         "皮队友": 'teammate',
         "starify": 'starify',
-        "冲鸭": "rush",
+        "冲鸭": 'rush',
     }
     # 测试域名
     bb_host = appInfo['bb_dev_58']

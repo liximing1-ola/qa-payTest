@@ -49,7 +49,7 @@ class Session:
             try:
                 headers = Yaml.read_yaml('Basic.yml', 'header_dev')
                 params = Yaml.read_yaml('Basic.yml', 'params_teammate_qq')
-                login_url = config.bb_qqLogin_url + '?' + params + '&package=com.im.teammate.ios'  # 7.22修改，请求接口加包名限制
+                login_url = config.bb_qqLogin_url + '?' + params + '&package=com.im.duck.android'  # 7.22修改，请求接口加包名限制
                 body = Yaml.read_yaml('Basic.yml', 'data_teammate_qq')
                 session = requests.session()
                 res = session.post(login_url, data=body, headers=headers, verify=False)
@@ -59,6 +59,7 @@ class Session:
                     print('failReason： {}'.format(res['msg']))
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
                 Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
+                print(tokenDict)
                 return tokenDict
             except Exception as error:
                 Logs.get_log('getSession.log').error('session异常，原因： {}'.format(error))

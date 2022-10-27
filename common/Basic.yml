@@ -9,7 +9,7 @@ header_dev:
 params_dev_qq:
     t=BCB514D0C9FBEBB04F30223DBE7DCE20&o=659826BC750ABF8FF3AED92E552DCF62
 
-# 皮队友
+# 冲鸭
 params_teammate_qq:
     t=08CD562CDFA2B2AEFC69865D22E2B345&o=7AFAE4ED1F6408A24C950DECE5A0C120
 
@@ -18,7 +18,7 @@ data_dev_qq:
     "type": 'login'
     "dtoken": '8160Ky5RFbkn6TNHLM1gxOq6lFGTHgV__2BwRNY4gTNINdHhZyOKOWn02OWbUNeFp7BIaqTMx8jy40WQHcYK9AaGfLtZEjE90AhqOMFvVrLFFXzQfOBGtGY7Vqd3cfa44iisS__2BUERHpP5fooA'
 
-# 皮队友
+# 冲鸭
 data_teammate_qq:
     "type": 'login'
     "dtoken": 'eb4epfrrA5D11B54hdqHBW8CUl4qFtuOR4tXlEMUzUx8ryHz2DXesrU5G9KAvCtx7uR7GAQeY8cL1DJABrZDcotV0Z1agNfk__2BlL70oDeYm48HWXXW9MhSaDBe9X4__2FaDK8wu4Pj8Dvx1S9Q'
