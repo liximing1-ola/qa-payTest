@@ -7,6 +7,7 @@ from common.Request import post_request_session
 from common.conMysql import conMysql
 from common.method import reason
 from common.runFailed import Retry
+from common.Session import Session
 @Retry
 class TestPayCreate(unittest.TestCase):
     rate_role = {
@@ -26,6 +27,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查打赏者余额，预期为：100 - 100 = 0
         5.检查被打赏者余额，预期为：100 * 0.6 = 60
         """
+        Session.getSession('rush')
         testUid = self.rate_role["rewardedUid"]  # 被打赏者
         payUid = self.rate_role["rewardUid"]  # 打赏
         conMysql.updateUserMoneyClearSql(testUid, payUid)
