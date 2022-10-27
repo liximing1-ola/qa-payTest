@@ -1,5 +1,5 @@
 import unittest
-from common import basicData
+from common.basicData import encodeData
 from common.Assert import assert_body, assert_code, assert_equal
 from common.Config import config
 from common.Consts import case_list_b, result
@@ -32,15 +32,18 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(payUid, money=100)  # 打赏者
         conMysql.checkUserBroker(testUid, bid=self.rate_role["bid"])  # 被打赏者加入工会
         conMysql.check_uid_white(testUid)  # 被打赏者加入白名单，分成为60%
-        data = basicData.encodeData(payType='package', money=100, rid=200064778, uid=testUid, giftId=config.giftId['5'])
-        print('1111111111111111111111111')
+        data = encodeData(money=100, rid=200064778, uid=testUid, giftId=config.giftId['5'])
+        print(data)
+        print(config.pay_url)
         res = post_request_session(config.pay_url, data, tokenName='rush')
+        print(res)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', payUid), 0)  # 打赏者金额剩余
         assert_equal(conMysql.selectUserInfoSql('sum_money', testUid), 60)  # 被打赏者金额总数
         case_list_b[des] = result
 
+    @unittest.skip
     def test_02_chatPayCustomRate_60(self, des='私聊打赏自定义分成:60'):
         """
         用例描述：
@@ -58,7 +61,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(payUid, money=1000)  # 打赏者
         conMysql.checkUserBroker(testUid, bid=self.rate_role["bid"])  # 被打赏者加入工会
         conMysql.check_uid_white(testUid)  # 被打赏者加入白名单，分成为60%
-        data = basicData.encodeData(payType='chat-gift', uid=testUid, giftId=20)
+        data = encodeData(payType='chat-gift', uid=testUid, giftId=20)
         res = post_request_session(config.rush_pay_url, data, tokenName='rush')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -66,6 +69,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_money', testUid), 600)  # 被打赏者金额总数
         case_list_b[des] = result
 
+    @unittest.skip
     def test_03_defendPayCustomRate_60(self, des='个人守护打赏自定义分成:60'):
         """
         用例描述：
@@ -83,7 +87,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(payUid, money=52000)  # 打赏者
         conMysql.checkUserBroker(testUid, bid=self.rate_role["bid"])  # 被打赏者加入工会
         conMysql.check_uid_white(testUid) # 被打赏者加入白名单，分成为60%
-        data = basicData.encodeData(payType='defend', uid=testUid, money=52000)
+        data = encodeData(payType='defend', uid=testUid, money=52000)
         res = post_request_session(config.rush_pay_url, data, tokenName='rush')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
