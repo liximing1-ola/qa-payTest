@@ -15,7 +15,6 @@ class TestPayCreate(unittest.TestCase):
         'gift_329': 329,  # 礼物四叶草
         'gift_340': 340,  # 礼物小天使
     }
-    cid = int(conMysql.selectUserInfoSql('id_commodity', config.payUid, cid=gift_cid['gift_340']))
 
     @pytest.mark.run(order=1)
     def test_01_shopPayChangeMoney(self, des='商城购买单个道具场景'):
@@ -78,12 +77,13 @@ class TestPayCreate(unittest.TestCase):
         5.检查被打赏者余额：990*0.62 = 6138
         """
         conMysql.updateUserMoneyClearSql(config.payUid, config.rewardUid)
+        cid = int(conMysql.selectUserInfoSql('id_commodity', config.payUid, cid=self.gift_cid['gift_340']))
         data = encodeData(payType='package',
                           rid=config.star_role['auto_rid'],
                           uid=config.rewardUid,
                           giftId=config.giftId['54'],
                           money=9900,
-                          package_cid=self.cid,
+                          package_cid=cid,
                           ctype='gift')
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
@@ -105,12 +105,13 @@ class TestPayCreate(unittest.TestCase):
         5.检查被打赏者余额 预期：0
         """
         conMysql.updateUserMoneyClearSql(config.payUid, config.rewardUid)
+        cid = int(conMysql.selectUserInfoSql('id_commodity', config.payUid, cid=self.gift_cid['gift_340']))
         data = encodeData(payType='package',
                           rid=config.star_role['auto_rid'],
                           uid=config.rewardUid,
                           giftId=config.giftId['54'],
                           money=99000,
-                          package_cid=self.cid,
+                          package_cid=cid,
                           ctype='gift',
                           num=10)
         res = post_request_session(config.pay_url, data)

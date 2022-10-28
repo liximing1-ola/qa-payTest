@@ -11,8 +11,6 @@ from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
 
     liveRid = 193185408  # 直播间rid
-    gift_cid = 54  # 老司机券
-    cid = conMysql.selectUserInfoSql('id_commodity', config.payUid, cid=gift_cid)
     union_rid = conMysql.selectUserInfoSql(accountType='union')
 
     def test_01_RoomPayNoMoney(self, des='房间1V1打赏但余额不足的场景'):
@@ -62,7 +60,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid), 62)
         case_list[des] = result
 
-    def test_03_couponNoStatePayChange(self, des='打赏礼物使用未激活券的场景'):
+    def test_03_couponNoStatePayChange(self, des='打赏礼物使用未激活券的场景', gift_cid=54):
         """
         用例描述：
         有未激活券(state=0)的情况下，验证打赏
@@ -78,12 +76,13 @@ class TestPayCreate(unittest.TestCase):
         conMysql.insertXsUserCommodity(config.payUid, self.gift_cid, num=1)
         conMysql.updateMoneySql(config.payUid, money=3000)
         conMysql.updateMoneySql(config.rewardUid)
+        cid = conMysql.selectUserInfoSql('id_commodity', config.payUid, cid=gift_cid)
         data = encodeData(payType='package',
                           rid=config.live_role['auto_rid'],
                           uid=config.rewardUid,
                           giftId=config.giftId['11'],
                           money=3000,
-                          package_cid=self.cid,
+                          package_cid=cid,
                           ctype='coupon',
                           duction_money=500)
         res = post_request_session(config.pay_url, data)
@@ -94,7 +93,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 3000)
         case_list[des] = result
 
-    def test_04_couponStatePayChange(self, des='打赏礼物时有激活券的场景'):
+    def test_04_couponStatePayChange(self, des='打赏礼物时有激活券的场景', gift_cid=54):
         """
         用例描述：
         有激活券(state=1)的情况下，验证打赏流程
@@ -109,12 +108,13 @@ class TestPayCreate(unittest.TestCase):
         conMysql.insertXsUserCommodity(config.payUid, self.gift_cid, num=1, state=1)
         conMysql.updateMoneySql(config.payUid, money=3000)
         conMysql.updateMoneySql(config.rewardUid)
+        cid = conMysql.selectUserInfoSql('id_commodity', config.payUid, cid=gift_cid)
         data = encodeData(payType='package',
                           rid=config.live_role['auto_rid'],
                           uid=config.rewardUid,
                           giftId=config.giftId['11'],
                           money=3000,
-                          package_cid=self.cid,
+                          package_cid=cid,
                           ctype='coupon',
                           duction_money=500)
         res = post_request_session(config.pay_url, data)
