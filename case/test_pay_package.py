@@ -73,7 +73,7 @@ class TestPayCreate(unittest.TestCase):
         6.检查打赏者余额,预期为：3000
         """
         conMysql.deleteUserAccountSql('user_commodity', config.payUid)
-        conMysql.insertXsUserCommodity(config.payUid, self.gift_cid, num=1)
+        conMysql.insertXsUserCommodity(config.payUid, gift_cid, num=1)
         conMysql.updateMoneySql(config.payUid, money=3000)
         conMysql.updateMoneySql(config.rewardUid)
         cid = conMysql.selectUserInfoSql('id_commodity', config.payUid, cid=gift_cid)
@@ -105,7 +105,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查打赏者余额,预期为：3000 -2500 = 500
         """
         conMysql.deleteUserAccountSql('user_commodity', config.payUid)
-        conMysql.insertXsUserCommodity(config.payUid, self.gift_cid, num=1, state=1)
+        conMysql.insertXsUserCommodity(config.payUid, gift_cid, num=1, state=1)
         conMysql.updateMoneySql(config.payUid, money=3000)
         conMysql.updateMoneySql(config.rewardUid)
         cid = conMysql.selectUserInfoSql('id_commodity', config.payUid, cid=gift_cid)
