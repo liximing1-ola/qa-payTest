@@ -61,7 +61,7 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 100)
-        assert_len(conMysql.selectUserInfoSql('single_money', config.rewardUid), 100)
+        assert_len(conMysql.selectUserInfoSql('single_money', config.rewardUid), 186)
         case_list_b[des] = result
 
     def test_03_personRoomPayGiftToBrokerUser(self, des='个人房打赏钻石礼物给工会成员'):
