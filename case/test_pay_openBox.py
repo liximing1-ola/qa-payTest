@@ -10,6 +10,7 @@ from common.runFailed import Retry
 @Retry
 class TestPayCreate(unittest.TestCase):
 
+    @unittest.skip
     def test_01_openBoxPayChange(self, des='背包开箱子场景'):
         """
         用例描述：
@@ -40,6 +41,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.payUid), 2)
         case_list[des] = result
 
+    @unittest.skip
     def test_02_openMoreBoxPayChange(self, des='背包箱子多开场景'):
         """
         用例描述：
@@ -98,6 +100,7 @@ class TestPayCreate(unittest.TestCase):
         assert_len(conMysql.selectUserInfoSql('sum_money', config.rewardUid), 100)
         case_list[des] = result
 
+    @unittest.skip
     def test_04_giveBoxMorePeople(self, des='房间送多人多个箱子场景'):
         """
         用例描述：
