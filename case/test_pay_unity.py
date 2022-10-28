@@ -5,7 +5,7 @@ import unittest
 from common.Request import post_request_session
 from common.Assert import assert_body, assert_code, assert_equal
 from common.Consts import case_list, result
-from common import basicData
+from common.basicData import encodeData
 class TestPayCreate(unittest.TestCase):
 
     @unittest.skip('unity已下线')
@@ -20,7 +20,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查账户余额，预期值为：100 - 100 = 0
         """
         conMysql.updateMoneySql(config.payUid, money=100)
-        data = basicData.encodeData(payType='unity-game-buy', money=100)
+        data = encodeData(payType='unity-game-buy', money=100)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))

@@ -5,7 +5,7 @@ import unittest
 import time
 from common.Assert import assert_body, assert_code, assert_equal
 from common.Request import post_request_session
-from common import basicData
+from common.basicData import encodeData
 from common.Consts import case_list_c, result
 from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
@@ -28,8 +28,11 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, money=100)
         conMysql.insertBeanSql(config.rewardUid, money_coupon=20)
         conMysql.updateMoneySql(config.rewardUid, money=20, money_debts=100)
-        data = basicData.encodeData(payType='package', money=100, rid=config.star_role['auto_rid'],
-                                    uid=config.rewardUid, giftId=config.giftId['5'])
+        data = encodeData(payType='package',
+                          money=100,
+                          rid=config.star_role['auto_rid'],
+                          uid=config.rewardUid,
+                          giftId=config.giftId['5'])
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))

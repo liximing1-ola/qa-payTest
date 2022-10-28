@@ -4,7 +4,7 @@ from common.Request import post_request_session
 import unittest
 from common.Assert import assert_code, assert_equal, assert_body
 from common.method import reason
-from common import basicData
+from common.basicData import encodeData
 from common.Consts import case_list, result
 from common.runFailed import Retry
 @Retry(max_n=2)
@@ -24,7 +24,10 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateUserMoneyClearSql(config.payUid, config.rewardUid)
         conMysql.deleteUserAccountSql('broker_user', config.rewardUid)
         conMysql.deleteUserAccountSql('chatroom', config.rewardUid)
-        data = basicData.encodeData(payType='chat-gift', uid=config.rewardUid, num=10, giftId=config.giftId['5'])
+        data = encodeData(payType='chat-gift',
+                          uid=config.rewardUid,
+                          num=10,
+                          giftId=config.giftId['5'])
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 0, reason(des, res))

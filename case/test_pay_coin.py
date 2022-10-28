@@ -4,7 +4,7 @@ from common.conMysql import conMysql
 from common.Request import post_request_session
 import unittest
 from common.Assert import assert_body, assert_code, assert_equal
-from common import basicData
+from common.basicData import encodeData
 from common.Consts import case_list, result
 from common.runFailed import Retry
 @Retry(max_n=3, func_prefix='test_02_roomChangePayCoin')
@@ -22,7 +22,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查账户金币余额：gold_coin：600
         """
         conMysql.updateMoneySql(config.payUid, money=1000)
-        data = basicData.encodeData(payType='exchange_gold')
+        data = encodeData(payType='exchange_gold')
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -43,7 +43,10 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.payUid, gold_coin=100)
         conMysql.updateUserMoneyClearSql(config.rewardUid, config.rewardUid2)
-        data = basicData.encodeData(payType='package-more', money=20, giftId=config.giftId['62'], giftType='coin')
+        data = encodeData(payType='package-more',
+                          money=20,
+                          giftId=config.giftId['62'],
+                          giftType='coin')
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))

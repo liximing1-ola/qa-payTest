@@ -4,10 +4,12 @@ import unittest
 from common.Request import post_request_session
 from common.method import reason
 from common.Assert import assert_code, assert_equal, assert_body
-from common import basicData
+from common.basicData import encodeData
 from common.Consts import result, case_list
 from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
+
+    goldCid = 1629  # 金豆道具
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -30,8 +32,10 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.deleteUserBeanSql(config.payUid, config.rewardUid)  # 执行前处理数据
         conMysql.updateMoneySql(config.payUid)
-        data = basicData.encodeData(payType='package', uid=config.rewardUid, giftId=config.giftId['362'],
-                                    giftType='bean')
+        data = encodeData(payType='package',
+                          uid=config.rewardUid,
+                          giftId=config.giftId['362'],
+                          giftType='bean')
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 0, reason(des, res))
@@ -51,8 +55,11 @@ class TestPayCreate(unittest.TestCase):
         5.检查被打赏者金豆余额，预期为：6000 * 0.5 = 3000
         """
         conMysql.insertBeanSql(config.payUid, money_coupon=6000)
-        data = basicData.encodeData(payType='package-more', giftId=config.giftId['362'], giftType='bean', num=6,
-                                    uids=('{}'.format(config.rewardUid), ))
+        data = encodeData(payType='package-more',
+                          giftId=config.giftId['362'],
+                          giftType='bean',
+                          num=6,
+                          uids=('{}'.format(config.rewardUid), ))
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -75,8 +82,10 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, money=10000)
         conMysql.updateMoneySql(config.rewardUid)
         conMysql.insertBeanSql(config.payUid, money_coupon=500)
-        data = basicData.encodeData(payType='package-exchange', uid=config.rewardUid, giftId=config.giftId['362'],
-                                    giftType='bean')
+        data = encodeData(payType='package-exchange',
+                          uid=config.rewardUid,
+                          giftId=config.giftId['362'],
+                          giftType='bean')
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -100,7 +109,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, money=1000)
         conMysql.updateMoneySql(config.rewardUid)
         conMysql.insertBeanSql(config.payUid, money_coupon=200)
-        data = basicData.encodeData(payType='chat-gift', uid=config.rewardUid)
+        data = encodeData(payType='chat-gift', uid=config.rewardUid)
         res = post_request_session(config.pay_url, data=data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -124,7 +133,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, money=1000)
         conMysql.updateMoneySql(config.rewardUid)
         conMysql.insertBeanSql(config.payUid, money_coupon=400)
-        data = basicData.encodeData(payType='package', uid=config.rewardUid)
+        data = encodeData(payType='package', uid=config.rewardUid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -149,7 +158,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, money=700)
         conMysql.updateMoneySql(config.rewardUid)
         conMysql.insertBeanSql(config.payUid, money_coupon=400)
-        data = basicData.encodeData(payType='package', uid=config.rewardUid)
+        data = encodeData(payType='package', uid=config.rewardUid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 0, reason(des, res))
@@ -173,7 +182,9 @@ class TestPayCreate(unittest.TestCase):
         conMysql.deleteUserAccountSql('user_commodity', config.payUid)
         conMysql.updateMoneySql(config.payUid, money=80000)
         conMysql.insertBeanSql(config.payUid, money_coupon=400)
-        data = basicData.encodeData(payType='pub-drink-buy', money=79900, rid=config.live_role['auto_rid'])
+        data = encodeData(payType='pub-drink-buy',
+                          money=79900,
+                          rid=config.live_role['auto_rid'])
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -195,7 +206,9 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.deleteUserAccountSql('user_commodity', config.rewardUid)
         conMysql.insertBeanSql(config.payUid, money_coupon=1000)
-        data = basicData.encodeData(payType='deco-present', uid=config.rewardUid, cid=1629)
+        data = encodeData(payType='deco-present',
+                          uid=config.rewardUid,
+                          cid=self.goldCid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))

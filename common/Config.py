@@ -108,7 +108,6 @@ class config:
     pt_testUid = pt_user['testUid']  # 非公会成员，是一代宗师
     pt_brokerUid = pt_user['brokerUid']  # 公会成员
     pt_fleetUid = pt_user['fleet_uid']
-
     # 房间类型41
     pt_room = {
         'business_joy': 105697423,  # 商业房
@@ -118,7 +117,6 @@ class config:
         'ms_fleet': 105725790,  # 马来大区家族房
         'vip_rid': 105698376,  # 个人房
     }
-
     # 礼物配置
     pt_giftId = {
         "10": 10,  # 么么哒*6币

@@ -4,16 +4,11 @@ from common.conMysql import conMysql
 import unittest
 from common.Request import post_request_session
 from common.Assert import assert_body, assert_code, assert_equal
-from common import basicData
+from common.basicData import encodeData
 from common.Consts import case_list_b, result
 from common.runFailed import Retry
 @Retry
 class TestPayCreate(unittest.TestCase):
-
-    rate_role = {
-        'rewardUid2': 100500205,  # 公会成员
-        'pack_ceo': 105002314,  # 公会长
-    }
 
     def test_01_roomPayCustomRate_50(self, des='商业房打赏自定义分成:50'):
         """
@@ -33,7 +28,10 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateUserMoneyClearSql(testUid, ceoUid)
         conMysql.checkUserBroker(testUid, bid=ceoUid)  # bid=105002314 被打赏者加入工会
         conMysql.checkBrokerUserRate(testUid, ceoUid, rate=50)  # config.bbc_broker_user_rate 设置分成比
-        data = basicData.encodeData(payType='package', money=100, uid=testUid, giftId=config.giftId['5'])
+        data = encodeData(payType='package',
+                          money=100,
+                          uid=testUid,
+                          giftId=config.giftId['5'])
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -61,7 +59,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateUserMoneyClearSql(testUid, ceoUid)
         conMysql.checkUserBroker(testUid, bid=ceoUid)  # bid=105002314 被打赏者加入工会
         conMysql.checkBrokerUserRate(testUid, ceoUid, rate=80)  # config.bbc_broker_user_rate 设置分成比
-        data = basicData.encodeData(payType='chat-gift', uid=testUid)
+        data = encodeData(payType='chat-gift', uid=testUid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -89,7 +87,9 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateUserMoneyClearSql(testUid, ceoUid)
         conMysql.checkUserBroker(testUid, bid=ceoUid)  # bid=105002314 被打赏者加入工会
         conMysql.checkBrokerUserRate(testUid, ceoUid, rate=25)  # config.bbc_broker_user_rate 设置分成比
-        data = basicData.encodeData(payType='defend', uid=testUid, money=52000)
+        data = encodeData(payType='defend',
+                          uid=testUid,
+                          money=52000)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))

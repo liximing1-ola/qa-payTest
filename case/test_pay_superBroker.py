@@ -5,7 +5,7 @@ import unittest
 import pytest
 from common.Request import post_request_session
 from common.Assert import assert_body, assert_code, assert_equal
-from common import basicData
+from common.basicData import encodeData
 from common.runFailed import Retry
 from common.Consts import case_list_b, result
 from common.conRedis import conRedis
@@ -32,8 +32,9 @@ class TestPayCreate(unittest.TestCase):
         test_uid = config.star_role['testUid']  # 105002312
         conMysql.updateMoneySql(test_uid)
         conMysql.checkOnlineEarnArtist(test_uid, worth=700)  # 设置用户为初级艺人
-        data = basicData.encodeData(payType='package', rid=config.star_role['super-voice-fresh'],
-                                    uid=test_uid)
+        data = encodeData(payType='package',
+                          rid=config.star_role['super-voice-fresh'],
+                          uid=test_uid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -57,8 +58,9 @@ class TestPayCreate(unittest.TestCase):
         test_uid = config.star_role['testUid']
         conMysql.updateMoneySql(test_uid)
         conMysql.checkOnlineEarnArtist(test_uid, worth=3501)  # 设置一个中级艺人
-        data = basicData.encodeData(payType='package', rid=config.star_role['super-voice-fresh'],
-                                    uid=test_uid)
+        data = encodeData(payType='package',
+                          rid=config.star_role['super-voice-fresh'],
+                          uid=test_uid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -82,8 +84,9 @@ class TestPayCreate(unittest.TestCase):
         test_uid = config.star_role['testUid']
         conMysql.updateMoneySql(test_uid)
         conMysql.checkOnlineEarnArtist(test_uid, worth=10001)
-        data = basicData.encodeData(payType='package', rid=config.star_role['super-voice-fresh'],
-                                    uid=test_uid)
+        data = encodeData(payType='package',
+                          rid=config.star_role['super-voice-fresh'],
+                          uid=test_uid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -109,8 +112,9 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(test_uid)  # 清空账户
         conMysql.updateSuperVoiceUser(test_uid, test_bid, nid=200)  # 修改用户为网赚工会用户
         conMysql.checkOnlineEarnArtist(test_uid, worth=5000)  # 设置为中级艺人
-        data = basicData.encodeData(payType='package', rid=config.star_role['super-voice-fresh'],
-                                    uid=test_uid)
+        data = encodeData(payType='package',
+                          rid=config.star_role['super-voice-fresh'],
+                          uid=test_uid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -140,8 +144,9 @@ class TestPayCreate(unittest.TestCase):
         conMysql.checkOnlineEarnRelation(test_agent, test_uid)  # 检查艺人经纪人关联关系
         conMysql.deleteUserAccountSql('broker_user', test_uid)  # 删除用户工会数据
         conMysql.checkUserBroker(test_agent)
-        data = basicData.encodeData(payType='package', rid=config.star_role['super-voice-fresh'],
-                                    uid=test_uid)
+        data = encodeData(payType='package',
+                          rid=config.star_role['super-voice-fresh'],
+                          uid=test_uid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -171,8 +176,9 @@ class TestPayCreate(unittest.TestCase):
         conMysql.checkOnlineEarnRelation(test_agent, test_uid)  # 检查经纪人艺人关系
         conMysql.updateUserMoneyClearSql(test_agent, test_uid)  # 清空用户账户
         conMysql.insertSuperVoiceUser(test_uid, test_bid)  # 加入指定公会
-        data = basicData.encodeData(payType='package', rid=config.star_role['super-voice-fresh'],
-                                    uid=test_uid)
+        data = encodeData(payType='package',
+                          rid=config.star_role['super-voice-fresh'],
+                          uid=test_uid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -203,8 +209,9 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateUserMoneyClearSql(test_agent, test_uid)  # 更新余额
         conMysql.checkOnlineEarnRelation(test_agent, test_uid)  # 更新经纪人和艺人身份
         conMysql.checkSuperVoiceUser(test_uid, test_bid)  # 加入公会
-        data = basicData.encodeData(payType='package', rid=config.star_role['super-voice-fresh'],
-                                    uid=test_uid)
+        data = encodeData(payType='package',
+                          rid=config.star_role['super-voice-fresh'],
+                          uid=test_uid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -235,7 +242,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateUserMoneyClearSql(test_agent, test_uid)
         # conMysql.updateSuperVoiceUser(test_uid, test_bid, nid=200)  # 更新用户到指定工会,上面case已加入
         conMysql.checkOnlineEarnRelation(test_agent, test_uid)
-        data = basicData.encodeData(payType='package')
+        data = encodeData(payType='package')
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -262,8 +269,9 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(test_uid)
         conMysql.checkOnlineEarnArtist(test_uid, worth=700)  # 设置用户为初级艺人
         conMysql.checkWhiteUid(test_uid, white_type=105)  # type=105是网赚白名单用户
-        data = basicData.encodeData(payType='package', rid=config.star_role['super-voice-fresh'],
-                                    uid=test_uid)
+        data = encodeData(payType='package',
+                          rid=config.star_role['super-voice-fresh'],
+                          uid=test_uid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))

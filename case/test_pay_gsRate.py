@@ -9,6 +9,7 @@ from common.method import reason
 from common.runFailed import Retry
 from common.Session import Session
 @Retry
+@unittest.skip('等待上线')
 class TestPayCreate(unittest.TestCase):
     rate_role = {
         "bid": 100011021,  # 公会的bid
@@ -34,7 +35,10 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(payUid, money=100)  # 打赏者
         conMysql.checkUserBroker(testUid, bid=self.rate_role["bid"])  # 被打赏者加入工会
         conMysql.check_uid_white(testUid)  # 被打赏者加入白名单，分成为60%
-        data = encodeData(money=100, rid=200064778, uid=testUid, giftId=config.giftId['5'])
+        data = encodeData(money=100,
+                          rid=200064778,
+                          uid=testUid,
+                          giftId=config.giftId['5'])
         res = post_request_session(config.rush_pay_url, data, tokenName='rush')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -59,7 +63,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(payUid, money=1000)  # 打赏者
         conMysql.checkUserBroker(testUid, bid=self.rate_role["bid"])  # 被打赏者加入工会
         conMysql.check_uid_white(testUid)  # 被打赏者加入白名单，分成为60%
-        data = encodeData(payType='chat-gift', uid=testUid, giftId=20)
+        data = encodeData(payType='chat-gift', uid=testUid)
         res = post_request_session(config.rush_pay_url, data, tokenName='rush')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -83,8 +87,10 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateUserMoneyClearSql(testUid, payUid)
         conMysql.updateMoneySql(payUid, money=52000)  # 打赏者
         conMysql.checkUserBroker(testUid, bid=self.rate_role["bid"])  # 被打赏者加入工会
-        conMysql.check_uid_white(testUid) # 被打赏者加入白名单，分成为60%
-        data = encodeData(payType='defend', uid=testUid, money=52000)
+        conMysql.check_uid_white(testUid)  # 被打赏者加入白名单，分成为60%
+        data = encodeData(payType='defend',
+                          uid=testUid,
+                          money=52000)
         res = post_request_session(config.rush_pay_url, data, tokenName='rush')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))

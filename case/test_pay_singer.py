@@ -5,11 +5,13 @@ import unittest
 import pytest
 from common.Request import post_request_session
 from common.Assert import assert_body, assert_code, assert_equal
-from common import basicData
+from common.basicData import encodeData
 from common.runFailed import Retry
 from common.Consts import case_list_b, result
 @Retry
 class TestPayCreate(unittest.TestCase):
+
+    singer_rid = conMysql.selectUserInfoSql('union')
 
     @pytest.mark.run(order=1)
     def test_01_singerRoomLiveBroker_60(self, des='歌友房直播工会收60%公会魅力值'):
@@ -24,8 +26,9 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.payUid, money=1000)
         conMysql.updateMoneySql(config.pack_cal_uid)
-        singer_rid = conMysql.selectUserInfoSql('union')
-        data = basicData.encodeData(payType='package', rid=singer_rid, uid=config.pack_cal_uid)
+        data = encodeData(payType='package',
+                          rid=self.singer_rid,
+                          uid=config.pack_cal_uid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -46,8 +49,9 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.payUid, money=1000)
         conMysql.updateMoneySql(config.rewardUid)
-        singer_rid = conMysql.selectUserInfoSql('union')
-        data = basicData.encodeData(payType='package', rid=singer_rid, uid=config.rewardUid)
+        data = encodeData(payType='package',
+                          rid=self.singer_rid,
+                          uid=config.rewardUid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))

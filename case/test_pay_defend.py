@@ -4,15 +4,16 @@ import unittest
 import pytest
 from common.Request import post_request_session
 from common.Assert import assert_code, assert_body, assert_equal
-from common import basicData
+from common.basicData import encodeData
 from common.Consts import case_list, result
 from common.runFailed import Retry
 from common.conMysql import conMysql
 @Retry(max_n=1)
 class TestPayCreate(unittest.TestCase):
 
+    # {'id': 2, 'name': '小宝贝', 'money_value': 52000, 'break_money': 28800, 'upgrade_money': 99900}
     dict_config = conMysql.selectUserInfoSql('relation_config', uid=2)  # uid=id
-    #  eg：{'id': 2, 'name': '小宝贝', 'money_value': 52000, 'break_money': 28800, 'upgrade_money': 99900}
+    defend_id = conMysql.selectUserInfoSql('relation_id', config.rewardUid)
 
     @pytest.mark.run(order=1)
     def test_01_defendPayChangMoney(self, des='开通个人守护场景'):
@@ -28,8 +29,9 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.payUid, money=52000)
         conMysql.updateMoneySql(config.rewardUid)
-        data = basicData.encodeData(payType='defend', money=TestPayCreate.dict_config['money_value'],
-                                    uid=config.rewardUid)
+        data = encodeData(payType='defend',
+                          money=self.dict_config['money_value'],
+                          uid=config.rewardUid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -51,9 +53,9 @@ class TestPayCreate(unittest.TestCase):
          """
         conMysql.updateMoneySql(config.payUid, money=100000)
         conMysql.updateMoneySql(config.rewardUid)
-        defend_id = conMysql.selectUserInfoSql('relation_id', config.rewardUid)
-        data = basicData.encodeData(payType='defend-upgrade', money=TestPayCreate.dict_config['upgrade_money'],
-                                    defend_id=defend_id)
+        data = encodeData(payType='defend-upgrade',
+                          money=self.dict_config['upgrade_money'],
+                          defend_id=self.defend_id)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -73,9 +75,9 @@ class TestPayCreate(unittest.TestCase):
          4.检查打赏者余额，预期：40000 - 36000 = 4000
          """
         conMysql.updateMoneySql(config.payUid, money=40000)
-        defend_id = conMysql.selectUserInfoSql('relation_id', config.rewardUid)
-        data = basicData.encodeData(payType='defend-break', money=TestPayCreate.dict_config['break_money'],
-                                    defend_id=defend_id)
+        data = encodeData(payType='defend-break',
+                          money=self.dict_config['break_money'],
+                          defend_id=self.defend_id)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -95,8 +97,10 @@ class TestPayCreate(unittest.TestCase):
          """
         conMysql.updateMoneySql(config.payUid, money=100000)
         conMysql.updateMoneySql(config.pack_cal_uid)
-        data = basicData.encodeData(payType='package-knightDefend', money=99900, uid=config.pack_cal_uid,
-                                    rid=config.live_role['live_rid'])
+        data = encodeData(payType='package-knightDefend',
+                          money=99900,
+                          uid=config.pack_cal_uid,
+                          rid=config.live_role['live_rid'])
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
