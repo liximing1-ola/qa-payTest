@@ -8,7 +8,6 @@ from common.basicData import encodeData
 from common.Consts import case_list_b, result
 from common.runFailed import Retry
 @Retry
-@unittest.skip('等待上线')
 class TestPayCreate(unittest.TestCase):
 
     # select rid from xs_chatroom where uid=103273407 and property='vip'  个人房，＞5级不回收
