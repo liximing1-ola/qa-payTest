@@ -9,8 +9,6 @@ from common.Consts import result, case_list
 from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
 
-    goldCid = 1629  # 金豆道具
-
     @classmethod
     def setUpClass(cls) -> None:
         conMysql.checkXsGiftConfig()
@@ -193,7 +191,7 @@ class TestPayCreate(unittest.TestCase):
         case_list[des] = result
 
     @unittest.skip('装扮改成钻石货币')
-    def test_08_BeanPayChangePresentDeco(self, des='赠送金豆装扮的场景'):
+    def test_08_BeanPayChangePresentDeco(self, des='赠送金豆装扮的场景', goldCid=1629):
         """
         用例描述：
         赠送金豆装扮的场景
@@ -208,7 +206,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.insertBeanSql(config.payUid, money_coupon=1000)
         data = encodeData(payType='deco-present',
                           uid=config.rewardUid,
-                          cid=self.goldCid)
+                          cid=goldCid)  # 金豆道具
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))

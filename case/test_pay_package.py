@@ -10,7 +10,7 @@ from common.runFailed import Retry
 @Retry
 class TestPayCreate(unittest.TestCase):
 
-    liveRid = 193185408  # 直播间rid
+    liveRid = config.live_role.copy()['liveRid']
     union_rid = conMysql.selectUserInfoSql(accountType='union')
 
     def test_01_RoomPayNoMoney(self, des='房间1V1打赏但余额不足的场景'):

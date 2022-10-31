@@ -10,7 +10,7 @@ from common.runFailed import Retry
 @Retry
 class TestPayCreate(unittest.TestCase):
 
-    liveRid = 193185408  # 直播间rid
+    liveRid = config.live_role.copy()['liveRid']
 
     def test_01_liveRoomPay_6238(self, des='直播间非公会主播(非宗师)打赏分成62:38'):
         """

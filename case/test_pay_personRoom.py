@@ -11,7 +11,7 @@ from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
 
     # select rid from xs_chatroom where uid=103273407 and property='vip'  个人房，＞5级不回收
-    vipRoomRid = 200089706
+    vipRoomRid = config.bb_user.copy()['vipRoomRid']
 
     def test_01_personRoomPayGift(self, des='个人房打赏钻石礼物场景'):
         """

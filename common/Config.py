@@ -58,6 +58,7 @@ class config:
         'payUid': 103273407,  # god
         'testUid': 105002312,  # 非一代宗师
         'pack_cal_uid': 105002313,  # 打包结算签约主播
+        'vipRoomRid': 200089706,  # 个人房，房主uid=103273407
     }
     # 直播间角色配置
     live_role = {
@@ -67,7 +68,8 @@ class config:
         'testUid': 105002312,  # 非公会非一代宗师主播
         'live_rid': 193185577,  # 直播间，房主:105002313
         'auto_rid': 193185484,  # 商业8坑位房间
-        'cp_link_rid': 193185538  # 商业连连看房间
+        'cp_link_rid': 193185538,  # 商业连连看房间
+        'liveRid': 193185408,
     }
     # 网赚房角色配置
     star_role = {
@@ -126,9 +128,8 @@ class config:
 
 
 if __name__ == '__main__':
-    print(config.appInfo.items())
-    print(config.appInfo.get('banban'))
-    print(config.appName['谁是凶手'])
-    print(config.pt_giftId.values())
-    print(tuple(i for i in config.pt_giftId.values()))
-    print(config.pt_user.values())
+    print(config.bb_user.copy())
+    vipRoomRid = config.bb_user.copy()['vipRoomRid']
+    print(vipRoomRid)
+    liveRid = config.live_role.copy()['liveRid']
+    print(liveRid)
