@@ -10,7 +10,7 @@ from common.runFailed import Retry
 from common.Consts import case_list_b, result
 from common.conRedis import conRedis
 @Retry
-# @unittest.skip('2022/11/1 网赚分成下线')
+@unittest.skip('2022/11/1 网赚分成下线')
 class TestPayCreate(unittest.TestCase):
 
     @classmethod
@@ -221,12 +221,11 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('sum_money', test_uid), 186)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', test_uid), 210)
         assert_equal(conMysql.selectUserInfoSql('single_money', test_agent, money_type='money_cash'), 0)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 400)
         case_list_b[des] = result
 
-    @unittest.skip
     @pytest.mark.run(order=8)
     def test_08_NormalRoomPayArtist_620(self, des='普通房指定工会有经纪人(1j)只艺人收到62%'):
         """
@@ -258,7 +257,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
-    @unittest.skip
     @pytest.mark.run(order=9)
     def test_09_starRoomWhiteUserPay_70(self, des='网赚房无公会无经纪人白名单艺人收70%个人魅力值'):
         """
