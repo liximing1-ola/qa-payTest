@@ -8,7 +8,7 @@ import urllib3
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from common import Logs, method
 from common.Config import config
-from common.params_Yaml import Yaml
+from common.paramsYaml import Yaml
 
 
 class Session:

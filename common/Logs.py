@@ -11,15 +11,13 @@ def get_log(log_name, level=logging.DEBUG, when='midnight', back_count=0):
     :param back_count:
     :return:
     """
-    logs = logging.getLogger(log_name)  #
-    logs.setLevel(level)  # 设置log打印级别
+    logs = logging.getLogger(log_name)
+    logs.setLevel(level)  # log打印级别
     LOG_PATH = os.path.join(config.BASE_PATH, 'log')
     if not os.path.exists(LOG_PATH):
         os.makedirs(LOG_PATH)
     log_file_path = os.path.join(LOG_PATH, log_name)
-    # log输出格式
     formatter = logging.Formatter('%(asctime)s - %(pathname)s[line:%(lineno)d] - %(levelname)s: %(message)s')
-    # 输出到控制台
     ch = logging.StreamHandler()
     ch.setLevel(level='INFO')
     ch.setFormatter(formatter)  # 设置日志输出格式

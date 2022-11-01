@@ -54,19 +54,6 @@ class mysql:
         except Exception as error:
             print(error)
 
-    # 查询消费记录的money
-    @staticmethod
-    def selectPayChangeSql(uid):
-        con, cur = mysql.conMysql()
-        sql = "select money from xs_pay_change_new where uid={} ORDER BY id DESC LIMIT 1".format(uid)
-        try:
-            cur.execute(sql)
-            res = cur.fetchone()
-            if len(res) > 0:
-                return res[0]
-        except Exception as error:
-            print(error)
-
     # 清空用户背包
     @staticmethod
     def deleteUserCommoditySql(uid):

@@ -84,7 +84,6 @@ class crazySpin:
             '_sign': '12c5970528bf21e8aac9586534606432',
             '_blid': uid,
         }
-        # url8 = url7+'?'+urllib.parse.urlencode(params)
         requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
         header = {
             "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko)\

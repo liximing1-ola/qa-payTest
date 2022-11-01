@@ -10,7 +10,7 @@ class Yaml:
         读取yaml
         :return: yaml_data[yaml_name]
         """
-        yaml_path = config.BASE_PATH + '/common/' + yaml_fileName
+        yaml_path = os.path.join(config.BASE_PATH, 'common', yaml_fileName)
         try:
             if not os.path.exists(yaml_path):
                 return FileExistsError
