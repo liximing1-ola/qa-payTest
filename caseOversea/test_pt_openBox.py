@@ -10,7 +10,7 @@ from common.runFailed import Retry
 @Retry
 class TestPayCreate(unittest.TestCase):
 
-    def test_01_openBoxPayChange(self, des='背包开箱子场景'):
+    def test_01_openBoxPayChange(self, des='背包开箱子场景', cid=2):
         """
         用例描述：
         验证背包内开箱子得到物品
@@ -27,7 +27,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.deleteUserAccountSql('user_box', config.pt_payUid)
         conMysql.deleteUserAccountSql('user_commodity', config.pt_payUid)
-        conMysql.insertXsUserCommodity(config.pt_payUid, cid=2, num=1)  # 背包插入1个铜箱子
+        conMysql.insertXsUserCommodity(config.pt_payUid, cid=cid, num=1)  # 背包插入1个铜箱子
         conMysql.insertXsUserBox(config.pt_payUid)
         conMysql.updateMoneySql(config.pt_payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
         data = encodePtData(payType='shop-buy-box')
@@ -38,7 +38,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.pt_payUid), 2)
         case_list[des] = result
 
-    def test_02_openMoreBoxPayChange(self, des='背包箱子多开场景'):
+    def test_02_openMoreBoxPayChange(self, des='背包箱子多开场景', cid=3):
         """
         用例描述：
         验证背包内开箱子得到物品
@@ -55,10 +55,14 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.deleteUserAccountSql('user_box', config.pt_payUid)
         conMysql.deleteUserAccountSql('user_commodity', config.pt_payUid)
-        conMysql.insertXsUserCommodity(config.pt_payUid, cid=3, num=6)  # 背包插入6个银箱子
+        conMysql.insertXsUserCommodity(config.pt_payUid, cid=cid, num=6)  # 背包插入6个银箱子
         conMysql.insertXsUserBox(config.pt_payUid, box_type='silver')
         conMysql.updateMoneySql(config.pt_payUid, money=12600)
-        data = encodePtData(payType='shop-buy-box', money=2100, num=6, cid=6, boxType='silver')
+        data = encodePtData(payType='shop-buy-box',
+                            money=2100,
+                            num=6,
+                            cid=6,
+                            boxType='silver')
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -85,7 +89,9 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 100)
         assert_len(conMysql.selectUserInfoSql('sum_money', config.pt_testUid), 100)
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash_b'),
+        assert_equal(conMysql.selectUserInfoSql('single_money',
+                                                config.pt_testUid,
+                                                money_type='money_cash_b'),
                      conMysql.selectUserInfoSql(accountType='pay_change', uid=config.pt_testUid))
         case_list[des] = result
 
@@ -102,12 +108,17 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, money=10000)
         conMysql.updateMoneySql(config.pt_testUid)
-        data = encodePtData(payType='package-more', num=2, money=2100, giftId=config.giftId['47'])
+        data = encodePtData(payType='package-more',
+                            num=2,
+                            money=2100,
+                            giftId=config.giftId['47'])
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 1600)
         assert_len(conMysql.selectUserInfoSql('sum_money', config.pt_testUid), 1000)
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash_b'),
+        assert_equal(conMysql.selectUserInfoSql('single_money',
+                                                config.pt_testUid,
+                                                money_type='money_cash_b'),
                      conMysql.selectUserInfoSql(accountType='pay_change', uid=config.pt_testUid))
         case_list[des] = result

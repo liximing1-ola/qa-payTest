@@ -6,7 +6,6 @@ from common.Request import post_request_session
 from common.Assert import assert_code, assert_body, assert_equal
 from common.basicData import encodePtData
 from common.Consts import result, case_list
-from common.runFailed import Retry
 @unittest.skip('修复')
 class TestPayCreate(unittest.TestCase):
 

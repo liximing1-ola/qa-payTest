@@ -58,12 +58,16 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
         conMysql.updateMoneySql(config.pt_testUid)
-        data = encodePtData(payType='package', giftId=config.giftId['46'], rid=config.pt_room['vip_rid'])
+        data = encodePtData(payType='package',
+                            giftId=config.giftId['46'],
+                            rid=config.pt_room['vip_rid'])
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 100)
         assert_len(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash_b'), 90)
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash_b'),
+        assert_equal(conMysql.selectUserInfoSql('single_money',
+                                                config.pt_testUid,
+                                                money_type='money_cash_b'),
                      conMysql.selectUserInfoSql(accountType='pay_change', uid=config.pt_testUid))
         case_list[des] = result

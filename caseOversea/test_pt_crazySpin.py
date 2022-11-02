@@ -28,14 +28,16 @@ class TestPayCreate(unittest.TestCase):
         conMysql.deleteUserAccountSql('user_commodity', config.pt_payUid)
         conMysql.updateMoneySql(config.pt_payUid, money=2000)
         data = encodePtData(payType='shop-buy-crazyspin')
-        res = post_request_session(url=crazySpin.spinBuy(uid=config.pt_payUid), data=data, tokenName='pt')
+        res = post_request_session(url=crazySpin.spinBuy(uid=config.pt_payUid),
+                                   data=data,
+                                   tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 1000)
         assert_equal(conMysql.selectUserInfoSql('sum_commodity_32', config.pt_payUid), 10)
         case_list[des] = result
 
-    def test_02_playCrazySpin(self, des='开启大转盘抽奖场景'):
+    def test_02_playCrazySpin(self, des='开启大转盘抽奖场景', cid=32):
         """
         用例描述：
         验证玩大转盘，背包先正常扣券。以及背包得到新增物品
@@ -52,11 +54,14 @@ class TestPayCreate(unittest.TestCase):
         5.检查背包内开出物品，预期值应为：10（开出礼物个数*10）
         """
         conMysql.deleteUserAccountSql('user_commodity', config.pt_payUid)
-        conMysql.insertXsUserCommodity(config.pt_payUid, cid=32, num=100)  # 背包插入100个欢乐券
-        crazySpin.turntablelist(config.pt_room['business_joy'], config.pt_payUid, tokenName='pt')
+        conMysql.insertXsUserCommodity(config.pt_payUid, cid=cid, num=100)  # 背包插入100个欢乐券
+        crazySpin.turntablelist(config.pt_room['business_joy'],
+                                config.pt_payUid, tokenName='pt')
         crazySpin.turntablehorn(config.pt_payUid, tokenName='pt')
         data = encodePtData(payType='play-crazyspin')
-        res = post_request_session(url=crazySpin.spinPlay(uid=config.pt_payUid), data=data, tokenName='pt')
+        res = post_request_session(url=crazySpin.spinPlay(uid=config.pt_payUid),
+                                   data=data,
+                                   tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.pt_payUid), 100)

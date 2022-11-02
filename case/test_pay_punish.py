@@ -2,7 +2,7 @@ from common.Config import config
 from common.conMysql import conMysql
 from common.method import reason
 import unittest
-import time
+from time import sleep
 from common.Assert import assert_body, assert_code, assert_equal
 from common.Request import post_request_session
 from common.basicData import encodeData
@@ -36,7 +36,7 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        time.sleep(2)  # 延迟处理NSQ消息
+        sleep(2)  # 延迟处理NSQ消息
         assert_equal(conMysql.selectUserInfoSql('bean', config.rewardUid), 0)
         assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid, 'money'), 2)
         assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid, 'money_cash_b'), 0)

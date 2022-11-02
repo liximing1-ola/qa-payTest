@@ -21,7 +21,9 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, gold_coin=30000)
         conMysql.deleteUserAccountSql('user_commodity', config.pt_payUid)
-        data = encodePtData(payType='coin-shop-buy', money=21000, cid=cid)
+        data = encodePtData(payType='coin-shop-buy',
+                            money=21000,
+                            cid=cid)
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -42,7 +44,9 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, money=10000, money_cash=2000, money_b=2000, money_cash_b=4000)
         conMysql.deleteUserAccountSql('user_commodity', config.pt_payUid)
-        data = encodePtData(payType='shop-buy', money=18000, cid=cid)
+        data = encodePtData(payType='shop-buy',
+                            money=18000,
+                            cid=cid)
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))

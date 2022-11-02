@@ -8,7 +8,7 @@ from common.basicData import encodePtData
 from common.Consts import result, case_list
 from common.runFailed import Retry
 from common.conRedis import conRedis
-import time
+from time import sleep
 @Retry
 class TestPayCreate(unittest.TestCase):
 
@@ -20,7 +20,7 @@ class TestPayCreate(unittest.TestCase):
     @classmethod
     def tearDownClass(cls) -> None:
         conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()))
-        time.sleep(0.3)
+        sleep(0.3)
         conRedis.delKey('User.Big.Area.Id', config.pt_user.values())
         conRedis.delKey('User.Big.Area', config.pt_user.values())
 
@@ -40,7 +40,7 @@ class TestPayCreate(unittest.TestCase):
         data = encodePtData(payType='package',
                             money=300,
                             rid=config.pt_room['th_union'],
-                            giftId=config.giftId['773'])
+                            giftId=config.pt_giftId['773'])
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -69,7 +69,7 @@ class TestPayCreate(unittest.TestCase):
                             num=2,
                             money=1200,
                             rid=config.pt_room['th_union'],
-                            giftId=config.giftId['774'])
+                            giftId=config.pt_giftId['774'])
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))

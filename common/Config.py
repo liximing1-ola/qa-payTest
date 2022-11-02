@@ -93,8 +93,6 @@ class config:
         "54": 54,  # 小天使*99币（商城购买）
         "62": 62,  # 人气券*20（金币）
         "362": 362,  # 啵啵奶茶*1000（金豆）
-        "773": 773,  # 小飞机盲盒
-        "774": 774,  # 飞马盲盒
     }
     rewardUid = bb_user['testUid']  # 被打赏者
     rewardUid2 = 100500205  # 被打赏者
@@ -102,10 +100,12 @@ class config:
     pack_cal_uid = bb_user['pack_cal_uid']  # 打包结算主播
 
     # PT
-    pt_user = {'payUid': 800240376,
-               'testUid': 800022872,
-               'brokerUid': 800018895,
-               'fleet_uid': 800041062}
+    pt_user = {
+        'payUid': 800240376,
+        'testUid': 800022872,
+        'brokerUid': 800018895,
+        'fleet_uid': 800041062
+    }
     pt_payUid = pt_user['payUid']
     pt_testUid = pt_user['testUid']  # 非公会成员，是一代宗师
     pt_brokerUid = pt_user['brokerUid']  # 公会成员
@@ -124,6 +124,8 @@ class config:
         "10": 10,  # 么么哒*6币
         "46": 46,  # 幸运星*6币
         "47": 47,  # 五色星*21币
+        "773": 773,  # 小飞机盲盒
+        "774": 774,  # 飞马盲盒
     }
 
 
