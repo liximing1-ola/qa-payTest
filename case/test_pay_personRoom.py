@@ -14,7 +14,7 @@ class TestPayCreate(unittest.TestCase):
     # select * from config.xsst_room_pretty;
     vipRoomRid = config.bb_user.copy()['vipRoomRid']
     prettyRid = config.bb_user.copy()['prettyRid']
-    gsUid = config.live_role.copy()['gsUid']
+    gsUid = config.bb_user.copy()['gsUid']
 
     def test_01_personRoomPayGift(self, des='个人房打赏钻石礼物场景'):
         """
