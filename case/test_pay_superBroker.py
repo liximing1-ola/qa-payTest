@@ -12,9 +12,22 @@ from common.conRedis import conRedis
 @unittest.skip('2022/11/1 网赚分成下线')
 class TestPayCreate(unittest.TestCase):
 
+    # 网赚房角色配置
+    star_role = {
+        'testUid': 105002312,  # 非公会用户
+        'auto_rid': 193185484,  # 商业8坑位房间
+        'super_star_uid': 105002325,  # 指定工会艺人
+        'super_agent_uid': 105002323,  # 指定工会经纪人
+        'agent_star_uid': 105002331,  # 指定工会内有经纪人(105002323)的艺人
+        'super_broker': 136594717,  # 指定工会bid
+        'super-voice-fresh': 200000287,  # 网赚房间
+        'pack_cal_uid': 105002313,  # 公会签约主播（打包结算）
+        'white_uid': 105002338,  # 白名单用户
+    }
+
     @classmethod
     def setUpClass(cls) -> None:
-        conMysql.updateUserInfoSql('super_chatroom', config.star_role['super-voice-fresh'])
+        conMysql.updateUserInfoSql('super_chatroom', TestPayCreate.star_role['super-voice-fresh'])
 
     @pytest.mark.run(order=1)
     def test_01_starRoomNoBrokerArtistPay_35(self, des='网赚房无公会无经纪人初级艺人收35%个人魅力值'):
@@ -28,17 +41,17 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：1000 * 0.35 = 350(个人魅力值)
         """
         conMysql.updateMoneySql(config.payUid, money=1000)
-        test_uid = config.star_role['testUid']  # 105002312
+        test_uid = self.star_role['testUid']  # 105002312
         conMysql.updateMoneySql(test_uid)
         conMysql.checkOnlineEarnArtist(test_uid, worth=700)  # 设置用户为初级艺人
         data = encodeData(payType='package',
-                          rid=config.star_role['super-voice-fresh'],
+                          rid=self.star_role['super-voice-fresh'],
                           uid=test_uid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('single_money', test_uid), 620)
-        assert_equal(conMysql.selectUserInfoSql('sum_money', test_uid), 620)
+        assert_equal(conMysql.selectUserInfoSql('single_money', test_uid), 350)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', test_uid), 350)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
@@ -54,17 +67,17 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：1000 * 0.45 = 450(个人魅力值)
         """
         conMysql.updateMoneySql(config.payUid, money=1200)
-        test_uid = config.star_role['testUid']
+        test_uid = self.star_role['testUid']
         conMysql.updateMoneySql(test_uid)
         conMysql.checkOnlineEarnArtist(test_uid, worth=3501)  # 设置一个中级艺人
         data = encodeData(payType='package',
-                          rid=config.star_role['super-voice-fresh'],
+                          rid=self.star_role['super-voice-fresh'],
                           uid=test_uid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('single_money', test_uid), 620)
-        assert_equal(conMysql.selectUserInfoSql('sum_money', test_uid), 620)
+        assert_equal(conMysql.selectUserInfoSql('single_money', test_uid), 450)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', test_uid), 450)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 200)
         case_list_b[des] = result
 
@@ -80,11 +93,11 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：1000 * 0.55 = 550(个人魅力值)
         """
         conMysql.updateMoneySql(config.payUid, money=1300)
-        test_uid = config.star_role['testUid']
+        test_uid = self.star_role['testUid']
         conMysql.updateMoneySql(test_uid)
         conMysql.checkOnlineEarnArtist(test_uid, worth=10001)
         data = encodeData(payType='package',
-                          rid=config.star_role['super-voice-fresh'],
+                          rid=self.star_role['super-voice-fresh'],
                           uid=test_uid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
@@ -106,13 +119,13 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：1000 * 0.45 = 450（公会魅力值）
         """
         conMysql.updateMoneySql(config.payUid, money=1000)
-        test_uid = config.star_role['super_star_uid']  # 105002325
-        test_bid = config.star_role['super_broker']
+        test_uid = self.star_role['super_star_uid']  # 105002325
+        test_bid = self.star_role['super_broker']
         conMysql.updateMoneySql(test_uid)  # 清空账户
         conMysql.updateSuperVoiceUser(test_uid, test_bid, nid=200)  # 修改用户为网赚工会用户
         conMysql.checkOnlineEarnArtist(test_uid, worth=5000)  # 设置为中级艺人
         data = encodeData(payType='package',
-                          rid=config.star_role['super-voice-fresh'],
+                          rid=self.star_role['super-voice-fresh'],
                           uid=test_uid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
@@ -135,8 +148,8 @@ class TestPayCreate(unittest.TestCase):
         5.检查经纪人余额，预期为：1000 * 0.8 = 80（个人魅力值）
         """
         conMysql.updateMoneySql(config.payUid, money=1000)
-        test_uid = config.star_role['agent_star_uid']  # 105002331
-        test_agent = config.star_role['super_agent_uid']  # 105002323
+        test_uid = self.star_role['agent_star_uid']  # 105002331
+        test_agent = self.star_role['super_agent_uid']  # 105002323
         conMysql.checkOnlineEarnAgent(test_agent)  # 检查用户经纪人身份
         conMysql.checkOnlineEarnArtist(test_uid, worth=700)   # 设置艺人为初级艺人
         conMysql.updateUserMoneyClearSql(test_agent, test_uid)  # 清空用户账户
@@ -144,7 +157,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.deleteUserAccountSql('broker_user', test_uid)  # 删除用户工会数据
         conMysql.checkUserBroker(test_agent)
         data = encodeData(payType='package',
-                          rid=config.star_role['super-voice-fresh'],
+                          rid=self.star_role['super-voice-fresh'],
                           uid=test_uid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
@@ -168,15 +181,15 @@ class TestPayCreate(unittest.TestCase):
         5.检查经纪人余额，预期为：1000 * 0.08 = 80
         """
         conMysql.updateMoneySql(config.payUid, money=1000)
-        test_uid = config.star_role['agent_star_uid']  # 105002331
-        test_agent = config.star_role['super_agent_uid']  # 105002323
-        test_bid = config.star_role['super_broker']  # 136594717
+        test_uid = self.star_role['agent_star_uid']  # 105002331
+        test_agent = self.star_role['super_agent_uid']  # 105002323
+        test_bid = self.star_role['super_broker']  # 136594717
         conMysql.checkOnlineEarnArtist(test_uid, worth=4200)
         conMysql.checkOnlineEarnRelation(test_agent, test_uid)  # 检查经纪人艺人关系
         conMysql.updateUserMoneyClearSql(test_agent, test_uid)  # 清空用户账户
         conMysql.insertSuperVoiceUser(test_uid, test_bid)  # 加入指定公会
         data = encodeData(payType='package',
-                          rid=config.star_role['super-voice-fresh'],
+                          rid=self.star_role['super-voice-fresh'],
                           uid=test_uid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
@@ -200,9 +213,9 @@ class TestPayCreate(unittest.TestCase):
         5.检查经纪人余额，预期为： 1000 * 0.12 = 120(money_cash)
         """
         conMysql.updateMoneySql(config.payUid, money=1000)
-        test_uid = config.star_role['pack_cal_uid']  # 105002313
-        test_bid = config.star_role['super_broker']  # 136594717
-        test_agent = config.star_role['super_agent_uid']  # 105002323
+        test_uid = self.star_role['pack_cal_uid']  # 105002313
+        test_bid = self.star_role['super_broker']  # 136594717
+        test_agent = self.star_role['super_agent_uid']  # 105002323
         conMysql.checkOnlineEarnArtist(test_uid, worth=10001)  # 设置用户为高级艺人
         conMysql.checkOnlineEarnAgent(test_agent, point=100000)  # 更新经纪人等级
         conMysql.updateUserMoneyClearSql(test_agent, test_uid)  # 更新余额
@@ -213,7 +226,7 @@ class TestPayCreate(unittest.TestCase):
         #                  uid=test_uid)
         data = encodeData(payType='package',
                           money=600,
-                          rid=config.star_role['super-voice-fresh'],
+                          rid=self.star_role['super-voice-fresh'],
                           uid=test_uid,
                           giftId=config.giftId['46'],
                           star=4)
@@ -238,9 +251,9 @@ class TestPayCreate(unittest.TestCase):
         5.检查经纪人余额，预期为：0
         """
         conMysql.updateMoneySql(config.payUid, money=1000)
-        test_uid = config.star_role['agent_star_uid']  # 105002331
+        test_uid = self.star_role['agent_star_uid']  # 105002331
         # test_bid = config.super_live_role['super_broker']  # 136594717
-        test_agent = config.star_role['super_agent_uid']  # 105002323
+        test_agent = self.star_role['super_agent_uid']  # 105002323
         conMysql.checkOnlineEarnAgent(test_agent)
         conMysql.checkOnlineEarnArtist(test_uid, worth=4200)
         conMysql.updateUserMoneyClearSql(test_agent, test_uid)
@@ -268,13 +281,13 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：1000 * 0.7 = 700(个人魅力值)
         """
         conMysql.updateMoneySql(config.payUid, money=2000)
-        test_uid = config.star_role['white_uid']  # Redis-cli SADD Xs.WhiteList.SuperVoice.White 105002338
+        test_uid = self.star_role['white_uid']  # Redis-cli SADD Xs.WhiteList.SuperVoice.White 105002338
         conRedis.checkSetKey('Xs.WhiteList.SuperVoice.White', test_uid)
         conMysql.updateMoneySql(test_uid)
         conMysql.checkOnlineEarnArtist(test_uid, worth=700)  # 设置用户为初级艺人
         conMysql.checkWhiteUid(test_uid, white_type=105)  # type=105是网赚白名单用户
         data = encodeData(payType='package',
-                          rid=config.star_role['super-voice-fresh'],
+                          rid=self.star_role['super-voice-fresh'],
                           uid=test_uid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])

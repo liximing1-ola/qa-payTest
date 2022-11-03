@@ -59,7 +59,8 @@ class config:
         'testUid': 105002312,  # 非一代宗师
         'pack_cal_uid': 105002313,  # 打包结算签约主播
         'vipRoomRid': 200089706,  # 个人房，房主uid=103273407
-        'prettyRid': 193185564,  # 靓号房
+        'gsUid': 105002325,  # GS用户
+        'prettyRid': 200089942,  # 靓号房, 房主uid=105002325
     }
     # 直播间角色配置
     live_role = {
@@ -71,18 +72,6 @@ class config:
         'auto_rid': 193185484,  # 商业8坑位房间
         'cp_link_rid': 193185538,  # 商业连连看房间
         'liveRid': 193185408,
-    }
-    # 网赚房角色配置
-    star_role = {
-        'testUid': 105002312,  # 非公会用户
-        'auto_rid': 193185484,  # 商业8坑位房间
-        'super_star_uid': 105002325,  # 指定工会艺人
-        'super_agent_uid': 105002323,  # 指定工会经纪人
-        'agent_star_uid': 105002331,  # 指定工会内有经纪人(105002323)的艺人
-        'super_broker': 136594717,  # 指定工会bid
-        'super-voice-fresh': 200000287,  # 网赚房间
-        'pack_cal_uid': 105002313,  # 公会签约主播（打包结算）
-        'white_uid': 105002338,  # 白名单用户
     }
     # 礼物配置
     giftId = {
