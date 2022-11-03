@@ -122,7 +122,7 @@ class TestPayCreate(unittest.TestCase):
         2.个人房房间打赏礼盒（打赏100分）
         3.校验接口状态和返回值数据
         4.检查打赏者账户余额，预期值为：700 - 600 = 100
-        5.检查收箱用户账户余额，预期值为：大于186,(300*0.7=210)
+        5.检查收箱用户账户余额，预期值为：大于210,(300*0.7=210)
         """
         conMysql.updateMoneySql(config.payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
         conMysql.updateMoneySql(config.pack_cal_uid)
