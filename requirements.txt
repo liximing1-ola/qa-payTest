@@ -1,4 +1,4 @@
-allure-pytest==2.8.34
+allure-pytest==2.11.1
 allure-python-commons==2.8.34
 asn1crypto==0.24.0
 attrs==21.2.0
@@ -31,7 +31,7 @@ idna==2.6
 importlib-metadata==4.6.1
 incremental==16.10.1
 iniconfig==1.1.1
-Jinja2==2.10
+Jinja2==3.1.2
 jsonpatch==1.16
 jsonpath==0.82
 jsonpointer==1.10

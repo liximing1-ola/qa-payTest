@@ -7,6 +7,7 @@ import pytest
 from common.Assert import assert_equal, assert_code, assert_body
 from common.Consts import case_list, result
 from common.basicData import encodeData
+
 @unittest.skip('购买爵位场景已下线')
 class TestPayCreate(unittest.TestCase):
 

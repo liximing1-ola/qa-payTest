@@ -59,6 +59,7 @@ class config:
         'testUid': 105002312,  # 非一代宗师
         'pack_cal_uid': 105002313,  # 打包结算签约主播
         'vipRoomRid': 200089706,  # 个人房，房主uid=103273407
+        'prettyRid': 193185564,  # 靓号房
     }
     # 直播间角色配置
     live_role = {

@@ -7,8 +7,6 @@ from autoGitPull import updateTime, updateCode
 from common import Logs, method, Consts
 from common.Config import config
 from common.method import checkPath
-
-
 def main(appInfo):
     if appInfo == config.appName['伴伴']:
         if updateCode.autoGitPull('bb_php') | updateCode.autoGitPull('bb_go'):
@@ -33,14 +31,14 @@ def main(appInfo):
                 robot('slack', des_2)
             elif len(test_result.failures) >= 1:
                 Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
-                robot('slack', des)
+                robot('slack', des, color='danger')
                 for case, reason in test_result.failures:
-                    robot('slack', Consts.fail_case_reason[0], title=case.id())
+                    robot('slack', Consts.fail_case_reason[0], title=case.id(), color='danger')
                     break
             elif len(test_result.errors) >= 1:
                 Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
                 for case, reason in test_result.errors:
-                    robot('slack', reason, case.id())
+                    robot('slack', reason, case.id(), color='danger')
                     break
         else:
             Logs.get_log('runCode.log').info('NoRun')

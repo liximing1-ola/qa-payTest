@@ -11,7 +11,9 @@ from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
 
     # select rid from xs_chatroom where uid=103273407 and property='vip'  个人房，＞5级不回收
+    # select * from config.xsst_room_pretty;
     vipRoomRid = config.bb_user.copy()['vipRoomRid']
+    prettyRid = config.bb_user.copy()['prettyRid']
 
     def test_01_personRoomPayGift(self, des='个人房打赏钻石礼物场景'):
         """
@@ -85,4 +87,28 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('single_money', config.pack_cal_uid), 70)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
+        case_list_b[des] = result
+
+    def test_04_prettyRoomPayGiftToBrokerUser(self, des='靓号房打赏礼物给GS进moneyCash'):
+        """
+        用例描述：
+        验证余额足够时，靓号房打赏礼物给工会成员分成为：70:30，且收入在工会魅力值
+        脚本步骤：
+        1.构造打赏者和被打赏者数据
+        2.个人房房间打赏礼物（打赏100分）
+        3.校验接口状态和返回值数据
+        4.检查被打赏者余额，预期为：100 * 0.7 =70 (money_cash)
+        """
+        conMysql.updateMoneySql(config.payUid, money_cash_b=250)
+        conMysql.updateMoneySql(config.pack_cal_uid)
+        data = encodeData(payType='package',
+                          money=100,
+                          rid=self.prettyRid,
+                          uid=config.pack_cal_uid,
+                          giftId=config.giftId['5'])
+        res = post_request_session(config.pay_url, data)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.pack_cal_uid, money_type='money_cash'), 70)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 150)
         case_list_b[des] = result

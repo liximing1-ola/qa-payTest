@@ -6,10 +6,9 @@ import pytest
 from common.Request import post_request_session
 from common.Assert import assert_body, assert_code, assert_equal
 from common.basicData import encodeData
-from common.runFailed import Retry
 from common.Consts import case_list_b, result
 from common.conRedis import conRedis
-@Retry
+
 @unittest.skip('2022/11/1 网赚分成下线')
 class TestPayCreate(unittest.TestCase):
 
