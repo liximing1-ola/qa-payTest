@@ -125,7 +125,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查收箱用户账户余额，预期值为：大于186,(300*0.7=210)
         """
         conMysql.updateMoneySql(config.payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
-        conMysql.updateMoneySql(config.rewardUid)
+        conMysql.updateMoneySql(config.pack_cal_uid)
         data = encodeData(payType='package',
                           money=600,
                           rid=self.prettyRid,
@@ -136,5 +136,5 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 100)
-        assert_len(conMysql.selectUserInfoSql('single_money', config.rewardUid, money_type='money_cash'), 210)
+        assert_len(conMysql.selectUserInfoSql('single_money', config.pack_cal_uid, money_type='money_cash'), 210)
         case_list_b[des] = result
