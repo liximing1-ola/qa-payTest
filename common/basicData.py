@@ -3,7 +3,7 @@ from common.Config import config
 
 # 国内消费场景
 def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'],
-               uid=config.star_role['agent_star_uid'], giftId=config.giftId['7'],
+               uid=config.rewardUid, giftId=config.giftId['7'],
                giftType='normal', cid=5, boxType='copper', num=1, package_cid=0,
                ctype='', duction_money=0, star=0, defend_id=244,
                uids=('{}'.format(config.rewardUid), '{}'.format(config.rewardUid2))):
