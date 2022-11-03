@@ -114,6 +114,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 150)
         case_list_b[des] = result
 
+    @unittest.skip
     def test_05_personRoomPayBox(self, des='靓号房打赏礼盒场景'):
         """
         用例描述：
