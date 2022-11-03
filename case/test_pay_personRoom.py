@@ -112,3 +112,29 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('single_money', config.pack_cal_uid, money_type='money_cash'), 70)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 150)
         case_list_b[des] = result
+
+    def test_05_personRoomPayBox(self, des='靓号房打赏礼盒场景'):
+        """
+        用例描述：
+        验证余额足够时，靓号房打赏礼盒分成满足师徒收益(非一代宗师)的基础上为：70:30，且收入在公会魅力值
+        脚本步骤：
+        1.构造打赏者和被打赏者数据
+        2.个人房房间打赏礼盒（打赏100分）
+        3.校验接口状态和返回值数据
+        4.检查打赏者账户余额，预期值为：700 - 600 = 100
+        5.检查收箱用户账户余额，预期值为：大于186,(300*0.7=210)
+        """
+        conMysql.updateMoneySql(config.payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
+        conMysql.updateMoneySql(config.rewardUid)
+        data = encodeData(payType='package',
+                          money=600,
+                          rid=self.prettyRid,
+                          uid=config.pack_cal_uid,
+                          giftId=config.giftId['46'],
+                          star=4)
+        res = post_request_session(config.pay_url, data)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 100)
+        assert_len(conMysql.selectUserInfoSql('single_money', config.rewardUid), 210)
+        case_list_b[des] = result
