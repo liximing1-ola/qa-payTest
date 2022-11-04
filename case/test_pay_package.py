@@ -28,7 +28,6 @@ class TestPayCreate(unittest.TestCase):
         data = encodeData(payType='package',
                           money=100,
                           rid=self.liveRid,
-                          uid=config.rewardUid,
                           giftId=config.giftId['5'])
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
@@ -51,8 +50,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.rewardUid)
         data = encodeData(payType='package',
                           money=100,
-                          rid=config.star_role['auto_rid'],
-                          uid=config.rewardUid,
+                          rid=config.live_role['auto_rid'],
                           giftId=config.giftId['5'])
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
@@ -79,7 +77,6 @@ class TestPayCreate(unittest.TestCase):
         cid = conMysql.selectUserInfoSql('id_commodity', config.payUid, cid=gift_cid)
         data = encodeData(payType='package',
                           rid=config.live_role['auto_rid'],
-                          uid=config.rewardUid,
                           giftId=config.giftId['11'],
                           money=3000,
                           package_cid=cid,
@@ -111,7 +108,6 @@ class TestPayCreate(unittest.TestCase):
         cid = conMysql.selectUserInfoSql('id_commodity', config.payUid, cid=gift_cid)
         data = encodeData(payType='package',
                           rid=config.live_role['auto_rid'],
-                          uid=config.rewardUid,
                           giftId=config.giftId['11'],
                           money=3000,
                           package_cid=cid,
@@ -183,9 +179,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.payUid, money=1000)
         conMysql.updateMoneySql(config.rewardUid)
-        data = encodeData(payType='package',
-                          rid=self.union_rid,
-                          uid=config.rewardUid)  # 联盟房rid
+        data = encodeData(payType='package', rid=self.union_rid)  # 联盟房rid
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -211,7 +205,6 @@ class TestPayCreate(unittest.TestCase):
         cid = conMysql.selectUserInfoSql('id_commodity', config.payUid, cid=gift_cid)
         data = encodeData(payType='package-radioDefend',
                           rid=200022566,  # rid=200022566， error先检查电台房在不在
-                          uid=config.rewardUid,
                           money=520,
                           package_cid=cid)
         res = post_request_session(config.pay_url, data)

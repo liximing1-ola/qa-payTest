@@ -31,7 +31,6 @@ class TestPayCreate(unittest.TestCase):
         conMysql.deleteUserBeanSql(config.payUid, config.rewardUid)  # 执行前处理数据
         conMysql.updateMoneySql(config.payUid)
         data = encodeData(payType='package',
-                          uid=config.rewardUid,
                           giftId=config.giftId['362'],
                           giftType='bean')
         res = post_request_session(config.pay_url, data)
@@ -81,7 +80,6 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.rewardUid)
         conMysql.insertBeanSql(config.payUid, money_coupon=500)
         data = encodeData(payType='package-exchange',
-                          uid=config.rewardUid,
                           giftId=config.giftId['362'],
                           giftType='bean')
         res = post_request_session(config.pay_url, data)
@@ -107,7 +105,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, money=1000)
         conMysql.updateMoneySql(config.rewardUid)
         conMysql.insertBeanSql(config.payUid, money_coupon=200)
-        data = encodeData(payType='chat-gift', uid=config.rewardUid)
+        data = encodeData(payType='chat-gift')
         res = post_request_session(config.pay_url, data=data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -131,7 +129,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, money=1000)
         conMysql.updateMoneySql(config.rewardUid)
         conMysql.insertBeanSql(config.payUid, money_coupon=400)
-        data = encodeData(payType='package', uid=config.rewardUid)
+        data = encodeData(payType='package')
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -156,7 +154,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, money=700)
         conMysql.updateMoneySql(config.rewardUid)
         conMysql.insertBeanSql(config.payUid, money_coupon=400)
-        data = encodeData(payType='package', uid=config.rewardUid)
+        data = encodeData(payType='package')
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 0, reason(des, res))
@@ -204,9 +202,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.deleteUserAccountSql('user_commodity', config.rewardUid)
         conMysql.insertBeanSql(config.payUid, money_coupon=1000)
-        data = encodeData(payType='deco-present',
-                          uid=config.rewardUid,
-                          cid=goldCid)  # 金豆道具
+        data = encodeData(payType='deco-present', cid=goldCid)  # 金豆道具
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))

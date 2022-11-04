@@ -31,7 +31,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.rewardUid)
         data = encodeData(payType='defend',
                           money=self.dict_config['money_value'],
-                          uid=config.rewardUid)
+                          )
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))

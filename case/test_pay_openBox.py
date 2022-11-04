@@ -87,8 +87,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.rewardUid)
         data = encodeData(payType='package',
                           money=600,
-                          rid=config.live_role['cp_link_rid'],  # 这个房间走的55分成
-                          uid=config.rewardUid,
+                          rid=config.live_role['cp_link_rid'],  # 这个房间走的55分成,
                           giftId=config.giftId['46'],
                           star=4)
         res = post_request_session(config.pay_url, data)

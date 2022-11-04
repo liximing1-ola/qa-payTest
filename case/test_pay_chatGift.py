@@ -25,7 +25,6 @@ class TestPayCreate(unittest.TestCase):
         conMysql.deleteUserAccountSql('broker_user', config.rewardUid)
         conMysql.deleteUserAccountSql('chatroom', config.rewardUid)
         data = encodeData(payType='chat-gift',
-                          uid=config.rewardUid,
                           num=10,
                           giftId=config.giftId['5'])
         res = post_request_session(config.pay_url, data)

@@ -30,7 +30,6 @@ class TestPayCreate(unittest.TestCase):
         data = encodeData(payType='package',
                           money=100,
                           rid=self.liveRid,
-                          uid=config.rewardUid,
                           giftId=config.giftId['5'])
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
@@ -55,7 +54,6 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, money=1100, money_cash=100, money_cash_b=100, money_b=100)
         conMysql.updateMoneySql(config.rewardUid)
         data = encodeData(payType='chat-gift',
-                          uid=config.rewardUid,
                           num=10,
                           giftId=config.giftId['5'])
         res = post_request_session(config.pay_url, data)
@@ -255,8 +253,7 @@ class TestPayCreate(unittest.TestCase):
         data = encodeData(payType='package',
                           giftId=config.giftId['5'],
                           rid=config.live_role['live_rid'],
-                          money=100,
-                          uid=config.rewardUid)
+                          money=100)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))

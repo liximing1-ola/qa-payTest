@@ -31,7 +31,6 @@ class TestPayCreate(unittest.TestCase):
         data = encodeData(payType='package',
                           money=100,
                           rid=self.vipRoomRid,
-                          uid=config.rewardUid,
                           giftId=config.giftId['5'])
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
@@ -56,7 +55,6 @@ class TestPayCreate(unittest.TestCase):
         data = encodeData(payType='package',
                           money=600,
                           rid=self.vipRoomRid,
-                          uid=config.rewardUid,
                           giftId=config.giftId['46'],
                           star=4)
         res = post_request_session(config.pay_url, data)
