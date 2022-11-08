@@ -19,6 +19,8 @@ class TestPayCreate(unittest.TestCase):
         gift = gift_config['10']
         #  sql:打赏者starify_payUid 修改余额=19999
         conMysql.updateMoneySql(starify_payUid, 19999)
+        #  sql:打赏者starify_payUid 清空背包礼物
+        conMysql.deleteUserAccountSql('user_commodity', starify_payUid)
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         data = deal_pay_data("room", gift['gift_id'], to_uids=[starify_rewardUid01], )
@@ -36,6 +38,8 @@ class TestPayCreate(unittest.TestCase):
         gift = gift_config['10']
         #  sql:打赏者starify_payUid 修改余额=0
         conMysql.updateMoneySql(starify_payUid, 0)
+        #  sql:打赏者starify_payUid 清空背包礼物
+        conMysql.deleteUserAccountSql('user_commodity', starify_payUid)
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         data = deal_pay_data("room", gift['gift_id'], to_uids=[starify_rewardUid01], )
@@ -52,6 +56,8 @@ class TestPayCreate(unittest.TestCase):
         gift = gift_config['10']
         #  sql:打赏者starify_payUid 修改余额=19998
         conMysql.updateMoneySql(starify_payUid, 19998)
+        #  sql:打赏者starify_payUid 清空背包礼物
+        conMysql.deleteUserAccountSql('user_commodity', starify_payUid)
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         data = deal_pay_data("room", gift['gift_id'], to_uids=[starify_rewardUid01], )
@@ -68,6 +74,8 @@ class TestPayCreate(unittest.TestCase):
         gift = gift_config['9']
         #  sql:打赏者starify_payUid 修改余额=5200*2(人数)=10400
         conMysql.updateMoneySql(starify_payUid, 10400)
+        #  sql:打赏者starify_payUid 清空背包礼物
+        conMysql.deleteUserAccountSql('user_commodity', starify_payUid)
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid02 修改余额=0
@@ -90,6 +98,8 @@ class TestPayCreate(unittest.TestCase):
         gift = gift_config['9']
         #  sql:打赏者starify_payUid 修改余额=0
         conMysql.updateMoneySql(starify_payUid, 0)
+        #  sql:打赏者starify_payUid 清空背包礼物
+        conMysql.deleteUserAccountSql('user_commodity', starify_payUid)
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid02 修改余额=0
@@ -110,6 +120,8 @@ class TestPayCreate(unittest.TestCase):
         gift = gift_config['9']
         #  sql:打赏者starify_payUid 修改余额=5200*2(人数)-1=10399
         conMysql.updateMoneySql(starify_payUid, 10399)
+        #  sql:打赏者starify_payUid 清空背包礼物
+        conMysql.deleteUserAccountSql('user_commodity', starify_payUid)
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid02 修改余额=0
@@ -661,6 +673,8 @@ class TestPayCreate(unittest.TestCase):
         money = 100000
         #  sql:打赏者starify_payUid 修改余额=100000
         conMysql.updateMoneySql(starify_payUid, money)
+        #  sql:打赏者starify_payUid 清空背包礼物
+        conMysql.deleteUserAccountSql('user_commodity', starify_payUid)
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         # 打赏编号3~8的礼物,不返奖
