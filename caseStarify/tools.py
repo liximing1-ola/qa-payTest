@@ -1,4 +1,5 @@
 import hashlib
+import math
 import time
 
 import requests
@@ -40,6 +41,9 @@ def hash_key():
 	"""生成连击key"""
 	return hashlib.md5(str(int(time.time())).encode()).hexdigest()
 
+def deal_num(num):
+	"""处理精度问题,保留2位小数后,向上取整"""
+	return math.ceil(round(num, 2))
 
 if __name__ == '__main__':
 	pass
