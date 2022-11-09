@@ -89,20 +89,22 @@ commodity_config = {
 		"name": "txk-001-en",
 		"price": 100,
 		"cid": 83,
-		"level": [
+		"level_1":
 			{
 				"day": 3,
 				"rate": 0.8,  # 折扣
 			},
+		"level_2":
 			{
 				"day": 7,
 				"rate": 0.7,  # 折扣
 			},
+		"level_3":
 			{
 				"day": 15,
 				"rate": 0.6,  # 折扣
 			},
-		]
+
 	},
 	# 物品-麦上光圈
 	"ring": {

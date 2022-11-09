@@ -25,7 +25,7 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', True, reason_starify(des, res))
         #  sql:starify_payUid 查询余额=0
-        cost = commodity['level'][sale_level]['day'] * commodity['level'][sale_level]['rate'] * commodity['price']
+        cost = commodity[f'level_{sale_level}']['day'] * commodity[f'level_{sale_level}']['rate'] * commodity['price']
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 100000 - cost)
         #  sql:检查背包物品=1
         assert_equal(conMysql.selectUserInfoSql('gift_num', starify_payUid), 1)
