@@ -30,8 +30,8 @@ query_starify = {
 	'_timestamp': "1577808000",
 	'_abi': "arm64-v8a",
 	'format': 'json',
-	'_versionName': '1.0.4.0',
-	'_versionCode': '100004000',
+	'_versionName': '1.0.5.2',
+	'_versionCode': '100005002',
 }
 
 body_starify = {

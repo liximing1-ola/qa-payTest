@@ -16,19 +16,21 @@ starify_work_state = {
 }
 
 # 礼物配置
-gift_config = {
+commodity_config = {
+	# 作品礼物
 	"1": {
 		"gift_id": 1,  # 礼物id
 		"name": "星幣",
 		"price": 1,
-		"cid": 999,  # todo 物品id
+		"cid": 94,
 	},
 	"2": {
 		"gift_id": 2,
 		"name": "安可",
 		"price": 2,
-		"cid": 999,  # todo 物品id
+		"cid": 95,
 	},
+	# 房间礼物-非特权
 	"3": {
 		"gift_id": 3,
 		"name": "為你打call",
@@ -80,6 +82,27 @@ gift_config = {
 		"cid": 24,
 		"reward_lower": 0.15,
 		"reward_upper": 0.20
-	}
+	},
+	# 物品-头像框
+	"header": {
+		"gift_id": 0,
+		"name": "txk-001-en",
+		"price": 100,
+		"cid": 83,
+	},
+	# 物品-麦上光圈
+	"ring": {
+		"gift_id": 0,
+		"name": "guangquan-001-en",
+		"price": 888,
+		"cid": 88,
+	},
+	# 物品-入场横幅
+	"effect": {
+		"gift_id": 0,
+		"name": "hengfu-001-en",
+		"price": 555,
+		"cid": 89,
+	},
 }
 
