@@ -19,7 +19,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.deleteUserAccountSql("user_work_reward", starify_payUid, starify_work_state['todo'])
         #  sql:打赏者starify_payUid 修改余额=2
         conMysql.updateMoneySql(starify_payUid, 2)
-        data = deal_pay_data("work", commodity['gift_id'], work_state="todo")
+        data = deal_pay_data("work", commodity, work_state="todo")
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
         assert_body(res['body'], 'success', True, reason_starify(des, res))
@@ -33,7 +33,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.deleteUserAccountSql("user_work_reward", starify_payUid, starify_work_state['todo'])
         #  sql:starify_payUid 修改余额=0
         conMysql.updateMoneySql(starify_payUid, 0)
-        data = deal_pay_data("work", commodity['gift_id'], work_state="todo")
+        data = deal_pay_data("work", commodity, work_state="todo")
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
         assert_body(res['body'], 'msg', '支付或打赏失败', reason_starify(des, res))
@@ -47,7 +47,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.deleteUserAccountSql("user_work_reward", starify_payUid, starify_work_state['todo'])
         #  sql:starify_payUid 修改余额=1
         conMysql.updateMoneySql(starify_payUid, 1)
-        data = deal_pay_data("work", commodity['gift_id'], work_state="todo")
+        data = deal_pay_data("work", commodity, work_state="todo")
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
         assert_body(res['body'], 'msg', "支付或打赏失败", reason_starify(des, res))
@@ -59,7 +59,7 @@ class TestPayCreate(unittest.TestCase):
         commodity = commodity_config['2']
         #  sql:starify_payUid 修改余额=2
         conMysql.updateMoneySql(starify_payUid, 2)
-        data = deal_pay_data("work", commodity['gift_id'], work_state="done")
+        data = deal_pay_data("work", commodity, work_state="done")
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
         assert_body(res['body'], 'msg', '同一个星币礼物只能打赏同一个作品一次', reason_starify(des, res))
@@ -73,7 +73,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.deleteUserAccountSql("user_work_reward", starify_payUid, starify_work_state['todo'])
         #  sql:starify_payUid 修改余额
         conMysql.updateMoneySql(starify_payUid, 1)
-        data = deal_pay_data("work", commodity['gift_id'], "todo")
+        data = deal_pay_data("work", commodity, "todo")
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
         assert_body(res['body'], 'success', True, reason_starify(des, res))
