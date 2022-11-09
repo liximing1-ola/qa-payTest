@@ -1,3 +1,4 @@
+import math
 import unittest
 
 from caseStarify.deal_data import deal_pay_data
@@ -25,7 +26,8 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', True, reason_starify(des, res))
         #  sql:starify_payUid 查询余额=0
-        cost = commodity[f'level_{sale_level}']['day'] * commodity[f'level_{sale_level}']['rate'] * commodity['price']
+        cost = math.ceil(
+            commodity[f'level_{sale_level}']['day'] * commodity[f'level_{sale_level}']['rate'] * commodity['price'])
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 100000 - cost)
         #  sql:检查背包物品=1
         assert_equal(conMysql.selectUserInfoSql('commodity_num', starify_payUid, commodity['cid'], 86400 * 3), 1)
@@ -43,7 +45,8 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', True, reason_starify(des, res))
         #  sql:starify_payUid 查询余额=0
-        cost = commodity[f'level_{sale_level}']['day'] * commodity[f'level_{sale_level}']['rate'] * commodity['price']
+        cost = math.ceil(
+            commodity[f'level_{sale_level}']['day'] * commodity[f'level_{sale_level}']['rate'] * commodity['price'])
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 100000 - cost)
         #  sql:检查背包物品=1
         assert_equal(conMysql.selectUserInfoSql('commodity_num', starify_payUid, commodity['cid'], 86400 * 7), 1)
@@ -61,7 +64,8 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', True, reason_starify(des, res))
         #  sql:starify_payUid 查询余额=0
-        cost = commodity[f'level_{sale_level}']['day'] * commodity[f'level_{sale_level}']['rate'] * commodity['price']
+        cost = math.ceil(
+            commodity[f'level_{sale_level}']['day'] * commodity[f'level_{sale_level}']['rate'] * commodity['price'])
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 100000 - cost)
         #  sql:检查背包物品=1
         assert_equal(conMysql.selectUserInfoSql('commodity_num', starify_payUid, commodity['cid'], 86400 * 15), 1)
@@ -79,7 +83,8 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', True, reason_starify(des, res))
         #  sql:starify_payUid 查询余额=0
-        cost = commodity[f'level_{sale_level}']['day'] * commodity[f'level_{sale_level}']['rate'] * commodity['price']
+        cost = math.ceil(
+            commodity[f'level_{sale_level}']['day'] * commodity[f'level_{sale_level}']['rate'] * commodity['price'])
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 100000 - cost)
         #  sql:检查背包物品=1
         assert_equal(conMysql.selectUserInfoSql('commodity_num', starify_payUid, commodity['cid'], 86400 * 3), 1)
@@ -97,7 +102,8 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', True, reason_starify(des, res))
         #  sql:starify_payUid 查询余额=0
-        cost = commodity[f'level_{sale_level}']['day'] * commodity[f'level_{sale_level}']['rate'] * commodity['price']
+        cost = math.ceil(
+            commodity[f'level_{sale_level}']['day'] * commodity[f'level_{sale_level}']['rate'] * commodity['price'])
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 100000 - cost)
         #  sql:检查背包物品=1
         assert_equal(conMysql.selectUserInfoSql('commodity_num', starify_payUid, commodity['cid'], 86400 * 3), 1)
