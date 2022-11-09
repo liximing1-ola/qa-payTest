@@ -37,6 +37,7 @@ class conMysql:
                 print(error)
         elif accountType == 'gift_num':  # 查询用户背包某个物品总数
             sql = f'select sum(num) from xs_user_commodity where uid ={uid} and cid = {cid};'
+            print(sql)
             try:
                 conMysql.cur.execute(sql)
                 res = conMysql.cur.fetchone()
