@@ -28,7 +28,7 @@ class TestPayCreate(unittest.TestCase):
         cost = commodity['level'][sale_level]['day'] * commodity['level'][sale_level]['rate'] * commodity['price']
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 100000 - cost)
         #  sql:检查背包物品=1
-        assert_equal(conMysql.selectUserInfoSql('gift_num', starify_rewardUid01), 1)
+        assert_equal(conMysql.selectUserInfoSql('gift_num', starify_payUid), 1)
         case_list[des] = result
     # def test_shop_001(self, des='星币充足,商城购买-进场横幅'):
     #     pass
