@@ -28,7 +28,7 @@ class TestPayCreate(unittest.TestCase):
         #  sql:starify_payUid 查询余额=0
         cost = math.ceil(
             round(commodity[f'level_{sale_level}']['day'] * commodity[f'level_{sale_level}']['rate'] * commodity[
-                'price']))
+                'price'], 2))
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 100000 - cost)
         #  sql:检查背包物品=1
         assert_equal(conMysql.selectUserInfoSql('commodity_num', starify_payUid, commodity['cid'], 86400 * 3), 1)
@@ -48,7 +48,7 @@ class TestPayCreate(unittest.TestCase):
         #  sql:starify_payUid 查询余额=0
         cost = math.ceil(
             round(commodity[f'level_{sale_level}']['day'] * commodity[f'level_{sale_level}']['rate'] * commodity[
-                'price']))
+                'price'], 2))
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 100000 - cost)
         #  sql:检查背包物品=1
         assert_equal(conMysql.selectUserInfoSql('commodity_num', starify_payUid, commodity['cid'], 86400 * 7), 1)
@@ -68,7 +68,7 @@ class TestPayCreate(unittest.TestCase):
         #  sql:starify_payUid 查询余额=0
         cost = math.ceil(
             round(commodity[f'level_{sale_level}']['day'] * commodity[f'level_{sale_level}']['rate'] * commodity[
-                'price']))
+                'price'], 2))
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 100000 - cost)
         #  sql:检查背包物品=1
         assert_equal(conMysql.selectUserInfoSql('commodity_num', starify_payUid, commodity['cid'], 86400 * 15), 1)
@@ -88,7 +88,7 @@ class TestPayCreate(unittest.TestCase):
         #  sql:starify_payUid 查询余额=0
         cost = math.ceil(
             round(commodity[f'level_{sale_level}']['day'] * commodity[f'level_{sale_level}']['rate'] * commodity[
-                'price']))
+                'price'], 2))
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 100000 - cost)
         #  sql:检查背包物品=1
         assert_equal(conMysql.selectUserInfoSql('commodity_num', starify_payUid, commodity['cid'], 86400 * 3), 1)
@@ -108,7 +108,7 @@ class TestPayCreate(unittest.TestCase):
         #  sql:starify_payUid 查询余额=0
         cost = math.ceil(
             round(commodity[f'level_{sale_level}']['day'] * commodity[f'level_{sale_level}']['rate'] * commodity[
-                'price']))
+                'price'], 2))
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 100000 - cost)
         #  sql:检查背包物品=1
         assert_equal(conMysql.selectUserInfoSql('commodity_num', starify_payUid, commodity['cid'], 86400 * 3), 1)
