@@ -93,18 +93,20 @@ commodity_config = {
 			{
 				"day": 3,
 				"rate": 0.8,  # 折扣
+				"duration": 3 * 86400,
 			},
 		"level_2":
 			{
 				"day": 7,
 				"rate": 0.7,  # 折扣
+				"duration": 7 * 86400,
 			},
 		"level_3":
 			{
 				"day": 15,
 				"rate": 0.6,  # 折扣
+				"duration": 15 * 86400,
 			},
-
 	},
 	# 物品-麦上光圈
 	"ring": {
@@ -112,6 +114,24 @@ commodity_config = {
 		"name": "guangquan-001-en",
 		"price": 888,
 		"cid": 88,
+		"level_1":
+			{
+				"day": 3,
+				"rate": 0.8,  # 折扣
+				"duration": 3 * 86400,
+			},
+		"level_2":
+			{
+				"day": 7,
+				"rate": 0.7,  # 折扣
+				"duration": 7 * 86400,
+			},
+		"level_3":
+			{
+				"day": 15,
+				"rate": 0.6,  # 折扣
+				"duration": 15 * 86400,
+			},
 	},
 	# 物品-入场横幅
 	"effect": {
@@ -119,6 +139,24 @@ commodity_config = {
 		"name": "hengfu-001-en",
 		"price": 555,
 		"cid": 89,
+		"level_1":
+			{
+				"day": 3,
+				"rate": 1,  # 折扣
+				"duration": 3 * 86400,
+			},
+		"level_2":
+			{
+				"day": 7,
+				"rate": 1,  # 折扣
+				"duration": 7 * 86400,
+			},
+		"level_3":
+			{
+				"day": 15,
+				"rate": 1,  # 折扣
+				"duration": 15 * 86400,
+			},
 	},
 }
 

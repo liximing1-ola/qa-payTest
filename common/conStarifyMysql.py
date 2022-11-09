@@ -23,7 +23,7 @@ class conMysql:
     cur = con.cursor()
 
     @staticmethod
-    def selectUserInfoSql(accountType, uid, cid=0):
+    def selectUserInfoSql(accountType, uid, cid=0, duration_time=86400):
         if accountType == 'star_coin':  # 查询账户余额
             sql = f"select star_coin from xs_user_money where uid={uid};"
             try:
@@ -35,8 +35,20 @@ class conMysql:
                     return res[0]
             except Exception as error:
                 print(error)
-        elif accountType == 'gift_num':  # 查询用户背包某个物品总数
+        elif accountType == 'gift_num':  # 查询用户背包某个礼物总数
             sql = f'select sum(num) from xs_user_commodity where uid ={uid} and cid = {cid};'
+            print(sql)
+            try:
+                conMysql.cur.execute(sql)
+                res = conMysql.cur.fetchone()
+                if res[0] is None:
+                    return 0
+                else:
+                    return res[0]
+            except Exception as error:
+                print(error)
+        elif accountType == 'commodity_num':  # 查询用户背包某个物品总数
+            sql = f'select sum(num) from xs_user_commodity where uid ={uid} and cid = {cid} and duration_time={duration_time};'
             print(sql)
             try:
                 conMysql.cur.execute(sql)
