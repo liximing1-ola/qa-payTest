@@ -4,7 +4,7 @@ from caseStarify.need_data import *
 from caseStarify.tools import hash_key
 
 
-def deal_pay_data(op_type, commodity, work_state="todo", to_uids=None, is_use_bag=False, hit_offset=1, combo_key=None):
+def deal_pay_data(op_type, commodity, work_state="todo", to_uids=None, is_use_bag=False, hit_offset=1, combo_key=None,sale_level=1):
 	"""
 	处理pay的data
 	:param op_type: 打赏类型 work/room
@@ -13,6 +13,8 @@ def deal_pay_data(op_type, commodity, work_state="todo", to_uids=None, is_use_ba
 	:param to_uids: 房间打赏时,必传,被打赏人id的list
 	:param is_use_bag: 房间打赏时,必传,是否时背包礼物
 	:param hit_offset: 合并请求的连击数
+	:param combo_key: 连击key
+	:param sale_level: 物品购买档位 1,2,3
 	:return:
 	"""
 
@@ -41,8 +43,8 @@ def deal_pay_data(op_type, commodity, work_state="todo", to_uids=None, is_use_ba
 	}
 	params_shop = {
 		"cid": commodity['cid'],
-		"sale_level": 1,  # 档位 1=3天/2=7天/3=15天
-		"count": 1
+		"sale_level": sale_level,  # 档位 1=3天/2=7天/3=15天
+		"count": 1  # 目前,默认为1
 	}
 	if op_type == "work":
 		params = params_work

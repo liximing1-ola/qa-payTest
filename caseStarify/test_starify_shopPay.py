@@ -13,19 +13,21 @@ from common.runFailed import Retry
 
 @Retry(max_n=1)
 class TestPayCreate(unittest.TestCase):
-    def test_shop_001(self, des='星币充足,商城购买-头像框'):
+    def test_shop_001(self, des='星币充足,商城购买-头像框,3天'):
         commodity = commodity_config['header']
+        sale_level = 1
         #  sql:打赏者starify_payUid 修改余额=10000
         conMysql.updateMoneySql(starify_payUid, 100000)
         #  sql:打赏者starify_payUid 清空背包礼物
         conMysql.deleteUserAccountSql('user_commodity', starify_payUid)
-        data = deal_pay_data("shop_buy", commodity)
+        data = deal_pay_data("shop_buy", commodity, sale_level=sale_level)
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
         assert_body(res['body'], 'success', True, reason_starify(des, res))
         #  sql:starify_payUid 查询余额=0
-        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 100000-3*commodity['price'])
-        #  sql:检查背包物品=1 todo
+        cost = commodity['level'][sale_level]['day'] * commodity['level'][sale_level]['rate'] * commodity['price']
+        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 100000 - cost)
+        #  sql:检查背包物品=1
         assert_equal(conMysql.selectUserInfoSql('gift_num', starify_rewardUid01), 1)
         case_list[des] = result
     # def test_shop_001(self, des='星币充足,商城购买-进场横幅'):
