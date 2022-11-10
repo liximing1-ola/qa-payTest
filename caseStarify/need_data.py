@@ -1,12 +1,12 @@
 # 房间号
-starify_rid = 10000184
+starify_rid = 10002496
 # 打赏人
-starify_payPhone = "15008520850"
-starify_payUid = 124458
+starify_payPhone = "15008520001"
+starify_payUid = 124585
 # 被打赏人 01
-starify_rewardUid01 = 124461  # 手机 15008520851
+starify_rewardUid01 = 124586  # 手机 15008520002
 # 被打赏人 02
-starify_rewardUid02 = 124460  # 手机 15008520852
+starify_rewardUid02 = 124587  # 手机 15008520003
 
 
 # 作品id
