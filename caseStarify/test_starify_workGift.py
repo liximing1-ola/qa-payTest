@@ -36,7 +36,7 @@ class TestPayCreate(unittest.TestCase):
         data = deal_pay_data("work", commodity, work_state="todo")
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
-        assert_body(res['body'], 'msg', '支付或打赏失败', reason_starify(des, res))
+        assert_body(res['body'], 'msg', '余额不足', reason_starify(des, res))
         #  sql:starify_payUid 查询余额=0
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
         case_list[des] = result
@@ -50,7 +50,7 @@ class TestPayCreate(unittest.TestCase):
         data = deal_pay_data("work", commodity, work_state="todo")
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
-        assert_body(res['body'], 'msg', "支付或打赏失败", reason_starify(des, res))
+        assert_body(res['body'], 'msg', "余额不足", reason_starify(des, res))
         #  sql:starify_payUid 查询余额=1
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 1)
         case_list[des] = result
