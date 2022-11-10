@@ -22,56 +22,56 @@ commodity_config = {
 		"gift_id": 1,  # 礼物id
 		"name": "星幣",
 		"price": 1,
-		"cid": 94,
+		"cid": 28,
 	},
 	"2": {
 		"gift_id": 2,
 		"name": "安可",
 		"price": 2,
-		"cid": 95,
+		"cid": 29,
 	},
 	# 房间礼物-非特权
 	"3": {
 		"gift_id": 3,
 		"name": "為你打call",
 		"price": 5,
-		"cid": 17,
+		"cid": 30,
 	},
 	"4": {
 		"gift_id": 4,
 		"name": "螢光棒",
 		"price": 40,
-		"cid": 18,
+		"cid": 31,
 	},
 	"5": {
 		"gift_id": 5,
 		"name": "氣泡槍",
 		"price": 150,
-		"cid": 19,
+		"cid": 32,
 	},
 	"6": {
 		"gift_id": 6,
 		"name": "光音魔瓶",
 		"price": 520,
-		"cid": 20,
+		"cid": 33,
 	},
 	"7": {
 		"gift_id": 7,
 		"name": "節奏大師",
 		"price": 1200,
-		"cid": 21,
+		"cid": 34,
 	},
 	"8": {
 		"gift_id": 8,
 		"name": "麥克風",
 		"price": 2000,
-		"cid": 22,
+		"cid": 35,
 	},
 	"9": {
 		"gift_id": 9,
 		"name": "聲霸天下",
 		"price": 5200,
-		"cid": 23,
+		"cid": 36,
 		"reward_lower": 0.05,  # 返奖下限
 		"reward_upper": 0.10  # 返奖上限
 	},
@@ -79,7 +79,7 @@ commodity_config = {
 		"gift_id": 10,
 		"name": "摩登派對",
 		"price": 19999,
-		"cid": 24,
+		"cid": 37,
 		"reward_lower": 0.15,
 		"reward_upper": 0.20
 	},
