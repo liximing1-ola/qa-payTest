@@ -86,38 +86,63 @@ commodity_config = {
 	# 物品-头像框
 	"header": {
 		"gift_id": 0,
-		"name": "txk-001-en",
-		"price": 100,
-		"cid": 83,
+		"name": "header-2",
+		"price": 444,
+		"cid": 46,
 		"level_1":
 			{
 				"day": 3,
-				"rate": 0.8,  # 折扣
+				"rate": 1,  # 折扣
 				"duration": 3 * 86400,
 			},
 		"level_2":
 			{
 				"day": 7,
-				"rate": 0.7,  # 折扣
+				"rate": 0.8,  # 折扣
 				"duration": 7 * 86400,
 			},
 		"level_3":
 			{
 				"day": 15,
-				"rate": 0.6,  # 折扣
+				"rate": 0.7,  # 折扣
 				"duration": 15 * 86400,
 			},
 	},
 	# 物品-麦上光圈
 	"ring": {
 		"gift_id": 0,
-		"name": "guangquan-001-en",
-		"price": 888,
-		"cid": 88,
+		"name": "ring-1",
+		"price": 2222,
+		"cid": 44,
 		"level_1":
 			{
 				"day": 3,
-				"rate": 0.8,  # 折扣
+				"rate":1,  # 折扣
+				"duration": 3 * 86400,
+			},
+		"level_2":
+			{
+				"day": 7,
+				"rate": 0.85,  # 折扣
+				"duration": 7 * 86400,
+			},
+		"level_3":
+			{
+				"day": 15,
+				"rate": 0.65,  # 折扣
+				"duration": 15 * 86400,
+			},
+	},
+	# 物品-入场横幅
+	"effect": {
+		"gift_id": 0,
+		"name": "effect-3",
+		"price": 333,
+		"cid": 42,
+		"level_1":
+			{
+				"day": 3,
+				"rate": 1,  # 折扣
 				"duration": 3 * 86400,
 			},
 		"level_2":
@@ -129,32 +154,7 @@ commodity_config = {
 		"level_3":
 			{
 				"day": 15,
-				"rate": 0.6,  # 折扣
-				"duration": 15 * 86400,
-			},
-	},
-	# 物品-入场横幅
-	"effect": {
-		"gift_id": 0,
-		"name": "hengfu-001-en",
-		"price": 555,
-		"cid": 89,
-		"level_1":
-			{
-				"day": 3,
-				"rate": 1,  # 折扣
-				"duration": 3 * 86400,
-			},
-		"level_2":
-			{
-				"day": 7,
-				"rate": 1,  # 折扣
-				"duration": 7 * 86400,
-			},
-		"level_3":
-			{
-				"day": 15,
-				"rate": 1,  # 折扣
+				"rate": 0.5,  # 折扣
 				"duration": 15 * 86400,
 			},
 	},
