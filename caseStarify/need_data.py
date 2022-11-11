@@ -11,8 +11,8 @@ starify_rewardUid02 = 124587  # 手机 15008520003
 
 # 作品id
 starify_work_state = {
-	"todo": 733,  # 未打赏
-	"done": 734,  # 已打赏
+	"todo": 9926,  # 未打赏
+	"done": 9927,  # 已打赏
 }
 
 # 礼物配置
