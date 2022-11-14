@@ -28,7 +28,6 @@ class config:
         "伴伴": 'banban',
         "Partying": 'pt',
         "谁是凶手": 'games',
-        "嗨歌": 'havefun',
         "starify": 'starify',
         "冲鸭": 'rush',
     }
