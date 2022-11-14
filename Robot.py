@@ -17,6 +17,7 @@ def robot(mode, reason, title='', bot='BB', color="good"):
         # 'starify': 'https://hooks.slack.com/services/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',  # todo 调试 test
     }
     url = robot_dict[bot]
+    url = robot_dict_wechat[bot]
     if mode == 'fail':
         content = "警告! 失败用例: {}, 失败原因: {}".format(title, reason)
         data = {
