@@ -91,6 +91,7 @@ def post_request_session_starify(url, data, tokenName='starify'):
     except Exception as e:
         print(e)
         return ()
+    print(response.json())
     time_consuming = response.elapsed.microseconds / 1000
     time_total = response.elapsed.total_seconds()
     response_dicts = dict()
