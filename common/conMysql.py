@@ -228,8 +228,8 @@ class conMysql:
             finally:
                 conMysql.con.commit()
         elif tableName == 'chatroom':  # 修改用户为房间房主
-            sql = "update xs_chatroom set app_id=1, uid ={}, settlement_channel='live' where rid=193185577 limit 1".format(
-                uid)
+            sql = "update xs_chatroom set app_id=1, uid={}, settlement_channel='live', " \
+                  "room_factory_type='business-soundchat' where rid={} limit 1".format(uid, config.live_role['live_rid'])
             try:
                 conMysql.cur.execute(sql)
             except Exception as error:
