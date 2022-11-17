@@ -49,7 +49,7 @@ class config:
     }
     # app登录方式
     bb_qqLogin_url = bb_host + 'account/qqlogin'
-    pt_mobile_login_url = pt_host + 'account/passwordLogin'
+    pt_mobile_login_url = pt_host + 'account/passwordLogin' + '?package=com.imbb.oversea.android'  # 加包名限制
     starify_mobile_login_url = starify_host + 'go/starify/login/mobileLogin'
 
     # banban用户配置
