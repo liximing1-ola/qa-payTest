@@ -6,7 +6,7 @@ class config:
     # 工程目录
     BASE_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     appInfo = {'bb_dev_58': 'https://dev.iambanban.com/',
-               'pt_ali': 'https://test.overseaban.com/',
+               'pt_ali': 'https://pt-dev.iambanban.com/',
                'banban': 'com.imbb.banban.android',
                'pt': 'com.ola.chat',
                'starify': 'http://47.243.83.154/',
