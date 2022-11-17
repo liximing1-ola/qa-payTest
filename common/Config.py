@@ -44,7 +44,7 @@ class config:
 
     # 服务器标识
     linux_node = {
-        'ali': 'iZj6c7cxmmtvxr9kuetoizZ',
+        'ali': 'iZbp1fveowr7j693hrwb48Z',
         'ali-starify': 'iZj6cig35upuwmdws5sec2Z',  # todo 修改 调试用 ubuntu / dev=iZj6cig35upuwmdws5sec2Z
     }
     # app登录方式
