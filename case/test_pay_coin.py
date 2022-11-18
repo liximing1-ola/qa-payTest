@@ -7,6 +7,8 @@ from common.Assert import assert_body, assert_code, assert_equal
 from common.basicData import encodeData
 from common.Consts import case_list, result
 from common.runFailed import Retry
+
+
 @Retry(max_n=3, func_prefix='test_02_roomChangePayCoin')
 class TestPayCreate(unittest.TestCase):
 

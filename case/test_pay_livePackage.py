@@ -7,9 +7,10 @@ from common.Assert import assert_body, assert_code, assert_equal
 from common.basicData import encodeData
 from common.Consts import case_list_b, result
 from common.runFailed import Retry
+
+
 @Retry
 class TestPayCreate(unittest.TestCase):
-
     liveRid = config.live_role.copy()['liveRid']
 
     def test_01_liveRoomPay_6238(self, des='直播间非公会主播(非宗师)打赏分成62:38'):

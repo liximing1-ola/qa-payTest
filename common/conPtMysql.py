@@ -1,6 +1,8 @@
 # coding=utf-8
 import pymysql
 from common.Config import config
+
+
 class conMysql:
     db_config = {"ali_db": 'localhost',
                  "ali_user": 'root',
@@ -147,7 +149,8 @@ class conMysql:
     def updateUserLanguage(*uids, language='zh_CN', area_code='CN'):
         try:
             for uid in uids:
-                sql = "update xs_user_settings set language='{}',area_code='{}' where uid in {}".format(language, area_code, uid)
+                sql = "update xs_user_settings set language='{}',area_code='{}' where uid in {}".format(language,
+                                                                                                        area_code, uid)
                 conMysql.cur.execute(sql)
         except Exception as error:
             conMysql.con.rollback()
@@ -173,7 +176,8 @@ class conMysql:
     @staticmethod
     def updateMoneySql(uid, money=0, money_cash=0, money_cash_b=0, money_b=0, gold_coin=0, money_debts=0):
         sql = "update xs_user_money set money={}, money_b={}, money_cash={}, money_cash_b={},gold_coin={}, " \
-              "money_debts={} where uid={} limit 1".format(money, money_b, money_cash, money_cash_b, gold_coin, money_debts, uid)
+              "money_debts={} where uid={} limit 1".format(money, money_b, money_cash, money_cash_b, gold_coin,
+                                                           money_debts, uid)
         try:
             conMysql.cur.execute(sql)
         except Exception as error:
@@ -197,7 +201,8 @@ class conMysql:
     # 用户背包增加测试数据
     @staticmethod
     def insertXsUserCommodity(uid, cid, num, state=0):
-        sql = "insert into xs_user_commodity (uid, cid, num, state) values ({}, {}, {}, {})".format(uid, cid, num, state)
+        sql = "insert into xs_user_commodity (uid, cid, num, state) values ({}, {}, {}, {})".format(uid, cid, num,
+                                                                                                    state)
         try:
             conMysql.cur.execute(sql)
         except Exception as error:
@@ -209,7 +214,7 @@ class conMysql:
     # 更新箱子刷新物品
     @staticmethod
     def insertXsUserBox(uid, gift_cid=2505, box_type='copper'):
-        sql = "insert into xs_user_box (last_refresh_cid, last_refresh_sub_cid, uid, type) values ({},{},{},'{}')"\
+        sql = "insert into xs_user_box (last_refresh_cid, last_refresh_sub_cid, uid, type) values ({},{},{},'{}')" \
             .format(gift_cid, gift_cid, uid, box_type)
         try:
             conMysql.cur.execute(sql)
@@ -236,7 +241,8 @@ class conMysql:
     # 查询大区房间信息
     @staticmethod
     def select_user_chatroom(property, bigarea_id=1):
-        sql = "select rid from xs_chatroom a left join xs_user_bigarea b on a.uid = b.uid where a.property = '{}' and b.bigarea_id = {} limit 1".format(property, bigarea_id)
+        sql = "select rid from xs_chatroom a left join xs_user_bigarea b on a.uid = b.uid where a.property = '{}' and b.bigarea_id = {} limit 1".format(
+            property, bigarea_id)
         try:
             conMysql.cur.execute(sql)
             res = conMysql.cur.fetchone()

@@ -5,7 +5,6 @@
 import os
 import requests
 import urllib3
-from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from common import Logs, method
 from common.Config import config
 from common.paramsYaml import Yaml
@@ -23,7 +22,7 @@ class Session:
         :return: 登陆token
         """
         urllib3.disable_warnings()
-        requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         if env == "release":
             pass
         elif env == "dev":  # 伴伴

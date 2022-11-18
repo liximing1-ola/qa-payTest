@@ -1,4 +1,6 @@
 import redis
+
+
 class conRedis:
     redis_config = {
         'host_46': '192.168.11.46',  # 46 redis
@@ -26,6 +28,6 @@ class conRedis:
                 r.hdel(key, k)
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     conRedis.checkSetKey('Xs.WhiteList.SuperVoice.White', 105002338)
     # conRedis.delKey('User.Big.Area.Id', tuple(i for i in conRedis.pt_user.values()))

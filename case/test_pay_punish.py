@@ -7,8 +7,11 @@ from common.Assert import assert_body, assert_code, assert_equal
 from common.Request import post_request_session
 from common.basicData import encodeData
 from common.Consts import case_list_c, result
-class TestPayCreate(unittest.TestCase):
+from common.runFailed import Retry
 
+
+@Retry
+class TestPayCreate(unittest.TestCase):
 
     def test_01_PayChangeTriggerPunish(self, des='打赏时触发罚款流程'):
         """

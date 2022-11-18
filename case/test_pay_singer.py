@@ -8,9 +8,10 @@ from common.Assert import assert_body, assert_code, assert_equal
 from common.basicData import encodeData
 from common.runFailed import Retry
 from common.Consts import case_list_b, result
+
+
 @Retry
 class TestPayCreate(unittest.TestCase):
-
     singer_rid = conMysql.selectUserInfoSql('union')
 
     @pytest.mark.run(order=1)

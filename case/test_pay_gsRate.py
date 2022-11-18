@@ -8,6 +8,8 @@ from common.conMysql import conMysql
 from common.method import reason
 from common.runFailed import Retry
 from common.Session import Session
+
+
 @Retry
 @unittest.skip('等待上线')
 class TestPayCreate(unittest.TestCase):

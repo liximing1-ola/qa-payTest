@@ -6,7 +6,6 @@ from time import time
 from urllib.parse import urlencode, unquote
 import requests
 import urllib3
-from requests.packages.urllib3.exceptions import InsecureRequestWarning  # 使用requests库请求HTTPS时,因为忽略证书验证,导致每次运行时都会报错
 from caseStarify.need_data import starify_payUid
 from caseStarify.tools import create_sign
 from common import Session
@@ -24,7 +23,7 @@ def post_request_session(url, data, tokenName='dev'):
     :return:
     """
     urllib3.disable_warnings()
-    requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     header = {
         "User-Agent": "Mozilla/5.0 (Linux; Android 11; HD1900 Build/RKQ1.201022.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/87.0.4280.141 Mobile Safari/537.36 / Xs android V1.1.0.0 / Js V1.0.0.0 / Login V1658980709",
         "Content-Type": "application/x-www-form-urlencoded",
@@ -67,7 +66,7 @@ def post_request_session_starify(url, data, tokenName='starify'):
     :return:
     """
     urllib3.disable_warnings()
-    requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     # 处理header
     header = header_starify.copy()
     header['user-token'] = Session.checkUserToken(operate='read', app_name=tokenName)
