@@ -8,11 +8,13 @@ from common.basicData import encodeData
 from common.Consts import case_list, result
 from common.runFailed import Retry
 from common.conMysql import conMysql
+
+
 @Retry(max_n=1)
 class TestPayCreate(unittest.TestCase):
-
     dict_config = conMysql.selectUserInfoSql('relation_config', uid=2)  # uid=id
-    defend_id = conMysql.selectUserInfoSql('relation_id', config.rewardUid)  # {'id': 2, 'name': '小宝贝', 'money_value': 52000, 'break_money': 28800, 'upgrade_money': 99900}
+    defend_id = conMysql.selectUserInfoSql('relation_id',
+                                           config.rewardUid)  # {'id': 2, 'name': '小宝贝', 'money_value': 52000, 'break_money': 28800, 'upgrade_money': 99900}
 
     @pytest.mark.run(order=1)
     def test_01_defendPayChangMoney(self, des='开通个人守护场景'):

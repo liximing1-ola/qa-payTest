@@ -1,6 +1,8 @@
 # coding=utf-8
 import pymysql
 from common.Consts import fail_case_reason
+
+
 class mysql:
     db_config = {"dev_46_db": '192.168.11.46',
                  "dev_46_user": 'root',
@@ -29,7 +31,7 @@ class mysql:
     @staticmethod
     def updateMoneySql(uid, money=0, money_cash=0, money_cash_b=0, money_b=0, gold_coin=0):
         con, cur = mysql.conMysql()
-        sql = "update xs_user_money set money={}, money_b={}, money_cash={}, money_cash_b={},gold_coin={} where uid={} limit 1"\
+        sql = "update xs_user_money set money={}, money_b={}, money_cash={}, money_cash_b={},gold_coin={} where uid={} limit 1" \
             .format(money, money_b, money_cash, money_cash_b, gold_coin, uid)
         try:
             cur.execute(sql)
@@ -111,7 +113,8 @@ class mysql:
     @staticmethod
     def insertXsUserCommodity(uid, cid, num, state=0):
         con, cur = mysql.conMysql()
-        sql = "insert into xs_user_commodity (uid, cid, num, state) values ({}, {}, {}, {})".format(uid, cid, num, state)
+        sql = "insert into xs_user_commodity (uid, cid, num, state) values ({}, {}, {}, {})".format(uid, cid, num,
+                                                                                                    state)
         try:
             cur.execute(sql)
         except Exception as error:

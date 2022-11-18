@@ -8,9 +8,10 @@ from common.Assert import assert_code, assert_body, assert_equal
 from common.Consts import case_list, result
 from common.basicData import encodeData
 from common.runFailed import Retry
+
+
 @Retry
 class TestPayCreate(unittest.TestCase):
-
     gift_cid = {
         'gift_329': 329,  # 礼物四叶草
         'gift_340': 340,  # 礼物小天使

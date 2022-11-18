@@ -1,6 +1,7 @@
 import urllib.parse
 from common.Config import config
 
+
 # 国内消费场景
 def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'],
                uid=config.rewardUid, giftId=config.giftId['7'],

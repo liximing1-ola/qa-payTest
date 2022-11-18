@@ -2,7 +2,8 @@ import urllib.parse
 import requests
 from common.Config import config
 from common.Session import Session
-from requests.packages.urllib3.exceptions import InsecureRequestWarning  # 使用requests库请求HTTPS时,因为忽略证书验证,导致每次运行时都会报错
+import urllib3
+
 
 class crazySpin:
     @staticmethod
@@ -20,7 +21,7 @@ class crazySpin:
             '_sign': '9a790a06ee3fc5da796009f6e4b6b95e',
             '_blid': uid,
         }
-        url2 = url1+'pay/create'+'?'+urllib.parse.urlencode(params)
+        url2 = url1 + 'pay/create' + '?' + urllib.parse.urlencode(params)
         return url2
 
     @staticmethod
@@ -38,7 +39,7 @@ class crazySpin:
             '_sign': '12c5970528bf21e8aac9586534606432',
             '_blid': uid,
         }
-        url4 = url3+'?'+urllib.parse.urlencode(params)
+        url4 = url3 + '?' + urllib.parse.urlencode(params)
         return url4
 
     @staticmethod
@@ -57,8 +58,9 @@ class crazySpin:
             '_sign': '12c5970528bf21e8aac9586534606432',
             '_blid': uid,
         }
-        url6 = url5+'?'+urllib.parse.urlencode(params)
-        requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+        url6 = url5 + '?' + urllib.parse.urlencode(params)
+        urllib3.disable_warnings()
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         header = {
             "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko)\
                                 Chrome/67.0.3396.99 Safari/537.36",
@@ -84,7 +86,7 @@ class crazySpin:
             '_sign': '12c5970528bf21e8aac9586534606432',
             '_blid': uid,
         }
-        requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         header = {
             "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko)\
                                 Chrome/67.0.3396.99 Safari/537.36",

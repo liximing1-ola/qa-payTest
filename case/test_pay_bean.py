@@ -7,6 +7,8 @@ from common.Assert import assert_code, assert_equal, assert_body
 from common.basicData import encodeData
 from common.Consts import result, case_list
 from common.runFailed import Retry
+
+
 class TestPayCreate(unittest.TestCase):
 
     @classmethod
@@ -14,7 +16,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.checkXsGiftConfig()
 
     def tearDown(self) -> None:
-        conMysql.deleteUserBeanSql(config.payUid, config.rewardUid)   # 清理前置冗余数据
+        conMysql.deleteUserBeanSql(config.payUid, config.rewardUid)  # 清理前置冗余数据
 
     @Retry
     def test_01_NoBeanPayBeanGift(self, des='打赏金豆礼物但金豆不足的场景'):
@@ -56,7 +58,7 @@ class TestPayCreate(unittest.TestCase):
                           giftId=config.giftId['362'],
                           giftType='bean',
                           num=6,
-                          uids=('{}'.format(config.rewardUid), ))
+                          uids=('{}'.format(config.rewardUid),))
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
