@@ -3,6 +3,8 @@ import logging
 import os
 from logging.handlers import TimedRotatingFileHandler
 from common.Config import config
+
+
 def get_log(log_name, level=logging.DEBUG, when='midnight', back_count=0):
     """
     :param log_name:

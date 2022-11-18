@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# download from github
+# code from GitHub
 
 import datetime
 import sys
@@ -8,6 +8,8 @@ import io
 import unittest
 from xml.sax import saxutils
 from requests import __version__
+
+
 class OutputRedirector(object):
     """ Wrapper to redirect stdout or stderr """
 
@@ -27,8 +29,8 @@ class OutputRedirector(object):
 stdout_redirector = OutputRedirector(sys.stdout)
 stderr_redirector = OutputRedirector(sys.stderr)
 
-class Template_mixin(object):
 
+class Template_mixin(object):
     STATUS = {
         0: u'通过',
         1: u'失败',
@@ -384,6 +386,7 @@ class Template_mixin(object):
 
 TestResult = unittest.TestResult
 
+
 class _TestResult(TestResult):
 
     def __init__(self, verbosity=1):
@@ -584,8 +587,8 @@ class HTMLTestRunner(Template_mixin):
             ending=ending,
             chart_script=chart
         )
-        #self.stream.write(output.encode('utf8'))
-        #self.stream.write(output)
+        # self.stream.write(output.encode('utf8'))
+        # self.stream.write(output)
 
     def _generate_stylesheet(self):
         return self.STYLESHEET_TMPL
@@ -686,6 +689,7 @@ class HTMLTestRunner(Template_mixin):
 
     def _generate_ending(self):
         return self.ENDING_TMPL
+
 
 class TestProgram(unittest.TestProgram):
 

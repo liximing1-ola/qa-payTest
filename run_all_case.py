@@ -7,6 +7,8 @@ from autoGitPull import updateTime, updateCode
 from common import Logs, method, Consts
 from common.Config import config
 from common.method import checkPath
+
+
 def main(appInfo):
     if appInfo == config.appName['伴伴']:
         if updateCode.autoGitPull('bb_php') | updateCode.autoGitPull('bb_go'):
@@ -113,6 +115,7 @@ def main(appInfo):
             Logs.get_log('runCode.log').info('NoRun')
     else:
         Logs.get_log('runCode.log').error('{} 执行异常'.format(appInfo))
+
 
 def all_case(appInfo):
     case_dir = config.BASE_PATH

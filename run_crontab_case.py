@@ -4,6 +4,8 @@ from common import Logs, method, Consts
 from Robot import robot
 from common.Config import config
 import platform
+
+
 def all_case(appInfo):
     case_dir = config.BASE_PATH
     if appInfo == config.appName['伴伴']:
@@ -20,6 +22,7 @@ def all_case(appInfo):
                                                    top_level_dir=None)
     testcase.addTests(discover)
     return testcase
+
 
 def main(appInfo):
     if appInfo == config.appName['Partying']:
@@ -73,4 +76,3 @@ if __name__ == "__main__":
         main(config.appName['Partying'])
     else:
         main(config.appName['伴伴'])
-    main(config.appName['伴伴'])
