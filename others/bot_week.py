@@ -1,5 +1,7 @@
 import requests
 import time
+
+
 def robot():
     url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=ddf98ffd-fd35-42be-8362-5e485b08226a'  # 质量周报机器人
     headers = {'Content-Type': 'application/json'}
@@ -21,6 +23,7 @@ def robot():
     requests.post(
         url,
         headers=headers, json=data)
+
 
 def dictToList(result_dict):
     list_case = []
