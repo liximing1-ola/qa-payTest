@@ -57,11 +57,57 @@ class conMysql:
                     return res[0]
             except Exception as error:
                 print(error)
+        elif accountType == 'wealth':  # 查询用户-财富值
+            sql = f'select wealth from xs_user_wealth where uid ={uid};'
+            try:
+                conMysql.cur.execute(sql)
+                res = conMysql.cur.fetchone()
+                if res[0] is None:
+                    return 0
+                else:
+                    return res[0]
+            except Exception as error:
+                print(error)
+        elif accountType == 'charm':  # 查询用户-财富值
+            sql = f'select charm from xs_user_charm where uid ={uid};'
+            try:
+                conMysql.cur.execute(sql)
+                res = conMysql.cur.fetchone()
+                if res[0] is None:
+                    return 0
+                else:
+                    return res[0]
+            except Exception as error:
+                print(error)
 
     @staticmethod
     def updateMoneySql(uid, money):
         """更新用户账户余额"""
         sql = f"UPDATE xs_user_money SET star_coin={money} WHERE uid={uid};"
+        try:
+            conMysql.cur.execute(sql)
+        except Exception as error:
+            conMysql.con.rollback()
+            print('update fail', error)
+        finally:
+            conMysql.con.commit()
+
+    @staticmethod
+    def updateWealthSql(uid, wealth, pre_wealth=0):
+        """更新用户-财富值"""
+        sql = f"UPDATE xs_user_wealth SET wealth={wealth},pre_wealth={pre_wealth} WHERE uid={uid};"
+        try:
+            conMysql.cur.execute(sql)
+        except Exception as error:
+            conMysql.con.rollback()
+            print('update fail', error)
+        finally:
+            conMysql.con.commit()
+
+    @staticmethod
+    def updateCharmSql(uid, charm):
+        """更新用户-魅力值"""
+        sql = f"UPDATE xs_user_wealth SET charm={charm} WHERE uid={uid};"
         try:
             conMysql.cur.execute(sql)
         except Exception as error:

@@ -23,12 +23,16 @@ commodity_config = {
 		"name": "星幣",
 		"price": 1,
 		"cid": 28,
+		"wealth": 1,
+		"charm": 0,
 	},
 	"2": {
 		"gift_id": 2,
 		"name": "安可",
 		"price": 2,
 		"cid": 29,
+		"wealth": 2,
+		"charm": 0,
 	},
 	# 房间礼物-非特权
 	"3": {
@@ -36,36 +40,48 @@ commodity_config = {
 		"name": "為你打call",
 		"price": 5,
 		"cid": 30,
+		"wealth": 5,
+		"charm": 1,
 	},
 	"4": {
 		"gift_id": 4,
 		"name": "螢光棒",
 		"price": 40,
 		"cid": 31,
+		"wealth": 40,
+		"charm": 8,
 	},
 	"5": {
 		"gift_id": 5,
 		"name": "氣泡槍",
 		"price": 150,
 		"cid": 32,
+		"wealth": 150,
+		"charm": 30,
 	},
 	"6": {
 		"gift_id": 6,
 		"name": "光音魔瓶",
 		"price": 520,
 		"cid": 33,
+		"wealth": 520,
+		"charm": 104,
 	},
 	"7": {
 		"gift_id": 7,
 		"name": "節奏大師",
 		"price": 1200,
 		"cid": 34,
+		"wealth": 1200,
+		"charm": 240,
 	},
 	"8": {
 		"gift_id": 8,
 		"name": "麥克風",
 		"price": 2000,
 		"cid": 35,
+		"wealth": 2000,
+		"charm": 400,
 	},
 	"9": {
 		"gift_id": 9,
@@ -73,7 +89,9 @@ commodity_config = {
 		"price": 5200,
 		"cid": 36,
 		"reward_lower": 0.05,  # 返奖下限
-		"reward_upper": 0.10  # 返奖上限
+		"reward_upper": 0.10,  # 返奖上限
+		"wealth": 5200,
+		"charm": 1040,
 	},
 	"10": {
 		"gift_id": 10,
@@ -81,7 +99,9 @@ commodity_config = {
 		"price": 19999,
 		"cid": 37,
 		"reward_lower": 0.15,
-		"reward_upper": 0.20
+		"reward_upper": 0.20,
+		"wealth": 19999,
+		"charm": 3999,
 	},
 	# 物品-头像框
 	"header": {
@@ -107,6 +127,8 @@ commodity_config = {
 				"rate": 0.7,  # 折扣
 				"duration": 15 * 86400,
 			},
+		"wealth": 444,
+		"charm": 0,
 	},
 	# 物品-麦上光圈
 	"ring": {
@@ -132,6 +154,8 @@ commodity_config = {
 				"rate": 0.65,  # 折扣
 				"duration": 15 * 86400,
 			},
+		"wealth": 2222,
+		"charm": 0,
 	},
 	# 物品-入场横幅
 	"effect": {
@@ -157,6 +181,8 @@ commodity_config = {
 				"rate": 0.5,  # 折扣
 				"duration": 15 * 86400,
 			},
+		"wealth": 333,
+		"charm": 0,
 	},
 }
 
