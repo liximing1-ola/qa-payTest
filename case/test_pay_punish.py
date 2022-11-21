@@ -10,7 +10,7 @@ from common.Consts import case_list_c, result
 from common.runFailed import Retry
 
 
-@Retry
+@Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
 
     def test_01_PayChangeTriggerPunish(self, des='打赏时触发罚款流程'):
