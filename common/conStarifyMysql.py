@@ -109,7 +109,7 @@ class conMysql:
     @staticmethod
     def updateCharmSql(uid, charm):
         """更新用户-魅力值"""
-        sql = f"UPDATE xs_user_wealth SET charm={charm} WHERE uid={uid};"
+        sql = f"UPDATE xs_user_charm SET charm={charm} WHERE uid={uid};"
         try:
             conMysql.cur.execute(sql)
         except Exception as error:
