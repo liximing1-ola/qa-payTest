@@ -7,14 +7,16 @@ from common.Assert import assert_code, assert_body, assert_len, assert_equal
 from common.basicData import encodePtData
 from common.Consts import result, case_list
 from common.runFailed import Retry
+
+
 @Retry
 class TestPayCreate(unittest.TestCase):
-
     """
     马来区消费差异化验证：
     1.家族房内打赏分成比例30%（礼物打赏，箱子打赏）
     2.个人房内打赏分成比例30%（礼物打赏，箱子打赏）
     """
+
     @classmethod
     def setUpClass(cls) -> None:
         conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()), bigarea_id=9)

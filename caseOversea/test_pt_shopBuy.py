@@ -6,6 +6,8 @@ from common.Assert import assert_code, assert_equal, assert_body
 from common.method import reason
 from common.basicData import encodePtData
 from common.Consts import case_list, result
+
+
 class TestPayCreate(unittest.TestCase):
 
     def test_01_shopCoinPayChange(self, des='商城购买金豆道具场景', cid=694):

@@ -7,6 +7,8 @@ from common.method import reason
 from common.basicData import encodePtData
 from common.Consts import case_list, result
 from common.runFailed import Retry
+
+
 @Retry
 class TestPayCreate(unittest.TestCase):
 
