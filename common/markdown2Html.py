@@ -1,5 +1,6 @@
 import os
 from common.Config import config
+
 try:
     from markdown import markdown
 except ModuleNotFoundError as e:
@@ -12,6 +13,7 @@ try:
 except ModuleNotFoundError as e:
     os.system("pip3 install pymdown-extensions")
     from pymdownx import superfences
+
 
 # pip3 install xx -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com
 # 如果不行换个源
@@ -116,5 +118,5 @@ if __name__ == '__main__':
     md_name = "result.md"
     html_name = "result.html"
 
-    if mdtox(path + md_name).to_html(path+ html_name):
+    if mdtox(path + md_name).to_html(path + html_name):
         print('done')

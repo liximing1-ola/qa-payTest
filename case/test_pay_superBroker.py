@@ -9,9 +9,9 @@ from common.basicData import encodeData
 from common.Consts import case_list_b, result
 from common.conRedis import conRedis
 
+
 @unittest.skip('2022/11/1 网赚分成下线')
 class TestPayCreate(unittest.TestCase):
-
     # 网赚房角色配置
     star_role = {
         'testUid': 105002312,  # 非公会用户
@@ -151,7 +151,7 @@ class TestPayCreate(unittest.TestCase):
         test_uid = self.star_role['agent_star_uid']  # 105002331
         test_agent = self.star_role['super_agent_uid']  # 105002323
         conMysql.checkOnlineEarnAgent(test_agent)  # 检查用户经纪人身份
-        conMysql.checkOnlineEarnArtist(test_uid, worth=700)   # 设置艺人为初级艺人
+        conMysql.checkOnlineEarnArtist(test_uid, worth=700)  # 设置艺人为初级艺人
         conMysql.updateUserMoneyClearSql(test_agent, test_uid)  # 清空用户账户
         conMysql.checkOnlineEarnRelation(test_agent, test_uid)  # 检查艺人经纪人关联关系
         conMysql.deleteUserAccountSql('broker_user', test_uid)  # 删除用户工会数据

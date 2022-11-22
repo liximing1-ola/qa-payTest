@@ -7,9 +7,10 @@ from common.Assert import assert_body, assert_code, assert_equal, assert_len
 from common.basicData import encodeData
 from common.Consts import case_list_b, result
 from common.runFailed import Retry
+
+
 @Retry
 class TestPayCreate(unittest.TestCase):
-
     # select rid from xs_chatroom where uid=103273407 and property='vip'  个人房，＞5级不回收
     # select * from config.xsst_room_pretty;
     vipRoomRid = config.bb_user.copy()['vipRoomRid']

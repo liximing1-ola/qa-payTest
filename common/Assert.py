@@ -20,9 +20,11 @@ def assert_code(actual_code, expected_code=200):
         assert actual_code == expected_code
         return True
     except:
-        reason = 'Actual Code: {}, Expected Code: {}, 验证结果不一致，估计服务器开小差啦!'.format(actual_code, expected_code)
+        reason = 'Actual Code: {}, Expected Code: {}, 验证结果不一致，估计服务器开小差啦!'.format(actual_code,
+                                                                                                 expected_code)
         Consts.fail_case_reason.append(reason)
         raise
+
 
 def assert_len(actual_len, expect_len):
     """
@@ -37,6 +39,7 @@ def assert_len(actual_len, expect_len):
         Consts.fail_case_reason.append(reason)
         raise
 
+
 def assert_equal(actual_result, expect_result):
     """
     :param actual_result: 实际结果
@@ -50,6 +53,7 @@ def assert_equal(actual_result, expect_result):
         Consts.fail_case_reason.append(reason)
         raise
 
+
 def assert_in_text(body, expected_msg):
     """
     :param body: 返回值
@@ -62,6 +66,7 @@ def assert_in_text(body, expected_msg):
     except:
         Consts.fail_case_reason.append('fail')
         raise
+
 
 def assert_body(body, body_msg, expected_msg, reason):
     """

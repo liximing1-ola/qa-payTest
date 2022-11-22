@@ -6,7 +6,7 @@ class config:
     # 工程目录
     BASE_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     appInfo = {'bb_dev_58': 'https://dev.iambanban.com/',
-               'pt_ali': 'https://test.overseaban.com/',
+               'pt_ali': 'https://pt-dev.iambanban.com/',
                'banban': 'com.imbb.banban.android',
                'pt': 'com.ola.chat',
                'starify': 'http://47.243.83.154/',
@@ -28,7 +28,6 @@ class config:
         "伴伴": 'banban',
         "Partying": 'pt',
         "谁是凶手": 'games',
-        "嗨歌": 'havefun',
         "starify": 'starify',
         "冲鸭": 'rush',
     }
@@ -45,12 +44,12 @@ class config:
 
     # 服务器标识
     linux_node = {
-        'ali': 'iZj6c7cxmmtvxr9kuetoizZ',
+        'ali': 'iZbp1fveowr7j693hrwb48Z',
         'ali-starify': 'iZj6cig35upuwmdws5sec2Z',  # todo 修改 调试用 ubuntu / dev=iZj6cig35upuwmdws5sec2Z
     }
     # app登录方式
     bb_qqLogin_url = bb_host + 'account/qqlogin'
-    pt_mobile_login_url = pt_host + 'account/passwordLogin'
+    pt_mobile_login_url = pt_host + 'account/passwordLogin' + '?package=com.imbb.oversea.android'  # 加包名限制
     starify_mobile_login_url = starify_host + 'go/starify/login/mobileLogin'
 
     # banban用户配置

@@ -1,6 +1,8 @@
 # coding=utf-8
 import time
 import pymysql
+
+
 class conMysql:
     db_config = {
         "ali_db": '127.0.0.1',

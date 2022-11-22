@@ -6,12 +6,14 @@ from common.Request import post_request_session
 from common.conPtMysql import conMysql
 import time
 import random
+
+
 class Greedy:
 
     @staticmethod
     def greedy_index(uid):
         url = 'greedy/index?uid={}'.format(uid)
-        return post_request_session(config.pt_host+url, None, tokenName='pt')
+        return post_request_session(config.pt_host + url, None, tokenName='pt')
 
     @staticmethod
     def greedy_stake(uid, vid, counter, round_id, money_type, notice=False):
@@ -23,7 +25,7 @@ class Greedy:
             'money_type': money_type,
             'notice': notice
         }
-        return post_request_session(config.pt_host+url, params, tokenName='pt')
+        return post_request_session(config.pt_host + url, params, tokenName='pt')
 
     @staticmethod
     def bet(money_type):

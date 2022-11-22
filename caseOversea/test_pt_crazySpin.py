@@ -8,6 +8,8 @@ from common.basicData import encodePtData
 from common.Consts import result, case_list
 from common.runFailed import Retry
 from common.Crazyspin import crazySpin
+
+
 @Retry
 class TestPayCreate(unittest.TestCase):
 

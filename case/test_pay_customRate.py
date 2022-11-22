@@ -7,9 +7,10 @@ from common.Assert import assert_body, assert_code, assert_equal
 from common.basicData import encodeData
 from common.Consts import case_list_b, result
 from common.runFailed import Retry
+
+
 @Retry
 class TestPayCreate(unittest.TestCase):
-
     customUid = config.rewardUid2  # 被打赏者
     ceoUid = config.live_role.copy()['pack_ceo']  # 公会长
 

@@ -45,12 +45,15 @@ class updateCode:
         commit_log = repo.git.log('--pretty={"commit":"%h","author":"%an","summary":"%s","date":"%cd"}', max_count=3,
                                   date='format:%Y-%m-%d %H:%M:%S')
         log_list = commit_log.split("\n")
-        Logs.get_log('gitCommitPull.log').info('当前分支: {}, 最新一条commit: {}'.format(repo.active_branch, log_list[0]))
+        Logs.get_log('gitCommitPull.log').info(
+            '当前分支: {}, 最新一条commit: {}'.format(repo.active_branch, log_list[0]))
         if str(repo.active_branch) == git_branch:  # 当前线上分支
-            times = int(mktime(strptime([eval(item) for item in log_list][0]['date'], "%Y-%m-%d %H:%M:%S")))  # commit更新时间
+            times = int(
+                mktime(strptime([eval(item) for item in log_list][0]['date'], "%Y-%m-%d %H:%M:%S")))  # commit更新时间
             lastTime = int(updateTime('read'))  # 上次脚本执行时间
             if times > lastTime:
-                Logs.get_log('updateGitCode.log').info('最新代码提交时间: {}, 上次代码更新时间: {}'.format(times, lastTime))
+                Logs.get_log('updateGitCode.log').info(
+                    '最新代码提交时间: {}, 上次代码更新时间: {}'.format(times, lastTime))
                 if appInfo == 'pt':
                     robot('slack_pt', log_list[0], bot=bot)  # partying git commit update message
                 else:
@@ -63,6 +66,7 @@ class updateCode:
         else:
             Logs.get_log('gitBranchError.log').error("git branch error： {}".format(repo.active_branch))
             return False
+
 
 def updateTime(operate, now=''):
     default_time = '1600000000'  # 默认时间戳
@@ -86,5 +90,5 @@ def updateTime(operate, now=''):
             f.flush()
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     updateTime('change')

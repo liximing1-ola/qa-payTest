@@ -11,6 +11,8 @@ from common.Session import Session
 from common.Request import post_request_session
 from common.Assert import assert_equal, assert_code
 from time import sleep
+
+
 class TestPayConcurrent:
     php_urL = {
         'pay_url': config.bb_host + 'pay/create?package=com.imbb.banban.android',  # 内网支付接口

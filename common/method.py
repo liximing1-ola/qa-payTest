@@ -19,6 +19,7 @@ def dictToListSlack(result_dict):
         case.append(field)
     return case
 
+
 # 将列表生成支持markdown的形式
 def dictToList(result_dict):
     list_case = []
@@ -33,6 +34,7 @@ def dictToList(result_dict):
     # with open(path + 'result.md', 'a', encoding='utf-8') as r:
     #    r.writelines(case)
     return case
+
 
 # 随机获取图片
 def getImage(mode=2):
@@ -52,6 +54,7 @@ def getImage(mode=2):
         icon = random.randint(1, 200)
         return 'http://xs-image.oss-cn-hangzhou.aliyuncs.com/static/gift_big/{}.png'.format(icon)
 
+
 # 检查当前字段是否在Json中存在
 def isExtend(data, tag):
     if type(data) != type({}):
@@ -62,6 +65,7 @@ def isExtend(data, tag):
             if key == tag:
                 return True
     return False
+
 
 def getKeys(data):
     keysAll_list = []
@@ -87,6 +91,7 @@ def getKeys(data):
     getKey(data)
     return keysAll_list
 
+
 def getValue(res):
     if res['body']['success'] is True:
         print('结果：{}, 时间：{}'.format(res['body']['success'], time.time()))
@@ -95,15 +100,18 @@ def getValue(res):
         print('结果：{}， 时间：{}'.format(res['body'], time.time()))
         Consts.fail_num += 1
 
+
 def reason(des, res):
     if res['body']['success'] == 0 and not isExtend(res['body'], 'msg'):
         print(res['body'])
     return 'Depiction: {},  failReason: {}'.format(des, res['body'])
 
+
 def reason_starify(des, res):
     if res['body'].get("success", None) is True and not isExtend(res['body'], 'msg'):
         print(res['body'])
     return 'Depiction: {},  failReason: {}'.format(des, res['body'])
+
 
 def checkPath(path):
     if not os.path.exists(path):

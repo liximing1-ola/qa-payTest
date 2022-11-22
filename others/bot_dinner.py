@@ -4,6 +4,7 @@ import time
 import random
 from chinese_calendar import is_holiday
 
+
 def getHoliday():
     now_year = int(time.strftime('%Y', time.localtime(time.time())))
     now_month = int(time.strftime('%m', time.localtime(time.time())))
@@ -12,6 +13,7 @@ def getHoliday():
     print(holiday)
     print(is_holiday(holiday))
     return is_holiday(holiday)
+
 
 def robot():
     url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e317861a-d1ec-4ac4-af96-9d4b8f12d9d6'
@@ -46,6 +48,7 @@ def robot():
             }
         }
         requests.post(url, headers=headers, json=data)
+
 
 # 随机获取图片
 def getImage(mode=2):
