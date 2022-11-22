@@ -103,6 +103,46 @@ commodity_config = {
 		"wealth": 19999,
 		"charm": 3999,
 	},
+	#特权礼物
+	"lv3": {
+		"gift_id": 19,
+		"name": "藤野仙车",
+		"price": 520,
+		"cid": 53,
+		"wealth": 520,
+		"charm": 104,
+	},
+	"lv4": {
+		"gift_id": 20,
+		"name": "蝴蝶仙女",
+		"price": 2000,
+		"cid": 54,
+		"wealth": 2000,
+		"charm": 400,
+	},
+	"lv5": {
+		"gift_id": 21,
+		"name": "爱心轰炸机",
+		"price": 5200,
+		"cid": 55,
+		"wealth": 5200,
+		"charm": 1040,
+		"reward_lower": 0.1,
+		"reward_upper": 0.15,
+	},
+	"lv6": {
+		"gift_id": 22,
+		"name": "林深见鹿",
+		"price": 18888,
+		"cid": 56,
+		"wealth": 18888,
+		"charm": 3777,
+		"reward_lower": 0.15,
+		"reward_upper": 0.20,
+	},
+
+
+
 	# 物品-头像框
 	"header": {
 		"gift_id": 0,
