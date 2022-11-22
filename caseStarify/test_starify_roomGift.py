@@ -1011,14 +1011,218 @@ class TestPayCreate(unittest.TestCase):
                 assert_equal(conMysql.selectUserInfoSql('charm', starify_rewardUid01), 0)
         case_list[des] = result
 
-    def test_room_025(self, des='房间打赏,财富等级=lv3时送lv3~lv6未解锁的特权礼物'):
-        pass
+    def test_room_025(self, des='房间打赏,财富等级=lv3时送lv4~lv6未解锁的特权礼物'):
+        for i in range(4, 7):
+            commodity = commodity_config[f'lv{i}']
+            #  sql:打赏者starify_payUid 修改余额=50000
+            conMysql.updateMoneySql(starify_payUid, 50000)
+            #  sql:打赏者starify_payUid 清空背包礼物
+            conMysql.deleteUserAccountSql('user_commodity', starify_payUid)
+            #  sql:打赏者starify_payUid 修改财富值=0
+            conMysql.updateWealthSql(starify_payUid, 170000)
+            #  sql:被打赏者starify_rewardUid01 修改余额=0
+            conMysql.updateMoneySql(starify_rewardUid01, 0)
+            #  sql:被打赏者starify_rewardUid01 修改魅力值=0
+            conMysql.updateWealthSql(starify_rewardUid01, 0)
+            data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
+            res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+            assert_code(res['code'])
+            assert_body(res['body'], 'msg', "当前特权级别无法使用此礼物", reason_starify(des, res))
 
-    def test_room_026(self, des='房间打赏,财富等级=lv4时送lv3~lv6未解锁的特权礼物'):
-        pass
+            #  sql:打赏者starify_payUid 查询余额=0
+            assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 50000)
+            #  sql:被打赏者starify_rewardUid01 查询余额=0
+            assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01), 0)
+            #  sql:打赏者starify_payUid 查询-财富值=0
+            assert_equal(conMysql.selectUserInfoSql('wealth', starify_payUid), 0)
+            #  sql:被打赏者starify_rewardUid01 查询-魅力值=0
+            assert_equal(conMysql.selectUserInfoSql('charm', starify_rewardUid01), 0)
+        case_list[des] = result
 
-    def test_room_027(self, des='房间打赏,财富等级=lv5时送lv3~lv6未解锁的特权礼物'):
-        pass
+    def test_room_026(self, des='房间打赏,财富等级=lv4时送lv5~lv6未解锁的特权礼物'):
+        for i in range(5, 7):
+            commodity = commodity_config[f'lv{i}']
+            #  sql:打赏者starify_payUid 修改余额=50000
+            conMysql.updateMoneySql(starify_payUid, 50000)
+            #  sql:打赏者starify_payUid 清空背包礼物
+            conMysql.deleteUserAccountSql('user_commodity', starify_payUid)
+            #  sql:打赏者starify_payUid 修改财富值=0
+            conMysql.updateWealthSql(starify_payUid, 380000)
+            #  sql:被打赏者starify_rewardUid01 修改余额=0
+            conMysql.updateMoneySql(starify_rewardUid01, 0)
+            #  sql:被打赏者starify_rewardUid01 修改魅力值=0
+            conMysql.updateWealthSql(starify_rewardUid01, 0)
+            data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
+            res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+            assert_code(res['code'])
+            assert_body(res['body'], 'msg', "当前特权级别无法使用此礼物", reason_starify(des, res))
 
-    def test_room_028(self, des='房间打赏,财富等级=lv6时送lv3~lv6未解锁的特权礼物'):
-        pass
+            #  sql:打赏者starify_payUid 查询余额=0
+            assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 50000)
+            #  sql:被打赏者starify_rewardUid01 查询余额=0
+            assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01), 0)
+            #  sql:打赏者starify_payUid 查询-财富值=0
+            assert_equal(conMysql.selectUserInfoSql('wealth', starify_payUid), 0)
+            #  sql:被打赏者starify_rewardUid01 查询-魅力值=0
+            assert_equal(conMysql.selectUserInfoSql('charm', starify_rewardUid01), 0)
+        case_list[des] = result
+
+    def test_room_027(self, des='房间打赏,财富等级=lv5时送lv6未解锁的特权礼物'):
+        for i in range(6, 7):
+            commodity = commodity_config[f'lv{i}']
+            #  sql:打赏者starify_payUid 修改余额=50000
+            conMysql.updateMoneySql(starify_payUid, 50000)
+            #  sql:打赏者starify_payUid 清空背包礼物
+            conMysql.deleteUserAccountSql('user_commodity', starify_payUid)
+            #  sql:打赏者starify_payUid 修改财富值=0
+            conMysql.updateWealthSql(starify_payUid, 1500000)
+            #  sql:被打赏者starify_rewardUid01 修改余额=0
+            conMysql.updateMoneySql(starify_rewardUid01, 0)
+            #  sql:被打赏者starify_rewardUid01 修改魅力值=0
+            conMysql.updateWealthSql(starify_rewardUid01, 0)
+            data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
+            res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+            assert_code(res['code'])
+            assert_body(res['body'], 'msg', "当前特权级别无法使用此礼物", reason_starify(des, res))
+
+            #  sql:打赏者starify_payUid 查询余额=0
+            assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 50000)
+            #  sql:被打赏者starify_rewardUid01 查询余额=0
+            assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01), 0)
+            #  sql:打赏者starify_payUid 查询-财富值=0
+            assert_equal(conMysql.selectUserInfoSql('wealth', starify_payUid), 0)
+            #  sql:被打赏者starify_rewardUid01 查询-魅力值=0
+            assert_equal(conMysql.selectUserInfoSql('charm', starify_rewardUid01), 0)
+        case_list[des] = result
+
+    def test_room_028(self, des='房间打赏,财富等级=lv3时送lv3已解锁的特权礼物'):
+        for i in range(3, 4):
+            commodity = commodity_config[f'lv{i}']
+            #  sql:打赏者starify_payUid 修改余额=50000
+            conMysql.updateMoneySql(starify_payUid, 50000)
+            #  sql:打赏者starify_payUid 清空背包礼物
+            conMysql.deleteUserAccountSql('user_commodity', starify_payUid)
+            #  sql:打赏者starify_payUid 修改财富值=0
+            conMysql.updateWealthSql(starify_payUid, 170000)
+            #  sql:被打赏者starify_rewardUid01 修改余额=0
+            conMysql.updateMoneySql(starify_rewardUid01, 0)
+            #  sql:被打赏者starify_rewardUid01 修改魅力值=0
+            conMysql.updateWealthSql(starify_rewardUid01, 0)
+            data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
+            res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+            assert_code(res['code'])
+            assert_body(res['body'], 'success', True, reason_starify(des, res))
+
+            #  sql:打赏者starify_payUid 查询余额=0
+            assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 50000 - commodity['price'])
+            if i in [3, 4]:  # 不分成
+                #  sql:被打赏者starify_rewardUid01 查询余额=0
+                assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01), 0)
+            else:  # 分成
+                assert_between(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01),
+                               commodity['price'] * commodity['reward_lower'],
+                               commodity['price'] * commodity['reward_upper'])
+            #  sql:打赏者starify_payUid 查询-财富值=礼物价值*(人数*连击数-背包礼物数)
+            assert_equal(conMysql.selectUserInfoSql('wealth', starify_payUid), commodity['wealth'] * (1 * 1 - 0))
+            #  sql:被打赏者starify_rewardUid01 查询-魅力值=0
+            assert_equal(conMysql.selectUserInfoSql('charm', starify_rewardUid01), commodity['charm'])
+        case_list[des] = result
+
+    def test_room_029(self, des='房间打赏,财富等级=lv4时送lv3~lv4已解锁的特权礼物'):
+        for i in range(3, 5):
+            commodity = commodity_config[f'lv{i}']
+            #  sql:打赏者starify_payUid 修改余额=50000
+            conMysql.updateMoneySql(starify_payUid, 50000)
+            #  sql:打赏者starify_payUid 清空背包礼物
+            conMysql.deleteUserAccountSql('user_commodity', starify_payUid)
+            #  sql:打赏者starify_payUid 修改财富值=0
+            conMysql.updateWealthSql(starify_payUid, 380000)
+            #  sql:被打赏者starify_rewardUid01 修改余额=0
+            conMysql.updateMoneySql(starify_rewardUid01, 0)
+            #  sql:被打赏者starify_rewardUid01 修改魅力值=0
+            conMysql.updateWealthSql(starify_rewardUid01, 0)
+            data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
+            res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+            assert_code(res['code'])
+            assert_body(res['body'], 'success', True, reason_starify(des, res))
+
+            #  sql:打赏者starify_payUid 查询余额=0
+            assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 50000 - commodity['price'])
+            if i in [3, 4]:  # 不分成
+                #  sql:被打赏者starify_rewardUid01 查询余额=0
+                assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01), 0)
+            else:  # 分成
+                assert_between(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01),
+                               commodity['price'] * commodity['reward_lower'],
+                               commodity['price'] * commodity['reward_upper'])
+            #  sql:打赏者starify_payUid 查询-财富值=礼物价值*(人数*连击数-背包礼物数)
+            assert_equal(conMysql.selectUserInfoSql('wealth', starify_payUid), commodity['wealth'] * (1 * 1 - 0))
+            #  sql:被打赏者starify_rewardUid01 查询-魅力值=0
+            assert_equal(conMysql.selectUserInfoSql('charm', starify_rewardUid01), commodity['charm'])
+        case_list[des] = result
+
+    def test_room_030(self, des='房间打赏,财富等级=lv5时送lv3~lv5已解锁的特权礼物'):
+        for i in range(3, 6):
+            commodity = commodity_config[f'lv{i}']
+            #  sql:打赏者starify_payUid 修改余额=50000
+            conMysql.updateMoneySql(starify_payUid, 50000)
+            #  sql:打赏者starify_payUid 清空背包礼物
+            conMysql.deleteUserAccountSql('user_commodity', starify_payUid)
+            #  sql:打赏者starify_payUid 修改财富值=0
+            conMysql.updateWealthSql(starify_payUid, 1500000)
+            #  sql:被打赏者starify_rewardUid01 修改余额=0
+            conMysql.updateMoneySql(starify_rewardUid01, 0)
+            #  sql:被打赏者starify_rewardUid01 修改魅力值=0
+            conMysql.updateWealthSql(starify_rewardUid01, 0)
+            data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
+            res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+            assert_code(res['code'])
+            assert_body(res['body'], 'success', True, reason_starify(des, res))
+
+            #  sql:打赏者starify_payUid 查询余额=0
+            assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 50000 - commodity['price'])
+            if i in [3, 4]:  # 不分成
+                #  sql:被打赏者starify_rewardUid01 查询余额=0
+                assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01), 0)
+            else:  # 分成
+                assert_between(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01),
+                               commodity['price'] * commodity['reward_lower'],
+                               commodity['price'] * commodity['reward_upper'])
+            #  sql:打赏者starify_payUid 查询-财富值=礼物价值*(人数*连击数-背包礼物数)
+            assert_equal(conMysql.selectUserInfoSql('wealth', starify_payUid), commodity['wealth'] * (1 * 1 - 0))
+            #  sql:被打赏者starify_rewardUid01 查询-魅力值=0
+            assert_equal(conMysql.selectUserInfoSql('charm', starify_rewardUid01), commodity['charm'])
+        case_list[des] = result
+
+    def test_room_031(self, des='房间打赏,财富等级=lv6时送lv3~lv6已解锁的特权礼物'):
+        for i in range(3, 7):
+            commodity = commodity_config[f'lv{i}']
+            #  sql:打赏者starify_payUid 修改余额=50000
+            conMysql.updateMoneySql(starify_payUid, 50000)
+            #  sql:打赏者starify_payUid 清空背包礼物
+            conMysql.deleteUserAccountSql('user_commodity', starify_payUid)
+            #  sql:打赏者starify_payUid 修改财富值=0
+            conMysql.updateWealthSql(starify_payUid, 6000000)
+            #  sql:被打赏者starify_rewardUid01 修改余额=0
+            conMysql.updateMoneySql(starify_rewardUid01, 0)
+            #  sql:被打赏者starify_rewardUid01 修改魅力值=0
+            conMysql.updateWealthSql(starify_rewardUid01, 0)
+            data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
+            res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+            assert_code(res['code'])
+            assert_body(res['body'], 'success', True, reason_starify(des, res))
+
+            #  sql:打赏者starify_payUid 查询余额=0
+            assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 50000 - commodity['price'])
+            if i in [3, 4]:  # 不分成
+                #  sql:被打赏者starify_rewardUid01 查询余额=0
+                assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01), 0)
+            else:  # 分成
+                assert_between(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01),
+                               commodity['price'] * commodity['reward_lower'],
+                               commodity['price'] * commodity['reward_upper'])
+            #  sql:打赏者starify_payUid 查询-财富值=礼物价值*(人数*连击数-背包礼物数)
+            assert_equal(conMysql.selectUserInfoSql('wealth', starify_payUid), commodity['wealth'] * (1 * 1 - 0))
+            #  sql:被打赏者starify_rewardUid01 查询-魅力值=0
+            assert_equal(conMysql.selectUserInfoSql('charm', starify_rewardUid01), commodity['charm'])
+        case_list[des] = result
