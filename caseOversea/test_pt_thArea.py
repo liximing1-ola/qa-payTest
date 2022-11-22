@@ -9,13 +9,15 @@ from common.Consts import result, case_list
 from common.runFailed import Retry
 import time
 from common.conRedis import conRedis
+
+
 @Retry
 class TestPayCreate(unittest.TestCase):
-
     """
     泰语区消费差异化验证：
     1.非华语区联盟房消费分成为30%(礼物打赏，箱子)
     """
+
     @classmethod
     def setUpClass(cls) -> None:
         conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()), bigarea_id=6)

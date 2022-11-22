@@ -9,6 +9,8 @@ from common.Consts import result, case_list
 from common.runFailed import Retry
 from common.conRedis import conRedis
 from time import sleep
+
+
 @Retry
 class TestPayCreate(unittest.TestCase):
 

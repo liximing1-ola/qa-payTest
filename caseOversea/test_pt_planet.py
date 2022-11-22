@@ -6,6 +6,8 @@ from common.Request import post_request_session
 from common.Assert import assert_code, assert_body, assert_equal
 from common.basicData import encodePtData
 from common.Consts import result, case_list
+
+
 @unittest.skip('修复')
 class TestPayCreate(unittest.TestCase):
 
@@ -24,8 +26,8 @@ class TestPayCreate(unittest.TestCase):
         4.检查背包内下发物品，预期值应为1（cid物品得到1个）
         """
         conMysql.deleteUserAccountSql('user_commodity', config.pt_payUid)
-        conMysql.deleteUserAccountSql ('user_journey_planet_record', config.pt_payUid)
-        conMysql.deleteUserAccountSql ('user_journey_planet_draw_record', config.pt_payUid)
+        conMysql.deleteUserAccountSql('user_journey_planet_record', config.pt_payUid)
+        conMysql.deleteUserAccountSql('user_journey_planet_draw_record', config.pt_payUid)
         conMysql.updateMoneySql(config.pt_payUid, money=2000)
         data = encodePtData(payType='journey_planet_draw')
         res = post_request_session(url=config.pt_pay_url, data=data, tokenName='pt')
@@ -34,4 +36,3 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 500)
         assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.pt_payUid), 1)
         case_list[des] = result
-
