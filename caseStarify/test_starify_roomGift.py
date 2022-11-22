@@ -1158,7 +1158,8 @@ class TestPayCreate(unittest.TestCase):
                                commodity['price'] * commodity['reward_lower'],
                                commodity['price'] * commodity['reward_upper'])
             #  sql:打赏者starify_payUid 查询-财富值=礼物价值*(人数*连击数-背包礼物数)
-            assert_equal(conMysql.selectUserInfoSql('wealth', starify_payUid), commodity['wealth'] * (1 * 1 - 0))
+            assert_equal(conMysql.selectUserInfoSql('wealth', starify_payUid),
+                         380000 + commodity['wealth'] * (1 * 1 - 0))
             #  sql:被打赏者starify_rewardUid01 查询-魅力值=0
             assert_equal(conMysql.selectUserInfoSql('charm', starify_rewardUid01), commodity['charm'])
         case_list[des] = result
@@ -1191,7 +1192,8 @@ class TestPayCreate(unittest.TestCase):
                                commodity['price'] * commodity['reward_lower'],
                                commodity['price'] * commodity['reward_upper'])
             #  sql:打赏者starify_payUid 查询-财富值=礼物价值*(人数*连击数-背包礼物数)
-            assert_equal(conMysql.selectUserInfoSql('wealth', starify_payUid), commodity['wealth'] * (1 * 1 - 0))
+            assert_equal(conMysql.selectUserInfoSql('wealth', starify_payUid),
+                         1500000 + commodity['wealth'] * (1 * 1 - 0))
             #  sql:被打赏者starify_rewardUid01 查询-魅力值=0
             assert_equal(conMysql.selectUserInfoSql('charm', starify_rewardUid01), commodity['charm'])
         case_list[des] = result
@@ -1224,7 +1226,8 @@ class TestPayCreate(unittest.TestCase):
                                commodity['price'] * commodity['reward_lower'],
                                commodity['price'] * commodity['reward_upper'])
             #  sql:打赏者starify_payUid 查询-财富值=礼物价值*(人数*连击数-背包礼物数)
-            assert_equal(conMysql.selectUserInfoSql('wealth', starify_payUid), commodity['wealth'] * (1 * 1 - 0))
+            assert_equal(conMysql.selectUserInfoSql('wealth', starify_payUid),
+                         6000000 + commodity['wealth'] * (1 * 1 - 0))
             #  sql:被打赏者starify_rewardUid01 查询-魅力值=0
             assert_equal(conMysql.selectUserInfoSql('charm', starify_rewardUid01), commodity['charm'])
         case_list[des] = result
