@@ -955,6 +955,7 @@ class TestPayCreate(unittest.TestCase):
         # 打赏编号3~8的礼物,不返奖
         money = 100000
         wealth = 0
+        charm = 0
         #  sql:打赏者starify_payUid 修改余额=100000
         conMysql.updateMoneySql(starify_payUid, money)
         #  sql:打赏者starify_payUid 清空背包礼物
@@ -974,6 +975,7 @@ class TestPayCreate(unittest.TestCase):
             #  sql:打赏者starify_payUid 查询余额=100000-gift['price']
             money -= commodity['price']
             wealth += commodity['wealth']
+            charm += commodity['charm']
             assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), money)
             #  sql:被打赏者starify_rewardUid01 查询余额=0
             assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01), 0)
@@ -981,7 +983,7 @@ class TestPayCreate(unittest.TestCase):
             #  sql:打赏者starify_payUid 查询-财富值=礼物价值*(人数*连击数-背包礼物数)
             assert_equal(conMysql.selectUserInfoSql('wealth', starify_payUid), wealth)
             #  sql:被打赏者starify_rewardUid01 查询-魅力值=礼物对应魅力值*连击数
-            assert_equal(conMysql.selectUserInfoSql('charm', starify_rewardUid01), commodity['charm'] * 1)
+            assert_equal(conMysql.selectUserInfoSql('charm', starify_rewardUid01), charm)
         case_list[des] = result
 
     def test_room_024(self, des='房间打赏,财富等级=lv0~lv2时送lv3~lv6未解锁的特权礼物'):
@@ -1125,7 +1127,8 @@ class TestPayCreate(unittest.TestCase):
                                commodity['price'] * commodity['reward_lower'],
                                commodity['price'] * commodity['reward_upper'])
             #  sql:打赏者starify_payUid 查询-财富值=礼物价值*(人数*连击数-背包礼物数)
-            assert_equal(conMysql.selectUserInfoSql('wealth', starify_payUid), commodity['wealth'] * (1 * 1 - 0))
+            assert_equal(conMysql.selectUserInfoSql('wealth', starify_payUid),
+                         170000 + commodity['wealth'] * (1 * 1 - 0))
             #  sql:被打赏者starify_rewardUid01 查询-魅力值=0
             assert_equal(conMysql.selectUserInfoSql('charm', starify_rewardUid01), commodity['charm'])
         case_list[des] = result
