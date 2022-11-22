@@ -26,7 +26,7 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        conMysql.updateCharmSql(starify_rewardUid01, 0)
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
@@ -54,7 +54,7 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        conMysql.updateCharmSql(starify_rewardUid01, 0)
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
@@ -80,7 +80,7 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        conMysql.updateCharmSql(starify_rewardUid01, 0)
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
@@ -106,11 +106,11 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        conMysql.updateCharmSql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid02 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid02, 0)
         #  sql:被打赏者starify_rewardUid02 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid02, 0)
+        conMysql.updateCharmSql(starify_rewardUid02, 0)
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02], )
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
@@ -144,11 +144,11 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        conMysql.updateCharmSql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid02 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid02, 0)
         #  sql:被打赏者starify_rewardUid02 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid02, 0)
+        conMysql.updateCharmSql(starify_rewardUid02, 0)
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02], )
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
@@ -178,11 +178,11 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        conMysql.updateCharmSql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid02 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid02, 0)
         #  sql:被打赏者starify_rewardUid02 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid02, 0)
+        conMysql.updateCharmSql(starify_rewardUid02, 0)
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02], )
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
@@ -214,11 +214,11 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        conMysql.updateCharmSql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid02 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid02, 0)
         #  sql:被打赏者starify_rewardUid02 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid02, 0)
+        conMysql.updateCharmSql(starify_rewardUid02, 0)
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02], )
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
@@ -256,11 +256,11 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        conMysql.updateCharmSql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid02 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid02, 0)
         #  sql:被打赏者starify_rewardUid02 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid02, 0)
+        conMysql.updateCharmSql(starify_rewardUid02, 0)
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02], )
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
@@ -294,11 +294,11 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        conMysql.updateCharmSql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid02 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid02, 0)
         #  sql:被打赏者starify_rewardUid02 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid02, 0)
+        conMysql.updateCharmSql(starify_rewardUid02, 0)
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02], )
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
@@ -332,7 +332,7 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        conMysql.updateCharmSql(starify_rewardUid01, 0)
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
@@ -362,7 +362,7 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        conMysql.updateCharmSql(starify_rewardUid01, 0)
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
@@ -392,11 +392,11 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        conMysql.updateCharmSql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid02 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid02, 0)
         #  sql:被打赏者starify_rewardUid02 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid02, 0)
+        conMysql.updateCharmSql(starify_rewardUid02, 0)
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02], )
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
@@ -432,11 +432,11 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        conMysql.updateCharmSql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid02 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid02, 0)
         #  sql:被打赏者starify_rewardUid02 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid02, 0)
+        conMysql.updateCharmSql(starify_rewardUid02, 0)
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02], )
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
@@ -468,11 +468,11 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        conMysql.updateCharmSql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid02 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid02, 0)
         #  sql:被打赏者starify_rewardUid02 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid02, 0)
+        conMysql.updateCharmSql(starify_rewardUid02, 0)
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02], )
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
@@ -504,7 +504,7 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        conMysql.updateCharmSql(starify_rewardUid01, 0)
         combo_key = hash_key()  # 连击KEY
         # 1 连击*1
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], hit_offset=1,
@@ -553,7 +553,7 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        conMysql.updateCharmSql(starify_rewardUid01, 0)
         combo_key = hash_key()  # 连击KEY
         # 1 连击
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], hit_offset=1,
@@ -602,7 +602,7 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        conMysql.updateCharmSql(starify_rewardUid01, 0)
         combo_key = hash_key()  # 连击KEY
         # 1 连击
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], hit_offset=1,
@@ -649,11 +649,11 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        conMysql.updateCharmSql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid02 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid02, 0)
         #  sql:被打赏者starify_rewardUid02 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid02, 0)
+        conMysql.updateCharmSql(starify_rewardUid02, 0)
         combo_key = hash_key()  # 连击KEY
         # 1 连击
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02],
@@ -712,11 +712,11 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        conMysql.updateCharmSql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid02 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid02, 0)
         #  sql:被打赏者starify_rewardUid02 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid02, 0)
+        conMysql.updateCharmSql(starify_rewardUid02, 0)
         combo_key = hash_key()  # 连击KEY
         # 1 连击
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02],
@@ -775,11 +775,11 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        conMysql.updateCharmSql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid02 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid02, 0)
         #  sql:被打赏者starify_rewardUid02 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid02, 0)
+        conMysql.updateCharmSql(starify_rewardUid02, 0)
         combo_key = hash_key()  # 连击KEY
         # 1 连击
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02],
@@ -838,11 +838,11 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        conMysql.updateCharmSql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid02 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid02, 0)
         #  sql:被打赏者starify_rewardUid02 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid02, 0)
+        conMysql.updateCharmSql(starify_rewardUid02, 0)
         combo_key = hash_key()  # 连击KEY
         # 1 连击
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02],
@@ -901,11 +901,11 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        conMysql.updateCharmSql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid02 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid02, 0)
         #  sql:被打赏者starify_rewardUid02 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid02, 0)
+        conMysql.updateCharmSql(starify_rewardUid02, 0)
         combo_key = hash_key()  # 连击KEY
         # 1 连击
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02],
@@ -962,7 +962,7 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid01 修改余额=0
         conMysql.updateMoneySql(starify_rewardUid01, 0)
         #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        conMysql.updateCharmSql(starify_rewardUid01, 0)
         # 打赏编号3~8的礼物,不返奖
         for i in range(3, 9):
             commodity = commodity_config[str(i)]
@@ -995,7 +995,7 @@ class TestPayCreate(unittest.TestCase):
                 #  sql:被打赏者starify_rewardUid01 修改余额=0
                 conMysql.updateMoneySql(starify_rewardUid01, 0)
                 #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-                conMysql.updateWealthSql(starify_rewardUid01, 0)
+                conMysql.updateCharmSql(starify_rewardUid01, 0)
                 data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
                 res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
                 assert_code(res['code'])
@@ -1023,7 +1023,7 @@ class TestPayCreate(unittest.TestCase):
             #  sql:被打赏者starify_rewardUid01 修改余额=0
             conMysql.updateMoneySql(starify_rewardUid01, 0)
             #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-            conMysql.updateWealthSql(starify_rewardUid01, 0)
+            conMysql.updateCharmSql(starify_rewardUid01, 0)
             data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
             res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
             assert_code(res['code'])
@@ -1051,7 +1051,7 @@ class TestPayCreate(unittest.TestCase):
             #  sql:被打赏者starify_rewardUid01 修改余额=0
             conMysql.updateMoneySql(starify_rewardUid01, 0)
             #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-            conMysql.updateWealthSql(starify_rewardUid01, 0)
+            conMysql.updateCharmSql(starify_rewardUid01, 0)
             data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
             res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
             assert_code(res['code'])
@@ -1079,7 +1079,7 @@ class TestPayCreate(unittest.TestCase):
             #  sql:被打赏者starify_rewardUid01 修改余额=0
             conMysql.updateMoneySql(starify_rewardUid01, 0)
             #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-            conMysql.updateWealthSql(starify_rewardUid01, 0)
+            conMysql.updateCharmSql(starify_rewardUid01, 0)
             data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
             res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
             assert_code(res['code'])
@@ -1107,7 +1107,7 @@ class TestPayCreate(unittest.TestCase):
             #  sql:被打赏者starify_rewardUid01 修改余额=0
             conMysql.updateMoneySql(starify_rewardUid01, 0)
             #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-            conMysql.updateWealthSql(starify_rewardUid01, 0)
+            conMysql.updateCharmSql(starify_rewardUid01, 0)
             data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
             res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
             assert_code(res['code'])
@@ -1140,7 +1140,7 @@ class TestPayCreate(unittest.TestCase):
             #  sql:被打赏者starify_rewardUid01 修改余额=0
             conMysql.updateMoneySql(starify_rewardUid01, 0)
             #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-            conMysql.updateWealthSql(starify_rewardUid01, 0)
+            conMysql.updateCharmSql(starify_rewardUid01, 0)
             data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
             res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
             assert_code(res['code'])
@@ -1173,7 +1173,7 @@ class TestPayCreate(unittest.TestCase):
             #  sql:被打赏者starify_rewardUid01 修改余额=0
             conMysql.updateMoneySql(starify_rewardUid01, 0)
             #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-            conMysql.updateWealthSql(starify_rewardUid01, 0)
+            conMysql.updateCharmSql(starify_rewardUid01, 0)
             data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
             res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
             assert_code(res['code'])
@@ -1206,7 +1206,7 @@ class TestPayCreate(unittest.TestCase):
             #  sql:被打赏者starify_rewardUid01 修改余额=0
             conMysql.updateMoneySql(starify_rewardUid01, 0)
             #  sql:被打赏者starify_rewardUid01 修改魅力值=0
-            conMysql.updateWealthSql(starify_rewardUid01, 0)
+            conMysql.updateCharmSql(starify_rewardUid01, 0)
             data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
             res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
             assert_code(res['code'])
