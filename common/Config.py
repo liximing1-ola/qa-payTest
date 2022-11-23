@@ -9,7 +9,7 @@ class config:
                'pt_ali': 'https://pt-dev.iambanban.com/',
                'banban': 'com.imbb.banban.android',
                'pt': 'com.ola.chat',
-               'starify': 'http://47.243.83.154/',
+               'starify': 'http://116.62.125.230/',
                "rush": 'https://192.168.11.55/',
                }
     codeInfo = {'bb_php_path': '/home/webroot/banban',

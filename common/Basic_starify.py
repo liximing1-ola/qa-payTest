@@ -17,7 +17,7 @@ header_starify = {
 	'user-imei': 'f576d6f31f83dea5',
 	'user-language': 'zh_CN',
 	'accept-encoding': 'gzip',
-	'host': '47.243.83.154',
+	'host': '116.62.125.230',
 	'content-type': 'application/x-www-form-urlencoded; charset=utf-8'
 }
 
