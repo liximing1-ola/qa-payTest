@@ -20,7 +20,7 @@ def robot(mode, reason, title='', bot='BB', color="good"):
         #  test
     }
     url = robot_dict[bot]
-    url = robot_dict_wechat[bot]
+    # url = robot_dict_wechat[bot]
     if mode == 'fail':
         content = "警告! 失败用例: {}, 失败原因: {}".format(title, reason)
         data = {
