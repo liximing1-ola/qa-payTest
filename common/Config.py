@@ -9,7 +9,7 @@ class config:
                'pt_ali': 'https://pt-dev.iambanban.com/',
                'banban': 'com.imbb.banban.android',
                'pt': 'com.ola.chat',
-               'starify': 'http://47.243.83.154/',
+               'starify': 'http://116.62.125.230/',
                "rush": 'https://192.168.11.55/',
                }
     codeInfo = {'bb_php_path': '/home/webroot/banban',
@@ -45,7 +45,7 @@ class config:
     # 服务器标识
     linux_node = {
         'ali': 'iZbp1fveowr7j693hrwb48Z',
-        'ali-starify': 'iZj6cig35upuwmdws5sec2Z',  # todo 修改 调试用 ubuntu / dev=iZj6cig35upuwmdws5sec2Z
+        'ali-starify': 'iZbp15ildwog86lw08ptpnZ',  # todo 修改 调试用 ubuntu / dev=iZj6cig35upuwmdws5sec2Z
     }
     # app登录方式
     bb_qqLogin_url = bb_host + 'account/qqlogin'
