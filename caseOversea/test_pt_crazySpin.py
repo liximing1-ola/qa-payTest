@@ -58,7 +58,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.deleteUserAccountSql('user_commodity', config.pt_payUid)
         conMysql.insertXsUserCommodity(config.pt_payUid, cid=cid, num=100)  # 背包插入100个欢乐券
         crazySpin.turntablelist(config.pt_room['business_joy'],
-                                config.pt_payUid, tokenName='pt')
+                                config.pt_payUid,
+                                tokenName='pt')
         crazySpin.turntablehorn(config.pt_payUid, tokenName='pt')
         data = encodePtData(payType='play-crazyspin')
         res = post_request_session(url=crazySpin.spinPlay(uid=config.pt_payUid),
