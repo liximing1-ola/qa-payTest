@@ -13,7 +13,7 @@ from common.Crazyspin import crazySpin
 @Retry
 class TestPayCreate(unittest.TestCase):
 
-    def test_01_crazySpinExchange(self, des='扣除钻石购买大转盘欢乐券'):
+    def test_01_crazySpinExchange(self, des='扣除钻石购买欢乐转盘欢乐券'):
         """
         用例描述：
         验证购买欢乐券，钻石扣除正常，背包正常得到欢乐券
