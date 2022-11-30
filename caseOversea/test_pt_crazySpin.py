@@ -13,7 +13,7 @@ from common.Crazyspin import crazySpin
 @Retry
 class TestPayCreate(unittest.TestCase):
 
-    def test_01_crazySpinExchange(self, des='扣除钻石购买大转盘欢乐券'):
+    def test_01_crazySpinExchange(self, des='扣除钻石购买欢乐转盘欢乐券'):
         """
         用例描述：
         验证购买欢乐券，钻石扣除正常，背包正常得到欢乐券
@@ -58,7 +58,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.deleteUserAccountSql('user_commodity', config.pt_payUid)
         conMysql.insertXsUserCommodity(config.pt_payUid, cid=cid, num=100)  # 背包插入100个欢乐券
         crazySpin.turntablelist(config.pt_room['business_joy'],
-                                config.pt_payUid, tokenName='pt')
+                                config.pt_payUid,
+                                tokenName='pt')
         crazySpin.turntablehorn(config.pt_payUid, tokenName='pt')
         data = encodePtData(payType='play-crazyspin')
         res = post_request_session(url=crazySpin.spinPlay(uid=config.pt_payUid),

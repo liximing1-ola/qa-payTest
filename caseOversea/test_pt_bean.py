@@ -19,7 +19,7 @@ class TestPayCreate(unittest.TestCase):
     def test_01_moneyExchangeCoin(self, des='余额兑换金豆场景'):
         """
         用例描述：
-        验证money兑换金豆流程
+        验证余额兑换金豆流程
         脚本步骤：
         1.构造用户数据
         2.金豆兑换流程
