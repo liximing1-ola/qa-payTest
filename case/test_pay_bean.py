@@ -140,7 +140,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list[des] = result
 
-    @unittest.skip('金豆不再抵扣手续费')
+    @unittest.skip('2022/5/12 金豆不再抵扣手续费')
     def test_06_MoneyConvertGoldPayGift(self, des='金豆抵扣手续费但钻石余额少于礼物价格的场景'):
         """
         用例描述：
@@ -165,7 +165,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('bean', config.payUid), 400)
         case_list[des] = result
 
-    @unittest.skip('卡座玩法已下线')
+    @unittest.skip('卡座玩法')
     def test_07_BeanPayChangeCombo(self, des='卡座内购买套餐场景'):
         """
         用例描述：
@@ -190,7 +190,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('bean', config.payUid), 400)
         case_list[des] = result
 
-    @unittest.skip('装扮已改成钻石货币')
+    @unittest.skip('金豆装扮')
     def test_08_BeanPayChangePresentDeco(self, des='赠送金豆装扮的场景', goldCid=1629):
         """
         用例描述：
@@ -211,3 +211,16 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.rewardUid), 1)
         assert_equal(conMysql.selectUserInfoSql('bean', config.payUid), 0)
         case_list[des] = result
+
+    @unittest.skip('金豆兑换')
+    def test_09_moneyChangeExchangeCoin(self, des='余额兑换金豆场景'):
+        """
+        用例描述：
+        验证money兑换金豆流程
+        脚本步骤：
+        1.构造用户数据
+        2.金豆兑换流程
+        3.校验接口状态和返回值数据
+        4.检查账户钻石余额：money：1000 - 600 = 400
+        5.检查账户金豆余额：gold_coin：600
+        """

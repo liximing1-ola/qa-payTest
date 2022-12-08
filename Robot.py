@@ -17,10 +17,9 @@ def robot(mode, reason, title='', bot='BB', color="good"):
         'PT': 'https://hooks.slack.com/workflows/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',
         'starify': 'https://hooks.slack.com/services/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',
         # 'starify': 'https://hooks.slack.com/services/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',  # todo 调试
-        #  test
     }
     url = robot_dict[bot]
-    # url = robot_dict_wechat[bot]
+    url = robot_dict_wechat[bot]
     if mode == 'fail':
         content = "警告! 失败用例: {}, 失败原因: {}".format(title, reason)
         data = {
