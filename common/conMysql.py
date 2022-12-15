@@ -1,7 +1,6 @@
 # coding=utf-8
 import pymysql
 import time
-from common.getToken import getToken
 from common.Config import config
 
 
