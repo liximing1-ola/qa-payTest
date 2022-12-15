@@ -92,8 +92,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 9000)
         case_list[des] = result
 
-    @unittest.TestCase('2022.2.24 金豆不再抵扣20%手续费')
-    def test_04_ImMoneyPayChangeBeanDeduct(self, des='私聊打赏钻石礼物时金豆抵扣平台手续费场景'):
+    def test_04_ImMoneyPayChangeBeanDeduct(self, des='私聊打赏钻石礼物时金豆不再抵扣平台手续费'):
         """
         用例描述：
         验证私聊场景打赏钻石礼物时金豆抵扣平台手续费的场景
@@ -117,8 +116,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.rewardUid), 720)
         case_list[des] = result
 
-    @unittest.TestCase('2022.2.24 金豆不再抵扣20%手续费')
-    def test_05_RoomMoneyConvertGoldPayGift(self, des='房间打赏钻石礼物时金豆抵扣平台手续费场景'):
+    def test_05_RoomMoneyConvertGoldPayGift(self, des='房间打赏钻石礼物时金豆不再抵扣平台手续费'):
         """
         用例描述：
         验证房间内打赏钻石礼物时金豆抵扣平台手续费的场景
