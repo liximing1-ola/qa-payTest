@@ -1,6 +1,7 @@
 # coding=utf-8
 import pymysql
 import time
+from common.getToken import getToken
 from common.Config import config
 
 
@@ -113,7 +114,8 @@ class conMysql:
             except Exception as error:
                 print(error)
         elif accountType == 'relation_id':  # 查询用户守护关系id
-            sql = "select id from xs_relation_defend where uid={} and defend_uid={}".format(config.payUid, uid)
+            sql = "select id from xs_relation_defend where uid={} and defend_uid={} and relation_id={}".\
+                format(config.payUid, uid, cid)
             try:
                 conMysql.cur.execute(sql)
                 res = conMysql.cur.fetchone()
@@ -141,6 +143,19 @@ class conMysql:
                     raise EnvironmentError('库表无联盟房')
                 else:
                     return res[0]
+            except Exception as error:
+                print(error)
+        elif accountType == 'fleet':
+            sql = " select rid from xs_chatroom where property='{}' limit 1".format(accountType)
+            try:
+                conMysql.cur.execute(sql)
+                res = conMysql.cur.fetchone()
+                if res is None:
+                    raise EnvironmentError('库表无家族房')
+                else:
+                    if res[0] != config.bb_user['fleetRid']:
+                        return res[0]
+                    return res[1]
             except Exception as error:
                 print(error)
         else:
@@ -227,6 +242,18 @@ class conMysql:
                 print('update fail', error)
             finally:
                 conMysql.con.commit()
+
+        elif tableName == 'user_index':  # 修改用户xs_user_index:salt
+            dateline = int(time.time())
+            sql = "update xs_user_index set salt='{}', dateline={} where uid={} limit 1".format(bid, dateline, uid)
+            try:
+                conMysql.cur.execute(sql)
+            except Exception as error:
+                conMysql.con.rollback()
+                print('update fail', error)
+            finally:
+                conMysql.con.commit()
+
         elif tableName == 'chatroom':  # 修改用户为房间房主
             sql = "update xs_chatroom set app_id=1, uid={}, settlement_channel='live', " \
                   "room_factory_type='business-soundchat' where rid={} limit 1".format(uid, config.live_role['live_rid'])
@@ -237,6 +264,7 @@ class conMysql:
                 print('update fail', error)
             finally:
                 conMysql.con.commit()
+
         elif tableName == 'super_chatroom':
             sql = "update xs_chatroom set type='super-voice-fresh',property='business',version=737,room_factory_type='super-voice-fresh'," \
                   "room_module_id=73,settlement_channel='super-voice' where rid={}".format(uid)
@@ -629,5 +657,16 @@ class conMysql:
                     print('update fail', error)
         except Exception as error:
             print(error)
+        finally:
+            conMysql.con.commit()
+
+    @staticmethod
+    def updateXsUserIndex(uid):
+        sql = "update xs_user_index set salt='{}' where uid={}".format(getToken.get_salt(uid), uid)
+        try:
+            conMysql.cur.execute(sql)
+        except Exception as error:
+            conMysql.con.rollback()
+            print('update fail', error)
         finally:
             conMysql.con.commit()

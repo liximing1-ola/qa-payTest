@@ -83,20 +83,19 @@ class TestPayCreate(unittest.TestCase):
         2.giveBox
         3.校验接口状态和返回值数据
         4.检查打赏者账户余额，预期值为：700 - 600 = 100
-        5.检查收箱用户账户余额，预期值为：大于100
+        5.检查收箱用户账户余额，预期值为：大于186
         """
         conMysql.updateMoneySql(config.payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
         conMysql.updateMoneySql(config.rewardUid)
         data = encodeData(payType='package',
                           money=600,
-                          rid=config.live_role['cp_link_rid'],  # 这个房间走的55分成,
                           giftId=config.giftId['46'],
                           star=4)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 100)
-        assert_len(conMysql.selectUserInfoSql('sum_money', config.rewardUid), 300 * 0.42)
+        assert_len(conMysql.selectUserInfoSql('sum_money', config.rewardUid), 300 * 0.62)
         case_list[des] = result
 
     def test_04_giveBoxMorePeople(self, des='房间送多人多个箱子场景'):
