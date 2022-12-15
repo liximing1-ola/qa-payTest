@@ -38,7 +38,7 @@ class config:
     rush_host = appInfo['rush']
     # 内网支付接口
     pay_url = bb_host + 'pay/create?package=com.imbb.banban.android'
-    pt_pay_url = pt_host + 'pay/create?package=com.ola.chat'
+    pt_pay_url = pt_host + 'pay/create?package=com.imbb.oversea.android'
     starify_pay_url = starify_host + 'go/starify/pay/create'
     rush_pay_url = bb_host + "pay/create?package=com.im.duck.android"
 
