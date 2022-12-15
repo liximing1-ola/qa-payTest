@@ -112,7 +112,8 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid, money_type='money_cash'), 322400)
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid,
+                                                money_type='money_cash'), 520000 * config.rate)
         case_list[des] = result
 
     @pytest.mark.run(order=5)
@@ -136,7 +137,8 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 480000)
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid, money_type='money_cash'), 322400)
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid,
+                                                money_type='money_cash'), 520000 * config.rate)
         case_list[des] = result
 
     @pytest.mark.run(order=6)

@@ -83,7 +83,8 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid, money_type='money_cash'), 500)
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid,
+                                                money_type='money_cash'), 1000 * (config.rate - 0.2))
         assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid, ), 300)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.gsUid), 800)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
@@ -112,7 +113,8 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
-        assert_len(conMysql.selectUserInfoSql('single_money', config.gsUid, money_type='money_cash'), 300 * 0.7)
+        assert_len(conMysql.selectUserInfoSql('single_money', config.gsUid,
+                                              money_type='money_cash'), 300 * config.rate)
         case_list_b[des] = result
 
     def test_05_sameFleetRoomPayNormalUser(self, des='家族房打赏一代用户场景'):
@@ -137,7 +139,7 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('sum_money', self.payUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         assert_len(conMysql.selectUserInfoSql('single_money', self.rewardUid2), 300 * 0.8)
         conMysql.checkUserXsMentorLevel(self.rewardUid2, level=1)
         case_list_b[des] = result
