@@ -15,7 +15,7 @@ class config:
     codeInfo = {'bb_php_path': '/home/webroot/banban',
                 'bb_go_path': '/home/webroot/bb-consume',
                 'pt_php_path': '/home/webroot/release_oversea/banban',
-                'bb_git_branch': 'release-for-vpc',
+                'bb_git_branch': 'zhudong/feature_rate',
                 'bb_go_git_branch': 'master',
                 'pt_git_branch': 'main',
                 'starify_go_path': r"/var/www/sta-go",
@@ -52,7 +52,7 @@ class config:
     pt_mobile_login_url = pt_host + 'account/passwordLogin' + '?package=com.imbb.oversea.android'  # 加包名限制
     starify_mobile_login_url = starify_host + 'go/starify/login/mobileLogin'
 
-    rate = 0.7
+    rate = 0.62
     # 用户配置
     bb_user = {
         'payUid': 103273407,  # boss

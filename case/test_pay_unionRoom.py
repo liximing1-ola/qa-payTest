@@ -39,7 +39,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
-    @unittest.skip
     @pytest.mark.run(order=2)
     def test_02_singerRoomNormalBrokerRate_62(self, des='歌友房普通工会收62%公会魅力值'):
         """
@@ -64,7 +63,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
-    @unittest.skip
     @pytest.mark.run(order=3)
     def test_03_singerPayBoxNormalBrokerRate_62(self, des='歌友房打赏箱子GS收62%（mc）'):
         """
@@ -93,7 +91,6 @@ class TestPayCreate(unittest.TestCase):
                                               money_type='money_cash'), 300 * config.rate)
         case_list_b[des] = result
 
-    @unittest.skip
     def test_04_singerRoomPayNormalUser(self, des='歌友房普通用户礼物打赏收个人魅力值'):
         """
         用例描述：
