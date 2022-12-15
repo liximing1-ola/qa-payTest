@@ -140,8 +140,7 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
-        assert_len(conMysql.selectUserInfoSql('single_money', self.rewardUid2), 300 * 0.8)
-        conMysql.checkUserXsMentorLevel(self.rewardUid2, level=1)
+        assert_len(conMysql.selectUserInfoSql('single_money', config.masterUid), 300 * 0.8)
         case_list_b[des] = result
 
     def test_06_otherFleetRoomNormalGsRate(self, des='非本家族房打赏用户场景'):

@@ -111,7 +111,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateUserMoneyClearSql(config.masterUid, config.rewardUid, config.gsUid)
         data = encodeData(payType='package-more',
                           num=6,
-                          uids=(config.gsUid, config.rewardUid, config.masterUid))
+                          uids=('{}'.format(config.gsUid), '{}'.format(config.rewardUid), '{}'.format(config.masterUid)))
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'], 200)
         assert_body(res['body'], 'success', 1, reason(des, res))
