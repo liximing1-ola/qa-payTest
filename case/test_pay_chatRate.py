@@ -53,7 +53,8 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid, money_type='money_cash'), 500)
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid,
+                                                money_type='money_cash'), 1000 * (config.rate - 0.2))
         assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid, money_type='money_cash_b'), 300)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list[des] = result
@@ -80,7 +81,8 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_len(conMysql.selectUserInfoSql('single_money', config.gsUid), 300 * 0.3)
-        assert_len(conMysql.selectUserInfoSql('single_money', config.gsUid, money_type='money_cash'), 300 * 0.5)
+        assert_len(conMysql.selectUserInfoSql('single_money', config.gsUid,
+                                              money_type='money_cash'), 300 * (config.rate - 0.2))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 400)
         case_list[des] = result
 

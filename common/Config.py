@@ -52,6 +52,7 @@ class config:
     pt_mobile_login_url = pt_host + 'account/passwordLogin' + '?package=com.imbb.oversea.android'  # 加包名限制
     starify_mobile_login_url = starify_host + 'go/starify/login/mobileLogin'
 
+    rate = 0.7
     # 用户配置
     bb_user = {
         'payUid': 103273407,  # boss

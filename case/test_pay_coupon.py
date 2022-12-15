@@ -117,7 +117,8 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid), 3720)
         assert_equal(conMysql.selectUserInfoSql('single_money', config.masterUid), 4200)
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid, money_type='money_cash'), 4200)
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid,
+                                                money_type='money_cash'), 6000 * config.rate)
         assert_equal(conMysql.selectUserInfoSql('single_money', config.payUid, money_type='money_cash'), 2000)
         case_list[des] = result
 
