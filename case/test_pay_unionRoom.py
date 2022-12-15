@@ -39,6 +39,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
+    @unittest.skip
     @pytest.mark.run(order=2)
     def test_02_singerRoomNormalBrokerRate_62(self, des='歌友房普通工会收62%公会魅力值'):
         """
