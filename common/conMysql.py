@@ -112,6 +112,15 @@ class conMysql:
                     return res[0]
             except Exception as error:
                 print(error)
+        elif accountType == 'user_index':  # 查询用户salt
+            sql = "select salt from xs_user_index where uid = {}".format(uid)
+            try:
+                conMysql.cur.execute(sql)
+                res = conMysql.cur.fetchone()
+                if len(res) > 0:
+                    return res[0]
+            except Exception as error:
+                print(error)
         elif accountType == 'relation_id':  # 查询用户守护关系id
             sql = "select id from xs_relation_defend where uid={} and defend_uid={} and relation_id={}".\
                 format(config.payUid, uid, cid)
@@ -656,16 +665,5 @@ class conMysql:
                     print('update fail', error)
         except Exception as error:
             print(error)
-        finally:
-            conMysql.con.commit()
-
-    @staticmethod
-    def updateXsUserIndex(uid):
-        sql = "update xs_user_index set salt='{}' where uid={}".format(getToken.get_salt(uid), uid)
-        try:
-            conMysql.cur.execute(sql)
-        except Exception as error:
-            conMysql.con.rollback()
-            print('update fail', error)
         finally:
             conMysql.con.commit()

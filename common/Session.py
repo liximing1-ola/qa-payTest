@@ -8,6 +8,8 @@ import urllib3
 from common import Logs, method
 from common.Config import config
 from common.paramsYaml import Yaml
+from common.conMysql import conMysql
+from common.getToken import getToken
 
 
 class Session:
@@ -36,6 +38,7 @@ class Session:
                 res = session.post(login_url, data=body, headers=headers, verify=False)
                 res.raise_for_status()
                 res = res.json()
+                print(res)
                 if not method.isExtend(res, 'token') or res['success'] != 1:
                     print('failReason： {}'.format(res['msg']))
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
@@ -43,6 +46,7 @@ class Session:
                 return tokenDict
             except Exception as error:
                 Logs.get_log('getSession.log').error('session异常，原因： {}'.format(error))
+
 
         elif env == "rush":  # 冲鸭
             # noinspection PyBroadException
