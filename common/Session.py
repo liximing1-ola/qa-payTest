@@ -41,6 +41,7 @@ class Session:
                 print(res)
                 if not method.isExtend(res, 'token') or res['success'] != 1:
                     print('failReason： {}'.format(res['msg']))
+                print('token1-{}'.format(res['data'].get('token')))
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
                 Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
                 return tokenDict
@@ -48,6 +49,7 @@ class Session:
                 Logs.get_log('getSession.log').error('session异常，原因： {}'.format(error))
                 token = getToken(config.payUid, conMysql.selectUserInfoSql('user_index', config.payUid)).gen_token()
                 tokenDict = {'token': token}
+                print(token)
                 Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
 
         elif env == "rush":  # 冲鸭
