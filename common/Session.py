@@ -38,7 +38,6 @@ class Session:
                 res = session.post(login_url, data=body, headers=headers, verify=False)
                 res.raise_for_status()
                 res = res.json()
-                print(res)
                 if not method.isExtend(res, 'token') or res['success'] != 1:
                     print('failReason： {}'.format(res['msg']))
                 print('token1-{}'.format(res['data'].get('token')))
