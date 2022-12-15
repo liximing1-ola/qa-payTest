@@ -52,25 +52,24 @@ class config:
     pt_mobile_login_url = pt_host + 'account/passwordLogin' + '?package=com.imbb.oversea.android'  # 加包名限制
     starify_mobile_login_url = starify_host + 'go/starify/login/mobileLogin'
 
-    # banban用户配置
+    # 用户配置
     bb_user = {
-        'payUid': 103273407,  # god
+        'payUid': 103273407,  # boss
         'testUid': 105002312,  # 非一代宗师
         'pack_cal_uid': 105002313,  # 打包结算签约主播
         'vipRoomRid': 200089706,  # 个人房，房主uid=103273407
-        'gsUid': 105002325,  # GS用户
+        'gsUid': 105002325,  # GS用户,直播公会未签约打包结算等同于普通公会
         'prettyRid': 200089942,  # 靓号房, 房主uid=105002325
+        'fleetRid': 200091067,  # 家族房，家主uid=103273407，成员105002325/100500205
     }
-    # 直播间角色配置
+    rate = 0.7
+    # 角色配置
     live_role = {
         'pack_ceo': 105002314,  # 直播公会公会长
         'pack_master_NoPack': 105002319,  # 非公会一代宗师主播
         'pack_cal_uid': 105002313,  # 公会签约主播（打包结算），宗师等级可设置为一代和非一代
-        'testUid': 105002312,  # 非公会非一代宗师主播
-        'live_rid': 193185577,  # 直播间，房主:105002313
-        'auto_rid': 193185484,  # 商业8坑位房间
-        'cp_link_rid': 193185538,  # 商业连连看房间
-        'liveRid': 193185408,
+        'live_rid': 193185577,  # 直播间(types=live)，房主:105002313
+        'auto_rid': 193185484,  # property: business | types: auto | room_factory_type: business-content | settlement_channel: cp-women
     }
     # 礼物配置
     giftId = {
@@ -83,10 +82,11 @@ class config:
         "62": 62,  # 人气券*20（金币）
         "362": 362,  # 啵啵奶茶*1000（金豆）
     }
-    rewardUid = bb_user['testUid']  # 被打赏者
-    rewardUid2 = 100500205  # 被打赏者
+
     payUid = bb_user['payUid']  # 打赏者
-    pack_cal_uid = bb_user['pack_cal_uid']  # 打包结算主播
+    rewardUid = bb_user['testUid']  # 被打赏者(非一代宗师)
+    masterUid = 100500338  # 被打赏者（一代宗师）
+    gsUid = bb_user['gsUid']  # 公会用户
 
     # PT
     pt_user = {
@@ -119,8 +119,4 @@ class config:
 
 
 if __name__ == '__main__':
-    print(config.bb_user.copy())
-    vipRoomRid = config.bb_user.copy()['vipRoomRid']
-    print(vipRoomRid)
-    liveRid = config.live_role.copy()['liveRid']
-    print(liveRid)
+    pass

@@ -7,7 +7,7 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'],
                uid=config.rewardUid, giftId=config.giftId['7'],
                giftType='normal', cid=5, boxType='copper', num=1, package_cid=0,
                ctype='', duction_money=0, star=0, defend_id=244,
-               uids=('{}'.format(config.rewardUid), '{}'.format(config.rewardUid2))):
+               uids=('{}'.format(config.rewardUid), '{}'.format(config.masterUid))):
     if payType == 'package':
         data = {
             "platform": "available",
@@ -154,7 +154,7 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'],
                  "version": 2,
                  "num": num,
                  "gift_type": "normal",
-                 "star": 0,
+                 "star": star,
                  "show_pac_man_guide": 1,
                  "all_mic": 0,
                  "useCoin": -1
@@ -210,7 +210,7 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'],
             "type": 'defend',
             "money": money,
             "params":
-                {"defend": 2,
+                {"defend": defend_id,
                  "to": uid,
                  "cid": 0,
                  "duction_money": 0,

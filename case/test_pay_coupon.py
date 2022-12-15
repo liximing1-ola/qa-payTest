@@ -11,10 +11,10 @@ from common.runFailed import Retry
 
 @Retry
 class TestPayCreate(unittest.TestCase):
-    liveRid = config.live_role.copy()['liveRid']
-    union_rid = conMysql.selectUserInfoSql(accountType='union')
 
-    def test_01_RoomPayNoMoney(self, des='房间1V1打赏但余额不足的场景'):
+    businessRid = config.live_role.copy()['auto_rid']
+
+    def test_01_RoomPayNoMoney(self, des='房间打赏但余额不足的场景'):
         """
         用例描述：
         验证余额不足时，房间一对一打赏
@@ -28,7 +28,6 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateUserMoneyClearSql(config.payUid, config.rewardUid)
         data = encodeData(payType='package',
                           money=100,
-                          rid=self.liveRid,
                           giftId=config.giftId['5'])
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
@@ -37,29 +36,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.rewardUid), 0)
         case_list[des] = result
 
-    def test_02_RoomPayChangeMoney(self, des='非直播1V1打赏场景'):
-        """
-        用例描述：
-        验证余额足够时，非直播类型房间一对一打赏,打赏分成满足师徒收益的基础上为：62:38
-        脚本步骤：
-        1.构造打赏者和被打赏者数据
-        2.房间内一对一打赏（打赏100分）
-        3.校验接口状态和返回值数据
-        4.检查被打赏者余额，预期为：100 * 0.62 = 62
-        """
-        conMysql.updateMoneySql(config.payUid, money=30, money_cash=30, money_cash_b=30, money_b=10)
-        conMysql.updateMoneySql(config.rewardUid)
-        data = encodeData(payType='package',
-                          money=100,
-                          rid=config.live_role['auto_rid'],
-                          giftId=config.giftId['5'])
-        res = post_request_session(config.pay_url, data)
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid), 62)
-        case_list[des] = result
-
-    def test_03_couponNoStatePayChange(self, des='打赏礼物使用未激活券的场景', gift_cid=54):
+    def test_02_couponNoStatePayChange(self, des='打赏礼物使用未激活券的场景', gift_cid=54):
         """
         用例描述：
         有未激活券(state=0)的情况下，验证打赏
@@ -77,7 +54,6 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.rewardUid)
         cid = conMysql.selectUserInfoSql('id_commodity', config.payUid, cid=gift_cid)
         data = encodeData(payType='package',
-                          rid=config.live_role['auto_rid'],
                           giftId=config.giftId['11'],
                           money=3000,
                           package_cid=cid,
@@ -91,7 +67,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 3000)
         case_list[des] = result
 
-    def test_04_couponStatePayChange(self, des='打赏礼物时有激活券的场景', gift_cid=54):
+    def test_03_couponStatePayChange(self, des='打赏礼物时有激活券的场景', gift_cid=54):
         """
         用例描述：
         有激活券(state=1)的情况下，验证打赏流程
@@ -108,7 +84,6 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.rewardUid)
         cid = conMysql.selectUserInfoSql('id_commodity', config.payUid, cid=gift_cid)
         data = encodeData(payType='package',
-                          rid=config.live_role['auto_rid'],
                           giftId=config.giftId['11'],
                           money=3000,
                           package_cid=cid,
@@ -121,7 +96,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 500)
         case_list[des] = result
 
-    def test_05_RoomToMorePayChange(self, des='房间内打赏多人场景'):
+    def test_04_RoomToMorePayChange(self, des='房间内打赏多人场景'):
         """
         用例描述：
         验证非直播类型房间内一对多打赏场景
@@ -130,65 +105,23 @@ class TestPayCreate(unittest.TestCase):
         2.房间内一对多打赏流程
         3.校验接口状态和返回值数据
         4.检查打赏者余额,预期为：20000-1000*6*3 = 2000
-        5.检查被打赏者余额，预期为：1000*6*0.62 = 3720(非一代宗师)
+        5.检查被打赏者余额，预期为：1000*6*0.62 = 3720(非一代宗师) 1000*6*0.7=4200(一代宗师) 1000*6*0.62=3720（公会）
         """
         conMysql.updateMoneySql(config.payUid, money=5000, money_cash=5000, money_cash_b=5000, money_b=5000)
-        conMysql.updateUserMoneyClearSql(config.rewardUid2, config.rewardUid)
+        conMysql.updateUserMoneyClearSql(config.masterUid, config.rewardUid, config.gsUid)
         data = encodeData(payType='package-more',
                           num=6,
-                          uids=('105002312', '100500131', '100500205'))
+                          uids=(config.gsUid, config.rewardUid, config.masterUid))
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'], 200)
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.rewardUid), 3720)
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid), 3720)
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.masterUid), 4200)
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid, money_type='money_cash'), 4200)
         assert_equal(conMysql.selectUserInfoSql('single_money', config.payUid, money_type='money_cash'), 2000)
         case_list[des] = result
 
-    def test_06_packCalInUnionRoomPayCreate(self, des='打包结算用户联盟房分成'):
-        """
-        用例描述：
-        验证联盟房间内打包结算用户成员打赏分成为60%（工会魅力值）
-        脚本步骤：
-        1.构造打赏者和被打赏者数据
-        2.联盟房间内打赏直播工会成员
-        3.校验接口状态和返回值数据
-        4.检查打赏者余额,预期为：1000-1000 = 0
-        5.检查被打赏者余额，预期为：1000 * 0.6 = 600
-        """
-        conMysql.updateMoneySql(config.payUid, money=1000)
-        conMysql.updateMoneySql(config.pack_cal_uid)
-        data = encodeData(payType='package',
-                          rid=self.union_rid,
-                          uid=config.pack_cal_uid)  # 联盟房rid，error先检查联盟房在不在
-        res = post_request_session(config.pay_url, data)
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.pack_cal_uid, money_type='money_cash'), 600)
-        case_list[des] = result
-
-    def test_07_normalUserInUnionRoomPayCreate(self, des='普通用户联盟房分成'):
-        """
-        用例描述：
-        验证联盟房间内普通用户打赏分成为62%（个人魅力值，非一代宗师）
-        脚本步骤：
-        1.构造打赏者和被打赏者数据
-        2.联盟房间内打赏直播工会成员
-        3.校验接口状态和返回值数据
-        4.检查打赏者余额,预期为：1000-1000 = 0
-        5.检查被打赏者余额，预期为：1000 * 0.62 = 620（个人魅力值）
-        """
-        conMysql.updateMoneySql(config.payUid, money=1000)
-        conMysql.updateMoneySql(config.rewardUid)
-        data = encodeData(payType='package', rid=self.union_rid)  # 联盟房rid
-        res = post_request_session(config.pay_url, data)
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid), 620)
-        case_list[des] = result
-
-    def test_08_couponNoStatePayChange(self, des='电台使用青铜体验券', gift_cid=21980):
+    def test_05_couponNoStatePayChange(self, des='电台使用青铜体验券', gift_cid=21980):
         """
         用例描述：
         在电台房使用24小时体验青铜坑位券，不分成
