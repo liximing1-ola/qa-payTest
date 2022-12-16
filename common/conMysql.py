@@ -127,6 +127,8 @@ class conMysql:
             try:
                 conMysql.cur.execute(sql)
                 res = conMysql.cur.fetchone()
+                if res is None:
+                    return 0
                 if len(res) > 0:
                     return res[0]
             except Exception as error:

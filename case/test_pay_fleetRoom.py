@@ -84,9 +84,9 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid,
-                                                money_type='money_cash'), 1000 * (config.rate - 0.2))
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid, ), 300)
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.gsUid), 800)
+                                                money_type='money_cash'), 420)
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid), 300)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.gsUid), 720)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
