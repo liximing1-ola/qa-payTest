@@ -151,12 +151,11 @@ class TestPayCreate(unittest.TestCase):
          3.校验接口状态和返回值数据
          4.检查打赏者余额，预期：100000 - 99900 = 100
          """
-        conMysql.updateMoneySql(config.payUid, money=40000)
+        conMysql.updateMoneySql(config.payUid, money=100000)
         data = encodeData(payType='defend-break',
                           money=self.defend_cp_config['break_money'],
                           defend_id=self.defend_cp_id)
         res = post_request_session(config.pay_url, data)
-        print(res)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 100)
