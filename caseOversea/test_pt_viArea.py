@@ -28,7 +28,7 @@ class TestPayCreate(unittest.TestCase):
     def tearDownClass(cls) -> None:
         conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()))
 
-    def test_01_arAreaVipRoomPay(self, des='越南区区商业房礼物打赏37分成场景'):
+    def test_01_viAreaVipRoomPay(self, des='越南区区商业房礼物打赏37分成场景'):
         """
         用例描述：
         验证余额足够时，越南区区商业房打赏普通礼物,打赏分成满足师徒收益(一代宗师)的基础上为3:7
@@ -49,7 +49,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash'), 420)
         case_list[des] = result
 
-    def test_02_arAreaVipRoomGiveBox(self, des='越南区区商业房箱子打赏37分成场景'):
+    def test_02_viAreaVipRoomGiveBox(self, des='越南区区商业房箱子打赏37分成场景'):
         """
         用例描述：
         验证余额足够时，越南区商业房1对1打赏箱子,打赏分成满足师徒收益(一代宗师)的基础上为3:7
@@ -77,7 +77,7 @@ class TestPayCreate(unittest.TestCase):
         case_list[des] = result
 
     # 白名单打赏0.8分成，非白名单0.5分成
-    def test_03_arAreaChatPay(self, des='越南区非白名单私聊礼物打赏55分成场景'):
+    def test_03_viAreaChatPay(self, des='越南区非白名单私聊礼物打赏55分成场景'):
         """
         用例描述：
         验证余额足够时，越南区私聊打赏普通礼物,打赏分成满足师徒收益(一代宗师)的基础上为0.5
@@ -98,7 +98,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash'), 300)
         case_list[des] = result
 
-    def test_04_arAreaUnionRoomPay(self, des='越南区区联盟房礼物打赏30%分成场景'):
+    def test_04_viAreaUnionRoomPay(self, des='越南区区联盟房礼物打赏30%分成场景'):
         """
         用例描述：
         验证余额足够时，越南区联盟房间1对1打赏礼物,打赏分成满足师徒收益(一代宗师)的基础上为：30%
