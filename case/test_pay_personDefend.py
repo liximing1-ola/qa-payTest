@@ -48,7 +48,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid), 32240)
         case_list[des] = result
 
-    @unittest.skip
     @pytest.mark.run(order=2)
     def test_02_defendUpgradePayChangeMoney(self, des='守护进阶场景'):
         """
@@ -73,7 +72,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid), 61938)
         case_list[des] = result
 
-    @unittest.skip
     @pytest.mark.run(order=3)
     def test_03_defendBreakPayChangeMoney(self, des='守护解除场景'):
         """
