@@ -129,12 +129,10 @@ class TestPayCreate(unittest.TestCase):
          """
         conMysql.updateMoneySql(config.payUid, money=1000000)
         conMysql.updateMoneySql(config.gsUid)
-        print(self.defend_cp_id)
         data = encodeData(payType='defend-upgrade',
                           money=self.defend_cp_config['upgrade_money'],
                           defend_id=self.defend_cp_id)
         res = post_request_session(config.pay_url, data)
-        print(res)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 480000)
@@ -158,6 +156,7 @@ class TestPayCreate(unittest.TestCase):
                           money=self.defend_cp_config['break_money'],
                           defend_id=self.defend_cp_id)
         res = post_request_session(config.pay_url, data)
+        print(res)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 100)
