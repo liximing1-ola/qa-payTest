@@ -112,6 +112,7 @@ class TestPayCreate(unittest.TestCase):
                           defend_id=self.defend_cp_config['id'],
                           money=self.defend_cp_config['money_value'])
         res = post_request_session(config.pay_url, data)
+        print(res)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
@@ -119,6 +120,7 @@ class TestPayCreate(unittest.TestCase):
                                                 money_type='money_cash'), 520000 * config.rate)
         case_list[des] = result
 
+    @unittest.skip
     @pytest.mark.run(order=5)
     def test_05_defendUpgradeToGs(self, des='守护进阶消费GS收62%（mc）'):
         """
@@ -137,6 +139,7 @@ class TestPayCreate(unittest.TestCase):
                           money=self.defend_cp_config['upgrade_money'],
                           defend_id=self.defend_cp_id)
         res = post_request_session(config.pay_url, data)
+        print(res)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 480000)
@@ -144,6 +147,7 @@ class TestPayCreate(unittest.TestCase):
                                                 money_type='money_cash'), 520000 * config.rate)
         case_list[des] = result
 
+    @unittest.skip
     @pytest.mark.run(order=6)
     def test_06_defendBreakPayMoney(self, des='守护解除场景'):
         """
