@@ -120,7 +120,6 @@ class TestPayCreate(unittest.TestCase):
                                                 money_type='money_cash'), 520000 * config.rate)
         case_list[des] = result
 
-    @unittest.skip
     @pytest.mark.run(order=5)
     def test_05_defendUpgradeToGs(self, des='守护进阶消费GS收62%（mc）'):
         """
