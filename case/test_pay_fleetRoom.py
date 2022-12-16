@@ -83,6 +83,8 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
+        print(conMysql.selectUserInfoSql('single_money', config.gsUid,
+                                                money_type='money_cash'))
         assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid,
                                                 money_type='money_cash'), 420)
         assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid), 300)
