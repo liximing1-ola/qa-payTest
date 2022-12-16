@@ -24,8 +24,8 @@ class TestPayCreate(unittest.TestCase):
         2.房间内打赏（打赏100分）
         3.校验接口状态和返回值数据
         4.检查打赏者余额，预期为：100 - 100 = 0
-        5.检查被打赏者余额，预期为：100 * 0.7 * 0.5 = 35
-        6.检查被打赏者公会长余额，预期为：100 * 0.7 *（1-0.5） = 35
+        5.检查被打赏者余额，预期为：100 * 0.62 * 0.5 = 35
+        6.检查被打赏者公会长余额，预期为：100 * 0.62 *（1-0.5） = 35
         """
         conMysql.updateMoneySql(config.payUid, money=30, money_cash=30, money_cash_b=30, money_b=10)
         conMysql.updateUserMoneyClearSql(self.customUid, self.ceoUid)
@@ -39,8 +39,10 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
-        assert_equal(conMysql.selectUserInfoSql('single_money', self.customUid, money_type='money_cash'), 35)
-        assert_equal(conMysql.selectUserInfoSql('single_money', self.ceoUid, money_type='money_cash'), 35)
+        assert_equal(conMysql.selectUserInfoSql('single_money', self.customUid,
+                                                money_type='money_cash'), 100 * config.rate * 0.5)
+        assert_equal(conMysql.selectUserInfoSql('single_money', self.ceoUid,
+                                                money_type='money_cash'), 100 * config.rate * (1-0.5))
         case_list_b[des] = result
 
     def test_02_chatPayCustomRate_80(self, des='私聊打赏自定义分成:80'):
@@ -66,8 +68,10 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         assert_equal(conMysql.selectUserInfoSql('sum_money', self.customUid), 700)
-        assert_equal(conMysql.selectUserInfoSql('single_money', self.customUid, money_type='money_cash'), 400)
-        assert_equal(conMysql.selectUserInfoSql('single_money', self.ceoUid, money_type='money_cash'), 100)
+        assert_equal(conMysql.selectUserInfoSql('single_money', self.customUid,
+                                                money_type='money_cash'), 1000 * config.rate * 0.8)
+        assert_equal(conMysql.selectUserInfoSql('single_money', self.ceoUid,
+                                                money_type='money_cash'), 1000 * config.rate * 0.2)
         case_list_b[des] = result
 
     def test_03_defendPayCustomRate_25(self, des='个人守护打赏自定义分成:25'):
@@ -93,6 +97,8 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
-        assert_equal(conMysql.selectUserInfoSql('single_money', self.customUid, money_type='money_cash'), 9100)
-        assert_equal(conMysql.selectUserInfoSql('single_money', self.ceoUid, money_type='money_cash'), 27300)
+        assert_equal(conMysql.selectUserInfoSql('single_money', self.customUid,
+                                                money_type='money_cash'), 52000 * config.rate * 0.25)
+        assert_equal(conMysql.selectUserInfoSql('single_money', self.ceoUid,
+                                                money_type='money_cash'), 52000 * config.rate * 0.75)
         case_list_b[des] = result
