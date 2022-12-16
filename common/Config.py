@@ -109,6 +109,9 @@ class config:
         'vip_rid': 105698376,  # 个人房
         'business_joy_ar': 105726673,  # 阿语商业房
         'union_ar': 105713367,  # 阿语联盟房
+        'business_joy_vi': 105726676,  # 越南商业房
+        'union_vi': 105718889,  # 越南联盟房
+
     }
     # 礼物配置
     pt_giftId = {
