@@ -107,6 +107,8 @@ class config:
         'id_fleet': 105711999,  # 印尼大区家族房
         'ms_fleet': 105725790,  # 马来大区家族房
         'vip_rid': 105698376,  # 个人房
+        'business_joy_ar': 105726673,  # 阿语商业房
+        'union_ar': 105713367,  # 阿语联盟房
     }
     # 礼物配置
     pt_giftId = {
