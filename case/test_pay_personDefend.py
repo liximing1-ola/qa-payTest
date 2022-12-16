@@ -19,7 +19,6 @@ class TestPayCreate(unittest.TestCase):
     defend_cp_config = conMysql.selectUserInfoSql('relation_config', uid=1)
     defend_520_id = conMysql.selectUserInfoSql('relation_id', cid=2)
     defend_cp_id = conMysql.selectUserInfoSql('relation_id', uid=config.gsUid, cid=1)
-    pack_cal_uid = config.bb_user.copy()['pack_cal_uid']  # 直播公会gs
 
     @unittest.skip
     @pytest.mark.run(order=1)
@@ -112,7 +111,6 @@ class TestPayCreate(unittest.TestCase):
                           defend_id=self.defend_cp_config['id'],
                           money=self.defend_cp_config['money_value'])
         res = post_request_session(config.pay_url, data)
-        print(res)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
@@ -134,6 +132,7 @@ class TestPayCreate(unittest.TestCase):
          """
         conMysql.updateMoneySql(config.payUid, money=1000000)
         conMysql.updateMoneySql(config.gsUid)
+        print(self.defend_cp_id)
         data = encodeData(payType='defend-upgrade',
                           money=self.defend_cp_config['upgrade_money'],
                           defend_id=self.defend_cp_id)
