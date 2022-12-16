@@ -54,9 +54,9 @@ class TestPayCreate(unittest.TestCase):
         2.私聊打赏（打赏1000分）
         3.校验接口状态和返回值数据
         4.检查打赏者余额，预期为：1000 - 1000 = 0
-        5.检查被打赏者总余额，预期为：1000 * 0.5 * 0.8 + 1000 * 0.3 = 700
-        6.检查被打赏者公会魅力值余额,预期为：1000 * 0.5 * 0.8 = 400（公会魅力值）
-        7.检查被打赏者公会长余额，预期为：1000 * 0.5 *（1-0.8) = 100(公会魅力值)
+        5.检查被打赏者总余额，预期为：1000 * 0.42 * 0.8 + 1000 * 0.3 = 636
+        6.检查被打赏者公会魅力值余额,预期为：1000 * 0.42 * 0.8 = 336（公会魅力值）
+        7.检查被打赏者公会长余额，预期为：1000 * 0.42 *（1-0.8) = 84(公会魅力值)
         """
         conMysql.updateMoneySql(config.payUid, money=930, money_cash=30, money_cash_b=30, money_b=10)
         conMysql.updateUserMoneyClearSql(self.customUid, self.ceoUid)
@@ -67,11 +67,11 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
-        assert_equal(conMysql.selectUserInfoSql('sum_money', self.customUid), 700)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', self.customUid), 636)
         assert_equal(conMysql.selectUserInfoSql('single_money', self.customUid,
-                                                money_type='money_cash'), 1000 * config.rate * 0.8)
+                                                money_type='money_cash'), 336)
         assert_equal(conMysql.selectUserInfoSql('single_money', self.ceoUid,
-                                                money_type='money_cash'), 1000 * config.rate * 0.2)
+                                                money_type='money_cash'), 84)
         case_list_b[des] = result
 
     def test_03_defendPayCustomRate_25(self, des='个人守护打赏自定义分成:25'):
@@ -83,8 +83,8 @@ class TestPayCreate(unittest.TestCase):
         2.开通守护
         3.校验接口状态和返回值数据
         4.检查打赏者余额，预期为：52000 - 52000 = 0
-        5.检查被打赏者总余额，预期为：52000 * 0.7 * 0.25 = 9100
-        6.检查被打赏者公会长余额，预期为：52000 * 0.7 *（1-0.25) = 27300
+        5.检查被打赏者总余额，预期为：52000 * 0.62 * 0.25 = 8060
+        6.检查被打赏者公会长余额，预期为：52000 * 0.62 *（1-0.25) = 27300
         """
         conMysql.updateMoneySql(config.payUid, money=52000)
         conMysql.updateUserMoneyClearSql(self.customUid, self.ceoUid)
@@ -92,7 +92,8 @@ class TestPayCreate(unittest.TestCase):
         conMysql.checkBrokerUserRate(self.customUid, self.ceoUid, rate=25)  # config.bbc_broker_user_rate 设置分成比
         data = encodeData(payType='defend',
                           uid=self.customUid,
-                          money=52000)
+                          money=52000,
+                          defend_id=2)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
