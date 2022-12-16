@@ -33,6 +33,9 @@ class TestPayCreate(unittest.TestCase):
         4.检查打赏者余额
         5.检查被打赏者余额,预期：52000 * 0.62 = 32240
         """
+        print(self.defend_520_id)
+        print(self.defend_cp_id)
+
         conMysql.updateMoneySql(config.payUid, money=52000)
         conMysql.updateMoneySql(config.rewardUid)
         data = encodeData(payType='defend',
@@ -45,6 +48,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid), 32240)
         case_list[des] = result
 
+    @unittest.skip
     @pytest.mark.run(order=2)
     def test_02_defendUpgradePayChangeMoney(self, des='守护进阶场景'):
         """
@@ -69,6 +73,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid), 61938)
         case_list[des] = result
 
+    @unittest.skip
     @pytest.mark.run(order=3)
     def test_03_defendBreakPayChangeMoney(self, des='守护解除场景'):
         """
@@ -90,6 +95,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 11200)
         case_list[des] = result
 
+    @unittest.skip
     @pytest.mark.run(order=4)
     def test_04_defendPayToGs(self, des='守护消费GS收62%（mc）'):
         """
@@ -116,6 +122,7 @@ class TestPayCreate(unittest.TestCase):
                                                 money_type='money_cash'), 520000 * config.rate)
         case_list[des] = result
 
+    @unittest.skip
     @pytest.mark.run(order=5)
     def test_05_defendUpgradeToGs(self, des='守护进阶消费GS收62%（mc）'):
         """
@@ -141,6 +148,7 @@ class TestPayCreate(unittest.TestCase):
                                                 money_type='money_cash'), 520000 * config.rate)
         case_list[des] = result
 
+    @unittest.skip
     @pytest.mark.run(order=6)
     def test_06_defendBreakPayMoney(self, des='守护解除场景'):
         """
