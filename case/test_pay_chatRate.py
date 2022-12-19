@@ -57,7 +57,7 @@ class TestPayCreate(unittest.TestCase):
                                                 money_type='money_cash'), 1000 * (config.rate - 0.2))
         assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid,
                                                 money_type='money_cash_b'), 300)
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.gsUid), 1000 * self.chat_rate)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.gsUid), 720)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list[des] = result
 
