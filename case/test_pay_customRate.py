@@ -68,10 +68,10 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         assert_equal(conMysql.selectUserInfoSql('sum_money', self.customUid), 636)
-        assert_equal(conMysql.selectUserInfoSql('single_money', self.customUid,
-                                                money_type='money_cash'), 336)
-        assert_equal(conMysql.selectUserInfoSql('single_money', self.ceoUid,
-                                                money_type='money_cash'), 84)
+        assert_equal(conMysql.selectUserInfoSql('single_money', self.customUid, money_type='money_cash'),
+                     1000 * (config.rate - 0.2) * 0.8)
+        assert_equal(conMysql.selectUserInfoSql('single_money', self.ceoUid, money_type='money_cash'),
+                     1000 * (config.rate - 0.2) * 0.2)
         case_list_b[des] = result
 
     def test_03_defendPayCustomRate_25(self, des='个人守护打赏自定义分成:25'):
@@ -98,8 +98,8 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
-        assert_equal(conMysql.selectUserInfoSql('single_money', self.customUid,
-                                                money_type='money_cash'), 52000 * config.rate * 0.25)
-        assert_equal(conMysql.selectUserInfoSql('single_money', self.ceoUid,
-                                                money_type='money_cash'), 52000 * config.rate * 0.75)
+        assert_equal(conMysql.selectUserInfoSql('single_money', self.customUid, money_type='money_cash'),
+                     52000 * config.rate * 0.25)
+        assert_equal(conMysql.selectUserInfoSql('single_money', self.ceoUid, money_type='money_cash'),
+                     52000 * config.rate * 0.75)
         case_list_b[des] = result

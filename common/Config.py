@@ -53,6 +53,7 @@ class config:
     starify_mobile_login_url = starify_host + 'go/starify/login/mobileLogin'
 
     rate = 0.62
+
     # 用户配置
     bb_user = {
         'payUid': 103273407,  # boss
@@ -61,7 +62,7 @@ class config:
         'vipRoomRid': 200089706,  # 个人房，房主uid=103273407
         'gsUid': 105002325,  # GS用户,直播公会未签约打包结算等同于普通公会
         'prettyRid': 200089942,  # 靓号房, 房主uid=105002325
-        'fleetRid': 200091067,  # 家族房，家主uid=103273407，成员105002325/100500205
+        'fleetRid': 200091067,  # 家族房，家主uid=103273407，成员105002325/100500205/100500338
     }
     # 角色配置
     live_role = {
