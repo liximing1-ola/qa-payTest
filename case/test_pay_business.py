@@ -18,7 +18,7 @@ class TestPayCreate(unittest.TestCase):
         验证余额足够时，商业房打赏礼物给普通用户分成满足师徒收益(非一代宗师)的基础上为：62:38，且收入在个人魅力值
         脚本步骤：
         1.构造打赏者和被打赏者数据
-        2.个人房房间打赏礼物（打赏100分）
+        2.房间打赏礼物（打赏100分）
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：100 * 0.62 =62 (money_cash_b)
         """
@@ -40,7 +40,7 @@ class TestPayCreate(unittest.TestCase):
         验证余额足够时，商业房打赏礼盒分成满足师徒收益(一代宗师)的基础上为：70:30，且收入在个人魅力值
         脚本步骤：
         1.构造打赏者和被打赏者数据
-        2.个人房房间打赏礼盒（打赏铜箱子）
+        2.房间打赏礼盒（打赏铜箱子）
         3.校验接口状态和返回值数据
         4.检查打赏者账户余额，预期值为：700 - 600 = 100
         5.检查收箱用户账户余额，预期值为不小于：210
@@ -65,7 +65,7 @@ class TestPayCreate(unittest.TestCase):
         验证余额足够时，商业房打赏礼物给GS分成为：62:38，且收入在公会魅力值
         脚本步骤：
         1.构造打赏者和被打赏者数据
-        2.个人房房间打赏礼物（打赏100分）
+        2.房间打赏礼物（打赏100分）
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：100 * 0.62 =62 (money_cash)
         """
@@ -92,7 +92,7 @@ class TestPayCreate(unittest.TestCase):
         2.giveBox
         3.校验接口状态和返回值数据
         4.检查账户余额，预期值为：10000 - 2100*2*2 = 1600
-        5.检查收箱用户账户余额，预期值为不小于：
+        5.检查收箱用户账户余额，预期值为不小于：2000 * 0.62 = 1240（money_cash）
         """
         conMysql.updateMoneySql(config.payUid, money=10000)
         conMysql.updateMoneySql(config.rewardUid)
@@ -109,5 +109,31 @@ class TestPayCreate(unittest.TestCase):
         assert_len(conMysql.selectUserInfoSql('single_money', config.rewardUid), 620)
         assert_len(conMysql.selectUserInfoSql('single_money', config.gsUid,
                                               money_type='money_cash'), 2000 * config.rate)
+        case_list[des] = result
+
+    @unittest.skip('点歌消费')
+    def test_05_musicOrderPayGiftToGs(self, des='点歌消费GS到账62%(mc)'):
+        """
+        用例描述：
+        验证余额足够时，business-music内点歌给GS分成为：62:38，且收入在公会魅力值
+        限制：房型限定为business-music
+        脚本步骤：
+        1.构造打赏者和被打赏者数据
+        2.房间选中GS点歌（打赏100分）
+        3.校验接口状态和返回值数据
+        4.检查被打赏者余额，预期为：3000 * 0.62 = 1860 (money_cash)
+        """
+        conMysql.updateMoneySql(config.payUid, money=3000)
+        conMysql.updateMoneySql(config.gsUid)
+        data = encodeData(payType='banban-consume',
+                          money=3000,
+                          uid=config.gsUid,
+                          rid='')
+        res = post_request_session(config.pay_url, data)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid,
+                                                money_type='money_cash'), 100 * config.rate)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list[des] = result
 

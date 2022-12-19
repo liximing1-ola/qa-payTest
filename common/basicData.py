@@ -334,6 +334,21 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'],
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
         return data
+    elif payType == 'banban-consume':
+        data = {
+            "platform": 'available',
+            "type": 'banban-consume',
+            "money": money,
+            "params":
+                {"consume_type": "music_order",
+                 "rid": rid,
+                 "order_songs": [{"song_id": 10282, "singer_id": uid}],
+                 "useCoin": -1
+                 }
+        }
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        return data
     else:
         raise Exception('payType is error')
 

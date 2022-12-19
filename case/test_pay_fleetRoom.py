@@ -11,7 +11,6 @@ from common.Consts import case_list_b, result
 
 @Retry
 class TestPayCreate(unittest.TestCase):
-
     other_fleet_rid = conMysql.selectUserInfoSql('fleet')  # 非本家族房
     fleet_rid = config.bb_user.copy()['fleetRid']  # 本家族房
     pack_cal_uid = config.bb_user.copy()['pack_cal_uid']  # 直播公会gs
@@ -67,7 +66,7 @@ class TestPayCreate(unittest.TestCase):
     def test_03_sameFleetRoomNormalGsRate(self, des='家族房打赏普通公会gs场景'):
         """
         用例描述：
-        tdr：家族房内普通公会成员箱子打赏到账42%公会魅力值+30%个人魅力值
+        tdr：家族房内普通公会成员礼物打赏到账42%公会魅力值+30%个人魅力值
          脚本步骤：
         1.构造打赏者和被打赏者数据
         2.房间打赏（打赏1000分）
@@ -84,7 +83,7 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         print(conMysql.selectUserInfoSql('single_money', config.gsUid,
-                                                money_type='money_cash'))
+                                         money_type='money_cash'))
         assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid,
                                                 money_type='money_cash'), 420)
         assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid), 300)
