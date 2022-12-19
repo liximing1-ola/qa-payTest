@@ -123,17 +123,5 @@ class TestPayCreate(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：3000 * 0.62 = 1860 (money_cash)
         """
-        conMysql.updateMoneySql(config.payUid, money=3000)
-        conMysql.updateMoneySql(config.gsUid)
-        data = encodeData(payType='banban-consume',
-                          money=3000,
-                          uid=config.gsUid,
-                          rid='')
-        res = post_request_session(config.pay_url, data)
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid,
-                                                money_type='money_cash'), 100 * config.rate)
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
-        case_list[des] = result
+
 

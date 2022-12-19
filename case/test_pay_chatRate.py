@@ -55,7 +55,9 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid,
                                                 money_type='money_cash'), 1000 * (config.rate - 0.2))
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid, money_type='money_cash_b'), 300)
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid,
+                                                money_type='money_cash_b'), 300)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.gsUid), 1000 * self.chat_rate)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list[des] = result
 
@@ -68,9 +70,9 @@ class TestPayCreate(unittest.TestCase):
         2.私聊打赏（打赏铜箱子600分）
         3.校验接口状态和返回值数据
         4.检查被打赏者余额和账户，预期为不小于： 300 * 0.42 = 126(money_cash) + 300 * 0.3 = 90（money_cash_b）
-        5.检查打赏者余额.预期为：1000 - 600 = 400
+        5.检查打赏者余额.预期为：600 - 600 = 0
         """
-        conMysql.updateMoneySql(config.payUid, money=1000)
+        conMysql.updateMoneySql(config.payUid, money=600)
         conMysql.updateMoneySql(config.gsUid)
         data = encodeData(payType='chat-gift',
                           uid=config.gsUid,
@@ -83,7 +85,7 @@ class TestPayCreate(unittest.TestCase):
         assert_len(conMysql.selectUserInfoSql('single_money', config.gsUid), 300 * 0.3)
         assert_len(conMysql.selectUserInfoSql('single_money', config.gsUid,
                                               money_type='money_cash'), 300 * (config.rate - 0.2))
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 400)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list[des] = result
 
     def test_04_chatPayGiftNormalUser(self, des='私聊打赏非一代宗师用户分成72%（mcb）'):
@@ -113,7 +115,7 @@ class TestPayCreate(unittest.TestCase):
         验证消费打赏箱子时，一代宗师用户收80%个人魅力值
         脚本步骤：
         1.构造打赏者和被打赏者数据
-        2.私聊打赏（打赏600分）
+        2.私聊打赏（打赏铜箱子）
         3.校验接口状态和返回值数据
         4.检查被打赏者余额和账户，预期为不小于：300 * 0.8 = 240(money_cash_b)
         5.检查打赏者余额.预期为：1000 - 600 = 400

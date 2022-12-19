@@ -35,7 +35,8 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid, money_type='money_cash'), 62)
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid, money_type='money_cash'),
+                     100 * config.rate)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 150)
         case_list_b[des] = result
 
@@ -62,7 +63,8 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 100)
-        assert_len(conMysql.selectUserInfoSql('single_money', config.gsUid, money_type='money_cash'), 300 * 0.62)
+        assert_len(conMysql.selectUserInfoSql('single_money', config.gsUid, money_type='money_cash'),
+                   300 * config.rate)
         case_list_b[des] = result
 
     def test_03_prettyRoomPayGiftToNormalUser(self, des='靓号房打赏普通用户进个人魅力值'):
