@@ -16,11 +16,13 @@ class TestPayCreate(unittest.TestCase):
         """
         用例描述：
         验证余额足够时，商业房打赏礼物给普通用户分成满足师徒收益(非一代宗师)的基础上为：62:38，且收入在个人魅力值
+        师父公会成员，收到的收入进个人魅力值
         脚本步骤：
         1.构造打赏者和被打赏者数据
         2.房间打赏礼物（打赏100分）
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：100 * 0.62 =62 (money_cash_b)
+        5.检查被打赏者师徒账户，预期为：100 * 0.05 = 5 （money_cash_b）
         """
         conMysql.updateMoneySql(config.payUid, money=30, money_cash=30, money_cash_b=30, money_b=10)
         conMysql.updateMoneySql(config.rewardUid)
@@ -32,7 +34,7 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid), 62)
-        print(conMysql.selectUserInfoSql('sum_money', config.gsUid))
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid), 5)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list[des] = result
 
