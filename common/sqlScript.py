@@ -1,6 +1,6 @@
 # coding=utf-8
 import pymysql
-from common.getToken import get_token
+from common.getToken import getToken
 
 
 class mysql:
@@ -148,7 +148,7 @@ class mysql:
     def updateUserIndex():
         con, cur = mysql.conMysql()
         for uid in mysql.getUids(2):
-            salt = get_token.get_salt()
+            salt = getToken.get_salt()
             sql = "update xs_user_index set salt='{}' where uid={}".format(salt, uid)
             print(uid, salt)
             try:
