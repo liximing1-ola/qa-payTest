@@ -80,7 +80,7 @@ class TestPayCreate(unittest.TestCase):
                           rid=self.singer_rid,
                           giftId=config.giftId['46'],
                           uid=config.gsUid,
-                          star=4)
+                          star=1)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
