@@ -24,6 +24,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.payUid, money=30, money_cash=30, money_cash_b=30, money_b=10)
         conMysql.updateMoneySql(config.rewardUid)
+        conMysql.updateMoneySql(config.gsUid)
         data = encodeData(payType='package',
                           money=100,
                           giftId=config.giftId['5'])
@@ -31,6 +32,7 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid), 62)
+        print(conMysql.selectUserInfoSql('sum_money', config.gsUid))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list[des] = result
 
