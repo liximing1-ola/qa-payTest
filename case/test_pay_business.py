@@ -106,6 +106,7 @@ class TestPayCreate(unittest.TestCase):
                           money=2100,
                           giftId=config.giftId['47'],
                           uids=('{}'.format(config.rewardUid), '{}'.format(config.gsUid)))
+        print(data)
         res = post_request_session(config.pay_url, data)
         print(res)
         assert_code(res['code'])
