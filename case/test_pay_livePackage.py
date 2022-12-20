@@ -77,7 +77,7 @@ class TestPayCreate(unittest.TestCase):
                           rid=self.live_role['live_rid'],
                           giftId=config.giftId['46'],
                           uid=test_uid,
-                          star=4)
+                          star=1)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -168,7 +168,7 @@ class TestPayCreate(unittest.TestCase):
                           money=600,
                           uid=test_uid,
                           giftId=config.giftId['46'],
-                          star=4)
+                          star=1)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))

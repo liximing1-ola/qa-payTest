@@ -55,7 +55,7 @@ class TestPayCreate(unittest.TestCase):
                           money=600,
                           rid=self.vipRoomRid,
                           giftId=config.giftId['46'],
-                          star=4)
+                          star=1)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))

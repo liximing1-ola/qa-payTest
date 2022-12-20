@@ -90,7 +90,7 @@ class TestPayCreate(unittest.TestCase):
         data = encodeData(payType='package',
                           money=600,
                           giftId=config.giftId['46'],
-                          star=4)
+                          star=1)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -113,7 +113,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.rewardUid)
         data = encodeData(payType='package-more',
                           num=2,
-                          star=8,
+                          star=2,
                           money=2100,
                           giftId=config.giftId['47'])
         res = post_request_session(config.pay_url, data)

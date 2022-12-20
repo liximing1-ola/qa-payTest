@@ -605,3 +605,13 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
         return data
     else:
         raise Exception('payType is error')
+
+
+if __name__ == '__main__':
+    data = encodeData(payType='package-more',
+                      num=2,
+                      star=8,
+                      money=2100,
+                      giftId=config.giftId['47'],
+                      uids=('{}'.format(config.rewardUid), '{}'.format(config.gsUid)))
+    print(data)
