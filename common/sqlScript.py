@@ -145,12 +145,13 @@ class mysql:
             con.commit()
 
     @staticmethod
-    def updateUserIndex():
+    def updateUserIndex(num):
         con, cur = mysql.conMysql()
-        for uid in mysql.getUids(2):
+        index = {}
+        for uid in mysql.getUids(num):
             salt = getToken.getToken.get_salt()
             sql = "update xs_user_index set salt='{}' where uid={}".format(salt, uid)
-            print(uid, salt)
+            index[uid] = '{}'.format(salt)
             try:
                 cur.execute(sql)
             except Exception as error:
@@ -158,7 +159,8 @@ class mysql:
                 print('update fail', error)
             finally:
                 con.commit()
+                print(index)
 
 
 if __name__ == '__main__':
-    mysql.updateUserIndex()
+    mysql.updateUserIndex(5)
