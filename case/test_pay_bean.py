@@ -109,7 +109,6 @@ class TestPayCreate(unittest.TestCase):
         conMysql.insertBeanSql(config.payUid, money_coupon=200)
         data = encodeData(payType='chat-gift')
         res = post_request_session(config.pay_url, data=data)
-        print(res)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('bean', config.payUid), 200)

@@ -1,6 +1,6 @@
 # coding=utf-8
 import pymysql
-from common.Consts import fail_case_reason
+from common.getToken import get_token
 
 
 class mysql:
@@ -137,8 +137,28 @@ class mysql:
             else:
                 for i in res:
                     uids.append(str(i[0]))
+                print(tuple(uids))
                 return tuple(uids)
         except Exception as error:
             print('fail', error)
         finally:
             con.commit()
+
+    @staticmethod
+    def updateUserIndex():
+        con, cur = mysql.conMysql()
+        for uid in mysql.getUids(2):
+            salt = get_token.get_salt()
+            sql = "update xs_user_index set salt='{}' where uid={}".format(salt, uid)
+            print(uid, salt)
+            try:
+                cur.execute(sql)
+            except Exception as error:
+                con.rollback()
+                print('update fail', error)
+            finally:
+                con.commit()
+
+
+if __name__ == '__main__':
+    mysql.updateUserIndex()
