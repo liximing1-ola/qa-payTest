@@ -15,9 +15,9 @@ from time import sleep
 
 class TestPayConcurrent:
     php_urL = {
-        'pay_url': config.bb_host + 'pay/create?package=com.imbb.banban.android',  # 内网支付接口
-        'commodity_present': config.bb_host + 'commodity/present?package=com.imbb.banban.android',  # 物品赠送接口
-        'commodity_use': config.bb_host + 'commodity/use?package=com.imbb.banban.android',  # 物品使用接口
+        'pay_url': config.appInfo['bb_dev'] + 'pay/create?package=com.imbb.banban.android',  # 内网支付接口
+        'commodity_present': config.appInfo['bb_dev'] + 'commodity/present?package=com.imbb.banban.android',  # 物品赠送接口
+        'commodity_use': config.appInfo['bb_dev'] + 'commodity/use?package=com.imbb.banban.android',  # 物品使用接口
     }
     commodity_id = {
         'cid_340': 340,  # 小天使
