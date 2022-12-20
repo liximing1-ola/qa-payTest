@@ -1,6 +1,6 @@
 # coding=utf-8
 import pymysql
-from common import getToken
+import getToken
 
 
 class mysql:
