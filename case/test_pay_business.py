@@ -107,6 +107,7 @@ class TestPayCreate(unittest.TestCase):
                           giftId=config.giftId['47'],
                           uids=('{}'.format(config.rewardUid), '{}'.format(config.gsUid)))
         res = post_request_session(config.pay_url, data)
+        print(res)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 1600)
