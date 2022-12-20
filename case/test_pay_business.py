@@ -12,6 +12,7 @@ from common.runFailed import Retry
 @Retry(max_n=2)
 class TestPayCreate(unittest.TestCase):
 
+    @unittest.skip
     def test_01_businessPayGiftNormalUser(self, des='商业房礼物打赏普通用户到账62%(mcb)'):
         """
         用例描述：
@@ -38,6 +39,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list[des] = result
 
+    @unittest.skip
     def test_02_businessPayBoxNormalUser(self, des='商业房打赏箱子一代用户到账70%(mcb)'):
         """
         用例描述：
@@ -63,6 +65,7 @@ class TestPayCreate(unittest.TestCase):
         assert_len(conMysql.selectUserInfoSql('single_money', config.masterUid), 300 * 0.7)
         case_list[des] = result
 
+    @unittest.skip
     def test_03_businessPayGiftToGs(self, des='商业房礼物打赏GS到账62%(mc)'):
         """
         用例描述：
