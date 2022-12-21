@@ -159,7 +159,7 @@ class mysql:
                 print('update fail', error)
             finally:
                 con.commit()
-                print(index)
+        print(index)
 
 
 if __name__ == '__main__':
