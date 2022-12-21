@@ -48,7 +48,7 @@ class Session:
                 Logs.get_log('getSession.log').error('session异常，原因： {}'.format(error))
                 token = getToken(config.payUid, conMysql.selectUserInfoSql('user_index', config.payUid)).gen_token()
                 tokenDict = {'token': token}
-                print(token)
+                print('token2-{}'.format(token))
                 Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
 
         elif env == "rush":  # 冲鸭
