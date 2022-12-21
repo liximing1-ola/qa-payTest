@@ -24,12 +24,12 @@ class TestPayCreate(unittest.TestCase):
         2.房间内打赏（打赏100分）
         3.校验接口状态和返回值数据
         4.检查打赏者余额，预期为：100 - 100 = 0
-        5.检查被打赏者余额，预期为：100 * 0.62 * 0.5 = 35
-        6.检查被打赏者公会长余额，预期为：100 * 0.62 *（1-0.5） = 35
+        5.检查被打赏者余额，预期为：100 * 0.62 * 0.5
+        6.检查被打赏者公会长余额，预期为：100 * 0.62 *（1-0.5）
         """
         conMysql.updateMoneySql(config.payUid, money=30, money_cash=30, money_cash_b=30, money_b=10)
         conMysql.updateUserMoneyClearSql(self.customUid, self.ceoUid)
-        conMysql.checkUserBroker(self.customUid, bid=self.ceoUid)  # bid=105002314 被打赏者加入工会
+        conMysql.checkUserBroker(self.customUid, bid=self.ceoUid)  # bid=100500205 被打赏者加入工会
         conMysql.checkBrokerUserRate(self.customUid, self.ceoUid, rate=50)  # config.bbc_broker_user_rate 设置分成比
         data = encodeData(payType='package',
                           money=100,
