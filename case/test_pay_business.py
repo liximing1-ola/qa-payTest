@@ -12,6 +12,9 @@ from common.runFailed import Retry
 @Retry(max_n=2)
 class TestPayCreate(unittest.TestCase):
 
+    business_uid = 105002103  # 商业房193185484房主
+    ceo_uid = config.live_role['pack_ceo']  # 直播公会公会长
+
     def test_01_businessPayGiftNormalUser(self, des='商业房礼物打赏普通用户到账62%(mcb)'):
         """
         用例描述：
@@ -127,5 +130,53 @@ class TestPayCreate(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：3000 * 0.62 = 1860 (money_cash)
         """
+
+    def test_06_businessPayGiftToBusinessCreator(self, des='礼物打赏商业房房主到账70%(mc)'):
+        """
+        用例描述：
+        验证余额足够时，打赏礼物给商业房房主分成为：70:30，且收入在公会魅力值
+        脚本步骤：
+        1.构造打赏者和被打赏者数据
+        2.房间打赏礼物（打赏100分）
+        3.校验接口状态和返回值数据
+        4.检查被打赏者余额，预期为：100 * 0.7 =70 (money_cash)
+        """
+        conMysql.updateMoneySql(config.payUid, money=30, money_cash=30, money_cash_b=30, money_b=10)
+        conMysql.updateMoneySql(self.business_uid)
+        data = encodeData(payType='package',
+                          money=100,
+                          uid=self.business_uid,
+                          giftId=config.giftId['5'])
+        res = post_request_session(config.pay_url, data)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserInfoSql('single_money', self.business_uid,
+                                                money_type='money_cash'), 70)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
+        case_list[des] = result
+
+    def test_07_businessPayGiftToBrokerCreator(self, des='礼物打赏公会会长到账70%(mc)'):
+        """
+        用例描述：
+        验证余额足够时，打赏礼物给公会会长分成为：70:30，且收入在公会魅力值
+        脚本步骤：
+        1.构造打赏者和被打赏者数据
+        2.房间打赏礼物（打赏100分）
+        3.校验接口状态和返回值数据
+        4.检查被打赏者余额，预期为：100 * 0.7 =70 (money_cash)
+        """
+        conMysql.updateMoneySql(config.payUid, money=30, money_cash=30, money_cash_b=30, money_b=10)
+        conMysql.updateMoneySql(self.ceo_uid)
+        data = encodeData(payType='package',
+                          money=100,
+                          uid=self.ceo_uid,
+                          giftId=config.giftId['5'])
+        res = post_request_session(config.pay_url, data)
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(conMysql.selectUserInfoSql('single_money', self.ceo_uid,
+                                                money_type='money_cash'), 70)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
+        case_list[des] = result
 
 

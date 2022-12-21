@@ -48,7 +48,7 @@ class config:
     pt_mobile_login_url = pt_host + 'account/passwordLogin' + '?package=com.imbb.oversea.android'  # 加包名限制
     starify_mobile_login_url = appInfo['starify'] + 'go/starify/login/mobileLogin'
 
-    rate = 0.62  # GS商业房分成比
+    rate = 0.62  # GS商业房分成比，公会长和商业房房主不参与降点逻辑（公会长/房主仅作为被打赏者不扣）
 
     # 用户配置
     bb_user = {
