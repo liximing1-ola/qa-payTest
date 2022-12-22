@@ -181,5 +181,3 @@ class TestPayCreate(unittest.TestCase):
                                                 money_type='money_cash'), 70)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list[des] = result
-
-
