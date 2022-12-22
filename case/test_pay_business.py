@@ -155,6 +155,7 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('single_money', self.business_uid,
                                                 money_type='money_cash'), 70)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', self.business_uid), 70)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list[des] = result
 
@@ -179,5 +180,6 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('single_money', self.ceo_uid,
                                                 money_type='money_cash'), 70)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', self.ceo_uid), 70)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list[des] = result

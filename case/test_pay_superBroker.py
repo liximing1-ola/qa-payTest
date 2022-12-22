@@ -10,7 +10,7 @@ from common.Consts import case_list_b, result
 from common.conRedis import conRedis
 
 
-@unittest.skip('2022/11/1 网赚分成下线')
+@unittest.skip('网赚分成下线-2022/11/1 ')
 class TestPayCreate(unittest.TestCase):
     # 网赚房角色配置
     star_role = {
