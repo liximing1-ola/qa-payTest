@@ -12,7 +12,7 @@ from common.runFailed import Retry
 @Retry(max_n=2)
 class TestPayCreate(unittest.TestCase):
 
-    business_uid = 105002103  # 商业房193185484房主
+    business_uid = 105002103  # 商业房auto_rid房主
     ceo_uid = config.live_role['pack_ceo']  # 直播公会公会长
 
     def test_01_businessPayGiftNormalUser(self, des='商业房礼物打赏普通用户到账62%(mcb)'):
@@ -38,6 +38,7 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid), 62)
         assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid), 5)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.gsUid), 5)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list[des] = result
 
@@ -87,6 +88,7 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid,
                                                 money_type='money_cash'), 100 * config.rate)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.gsUid), 100 * config.rate)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list[des] = result
 
@@ -116,6 +118,7 @@ class TestPayCreate(unittest.TestCase):
         assert_len(conMysql.selectUserInfoSql('single_money', config.rewardUid), 620)
         assert_len(conMysql.selectUserInfoSql('single_money', config.gsUid,
                                               money_type='money_cash'), 2000 * config.rate)
+        assert_len(conMysql.selectUserInfoSql('sum_money', config.gsUid), 2000 * config.rate)
         case_list[des] = result
 
     @unittest.skip('点歌消费')
