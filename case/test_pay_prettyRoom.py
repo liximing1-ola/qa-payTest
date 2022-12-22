@@ -12,8 +12,7 @@ from common.runFailed import Retry
 @Retry
 class TestPayCreate(unittest.TestCase):
 
-    # config.xsst_room_pretty;
-    prettyRid = config.bb_user.copy()['prettyRid']
+    prettyRid = config.bb_user['prettyRid']  # config.xsst_room_pretty
 
     def test_01_prettyRoomPayGiftToBrokerUser(self, des='靓号房打赏礼物GS分62%进公会魅力值'):
         """
