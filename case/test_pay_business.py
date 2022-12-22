@@ -12,7 +12,7 @@ from common.runFailed import Retry
 @Retry(max_n=2)
 class TestPayCreate(unittest.TestCase):
 
-    business_uid = 105002103  # 商业房auto_rid房主
+    business_uid = 105002103  # 商业房auto_rid房主（一代宗师）
     ceo_uid = config.live_role['pack_ceo']  # 直播公会公会长
 
     def test_01_businessPayGiftNormalUser(self, des='商业房礼物打赏普通用户到账62%(mcb)'):

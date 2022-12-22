@@ -58,7 +58,7 @@ class crazySpin:
             '_sign': '12c5970528bf21e8aac9586534606432',
             '_blid': uid,
         }
-        url6 = url5 + '?' + urllib.parse.urlencode(params)
+        url5 + '?' + urllib.parse.urlencode(params)
         urllib3.disable_warnings()
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         header = {

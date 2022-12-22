@@ -636,36 +636,3 @@ class conMysql:
             print(error)
         finally:
             conMysql.con.commit()
-
-    # 插入uid分成白名单
-    @staticmethod
-    def insert_white_uid(uid):
-        sql = "insert into config.xsst_ktv_uid_white (uid,app_id,`type`) values ({},2,127);".format(uid)
-        try:
-            conMysql.cur.execute(sql)
-        except Exception as error:
-            conMysql.con.rollback()
-            print('insert fail', error)
-        finally:
-            conMysql.con.commit()
-
-    @staticmethod
-    # 查询是否在uid分成白名单
-    def check_uid_white(uid):
-        sql = 'select id from config.xsst_ktv_uid_white where uid={}'.format(uid)
-        try:
-            conMysql.cur.execute(sql)
-            res = conMysql.cur.fetchone()
-            if res is None:
-                conMysql.insert_white_uid(uid)
-            else:
-                sql = 'update config.xsst_ktv_uid_white set app_id={},`type`={} where id={}'.format(2, 127, res[0])
-                try:
-                    conMysql.cur.execute(sql)
-                except Exception as error:
-                    conMysql.con.rollback()
-                    print('update fail', error)
-        except Exception as error:
-            print(error)
-        finally:
-            conMysql.con.commit()
