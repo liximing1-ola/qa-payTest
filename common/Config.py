@@ -15,7 +15,7 @@ class config:
         'bb_php_path': '/home/webroot/banban',
         'bb_go_path': '/home/webroot/bb-consume',
         'pt_php_path': '/home/webroot/release_oversea/banban',
-        'bb_git_branch': 'zhudong/feature_rate',
+        'bb_git_branch': 'release-for-vpc',
         'bb_go_git_branch': 'master',
         'pt_git_branch': 'main',
         'starify_go_path': r"/var/www/sta-go",
