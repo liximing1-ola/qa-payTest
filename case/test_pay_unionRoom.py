@@ -14,7 +14,7 @@ from common.Consts import case_list_b, result
 class TestPayCreate(unittest.TestCase):
 
     singer_rid = conMysql.selectUserInfoSql('union')  # 联盟房/歌友房
-    pack_cal_uid = config.bb_user.copy()['pack_cal_uid']  # 直播公会gs
+    pack_cal_uid = config.bb_user['pack_cal_uid']  # 直播公会gs
 
     @pytest.mark.run(order=1)
     def test_01_singerRoomLiveBrokerRate_60(self, des='歌友房直播工会收60%公会魅力值'):

@@ -13,7 +13,7 @@ from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
 
     customUid = 100500205
-    ceoUid = config.live_role.copy()['pack_ceo']  # 公会长
+    ceoUid = config.live_role['pack_ceo']  # 公会长
 
     def test_01_roomPayCustomRate_50(self, des='商业房打赏自定义分成:50'):
         """

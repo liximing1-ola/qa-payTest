@@ -12,11 +12,7 @@ from common.runFailed import Retry
 @Retry
 class TestPayCreate(unittest.TestCase):
 
-    live_role = {
-        'pack_ceo': 105002314,  # 直播公会公会长
-        'pack_cal_uid': 105002313,  # 公会签约主播（打包结算），宗师等级可设置为一代和非一代
-        'live_rid': 193185577,  # 直播间，房主:105002313
-    }
+    live_role = config.live_role.copy()
 
     # 商业房房主 or (（工会会长 or 工会成员）&& 同意大神协议 )
     # (insert into xs_user_settings (uid, agreement_version) values(100500205, 1))
