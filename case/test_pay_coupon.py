@@ -12,7 +12,7 @@ from common.runFailed import Retry
 @Retry
 class TestPayCreate(unittest.TestCase):
 
-    businessRid = config.live_role.copy()['auto_rid']
+    businessRid = config.live_role['auto_rid']
 
     def test_01_RoomPayNoMoney(self, des='房间打赏但余额不足的场景'):
         """

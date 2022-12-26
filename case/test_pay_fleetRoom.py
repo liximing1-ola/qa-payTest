@@ -11,9 +11,10 @@ from common.Consts import case_list_b, result
 
 @Retry
 class TestPayCreate(unittest.TestCase):
+
     other_fleet_rid = conMysql.selectUserInfoSql('fleet')  # 非本家族房
-    fleet_rid = config.bb_user.copy()['fleetRid']  # 本家族房
-    pack_cal_uid = config.bb_user.copy()['pack_cal_uid']  # 直播公会gs
+    fleet_rid = config.bb_user['fleetRid']  # 本家族房
+    pack_cal_uid = config.bb_user['pack_cal_uid']  # 直播公会gs
 
     def test_01_sameFleetRoomLiveGsRate(self, des='家族房打赏直播公会gs场景'):
         """
