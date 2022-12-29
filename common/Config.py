@@ -99,11 +99,11 @@ class config:
     # 房间类型41
     pt_room = {
         'business_joy': 105697423,  # 商业房
+        'vip_rid': 105698376,  # 个人房
         'th_union': 105708881,  # 泰区联盟房
         'en_fleet': 105717544,  # 英语大区家族房
         'id_fleet': 105711999,  # 印尼大区家族房
         'ms_fleet': 105725790,  # 马来大区家族房
-        'vip_rid': 105698376,  # 个人房
         'business_joy_ar': 105726673,  # 阿语商业房
         'union_ar': 105713367,  # 阿语联盟房
         'business_joy_vi': 105726676,  # 越南商业房
@@ -119,6 +119,3 @@ class config:
         "774": 774,  # 飞马盲盒
     }
 
-
-if __name__ == '__main__':
-    pass
