@@ -40,15 +40,15 @@ class Session:
                 res = res.json()
                 if not method.isExtend(res, 'token') or res['success'] != 1:
                     print('failReason： {}'.format(res['msg']))
-                print('token1-{}'.format(res['data'].get('token')))
+                print('使用默认方案：token-{}'.format(res['data'].get('token')))
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
                 Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
                 return tokenDict
             except Exception as error:
-                Logs.get_log('getSession.log').error('session异常，原因： {}'.format(error))
+                Logs.get_log('getSession.log').error('默认方案session异常，原因： {}'.format(error))
                 token = getToken(config.payUid, conMysql.selectUserInfoSql('user_index', config.payUid)).gen_token()
                 tokenDict = {'token': token}
-                print('token2-{}'.format(token))
+                print('启动备选方案：token-{}'.format(token))
                 Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
 
         elif env == "rush":  # 冲鸭

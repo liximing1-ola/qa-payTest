@@ -11,7 +11,6 @@ from common.runFailed import Retry
 
 @Retry
 class TestPayCreate(unittest.TestCase):
-
     prettyRid = config.bb_user['prettyRid']  # config.xsst_room_pretty
 
     def test_01_prettyRoomPayGiftToBrokerUser(self, des='靓号房打赏礼物GS分62%进公会魅力值'):
@@ -36,6 +35,7 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid, money_type='money_cash'),
                      100 * config.rate)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.gsUid), 100 * config.rate)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 150)
         case_list_b[des] = result
 
