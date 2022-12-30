@@ -62,7 +62,8 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 4000)
-        assert_equal(conMysql.selectUserInfoSql('num_commodity', config.payUid, cid=self.gift_cid['gift_340']), 10)
+        assert_equal(conMysql.selectUserInfoSql('num_commodity', config.payUid,
+                                                cid=self.gift_cid['gift_340']), 10)
         case_list[des] = result
 
     @pytest.mark.run(order=3)
@@ -75,7 +76,7 @@ class TestPayCreate(unittest.TestCase):
         2.打赏背包道具 cid：340 * 1
         3.校验接口状态和返回值数据
         4.检查背包内物品：10 - 1 = 9
-        5.检查被打赏者余额：990*0.62 = 6138
+        5.检查被打赏者余额：9900 * 0.62 = 6138
         """
         conMysql.updateUserMoneyClearSql(config.payUid, config.rewardUid)
         cid = int(conMysql.selectUserInfoSql('id_commodity', config.payUid, cid=self.gift_cid['gift_340']))
@@ -88,7 +89,8 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('num_commodity', config.payUid, cid=self.gift_cid['gift_340']), 9)
+        assert_equal(conMysql.selectUserInfoSql('num_commodity', config.payUid,
+                                                cid=self.gift_cid['gift_340']), 9)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.rewardUid), 6138)
         case_list[des] = result
 
@@ -117,6 +119,7 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 0, reason(des, res))
         assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('num_commodity', config.payUid, cid=self.gift_cid['gift_340']), 9)
+        assert_equal(conMysql.selectUserInfoSql('num_commodity', config.payUid,
+                                                cid=self.gift_cid['gift_340']), 9)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.rewardUid), 0)
         case_list[des] = result
