@@ -24,11 +24,12 @@ class TestPayCreate(unittest.TestCase):
         2.房间打赏礼物（打赏100分）
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：100 * 0.62 =62 (money_cash_b)
-        5.检查被打赏者师徒账户，预期为：100 * 0.05 = 5 （money_cash_b）
+        5.检查被打赏者师徒账户，预期为：100 * 0.05 = 5（money_cash_b）
         """
         conMysql.updateMoneySql(config.payUid, money=30, money_cash=30, money_cash_b=30, money_b=10)
         conMysql.updateMoneySql(config.rewardUid)
         vip_level = conMysql.selectUserInfoSql('pay_room_money', config.payUid)
+        print(vip_level)
         conMysql.updateMoneySql(config.gsUid)
         data = encodeData(payType='package',
                           money=100,
