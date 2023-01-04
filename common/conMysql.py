@@ -103,6 +103,28 @@ class conMysql:
                     return res[0]
             except Exception as error:
                 print(error)
+        elif accountType == 'pay_room_money':  # 用户vip等级经验
+            sql = "select pay_room_money from xs_user_profile where uid={}".format(uid)
+            try:
+                conMysql.cur.execute(sql)
+                res = conMysql.cur.fetchone()
+                if res is None:
+                    return 0
+                else:
+                    return res[0]
+            except Exception as error:
+                print(error)
+        elif accountType == 'popularity':  # 用户人气等级经验
+            sql = "select popularity from xs_user_popularity where uid={}".format(uid)
+            try:
+                conMysql.cur.execute(sql)
+                res = conMysql.cur.fetchone()
+                if res is None:
+                    return 0
+                else:
+                    return res[0]
+            except Exception as error:
+                print(error)
         elif accountType == 'id_commodity':  # 查询用户背包物品ID
             sql = "select id from xs_user_commodity where cid={} and uid={}".format(cid, uid)
             try:
