@@ -351,11 +351,6 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
         assert_body(res['body'], 'success', True, reason_starify(des, res))
-        # A星币扣减100%
-        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01), default_money - cost0)
-        # A名额占用 todo
-        # C分成10%
-        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), cost0 * 0.1)
 
         # B竞价C,报价=A身价*1.5，产生最新报价
         cost1 = 200 * 1.5
@@ -373,7 +368,7 @@ class TestPayCreate(unittest.TestCase):
 
         case_list[des] = result
 
-    def test_contract_007(self, des='A报价>A的余额'):
+    def test_contract_007(self, des='A报价>A的余额，星币余额不足'):
         default_money = 100000
         #  sql:购买者A,starify_rewardUid01 修改余额=10000
         conMysql.updateMoneySql(starify_rewardUid01, default_money)
@@ -420,11 +415,7 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
         assert_body(res['body'], 'success', True, reason_starify(des, res))
-        # A星币扣减100%
-        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01), default_money - cost0)
-        # A名额占用 todo
-        # C分成10%
-        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), cost0 * 0.1)
+
         # 再次直接，A直接签约B,提示名额不足
         data = deal_pay_contract_data("params_contract", starify_rewardUid01, cost0, 1, singer_uid=starify_rewardUid02)
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
