@@ -23,6 +23,10 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(starify_rewardUid02, default_money)
         #  sql:被购买者C,starify_payUid 修改余额=0
         conMysql.updateMoneySql(starify_payUid, 0)
+        #  sql:购买者A,starify_rewardUid01 修改财富值=0,控制签约人数=1
+        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        #  sql:购买者B,starify_rewardUid02 修改财富值=0,控制签约人数=1
+        conMysql.updateWealthSql(starify_rewardUid02, 0)
 
         # sql:清除C的制作人 todo
         # sql:修改C的身价=100 todo
@@ -77,7 +81,10 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(starify_rewardUid02, default_money)
         #  sql:被购买者C,starify_payUid 修改余额=0
         conMysql.updateMoneySql(starify_payUid, 0)
-
+        #  sql:购买者A,starify_rewardUid01 修改财富值=0,控制签约人数=1
+        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        #  sql:购买者B,starify_rewardUid02 修改财富值=0,控制签约人数=1
+        conMysql.updateWealthSql(starify_rewardUid02, 0)
         # sql:清除C的制作人 todo
         # sql:修改C的身价=100 todo
 
@@ -134,7 +141,10 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(starify_rewardUid02, default_money)
         #  sql:被购买者C,starify_payUid 修改余额=0
         conMysql.updateMoneySql(starify_payUid, 0)
-
+        #  sql:购买者A,starify_rewardUid01 修改财富值=0,控制签约人数=1
+        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        #  sql:购买者B,starify_rewardUid02 修改财富值=0,控制签约人数=1
+        conMysql.updateWealthSql(starify_rewardUid02, 0)
         # sql:清除C的制作人 todo
         # sql:修改C的身价=100 todo
 
@@ -219,7 +229,10 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(starify_rewardUid02, default_money)
         #  sql:被购买者C,starify_payUid 修改余额=0
         conMysql.updateMoneySql(starify_payUid, 0)
-
+        #  sql:购买者A,starify_rewardUid01 修改财富值=0,控制签约人数=1
+        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        #  sql:购买者B,starify_rewardUid02 修改财富值=0,控制签约人数=1
+        conMysql.updateWealthSql(starify_rewardUid02, 0)
         # sql:清除C的制作人 todo
         # sql:修改C的身价=100 todo
 
@@ -301,7 +314,10 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(starify_rewardUid02, default_money)
         #  sql:被购买者C,starify_payUid 修改余额=0
         conMysql.updateMoneySql(starify_payUid, 0)
-
+        #  sql:购买者A,starify_rewardUid01 修改财富值=0,控制签约人数=1
+        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        #  sql:购买者B,starify_rewardUid02 修改财富值=0,控制签约人数=1
+        conMysql.updateWealthSql(starify_rewardUid02, 0)
         # sql:清除C的制作人 todo
         # sql:修改C的身价=100 todo
 
@@ -322,7 +338,10 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(starify_rewardUid02, default_money)
         #  sql:被购买者C,starify_payUid 修改余额=0
         conMysql.updateMoneySql(starify_payUid, 0)
-
+        #  sql:购买者A,starify_rewardUid01 修改财富值=0,控制签约人数=1
+        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        #  sql:购买者B,starify_rewardUid02 修改财富值=0,控制签约人数=1
+        conMysql.updateWealthSql(starify_rewardUid02, 0)
         # sql:清除C的制作人 todo
         # sql:修改C的身价=100 todo
 
@@ -362,7 +381,10 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(starify_rewardUid02, default_money)
         #  sql:被购买者C,starify_payUid 修改余额=0
         conMysql.updateMoneySql(starify_payUid, 0)
-
+        #  sql:购买者A,starify_rewardUid01 修改财富值=0,控制签约人数=1
+        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        #  sql:购买者B,starify_rewardUid02 修改财富值=0,控制签约人数=1
+        conMysql.updateWealthSql(starify_rewardUid02, 0)
         # sql:清除C的制作人 todo
         # sql:修改C的身价=100 todo
 
@@ -375,7 +397,7 @@ class TestPayCreate(unittest.TestCase):
 
         case_list[des] = result
 
-    def test_contract_008(self, des='竞拍名额不足'):
+    def test_contract_008(self, des='可签约的歌手数量余额不足'):
         default_money = 100000
         #  sql:购买者A,starify_rewardUid01 修改余额=10000
         conMysql.updateMoneySql(starify_rewardUid01, default_money)
@@ -383,7 +405,10 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(starify_rewardUid02, default_money)
         #  sql:被购买者C,starify_payUid 修改余额=0
         conMysql.updateMoneySql(starify_payUid, 0)
-
+        #  sql:购买者A,starify_rewardUid01 修改财富值=0,控制签约人数=1
+        conMysql.updateWealthSql(starify_rewardUid01, 0)
+        #  sql:购买者B,starify_rewardUid02 修改财富值=0,控制签约人数=1
+        conMysql.updateWealthSql(starify_rewardUid02, 0)
         # sql:清除C的制作人 todo
         # sql:清除B的制作人 todo
         # sql:修改C的身价=100 todo
