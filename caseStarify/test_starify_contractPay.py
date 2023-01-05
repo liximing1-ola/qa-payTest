@@ -38,7 +38,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01), default_money - cost0)
         # A名额占用 todo
         # C分成10%
-        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), cost0 * 0.1)
+        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), cost0 * contract_ratio['singer'])
 
         # A续约C，第1次报价
         cost1 = 400
@@ -63,10 +63,11 @@ class TestPayCreate(unittest.TestCase):
         # A星币扣减100%（2次价格）
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01), default_money - cost0 - cost2)
         # C分成10%（2次价格）
-        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), cost0 * 0.1 + cost2 * 0.1)
+        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid),
+                     cost0 * contract_ratio['singer'] + cost2 * contract_ratio['singer'])
         # A分成60%（2次价格）
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01),
-                     default_money - cost0 - cost2 + cost2 * 0.6)
+                     default_money - cost0 - cost2 + cost2 * contract_ratio['producer'])
         # A名额占用 todo
         case_list[des] = result
 
@@ -95,7 +96,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01), default_money - cost0)
         # A名额占用 todo
         # C分成10%
-        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), cost0 * 0.1)
+        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), cost0 * contract_ratio['singer'])
 
         # B竞价C，第1次报价
         cost1 = 400
@@ -122,10 +123,11 @@ class TestPayCreate(unittest.TestCase):
         # B星币扣减100%（2次价格）
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01), default_money - cost2)
         # C分成10%（2次价格）
-        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), cost0 * 0.1 + cost2 * 0.1)
+        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid),
+                     cost0 * contract_ratio['singer'] + cost2 * contract_ratio['singer'])
         # A分成60%（2次价格）
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01),
-                     default_money - cost0 + cost2 * 0.6)
+                     default_money - cost0 + cost2 * contract_ratio['producer'])
         # A名额释放 todo
         # B名额占用 todo
         case_list[des] = result
@@ -155,7 +157,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01), default_money - cost0)
         # A名额占用 todo
         # C分成10%
-        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), cost0 * 0.1)
+        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), cost0 * contract_ratio['singer'])
 
         # B竞价C，第1次报价
         cost1 = 400
@@ -208,10 +210,11 @@ class TestPayCreate(unittest.TestCase):
         # A星币扣减100%（4次价格）
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01), default_money - cost0 - cost4)
         # C分成10%（4次价格）
-        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), cost0 * 0.1 + cost4 * 0.1)
+        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid),
+                     cost0 * contract_ratio['singer'] + cost4 * contract_ratio['singer'])
         # A分成60%（4次价格）
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01),
-                     default_money - cost0 - cost4 + cost4 * 0.6)
+                     default_money - cost0 - cost4 + cost4 * contract_ratio['producer'])
         # A名额占用 todo
         # B名额释放 todo
         # B星币不扣减
@@ -243,7 +246,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01), default_money - cost0)
         # A名额占用 todo
         # C分成10%
-        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), cost0 * 0.1)
+        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), cost0 * contract_ratio['singer'])
 
         # A竞价C，第1次报价
         cost1 = 400
@@ -295,10 +298,11 @@ class TestPayCreate(unittest.TestCase):
         # B星币扣减100%（4次价格）
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid02), default_money - cost4)
         # C分成10%（4次价格）
-        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), cost0 * 0.1 + cost4 * 0.1)
+        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid),
+                     cost0 * contract_ratio['singer'] + cost4 * contract_ratio['singer'])
         # A分成60%（4次价格）
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01),
-                     default_money - cost0 + cost4 * 0.6)
+                     default_money - cost0 + cost4 * contract_ratio['producer'])
         # A名额释放 todo
         # B名额占用 todo
         case_list[des] = result

@@ -226,3 +226,8 @@ commodity_config = {
 	},
 }
 
+# 分成比例
+contract_ratio = {
+	'singer': 0.1,  # 歌手
+	'producer': 0.7,  # 制作人
+}
