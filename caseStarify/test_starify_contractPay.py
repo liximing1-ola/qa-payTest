@@ -388,8 +388,7 @@ class TestPayCreate(unittest.TestCase):
         data = deal_pay_contract_data("params_contract", starify_rewardUid01, cost0, 1)
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
-        assert_body(res['body'], 'msg', "出价不满足要求", reason_starify(des, res))  # todo 应该为 余额不足，bug修复后更新
-
+        assert_body(res['body'], 'msg', "余额不足", reason_starify(des, res))
         case_list[des] = result
 
     def test_contract_008(self, des='可签约的歌手数量余额不足'):
@@ -421,5 +420,4 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
         assert_code(res['code'])
         assert_body(res['body'], 'msg', '可签约的歌手数量余额不足', reason_starify(des, res))
-
         case_list[des] = result
