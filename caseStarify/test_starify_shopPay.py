@@ -1,4 +1,3 @@
-import math
 import unittest
 
 from caseStarify.deal_data import deal_pay_data
@@ -6,7 +5,6 @@ from caseStarify.need_data import *
 from caseStarify.tools import deal_num
 from common.Assert import *
 from common.Consts import case_list, result
-# from common.method import reason
 from common.Request import post_request_session_starify
 from common.conStarifyMysql import conMysql
 from common.method import reason_starify
