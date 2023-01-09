@@ -29,7 +29,6 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.payUid, money=30, money_cash=30, money_cash_b=30, money_b=10)
         conMysql.updateMoneySql(config.rewardUid)
         vip_level = conMysql.selectUserInfoSql('pay_room_money', config.payUid)
-        print(vip_level)
         conMysql.updateMoneySql(config.gsUid)
         data = encodeData(payType='package',
                           money=100,
