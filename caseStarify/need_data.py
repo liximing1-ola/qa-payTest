@@ -2,11 +2,11 @@
 starify_rid = 10002496
 # 打赏人
 starify_payPhone = "15008520001"
-starify_payUid = 124585
+starify_payUid = c_uid = 124585
 # 被打赏人 01
-starify_rewardUid01 = 124586  # 手机 15008520002
+starify_rewardUid01 = a_uid = 124586  # 手机 15008520002
 # 被打赏人 02
-starify_rewardUid02 = 124587  # 手机 15008520003
+starify_rewardUid02 = b_uid = 124587  # 手机 15008520003
 
 
 # 作品id

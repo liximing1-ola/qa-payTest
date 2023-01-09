@@ -98,15 +98,16 @@ class conMysql:
         conMysql.sql_execute(sql)
 
     @staticmethod
-    def deleteProducerSinger(producer_uid, singer_uid):
+    def deleteProducerSinger(singer_uid):
         """
         清除的制作人/歌手的关系
         :param producer_uid: 制作人uid
         :param singer_uid: 歌手uid
         :return:
         """
-        sql1 = f"update xs_audition_singer set producer_uid = 0 where uid= {producer_uid};"
-        sql2 = f"delete from xs_audition_relation where producer_uid={producer_uid} and singer_uid ={singer_uid};"
+        sql1 = f"update xs_audition_singer set producer_uid = 0 where uid= {singer_uid};"
+        # sql2 = f"delete from xs_audition_relation where producer_uid={producer_uid} and singer_uid ={singer_uid};"
+        sql2 = f"delete from xs_audition_relation where singer_uid ={singer_uid};"
         for sql in [sql1, sql2]:
             conMysql.sql_execute(sql)
 
@@ -126,7 +127,7 @@ class conMysql:
         return total
 
     @staticmethod
-    def updateSingerWorth(singer_uid, worth):
+    def updateSingerWorth(singer_uid, worth=100):
         """
         修改歌手的身价
         :param singer_uid: 歌手uid
