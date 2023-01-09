@@ -151,7 +151,71 @@ class conMysql:
         finally:
             conMysql.con.commit()
 
+    @staticmethod
+    def deleteProducerSinger(producer_uid, singer_uid):
+        """
+        清除的制作人/歌手的关系
+        :param producer_uid: 制作人uid
+        :param singer_uid: 歌手uid
+        :return:
+        """
+        sql1 = f"update xs_audition_singer set producer_uid = 0 where uid= {producer_uid};"
+        try:
+            conMysql.cur.execute(sql1)
+        except Exception as error:
+            conMysql.con.rollback()
+            print('insert fail', error)
+        finally:
+            conMysql.con.commit()
+        sql2 = f"delete from xs_audition_relation where producer_uid={producer_uid} and singer_uid ={singer_uid};"
+        try:
+            conMysql.cur.execute(sql2)
+        except Exception as error:
+            conMysql.con.rollback()
+            print('insert fail', error)
+        finally:
+            conMysql.con.commit()
 
+    @staticmethod
+    def selectProducerSinger(producer_uid):
+        """
+        已签约歌手人数
+        :param producer_uid: 制作人uid
+        :return:
+        """
+        sql1 = f"select count(1) from xs_audition_relation where producer_uid = {producer_uid};"
+        try:
+            conMysql.cur.execute(sql1)
+        except Exception as error:
+            conMysql.con.rollback()
+            print('insert fail', error)
+        finally:
+            conMysql.con.commit()
+        sql2 = f"select count(1) from xs_audition_purchasing where  status=0 and uid={producer_uid}"
+        try:
+            conMysql.cur.execute(sql2)
+        except Exception as error:
+            conMysql.con.rollback()
+            print('insert fail', error)
+        finally:
+            conMysql.con.commit()
+
+    @staticmethod
+    def updateSingerWorth(singer_uid, worth):
+        """
+        修改歌手的身价
+        :param singer_uid: 歌手uid
+        :param worth: 身价
+        :return:
+        """
+        sql = f"update xs_audition_singer set worth={worth} where uid={singer_uid}"
+        try:
+            conMysql.cur.execute(sql2)
+        except Exception as error:
+            conMysql.con.rollback()
+            print('insert fail', error)
+        finally:
+            conMysql.con.commit()
 if __name__ == '__main__':
     # conMysql.updateMoneySql(124458, 19999)
     print(conMysql.selectUserInfoSql('star_coin', 124458))
