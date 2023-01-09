@@ -25,6 +25,28 @@ class conMysql:
     cur = con.cursor()
 
     @staticmethod
+    def sql_fetchone(sql):
+        try:
+            conMysql.cur.execute(sql)
+            res = conMysql.cur.fetchone()
+            if res is None:
+                return 0
+            else:
+                return res[0]
+        except Exception as error:
+            print(error)
+
+    @staticmethod
+    def sql_execute(sql):
+        try:
+            conMysql.cur.execute(sql)
+        except Exception as error:
+            conMysql.con.rollback()
+            print('insert or delete or update fail', error)
+        finally:
+            conMysql.con.commit()
+
+    @staticmethod
     def selectUserInfoSql(accountType, uid, cid=0, duration_time=86400):
         if accountType == 'star_coin':  # 查询账户余额
             sql = f"select star_coin from xs_user_money where uid={uid};"
@@ -164,7 +186,7 @@ class conMysql:
             conMysql.cur.execute(sql1)
         except Exception as error:
             conMysql.con.rollback()
-            print('insert fail', error)
+            print('update fail', error)
         finally:
             conMysql.con.commit()
         sql2 = f"delete from xs_audition_relation where producer_uid={producer_uid} and singer_uid ={singer_uid};"
@@ -172,7 +194,7 @@ class conMysql:
             conMysql.cur.execute(sql2)
         except Exception as error:
             conMysql.con.rollback()
-            print('insert fail', error)
+            print('delete fail', error)
         finally:
             conMysql.con.commit()
 
@@ -184,21 +206,19 @@ class conMysql:
         :return:
         """
         sql1 = f"select count(1) from xs_audition_relation where producer_uid = {producer_uid};"
-        try:
-            conMysql.cur.execute(sql1)
-        except Exception as error:
-            conMysql.con.rollback()
-            print('insert fail', error)
-        finally:
-            conMysql.con.commit()
         sql2 = f"select count(1) from xs_audition_purchasing where  status=0 and uid={producer_uid}"
+        total = 0
         try:
-            conMysql.cur.execute(sql2)
+            for sql in [sql1, sql2]:
+                conMysql.cur.execute(sql)
+                res = conMysql.cur.fetchone()
+                if res is None:
+                    total += 0
+                else:
+                    total += res[0]
+            return total
         except Exception as error:
-            conMysql.con.rollback()
-            print('insert fail', error)
-        finally:
-            conMysql.con.commit()
+            print(error)
 
     @staticmethod
     def updateSingerWorth(singer_uid, worth):
@@ -210,12 +230,14 @@ class conMysql:
         """
         sql = f"update xs_audition_singer set worth={worth} where uid={singer_uid}"
         try:
-            conMysql.cur.execute(sql2)
+            conMysql.cur.execute(sql)
         except Exception as error:
             conMysql.con.rollback()
-            print('insert fail', error)
+            print('update fail', error)
         finally:
             conMysql.con.commit()
+
+
 if __name__ == '__main__':
     # conMysql.updateMoneySql(124458, 19999)
     print(conMysql.selectUserInfoSql('star_coin', 124458))
