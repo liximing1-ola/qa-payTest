@@ -106,9 +106,9 @@ class conMysql:
         :return:
         """
         sql1 = f"update xs_audition_singer set producer_uid = 0 where uid= {producer_uid};"
-        conMysql.sql_execute(sql)
         sql2 = f"delete from xs_audition_relation where producer_uid={producer_uid} and singer_uid ={singer_uid};"
-        conMysql.sql_execute(sql)
+        for sql in [sql1, sql2]:
+            conMysql.sql_execute(sql)
 
     @staticmethod
     def selectProducerSinger(producer_uid):
