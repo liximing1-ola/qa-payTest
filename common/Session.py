@@ -8,7 +8,6 @@ import urllib3
 from common import Logs, method
 from common.Config import config
 from common.paramsYaml import Yaml
-from common.conMysql import conMysql
 from common.getToken import getToken
 
 
@@ -46,6 +45,7 @@ class Session:
                 return tokenDict
             except Exception as error:
                 Logs.get_log('getSession.log').error('默认方案session异常，原因： {}'.format(error))
+                from common.conMysql import conMysql
                 token = getToken(config.payUid, conMysql.selectUserInfoSql('user_index', config.payUid)).gen_token()
                 tokenDict = {'token': token}
                 print('启动备选方案：token-{}'.format(token))

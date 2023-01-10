@@ -87,9 +87,9 @@ def deal_pay_contract_data(op_type, from_uid, worth, sign_type, singer_uid=stari
 		"sign_type": sign_type
 	}
 
-	if op_type == "params_contract":  # 竞拍
+	if op_type == "audition_contract":  # 竞拍
 		params = params_contract
-		total_money = worth
+		total_money = str(worth)
 	else:
 		raise Exception("不支持的参数!")
 	data = {
