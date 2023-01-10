@@ -33,7 +33,7 @@ class TestPayCreate(unittest.TestCase):
     #     # A直接签约C
     #     cost0 = 200
     #     data = deal_pay_contract_data("audition_contract", a_uid, cost0, 1)
-    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=a_uid)
     #     assert_code(res['code'])
     #     assert_body(res['body'], 'success', True, reason_starify(des, res))
     #     # A星币扣减100%
@@ -46,7 +46,7 @@ class TestPayCreate(unittest.TestCase):
     #     # A续约C，第1次报价
     #     cost1 = 400
     #     data = deal_pay_contract_data("audition_contract", a_uid, cost1, 0)
-    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=a_uid)
     #     assert_code(res['code'])
     #     assert_body(res['body'], 'success', True, reason_starify(des, res))
     #     # 1次，A星币冻结
@@ -55,7 +55,7 @@ class TestPayCreate(unittest.TestCase):
     #     # A续约C，第2次报价
     #     cost2 = 800
     #     data = deal_pay_contract_data("audition_contract", a_uid, cost2, 0)
-    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=a_uid)
     #     assert_code(res['code'])
     #     assert_body(res['body'], 'success', True, reason_starify(des, res))
     #     # 1次，A星币退回,2次，A星币冻结
@@ -95,7 +95,7 @@ class TestPayCreate(unittest.TestCase):
         # A直接签约C
         cost0 = 200
         data = deal_pay_contract_data("audition_contract", a_uid, cost0, 1)
-        res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+        res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=a_uid)
         assert_code(res['code'])
         assert_body(res['body'], 'success', True, reason_starify(des, res))
         # A星币扣减100%
@@ -108,7 +108,7 @@ class TestPayCreate(unittest.TestCase):
         # B竞价C，第1次报价
         cost1 = 400
         data = deal_pay_contract_data("audition_contract", b_uid, cost1, 0)
-        res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+        res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=b_uid)
         assert_code(res['code'])
         assert_body(res['body'], 'success', True, reason_starify(des, res))
         # 1次，B星币冻结
@@ -119,7 +119,7 @@ class TestPayCreate(unittest.TestCase):
         # B竞价C，第2次报价
         cost2 = 800
         data = deal_pay_contract_data("audition_contract", b_uid, cost2, 0)
-        res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+        res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=b_uid)
         assert_code(res['code'])
         assert_body(res['body'], 'success', True, reason_starify(des, res))
         # 1次，B星币退回,2次，B星币冻结
@@ -163,7 +163,7 @@ class TestPayCreate(unittest.TestCase):
     #     # A直接签约C
     #     cost0 = 200
     #     data = deal_pay_contract_data("audition_contract", a_uid, cost0, 1)
-    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=a_uid)
     #     assert_code(res['code'])
     #     assert_body(res['body'], 'success', True, reason_starify(des, res))
     #     # A星币扣减100%
@@ -176,7 +176,7 @@ class TestPayCreate(unittest.TestCase):
     #     # B竞价C，第1次报价
     #     cost1 = 400
     #     data = deal_pay_contract_data("audition_contract", b_uid, cost1, 0)
-    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=b_uid)
     #     assert_code(res['code'])
     #     assert_body(res['body'], 'success', True, reason_starify(des, res))
     #     # 1次，B星币冻结
@@ -187,7 +187,7 @@ class TestPayCreate(unittest.TestCase):
     #     # A竞价C，第2次报价
     #     cost2 = 800
     #     data = deal_pay_contract_data("audition_contract", a_uid, cost2, 0)
-    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=a_uid)
     #     assert_code(res['code'])
     #     assert_body(res['body'], 'success', True, reason_starify(des, res))
     #     # 1次，B星币退回
@@ -200,7 +200,7 @@ class TestPayCreate(unittest.TestCase):
     #     # B竞价C，第3次报价
     #     cost3 = 1600
     #     data = deal_pay_contract_data("audition_contract", b_uid, cost3, 0)
-    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=b_uid)
     #     assert_code(res['code'])
     #     assert_body(res['body'], 'success', True, reason_starify(des, res))
     #     # 3次，B星币冻结
@@ -213,7 +213,7 @@ class TestPayCreate(unittest.TestCase):
     #     # A竞价C，第4次报价
     #     cost4 = 3200
     #     data = deal_pay_contract_data("audition_contract", a_uid, cost4, 0)
-    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=a_uid)
     #     assert_code(res['code'])
     #     assert_body(res['body'], 'success', True, reason_starify(des, res))
     #     # 3次，B星币退回
@@ -261,7 +261,7 @@ class TestPayCreate(unittest.TestCase):
     #     # A直接签约C
     #     cost0 = 200
     #     data = deal_pay_contract_data("audition_contract", a_uid, cost0, 1)
-    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=a_uid)
     #     assert_code(res['code'])
     #     assert_body(res['body'], 'success', True, reason_starify(des, res))
     #     # A星币扣减100%
@@ -274,7 +274,7 @@ class TestPayCreate(unittest.TestCase):
     #     # A竞价C，第1次报价
     #     cost1 = 400
     #     data = deal_pay_contract_data("audition_contract", a_uid, cost1, 0)
-    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=a_uid)
     #     assert_code(res['code'])
     #     assert_body(res['body'], 'success', True, reason_starify(des, res))
     #     # 1次，A星币冻结
@@ -283,7 +283,7 @@ class TestPayCreate(unittest.TestCase):
     #     # B竞价C，第2次报价
     #     cost2 = 800
     #     data = deal_pay_contract_data("audition_contract", b_uid, cost2, 0)
-    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=b_uid)
     #     assert_code(res['code'])
     #     assert_body(res['body'], 'success', True, reason_starify(des, res))
     #     # 1次，A星币退回
@@ -297,7 +297,7 @@ class TestPayCreate(unittest.TestCase):
     #     # A竞价C，第3次报价
     #     cost3 = 1600
     #     data = deal_pay_contract_data("audition_contract", a_uid, cost3, 0)
-    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=a_uid)
     #     assert_code(res['code'])
     #     assert_body(res['body'], 'success', True, reason_starify(des, res))
     #     # 3次，A星币冻结
@@ -310,7 +310,7 @@ class TestPayCreate(unittest.TestCase):
     #     # B竞价C，第4次报价
     #     cost4 = 3200
     #     data = deal_pay_contract_data("audition_contract", b_uid, cost4, 0)
-    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=b_uid)
     #     assert_code(res['code'])
     #     assert_body(res['body'], 'success', True, reason_starify(des, res))
     #     # 3次，A星币退回
@@ -356,7 +356,7 @@ class TestPayCreate(unittest.TestCase):
     #     # A竞价C,报价=身价*1.5-1
     #     cost0 = 149
     #     data = deal_pay_contract_data("audition_contract", a_uid, cost0, 1)
-    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=a_uid)
     #     assert_code(res['code'])
     #     assert_body(res['body'], 'msg', "出价不满足要求", reason_starify(des, res))
     #
@@ -382,21 +382,21 @@ class TestPayCreate(unittest.TestCase):
     #     # A直接签约C
     #     cost0 = 200
     #     data = deal_pay_contract_data("audition_contract", a_uid, cost0, 1)
-    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=a_uid)
     #     assert_code(res['code'])
     #     assert_body(res['body'], 'success', True, reason_starify(des, res))
     #
     #     # B竞价C,报价=A身价*1.5，产生最新报价
     #     cost1 = 200 * 1.5
     #     data = deal_pay_contract_data("audition_contract", b_uid, cost1, 1)
-    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=b_uid)
     #     assert_code(res['code'])
     #     assert_body(res['body'], 'success', True, reason_starify(des, res))
     #
     #     # B竞价C,报价=A身价*1.5+50-1
     #     cost2 = 200 * 1.5 + 50 - 1
     #     data = deal_pay_contract_data("audition_contract", b_uid, cost2, 1)
-    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=b_uid)
     #     assert_code(res['code'])
     #     assert_body(res['body'], 'msg', "出价不满足要求", reason_starify(des, res))
     #
@@ -422,7 +422,7 @@ class TestPayCreate(unittest.TestCase):
     #     # A直接签约C，A报价>A的余额
     #     cost0 = default_money + 1
     #     data = deal_pay_contract_data("audition_contract", a_uid, cost0, 1)
-    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=a_uid)
     #     assert_code(res['code'])
     #     assert_body(res['body'], 'msg', "余额不足", reason_starify(des, res))
     #     case_list[des] = result
@@ -451,13 +451,13 @@ class TestPayCreate(unittest.TestCase):
     #     # A直接签约C
     #     cost0 = 200
     #     data = deal_pay_contract_data("audition_contract", a_uid, cost0, 1)
-    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=a_uid)
     #     assert_code(res['code'])
     #     assert_body(res['body'], 'success', True, reason_starify(des, res))
     #
     #     # 再次直接，A直接签约B,提示名额不足
     #     data = deal_pay_contract_data("audition_contract", a_uid, cost0, 1, singer_uid=b_uid)
-    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+    #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=a_uid)
     #     assert_code(res['code'])
     #     assert_body(res['body'], 'msg', '可签约的歌手数量余额不足', reason_starify(des, res))
     #     case_list[des] = result

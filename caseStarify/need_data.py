@@ -4,8 +4,10 @@ starify_rid = 10002496
 starify_payPhone = "15008520001"
 starify_payUid = a_uid = 124585
 # 被打赏人 01
+starify_rewardPhoneUid01 = "15008520002"
 starify_rewardUid01 = b_uid = 124586  # 手机 15008520002
 # 被打赏人 02
+starify_rewardPhoneUid02 = "15008520003"
 starify_rewardUid02 = c_uid = 124587  # 手机 15008520003
 
 

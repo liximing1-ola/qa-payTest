@@ -9,7 +9,7 @@ from common import Logs, method
 from common.Config import config
 from common.paramsYaml import Yaml
 from common.getToken import getToken
-
+from caseStarify.need_data import starify_payPhone, starify_rewardPhoneUid01, starify_rewardPhoneUid02, starify_payUid
 
 class Session:
     def __init__(self):
@@ -94,19 +94,26 @@ class Session:
                 headers = header_starify
                 query = query_starify.copy()
                 query['_timestamp'] = str(int(time()))
-                body = body_starify
-                sign = create_sign(query)
-                query['_sign'] = sign
-                url = config.starify_mobile_login_url+"?"+unquote(urlencode(query))
-                session = requests.session()
-                res = session.post(url, data=body, headers=headers, timeout=30)
-                res.raise_for_status()
-                res = res.json()
-                if not method.isExtend(res, 'token') or res['success'] != 1:
-                    print('failReason： {}'.format(res['msg']))
-                tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
-                Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
-                return tokenDict
+                for phone in [starify_payPhone, starify_rewardPhoneUid01, starify_rewardPhoneUid02]:
+                    body = {
+                        "mobile": phone,
+                        "area": "886",
+                        "code": "1234",
+                        "password": "",
+                    }
+                    sign = create_sign(query)
+                    query['_sign'] = sign
+                    url = config.starify_mobile_login_url + "?" + unquote(urlencode(query))
+                    session = requests.session()
+                    res = session.post(url, data=body, headers=headers, timeout=30)
+                    res.raise_for_status()
+                    res = res.json()
+                    if not method.isExtend(res, 'token') or res['success'] != 1:
+                        print('failReason： {}'.format(res['msg']))
+                    tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
+                    Session.checkUserToken_starify('write', uid=res['data']['uid'], app_name=env,
+                                                   token=tokenDict['token'])
+                    return tokenDict
             except Exception as error:
                 Logs.get_log('getSession.log').error('session获取异常，原因： {}'.format(error))
 
@@ -116,6 +123,20 @@ class Session:
     @staticmethod
     def checkUserToken(operate, app_name='dev', token=''):
         txtPath = os.path.split(os.path.realpath(__file__))[0] + '/{}UserToken.txt'.format(app_name)
+        if not os.path.exists(txtPath):
+            os.system(r"touch {}".format(txtPath))
+        if operate == 'write':
+            with open(txtPath, 'w') as f:
+                f.write(token)
+                f.flush()
+        elif operate == 'read':
+            with open(txtPath, 'r') as f:
+                f = f.read()
+                return f
+
+    @staticmethod
+    def checkUserToken_starify(operate, uid, app_name='dev', token=''):
+        txtPath = os.path.split(os.path.realpath(__file__))[0] + '/{}UserToken_{}.txt'.format(app_name, uid)
         if not os.path.exists(txtPath):
             os.system(r"touch {}".format(txtPath))
         if operate == 'write':
