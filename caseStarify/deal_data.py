@@ -68,7 +68,7 @@ def deal_pay_data(op_type, commodity, work_state="todo", to_uids=None, is_use_ba
 	return data
 
 
-def deal_pay_contract_data(op_type, from_uid, worth, sign_type, singer_uid=c, rid=0):
+def deal_pay_contract_data(op_type, from_uid, worth, sign_type, singer_uid=c_uid, rid=0):
 	"""
 	处理 竞拍玩法 参数
 	:param op_type: 类型
