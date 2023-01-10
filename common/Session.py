@@ -113,7 +113,7 @@ class Session:
                     tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
                     Session.checkUserToken_starify('write', uid=res['data']['uid'], app_name=env,
                                                    token=tokenDict['token'])
-                    return tokenDict
+                    # return tokenDict
             except Exception as error:
                 Logs.get_log('getSession.log').error('session获取异常，原因： {}'.format(error))
 
@@ -146,4 +146,7 @@ class Session:
         elif operate == 'read':
             with open(txtPath, 'r') as f:
                 f = f.read()
-                return f
+                if f:
+                    return f
+                else:
+                    raise Exception(f"{txtPath},token为空!")
