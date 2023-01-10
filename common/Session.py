@@ -86,7 +86,7 @@ class Session:
                 Logs.get_log('getSession.log').error('session获取异常，原因： {}'.format(error))
         elif env == config.appName['starify']:
             try:
-                from common.Basic_starify import header_starify, query_starify, body_starify
+                from common.Basic_starify import header_starify, query_starify
                 from caseStarify.tools import create_sign
                 from time import time
                 from urllib.parse import urlencode, urlunparse, unquote
