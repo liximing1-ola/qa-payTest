@@ -27,6 +27,7 @@ class conMysql:
     @staticmethod
     def sql_fetchone(sql):
         try:
+            print(sql)
             conMysql.cur.execute(sql)
             res = conMysql.cur.fetchone()
             if res is None:
@@ -39,6 +40,7 @@ class conMysql:
     @staticmethod
     def sql_execute(sql):
         try:
+            print(sql)
             conMysql.cur.execute(sql)
         except Exception as error:
             conMysql.con.rollback()
