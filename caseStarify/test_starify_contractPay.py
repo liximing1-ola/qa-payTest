@@ -12,70 +12,7 @@ from common.runFailed import Retry
 
 @Retry(max_n=1)
 class TestPayCreate(unittest.TestCase):
-    def test_contract_001(self, des='原制作人续约，多次竞拍抬价，原制作人竞拍成功'):
-        default_money = 100000
-        #  sql:购买者A,a_uid 修改余额=10000
-        conMysql.updateMoneySql(a_uid, default_money)
-        #  sql:购买者B,b_uid 修改余额=10000
-        conMysql.updateMoneySql(b_uid, default_money)
-        #  sql:被购买者C,c_uid 修改余额=0
-        conMysql.updateMoneySql(c_uid, 0)
-        #  sql:购买者A,a_uid 修改财富值=0,控制签约人数=1
-        conMysql.updateWealthSql(a_uid, 0)
-        #  sql:购买者B,b_uid 修改财富值=0,控制签约人数=1
-        conMysql.updateWealthSql(b_uid, 0)
-
-        # sql:清除C的制作人
-        conMysql.deleteProducerSinger(c_uid)
-        # sql:修改C的身价=100
-        conMysql.updateSingerWorth(c_uid, 100)
-
-        # A直接签约C
-        cost0 = 200
-        data = deal_pay_contract_data("audition_contract", a_uid, cost0, 1)
-        res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', True, reason_starify(des, res))
-        # A星币扣减100%
-        assert_equal(conMysql.selectUserInfoSql('star_coin', a_uid), default_money - cost0)
-        # A名额占用
-        assert_equal(conMysql.selectProducerSinger(a_uid), 1)
-        # C分成10%
-        assert_equal(conMysql.selectUserInfoSql('star_coin', c_uid), cost0 * contract_ratio['singer'])
-
-        # A续约C，第1次报价
-        cost1 = 400
-        data = deal_pay_contract_data("audition_contract", a_uid, cost1, 0)
-        res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', True, reason_starify(des, res))
-        # 1次，A星币冻结
-        assert_equal(conMysql.selectUserInfoSql('star_coin', a_uid), default_money - cost0 - cost1)
-
-        # A续约C，第2次报价
-        cost2 = 800
-        data = deal_pay_contract_data("audition_contract", a_uid, cost2, 0)
-        res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', True, reason_starify(des, res))
-        # 1次，A星币退回,2次，A星币冻结
-        assert_equal(conMysql.selectUserInfoSql('star_coin', a_uid), default_money - cost0 - cost2)
-
-        # 等30+3s结算
-        time.sleep(33)
-        # A星币扣减100%（2次价格）
-        assert_equal(conMysql.selectUserInfoSql('star_coin', a_uid), default_money - cost0 - cost2)
-        # C分成10%（2次价格）
-        assert_equal(conMysql.selectUserInfoSql('star_coin', c_uid),
-                     cost0 * contract_ratio['singer'] + cost2 * contract_ratio['singer'])
-        # A分成60%（2次价格）
-        assert_equal(conMysql.selectUserInfoSql('star_coin', a_uid),
-                     default_money - cost0 - cost2 + cost2 * contract_ratio['producer'])
-        # A名额占用
-        assert_equal(conMysql.selectProducerSinger(a_uid), 1)
-        case_list[des] = result
-
-    # def test_contract_002(self, des='新制作人，多次竞拍，新制作人竞拍成功'):
+    # def test_contract_001(self, des='原制作人续约，多次竞拍抬价，原制作人竞拍成功'):
     #     default_money = 100000
     #     #  sql:购买者A,a_uid 修改余额=10000
     #     conMysql.updateMoneySql(a_uid, default_money)
@@ -87,6 +24,7 @@ class TestPayCreate(unittest.TestCase):
     #     conMysql.updateWealthSql(a_uid, 0)
     #     #  sql:购买者B,b_uid 修改财富值=0,控制签约人数=1
     #     conMysql.updateWealthSql(b_uid, 0)
+    #
     #     # sql:清除C的制作人
     #     conMysql.deleteProducerSinger(c_uid)
     #     # sql:修改C的身价=100
@@ -105,44 +43,106 @@ class TestPayCreate(unittest.TestCase):
     #     # C分成10%
     #     assert_equal(conMysql.selectUserInfoSql('star_coin', c_uid), cost0 * contract_ratio['singer'])
     #
-    #     # B竞价C，第1次报价
+    #     # A续约C，第1次报价
     #     cost1 = 400
-    #     data = deal_pay_contract_data("audition_contract", b_uid, cost1, 0)
+    #     data = deal_pay_contract_data("audition_contract", a_uid, cost1, 0)
     #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
     #     assert_code(res['code'])
     #     assert_body(res['body'], 'success', True, reason_starify(des, res))
-    #     # 1次，B星币冻结
-    #     assert_equal(conMysql.selectUserInfoSql('star_coin', b_uid), default_money - cost1)
-    #     # B名额占用
-    #     assert_equal(conMysql.selectProducerSinger(b_uid), 1)
+    #     # 1次，A星币冻结
+    #     assert_equal(conMysql.selectUserInfoSql('star_coin', a_uid), default_money - cost0 - cost1)
     #
-    #     # B竞价C，第2次报价
+    #     # A续约C，第2次报价
     #     cost2 = 800
-    #     data = deal_pay_contract_data("audition_contract", b_uid, cost2, 0)
+    #     data = deal_pay_contract_data("audition_contract", a_uid, cost2, 0)
     #     res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
     #     assert_code(res['code'])
     #     assert_body(res['body'], 'success', True, reason_starify(des, res))
-    #     # 1次，B星币退回,2次，B星币冻结
-    #     assert_equal(conMysql.selectUserInfoSql('star_coin', b_uid), default_money - cost2)
-    #     # B名额占用
-    #     assert_equal(conMysql.selectProducerSinger(b_uid), 1)
+    #     # 1次，A星币退回,2次，A星币冻结
+    #     assert_equal(conMysql.selectUserInfoSql('star_coin', a_uid), default_money - cost0 - cost2)
     #
     #     # 等30+3s结算
-    #     time.sleep(33)
-    #     # B星币扣减100%（2次价格）
-    #     assert_equal(conMysql.selectUserInfoSql('star_coin', a_uid), default_money - cost2)
+    #     time.sleep(40)
+    #     # A星币扣减100%（2次价格）
+    #     assert_equal(conMysql.selectUserInfoSql('star_coin', a_uid), default_money - cost0 - cost2)
     #     # C分成10%（2次价格）
     #     assert_equal(conMysql.selectUserInfoSql('star_coin', c_uid),
     #                  cost0 * contract_ratio['singer'] + cost2 * contract_ratio['singer'])
     #     # A分成60%（2次价格）
     #     assert_equal(conMysql.selectUserInfoSql('star_coin', a_uid),
-    #                  default_money - cost0 + cost2 * contract_ratio['producer'])
-    #     # A名额释放
-    #     assert_equal(conMysql.selectProducerSinger(a_uid), 0)
-    #     # B名额占用
-    #     assert_equal(conMysql.selectProducerSinger(b_uid), 1)
+    #                  default_money - cost0 - cost2 + cost2 * contract_ratio['producer'])
+    #     # A名额占用
+    #     assert_equal(conMysql.selectProducerSinger(a_uid), 1)
     #     case_list[des] = result
-    #
+
+    def test_contract_002(self, des='新制作人，多次竞拍，新制作人竞拍成功'):
+        default_money = 100000
+        #  sql:购买者A,a_uid 修改余额=10000
+        conMysql.updateMoneySql(a_uid, default_money)
+        #  sql:购买者B,b_uid 修改余额=10000
+        conMysql.updateMoneySql(b_uid, default_money)
+        #  sql:被购买者C,c_uid 修改余额=0
+        conMysql.updateMoneySql(c_uid, 0)
+        #  sql:购买者A,a_uid 修改财富值=0,控制签约人数=1
+        conMysql.updateWealthSql(a_uid, 0)
+        #  sql:购买者B,b_uid 修改财富值=0,控制签约人数=1
+        conMysql.updateWealthSql(b_uid, 0)
+        # sql:清除C的制作人
+        conMysql.deleteProducerSinger(c_uid)
+        # sql:修改C的身价=100
+        conMysql.updateSingerWorth(c_uid, 100)
+
+        # A直接签约C
+        cost0 = 200
+        data = deal_pay_contract_data("audition_contract", a_uid, cost0, 1)
+        res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', True, reason_starify(des, res))
+        # A星币扣减100%
+        assert_equal(conMysql.selectUserInfoSql('star_coin', a_uid), default_money - cost0)
+        # A名额占用
+        assert_equal(conMysql.selectProducerSinger(a_uid), 1)
+        # C分成10%
+        assert_equal(conMysql.selectUserInfoSql('star_coin', c_uid), cost0 * contract_ratio['singer'])
+
+        # B竞价C，第1次报价
+        cost1 = 400
+        data = deal_pay_contract_data("audition_contract", b_uid, cost1, 0)
+        res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', True, reason_starify(des, res))
+        # 1次，B星币冻结
+        assert_equal(conMysql.selectUserInfoSql('star_coin', b_uid), default_money - cost1)
+        # B名额占用
+        assert_equal(conMysql.selectProducerSinger(b_uid), 1)
+
+        # B竞价C，第2次报价
+        cost2 = 800
+        data = deal_pay_contract_data("audition_contract", b_uid, cost2, 0)
+        res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', True, reason_starify(des, res))
+        # 1次，B星币退回,2次，B星币冻结
+        assert_equal(conMysql.selectUserInfoSql('star_coin', b_uid), default_money - cost2)
+        # B名额占用
+        assert_equal(conMysql.selectProducerSinger(b_uid), 1)
+
+        # 等30+3s结算
+        time.sleep(40)
+        # B星币扣减100%（2次价格）
+        assert_equal(conMysql.selectUserInfoSql('star_coin', a_uid), default_money - cost2)
+        # C分成10%（2次价格）
+        assert_equal(conMysql.selectUserInfoSql('star_coin', c_uid),
+                     cost0 * contract_ratio['singer'] + cost2 * contract_ratio['singer'])
+        # A分成60%（2次价格）
+        assert_equal(conMysql.selectUserInfoSql('star_coin', a_uid),
+                     default_money - cost0 + cost2 * contract_ratio['producer'])
+        # A名额释放
+        assert_equal(conMysql.selectProducerSinger(a_uid), 0)
+        # B名额占用
+        assert_equal(conMysql.selectProducerSinger(b_uid), 1)
+        case_list[des] = result
+
     # def test_contract_003(self, des='原、新制作人，多次竞拍抬价，原制作人竞拍成功'):
     #     default_money = 100000
     #     #  sql:购买者A,a_uid 修改余额=10000
@@ -224,7 +224,7 @@ class TestPayCreate(unittest.TestCase):
     #     assert_equal(conMysql.selectUserInfoSql('star_coin', a_uid), default_money - cost0 - cost4)
     #
     #     # 等30+3s结算
-    #     time.sleep(33)
+    #     time.sleep(40)
     #     # A星币扣减100%（4次价格）
     #     assert_equal(conMysql.selectUserInfoSql('star_coin', a_uid), default_money - cost0 - cost4)
     #     # C分成10%（4次价格）
@@ -321,7 +321,7 @@ class TestPayCreate(unittest.TestCase):
     #     assert_equal(conMysql.selectProducerSinger(b_uid), 0)
     #
     #     # 等30+3s结算
-    #     time.sleep(33)
+    #     time.sleep(40)
     #     # B星币扣减100%（4次价格）
     #     assert_equal(conMysql.selectUserInfoSql('star_coin', b_uid), default_money - cost4)
     #     # C分成10%（4次价格）
