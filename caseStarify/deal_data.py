@@ -99,4 +99,5 @@ def deal_pay_contract_data(op_type, from_uid, worth, sign_type, singer_uid=stari
 		"total_money": total_money,
 		"hideErrorToast": "1"
 	}
+	print(data)
 	return data
