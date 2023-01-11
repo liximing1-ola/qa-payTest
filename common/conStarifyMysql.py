@@ -32,6 +32,8 @@ class conMysql:
             res = conMysql.cur.fetchone()
             if res is None:
                 return 0
+            elif res[0] is None:
+                return 0
             else:
                 return res[0]
         except Exception as error:
@@ -142,4 +144,4 @@ class conMysql:
 
 if __name__ == '__main__':
     # conMysql.updateMoneySql(124458, 19999)
-    print(conMysql.selectUserInfoSql('star_coin', 124458))
+    print(conMysql.selectUserInfoSql('gift_num', 124458))
