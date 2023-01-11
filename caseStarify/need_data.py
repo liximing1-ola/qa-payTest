@@ -2,11 +2,13 @@
 starify_rid = 10002496
 # 打赏人
 starify_payPhone = "15008520001"
-starify_payUid = 124585
+starify_payUid = a_uid = 124585
 # 被打赏人 01
-starify_rewardUid01 = 124586  # 手机 15008520002
+starify_rewardPhoneUid01 = "15008520002"
+starify_rewardUid01 = b_uid = 124586  # 手机 15008520002
 # 被打赏人 02
-starify_rewardUid02 = 124587  # 手机 15008520003
+starify_rewardPhoneUid02 = "15008520003"
+starify_rewardUid02 = c_uid = 124587  # 手机 15008520003
 
 
 # 作品id
@@ -226,3 +228,40 @@ commodity_config = {
 	},
 }
 
+# 分成比例
+contract_ratio = {
+	'singer': 0.1,  # 歌手
+	'producer': 0.7,  # 制作人
+}
+
+# 财富等级
+wealth_lv = {
+	"lv0": {
+		"min": 0,
+		"max": 10000-1,
+	},
+	"lv1": {
+		"min": 10000,
+		"max": 50000-1,
+	},
+	"lv2": {
+		"min": 50000,
+		"max": 100000-1,
+	},
+	"lv3": {
+		"min": 100000,
+		"max": 500000-1,
+	},
+	"lv4": {
+		"min": 500000,
+		"max": 1000000-1,
+	},
+	"lv5": {
+		"min": 1000000,
+		"max": 2000000-1,
+	},
+	"lv6": {
+		"min": 2000000,
+		"max": 99999999,
+	},
+}
