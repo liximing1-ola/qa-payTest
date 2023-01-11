@@ -419,7 +419,7 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=b_uid)
         assert_code(res['code'])
         assert_body(res['body'], 'msg', "出价不满足要求", reason_starify(des, res))
-
+        time.sleep(45)  # 等待结算,以免影响其他case
         case_list[des] = result
 
     def test_contract_007(self, des='A报价>A的余额，星币余额不足'):
