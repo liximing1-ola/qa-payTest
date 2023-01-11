@@ -65,7 +65,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('star_coin', a_uid), default_money - cost0 - cost2)
 
         # 等30+3s结算
-        time.sleep(45)
+        time.sleep(40)
         # # A星币扣减100%（2次价格）
         # assert_equal(conMysql.selectUserInfoSql('star_coin', a_uid),
         #              default_money - cost0 - cost2 + cost2 * contract_ratio['producer'])
@@ -135,7 +135,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectProducerSinger(b_uid), 1)
 
         # 等30+3s结算
-        time.sleep(45)
+        time.sleep(40)
         # B星币扣减100%（2次价格）
         assert_equal(conMysql.selectUserInfoSql('star_coin', b_uid), default_money - cost2)
         # C分成10%（2次价格）
@@ -236,7 +236,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('star_coin', a_uid), default_money - cost0 - cost4)
 
         # 等30+3s结算
-        time.sleep(45)
+        time.sleep(40)
         # # A星币扣减100%（4次价格）
         # assert_equal(conMysql.selectUserInfoSql('star_coin', a_uid), default_money - cost0 - cost4)
         # C分成10%（4次价格）
@@ -338,7 +338,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectProducerSinger(b_uid), 1)
 
         # 等30+3s结算
-        time.sleep(45)
+        time.sleep(40)
         # B星币扣减100%（4次价格）
         assert_equal(conMysql.selectUserInfoSql('star_coin', b_uid), default_money - cost4)
         # C分成10%（4次价格）
@@ -419,9 +419,7 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=b_uid)
         assert_code(res['code'])
         assert_body(res['body'], 'msg', "出价不满足要求", reason_starify(des, res))
-        time.sleep(45)  # 等待结算,以免影响其他case
-
-
+        time.sleep(40)  # 等待结算,以免影响其他case
         case_list[des] = result
 
     def test_contract_007(self, des='A报价>A的余额，星币余额不足'):
