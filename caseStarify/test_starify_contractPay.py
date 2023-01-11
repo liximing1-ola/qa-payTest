@@ -32,6 +32,7 @@ class TestPayCreate(unittest.TestCase):
 
         # A直接签约C
         cost0 = 200
+        time.sleep(1)
         data = deal_pay_contract_data("audition_contract", a_uid, cost0, 1)
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=a_uid)
         assert_code(res['code'])
@@ -97,6 +98,7 @@ class TestPayCreate(unittest.TestCase):
 
         # A直接签约C
         cost0 = 200
+        time.sleep(1)
         data = deal_pay_contract_data("audition_contract", a_uid, cost0, 1)
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=a_uid)
         assert_code(res['code'])
@@ -167,6 +169,7 @@ class TestPayCreate(unittest.TestCase):
 
         # A直接签约C
         cost0 = 200
+        time.sleep(1)
         data = deal_pay_contract_data("audition_contract", a_uid, cost0, 1)
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=a_uid)
         assert_code(res['code'])
@@ -269,6 +272,7 @@ class TestPayCreate(unittest.TestCase):
 
         # A直接签约C
         cost0 = 200
+        time.sleep(1)
         data = deal_pay_contract_data("audition_contract", a_uid, cost0, 1)
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=a_uid)
         assert_code(res['code'])
@@ -330,8 +334,8 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('star_coin', a_uid), default_money - cost0)
         # 4次，B星币冻结
         assert_equal(conMysql.selectUserInfoSql('star_coin', b_uid), default_money - cost4)
-        # B名额释放
-        assert_equal(conMysql.selectProducerSinger(b_uid), 0)
+        # B名额冻结
+        assert_equal(conMysql.selectProducerSinger(b_uid), 1)
 
         # 等30+3s结算
         time.sleep(45)
@@ -394,6 +398,7 @@ class TestPayCreate(unittest.TestCase):
 
         # A直接签约C
         cost0 = 200
+        time.sleep(1)
         data = deal_pay_contract_data("audition_contract", a_uid, cost0, 1)
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=a_uid)
         assert_code(res['code'])
@@ -465,6 +470,7 @@ class TestPayCreate(unittest.TestCase):
 
         # A直接签约C
         cost0 = 200
+        time.sleep(1)
         data = deal_pay_contract_data("audition_contract", a_uid, cost0, 1)
         res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify', uid=a_uid)
         assert_code(res['code'])
