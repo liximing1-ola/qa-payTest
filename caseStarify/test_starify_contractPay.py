@@ -64,7 +64,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('star_coin', a_uid), default_money - cost0 - cost2)
 
         # 等30+3s结算
-        time.sleep(40)
+        time.sleep(45)
         # # A星币扣减100%（2次价格）
         # assert_equal(conMysql.selectUserInfoSql('star_coin', a_uid),
         #              default_money - cost0 - cost2 + cost2 * contract_ratio['producer'])
@@ -133,7 +133,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectProducerSinger(b_uid), 1)
 
         # 等30+3s结算
-        time.sleep(40)
+        time.sleep(45)
         # B星币扣减100%（2次价格）
         assert_equal(conMysql.selectUserInfoSql('star_coin', b_uid), default_money - cost2)
         # C分成10%（2次价格）
@@ -233,7 +233,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('star_coin', a_uid), default_money - cost0 - cost4)
 
         # 等30+3s结算
-        time.sleep(40)
+        time.sleep(45)
         # # A星币扣减100%（4次价格）
         # assert_equal(conMysql.selectUserInfoSql('star_coin', a_uid), default_money - cost0 - cost4)
         # C分成10%（4次价格）
@@ -334,7 +334,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectProducerSinger(b_uid), 0)
 
         # 等30+3s结算
-        time.sleep(40)
+        time.sleep(45)
         # B星币扣减100%（4次价格）
         assert_equal(conMysql.selectUserInfoSql('star_coin', b_uid), default_money - cost4)
         # C分成10%（4次价格）
