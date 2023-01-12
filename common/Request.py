@@ -57,7 +57,7 @@ def post_request_session(url, data, tokenName='dev'):
     return response_dicts
 
 
-def post_request_session_starify(url, data, tokenName='starify'):
+def post_request_session_starify(url, data, tokenName='starify', uid=starify_payUid):
     """
     post请求
     :param url:
@@ -69,7 +69,7 @@ def post_request_session_starify(url, data, tokenName='starify'):
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     # 处理header
     header = header_starify.copy()
-    header['user-token'] = Session.checkUserToken(operate='read', app_name=tokenName)
+    header['user-token'] = Session.checkUserToken_starify(operate='read', app_name=tokenName, uid=uid)
 
     # 处理query
     deal_query = query_starify.copy()
@@ -90,7 +90,7 @@ def post_request_session_starify(url, data, tokenName='starify'):
     except Exception as e:
         print(e)
         return ()
-    print(response.content.decode())
+    # print(response.json())
     time_consuming = response.elapsed.microseconds / 1000
     time_total = response.elapsed.total_seconds()
     response_dicts = dict()
