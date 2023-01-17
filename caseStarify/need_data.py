@@ -106,6 +106,22 @@ commodity_config = {
 		"charm": 3999,
 	},
 	#特权礼物
+	"lv1": {
+		"gift_id": 31,
+		"name": "pick_me",
+		"price": 100,
+		"cid": 121,
+		"wealth": 100,
+		"charm": 20,
+	},
+	"lv2": {
+		"gift_id": 32,
+		"name": "加热度",
+		"price": 300,
+		"cid": 122,
+		"wealth": 300,
+		"charm": 60,
+	},
 	"lv3": {
 		"gift_id": 19,
 		"name": "藤野仙车",
