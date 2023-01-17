@@ -1237,7 +1237,7 @@ class TestPayCreate(unittest.TestCase):
 
     def test_room_032(self, des='房间打赏,送>当前财富等级的特权礼物'):
 
-        for lv in range(0, 7):  # 财富等级
+        for lv in range(0, 6):  # 财富等级 0~5级有限制,6级无限制
             for gift_lv in (lv + 1, 7):  # 特权礼物等级
                 commodity = commodity_config[f'lv{gift_lv}']
                 #  sql:打赏者starify_payUid 修改余额=50000
@@ -1286,13 +1286,13 @@ class TestPayCreate(unittest.TestCase):
 
                 #  sql:打赏者starify_payUid 查询余额=0
                 assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 50000 - commodity['price'])
-                if gift_lv in range(1, 5):  # lv1~lv4礼物,不分成
-                    #  sql:被打赏者starify_rewardUid01 查询余额=0
-                    assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01), 0)
-                else:  # lv5~lv6分成
+                if gift_lv in [5, 6]:  # lv5~lv6分成
                     assert_between(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01),
                                    int(commodity['price'] * commodity['reward_lower']),
                                    int(commodity['price'] * commodity['reward_upper']))
+                else:  # lv1~lv4礼物,不分成
+                    #  sql:被打赏者starify_rewardUid01 查询余额=0
+                    assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01), 0)
                 #  sql:打赏者starify_payUid 查询-财富值=礼物价值*(人数*连击数-背包礼物数)
                 assert_equal(conMysql.selectUserInfoSql('wealth', starify_payUid),
                              wealth_lv[f'lv{lv}']['min'] + commodity['wealth'] * (1 * 1 - 0))
