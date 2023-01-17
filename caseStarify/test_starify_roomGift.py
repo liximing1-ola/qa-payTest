@@ -1238,7 +1238,7 @@ class TestPayCreate(unittest.TestCase):
     def test_room_032(self, des='房间打赏,送>当前财富等级的特权礼物'):
 
         for lv in range(0, 6):  # 财富等级 0~5级有限制,6级无限制
-            for gift_lv in (lv + 1, 7):  # 特权礼物等级
+            for gift_lv in range(lv + 1, 7):  # 特权礼物等级
                 commodity = commodity_config[f'lv{gift_lv}']
                 #  sql:打赏者starify_payUid 修改余额=50000
                 conMysql.updateMoneySql(starify_payUid, 50000)
@@ -1267,7 +1267,7 @@ class TestPayCreate(unittest.TestCase):
 
     def test_room_033(self, des='房间打赏,送<=当前财富等级的特权礼物'):
         for lv in range(1, 7):  # 财富等级
-            for gift_lv in (1, lv + 1):  # 特权礼物等级
+            for gift_lv in range(1, lv + 1):  # 特权礼物等级
                 commodity = commodity_config[f'lv{gift_lv}']
                 #  sql:打赏者starify_payUid 修改余额=50000
                 conMysql.updateMoneySql(starify_payUid, 50000)
