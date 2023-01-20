@@ -133,7 +133,10 @@ class Session:
         elif operate == 'read':
             with open(txtPath, 'r') as f:
                 f = f.read()
-                return f
+                if f:
+                    return f
+                else:
+                    raise Exception(f"{txtPath},token为空!")
 
     @staticmethod
     def checkUserToken_starify(operate, uid, app_name='dev', token=''):
