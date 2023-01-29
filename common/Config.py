@@ -7,7 +7,8 @@ class config:
     BASE_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     appInfo = {
         'bb_dev': 'https://dev.iambanban.com/',
-        'pt_ali': 'https://pt-dev.iambanban.com/',
+        'pt_ali_dev': 'https://pt-dev.iambanban.com/',              # 指向dev服务
+        'pt_ali_main':'https://pt-dev.iambanban.com/_testcase/',     # 指向线上拉取的main分支服务，go的还需要新启一个
         'starify': 'http://116.62.125.230/',
         "rush": 'https://192.168.11.55/',
     }
@@ -37,7 +38,7 @@ class config:
         'ali-starify': 'iZbp15ildwog86lw08ptpnZ',  # todo 修改 调试用 ubuntu / dev=iZj6cig35upuwmdws5sec2Z
     }
     # 测试域名
-    pt_host = appInfo['pt_ali']
+    pt_host = appInfo['pt_ali_main']
     # 内网支付接口
     pay_url = appInfo['bb_dev'] + 'pay/create?package=com.imbb.banban.android'
     pt_pay_url = pt_host + 'pay/create?package=com.imbb.oversea.android'
