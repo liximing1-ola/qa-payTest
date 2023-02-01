@@ -16,7 +16,7 @@ class getToken:
         self._verify_salt = '5(d+V8cxpY%d'
         self._key_c_length = 4
 
-    def gen_token(self):
+    def get_token(self):
         arg_dict = {
             "u": self.uid,
             "s": self._salt,
@@ -86,5 +86,5 @@ class getToken:
 
 if __name__ == "__main__":
     get_token = getToken(100287189, getToken.get_salt())
-    print(get_token.gen_token())
+    print(get_token.get_token())
     #  处理礼物打赏并发场景

@@ -46,7 +46,7 @@ class Session:
                 Logs.get_log('getSession.log').error('默认方案session异常，原因： {}'.format(error))
                 from common.conMysql import conMysql
                 from common.getToken import getToken
-                token = getToken(config.payUid, conMysql.selectUserInfoSql('user_index', config.payUid)).gen_token()
+                token = getToken(config.payUid, conMysql.selectUserInfoSql('user_index', config.payUid)).get_token()
                 tokenDict = {'token': token}
                 print('启动备选方案：token-{}'.format(token))
                 Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
