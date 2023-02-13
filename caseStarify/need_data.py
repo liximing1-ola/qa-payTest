@@ -22,7 +22,7 @@ commodity_config = {
 	# 作品礼物
 	"1": {
 		"gift_id": 1,  # 礼物id
-		"name": "星幣",
+		"name": "星币",
 		"price": 1,
 		"cid": 28,
 		"wealth": 1,
@@ -39,25 +39,25 @@ commodity_config = {
 	# 房间礼物-非特权
 	"3": {
 		"gift_id": 3,
-		"name": "為你打call",
+		"name": "为你打call",
 		"price": 5,
-		"cid": 30,
+		"cid": 1,
 		"wealth": 5,
 		"charm": 1,
 	},
 	"4": {
 		"gift_id": 4,
-		"name": "螢光棒",
+		"name": "荧光棒",
 		"price": 40,
-		"cid": 31,
+		"cid": 2,
 		"wealth": 40,
 		"charm": 8,
 	},
 	"5": {
 		"gift_id": 5,
-		"name": "氣泡槍",
+		"name": "气泡枪",
 		"price": 150,
-		"cid": 32,
+		"cid": 3,
 		"wealth": 150,
 		"charm": 30,
 	},
@@ -65,23 +65,23 @@ commodity_config = {
 		"gift_id": 6,
 		"name": "光音魔瓶",
 		"price": 520,
-		"cid": 33,
+		"cid": 4,
 		"wealth": 520,
 		"charm": 104,
 	},
 	"7": {
 		"gift_id": 7,
-		"name": "節奏大師",
+		"name": "节奏大师",
 		"price": 1200,
-		"cid": 34,
+		"cid": 5,
 		"wealth": 1200,
 		"charm": 240,
 	},
 	"8": {
 		"gift_id": 8,
-		"name": "麥克風",
+		"name": "麦克风",
 		"price": 2000,
-		"cid": 35,
+		"cid": 6,
 		"wealth": 2000,
 		"charm": 400,
 	},
@@ -89,70 +89,70 @@ commodity_config = {
 		"gift_id": 9,
 		"name": "聲霸天下",
 		"price": 5200,
-		"cid": 36,
-		"reward_lower": 0.05,  # 返奖下限
-		"reward_upper": 0.10,  # 返奖上限
+		"cid": 7,
 		"wealth": 5200,
 		"charm": 1040,
+		"reward_lower": 0.05,  # 返奖下限
+		"reward_upper": 0.10,  # 返奖上限
 	},
 	"10": {
 		"gift_id": 10,
-		"name": "摩登派對",
+		"name": "摩登派对",
 		"price": 19999,
-		"cid": 37,
-		"reward_lower": 0.15,
-		"reward_upper": 0.20,
+		"cid": 8,
 		"wealth": 19999,
 		"charm": 3999,
+		"reward_lower": 0.15,
+		"reward_upper": 0.20,
 	},
 	#特权礼物
 	"lv1": {
-		"gift_id": 31,
-		"name": "pick_me",
+		"gift_id": 28,
+		"name": "pick me",
 		"price": 100,
-		"cid": 121,
+		"cid": 70,
 		"wealth": 100,
 		"charm": 20,
 	},
 	"lv2": {
-		"gift_id": 32,
+		"gift_id": 27,
 		"name": "加热度",
 		"price": 300,
-		"cid": 122,
+		"cid": 69,
 		"wealth": 300,
 		"charm": 60,
 	},
 	"lv3": {
-		"gift_id": 19,
-		"name": "藤野仙车",
+		"gift_id": 15,
+		"name": "藤野仙車",
 		"price": 520,
-		"cid": 53,
+		"cid": 30,
 		"wealth": 520,
 		"charm": 104,
 	},
 	"lv4": {
-		"gift_id": 20,
+		"gift_id": 16,
 		"name": "蝴蝶仙女",
 		"price": 2000,
-		"cid": 54,
+		"cid": 31,
 		"wealth": 2000,
 		"charm": 400,
 	},
 	"lv5": {
-		"gift_id": 21,
-		"name": "爱心轰炸机",
+		"gift_id": 17,
+		"name": "愛心轟炸機",
 		"price": 5200,
-		"cid": 55,
+		"cid": 32,
 		"wealth": 5200,
 		"charm": 1040,
 		"reward_lower": 0.1,
 		"reward_upper": 0.15,
 	},
 	"lv6": {
-		"gift_id": 22,
-		"name": "林深见鹿",
+		"gift_id": 19,
+		"name": "林深見鹿",
 		"price": 18888,
-		"cid": 56,
+		"cid": 34,
 		"wealth": 18888,
 		"charm": 3777,
 		"reward_lower": 0.15,
@@ -164,36 +164,36 @@ commodity_config = {
 	# 物品-头像框
 	"header": {
 		"gift_id": 0,
-		"name": "header-2",
-		"price": 444,
-		"cid": 46,
+		"name": "Dreamy Planet",
+		"price": 10000,
+		"cid": 13,
 		"level_1":
 			{
 				"day": 3,
-				"rate": 1,  # 折扣
+				"rate": 0.9,  # 折扣
 				"duration": 3 * 86400,
 			},
 		"level_2":
 			{
 				"day": 7,
-				"rate": 0.8,  # 折扣
+				"rate": 0.9,  # 折扣
 				"duration": 7 * 86400,
 			},
 		"level_3":
 			{
 				"day": 15,
-				"rate": 0.7,  # 折扣
+				"rate": 0.85,  # 折扣
 				"duration": 15 * 86400,
 			},
-		"wealth": 444,
+		"wealth": 10000,
 		"charm": 0,
 	},
 	# 物品-麦上光圈
 	"ring": {
 		"gift_id": 0,
-		"name": "ring-1",
-		"price": 2222,
-		"cid": 44,
+		"name": "Love at First Sight",
+		"price": 9000,
+		"cid": 14,
 		"level_1":
 			{
 				"day": 3,
@@ -203,24 +203,24 @@ commodity_config = {
 		"level_2":
 			{
 				"day": 7,
-				"rate": 0.85,  # 折扣
+				"rate": 0.9,  # 折扣
 				"duration": 7 * 86400,
 			},
 		"level_3":
 			{
 				"day": 15,
-				"rate": 0.65,  # 折扣
+				"rate": 0.9,  # 折扣
 				"duration": 15 * 86400,
 			},
-		"wealth": 2222,
+		"wealth": 9000,
 		"charm": 0,
 	},
 	# 物品-入场横幅
 	"effect": {
 		"gift_id": 0,
-		"name": "effect-3",
-		"price": 333,
-		"cid": 42,
+		"name": "Electric Guitar",
+		"price": 4000,
+		"cid": 15,
 		"level_1":
 			{
 				"day": 3,
@@ -230,16 +230,16 @@ commodity_config = {
 		"level_2":
 			{
 				"day": 7,
-				"rate": 0.7,  # 折扣
+				"rate": 0.9,  # 折扣
 				"duration": 7 * 86400,
 			},
 		"level_3":
 			{
 				"day": 15,
-				"rate": 0.5,  # 折扣
+				"rate": 0.85,  # 折扣
 				"duration": 15 * 86400,
 			},
-		"wealth": 333,
+		"wealth": 4000,
 		"charm": 0,
 	},
 }
