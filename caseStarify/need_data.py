@@ -149,10 +149,10 @@ commodity_config = {
 		"reward_upper": 0.15,
 	},
 	"lv6": {
-		"gift_id": 19,
+		"gift_id": 18,
 		"name": "林深見鹿",
 		"price": 18888,
-		"cid": 34,
+		"cid": 33,
 		"wealth": 18888,
 		"charm": 3777,
 		"reward_lower": 0.15,
