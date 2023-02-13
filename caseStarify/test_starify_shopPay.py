@@ -10,6 +10,8 @@ from common.conStarifyMysql import conMysql
 from common.method import reason_starify
 from common.runFailed import Retry
 
+user_money = 200000
+
 
 @Retry(max_n=1)
 class TestPayCreate(unittest.TestCase):
@@ -17,7 +19,7 @@ class TestPayCreate(unittest.TestCase):
         commodity = commodity_config['header']
         sale_level = 1
         #  sql:打赏者starify_payUid 修改余额=10000
-        conMysql.updateMoneySql(starify_payUid, 100000)
+        conMysql.updateMoneySql(starify_payUid, user_money)
         #  sql:打赏者starify_payUid 清空背包礼物
         conMysql.deleteUserAccountSql('user_commodity', starify_payUid)
         #  sql:打赏者starify_payUid 修改财富值=0
@@ -29,7 +31,7 @@ class TestPayCreate(unittest.TestCase):
         #  sql:starify_payUid 查询余额=0
         cost = deal_num(commodity[f'level_{sale_level}']['day'] * commodity[f'level_{sale_level}']['rate'] * commodity[
             'price'])
-        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 100000 - cost)
+        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), user_money - cost)
         #  sql:检查背包物品=1
         assert_equal(conMysql.selectUserInfoSql('commodity_num', starify_payUid, commodity['cid'], 86400 * 3), 1)
         #  sql:打赏者starify_payUid 查询-财富值=物品价值*天数*折扣=花费
@@ -40,7 +42,7 @@ class TestPayCreate(unittest.TestCase):
         commodity = commodity_config['header']
         sale_level = 2
         #  sql:打赏者starify_payUid 修改余额=10000
-        conMysql.updateMoneySql(starify_payUid, 100000)
+        conMysql.updateMoneySql(starify_payUid, user_money)
         #  sql:打赏者starify_payUid 清空背包礼物
         conMysql.deleteUserAccountSql('user_commodity', starify_payUid)
         #  sql:打赏者starify_payUid 修改财富值=0
@@ -52,7 +54,7 @@ class TestPayCreate(unittest.TestCase):
         #  sql:starify_payUid 查询余额=0
         cost = deal_num(commodity[f'level_{sale_level}']['day'] * commodity[f'level_{sale_level}']['rate'] * commodity[
             'price'])
-        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 100000 - cost)
+        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), user_money - cost)
         #  sql:检查背包物品=1
         assert_equal(conMysql.selectUserInfoSql('commodity_num', starify_payUid, commodity['cid'], 86400 * 7), 1)
         #  sql:打赏者starify_payUid 查询-财富值=物品价值*天数*折扣=花费
@@ -63,7 +65,7 @@ class TestPayCreate(unittest.TestCase):
         commodity = commodity_config['header']
         sale_level = 3
         #  sql:打赏者starify_payUid 修改余额=10000
-        conMysql.updateMoneySql(starify_payUid, 100000)
+        conMysql.updateMoneySql(starify_payUid, user_money)
         #  sql:打赏者starify_payUid 清空背包礼物
         conMysql.deleteUserAccountSql('user_commodity', starify_payUid)
         #  sql:打赏者starify_payUid 修改财富值=0
@@ -75,7 +77,7 @@ class TestPayCreate(unittest.TestCase):
         #  sql:starify_payUid 查询余额=0
         cost = deal_num(commodity[f'level_{sale_level}']['day'] * commodity[f'level_{sale_level}']['rate'] * commodity[
             'price'])
-        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 100000 - cost)
+        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), user_money - cost)
         #  sql:检查背包物品=1
         assert_equal(conMysql.selectUserInfoSql('commodity_num', starify_payUid, commodity['cid'], 86400 * 15), 1)
         #  sql:打赏者starify_payUid 查询-财富值=物品价值*天数*折扣=花费
@@ -86,7 +88,7 @@ class TestPayCreate(unittest.TestCase):
         commodity = commodity_config['effect']
         sale_level = 1
         #  sql:打赏者starify_payUid 修改余额=10000
-        conMysql.updateMoneySql(starify_payUid, 100000)
+        conMysql.updateMoneySql(starify_payUid, user_money)
         #  sql:打赏者starify_payUid 清空背包礼物
         conMysql.deleteUserAccountSql('user_commodity', starify_payUid)
         #  sql:打赏者starify_payUid 修改财富值=0
@@ -98,7 +100,7 @@ class TestPayCreate(unittest.TestCase):
         #  sql:starify_payUid 查询余额=0
         cost = deal_num(commodity[f'level_{sale_level}']['day'] * commodity[f'level_{sale_level}']['rate'] * commodity[
             'price'])
-        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 100000 - cost)
+        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), user_money - cost)
         #  sql:检查背包物品=1
         assert_equal(conMysql.selectUserInfoSql('commodity_num', starify_payUid, commodity['cid'], 86400 * 3), 1)
         #  sql:打赏者starify_payUid 查询-财富值=物品价值*天数*折扣=花费
@@ -109,7 +111,7 @@ class TestPayCreate(unittest.TestCase):
         commodity = commodity_config['ring']
         sale_level = 1
         #  sql:打赏者starify_payUid 修改余额=10000
-        conMysql.updateMoneySql(starify_payUid, 100000)
+        conMysql.updateMoneySql(starify_payUid, user_money)
         #  sql:打赏者starify_payUid 清空背包礼物
         conMysql.deleteUserAccountSql('user_commodity', starify_payUid)
         #  sql:打赏者starify_payUid 修改财富值=0
@@ -121,7 +123,7 @@ class TestPayCreate(unittest.TestCase):
         #  sql:starify_payUid 查询余额=0
         cost = deal_num(commodity[f'level_{sale_level}']['day'] * commodity[f'level_{sale_level}']['rate'] * commodity[
             'price'])
-        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 100000 - cost)
+        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), user_money - cost)
         #  sql:检查背包物品=1
         assert_equal(conMysql.selectUserInfoSql('commodity_num', starify_payUid, commodity['cid'], 86400 * 3), 1)
         #  sql:打赏者starify_payUid 查询-财富值=物品价值*天数*折扣=花费
