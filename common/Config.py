@@ -38,7 +38,7 @@ class config:
         'ali-starify': 'iZbp15ildwog86lw08ptpnZ',  # todo 修改 调试用 ubuntu / dev=iZj6cig35upuwmdws5sec2Z
     }
     # 测试域名
-    pt_host = appInfo['pt_ali_main']
+    pt_host = appInfo['pt_ali_dev']
     # 内网支付接口
     pay_url = appInfo['bb_dev'] + 'pay/create?package=com.imbb.banban.android'
     pt_pay_url = pt_host + 'pay/create?package=com.imbb.oversea.android'
