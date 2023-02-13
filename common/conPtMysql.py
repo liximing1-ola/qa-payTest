@@ -256,7 +256,7 @@ class conMysql:
     # 更新被打赏账户testUid的人气数据
     @staticmethod
     def updateXsUserpopularity(uid):
-        sql = "update xs_user_popularity set popularity=0 where id = {}".format(uid)
+        sql = "update xs_user_popularity set popularity=0 where uid = {}".format(uid)
         try:
             conMysql.cur.execute(sql)
         except Exception as error:
@@ -268,7 +268,7 @@ class conMysql:
     # 查询被打赏测试账户testUid的人气数据
     @staticmethod
     def sqlXsUserpopularity(uid):
-        sql = "select popularity from xs_user_popularity  where id = {}".format(uid)
+        sql = "select popularity from xs_user_popularity  where uid = {}".format(uid)
         try:
             conMysql.cur.execute(sql)
             res = conMysql.cur.fetchone()
@@ -282,7 +282,7 @@ class conMysql:
     # 更新测试打赏者账户payUid的vip数据
     @staticmethod
     def updateXsUserprofile_pay_room_money(uid):
-        sql = "update xs_user_profile set pay_room_money=0 where id = {}".format(uid)
+        sql = "update xs_user_profile set pay_room_money=0 where uid = {}".format(uid)
         try:
             conMysql.cur.execute(sql)
         except Exception as error:
@@ -294,7 +294,7 @@ class conMysql:
     # 查询测试打赏者账户payUid的vip数据
     @staticmethod
     def sqlXsUserprofile_pay_room_money(uid):
-        sql = "select pay_room_money from xs_user_profile  where id = {}".format(uid)
+        sql = "select pay_room_money from xs_user_profile  where uid = {}".format(uid)
         try:
             conMysql.cur.execute(sql)
             res = conMysql.cur.fetchone()

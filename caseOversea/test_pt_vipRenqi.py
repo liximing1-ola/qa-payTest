@@ -9,7 +9,7 @@ from common.Consts import case_list, result
 from common.runFailed import Retry
 
 
-@Retry(max_n=3, func_prefix='test_01_paygiftVip')
+@Retry(max_n=3, func_prefix='test_01_payRoomgiftVip')
 class TestPayCreate(unittest.TestCase):
 
     @classmethod
