@@ -117,3 +117,25 @@ def checkPath(path):
     if not os.path.exists(path):
         Robot.robot('icon', 'php代码路径异常: {}'.format(path), bot='PT')
         raise EnvironmentError('代码路径异常')
+
+
+def getUserTitle(level):
+    if level == 10:
+        return 1.0
+    elif level == 20:
+        return 1.1
+    elif level == 30:
+        return 1.2
+    elif level == 40:
+        return 1.3
+    elif level == 50:
+        return 1.4
+    elif level == 60:
+        return 1.5
+    elif level == 70:
+        return 1.6
+    elif level == 80:
+        return 1.8
+    elif level == 90:
+        return 2.0
+

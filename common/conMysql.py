@@ -134,6 +134,15 @@ class conMysql:
                     return res[0]
             except Exception as error:
                 print(error)
+        elif accountType == 'level':  # 查询用户爵位等级
+            sql = "select level from xs_user_title_new where uid={}".format(uid)
+            try:
+                conMysql.cur.execute(sql)
+                res = conMysql.cur.fetchone()
+                if len(res) > 0:
+                    return res[0]
+            except Exception as error:
+                print(error)
         elif accountType == 'user_index':  # 查询用户salt
             sql = "select salt from xs_user_index where uid = {}".format(uid)
             try:

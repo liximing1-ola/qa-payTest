@@ -1,6 +1,7 @@
 from common.Config import config
 from common.conMysql import conMysql
 from common.Request import post_request_session
+from common.method import getUserTitle
 import unittest
 from common.Assert import assert_code, assert_equal, assert_body, assert_len
 from common.method import reason
@@ -40,8 +41,10 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid), 5)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.gsUid), 5)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
-        assert_equal(conMysql.selectUserInfoSql('pay_room_money', uid=config.payUid),
-                     int(vip_level + 100*1.5))
+        title_level = getUserTitle(conMysql.selectUserInfoSql('level', config.payUid))
+        assert_equal(conMysql.selectUserInfoSql('pay_room_money',
+                                                uid=config.payUid),
+                     int(vip_level + 100*title_level))
         case_list[des] = result
 
     def test_02_businessPayBoxNormalUser(self, des='商业房打赏箱子一代用户到账70%(mcb)'):
