@@ -42,10 +42,10 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid), 5)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.gsUid), 5)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
-        assert_equal(conMysql.selectUserInfoSql('pay_room_money', config.payUid),
-                     int(vip_level + 100 * getUserTitle(conMysql.selectUserInfoSql('level', config.payUid))))
         print(conMysql.selectUserInfoSql('pay_room_money', config.payUid))
         print(int(vip_level + 100 * getUserTitle(conMysql.selectUserInfoSql('level', config.payUid))))
+        assert_equal(conMysql.selectUserInfoSql('pay_room_money', config.payUid),
+                     int(vip_level + 100 * getUserTitle(conMysql.selectUserInfoSql('level', config.payUid))))
         case_list[des] = result
 
     def test_02_businessPayBoxNormalUser(self, des='商业房打赏箱子一代用户到账70%(mcb)'):
