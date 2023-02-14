@@ -99,7 +99,7 @@ class config:
     pt_fleetUid = pt_user['fleet_uid']
     # 房间类型41
     pt_room = {
-        'business_joy': 105697423,  # 商业房
+        'business_joy': 105699329,  # 商业房
         'vip_rid': 105698376,  # 个人房
         'th_union': 105708881,  # 泰区联盟房
         'en_fleet': 105717544,  # 英语大区家族房

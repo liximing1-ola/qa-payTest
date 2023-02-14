@@ -1,3 +1,5 @@
+import time
+
 from common.Config import config
 from common.conPtMysql import conMysql
 from common.Request import post_request_session
@@ -37,6 +39,7 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 0)
         assert_equal(conMysql.sqlXsUserprofile_pay_room_money(config.pt_payUid), 600)
+        time.sleep(2)  # 人气值需要task更新处理
         assert_equal(conMysql.sqlXsUserpopularity(config.pt_testUid), 600)
         case_list[des] = result
 
@@ -61,5 +64,6 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 0)
         assert_equal(conMysql.sqlXsUserprofile_pay_room_money(config.pt_payUid), 600)
+        time.sleep(2)  # 人气值需要task更新处理
         assert_equal(conMysql.sqlXsUserpopularity(config.pt_testUid), 600)
         case_list[des] = result
