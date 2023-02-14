@@ -38,7 +38,7 @@ class config:
         'ali-starify': 'iZbp15ildwog86lw08ptpnZ',  # todo 修改 调试用 ubuntu / dev=iZj6cig35upuwmdws5sec2Z
     }
     # 测试域名
-    pt_host = appInfo['pt_ali_main']
+    pt_host = appInfo['pt_ali_dev']
     # 内网支付接口
     pay_url = appInfo['bb_dev'] + 'pay/create?package=com.imbb.banban.android'
     pt_pay_url = pt_host + 'pay/create?package=com.imbb.oversea.android'
@@ -99,7 +99,7 @@ class config:
     pt_fleetUid = pt_user['fleet_uid']
     # 房间类型41
     pt_room = {
-        'business_joy': 105697423,  # 商业房
+        'business_joy': 105699329,  # 商业房
         'vip_rid': 105698376,  # 个人房
         'th_union': 105708881,  # 泰区联盟房
         'en_fleet': 105717544,  # 英语大区家族房
