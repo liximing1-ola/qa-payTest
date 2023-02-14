@@ -29,7 +29,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.payUid, money=30, money_cash=30, money_cash_b=30, money_b=10)
         conMysql.updateMoneySql(config.rewardUid)
-        vip_level = conMysql.selectUserInfoSql('pay_room_money', config.payUid)
+        vip_level = int(conMysql.selectUserInfoSql('pay_room_money', config.payUid))
         conMysql.updateMoneySql(config.gsUid)
         data = encodeData(payType='package',
                           money=100,
@@ -41,10 +41,10 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid), 5)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.gsUid), 5)
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
-        new_level = int(vip_level + 100 * getUserTitle(conMysql.selectUserInfoSql('level', config.payUid)))
-        print(vip_level)
-        print(new_level)
-        assert_equal(vip_level, new_level)
+        print(conMysql.selectUserInfoSql('pay_room_money', config.payUid))
+        print(int(vip_level + 100 * getUserTitle(conMysql.selectUserInfoSql('level', config.payUid))))
+        assert_equal(conMysql.selectUserInfoSql('pay_room_money', config.payUid),
+                     int(vip_level + 100 * getUserTitle(conMysql.selectUserInfoSql('level', config.payUid))))
         case_list[des] = result
 
     def test_02_businessPayBoxNormalUser(self, des='商业房打赏箱子一代用户到账70%(mcb)'):
