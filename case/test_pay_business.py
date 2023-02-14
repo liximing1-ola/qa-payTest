@@ -45,7 +45,7 @@ class TestPayCreate(unittest.TestCase):
         print(user_level)
         assert_equal(conMysql.selectUserInfoSql('pay_room_money',
                                                 uid=config.payUid),
-                     int(vip_level + 100*user_level)
+                     int(vip_level + 100*user_level))
         case_list[des] = result
 
     def test_02_businessPayBoxNormalUser(self, des='商业房打赏箱子一代用户到账70%(mcb)'):
