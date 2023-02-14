@@ -2,7 +2,7 @@ import os
 import random
 import time
 import requests
-from Robot import robot
+import Robot
 from common import Consts
 
 
@@ -114,7 +114,7 @@ def reason_starify(des, res):
 
 def checkPath(path):
     if not os.path.exists(path):
-        robot('icon', 'php代码路径异常: {}'.format(path), bot='PT')
+        Robot.robot('icon', 'php代码路径异常: {}'.format(path), bot='PT')
         raise EnvironmentError('代码路径异常')
 
 
