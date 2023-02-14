@@ -9,6 +9,7 @@ from common.Consts import result, case_list
 from common.runFailed import Retry
 
 
+@Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
 
     @classmethod
@@ -18,7 +19,6 @@ class TestPayCreate(unittest.TestCase):
     def tearDown(self) -> None:
         conMysql.deleteUserBeanSql(config.payUid, config.rewardUid)  # 清理前置冗余数据
 
-    @Retry
     def test_01_NoBeanPayBeanGift(self, des='打赏金豆礼物但金豆不足的场景'):
         """
         用例描述：
