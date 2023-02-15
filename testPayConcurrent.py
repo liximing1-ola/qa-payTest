@@ -55,8 +55,6 @@ class TestPayConcurrent:
         4.检查背包内物品
         5.检查被打赏者余额 990*0.62 = 6138
         """
-        mysql.updateMoneySql(config.payUid)
-        mysql.updateMoneySql(config.rewardUid)
         cid = int(mysql.getUserCommodityIdSql(self.commodity_id['cid_340'], config.payUid))
         payload = 'platform=available&type=package&money=9900&params=%7B%22rid%22%3A193185484%2C%22uids%22%3A%22105002312%22%2C%22positions%22%3A%220%22%2C%22position%22%3A-1%2C%22giftId%22%3A54%2C%22giftNum%22%3A1%2C%22price%22%3A9900%2C%22cid%22%3A{}%2C%22ctype%22%3A%22gift%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A1%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22refer%22%3A%22%E7%83%AD%E9%97%A8%3Aroom%22%2C%22useCoin%22%3A-1%7D'.format(
             cid)
