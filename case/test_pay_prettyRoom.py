@@ -9,7 +9,7 @@ from common.Consts import case_list_b, result
 from common.runFailed import Retry
 
 
-@Retry
+@Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
     prettyRid = config.bb_user['prettyRid']  # config.xsst_room_pretty
 

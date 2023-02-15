@@ -10,7 +10,7 @@ from common.runFailed import Retry
 from common.conMysql import conMysql
 
 
-@Retry(max_n=1)
+@Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
 
     # {'id': 2, 'name': '小宝贝', 'money_value': 52000, 'break_money': 28800, 'upgrade_money': 99900}

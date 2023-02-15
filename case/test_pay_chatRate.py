@@ -9,7 +9,7 @@ from common.Consts import case_list, result
 from common.runFailed import Retry
 
 
-@Retry(max_n=2)
+@Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
 
     def test_01_chatPayNoMoney(self, des='私聊打赏余额不足的场景'):

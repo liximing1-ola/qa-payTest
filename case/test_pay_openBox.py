@@ -9,7 +9,7 @@ from common.Consts import result, case_list
 from common.runFailed import Retry
 
 
-@Retry
+@Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
 
     def test_01_openBoxPayChange(self, des='背包开箱子场景'):

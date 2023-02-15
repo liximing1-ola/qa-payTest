@@ -10,7 +10,7 @@ from common.basicData import encodeData
 from common.runFailed import Retry
 
 
-@Retry
+@Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
     gift_cid = {
         'gift_329': 329,  # 礼物四叶草

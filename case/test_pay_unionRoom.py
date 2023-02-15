@@ -10,7 +10,7 @@ from common.runFailed import Retry
 from common.Consts import case_list_b, result
 
 
-@Retry
+@Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
     singer_rid = conMysql.selectUserInfoSql('union')  # 联盟房/歌友房
     pack_cal_uid = config.bb_user['pack_cal_uid']  # 直播公会gs

@@ -9,7 +9,7 @@ from common.runFailed import Retry
 from common.Consts import case_list_b, result
 
 
-@Retry
+@Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
 
     other_fleet_rid = conMysql.selectUserInfoSql('fleet')  # 非本家族房

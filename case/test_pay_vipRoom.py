@@ -9,7 +9,7 @@ from common.Consts import case_list_b, result
 from common.runFailed import Retry
 
 
-@Retry
+@Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
 
     vipRoomRid = config.bb_user['vipRoomRid']  # select rid from xs_chatroom where uid=103273407 and property='vip'  个人房，vip＞5级不回收
