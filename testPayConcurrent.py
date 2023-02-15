@@ -59,12 +59,11 @@ class TestPayConcurrent:
         data = encodeData(payType='package',
                           rid=config.live_role['auto_rid'],
                           giftId=self.commodity_id['cid_340'],
-                          money=9900,
+                          money=9900*2,
                           num=2,
                           package_cid=cid,
                           ctype='gift')
         res = post_request_session(config.pay_url, data)
-        print(res)
         assert_code(res['code'], 200)
         getValue(res)
 
