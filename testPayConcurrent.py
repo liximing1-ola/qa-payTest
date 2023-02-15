@@ -26,11 +26,11 @@ class PayConcurrent:
         }
 
         response = requests.request("POST", url, headers=headers, data=payload)
-        print(response)
+        print(response.text)
 
     def ok_test2(self):
         threads = []
-        for i in range(10):
+        for i in range(20):
             thread = gevent.spawn(self.ok_test)
             threads.append(thread)
         gevent.joinall(threads)
