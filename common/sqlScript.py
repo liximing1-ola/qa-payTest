@@ -1,6 +1,6 @@
 # coding=utf-8
 import pymysql
-import getToken
+# import getToken
 
 
 class mysql:
@@ -143,24 +143,3 @@ class mysql:
             print('fail', error)
         finally:
             con.commit()
-
-    @staticmethod
-    def updateUserIndex(num):
-        con, cur = mysql.conMysql()
-        index = {}
-        for uid in mysql.getUids(num):
-            salt = getToken.getToken.get_salt()
-            sql = "update xs_user_index set salt='{}' where uid={}".format(salt, uid)
-            index[uid] = '{}'.format(salt)
-            try:
-                cur.execute(sql)
-            except Exception as error:
-                con.rollback()
-                print('update fail', error)
-            finally:
-                con.commit()
-        print(index)
-
-
-if __name__ == '__main__':
-    mysql.updateUserIndex(5)
