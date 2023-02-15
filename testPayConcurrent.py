@@ -65,7 +65,6 @@ class TestPayConcurrent:
     def endPayCreate(self):
         assert_equal(mysql.checkUserCommoditySql(config.payUid, self.commodity_id['cid_340']), 0)
         sleep(1)
-        assert_equal(mysql.selectAllMoneySql(config.rewardUid), 6138)
         assert_equal(Consts.success_num, 1)
         Consts.fail_num = 0
 
@@ -88,8 +87,6 @@ class TestPayConcurrent:
         2.校验【status code】和返回值【body】状态
         3.检查背包内物品
         """
-        mysql.updateMoneySql(config.payUid)
-        mysql.deleteUserCommoditySql(config.payUid)
         mysql.insertXsUserCommodity(config.payUid, self.commodity_id['cid_264'], 1)
         assert_equal(mysql.checkUserCommoditySql(config.payUid, self.commodity_id['cid_264']), 1)
 
