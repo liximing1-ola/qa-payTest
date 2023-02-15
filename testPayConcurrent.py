@@ -60,6 +60,7 @@ class TestPayConcurrent:
                           rid=config.live_role['auto_rid'],
                           giftId=self.commodity_id['cid_340'],
                           money=9900,
+                          num=2,
                           package_cid=cid,
                           ctype='gift')
         res = post_request_session(config.pay_url, data)
