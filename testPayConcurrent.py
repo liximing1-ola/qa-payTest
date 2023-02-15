@@ -60,7 +60,7 @@ class TestPayConcurrent:
         cid = int(mysql.getUserCommodityIdSql(self.commodity_id['cid_340'], config.payUid))
         data = encodeData(payType='package',
                           rid=config.live_role['auto_rid'],
-                          giftId=config.giftId['cid_340'],
+                          giftId=self.commodity_id['cid_340'],
                           money=9900,
                           package_cid=cid,
                           ctype='gift')
