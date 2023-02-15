@@ -41,8 +41,8 @@ class TestPayConcurrent:
         data = encodeData(payType='shop-buy', cid=self.commodity_id['cid_340'], money=9900, num=2)
         res = post_request_session(url=self.php_urL['pay_url'], data=data)
         assert_code(res['code'], 200)
-        assert_equal(mysql.selectAllMoneySql(config.payUid), 100)
-        assert_equal(mysql.checkUserAllCommoditySql(config.payUid), 1)
+        assert_equal(mysql.selectAllMoneySql(config.payUid), 200)
+        assert_equal(mysql.checkUserAllCommoditySql(config.payUid), 2)
 
     def payCreateConcurrent(self):
         """
