@@ -55,8 +55,6 @@ class TestPayConcurrent:
         4.检查背包内物品
         5.检查被打赏者余额 990*0.62 = 6138
         """
-        mysql.updateMoneySql(config.payUid)
-        mysql.updateMoneySql(config.rewardUid)
         cid = int(mysql.getUserCommodityIdSql(self.commodity_id['cid_340'], config.payUid))
         data = encodeData(payType='package',
                           rid=config.live_role['auto_rid'],
@@ -164,7 +162,6 @@ class TestPayConcurrent:
     def main(self, num):
         self.test_01_payCreate(num)
         self.test_02_commodityUse(num)
-        # self.test_03_commodityPresent(num)
         case_list = method.dictToListSlack(Consts.case_list_c)
         des = "{}\n".format(case_list)
         Logs.get_log('concurrentCaseResult.log').info(des)
