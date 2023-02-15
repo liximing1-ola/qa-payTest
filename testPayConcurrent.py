@@ -65,6 +65,7 @@ class TestPayConcurrent:
                           package_cid=cid,
                           ctype='gift')
         res = post_request_session(config.pay_url, data)
+        print(res)
         assert_code(res['code'], 200)
         getValue(res)
 
