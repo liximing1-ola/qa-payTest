@@ -23,12 +23,11 @@ class PayConcurrent:
 
         payload = encodeData(payType='package',
                              rid=118491893,
-                             giftId=331,
-                             money=600,
-                             package_cid=754978162,
-                             ctype='gift',
-                             num=1,
                              uid=114820541,
+                             giftId=69,
+                             money=100,
+                             package_cid=755490304,
+                             ctype='gift',
                              )
         headers = {
             'user-token': '13d3JsaFNn__2FaL8dXrav8b0IosTROVP7yIOnje3SGB92bMDtxahkSuWX__2FW8ZU047__2BCfvP0YMe5OhDTzy3XMULDNY1__2BHZCh1rk__2BXr7sTRmDVUA39IAzx09eqQQ',
