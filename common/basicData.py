@@ -36,6 +36,7 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'],
         }
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
+        print(data)
         return data
     elif payType == 'package-more':
         p = []
@@ -608,10 +609,10 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
 
 
 if __name__ == '__main__':
-    data = encodeData(payType='package-more',
-                      num=2,
-                      star=8,
-                      money=2100,
-                      giftId=config.giftId['47'],
-                      uids=('{}'.format(config.rewardUid), '{}'.format(config.gsUid)))
-    print(data)
+    payload = encodeData(payType='package',
+                         rid=118491893,
+                         giftId=331,
+                         money=1200,
+                         package_cid=754978162,
+                         ctype='gift',
+                         num=2)
