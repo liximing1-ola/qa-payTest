@@ -25,7 +25,7 @@ class PayConcurrent:
                              rid=118491893,
                              uid=114820541,
                              giftId=694,
-                             money=600,
+                             money=30,
                              package_cid=754946029,
                              ctype='gift',
                              )
