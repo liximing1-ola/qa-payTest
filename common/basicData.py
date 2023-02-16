@@ -36,7 +36,6 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'],
         }
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
-        print(data)
         return data
     elif payType == 'package-more':
         p = []

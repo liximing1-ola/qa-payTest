@@ -27,7 +27,9 @@ class PayConcurrent:
                              money=600,
                              package_cid=754978162,
                              ctype='gift',
-                             num=1)
+                             num=1,
+                             uid=114820541,
+                             )
         headers = {
             'user-token': '13d3JsaFNn__2FaL8dXrav8b0IosTROVP7yIOnje3SGB92bMDtxahkSuWX__2FW8ZU047__2BCfvP0YMe5OhDTzy3XMULDNY1__2BHZCh1rk__2BXr7sTRmDVUA39IAzx09eqQQ',
             'Content-Type': 'application/x-www-form-urlencoded'
