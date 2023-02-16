@@ -24,9 +24,9 @@ class PayConcurrent:
         payload = encodeData(payType='package',
                              rid=118491893,
                              uid=114820541,
-                             giftId=67,
+                             giftId=694,
                              money=600,
-                             package_cid=754978162,
+                             package_cid=754946029,
                              ctype='gift',
                              )
         headers = {
