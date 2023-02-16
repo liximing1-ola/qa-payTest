@@ -35,7 +35,7 @@ class PayConcurrent:
         }
 
         response = requests.request("POST", url, headers=headers, data=payload)
-        print(response.text)
+        print(response.json())
 
     def ok_test2(self):
         threads = []
