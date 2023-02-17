@@ -38,7 +38,10 @@ class TestPayConcurrent:
         """
         mysql.updateMoneySql(config.payUid, 10000)
         mysql.deleteUserCommoditySql(config.payUid)
-        data = encodeData(payType='shop-buy', cid=self.commodity_id['cid_340'], money=9900, num=1)
+        data = encodeData(payType='shop-buy',
+                          cid=self.commodity_id['cid_340'],
+                          money=9900,
+                          num=1)
         res = post_request_session(url=self.php_urL['pay_url'], data=data)
         assert_code(res['code'], 200)
         assert_equal(mysql.selectAllMoneySql(config.payUid), 100)
@@ -53,11 +56,19 @@ class TestPayConcurrent:
         2.打赏背包道具 cid：340 * 1
         3.校验【status code】和返回值【body】状态
         4.检查背包内物品
-        5.检查被打赏者余额 990*0.62 = 6138
+        5.检查被打赏者余额 9900*0.62 = 6138
         """
         cid = int(mysql.getUserCommodityIdSql(self.commodity_id['cid_340'], config.payUid))
         payload = 'platform=available&type=package&money=9900&params=%7B%22rid%22%3A193185484%2C%22uids%22%3A%22105002312%22%2C%22positions%22%3A%220%22%2C%22position%22%3A-1%2C%22giftId%22%3A54%2C%22giftNum%22%3A1%2C%22price%22%3A9900%2C%22cid%22%3A{}%2C%22ctype%22%3A%22gift%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A1%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22refer%22%3A%22%E7%83%AD%E9%97%A8%3Aroom%22%2C%22useCoin%22%3A-1%7D'.format(
             cid)
+        payload = encodeData(payType='package',
+                             rid=193185484,
+                             uid=config.rewardUid,
+                             giftId=self.commodity_id['cid_340'],  # 修改id
+                             money=9900,
+                             package_cid=cid,  # 修改id
+                             ctype='gift',
+                             num=1)
         res = post_request_session(url=self.php_urL['pay_url'], data=payload)
         assert_code(res['code'], 200)
         getValue(res)
