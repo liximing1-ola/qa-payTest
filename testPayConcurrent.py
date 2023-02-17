@@ -35,7 +35,7 @@ class PayConcurrent:
 
     def getCommodityId(self):
         res = requests.get(self.commodity_id)
-        print(res)
+        print(res.json())
 
 
 if __name__ == '__main__':
