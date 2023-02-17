@@ -10,6 +10,11 @@ class PayConcurrent:
     url = "https://api-new.yinjietd.com/pay/create?package=com.imbb.banban.android&_ipv=0&_platform=android&_index=1755&_model=SEA-AL10&_timestamp=1676458178&_sign=bfd82709d13088a721188e59c0342638"
     commodity_id = 'https://api-new.yinjietd.com/commodity/userList?version=3&type=gift&package=com.imbb.banban.android&_ipv=0&_platform=android&_index=157&_model=SEA-AL10&_timestamp=1676621169&_sign=fba57be89a5882903e2458d55017145d'
 
+    headers = {
+            'user-token': 'c1df__2FUoyoWc8SXjYWNHA7oA__2Bkszd8LIfgkon__2BvnHKN5LYp0gJSJS__2FWuc77sC__2F5ci2Q5xBcqjv1k52IUDseppM__2B__2Bm8tvk2xzk__2F1__2F10Uhn8PUASP7ibuVKRLQO',
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+
     def release_test(self):
         payload = encodeData(payType='package',
                              rid=118491893,
@@ -18,12 +23,8 @@ class PayConcurrent:
                              money=30,
                              package_cid=754946029,  # 修改id
                              ctype='gift')
-        headers = {
-            'user-token': '13d3JsaFNn__2FaL8dXrav8b0IosTROVP7yIOnje3SGB92bMDtxahkSuWX__2FW8ZU047__2BCfvP0YMe5OhDTzy3XMULDNY1__2BHZCh1rk__2BXr7sTRmDVUA39IAzx09eqQQ',
-            'Content-Type': 'application/x-www-form-urlencoded'
-        }
 
-        response = requests.request("POST", self.url, headers=headers, data=payload)
+        response = requests.request("POST", self.url, headers=self.headers, data=payload)
         print(response.json())
 
     def release_test2(self):
@@ -34,7 +35,7 @@ class PayConcurrent:
         gevent.joinall(threads)
 
     def getCommodityId(self):
-        res = requests.get(self.commodity_id)
+        res = requests.get(self.commodity_id, headers=self.headers)
         print(res.json())
 
 
