@@ -64,9 +64,9 @@ class TestPayConcurrent:
         payload = encodeData(payType='package',
                              rid=193185484,
                              uid=config.rewardUid,
-                             giftId=self.commodity_id['cid_340'],  # 修改id
+                             giftId=54,  # 小天使礼物
                              money=9900,
-                             package_cid=cid,  # 修改id
+                             package_cid=cid,
                              ctype='gift',
                              num=1)
         res = post_request_session(url=self.php_urL['pay_url'], data=payload)
