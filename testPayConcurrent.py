@@ -35,8 +35,9 @@ class PayConcurrent:
         gevent.joinall(threads)
 
     def getCommodityId(self):
-        res = requests.get(self.commodity_id, headers=self.headers)
-        print(res.json())
+        res = requests.get(self.commodity_id, headers=self.headers).json()
+        print(res)
+        print(res['data'][0])
 
 
 if __name__ == '__main__':
