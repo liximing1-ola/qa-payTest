@@ -18,10 +18,10 @@ class PayConcurrent:
     def release_test(self):
         payload = encodeData(payType='package',
                              rid=118491893,
-                             uid=114820541,
-                             giftId=694,  # 修改id
-                             money=30,
-                             package_cid=754946029,  # 修改id
+                             uid=100287189,
+                             giftId=69,  # 修改id
+                             money=100,
+                             package_cid=self.getCommodityId(),  # 修改id
                              ctype='gift')
 
         response = requests.request("POST", self.url, headers=self.headers, data=payload)
@@ -46,5 +46,4 @@ class PayConcurrent:
 
 if __name__ == '__main__':
     p = PayConcurrent()
-    # p.release_test2()
-    p.getCommodityId()
+    p.release_test2()
