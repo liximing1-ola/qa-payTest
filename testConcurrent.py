@@ -78,7 +78,7 @@ class TestPayConcurrent:
         gevent.joinall(threads)
         self.endPayCreate()
         Consts.case_list_c[des] = Consts.result
-        print('-------------------------------------------------------------------------------')
+        print('-----------------------------------------------------------------------------------------')
 
     def startCommodityUseReady(self):
         """
@@ -115,7 +115,7 @@ class TestPayConcurrent:
         gevent.joinall(threads)
         self.endCommodityUse(num_times)
         Consts.case_list_c[des] = Consts.result
-        print('---------------------------------------------------------------------------------')
+        print('---------------------------------------------------------------------------------------')
 
     def startCommodityPresentReady(self):
         """
@@ -155,7 +155,7 @@ class TestPayConcurrent:
         gevent.joinall(threads)
         self.endCommodityPresent()
         Consts.case_list_c[des] = Consts.result
-        print('----------------------------------------------------------------------------')
+        print('------------------------------------------------------------------------------------')
 
     def main(self, num):
         self.test_01_payCreate(num)
