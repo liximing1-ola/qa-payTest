@@ -37,7 +37,7 @@ class PayConcurrent:
     def getCommodityId(self):
         res = requests.get(self.commodity_id, headers=self.headers).json()
         print(res)
-        if res['success'] == 0 or res['data'] is None:
+        if res['success'] == 0 or len(res['data']) == 0:
             return 0
 
         return res['data'][0]['id']
