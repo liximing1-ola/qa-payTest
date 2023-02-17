@@ -69,7 +69,7 @@ class TestPayConcurrent:
         Consts.fail_num = 0
 
     def test_01_payCreate(self, num_times, des='并发打赏背包礼物的场景'):
-        print('---------------{}--------------'.format(des))
+        print('----------------------------------------{}----------------------------------'.format(des))
         self.startPayCreateReady()
         threads = []
         for i in range(num_times):
@@ -78,7 +78,7 @@ class TestPayConcurrent:
         gevent.joinall(threads)
         self.endPayCreate()
         Consts.case_list_c[des] = Consts.result
-        print('--------------------------------')
+        print('-------------------------------------------------------------------------------')
 
     def startCommodityUseReady(self):
         """
@@ -106,7 +106,7 @@ class TestPayConcurrent:
         Consts.success_num = 0
 
     def test_02_commodityUse(self, num_times, des='并发使用背包物品的场景'):
-        print('---------------{}--------------'.format(des))
+        print('--------------------------{}----------------------------------------------'.format(des))
         self.startCommodityUseReady()
         threads = []
         for i in range(num_times):
@@ -115,7 +115,7 @@ class TestPayConcurrent:
         gevent.joinall(threads)
         self.endCommodityUse(num_times)
         Consts.case_list_c[des] = Consts.result
-        print('--------------------------------')
+        print('---------------------------------------------------------------------------------')
 
     def startCommodityPresentReady(self):
         """
@@ -146,7 +146,7 @@ class TestPayConcurrent:
         assert_equal(Consts.success_num, 2)
 
     def test_03_commodityPresent(self, num_times, des='并发赠送用户物品的场景'):
-        print('---------------{}--------------'.format(des))
+        print('-----------------------------------{}---------------------------------'.format(des))
         self.startCommodityPresentReady()
         threads = []
         for i in range(num_times):
@@ -155,7 +155,7 @@ class TestPayConcurrent:
         gevent.joinall(threads)
         self.endCommodityPresent()
         Consts.case_list_c[des] = Consts.result
-        print('---------------{}--------------')
+        print('----------------------------------------------------------------------------')
 
     def main(self, num):
         self.test_01_payCreate(num)
