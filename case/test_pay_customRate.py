@@ -18,7 +18,7 @@ class TestPayCreate(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls) -> None:
-        conMysql.checkBrokerUserRate(TestPayCreate.pack_cal_uid, TestPayCreate.ceoUid, rate=100)
+        conMysql.checkBrokerUserRate(cls.pack_cal_uid, cls.ceoUid, rate=100)
 
     def test_01_roomPayCustomRate_50(self, des='商业房打赏自定义分成:50'):
         """
