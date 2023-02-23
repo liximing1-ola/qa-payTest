@@ -19,12 +19,12 @@ class TestPayCreate(unittest.TestCase):
     def test_01_sameFleetRoomLiveGsRate(self, des='家族房打赏直播公会gs场景'):
         """
         用例描述：
-        tdr：同家族房内直播公会成员礼物打赏到账50%公会魅力值+30%个人魅力值
+        tdr：同家族房内直播公会成员礼物打赏到账70%个人魅力值
         脚本步骤：
         1.构造打赏者和被打赏者数据
         2.房间打赏（打赏1000分）
         3.校验接口状态和返回值数据
-        4.检查被打赏者余额，预期为：1000 * 0.5 = 500(money_cash) + 1000 * 0.3 = 300（money_cash_b）
+        4.检查被打赏者余额，预期为：1000 * 0.7 = 700(money_cash_b)
         5.检查打赏者余额，预期为：1000 - 1000 = 0
         """
         conMysql.updateMoneySql(config.payUid, money=1000)
@@ -43,12 +43,12 @@ class TestPayCreate(unittest.TestCase):
     def test_02_otherFleetRoomLiveGsRate(self, des='非本家族房打赏直播公会GS场景'):
         """
         用例描述：
-        tdr：other家族房内直播公会成员礼物打赏到账70%公会魅力值
+        tdr：other家族房内直播公会成员礼物打赏到账70%个人魅力值
         脚本步骤：
         1.构造打赏者和被打赏者数据
         2.房间打赏（打赏1000分）
         3.校验接口状态和返回值数据
-        4.检查被打赏者余额，预期为：1000 * 0.7 = 700(money_cash)
+        4.检查被打赏者余额，预期为：1000 * 0.7 = 700(money_cash_b)
         5.检查打赏者余额，预期为：1000 - 1000 = 0
         """
         conMysql.updateMoneySql(config.payUid, money=1000)
