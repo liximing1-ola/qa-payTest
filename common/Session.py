@@ -69,6 +69,7 @@ class Session:
                 return tokenDict
             except Exception as error:
                 Logs.get_log('getSession.log').error('session异常，原因： {}'.format(error))
+
         elif env == config.appName['Partying']:
             try:
                 headers = Yaml.read_yaml('Basic_pt.yml', 'header_pt')
@@ -84,6 +85,7 @@ class Session:
                 return tokenDict
             except Exception as error:
                 Logs.get_log('getSession.log').error('session获取异常，原因： {}'.format(error))
+
         elif env == config.appName['starify']:
             try:
                 from common.Basic_starify import header_starify, query_starify

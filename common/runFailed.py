@@ -64,7 +64,7 @@ class ClassD(unittest.TestCase):
                         n += 1
                         func_or_cls(*args, **kwargs)
                         return
-                    except Exception as error:  # 修改捕获的异常类型
+                    except Exception as error:
                         if n <= self._max_n:
                             trace = sys.exc_info()
                             traceback_info = str()

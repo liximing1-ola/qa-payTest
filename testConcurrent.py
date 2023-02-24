@@ -8,6 +8,7 @@ from common import Consts, Logs, method
 from common.basicData import encodeData
 from common.method import getValue
 from common.Session import Session
+from Robot import robot
 from common.Request import post_request_session
 from common.Assert import assert_equal, assert_code
 from time import sleep
@@ -173,7 +174,7 @@ class TestPayConcurrent:
         case_list = method.dictToListSlack(Consts.case_list_c)
         des = "{}\n".format(case_list)
         Logs.get_log('concurrentCaseResult.log').info(des)
-        # robot('markdown', des, bot='test')
+        robot('markdown', des, bot='BB')
 
 
 if __name__ == '__main__':
