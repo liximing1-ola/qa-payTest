@@ -168,15 +168,15 @@ class TestPayConcurrent:
         print('------------------------------------------------------------------------------------')
 
     def main(self, num):
-        self.test_01_payCreate(30)
+        self.test_01_payCreate(num)
         self.test_02_commodityUse(num)
         self.test_03_commodityPresent(num)
         case_list = method.dictToListSlack(Consts.case_list_c)
         des = "{}\n".format(case_list)
         Logs.get_log('concurrentCaseResult.log').info(des)
-        robot('markdown', des, bot='BB')
+        robot('success', des)
 
 
 if __name__ == '__main__':
     p = TestPayConcurrent()
-    p.main(20)
+    p.main(30)
