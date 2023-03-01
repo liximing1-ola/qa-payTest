@@ -74,6 +74,14 @@ class conMysql:
                 return int(res[0])
             except Exception as error:
                 print(error)
+        elif accountType == 'money_cash_personal':  # 查询用户新增个人魅力值字段表
+            sql = 'select money_cash_personal from xs_user_money_extend where uid ={}'.format(uid)
+            try:
+                conMysql.cur.execute(sql)
+                res = conMysql.cur.fetchone()
+                return int(res[0])
+            except Exception as error:
+                print(error)
 
     # 删除用户账户数据
     @staticmethod
@@ -165,6 +173,19 @@ class conMysql:
             for uid in uids:
                 sql = "update xs_user_money set money=0, money_b=0, money_cash=0, money_cash_b=0, gold_coin=0, " \
                       "money_debts=0, money_order=0, money_order_b=0 where uid={}".format(uid)
+                conMysql.cur.execute(sql)
+        except Exception as error:
+            conMysql.con.rollback()
+            print('update fail', error)
+        finally:
+            conMysql.con.commit()
+
+    #  清空用户xs_user_money_extend账户余额
+    @staticmethod
+    def updateUserextendMoneyClearSql(*uids):
+        try:
+            for uid in uids:
+                sql = "update xs_user_money_extend set money_cash_personal=0 where uid={}".format(uid)
                 conMysql.cur.execute(sql)
         except Exception as error:
             conMysql.con.rollback()

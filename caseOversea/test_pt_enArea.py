@@ -53,7 +53,7 @@ class TestPayCreate(unittest.TestCase):
         1.构造打赏者和被打赏者数据
         2.私聊一对一打赏流程
         3.校验接口和返回值数据
-        4.检查打赏者数据，预期：700 - 600 = 0
+        4.检查打赏者数据，预期：600 - 600 = 0
         5.检查被打赏者余额,预期为：不小于150
         """
         conMysql.updateMoneySql(config.pt_payUid, money=300, money_cash=100, money_b=100, money_cash_b=100)
