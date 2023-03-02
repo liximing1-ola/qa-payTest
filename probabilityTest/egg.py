@@ -240,7 +240,7 @@ def main_pay():
     # updateBeanSql(105002093, 1000000000)
     # updateBeanSql(105000355, 0)
     while i <= 200000:
-        release_test2(20)
+        release_test2(45)
         i += 1
 
 
