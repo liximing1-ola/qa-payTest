@@ -17,12 +17,16 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # 个人房幸运蛋概率测试
 def postPayCreate():
-    url = "https://dev.iambanban.com/pay/create?package=com.imbb.banban.android"
+    url = "https://192.168.11.46/pay/create?package=com.imbb.banban.android"
     headers = {
         'Content-Type': "application/x-www-form-urlencoded",
         'cache-control': "no-cache",
         'Postman-Token': "f7d705b2-cf29-4a4a-81ba-2c8c8d0f5ed5",
         "user-token": 'cc19BF90fWLBasZjkV5__2B3XOCrWjFDy7pmXlFLascuUUcpJvjvba7NTnN0eTphNyvZBOpvz9wVlBwAZS__2FiM__2BPvRvafKLT__2Fenj8q3GH9HdDMvWm9MQF2fFDAWK'}
+    """{"rid": 200057467, "uids": "100287189", "positions": "3", "position": -1, "giftId": 2602, "giftNum": 1,
+     "price": 200, "cid": 0, "ctype": "", "duction_money": 0, "version": 2, "num": 1, "gift_type": "normal", "star": 0,
+     "show_pac_man_guide": 1, "refer": "home_create_room_page:room", "all_mic": 0, "gift_refer": "", "egg_level": "1",
+     "useCoin": -1}"""
     data = {
         "platform": "available",
         "type": "package",
@@ -46,6 +50,7 @@ def postPayCreate():
              "show_pac_man_guide": 1,
              "refer": "",
              "all_mic": 0,
+             "egg_level": "1"
              }
     }
     d = urllib.parse.urlencode(data)
@@ -211,14 +216,14 @@ def conMysql():
 
 def updateBeanSql(uid, money):
     con, cur = conMysql()
-    sql = "update xs_user_money set money={} where uid={} limit 1".format(money, uid)
+    sql = "update xs_user_money set money={}, money_cash_b=0 where uid={} limit 1".format(money, uid)
     try:
         cur.execute(sql)
     except Exception as error:
         con.rollback()
         print('update fail', error)
     finally:
-        time.sleep(0.1)
+        time.sleep(0.3)
         con.commit()
 
 
