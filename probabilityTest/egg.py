@@ -38,7 +38,7 @@ def postPayCreate():
              "position": -1,
              "giftId": 2602,
              "giftNum": 1,
-             "price": 200,
+             "price": 1200,
              "cid": 0,
              "ctype": "",
              "duction_money": 0,
