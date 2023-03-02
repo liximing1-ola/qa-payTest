@@ -27,7 +27,7 @@ def postPayCreate():
     data = {
         "platform": "available",
         "type": "package",
-        "money": 1200,
+        "money": 600,
         "params":
             {"rid": 200057467,
              "uids": "105000355",
@@ -35,7 +35,7 @@ def postPayCreate():
              "position": -1,
              "giftId": 2602,
              "giftNum": 1,
-             "price": 1200,
+             "price": 600,
              "cid": 0,
              "ctype": "",
              "duction_money": 0,
@@ -47,7 +47,7 @@ def postPayCreate():
              "show_pac_man_guide": 1,
              "refer": "",
              "all_mic": 0,
-             "egg_level": "3"
+             "egg_level": "2"
              }
     }
     d = urllib.parse.urlencode(data)
@@ -235,10 +235,10 @@ def release_test2(num):
 
 def main_pay():
     i = 1
-    # updateBeanSql(105002093, 120000000)
-    # updateBeanSql(105000355, 0)
+    updateBeanSql(105002093, 60000000)
+    updateBeanSql(105000355, 0)
     while i <= 100000:
-        release_test2(30)
+        release_test2(66)
         i += 1
 
 
