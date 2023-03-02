@@ -230,7 +230,7 @@ def release_test2(num):
 
 def main_pay():
     i = 1
-    updateBeanSql(131565017, 100000000)
+    updateBeanSql(105002093, 1000000000)
     updateBeanSql(105000355, 0)
     while i < 200000:
         release_test2(20)
