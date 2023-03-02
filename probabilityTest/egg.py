@@ -238,10 +238,10 @@ def main_pay():
     # updateBeanSql(105002093, 120000000)
     # updateBeanSql(105000355, 0)
     while i <= 100000:
-        release_test2(1)
+        release_test2(30)
         i += 1
 
 
 if __name__ == '__main__':
-    postPayCreate()
-    # main_pay()
+    # postPayCreate()
+    main_pay()
