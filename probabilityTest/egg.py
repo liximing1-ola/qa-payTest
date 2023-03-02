@@ -3,8 +3,6 @@ import gevent
 from gevent import monkey
 
 monkey.patch_all()
-import requests
-from common.basicData import encodeData
 
 import time
 import urllib.parse
