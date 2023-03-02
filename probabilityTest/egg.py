@@ -53,7 +53,7 @@ def postPayCreate():
     data = d.replace('+', '').replace('%27', '%22')
     res = requests.post(url, data=data, headers=headers, verify=False)
     print(res.text)
-    res = res.json()
+    # res = res.json()
     print(res)
     if res['success'] == 1:
         pass
