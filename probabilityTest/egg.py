@@ -9,6 +9,10 @@ import urllib.parse
 
 import pymysql
 import requests
+import urllib3
+
+urllib3.disable_warnings()
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 # 个人房幸运蛋概率测试
@@ -46,7 +50,7 @@ def postPayCreate():
     }
     d = urllib.parse.urlencode(data)
     data = d.replace('+', '').replace('%27', '%22')
-    res = requests.post(url, data=data, headers=headers)
+    res = requests.post(url, data=data, headers=headers, verify=False)
     res = res.json()
     if res['success'] == 1:
         pass
