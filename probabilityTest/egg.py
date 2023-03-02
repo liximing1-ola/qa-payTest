@@ -23,10 +23,6 @@ def postPayCreate():
         'cache-control': "no-cache",
         'Postman-Token': "f7d705b2-cf29-4a4a-81ba-2c8c8d0f5ed5",
         "user-token": 'cc19BF90fWLBasZjkV5__2B3XOCrWjFDy7pmXlFLascuUUcpJvjvba7NTnN0eTphNyvZBOpvz9wVlBwAZS__2FiM__2BPvRvafKLT__2Fenj8q3GH9HdDMvWm9MQF2fFDAWK'}
-    """{"rid": 200057467, "uids": "100287189", "positions": "3", "position": -1, "giftId": 2602, "giftNum": 1,
-     "price": 200, "cid": 0, "ctype": "", "duction_money": 0, "version": 2, "num": 1, "gift_type": "normal", "star": 0,
-     "show_pac_man_guide": 1, "refer": "home_create_room_page:room", "all_mic": 0, "gift_refer": "", "egg_level": "1",
-     "useCoin": -1}"""
     data = {
         "platform": "available",
         "type": "package",
@@ -57,6 +53,7 @@ def postPayCreate():
     data = d.replace('+', '').replace('%27', '%22')
     res = requests.post(url, data=data, headers=headers, verify=False)
     res = res.json()
+    print(res)
     if res['success'] == 1:
         pass
     else:
@@ -237,10 +234,10 @@ def release_test2(num):
 
 def main_pay():
     i = 1
-    updateBeanSql(105002093, 120000000)
-    updateBeanSql(105000355, 0)
+    # updateBeanSql(105002093, 120000000)
+    # updateBeanSql(105000355, 0)
     while i <= 100000:
-        release_test2(30)
+        release_test2(1)
         i += 1
 
 
