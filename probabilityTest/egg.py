@@ -55,10 +55,10 @@ def postPayCreate():
     print(res.text)
     # res = res.json()
     print(res)
-    if res['success'] == 1:
-        pass
-    else:
-        raise EnvironmentError(res)
+    #if res['success'] == 1:
+    #    pass
+    #else:
+    #    raise EnvironmentError(res)
 
 
 def postPayCreate_600(giftNum):
