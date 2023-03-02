@@ -22,7 +22,8 @@ def postPayCreate():
         'Content-Type': "application/x-www-form-urlencoded",
         'cache-control': "no-cache",
         'Postman-Token': "f7d705b2-cf29-4a4a-81ba-2c8c8d0f5ed5",
-        "user-token": 'cc19BF90fWLBasZjkV5__2B3XOCrWjFDy7pmXlFLascuUUcpJvjvba7NTnN0eTphNyvZBOpvz9wVlBwAZS__2FiM__2BPvRvafKLT__2Fenj8q3GH9HdDMvWm9MQF2fFDAWK'}
+        "user-token": '0976FcAmUaHnJvJAKi804Ijs2Cm3__2BuamYTrhAVV9baYv2cOWvvuwII2kdNeSKeB8MGHOnQJq878fOl3VKNltq4__2BP7pfIksSLlQs1Y4s50wqo__2Fm3qksqrXTqC'}
+
     data = {
         "platform": "available",
         "type": "package",
@@ -52,13 +53,12 @@ def postPayCreate():
     d = urllib.parse.urlencode(data)
     data = d.replace('+', '').replace('%27', '%22')
     res = requests.post(url, data=data, headers=headers, verify=False)
-    print(res.text)
-    # res = res.json()
+    res = res.json()
     print(res)
-    #if res['success'] == 1:
-    #    pass
-    #else:
-    #    raise EnvironmentError(res)
+    if res['success'] == 1:
+        pass
+    else:
+        raise EnvironmentError(res)
 
 
 def postPayCreate_600(giftNum):
