@@ -10,7 +10,6 @@ import urllib.parse
 import pymysql
 import requests
 import urllib3
-import json
 
 urllib3.disable_warnings()
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -53,7 +52,7 @@ def postPayCreate():
     d = urllib.parse.urlencode(data)
     data = d.replace('+', '').replace('%27', '%22')
     res = requests.post(url, data=data, headers=headers, verify=False)
-    print(res.json())
+    print(res.text)
     res = res.json()
     print(res)
     if res['success'] == 1:
