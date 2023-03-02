@@ -1,5 +1,11 @@
 # coding=utf-8
-import random
+import gevent
+from gevent import monkey
+
+monkey.patch_all()
+import requests
+from common.basicData import encodeData
+
 import time
 import urllib.parse
 
@@ -14,7 +20,7 @@ def postPayCreate():
         'Content-Type': "application/x-www-form-urlencoded",
         'cache-control': "no-cache",
         'Postman-Token': "f7d705b2-cf29-4a4a-81ba-2c8c8d0f5ed5",
-        "user-token": '926feYL3bQMHn4RU0vCTv2CINtRAGANDu40NV62yeFulU6QfQeRXIZVyHy4Ab__2FcjekXWyLJUv__2FMBvTJtjGNjqYiFvM2OYG4gTWl3MNhBUnToMCGAnhkglLdT'}
+        "user-token": 'cc19BF90fWLBasZjkV5__2B3XOCrWjFDy7pmXlFLascuUUcpJvjvba7NTnN0eTphNyvZBOpvz9wVlBwAZS__2FiM__2BPvRvafKLT__2Fenj8q3GH9HdDMvWm9MQF2fFDAWK'}
     data = {
         "platform": "available",
         "type": "package",
@@ -214,13 +220,20 @@ def updateBeanSql(uid, money):
         con.commit()
 
 
+def release_test2(num):
+    threads = []
+    for i in range(num):
+        thread = gevent.spawn(postPayCreate)
+        threads.append(thread)
+    gevent.joinall(threads)
+
+
 def main_pay():
     i = 1
     updateBeanSql(131565017, 100000000)
     updateBeanSql(105000355, 0)
-    while i < 100000:
-        postPayCreate()
-        time.sleep(0.1)
+    while i < 200000:
+        release_test2(20)
         i += 1
 
 
