@@ -8,31 +8,31 @@ import requests
 
 
 # 个人房幸运蛋概率测试
-def postPayCreate(giftNum):
+def postPayCreate():
     url = "https://dev.iambanban.com/pay/create?package=com.imbb.banban.android"
     headers = {
         'Content-Type': "application/x-www-form-urlencoded",
         'cache-control': "no-cache",
         'Postman-Token': "f7d705b2-cf29-4a4a-81ba-2c8c8d0f5ed5",
-        "user-token": '8a2ekYGSBGzQGaeDDD__2FtXwt7q1ZaWC2r7eZViTdlGPPzJ__2FOCEtkXnkzbWnjgkZD8LlEwDsk9ZeanifS5wli8XrqnxZE35cfMCaZw1T10sTWSQgK__2FoDrIAd5H'}
+        "user-token": '926feYL3bQMHn4RU0vCTv2CINtRAGANDu40NV62yeFulU6QfQeRXIZVyHy4Ab__2FcjekXWyLJUv__2FMBvTJtjGNjqYiFvM2OYG4gTWl3MNhBUnToMCGAnhkglLdT'}
     data = {
         "platform": "available",
         "type": "package",
-        "money": 200 * giftNum,
+        "money": 200,
         "params":
-            {"rid": 200000945,
-             "uids": "105002315",
+            {"rid": 200057467,
+             "uids": "105000355",
              "positions": "1",
              "position": -1,
-             "giftId": 558,
-             "giftNum": giftNum,
+             "giftId": 2596,
+             "giftNum": 1,
              "price": 200,
              "cid": 0,
              "ctype": "",
              "duction_money": 0,
              "version": 2,
-             "num": giftNum,
-             "gift_type": 'bean',
+             "num": 1,
+             "gift_type": 'normal',
              "useCoin": -1,
              "star": 0,
              "show_pac_man_guide": 1,
@@ -201,9 +201,9 @@ def conMysql():
     return con, cursor
 
 
-def updateBeanSql(uid, coupon_money):
+def updateBeanSql(uid, money):
     con, cur = conMysql()
-    sql = "update xs_user_money_extend set money_coupon={} where uid={} limit 1".format(coupon_money, uid)
+    sql = "update xs_user_money set money={} where uid={} limit 1".format(money, uid)
     try:
         cur.execute(sql)
     except Exception as error:
@@ -216,36 +216,13 @@ def updateBeanSql(uid, coupon_money):
 
 def main_pay():
     i = 1
-    # updateBeanSql(128440017, coupon_money=1000000000)
-    # updateBeanSql(105002315, 0)
-    while i < 10000:
-        num = int(random.choice('136'))
-        print('第{}次, 开蛋数为{}'.format(i, num))
-        postPayCreate(num)
-        time.sleep(1)
-        i += 1
-
-
-def main_ktv():
-    i = 1
-    while i < 10000:
-        print('第{}次'.format(i))
-        postPayCreate_live()
-        time.sleep(0.5)
-        i += 1
-
-
-def main_pay_600():
-    i = 1
-    # updateBeanSql(128440017, coupon_money=200000000)
-    # updateBeanSql(105002315, 0)
-    while i < 20000:
-        num = int(random.randint(1, 50))
-        print('第{}次, 开箱数为{}'.format(i, num))
-        postPayCreate_600(num)
-        time.sleep(1)
+    updateBeanSql(131565017, 100000000)
+    updateBeanSql(105000355, 0)
+    while i < 100000:
+        postPayCreate()
+        time.sleep(0.1)
         i += 1
 
 
 if __name__ == '__main__':
-    main_pay_600()
+    main_pay()
