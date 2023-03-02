@@ -30,7 +30,7 @@ def postPayCreate():
              "uids": "105000355",
              "positions": "1",
              "position": -1,
-             "giftId": 2596,
+             "giftId": 2602,
              "giftNum": 1,
              "price": 200,
              "cid": 0,
