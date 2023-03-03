@@ -6,7 +6,7 @@ monkey.patch_all()
 
 import time
 import urllib.parse
-
+import random
 import pymysql
 import requests
 import urllib3
@@ -17,6 +17,17 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # 个人房幸运蛋概率测试
 def postPayCreate():
+    egg_level = random.randint(1, 3)
+
+    if egg_level == 1:
+        money = 200
+    elif egg_level == 2:
+        money = 600
+    elif egg_level == 3:
+        money = 1200
+    else:
+        raise EnvironmentError('level error')
+
     url = "https://192.168.11.46/pay/create?package=com.imbb.banban.android"
     headers = {
         'Content-Type': "application/x-www-form-urlencoded",
@@ -27,7 +38,7 @@ def postPayCreate():
     data = {
         "platform": "available",
         "type": "package",
-        "money": 600,
+        "money": money,
         "params":
             {"rid": 200057467,
              "uids": "105000355",
@@ -35,7 +46,7 @@ def postPayCreate():
              "position": -1,
              "giftId": 2602,
              "giftNum": 1,
-             "price": 600,
+             "price": money,
              "cid": 0,
              "ctype": "",
              "duction_money": 0,
@@ -47,7 +58,7 @@ def postPayCreate():
              "show_pac_man_guide": 1,
              "refer": "",
              "all_mic": 0,
-             "egg_level": "2"
+             "egg_level": "{}".format(egg_level)
              }
     }
     d = urllib.parse.urlencode(data)
@@ -235,10 +246,10 @@ def release_test2(num):
 
 def main_pay():
     i = 1
-    #updateBeanSql(105002093, 60000000)
-    #updateBeanSql(105000355, 0)
+    updateBeanSql(105002093, 100000000)
+    updateBeanSql(105000355, 0)
     while i <= 100000:
-        release_test2(66)
+        release_test2(20)
         i += 1
 
 
