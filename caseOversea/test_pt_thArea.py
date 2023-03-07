@@ -11,7 +11,7 @@ import time
 from common.conRedis import conRedis
 
 
-@Retry
+@unittest.skip('老版本样式的泰语分成体系，已替换新分成')
 class TestPayCreate(unittest.TestCase):
     """
     泰语区消费差异化验证：

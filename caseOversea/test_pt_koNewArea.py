@@ -9,7 +9,7 @@ from common.Consts import result, case_list
 from common.runFailed import Retry
 
 
-@unittest.skip('老版本样式的日语分成体系，已替换新分成')
+@Retry
 class TestPayCreate(unittest.TestCase):
     """
     日语区消费差异化验证：
