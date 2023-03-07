@@ -39,6 +39,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, money=100, money_cash=100, money_cash_b=100, money_b=100)
         conMysql.updateMoneySql(config.pt_testUid)
+        conMysql.updateUserextendMoneyClearSql(config.pt_testUid)  # 非主播钱包附加表账户余额清空
         data = encodePtData(payType='package',
                             money=300,
                             rid=config.pt_room['th_union'],
@@ -47,10 +48,10 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 100)
-        assert_len(conMysql.selectUserInfoSql('sum_money', config.pt_testUid), 30)
-        assert_equal(conMysql.selectUserInfoSql('single_money',
+        assert_len(conMysql.selectUserInfoSql('money_cash_personal', config.pt_testUid), 30)
+        assert_equal(conMysql.selectUserInfoSql('money_cash_personal',
                                                 config.pt_testUid,
-                                                money_type='money_cash_b'),
+                                                money_type='money_cash_personal'),
                      conMysql.selectUserInfoSql(accountType='pay_change', uid=config.pt_testUid))
         case_list[des] = result
 
@@ -67,6 +68,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, money=10000)
         conMysql.updateMoneySql(config.pt_testUid)
+        conMysql.updateUserextendMoneyClearSql(config.pt_testUid)  # 非主播钱包附加表账户余额清空
         data = encodePtData(payType='package-more',
                             num=2,
                             money=1200,
@@ -76,9 +78,9 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 5200)
-        assert_len(conMysql.selectUserInfoSql('sum_money', config.pt_testUid), 60)
-        assert_equal(conMysql.selectUserInfoSql('single_money',
+        assert_len(conMysql.selectUserInfoSql('money_cash_personal', config.pt_testUid), 60)
+        assert_equal(conMysql.selectUserInfoSql('money_cash_personal',
                                                 config.pt_testUid,
-                                                money_type='money_cash_b'),
+                                                money_type='money_cash_personal'),
                      conMysql.selectUserInfoSql(accountType='pay_change', uid=config.pt_testUid))
         case_list[des] = result
