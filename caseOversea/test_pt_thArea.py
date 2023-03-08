@@ -95,7 +95,6 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, 700)
         conMysql.updateMoneySql(config.pt_brokerUid)  # 非主播账户余额清空
-        conMysql.updateUserextendMoneyClearSql(config.pt_brokerUid)  # 非主播钱包附加表账户余额清空
         data = encodePtData(payType='chat-gift', uid=config.pt_brokerUid)
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
@@ -118,7 +117,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.pt_payUid, 700)
         conMysql.updateMoneySql(config.pt_brokerUid)
         data = encodePtData(payType='package',
-                            rid=conMysql.select_user_chatroom(property='union', bigarea_id=6), uid=config.pt_brokerUid)
+                            rid=config.pt_room['th_union'], uid=config.pt_brokerUid)
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -126,7 +125,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_brokerUid, money_type='money_cash_b'), 420)
         case_list[des] = result
 
-    def test_01_thAreaNoBrokerMemberIMPay(self, des='泰国区私聊打赏非主播分成80%'):
+    def test_05_thAreaNoBrokerMemberIMPay(self, des='泰国区私聊打赏非主播分成80%'):
         """
         用例描述：
         检查泰语区私聊一对一打赏礼物，非公会成员是一代宗师的用户收到打赏的80%
