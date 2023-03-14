@@ -130,7 +130,7 @@ def all_case(appInfo):
 
     testcase = unittest.TestSuite()
     discover = unittest.defaultTestLoader.discover(case_dir,  # 指定待执行用例的目录
-                                                   pattern="test_pay_pretty.py",
+                                                   pattern="test_pay_prettyRoom.py",
                                                    top_level_dir=None)
     testcase.addTests(discover)
     return testcase
