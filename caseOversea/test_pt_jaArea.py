@@ -13,8 +13,8 @@ from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
     """
     日语区消费差异化验证：
-    1.日语区：非公会成员：52% /公会成员：60% （礼物打赏，箱子打赏）
-    2.先判断是否公会，再判断师徒体系，如果是一代宗师：60分成
+    1.日语区：非公会成员：70% /公会成员：60% （私聊礼物打赏，箱子打赏）
+    2.先判断是否公会，再判断商业厅/非商业厅。商业厅都是60%
     """
 
     @classmethod
@@ -25,36 +25,39 @@ class TestPayCreate(unittest.TestCase):
     def tearDownClass(cls) -> None:
         conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()))
 
-    def test_01_jaAreaNoBrokerMemberIMPay(self, des='日区非公会一代宗师私聊分成60:40'):
+    def test_01_jaAreaNoBrokerMemberIMPay(self, des='日语区私聊打赏非公会私聊分成70%'):
         """
         用例描述：
-        检查日语区私聊一对一打赏礼物，非公会成员是一代宗师的用户收到打赏的60%
+        检查日语区私聊一对一打赏礼物，非公会成员是一代宗师的用户收到打赏的70%
         脚本步骤：
         1.构造打赏者和被打赏者数据
         2.私聊一对一打赏流程
-        3.校验接口和返回值数据
+        3.校验接口和返回值数据，到账money_cash_personal
         4.检查打赏者数据，预期：600 - 600 = 0
-        5.检查被打赏者余额,预期：600 * 0.60 = 360
+        5.检查被打赏者余额,预期：600 * 0.7 = 420
         """
         conMysql.updateMoneySql(config.pt_payUid, money=600)
         conMysql.updateMoneySql(config.pt_testUid)
+        conMysql.updateUserextendMoneyClearSql(config.pt_testUid)  # 非主播钱包附加表账户余额清空
         data = encodePtData(payType='chat-gift')
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash'), 360)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 0)
+        assert_equal(
+            conMysql.selectUserInfoSql('money_cash_personal', config.pt_testUid, money_type='money_cash_personal'), 420)
         case_list[des] = result
 
-    def test_02_jaAreaBrokerMemberIMPayGiveBox(self, des='日区公会成员私聊分成60:40'):
+    def test_02_jaAreaBrokerMemberIMPayGiveBox(self, des='日语区私聊打赏公会主播私聊箱子分成60%'):
         """
         用例描述：
         检查日语区私聊一对一打赏箱子，公会成员收到打赏的60%
         脚本步骤：
         1.构造打赏者和被打赏者数据
         2.私聊一对一打赏流程
-        3.校验接口和返回值数据
+        3.校验接口和返回值数据，到账money_cash_b
         4.检查打赏者数据，预期：600 - 600 = 0
-        5.检查被打赏者余额,预期：不小于180
+        5.检查被打赏者余额,预期：不小于300*60% = 180
         """
         conMysql.updateMoneySql(config.pt_payUid, money=600)
         conMysql.updateMoneySql(config.pt_brokerUid)
@@ -72,50 +75,50 @@ class TestPayCreate(unittest.TestCase):
                      conMysql.selectUserInfoSql(accountType='pay_change', uid=config.pt_brokerUid))
         case_list[des] = result
 
-    def test_03_jaAreaNoBrokerMemberRoomPay(self, des='日区非公会一代宗师房间分成60:40'):
+    def test_03_jaAreaNoBrokerMemberRoomPay(self, des='日语区房间打赏非公会私聊分成70%'):
         """
         用例描述：
-        验证日语区商业房打赏礼物，非公会成员是一代宗师的用户收到打赏的60%
+        验证日语区家族房打赏礼物，非公会成员是一代宗师的用户收到打赏的60%
         脚本步骤：
         1.构造打赏者和被打赏者数据
         2.房间内一对一打赏（打赏600分）
-        3.校验接口状态和返回值数据
-        4.检查被打赏者余额，预期为：600 * 0.6 = 360
+        3.校验接口状态和返回值数据,到账money_cash_personal
+        4.检查被打赏者余额，预期为：600 * 0.7 = 420
         """
         conMysql.updateMoneySql(config.pt_payUid, 600)
         conMysql.updateMoneySql(config.pt_testUid)
-        data = encodePtData(payType='package')
+        conMysql.updateUserextendMoneyClearSql(config.pt_testUid)  # 非主播钱包附加表账户余额清空
+        data = encodePtData(payType='package',uid=config.pt_testUid,rid=conMysql.select_user_chatroom(property='fleet', bigarea_id=10))
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 0)
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_testUid, money_type='money_cash'), 360)
+        assert_equal(conMysql.selectUserInfoSql('money_cash_personal', config.pt_testUid, money_type='money_cash_personal'), 420)
         case_list[des] = result
 
-    @unittest.skip
-    def test_04_jaAreaBrokerMemberGiveBoxPay(self, des='日区公会成员房间分成60:40'):
+    def test_04_jaAreaBrokerMemberGiveBoxPay(self, des='日语区房间打赏公会私聊分成60%'):
         """
         用例描述：
-        验证日语区商业房打赏箱子，公会成员收到打赏的60%
+        验证日语区家族房打赏箱子，公会成员收到打赏的60%
         脚本步骤：
         1.构造数据（更新xs_user_money，xs_user_commodity，xs_user_box）
         2.giveBox
-        3.校验接口状态和返回值数据
+        3.校验接口状态和返回值数据，到账money_cash_b
         4.检查打赏者账户余额，预期值为：700 - 600 = 100
-        5.检查收箱用户账户余额，预期值为：大于100
+        5.检查收箱用户账户余额，预期值为：大于180
         """
         conMysql.updateMoneySql(config.pt_payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
         conMysql.updateMoneySql(config.pt_brokerUid)
         data = encodePtData(payType='package',
                             uid=config.pt_brokerUid,
-                            giftId=config.giftId['46'])
+                            giftId=config.giftId['46'],rid=conMysql.select_user_chatroom(property='fleet', bigarea_id=10))
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 100)
         assert_len(conMysql.selectUserInfoSql('sum_money', config.pt_brokerUid), 180)
         assert_equal(conMysql.selectUserInfoSql('single_money',
-                                                config.pt_testUid,
+                                                config.pt_brokerUid,
                                                 money_type='money_cash_b'),
-                     conMysql.selectUserInfoSql(accountType='pay_change', uid=config.pt_testUid))
+                     conMysql.selectUserInfoSql(accountType='pay_change', uid=config.pt_brokerUid))
         case_list[des] = result
