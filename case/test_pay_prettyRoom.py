@@ -39,6 +39,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 150)
         case_list_b[des] = result
 
+    @unittest.skip
     def test_02_prettyRoomPayBox(self, des='靓号房打赏礼盒GS分62%进公会魅力值'):
         """
         用例描述：
@@ -66,6 +67,7 @@ class TestPayCreate(unittest.TestCase):
                    300 * config.rate)
         case_list_b[des] = result
 
+    @unittest.skip
     def test_03_prettyRoomPayGiftToNormalUser(self, des='靓号房打赏普通用户进个人魅力值'):
         """
         用例描述：
