@@ -51,7 +51,7 @@ class updateCode:
             #times = int(
             #   mktime(strptime([eval(item) for item in log_list][0]['date'], "%Y-%m-%d %H:%M:%S")))  # commit更新时间
             lastTime = int(updateTime('read'))  # 上次脚本执行时间
-            times = int(time())
+            times = int(160000000)
             if times > lastTime:
                 Logs.get_log('updateGitCode.log').info(
                     '最新代码提交时间: {}, 上次代码更新时间: {}'.format(times, lastTime))
