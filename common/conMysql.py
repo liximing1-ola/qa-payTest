@@ -677,9 +677,10 @@ class conMysql:
             conMysql.cur.execute(sql)
             res = conMysql.cur.fetchall()
             print(res)
+            print(res['gid'])
         except Exception as error:
             print(error)
 
 
 if __name__ == '__name__':
-    conMysql().checkPayChange(10028789)
+    conMysql().checkPayChange(100287189)
