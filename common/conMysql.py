@@ -153,7 +153,7 @@ class conMysql:
             except Exception as error:
                 print(error)
         elif accountType == 'relation_id':  # 查询用户守护关系id
-            sql = "select id from xs_relation_defend where uid={} and defend_uid={} and relation_id={}".\
+            sql = "select id from xs_relation_defend where uid={} and defend_uid={} and relation_id={}". \
                 format(config.payUid, uid, cid)
             try:
                 conMysql.cur.execute(sql)
@@ -297,7 +297,8 @@ class conMysql:
 
         elif tableName == 'chatroom':  # 修改用户为房间房主
             sql = "update xs_chatroom set app_id=1, uid={}, settlement_channel='live', " \
-                  "room_factory_type='business-soundchat' where rid={} limit 1".format(uid, config.live_role['live_rid'])
+                  "room_factory_type='business-soundchat' where rid={} limit 1".format(uid,
+                                                                                       config.live_role['live_rid'])
             try:
                 conMysql.cur.execute(sql)
             except Exception as error:
@@ -606,7 +607,8 @@ class conMysql:
             conMysql.cur.execute(sql)
             res = conMysql.cur.fetchone()
             if res is None:
-                sql = 'insert into config.xsst_ktv_uid_white(uid, type, app_id) values({}, {}, 1)'.format(uid,                                                                                               white_type)
+                sql = 'insert into config.xsst_ktv_uid_white(uid, type, app_id) values({}, {}, 1)'.format(uid,
+                                                                                                          white_type)
                 try:
                     conMysql.cur.execute(sql)
                 except Exception as error:
@@ -667,3 +669,17 @@ class conMysql:
             print(error)
         finally:
             conMysql.con.commit()
+
+    @staticmethod
+    def checkPayChange(uid):
+        sql = 'select reason from xs_pay_change where uid={} order by id desc'.format(uid)
+        try:
+            conMysql.cur.execute(sql)
+            res = conMysql.cur.fetchall()
+            print(res)
+        except Exception as error:
+            print(error)
+
+
+if __name__ == '__name__':
+    conMysql().checkPayChange(10028789)

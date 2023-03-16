@@ -88,8 +88,8 @@ class TestPayCreate(unittest.TestCase):
         2.开通守护
         3.校验接口状态和返回值数据
         4.检查打赏者余额，预期为：52000 - 52000 = 0
-        5.检查被打赏者总余额，预期为：52000 * 0.62 * 0.25 = 8060
-        6.检查被打赏者公会长余额，预期为：52000 * 0.62 *（1-0.25) = 27300
+        5.检查被打赏者总余额，到账预期为：52000*（0.7*0.25≈17%） - 52000*（0.08*0.25=2%）=8840-1040=7800
+        6.检查被打赏者公会长余额，到账预期为：52000*（70%-17%=53%) - 52000*（0.08*0.75=6%）=27560-3120=24440
         """
         conMysql.updateMoneySql(config.payUid, money=52000)
         conMysql.updateUserMoneyClearSql(self.customUid, self.ceoUid)
@@ -104,9 +104,9 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         assert_equal(conMysql.selectUserInfoSql('single_money', self.customUid, money_type='money_cash'),
-                     52000 * config.rate * 0.25)
+                     7800)
         assert_equal(conMysql.selectUserInfoSql('single_money', self.ceoUid, money_type='money_cash'),
-                     52000 * config.rate * 0.75)
+                     24440)
         case_list_b[des] = result
 
     def test_04_liveRoomPayCustomRate_70(self, des='直播公会房间打赏自定义分成:70'):
