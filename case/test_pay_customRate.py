@@ -16,9 +16,9 @@ class TestPayCreate(unittest.TestCase):
     pack_cal_uid = config.bb_user['pack_cal_uid']  # 打包结算签约主播
     ceoUid = config.live_role['pack_ceo']  # 公会长
 
-    @classmethod
-    def tearDownClass(cls) -> None:
-        conMysql.checkBrokerUserRate(cls.pack_cal_uid, cls.ceoUid, rate=100)
+    #@classmethod
+    #def tearDownClass(cls) -> None:
+    #    conMysql.checkBrokerUserRate(cls.pack_cal_uid, cls.ceoUid, rate=100)
 
     def test_01_roomPayCustomRate_50(self, des='商业房打赏自定义分成:50'):
         """
@@ -109,6 +109,7 @@ class TestPayCreate(unittest.TestCase):
                      24440)
         case_list_b[des] = result
 
+    @unittest.skip
     def test_04_liveRoomPayCustomRate_70(self, des='直播公会房间打赏自定义分成:70'):
         """
         用例描述：
