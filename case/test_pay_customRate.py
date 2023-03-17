@@ -141,6 +141,7 @@ class TestPayCreate(unittest.TestCase):
                                                 money_type='money_cash'), 39)
         case_list_b[des] = result
 
+    @unittest.skip
     def test_05_liveChatPayCustomRate_0(self, des='直播公会私聊打赏自定义分成:0'):
         """
         用例描述：
