@@ -12,6 +12,7 @@ from time import sleep
 
 
 @Retry
+# @unittest.skip('cn大区有调整，待处理')
 class TestPayCreate(unittest.TestCase):
 
     @classmethod

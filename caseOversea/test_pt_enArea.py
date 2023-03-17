@@ -9,7 +9,8 @@ from common.Consts import result, case_list
 from common.runFailed import Retry
 
 
-@Retry
+# @Retry
+@unittest.skip('en大区有调整，老版本样式')
 class TestPayCreate(unittest.TestCase):
     """
     英语区消费差异化验证：
