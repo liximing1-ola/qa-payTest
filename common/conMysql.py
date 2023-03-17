@@ -28,7 +28,7 @@ class conMysql:
 
     # 查询用户账户信息
     @staticmethod
-    def selectUserInfoSql(accountType, uid=config.rewardUid, money_type='money_cash_b', op='money', cid=263):
+    def selectUserInfoSql(accountType, uid=config.rewardUid, money_type='money_cash_b', cid=263):
         if accountType == 'bean':  # 查询用户账户扩展表金豆余额
             sql = "select money_coupon from xs_user_money_extend where uid={}".format(uid)
             try:
@@ -71,17 +71,6 @@ class conMysql:
                     return res[0]
                 else:
                     return None
-            except Exception as error:
-                print(error)
-        elif accountType == 'pay_change':  # 查询用户消费记录数据
-            sql = "select {} from xs_pay_change_new where uid={} ORDER BY id DESC LIMIT 1".format(op, uid)
-            try:
-                conMysql.cur.execute(sql)
-                res = conMysql.cur.fetchone()
-                if len(res) > 0:
-                    return res[0]
-                else:
-                    return 0
             except Exception as error:
                 print(error)
         elif accountType == 'sum_commodity':  # 查询用户背包物品总数
@@ -197,6 +186,27 @@ class conMysql:
                     if res[0] != config.bb_user['fleetRid']:
                         return res[0]
                     return res[1]
+            except Exception as error:
+                print(error)
+        elif accountType == 'pay_change':  # 查询用户消费记录数据
+            sql = 'select reason from xs_pay_change where uid={} order by id desc LIMIT 1'.format(uid)
+            try:
+                conMysql.cur.execute(sql)
+                res = conMysql.cur.fetchall()
+                if 'gid' in res.keys:
+                    return res['gid']
+                else:
+                    return 0
+            except Exception as error:
+                print(error)
+        elif accountType == 'xs_gift':
+            sql = 'select price from xs_gift where id={}'.format(cid)
+            try:
+                conMysql.cur.execute(sql)
+                res = conMysql.cur.fetchone()
+                if res is None:
+                    return 0
+                return int(res[0])
             except Exception as error:
                 print(error)
         else:
@@ -672,12 +682,26 @@ class conMysql:
 
     @staticmethod
     def checkPayChange(uid):
-        sql = 'select reason from xs_pay_change where uid={} order by id desc'.format(uid)
+        sql = 'select reason from xs_pay_change where uid={} order by id desc LIMIT 1'.format(uid)
         try:
             conMysql.cur.execute(sql)
             res = conMysql.cur.fetchall()
-            print(res)
-            print(res['gid'])
+            if 'gid' in res.keys:
+                return res['gid']
+            else:
+                return 0
+        except Exception as error:
+            print(error)
+
+    @staticmethod
+    def getGiftPrice(gid):
+        sql = 'select price from xs_gift where id={}'.format(gid)
+        try:
+            conMysql.cur.execute(sql)
+            res = conMysql.cur.fetchone()
+            if res is None:
+                return 0
+            return res[0]
         except Exception as error:
             print(error)
 
