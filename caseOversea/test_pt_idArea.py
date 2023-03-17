@@ -103,7 +103,7 @@ class TestPayCreate(unittest.TestCase):
     def test_04_idAreaNoBrokerMemberIMPay(self, des='印尼区私聊打赏非主播分成50%'):
         """
         用例描述：
-        检查泰语区私聊一对一打赏礼物，非公会成员是一代宗师的用户收到打赏的50%
+        检查印尼区私聊一对一打赏礼物，非公会成员是一代宗师的用户收到打赏的50%
         脚本步骤：
         1.构造打赏者和被打赏者数据
         2.私聊一对一打赏流程
