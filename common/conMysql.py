@@ -193,6 +193,7 @@ class conMysql:
             try:
                 conMysql.cur.execute(sql)
                 res = conMysql.cur.fetchall()
+                print(res)
                 if 'gid' in res.keys:
                     return res['gid']
                 else:
