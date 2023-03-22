@@ -197,8 +197,7 @@ class conMysql:
                 res_dict = ast.literal_eval(res[0])
                 reason_value = '{}'.format(money_type)
                 if reason_value in res_dict.keys():
-                    print(res[reason_value])
-                    return res[reason_value]
+                    return res_dict[reason_value]
                 else:
                     return 0
             except Exception as error:
