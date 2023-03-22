@@ -1,6 +1,7 @@
 # coding=utf-8
 import pymysql
 import time
+import ast
 from common.Config import config
 
 
@@ -193,9 +194,9 @@ class conMysql:
             try:
                 conMysql.cur.execute(sql)
                 res = conMysql.cur.fetchone()
-                print(res)
+                res_dict = ast.literal_eval(res[0])
                 reason_value = ''.format(money_type)
-                if reason_value in res[0].keys:
+                if reason_value in res_dict.keys:
                     return res[reason_value]
                 else:
                     return 0
