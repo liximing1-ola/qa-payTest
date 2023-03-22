@@ -67,8 +67,9 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 100)
-        income = conMysql.selectUserInfoSql('xs_gift',
-                                            cid=conMysql.selectUserInfoSql('pay_change', uid=config.masterUid))
+        income = conMysql.selectUserInfoSql('xs_gift', cid=conMysql.selectUserInfoSql('pay_change',
+                                                                                      uid=config.masterUid,
+                                                                                      money_type='_in_b_c'))
         print(income)
         assert_len(conMysql.selectUserInfoSql('single_money', config.masterUid), 300 * 0.7)
         assert_equal(conMysql.selectUserInfoSql('single_money', config.masterUid), income)

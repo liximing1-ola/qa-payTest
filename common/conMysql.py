@@ -193,9 +193,9 @@ class conMysql:
             try:
                 conMysql.cur.execute(sql)
                 res = conMysql.cur.fetchall()
-                print(res)
-                if 'gid' in res.keys:
-                    return res['gid']
+                reason_value = ''.format(money_type)
+                if reason_value in res[0].keys:
+                    return res[reason_value]
                 else:
                     return 0
             except Exception as error:
