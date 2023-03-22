@@ -195,6 +195,7 @@ class conMysql:
                 conMysql.cur.execute(sql)
                 res = conMysql.cur.fetchone()
                 res_dict = ast.literal_eval(res[0])
+                print(res_dict)
                 reason_value = ''.format(money_type)
                 if reason_value in res_dict.keys:
                     return res[reason_value]
