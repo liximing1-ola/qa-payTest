@@ -195,22 +195,11 @@ class conMysql:
                 conMysql.cur.execute(sql)
                 res = conMysql.cur.fetchone()
                 res_dict = ast.literal_eval(res[0])
-                print(res_dict)
                 reason_value = ''.format(money_type)
                 if reason_value in res_dict.keys:
                     return res[reason_value]
                 else:
                     return 0
-            except Exception as error:
-                print(error)
-        elif accountType == 'xs_gift':
-            sql = 'select price from xs_gift where id={}'.format(cid)
-            try:
-                conMysql.cur.execute(sql)
-                res = conMysql.cur.fetchone()
-                if res is None:
-                    return 0
-                return int(res[0])
             except Exception as error:
                 print(error)
         else:
