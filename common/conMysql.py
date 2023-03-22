@@ -192,7 +192,8 @@ class conMysql:
             sql = 'select reason from xs_pay_change where uid={} order by id desc LIMIT 1'.format(uid)
             try:
                 conMysql.cur.execute(sql)
-                res = conMysql.cur.fetchall()
+                res = conMysql.cur.fetchone()
+                print(res)
                 reason_value = ''.format(money_type)
                 if reason_value in res[0].keys:
                     return res[reason_value]
