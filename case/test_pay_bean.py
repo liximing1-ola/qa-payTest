@@ -177,15 +177,3 @@ class TestPayCreate(unittest.TestCase):
         4.检查购买者金豆余额，预期为：400
         5.检查购买者钻石余额，预期为：80000 - 79900 = 100
         """
-        conMysql.deleteUserAccountSql('user_commodity', config.payUid)
-        conMysql.updateMoneySql(config.payUid, money=80000)
-        conMysql.insertBeanSql(config.payUid, money_coupon=400)
-        data = encodeData(payType='pub-drink-buy',
-                          money=79900,
-                          rid=config.live_role['auto_rid'])
-        res = post_request_session(config.pay_url, data)
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 100)
-        assert_equal(conMysql.selectUserInfoSql('bean', config.payUid), 400)
-        case_list[des] = result

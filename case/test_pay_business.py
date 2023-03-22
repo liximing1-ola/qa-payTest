@@ -67,7 +67,11 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 100)
+        income = conMysql.selectUserInfoSql('xs_gift',
+                                            cid=conMysql.selectUserInfoSql('pay_change', uid=config.masterUid))
+        print(income)
         assert_len(conMysql.selectUserInfoSql('single_money', config.masterUid), 300 * 0.7)
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.masterUid), income)
         case_list[des] = result
 
     def test_03_businessPayGiftToGs(self, des='商业房礼物打赏GS到账62%(mc)'):
