@@ -1,12 +1,13 @@
 import os
 import sys
+sys.path.append(os.path.split(os.path.abspath(os.path.dirname(__file__)))[0])
 import unittest
 
 from Robot import robot
 from common import Logs, method, Consts
 from common.Config import config
 
-sys.path.append(os.path.split(os.path.abspath(os.path.dirname(__file__)))[0])
+
 
 
 def all_case():
