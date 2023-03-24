@@ -173,6 +173,7 @@ class TestPayConcurrent:
         脚本步骤：
         构造购买者数据 （更新xs_user_money和xs_user_commodity）
         """
+        Consts.success_num = 0
         mysql.updateMoneySql(config.payUid, 400)
         mysql.updateMoneySql(config.masterUid)
 
@@ -199,12 +200,11 @@ class TestPayConcurrent:
     def endPayGiftCreate():
         assert_equal(mysql.selectAllMoneySql(config.masterUid), 280)
         sleep(1)
-        print(Consts.success_num)
         assert_equal(Consts.success_num, 4)
         Consts.fail_num = 0
 
     def test_04_payCreate(self, num_times, des='并发打赏礼物的场景'):
-        print('----------------------------------------{}----------------------------------'.format(des))
+        print('------------------------------------{}----------------------------------'.format(des))
         self.startPayGiftCreateReady()
         threads = []
         for i in range(num_times):
@@ -223,7 +223,7 @@ class TestPayConcurrent:
         case_list = method.dictToList(Consts.case_list_c)
         des = "{}\n".format(case_list)
         Logs.get_log('concurrentCaseResult.log').info(des)
-        robot('success', reason=des)
+        robot('wx', reason=des)
 
 
 if __name__ == '__main__':

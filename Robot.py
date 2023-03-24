@@ -111,6 +111,16 @@ def robot(mode, reason, title='', bot='BB', color="good"):
         }
         requests.post(url, headers=headers, json=data)
 
+    elif mode == 'wx':
+        data = {
+            "msgtype": "text",
+            "text": {
+                "content": reason
+            }
+        }
+        url = robot_dict_wechat['BB']
+        requests.post(url, headers=headers, json=data)
+
     else:
         print('robot over gg')
 
