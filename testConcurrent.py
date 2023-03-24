@@ -26,7 +26,7 @@ class TestPayConcurrent:
     }
     Session().getSession('dev')
 
-    def startPayCreateReady(self):
+    def startPayPackGiftReady(self):
         """
         用例描述：
         构造背包内购买礼物场景
@@ -78,9 +78,9 @@ class TestPayConcurrent:
         assert_equal(Consts.success_num, 1)
         Consts.fail_num = 0
 
-    def test_01_payCreate(self, num_times, des='并发打赏背包礼物的场景'):
+    def test_01_payPackGift(self, num_times, des='打赏背包礼物的并发场景'):
         print('----------------------------------------{}----------------------------------'.format(des))
-        self.startPayCreateReady()
+        self.startPayPackGiftReady()
         threads = []
         for i in range(num_times):
             thread = gevent.spawn(self.payCreateConcurrent)
@@ -115,7 +115,7 @@ class TestPayConcurrent:
         assert_equal(Consts.fail_num, num_times - 1)
         Consts.success_num = 0
 
-    def test_02_commodityUse(self, num_times, des='并发使用背包物品的场景'):
+    def test_02_commodityUse(self, num_times, des='使用背包物品时的并发场景'):
         print('--------------------------{}----------------------------------------------'.format(des))
         self.startCommodityUseReady()
         threads = []
@@ -155,7 +155,7 @@ class TestPayConcurrent:
         assert_equal(mysql.checkUserCommoditySql(config.rewardUid, self.commodity_id['cid_264']), 2)
         assert_equal(Consts.success_num, 2)
 
-    def test_03_commodityPresent(self, num_times, des='并发赠送用户物品的场景'):
+    def test_03_commodityPresent(self, num_times, des='赠送物品时的并发场景'):
         print('-----------------------------------{}---------------------------------'.format(des))
         self.startCommodityPresentReady()
         threads = []
@@ -203,7 +203,7 @@ class TestPayConcurrent:
         assert_equal(Consts.success_num, 4)
         Consts.fail_num = 0
 
-    def test_04_payCreate(self, num_times, des='并发打赏礼物的场景'):
+    def test_04_payGift(self, num_times, des='打赏面板礼物时的并发场景'):
         print('------------------------------------{}----------------------------------'.format(des))
         self.startPayGiftCreateReady()
         threads = []
@@ -215,11 +215,60 @@ class TestPayConcurrent:
         Consts.case_list_c[des] = Consts.result
         print('-----------------------------------------------------------------------------------------')
 
+    @staticmethod
+    def startPayShopReady():
+        """
+        脚本步骤：
+        1.构造购买者数据 （更新xs_user_money和xs_user_commodity）
+        """
+        Consts.success_num = 0
+        mysql.updateMoneySql(config.payUid, 40000)
+        mysql.deleteUserCommoditySql(config.payUid)
+
+    def payShopCreateConcurrent(self):
+        """
+        用例描述：
+        验证商城购买道具
+        脚本步骤：
+        1.构造打赏者和被打赏者数据
+        2.打赏背包道具
+        3.校验【status code】和返回值【body】状态
+        4.检查背包内物品
+        """
+        data = encodeData(payType='shop-buy',
+                          cid=self.commodity_id['cid_340'],
+                          money=9900,
+                          num=1)
+        res = post_request_session(url=self.php_urL['pay_url'], data=data)
+        assert_code(res['code'], 200)
+        getValue(res)
+
+    @staticmethod
+    def endPayShopCreate():
+        assert_equal(mysql.selectAllMoneySql(config.payUid), 400)
+        assert_equal(mysql.checkUserAllCommoditySql(config.payUid), 4)
+        sleep(1)
+        assert_equal(Consts.success_num, 4)
+        Consts.fail_num = 0
+
+    def test_05_payShop(self, num_times, des='购买商城礼物时的并发场景'):
+        print('----------------------------------------{}----------------------------------'.format(des))
+        self.startPayShopReady()
+        threads = []
+        for i in range(num_times):
+            thread = gevent.spawn(self.payShopCreateConcurrent)
+            threads.append(thread)
+        gevent.joinall(threads)
+        self.endPayShopCreate()
+        Consts.case_list_c[des] = Consts.result
+        print('-----------------------------------------------------------------------------------------')
+
     def main(self, num):
-        self.test_01_payCreate(num)
+        self.test_01_payPackGift(num)
         self.test_02_commodityUse(num)
         self.test_03_commodityPresent(num)
-        self.test_04_payCreate(num)
+        self.test_04_payGift(num)
+        self.test_05_payShop(num)
         case_list = method.dictToList(Consts.case_list_c)
         des = "{}\n".format(case_list)
         Logs.get_log('concurrentCaseResult.log').info(des)
