@@ -199,6 +199,7 @@ class TestPayConcurrent:
     def endPayGiftCreate():
         assert_equal(mysql.selectAllMoneySql(config.masterUid), 280)
         sleep(1)
+        print(Consts.success_num)
         assert_equal(Consts.success_num, 4)
         Consts.fail_num = 0
 
