@@ -167,10 +167,58 @@ class TestPayConcurrent:
         Consts.case_list_c[des] = Consts.result
         print('------------------------------------------------------------------------------------')
 
+    @staticmethod
+    def startPayGiftCreateReady():
+        """
+        脚本步骤：
+        构造购买者数据 （更新xs_user_money和xs_user_commodity）
+        """
+        mysql.updateMoneySql(config.payUid, 400)
+        mysql.updateMoneySql(config.masterUid)
+
+    def payGiftCreateConcurrent(self):
+        """
+        用例描述：
+        验证房间内打赏礼物给其他人
+        脚本步骤：
+        1.构造打赏者和被打赏者数据
+        2.礼物面板打赏礼物
+        3.校验【status code】和返回值【body】状态
+        4.打赏多次（>4）后，检查打赏者余额：0
+        5.打赏多次（>4）后，检查被打赏者余额：400 * 0.7 = 280
+        """
+        payload = encodeData(payType='package',
+                             money=100,
+                             uid=config.masterUid,
+                             giftId=config.giftId['5'])
+        res = post_request_session(url=self.php_urL['pay_url'], data=payload)
+        assert_code(res['code'], 200)
+        getValue(res)
+
+    @staticmethod
+    def endPayGiftCreate():
+        assert_equal(mysql.selectAllMoneySql(config.masterUid), 280)
+        sleep(1)
+        assert_equal(Consts.success_num, 1)
+        Consts.fail_num = 0
+
+    def test_04_payCreate(self, num_times, des='并发打赏礼物的场景'):
+        print('----------------------------------------{}----------------------------------'.format(des))
+        self.startPayGiftCreateReady()
+        threads = []
+        for i in range(num_times):
+            thread = gevent.spawn(self.payGiftCreateConcurrent)
+            threads.append(thread)
+        gevent.joinall(threads)
+        self.endPayGiftCreate()
+        Consts.case_list_c[des] = Consts.result
+        print('-----------------------------------------------------------------------------------------')
+
     def main(self, num):
         self.test_01_payCreate(num)
         self.test_02_commodityUse(num)
         self.test_03_commodityPresent(num)
+        self.test_04_payCreate(num)
         case_list = method.dictToList(Consts.case_list_c)
         des = "{}\n".format(case_list)
         Logs.get_log('concurrentCaseResult.log').info(des)
@@ -179,4 +227,4 @@ class TestPayConcurrent:
 
 if __name__ == '__main__':
     p = TestPayConcurrent()
-    p.main(30)
+    p.main(20)
