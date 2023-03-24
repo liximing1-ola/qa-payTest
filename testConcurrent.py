@@ -223,7 +223,7 @@ class TestPayConcurrent:
         case_list = method.dictToList(Consts.case_list_c)
         des = "{}\n".format(case_list)
         Logs.get_log('concurrentCaseResult.log').info(des)
-        robot('wx', reason=des)
+        robot('wxBot', reason=des)
 
 
 if __name__ == '__main__':

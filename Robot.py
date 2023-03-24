@@ -111,7 +111,7 @@ def robot(mode, reason, title='', bot='BB', color="good"):
         }
         requests.post(url, headers=headers, json=data)
 
-    elif mode == 'wx':
+    elif mode == 'wxBot':
         data = {
             "msgtype": "text",
             "text": {
