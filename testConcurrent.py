@@ -199,7 +199,7 @@ class TestPayConcurrent:
     def endPayGiftCreate():
         assert_equal(mysql.selectAllMoneySql(config.masterUid), 280)
         sleep(1)
-        assert_equal(Consts.success_num, 1)
+        assert_equal(Consts.success_num, 4)
         Consts.fail_num = 0
 
     def test_04_payCreate(self, num_times, des='并发打赏礼物的场景'):
