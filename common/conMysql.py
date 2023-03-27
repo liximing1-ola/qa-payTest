@@ -8,10 +8,7 @@ from common.Config import config
 class conMysql:
     db_config = {"dev_46_db": '192.168.11.46',
                  "dev_46_user": 'root',
-                 "dev_46_pas": '123456',
-                 "ali_db": '',
-                 "ali_user": '',
-                 "ali_pas": ''}
+                 "dev_46_pas": '123456'}
     _dbUrl = db_config['dev_46_db']
     _user = db_config['dev_46_user']
     _password = db_config['dev_46_pas']
@@ -340,7 +337,7 @@ class conMysql:
     def updateUserMoneyClearSql(*uids):
         try:
             for uid in uids:
-                sql = "update xs_user_money set money=0, money_b=0, money_cash=0, money_cash_b=0,gold_coin=0, " \
+                sql = "update xs_user_money set money=0, money_b=0, money_cash=0, money_cash_b=0, gold_coin=0, " \
                       "money_debts=0 where uid={}".format(uid)
                 conMysql.cur.execute(sql)
         except Exception as error:
@@ -388,44 +385,6 @@ class conMysql:
         finally:
             time.sleep(0.01)
             conMysql.con.commit()
-
-    # 修改用户为指定工会用户
-    @staticmethod
-    def updateSuperVoiceUser(uid, bid, nid):
-        sql = "update xs_broker_user set bid={}, uid={}, state=1 where id={} limit 1".format(bid, uid, nid)
-        try:
-            conMysql.cur.execute(sql)
-        except Exception as error:
-            conMysql.con.rollback()
-            print('update fail', error)
-        finally:
-            conMysql.con.commit()
-
-    # 插入用户为指定工会用户
-    @staticmethod
-    def insertSuperVoiceUser(uid, bid):
-        sql = "insert into xs_broker_user(bid, uid, state) values ({}, {}, 1)".format(bid, uid)
-        try:
-            conMysql.cur.execute(sql)
-        except Exception as error:
-            conMysql.con.rollback()
-            print('insert fail', error)
-        finally:
-            conMysql.con.commit()
-
-    #  检查用户是否为指定工会用户
-    @staticmethod
-    def checkSuperVoiceUser(uid, bid):
-        sql = 'select id from xs_broker_user where uid={} limit 1'.format(uid, bid)
-        try:
-            conMysql.cur.execute(sql)
-            res = conMysql.cur.fetchone()
-            if res is None:
-                conMysql.updateSuperVoiceUser(uid, bid, nid=202)
-            else:
-                conMysql.updateSuperVoiceUser(uid, bid, res[0])
-        except Exception as error:
-            print(error)
 
     # 更新箱子刷新物品
     @staticmethod
@@ -515,115 +474,6 @@ class conMysql:
         finally:
             conMysql.con.commit()
 
-    # 查询用户经纪人身份是否存在
-    @staticmethod
-    def checkOnlineEarnAgent(uid, point=100):
-        sql = 'select * from xs_online_earn_agent where uid={}'.format(uid)
-        try:
-            conMysql.cur.execute(sql)
-            res = conMysql.cur.fetchone()
-            if res is None:
-                sql = 'insert into xs_online_earn_agent (uid, point,create_time,update_time) values' \
-                      '({}, {}, 1630577931, 1630577931)'.format(uid, point)
-                try:
-                    conMysql.cur.execute(sql)
-                except Exception as error:
-                    conMysql.con.rollback()
-                    print('insert fail', error)
-                finally:
-                    conMysql.con.commit()
-            else:
-                sql = "update xs_online_earn_agent set point={} where uid={} limit 1".format(point, uid)
-                try:
-                    conMysql.cur.execute(sql)
-                except Exception as error:
-                    conMysql.con.rollback()
-                    print('update fail', error)
-                finally:
-                    conMysql.con.commit()
-        except Exception as error:
-            print(error)
-
-    # 查询用户艺人身份是否存在
-    @staticmethod
-    def checkOnlineEarnArtist(uid, worth):
-        sql = 'select * from xs_online_earn_artist where uid={}'.format(uid)
-        try:
-            conMysql.cur.execute(sql)
-            res = conMysql.cur.fetchone()
-            if res is None:
-                sql = 'insert into xs_online_earn_artist (uid, worth,create_time,update_time) values' \
-                      '({}, {}, 1630577931, 1630577931)'.format(uid, worth)
-                try:
-                    conMysql.cur.execute(sql)
-                except Exception as error:
-                    conMysql.con.rollback()
-                    print('insert fail', error)
-            else:
-                sql = "update xs_online_earn_artist set worth={} where uid={} limit 1".format(worth, uid)
-                try:
-                    conMysql.cur.execute(sql)
-                except Exception as error:
-                    conMysql.con.rollback()
-                    print('update fail', error)
-        except Exception as error:
-            print(error)
-        finally:
-            conMysql.con.commit()
-
-    # 检查和构造艺人&&经纪人关系
-    @staticmethod
-    def checkOnlineEarnRelation(agent_uid, artist_uid):
-        sign_time = int(time.time())
-        end_time = sign_time + 604800
-        sql = 'select id from xs_online_earn_relation where agent_uid={} and artist_uid={}'.format(agent_uid,
-                                                                                                   artist_uid)
-        try:
-            conMysql.cur.execute(sql)
-            res = conMysql.cur.fetchone()
-            if res is None:
-                sql = 'insert into xs_online_earn_relation (agent_uid, artist_uid, sign_time, end_time) values' \
-                      '({}, {}, {}, {})'.format(agent_uid, artist_uid, sign_time, end_time)
-                try:
-                    conMysql.cur.execute(sql)
-                except Exception as error:
-                    conMysql.con.rollback()
-                    print('insert fail', error)
-            else:
-                sql = 'update xs_online_earn_relation set agent_uid={}, artist_uid={}, sign_time={}, end_time={} ' \
-                      'where id={}'.format(agent_uid, artist_uid, sign_time, end_time, res[0])
-                try:
-                    conMysql.cur.execute(sql)
-                except Exception as error:
-                    conMysql.con.rollback()
-                    print('update fail', error)
-        except Exception as error:
-            print(error)
-        finally:
-            conMysql.con.commit()
-
-    # 检查是否是白名单用户
-    @staticmethod
-    def checkWhiteUid(uid, white_type):
-        sql = 'select * from config.xsst_ktv_uid_white where type={} and uid={}'.format(white_type, uid)
-        try:
-            conMysql.cur.execute(sql)
-            res = conMysql.cur.fetchone()
-            if res is None:
-                sql = 'insert into config.xsst_ktv_uid_white(uid, type, app_id) values({}, {}, 1)'.format(uid,
-                                                                                                          white_type)
-                try:
-                    conMysql.cur.execute(sql)
-                except Exception as error:
-                    conMysql.con.rollback()
-                    print('insert fail', error)
-            else:
-                return 1
-        except Exception as error:
-            print(error)
-        finally:
-            conMysql.con.commit()
-
     # 查询工会用户
     @staticmethod
     def checkUserBroker(uid, bid=136594717):
@@ -632,7 +482,12 @@ class conMysql:
             conMysql.cur.execute(sql)
             res = conMysql.cur.fetchone()
             if res is None:
-                conMysql.insertSuperVoiceUser(uid, bid)
+                sql = "insert into xs_broker_user(bid, uid, state) values ({}, {}, 1)".format(bid, uid)
+                try:
+                    conMysql.cur.execute(sql)
+                except Exception as error:
+                    conMysql.con.rollback()
+                    print('insert fail', error)
             else:
                 sql = 'update xs_broker_user set uid={}, bid={} where id={}'.format(uid, bid, res[0])
                 try:
@@ -673,31 +528,3 @@ class conMysql:
         finally:
             conMysql.con.commit()
 
-    @staticmethod
-    def checkPayChange(uid):
-        sql = 'select reason from xs_pay_change where uid={} order by id desc LIMIT 1'.format(uid)
-        try:
-            conMysql.cur.execute(sql)
-            res = conMysql.cur.fetchall()
-            if 'gid' in res.keys:
-                return res['gid']
-            else:
-                return 0
-        except Exception as error:
-            print(error)
-
-    @staticmethod
-    def getGiftPrice(gid):
-        sql = 'select price from xs_gift where id={}'.format(gid)
-        try:
-            conMysql.cur.execute(sql)
-            res = conMysql.cur.fetchone()
-            if res is None:
-                return 0
-            return res[0]
-        except Exception as error:
-            print(error)
-
-
-if __name__ == '__name__':
-    conMysql().checkPayChange(100287189)

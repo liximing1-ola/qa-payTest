@@ -12,8 +12,8 @@ fail_case_reason = []
 # pass
 result = '✅'
 # 记录时间
-startTime=0
-endTime=0
+startTime = 0
+endTime = 0
 # 并发结果
-success_num=0
-fail_num=0
+success_num = 0
+fail_num = 0

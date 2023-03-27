@@ -186,7 +186,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.checkOnlineEarnArtist(test_uid, worth=4200)
         conMysql.checkOnlineEarnRelation(test_agent, test_uid)  # 检查经纪人艺人关系
         conMysql.updateUserMoneyClearSql(test_agent, test_uid)  # 清空用户账户
-        conMysql.insertSuperVoiceUser(test_uid, test_bid)  # 加入指定公会
+        conMysql.insertBrokerUser(test_uid, test_bid)  # 加入指定公会
         data = encodeData(payType='package',
                           rid=self.star_role['super-voice-fresh'],
                           uid=test_uid)

@@ -72,8 +72,8 @@ class Session:
 
         elif env == config.appName['Partying']:
             try:
-                headers = Yaml.read_yaml('Basic_pt.yml', 'header_pt')
-                body = Yaml.read_yaml('Basic_pt.yml', 'data_pt_mobile')
+                headers = Yaml.read_yaml('Basic.yml', 'header_pt')
+                body = Yaml.read_yaml('Basic.yml', 'data_pt_mobile')
                 session = requests.session()
                 res = session.post(config.pt_mobile_login_url, data=body, headers=headers, verify=False)
                 res.raise_for_status()
