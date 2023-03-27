@@ -32,7 +32,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, money=600)
         conMysql.updateXsUserprofile_pay_room_money(config.pt_payUid)
-        conMysql.updateXsUserpopularity(config.pt_testUid)
+        conMysql.updateXsUserPopularity(config.pt_testUid)
         data = encodePtData(payType='package')
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
@@ -40,7 +40,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 0)
         assert_equal(conMysql.sqlXsUserprofile_pay_room_money(config.pt_payUid), 600)
         time.sleep(2)  # 人气值需要task更新处理
-        assert_len(conMysql.sqlXsUserpopularity(config.pt_testUid), 600)
+        assert_len(conMysql.sqlXsUserPopularity(config.pt_testUid), 600)
         case_list[des] = result
 
     def test_02_payChatgiftVip(self, des='私聊打赏礼物校验人气值&自身的vip等级'):
@@ -57,7 +57,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, money=600)
         conMysql.updateXsUserprofile_pay_room_money(config.pt_payUid)
-        conMysql.updateXsUserpopularity(config.pt_testUid)
+        conMysql.updateXsUserPopularity(config.pt_testUid)
         data = encodePtData(payType='chat-gift')
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
@@ -65,5 +65,5 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 0)
         assert_equal(conMysql.sqlXsUserprofile_pay_room_money(config.pt_payUid), 600)
         time.sleep(2)  # 人气值需要task更新处理
-        assert_len(conMysql.sqlXsUserpopularity(config.pt_testUid), 600)
+        assert_len(conMysql.sqlXsUserPopularity(config.pt_testUid), 600)
         case_list[des] = result

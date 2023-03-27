@@ -15,7 +15,7 @@ class TestPayCreate(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()), bigarea_id=2)
+        conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()), bigArea_id=2)
         conMysql.updateUserRidInfoSql('vip', config.pt_room['vip_rid'], area='cn')
 
     @classmethod
@@ -54,8 +54,8 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, 700)
         conMysql.updateMoneySql(config.pt_testUid)
-        conMysql.updateUserextendMoneyClearSql(config.pt_testUid)  # 非主播钱包附加表账户余额清空
-        data = encodePtData(payType='package', rid=conMysql.select_user_chatroom('business',bigarea_id=2))
+        conMysql.updateUserExtendMoneyClearSql(config.pt_testUid)  # 非主播钱包附加表账户余额清空
+        data = encodePtData(payType='package', rid=conMysql.select_user_chatroom('business', bigArea_id=2))
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))

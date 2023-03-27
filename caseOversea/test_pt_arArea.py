@@ -21,7 +21,7 @@ class TestPayCreate(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()), bigarea_id=3)
+        conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()), bigArea_id=3)
         conMysql.updateUserRidInfoSql('business', config.pt_room['business_joy_ar'], area='ar')
 
     @classmethod
