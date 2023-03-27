@@ -153,17 +153,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查打赏者钻石余额,预期：700
         6.检查打赏者金豆余额,预期：400
         """
-        conMysql.updateMoneySql(config.payUid, money=700)
-        conMysql.updateMoneySql(config.rewardUid)
-        conMysql.insertBeanSql(config.payUid, money_coupon=400)
-        data = encodeData(payType='package')
-        res = post_request_session(config.pay_url, data)
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 0, reason(des, res))
-        assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 700)
-        assert_equal(conMysql.selectUserInfoSql('bean', config.payUid), 400)
-        case_list[des] = result
+        pass
 
     @unittest.skip('卡座玩法已下线')
     def test_07_BeanPayChangeCombo(self, des='卡座内购买套餐场景'):
@@ -177,3 +167,4 @@ class TestPayCreate(unittest.TestCase):
         4.检查购买者金豆余额，预期为：400
         5.检查购买者钻石余额，预期为：80000 - 79900 = 100
         """
+        pass

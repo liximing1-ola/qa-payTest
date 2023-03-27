@@ -9,6 +9,8 @@ from common.Assert import assert_equal
 from common.Consts import case_list_c, result
 import time
 from common.conRedis import conRedis
+
+
 class TestPayCreate(unittest.TestCase):
 
     @classmethod

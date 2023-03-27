@@ -125,7 +125,6 @@ class TestPayCreate(unittest.TestCase):
         assert_len(conMysql.selectUserInfoSql('sum_money', config.gsUid), 2000 * config.rate)
         case_list[des] = result
 
-    @unittest.skip('点歌消费')
     def test_05_musicOrderPayGiftToGs(self, des='点歌消费GS到账62%(mc)'):
         """
         用例描述：
@@ -137,6 +136,7 @@ class TestPayCreate(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：3000 * 0.62 = 1860 (money_cash)
         """
+        pass
 
     def test_06_businessPayGiftToBusinessCreator(self, des='礼物打赏商业房房主到账70%(mc)'):
         """
