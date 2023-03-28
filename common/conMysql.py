@@ -527,4 +527,3 @@ class conMysql:
             print(error)
         finally:
             conMysql.con.commit()
-

@@ -1,12 +1,5 @@
-from common.Config import config
-from common.Request import post_request_session
-from common.method import reason
-from common.conMysql import conMysql
 import unittest
 import pytest
-from common.Assert import assert_equal, assert_code, assert_body
-from common.Consts import case_list, result
-from common.basicData import encodeData
 
 
 @unittest.skip('爵位购买已下线')

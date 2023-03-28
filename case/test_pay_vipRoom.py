@@ -1,6 +1,6 @@
 from common.Config import config
 from common.method import reason
-from common.conMysql import conMysql
+from common.conMysql import conMysql as mysql
 import unittest
 from common.Request import post_request_session
 from common.Assert import assert_body, assert_code, assert_equal, assert_len
@@ -12,7 +12,8 @@ from common.runFailed import Retry
 @Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
 
-    vipRoomRid = config.bb_user['vipRoomRid']  # select rid from xs_chatroom where uid=103273407 and property='vip'  个人房，vip＞5级不回收
+    # select rid from xs_chatroom where uid=103273407 and property='vip'  个人房，vip＞5级不回收
+    vipRoomRid = config.bb_user['vipRoomRid']
 
     def test_01_personRoomPayGift(self, des='个人房礼物打赏给用户（mcb）'):
         """
@@ -24,8 +25,8 @@ class TestPayCreate(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：100 * 0.62 =62 (money_cash_b)
         """
-        conMysql.updateMoneySql(config.payUid, money=30, money_cash=30, money_cash_b=30, money_b=10)
-        conMysql.updateMoneySql(config.rewardUid)
+        mysql.updateMoneySql(config.payUid, money=30, money_cash=30, money_cash_b=30, money_b=10)
+        mysql.updateMoneySql(config.rewardUid)
         data = encodeData(payType='package',
                           money=100,
                           rid=self.vipRoomRid,
@@ -33,11 +34,11 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid), 62)
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
+        assert_equal(mysql.selectUserInfoSql('single_money', config.rewardUid), 62)
+        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
-    def test_02_personRoomPayBox(self, des='个人房打赏箱子给用户（mcb）'):
+    def test_02_personRoomPayBox(self, des='个人房打赏box给用户（mcb）'):
         """
         用例描述：
         验证余额足够时，个人房打赏礼盒分成满足师徒收益(非一代宗师)的基础上为：62:38，且收入在个人魅力值
@@ -48,8 +49,8 @@ class TestPayCreate(unittest.TestCase):
         4.检查打赏者账户余额，预期值为：700 - 600 = 100
         5.检查收箱用户账户余额，预期值为不小于：186
         """
-        conMysql.updateMoneySql(config.payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
-        conMysql.updateMoneySql(config.rewardUid)
+        mysql.updateMoneySql(config.payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
+        mysql.updateMoneySql(config.rewardUid)
         data = encodeData(payType='package',
                           money=600,
                           rid=self.vipRoomRid,
@@ -58,9 +59,9 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 100)
-        assert_len(conMysql.selectUserInfoSql('single_money', config.rewardUid), 300 * 0.62)
-        assert_len(conMysql.selectUserInfoSql('sum_money', config.rewardUid), 300 * 0.62)
+        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 100)
+        assert_len(mysql.selectUserInfoSql('single_money', config.rewardUid), 300 * 0.62)
+        assert_len(mysql.selectUserInfoSql('sum_money', config.rewardUid), 300 * 0.62)
         case_list_b[des] = result
 
     def test_03_personRoomPayGiftToBrokerUser(self, des='个人房打赏钻石礼物给GS（mcb）'):
@@ -73,8 +74,8 @@ class TestPayCreate(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：100 * 0.7 =70 (money_cash_b)
         """
-        conMysql.updateMoneySql(config.payUid, money_cash_b=100)
-        conMysql.updateMoneySql(config.gsUid)
+        mysql.updateMoneySql(config.payUid, money_cash_b=100)
+        mysql.updateMoneySql(config.gsUid)
         data = encodeData(payType='package',
                           money=100,
                           rid=self.vipRoomRid,
@@ -83,7 +84,7 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid), 70)
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.gsUid), 70)
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
+        assert_equal(mysql.selectUserInfoSql('single_money', config.gsUid), 70)
+        assert_equal(mysql.selectUserInfoSql('sum_money', config.gsUid), 70)
+        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result

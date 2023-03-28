@@ -1,13 +1,6 @@
-from common.Config import config
-from common.conMysql import conMysql
-from common.method import reason
+from common.conMysql import conMysql as mysql
 import unittest
 import pytest
-from common.Request import post_request_session
-from common.Assert import assert_body, assert_code, assert_equal
-from common.basicData import encodeData
-from common.Consts import case_list_b, result
-from common.conRedis import conRedis
 
 
 @unittest.skip('网赚分成下线-2022/11/1 ')
@@ -17,7 +10,7 @@ class TestPayCreate(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        conMysql.updateUserInfoSql('super_chatroom', TestPayCreate.star_role['super-voice-fresh'])
+        mysql.updateUserInfoSql('super_chatroom', TestPayCreate.star_role['super-voice-fresh'])
 
     @pytest.mark.run(order=1)
     def test_01_starRoomNoBrokerArtistPay_35(self, des='网赚房无公会无经纪人初级艺人收35%个人魅力值'):

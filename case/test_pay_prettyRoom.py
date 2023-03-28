@@ -1,6 +1,6 @@
 from common.Config import config
 from common.method import reason
-from common.conMysql import conMysql
+from common.conMysql import conMysql as mysql
 import unittest
 from common.Request import post_request_session
 from common.Assert import assert_body, assert_code, assert_equal, assert_len
@@ -23,8 +23,8 @@ class TestPayCreate(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：100 * 0.62 = 62 (money_cash)
         """
-        conMysql.updateMoneySql(config.payUid, money_cash_b=250)
-        conMysql.updateMoneySql(config.gsUid)
+        mysql.updateMoneySql(config.payUid, money_cash_b=250)
+        mysql.updateMoneySql(config.gsUid)
         data = encodeData(payType='package',
                           money=100,
                           rid=self.prettyRid,
@@ -33,10 +33,10 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid, money_type='money_cash'),
+        assert_equal(mysql.selectUserInfoSql('single_money', config.gsUid, money_type='money_cash'),
                      100 * config.rate)
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.gsUid), 100 * config.rate)
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 150)
+        assert_equal(mysql.selectUserInfoSql('sum_money', config.gsUid), 100 * config.rate)
+        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 150)
         case_list_b[des] = result
 
     def test_02_prettyRoomPayBox(self, des='靓号房打赏礼盒GS分62%进公会魅力值'):
@@ -50,8 +50,8 @@ class TestPayCreate(unittest.TestCase):
         4.检查打赏者账户余额，预期值为：700 - 600 = 100
         5.检查收箱用户账户余额，预期值为：不小于186,(300*0.62=186)
         """
-        conMysql.updateMoneySql(config.payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
-        conMysql.updateMoneySql(config.gsUid)
+        mysql.updateMoneySql(config.payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
+        mysql.updateMoneySql(config.gsUid)
         data = encodeData(payType='package',
                           money=600,
                           uid=config.gsUid,
@@ -61,8 +61,8 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 100)
-        assert_len(conMysql.selectUserInfoSql('single_money', config.gsUid, money_type='money_cash'),
+        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 100)
+        assert_len(mysql.selectUserInfoSql('single_money', config.gsUid, money_type='money_cash'),
                    300 * config.rate)
         case_list_b[des] = result
 
@@ -77,8 +77,8 @@ class TestPayCreate(unittest.TestCase):
         4.检查打赏者账户余额，预期值为：100 - 100 = 0
         5.检查被打赏者账户余额，预期值为：100 * 0.62 = 62
         """
-        conMysql.updateMoneySql(config.payUid, money_cash=100)
-        conMysql.updateMoneySql(config.rewardUid)
+        mysql.updateMoneySql(config.payUid, money_cash=100)
+        mysql.updateMoneySql(config.rewardUid)
         data = encodeData(payType='package',
                           money=100,
                           rid=self.prettyRid,
@@ -87,6 +87,6 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid), 62)
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
+        assert_equal(mysql.selectUserInfoSql('single_money', config.rewardUid), 62)
+        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result

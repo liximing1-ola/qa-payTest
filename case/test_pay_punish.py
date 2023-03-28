@@ -1,5 +1,5 @@
 from common.Config import config
-from common.conMysql import conMysql
+from common.conMysql import conMysql as mysql
 from common.method import reason
 import unittest
 from time import sleep
@@ -26,9 +26,9 @@ class TestPayCreate(unittest.TestCase):
         5.检查消费记录表消费money
         6.检查消费记录表消费方式op
         """
-        conMysql.updateMoneySql(config.payUid, money=100)
-        conMysql.insertBeanSql(config.rewardUid, money_coupon=20)
-        conMysql.updateMoneySql(config.rewardUid, money=20, money_cash=20, money_debts=100)
+        mysql.updateMoneySql(config.payUid, money=100)
+        mysql.insertBeanSql(config.rewardUid, money_coupon=20)
+        mysql.updateMoneySql(config.rewardUid, money=20, money_cash=20, money_debts=100)
         data = encodeData(payType='package',
                           money=100,
                           rid=config.live_role['auto_rid'],
@@ -37,10 +37,8 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         sleep(2)  # 延迟处理NSQ消息
-        assert_equal(conMysql.selectUserInfoSql('bean', config.rewardUid), 20)
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid, 'money'), 2)
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid, 'money_cash'), 0)
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid, 'money_debts'), 0)
-        # assert_equal(conMysql.selectUserInfoSql('pay_change', config.rewardUid, op='money'), 100)
-        # assert_equal(conMysql.selectUserInfoSql('pay_change', config.rewardUid, op='op'), 'punish')
+        assert_equal(mysql.selectUserInfoSql('bean', config.rewardUid), 20)
+        assert_equal(mysql.selectUserInfoSql('single_money', config.rewardUid, 'money'), 2)
+        assert_equal(mysql.selectUserInfoSql('single_money', config.rewardUid, 'money_cash'), 0)
+        assert_equal(mysql.selectUserInfoSql('single_money', config.rewardUid, 'money_debts'), 0)
         case_list_c[des] = result

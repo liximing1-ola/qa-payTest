@@ -1,6 +1,6 @@
 from common.Config import config
 from common.method import reason
-from common.conMysql import conMysql
+from common.conMysql import conMysql as mysql
 import unittest
 from common.Request import post_request_session
 from common.Assert import assert_code, assert_body, assert_len, assert_equal
@@ -27,19 +27,19 @@ class TestPayCreate(unittest.TestCase):
         4.检查账户余额，预期值为：700 - 600 = 100
         5.检查背包内开出物品，预期值应为：2（赠送头像框*1 + 开出礼物个数*1）
         """
-        conMysql.deleteUserAccountSql('user_box', config.payUid)
-        conMysql.deleteUserAccountSql('user_commodity', config.payUid)
-        conMysql.insertXsUserCommodity(config.payUid, cid=2, num=1)  # 背包插入1个铜箱子
-        conMysql.insertXsUserBox(config.payUid)
-        conMysql.updateMoneySql(config.payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
+        mysql.deleteUserAccountSql('user_box', config.payUid)
+        mysql.deleteUserAccountSql('user_commodity', config.payUid)
+        mysql.insertXsUserCommodity(config.payUid, cid=2, num=1)  # 背包插入1个铜箱子
+        mysql.insertXsUserBox(config.payUid)
+        mysql.updateMoneySql(config.payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
         data = encodeData(payType='shop-buy-box',
                           money=600,
                           boxType='copper')
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 100)
-        assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.payUid), 2)
+        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 100)
+        assert_equal(mysql.selectUserInfoSql('sum_commodity', config.payUid), 2)
         case_list[des] = result
 
     def test_02_openMoreBoxPayChange(self, des='背包箱子多开场景'):
@@ -57,11 +57,11 @@ class TestPayCreate(unittest.TestCase):
         4.检查账户余额，预期值为：12600 - 2100*6 = 0
         5.检查背包内开出物品，预期值应为12（赠送头像框*6，开出礼物个数等于*6）
         """
-        conMysql.deleteUserAccountSql('user_box', config.payUid)
-        conMysql.deleteUserAccountSql('user_commodity', config.payUid)
-        conMysql.insertXsUserCommodity(config.payUid, cid=3, num=6)  # 背包插入6个银箱子
-        conMysql.insertXsUserBox(config.payUid, box_type='silver')
-        conMysql.updateMoneySql(config.payUid, money=12600)
+        mysql.deleteUserAccountSql('user_box', config.payUid)
+        mysql.deleteUserAccountSql('user_commodity', config.payUid)
+        mysql.insertXsUserCommodity(config.payUid, cid=3, num=6)  # 背包插入6个银箱子
+        mysql.insertXsUserBox(config.payUid, box_type='silver')
+        mysql.updateMoneySql(config.payUid, money=12600)
         data = encodeData(payType='shop-buy-box',
                           money=2100,
                           num=6,
@@ -70,8 +70,8 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
-        assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.payUid), 12)
+        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 0)
+        assert_equal(mysql.selectUserInfoSql('sum_commodity', config.payUid), 12)
         case_list[des] = result
 
     def test_03_giveBoxPayChange(self, des='房间送箱子场景'):
@@ -85,8 +85,8 @@ class TestPayCreate(unittest.TestCase):
         4.检查打赏者账户余额，预期值为：700 - 600 = 100
         5.检查收箱用户账户余额，预期值为：大于186
         """
-        conMysql.updateMoneySql(config.payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
-        conMysql.updateMoneySql(config.rewardUid)
+        mysql.updateMoneySql(config.payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
+        mysql.updateMoneySql(config.rewardUid)
         data = encodeData(payType='package',
                           money=600,
                           giftId=config.giftId['46'],
@@ -94,8 +94,8 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 100)
-        assert_len(conMysql.selectUserInfoSql('sum_money', config.rewardUid), 300 * 0.62)
+        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 100)
+        assert_len(mysql.selectUserInfoSql('sum_money', config.rewardUid), 300 * 0.62)
         case_list[des] = result
 
     def test_04_giveBoxMorePeople(self, des='房间送多人多个箱子场景'):
@@ -109,8 +109,8 @@ class TestPayCreate(unittest.TestCase):
         4.检查账户余额，预期值为：10000 - 2100*2*2 = 1600
         5.检查收箱用户账户余额，预期值为：大于1000
         """
-        conMysql.updateMoneySql(config.payUid, money=10000)
-        conMysql.updateMoneySql(config.rewardUid)
+        mysql.updateMoneySql(config.payUid, money=10000)
+        mysql.updateMoneySql(config.rewardUid)
         data = encodeData(payType='package-more',
                           num=2,
                           star=2,
@@ -119,6 +119,6 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 1600)
-        assert_len(conMysql.selectUserInfoSql('sum_money', config.rewardUid), 1000)
+        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 1600)
+        assert_len(mysql.selectUserInfoSql('sum_money', config.rewardUid), 1000)
         case_list[des] = result
