@@ -26,6 +26,7 @@ class TestPayCreate(unittest.TestCase):
         2.歌友房打赏（打赏1000分）
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：1000 * 0.6 = 600(money_cash)
+        5.检查公会长余额，预期：0
         """
         conMysql.updateMoneySql(config.payUid, money=1000)
         conMysql.updateMoneySql(self.pack_cal_uid, self.pack_ceo_uid)
