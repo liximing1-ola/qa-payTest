@@ -16,7 +16,6 @@ class TestPayCreate(unittest.TestCase):
     fleet_rid = config.bb_user['fleetRid']  # 本家族房
     pack_cal_uid = config.bb_user['pack_cal_uid']  # 直播公会gs
 
-    @unittest.skip
     def test_01_sameFleetRoomLiveGsRate(self, des='家族房打赏直播公会gs场景'):
         """
         用例描述：
@@ -42,7 +41,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
-    @unittest.skip
     def test_02_otherFleetRoomLiveGsRate(self, des='非本家族房打赏直播公会GS场景'):
         """
         用例描述：
