@@ -28,7 +28,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：1000 * 0.6 = 600(money_cash)
         """
         conMysql.updateMoneySql(config.payUid, money=1000)
-        conMysql.updateMoneySql(self.pack_cal_uid)
+        conMysql.updateMoneySql(self.pack_cal_uid, self.pack_ceo_uid)
         data = encodeData(payType='package',
                           rid=self.singer_rid,
                           uid=self.pack_cal_uid)
