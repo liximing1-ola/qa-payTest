@@ -29,7 +29,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查公会长余额，预期：0
         """
         conMysql.updateMoneySql(config.payUid, money=1000)
-        conMysql.updateMoneySql(self.pack_cal_uid, self.pack_ceo_uid)
+        conMysql.updateUserMoneyClearSql(self.pack_cal_uid, self.pack_ceo_uid)
         data = encodeData(payType='package',
                           rid=self.singer_rid,
                           uid=self.pack_cal_uid)
