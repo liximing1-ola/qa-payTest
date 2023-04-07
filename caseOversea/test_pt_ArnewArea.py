@@ -23,7 +23,7 @@ class TestPayCreate(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()), bigArea_id=3)
+        conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()), bigarea_id=3)
         conMysql.updateUserRidInfoSql('business', config.pt_room['business_joy_ar'], area='ar')
 
     @classmethod
@@ -133,7 +133,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, 700)
         conMysql.updateMoneySql(config.pt_testUid)  # 非主播账户余额清空
-        conMysql.updateUserExtendMoneyClearSql(config.pt_testUid)  # 非主播钱包附加表账户余额清空
+        conMysql.updateUserextendMoneyClearSql(config.pt_testUid)  # 非主播钱包附加表账户余额清空
         data = encodePtData(payType='package', rid=config.pt_room['business_joy_ar'])
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
@@ -155,7 +155,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, 700)
         conMysql.updateMoneySql(config.pt_testUid)  # 非主播账户余额清空
-        conMysql.updateUserExtendMoneyClearSql(config.pt_testUid)  # 非主播钱包附加表账户余额清空
+        conMysql.updateUserextendMoneyClearSql(config.pt_testUid)  # 非主播钱包附加表账户余额清空
         data = encodePtData(payType='chat-gift')
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])

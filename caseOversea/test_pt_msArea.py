@@ -21,7 +21,7 @@ class TestPayCreate(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()), bigArea_id=9)
+        conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()), bigarea_id=9)
         conRedis.delKey('User.Big.Area.Id', config.pt_user.values())
         conRedis.delKey('User.Big.Area', config.pt_user.values())
 
@@ -40,8 +40,8 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, 700)
         conMysql.updateMoneySql(config.pt_testUid)
-        conMysql.updateUserExtendMoneyClearSql(config.pt_testUid)  # 非主播钱包附加表账户余额清空
-        data = encodePtData(payType='package', rid=conMysql.select_user_chatroom(property='vip', bigArea_id=9))
+        conMysql.updateUserextendMoneyClearSql(config.pt_testUid)  # 非主播钱包附加表账户余额清空
+        data = encodePtData(payType='package', rid=conMysql.select_user_chatroom(property='vip', bigarea_id=9))
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -62,10 +62,10 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
         conMysql.updateMoneySql(config.pt_testUid)
-        conMysql.updateUserExtendMoneyClearSql(config.pt_testUid)  # 非主播钱包附加表账户余额清空
+        conMysql.updateUserextendMoneyClearSql(config.pt_testUid)  # 非主播钱包附加表账户余额清空
         data = encodePtData(payType='package',
                             giftId=config.giftId['46'],
-                            rid=conMysql.select_user_chatroom(property='vip', bigArea_id=9))
+                            rid=conMysql.select_user_chatroom(property='vip', bigarea_id=9))
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
@@ -110,7 +110,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, 700)
         conMysql.updateMoneySql(config.pt_testUid)  # 非主播账户余额清空
-        conMysql.updateUserExtendMoneyClearSql(config.pt_testUid)  # 非主播钱包附加表账户余额清空
+        conMysql.updateUserextendMoneyClearSql(config.pt_testUid)  # 非主播钱包附加表账户余额清空
         data = encodePtData(payType='chat-gift')
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])

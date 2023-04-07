@@ -82,6 +82,14 @@ class conMysql:
                 return int(res[0])
             except Exception as error:
                 print(error)
+        elif accountType == 'chat-pay-card':  # 查询用户背包私聊卡道具数量
+            sql = 'select num from xs_user_commodity where uid ={} and cid = 42598'.format(uid)
+            try:
+                conMysql.cur.execute(sql)
+                res = conMysql.cur.fetchone()
+                return int(res[0])
+            except Exception as error:
+                print(error)
 
     # 删除用户账户数据
     @staticmethod
@@ -122,6 +130,15 @@ class conMysql:
                 print('delete fail', error)
             finally:
                 conMysql.con.commit()
+        elif tableName == 'chat_pay_card_record':  # 清除xs_chat_pay_card_record用户数据
+            sql = "delete from xs_chat_pay_card_record where uid={}".format(uid)
+            try:
+                conMysql.cur.execute(sql)
+            except Exception as error:
+                conMysql.con.rollback()
+                print('delete fail', error)
+            finally:
+                conMysql.con.commit()
         else:
             print('{} Error'.format(tableName))
 
@@ -141,10 +158,10 @@ class conMysql:
     # 1=en 2=cn 3=ar 4=ko 5=id 6=th 7=vi 8=tr 9=ms 10=ja
     # 默认中文大区
     @staticmethod
-    def updateUserBigArea(*uids, bigArea_id=2):
+    def updateUserBigArea(*uids, bigarea_id=2):
         try:
             for uid in uids:
-                sql = "update xs_user_bigarea set bigarea_id={} where uid in {}".format(bigArea_id, uid)
+                sql = "update xs_user_bigarea set bigarea_id={} where uid in {}".format(bigarea_id, uid)
                 conMysql.cur.execute(sql)
         except Exception as error:
             conMysql.con.rollback()
@@ -182,7 +199,7 @@ class conMysql:
 
     #  清空用户xs_user_money_extend账户余额
     @staticmethod
-    def updateUserExtendMoneyClearSql(*uids):
+    def updateUserextendMoneyClearSql(*uids):
         try:
             for uid in uids:
                 sql = "update xs_user_money_extend set money_cash_personal=0 where uid={}".format(uid)
@@ -261,9 +278,9 @@ class conMysql:
 
     # 查询大区房间信息
     @staticmethod
-    def select_user_chatroom(property, bigArea_id=1):
+    def select_user_chatroom(property, bigarea_id=1):
         sql = "select rid from xs_chatroom a left join xs_user_bigarea b on a.uid = b.uid where a.property = '{}' and b.bigarea_id = {} limit 1".format(
-            property, bigArea_id)
+            property, bigarea_id)
         try:
             conMysql.cur.execute(sql)
             res = conMysql.cur.fetchone()
@@ -276,7 +293,7 @@ class conMysql:
 
     # 更新被打赏账户testUid的人气数据
     @staticmethod
-    def updateXsUserPopularity(uid):
+    def updateXsUserpopularity(uid):
         sql = "update xs_user_popularity set popularity=0 where uid = {}".format(uid)
         try:
             conMysql.cur.execute(sql)
@@ -288,7 +305,7 @@ class conMysql:
 
     # 查询被打赏测试账户testUid的人气数据
     @staticmethod
-    def sqlXsUserPopularity(uid):
+    def sqlXsUserpopularity(uid):
         sql = "select popularity from xs_user_popularity  where uid = {}".format(uid)
         try:
             conMysql.cur.execute(sql)
