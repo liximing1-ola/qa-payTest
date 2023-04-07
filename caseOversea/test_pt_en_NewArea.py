@@ -19,7 +19,7 @@ class TestPayCreate(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()), bigArea_id=1)
+        conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()), bigarea_id=1)
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -59,7 +59,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, 700)
         conMysql.updateMoneySql(config.pt_testUid)  # 非主播账户余额清空
-        conMysql.updateUserExtendMoneyClearSql(config.pt_testUid)  # 非主播钱包附加表账户余额清空
+        conMysql.updateUserextendMoneyClearSql(config.pt_testUid)  # 非主播钱包附加表账户余额清空
         data = encodePtData(payType='chat-gift')
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
@@ -81,7 +81,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, money=300, money_cash=100, money_b=100, money_cash_b=100)
         conMysql.updateMoneySql(config.pt_testUid)
-        conMysql.updateUserExtendMoneyClearSql(config.pt_testUid)
+        conMysql.updateUserextendMoneyClearSql(config.pt_testUid)
         data = encodePtData(payType='chat-gift', giftId=config.giftId['46'],uid=config.pt_testUid)
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
@@ -152,7 +152,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
         conMysql.updateMoneySql(config.pt_testUid)
-        conMysql.updateUserExtendMoneyClearSql(config.pt_testUid)
+        conMysql.updateUserextendMoneyClearSql(config.pt_testUid)
         data = encodePtData(payType='package',
                             giftId=config.giftId['46'],
                             rid=conMysql.select_user_chatroom('fleet'),uid=config.pt_testUid)
