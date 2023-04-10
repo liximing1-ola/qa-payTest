@@ -35,9 +35,8 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(mysql.selectUserInfoSql('sum_money', self.pack_cal_uid), 700)
-        assert_equal(mysql.selectUserInfoSql('single_money', self.pack_cal_uid, money_type='money_cash_b'), 700)
-        assert_equal(mysql.selectUserInfoSql('sum_money', self.pack_cal_uid), 700)
+        assert_equal(mysql.selectUserInfoSql('single_money', self.pack_cal_uid, money_type='money_cash_b'), 300)
+        assert_equal(mysql.selectUserInfoSql('sum_money', self.pack_cal_uid), 800)
         assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
@@ -60,7 +59,7 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(mysql.selectUserInfoSql('single_money', self.pack_cal_uid, money_type='money_cash_b'), 700)
+        assert_equal(mysql.selectUserInfoSql('single_money', self.pack_cal_uid, money_type='money_cash'), 700)
         assert_equal(mysql.selectUserInfoSql('sum_money', self.pack_cal_uid), 700)
         assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
