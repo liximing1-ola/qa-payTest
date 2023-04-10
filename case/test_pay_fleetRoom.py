@@ -40,7 +40,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
-    @unittest.skip
     def test_02_otherFleetRoomLiveGsRate(self, des='非本家族房打赏直播公会GS场景'):
         """
         用例描述：
