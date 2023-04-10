@@ -16,16 +16,15 @@ class TestPayCreate(unittest.TestCase):
     fleet_rid = config.bb_user['fleetRid']  # 本家族房
     pack_cal_uid = config.bb_user['pack_cal_uid']  # 直播公会gs
 
-    @unittest.skip
     def test_01_sameFleetRoomLiveGsRate(self, des='家族房打赏直播公会gs场景'):
         """
         用例描述：
-        tdr：同家族房内直播公会成员礼物打赏到账70%个人魅力值
+        tdr：同家族房内直播公会成员礼物打赏到账80%个人魅力值
         脚本步骤：
         1.构造打赏者和被打赏者数据
         2.房间打赏（打赏1000分）
         3.校验接口状态和返回值数据
-        4.检查被打赏者余额，预期为：1000 * 0.7 = 700(money_cash_b)
+        4.检查被打赏者余额，预期为：1000 * 0.8 = 800(money_cash_b)
         5.检查打赏者余额，预期为：1000 - 1000 = 0
         """
         mysql.updateMoneySql(config.payUid, money=1000)
@@ -36,7 +35,7 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(mysql.selectUserInfoSql('single_money', self.pack_cal_uid, money_type='money_cash_b'), 300)
+        assert_equal(mysql.selectUserInfoSql('single_money', self.pack_cal_uid), 800)
         assert_equal(mysql.selectUserInfoSql('sum_money', self.pack_cal_uid), 800)
         assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
@@ -61,7 +60,7 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(mysql.selectUserInfoSql('single_money', self.pack_cal_uid, money_type='money_cash'), 700)
+        assert_equal(mysql.selectUserInfoSql('single_money', self.pack_cal_uid), 700)
         assert_equal(mysql.selectUserInfoSql('sum_money', self.pack_cal_uid), 700)
         assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
@@ -69,12 +68,12 @@ class TestPayCreate(unittest.TestCase):
     def test_03_sameFleetRoomNormalGsRate(self, des='家族房打赏普通公会gs场景'):
         """
         用例描述：
-        tdr：家族房内普通公会成员礼物打赏到账42%公会魅力值+30%个人魅力值
+        tdr：家族房内普通公会成员礼物打赏到账80%个人魅力值
          脚本步骤：
         1.构造打赏者和被打赏者数据
         2.房间打赏（打赏1000分）
         3.校验接口状态和返回值数据
-        4.检查被打赏者余额，预期为：1000 * 0.42 = 420(money_cash) + 1000 * 0.3 = 300（money_cash_b）
+        4.检查被打赏者余额，预期为：1000 * 0.8 = 800(money_cash_b)
         5.检查打赏者余额，预期为：1000 - 1000 = 0
         """
         mysql.updateMoneySql(config.payUid, money=1000)
@@ -85,22 +84,20 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(mysql.selectUserInfoSql('single_money', config.gsUid,
-                                                money_type='money_cash'), 420)
-        assert_equal(mysql.selectUserInfoSql('single_money', config.gsUid), 300)
-        assert_equal(mysql.selectUserInfoSql('sum_money', config.gsUid), 720)
+        assert_equal(mysql.selectUserInfoSql('single_money', config.gsUid), 800)
+        assert_equal(mysql.selectUserInfoSql('sum_money', config.gsUid), 800)
         assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
     def test_04_otherFleetRoomNormalGsRate(self, des='非本家族房打赏公会GS场景'):
         """
         用例描述：
-        tdr：other家族房内GS收到箱子打赏拿62%公会魅力值
+        tdr：非家族房内GS收到箱子打赏拿80%个人魅力值
        脚本步骤：
         1.构造打赏者和被打赏者数据
         2.房间打赏（打赏铜箱子）
         3.校验接口状态和返回值数据
-        4.检查被打赏者余额，预期为不小于：300 * 0.62 = 186(money_cash)
+        4.检查被打赏者余额，预期为不小于：300 * 0.8 = 240(money_cash_b)
         5.检查打赏者余额，预期为：600 - 600 = 0
         """
         mysql.updateMoneySql(config.payUid, money=600)
@@ -115,8 +112,7 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 0)
-        assert_len(mysql.selectUserInfoSql('single_money', config.gsUid,
-                                              money_type='money_cash'), 300 * config.rate)
+        assert_len(mysql.selectUserInfoSql('single_money', config.gsUid), 240)
         case_list_b[des] = result
 
     def test_05_sameFleetRoomPayNormalUser(self, des='家族房打赏一代用户场景'):
