@@ -91,7 +91,7 @@ class TestPayCreate(unittest.TestCase):
     def test_04_otherFleetRoomNormalGsRate(self, des='非本家族房打赏公会GS场景'):
         """
         用例描述：
-        tdr：非家族房内GS收到箱子打赏拿80%个人魅力值
+        tdr：非家族房内GS收到箱子打赏拿70%个人魅力值
        脚本步骤：
         1.构造打赏者和被打赏者数据
         2.房间打赏（打赏铜箱子）
@@ -114,7 +114,6 @@ class TestPayCreate(unittest.TestCase):
         assert_len(mysql.selectUserInfoSql('single_money', config.gsUid), 210)
         case_list_b[des] = result
 
-    @unittest.skip
     def test_05_sameFleetRoomPayNormalUser(self, des='家族房打赏一代用户场景'):
         """
         用例描述：
@@ -141,7 +140,6 @@ class TestPayCreate(unittest.TestCase):
         assert_len(mysql.selectUserInfoSql('single_money', config.masterUid), 300 * 0.8)
         case_list_b[des] = result
 
-    @unittest.skip
     def test_06_otherFleetRoomNormalGsRate(self, des='非本家族房打赏用户场景'):
         """
        用例描述：
