@@ -20,6 +20,7 @@ except ModuleNotFoundError as e:
 
 class mdtox:
     def __init__(self, md_filename, encoding='utf-8'):
+        self.html = None
         self.md_filename = md_filename
         self.encoding = encoding
         self.__args()

@@ -39,6 +39,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_commodity_32', config.pt_payUid), 10)
         case_list[des] = result
 
+    @unittest.skip('待补充go的接口服务')
     def test_02_playCrazySpin(self, des='开启大转盘抽奖场景', cid=32):
         """
         用例描述：
@@ -50,7 +51,7 @@ class TestPayCreate(unittest.TestCase):
          * 修改用户背包券数(xs_user_commodity)
          * 打开大转盘面板数据正常，达到重置奖池的目的 /go/party/turntable/list
          * 大转盘跑马灯功能服务正常 /go/party/turntable/horn
-        2.play crazy spin
+        2.扣除背包券来进行play
         3.校验接口状态和返回值数据
         4.检查账户背包惊喜券/欢乐券余额，预期值为：100 - 10 = 90
         5.检查背包内开出物品，预期值应为：10（开出礼物个数*10）

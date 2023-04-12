@@ -33,10 +33,3 @@ query_starify = {
 	'_versionName': '1.0.5.2',
 	'_versionCode': '100005002',
 }
-
-# body_starify = {
-# 	"mobile": starify_payPhone,
-# 	"area": "886",
-# 	"code": "1234",
-# 	"password": "",
-# }

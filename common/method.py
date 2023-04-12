@@ -1,6 +1,5 @@
 import os
 import random
-from common.Config import config
 import time
 import requests
 import Robot
@@ -51,7 +50,7 @@ def getImage(mode=2):
         res = res.json()
         return res[0]
     elif mode == 3:
-        icon = random.randint(1, 200)
+        icon = random.randint(1, 1000)
         return 'http://xs-image.oss-cn-hangzhou.aliyuncs.com/static/gift_big/{}.png'.format(icon)
 
 
@@ -117,3 +116,36 @@ def checkPath(path):
     if not os.path.exists(path):
         Robot.robot('icon', 'php代码路径异常: {}'.format(path), bot='PT')
         raise EnvironmentError('代码路径异常')
+
+
+def getUserTitle(level):
+    """
+    UserNewTitleSrv::TITLE_QI_SHI => 1.0,
+    UserNewTitleSrv::TITLE_NAN_JUE => 1.1,
+    UserNewTitleSrv::TITLE_ZI_JUE => 1.2,
+    UserNewTitleSrv::TITLE_BO_JUE => 1.3,
+    UserNewTitleSrv::TITLE_HOU_JUE => 1.4,
+    UserNewTitleSrv::TITLE_GONG_JUE => 1.5,
+    UserNewTitleSrv::TITLE_QIN_KING => 1.6,
+    UserNewTitleSrv::TITLE_GUO_KING => 1.8,
+    UserNewTitleSrv::TITLE_HUANG_DI => 2.0,
+    """
+    if level == 10:
+        return 1.0
+    elif level == 20:
+        return 1.1
+    elif level == 30:
+        return 1.2
+    elif level == 40:
+        return 1.3
+    elif level == 50:
+        return 1.4
+    elif level == 60:
+        return 1.5
+    elif level == 70:
+        return 1.6
+    elif level == 80:
+        return 1.8
+    elif level == 90:
+        return 2.0
+

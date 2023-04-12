@@ -33,21 +33,21 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.pt_payUid), 1)
         case_list[des] = result
 
-    def test_02_shopMoneyPayChange(self, des='商城购买钻石道具场景', cid=2158):
+    def test_02_shopMoneyPayChange(self, des='商城购买钻石道具场景', cid=42671):
         """
         用例描述：
         验证商城购买道具逻辑
         脚本步骤：
         1.构造购买者数据 （更新xs_user_money和xs_user_commodity）
-        2.商城内购买礼物道具*1 (cid:2158是30天男爵道具)
+        2.商城内购买礼物道具*1 (cid:42671是小铃铛入场特效)
         3.校验接口状态和返回值数据
-        4.检查购买者钻石余额：18000 - 18000 = 0
+        4.检查购买者钻石余额：3000 - 3000 = 0
         5.检查背包内物品
         """
-        conMysql.updateMoneySql(config.pt_payUid, money=10000, money_cash=2000, money_b=2000, money_cash_b=4000)
+        conMysql.updateMoneySql(config.pt_payUid, money=2000, money_cash=200, money_b=400, money_cash_b=400)
         conMysql.deleteUserAccountSql('user_commodity', config.pt_payUid)
         data = encodePtData(payType='shop-buy',
-                            money=18000,
+                            money=3000,
                             cid=cid)
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])

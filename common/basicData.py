@@ -603,6 +603,18 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
         return data
+
+    elif payType == 'chat-pay-card':
+        data = {
+            'platform': 'available',
+            'type': 'chat-pay-card',
+            'money': '160',
+            'params': '{"cid":42598,"num":10,"price":16.0,"useCoin":-1}',
+        }
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        return data
+
     else:
         raise Exception('payType is error')
 

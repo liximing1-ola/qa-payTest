@@ -38,7 +38,7 @@ class Session:
                 res = res.json()
                 if not method.isExtend(res, 'token') or res['success'] != 1:
                     print('failReason： {}'.format(res['msg']))
-                print('使用默认方案：token-{}'.format(res['data'].get('token')))
+                print('使用默认方案：token:{}'.format(res['data'].get('token')))
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
                 Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
                 return tokenDict
@@ -46,9 +46,9 @@ class Session:
                 Logs.get_log('getSession.log').error('默认方案session异常，原因： {}'.format(error))
                 from common.conMysql import conMysql
                 from common.getToken import getToken
-                token = getToken(config.payUid, conMysql.selectUserInfoSql('user_index', config.payUid)).gen_token()
+                token = getToken(config.payUid, conMysql.selectUserInfoSql('user_index', config.payUid)).get_token()
                 tokenDict = {'token': token}
-                print('启动备选方案：token-{}'.format(token))
+                print('默认方案失败，启用备选方案：token:{}'.format(token))
                 Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
 
         elif env == "rush":  # 冲鸭
@@ -69,10 +69,11 @@ class Session:
                 return tokenDict
             except Exception as error:
                 Logs.get_log('getSession.log').error('session异常，原因： {}'.format(error))
+
         elif env == config.appName['Partying']:
             try:
-                headers = Yaml.read_yaml('Basic_pt.yml', 'header_pt')
-                body = Yaml.read_yaml('Basic_pt.yml', 'data_pt_mobile')
+                headers = Yaml.read_yaml('Basic.yml', 'header_pt')
+                body = Yaml.read_yaml('Basic.yml', 'data_pt_mobile')
                 session = requests.session()
                 res = session.post(config.pt_mobile_login_url, data=body, headers=headers, verify=False)
                 res.raise_for_status()
@@ -84,6 +85,7 @@ class Session:
                 return tokenDict
             except Exception as error:
                 Logs.get_log('getSession.log').error('session获取异常，原因： {}'.format(error))
+
         elif env == config.appName['starify']:
             try:
                 from common.Basic_starify import header_starify, query_starify
@@ -133,7 +135,10 @@ class Session:
         elif operate == 'read':
             with open(txtPath, 'r') as f:
                 f = f.read()
-                return f
+                if f:
+                    return f
+                else:
+                    raise Exception(f"{txtPath},token为空!")
 
     @staticmethod
     def checkUserToken_starify(operate, uid, app_name='dev', token=''):

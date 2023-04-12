@@ -1,49 +1,71 @@
 # coding=utf-8
-import random
+import gevent
+from gevent import monkey
+
+monkey.patch_all()
+
 import time
 import urllib.parse
-
+import random
 import pymysql
 import requests
+import urllib3
+
+urllib3.disable_warnings()
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 # 个人房幸运蛋概率测试
-def postPayCreate(giftNum):
-    url = "https://dev.iambanban.com/pay/create?package=com.imbb.banban.android"
+def postPayCreate():
+    egg_level = random.randint(1, 3)
+
+    if egg_level == 1:
+        money = 200
+    elif egg_level == 2:
+        money = 600
+    elif egg_level == 3:
+        money = 1200
+    else:
+        raise EnvironmentError('level error')
+
+    url = "https://192.168.11.46/pay/create?package=com.imbb.banban.android"
     headers = {
         'Content-Type': "application/x-www-form-urlencoded",
         'cache-control': "no-cache",
         'Postman-Token': "f7d705b2-cf29-4a4a-81ba-2c8c8d0f5ed5",
-        "user-token": '8a2ekYGSBGzQGaeDDD__2FtXwt7q1ZaWC2r7eZViTdlGPPzJ__2FOCEtkXnkzbWnjgkZD8LlEwDsk9ZeanifS5wli8XrqnxZE35cfMCaZw1T10sTWSQgK__2FoDrIAd5H'}
+        "user-token": '0976FcAmUaHnJvJAKi804Ijs2Cm3__2BuamYTrhAVV9baYv2cOWvvuwII2kdNeSKeB8MGHOnQJq878fOl3VKNltq4__2BP7pfIksSLlQs1Y4s50wqo__2Fm3qksqrXTqC'}
+
     data = {
         "platform": "available",
         "type": "package",
-        "money": 200 * giftNum,
+        "money": money,
         "params":
-            {"rid": 200000945,
-             "uids": "105002315",
+            {"rid": 200057467,
+             "uids": "105000355",
              "positions": "1",
              "position": -1,
-             "giftId": 558,
-             "giftNum": giftNum,
-             "price": 200,
+             "giftId": 2602,
+             "giftNum": 1,
+             "price": money,
              "cid": 0,
              "ctype": "",
              "duction_money": 0,
              "version": 2,
-             "num": giftNum,
-             "gift_type": 'bean',
+             "num": 1,
+             "gift_type": 'normal',
              "useCoin": -1,
              "star": 0,
              "show_pac_man_guide": 1,
              "refer": "",
              "all_mic": 0,
+             "egg_level": "{}".format(egg_level)
              }
     }
     d = urllib.parse.urlencode(data)
     data = d.replace('+', '').replace('%27', '%22')
-    res = requests.post(url, data=data, headers=headers)
+    res = requests.post(url, data=data, headers=headers, verify=False)
     res = res.json()
+    print(res)
     if res['success'] == 1:
         pass
     else:
@@ -201,51 +223,36 @@ def conMysql():
     return con, cursor
 
 
-def updateBeanSql(uid, coupon_money):
+def updateBeanSql(uid, money):
     con, cur = conMysql()
-    sql = "update xs_user_money_extend set money_coupon={} where uid={} limit 1".format(coupon_money, uid)
+    sql = "update xs_user_money set money={}, money_cash_b=0 where uid={} limit 1".format(money, uid)
     try:
         cur.execute(sql)
     except Exception as error:
         con.rollback()
         print('update fail', error)
     finally:
-        time.sleep(0.1)
+        time.sleep(0.3)
         con.commit()
+
+
+def release_test2(num):
+    threads = []
+    for i in range(num):
+        thread = gevent.spawn(postPayCreate)
+        threads.append(thread)
+    gevent.joinall(threads)
 
 
 def main_pay():
     i = 1
-    # updateBeanSql(128440017, coupon_money=1000000000)
-    # updateBeanSql(105002315, 0)
-    while i < 10000:
-        num = int(random.choice('136'))
-        print('第{}次, 开蛋数为{}'.format(i, num))
-        postPayCreate(num)
-        time.sleep(1)
-        i += 1
-
-
-def main_ktv():
-    i = 1
-    while i < 10000:
-        print('第{}次'.format(i))
-        postPayCreate_live()
-        time.sleep(0.5)
-        i += 1
-
-
-def main_pay_600():
-    i = 1
-    # updateBeanSql(128440017, coupon_money=200000000)
-    # updateBeanSql(105002315, 0)
-    while i < 20000:
-        num = int(random.randint(1, 50))
-        print('第{}次, 开箱数为{}'.format(i, num))
-        postPayCreate_600(num)
-        time.sleep(1)
+    updateBeanSql(105002093, 1000000000)
+    updateBeanSql(105000355, 0)
+    while i <= 100000:
+        release_test2(20)
         i += 1
 
 
 if __name__ == '__main__':
-    main_pay_600()
+    # postPayCreate()
+    main_pay()

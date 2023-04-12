@@ -1,5 +1,5 @@
 from common.Config import config
-from common.conMysql import conMysql
+from common.conMysql import conMysql as mysql
 from common.Request import post_request_session
 import unittest
 from common.Assert import assert_code, assert_equal, assert_body, assert_len
@@ -9,7 +9,7 @@ from common.Consts import case_list, result
 from common.runFailed import Retry
 
 
-@Retry(max_n=2)
+@Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
 
     def test_01_chatPayNoMoney(self, des='私聊打赏余额不足的场景'):
@@ -23,9 +23,9 @@ class TestPayCreate(unittest.TestCase):
         4.检查预期返回msg，预期：支付失败，提示Toast
         5.检查被打赏者余额,预期：0
         """
-        conMysql.updateUserMoneyClearSql(config.payUid, config.rewardUid)
-        conMysql.deleteUserAccountSql('broker_user', config.rewardUid)
-        conMysql.deleteUserAccountSql('chatroom', config.rewardUid)
+        mysql.updateUserMoneyClearSql(config.payUid, config.rewardUid)
+        mysql.deleteUserAccountSql('broker_user', config.rewardUid)
+        mysql.deleteUserAccountSql('chatroom', config.rewardUid)
         data = encodeData(payType='chat-gift',
                           num=10,
                           giftId=config.giftId['5'])
@@ -33,7 +33,7 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 0, reason(des, res))
         assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.rewardUid), 0)
+        assert_equal(mysql.selectUserInfoSql('sum_money', config.rewardUid), 0)
         case_list[des] = result
 
     def test_02_chatPayGiftNormalBroker(self, des='私聊打赏礼物GS收72%'):
@@ -47,18 +47,18 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：1000 * 0.42 = 420(money_cash) + 1000 * 0.3 = 300（money_cash_b）
         6.检查打赏者余额.预期为：1000 - 1000 = 0
         """
-        conMysql.updateMoneySql(config.payUid, money=1000)
-        conMysql.updateMoneySql(config.gsUid)
+        mysql.updateMoneySql(config.payUid, money=1000)
+        mysql.updateMoneySql(config.gsUid)
         data = encodeData(payType='chat-gift', uid=config.gsUid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid,
+        assert_equal(mysql.selectUserInfoSql('single_money', config.gsUid,
                                                 money_type='money_cash'), 1000 * (config.rate - 0.2))
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid,
+        assert_equal(mysql.selectUserInfoSql('single_money', config.gsUid,
                                                 money_type='money_cash_b'), 300)
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.gsUid), 720)
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
+        assert_equal(mysql.selectUserInfoSql('sum_money', config.gsUid), 720)
+        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list[des] = result
 
     def test_03_chatPayBoxNormalBroker(self, des='私聊打赏箱子GS收72%'):
@@ -72,8 +72,8 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为不小于： 300 * 0.42 = 126(money_cash) + 300 * 0.3 = 90（money_cash_b）
         5.检查打赏者余额.预期为：600 - 600 = 0
         """
-        conMysql.updateMoneySql(config.payUid, money=600)
-        conMysql.updateMoneySql(config.gsUid)
+        mysql.updateMoneySql(config.payUid, money=600)
+        mysql.updateMoneySql(config.gsUid)
         data = encodeData(payType='chat-gift',
                           uid=config.gsUid,
                           money=600,
@@ -82,10 +82,10 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_len(conMysql.selectUserInfoSql('single_money', config.gsUid), 300 * 0.3)
-        assert_len(conMysql.selectUserInfoSql('single_money', config.gsUid,
+        assert_len(mysql.selectUserInfoSql('single_money', config.gsUid), 300 * 0.3)
+        assert_len(mysql.selectUserInfoSql('single_money', config.gsUid,
                                               money_type='money_cash'), 300 * (config.rate - 0.2))
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
+        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list[des] = result
 
     def test_04_chatPayGiftNormalUser(self, des='私聊打赏非一代宗师用户分成72%（mcb）'):
@@ -99,14 +99,14 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：1000 * 0.72 = 720(money_cash_b)
         5.检查打赏者余额.预期为：1000 - 1000 = 0
         """
-        conMysql.updateMoneySql(config.payUid, money=1000)
-        conMysql.updateMoneySql(config.rewardUid)
+        mysql.updateMoneySql(config.payUid, money=1000)
+        mysql.updateMoneySql(config.rewardUid)
         data = encodeData(payType='chat-gift')
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid), 720)
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
+        assert_equal(mysql.selectUserInfoSql('single_money', config.rewardUid), 720)
+        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list[des] = result
 
     def test_05_chatPayBoxNormalUser(self, des='私聊打赏一代宗师用户分成80%（mcb）'):
@@ -120,8 +120,8 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为不小于：300 * 0.8 = 240(money_cash_b)
         5.检查打赏者余额.预期为：1000 - 600 = 400
         """
-        conMysql.updateMoneySql(config.payUid, money=1000)
-        conMysql.updateMoneySql(config.masterUid)
+        mysql.updateMoneySql(config.payUid, money=1000)
+        mysql.updateMoneySql(config.masterUid)
         data = encodeData(payType='chat-gift',
                           uid=config.masterUid,
                           money=600,
@@ -130,8 +130,8 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_len(conMysql.selectUserInfoSql('single_money', config.masterUid), 300 * 0.8)
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 400)
+        assert_len(mysql.selectUserInfoSql('single_money', config.masterUid), 300 * 0.8)
+        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 400)
         case_list[des] = result
 
 

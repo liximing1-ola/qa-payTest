@@ -9,6 +9,8 @@ from common.Assert import assert_equal
 from common.Consts import case_list_c, result
 import time
 from common.conRedis import conRedis
+
+
 class TestPayCreate(unittest.TestCase):
 
     @classmethod
@@ -49,7 +51,7 @@ class TestPayCreate(unittest.TestCase):
         3.检查账户钻石消耗
         4.检查账户钻石余额：初始钻石-下注钻石+中奖钻石
         """
-        conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()), bigarea_id=3)
+        conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()), bigArea_id=3)
         conMysql.updateUserLanguage(tuple(i for i in config.pt_user.values()), language='ar', area_code='AR')
         conMysql.updateMoneySql(config.pt_payUid, money=100000)
         bet_data = Greedy.bet('diamond')

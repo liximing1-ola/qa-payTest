@@ -9,7 +9,7 @@ from common.Consts import result, case_list
 from common.runFailed import Retry
 
 
-@Retry
+@unittest.skip('老版本样式的英语分成体系，已替换上线新分成')
 class TestPayCreate(unittest.TestCase):
     """
     英语区消费差异化验证：
@@ -53,7 +53,7 @@ class TestPayCreate(unittest.TestCase):
         1.构造打赏者和被打赏者数据
         2.私聊一对一打赏流程
         3.校验接口和返回值数据
-        4.检查打赏者数据，预期：700 - 600 = 0
+        4.检查打赏者数据，预期：600 - 600 = 0
         5.检查被打赏者余额,预期为：不小于150
         """
         conMysql.updateMoneySql(config.pt_payUid, money=300, money_cash=100, money_b=100, money_cash_b=100)

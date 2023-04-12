@@ -1,5 +1,5 @@
 from common.Config import config
-from common.conMysql import conMysql
+from common.conMysql import conMysql as mysql
 from common.method import reason
 import unittest
 import pytest
@@ -10,10 +10,12 @@ from common.runFailed import Retry
 from common.Consts import case_list_b, result
 
 
-@Retry
+@Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
-    singer_rid = conMysql.selectUserInfoSql('union')  # 联盟房/歌友房
+
+    singer_rid = mysql.selectUserInfoSql('union')  # 联盟房/歌友房
     pack_cal_uid = config.bb_user['pack_cal_uid']  # 直播公会gs
+    pack_ceo_uid = config.live_role['pack_ceo']  # 直播公会公会长
 
     @pytest.mark.run(order=1)
     def test_01_singerRoomLiveBrokerRate_60(self, des='歌友房直播工会收60%公会魅力值'):
@@ -25,19 +27,21 @@ class TestPayCreate(unittest.TestCase):
         2.歌友房打赏（打赏1000分）
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：1000 * 0.6 = 600(money_cash)
+        5.检查公会长余额，预期：0
         """
-        conMysql.updateMoneySql(config.payUid, money=1000)
-        conMysql.updateMoneySql(self.pack_cal_uid)
+        mysql.updateMoneySql(config.payUid, money=1000)
+        mysql.updateUserMoneyClearSql(self.pack_cal_uid, self.pack_ceo_uid)
         data = encodeData(payType='package',
                           rid=self.singer_rid,
                           uid=self.pack_cal_uid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('single_money', self.pack_cal_uid,
+        assert_equal(mysql.selectUserInfoSql('single_money', self.pack_cal_uid,
                                                 money_type='money_cash'), 600)
-        assert_equal(conMysql.selectUserInfoSql('sum_money', self.pack_cal_uid), 600)
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
+        assert_equal(mysql.selectUserInfoSql('sum_money', self.pack_cal_uid), 600)
+        assert_equal(mysql.selectUserInfoSql('sum_money', self.pack_ceo_uid), 0)
+        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
     def test_02_singerRoomNormalBrokerRate_62(self, des='歌友房普通工会收62%公会魅力值'):
@@ -50,18 +54,18 @@ class TestPayCreate(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：1000 * 0.62 = 620(money_cash)
         """
-        conMysql.updateMoneySql(config.payUid, money=1000)
-        conMysql.updateMoneySql(config.gsUid)
+        mysql.updateMoneySql(config.payUid, money=1000)
+        mysql.updateMoneySql(config.gsUid)
         data = encodeData(payType='package',
                           rid=self.singer_rid,
                           uid=config.gsUid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.gsUid,
+        assert_equal(mysql.selectUserInfoSql('single_money', config.gsUid,
                                                 money_type='money_cash'), 1000 * config.rate)
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.gsUid), 1000 * config.rate)
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
+        assert_equal(mysql.selectUserInfoSql('sum_money', config.gsUid), 1000 * config.rate)
+        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
     def test_03_singerPayBoxNormalBrokerRate_62(self, des='歌友房打赏箱子GS收62%（mc）'):
@@ -75,8 +79,8 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为不小于：300 * 0.62 = 620(money_cash)
         5.检查打赏者余额，预期为：600 - 600 = 0
         """
-        conMysql.updateMoneySql(config.payUid, money=600)
-        conMysql.updateMoneySql(config.gsUid)
+        mysql.updateMoneySql(config.payUid, money=600)
+        mysql.updateMoneySql(config.gsUid)
         data = encodeData(payType='package',
                           money=600,
                           rid=self.singer_rid,
@@ -86,10 +90,10 @@ class TestPayCreate(unittest.TestCase):
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
-        assert_len(conMysql.selectUserInfoSql('single_money', config.gsUid,
+        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 0)
+        assert_len(mysql.selectUserInfoSql('single_money', config.gsUid,
                                               money_type='money_cash'), 300 * config.rate)
-        assert_len(conMysql.selectUserInfoSql('sum_money', config.gsUid), 300 * config.rate)
+        assert_len(mysql.selectUserInfoSql('sum_money', config.gsUid), 300 * config.rate)
         case_list_b[des] = result
 
     def test_04_singerRoomPayNormalUser(self, des='歌友房普通用户礼物打赏收个人魅力值'):
@@ -102,14 +106,14 @@ class TestPayCreate(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：1000 * 0.6 = 620(个人魅力值)
         """
-        conMysql.updateMoneySql(config.payUid, money=1000)
-        conMysql.updateMoneySql(config.rewardUid)
+        mysql.updateMoneySql(config.payUid, money=1000)
+        mysql.updateMoneySql(config.rewardUid)
         data = encodeData(payType='package',
                           rid=self.singer_rid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.rewardUid), 620)
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.rewardUid), 620)
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.payUid), 0)
+        assert_equal(mysql.selectUserInfoSql('single_money', config.rewardUid), 620)
+        assert_equal(mysql.selectUserInfoSql('sum_money', config.rewardUid), 620)
+        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result

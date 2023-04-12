@@ -74,6 +74,22 @@ class conMysql:
                 return int(res[0])
             except Exception as error:
                 print(error)
+        elif accountType == 'money_cash_personal':  # 查询用户新增个人魅力值字段表
+            sql = 'select money_cash_personal from xs_user_money_extend where uid ={}'.format(uid)
+            try:
+                conMysql.cur.execute(sql)
+                res = conMysql.cur.fetchone()
+                return int(res[0])
+            except Exception as error:
+                print(error)
+        elif accountType == 'chat-pay-card':  # 查询用户背包私聊卡道具数量
+            sql = 'select num from xs_user_commodity where uid ={} and cid = 42598'.format(uid)
+            try:
+                conMysql.cur.execute(sql)
+                res = conMysql.cur.fetchone()
+                return int(res[0])
+            except Exception as error:
+                print(error)
 
     # 删除用户账户数据
     @staticmethod
@@ -107,6 +123,15 @@ class conMysql:
                 conMysql.con.commit()
         elif tableName == 'user_journey_planet_record':  # 清除xs_user_journey_planet_record用户数据
             sql = "delete from xs_user_journey_planet_record where uid={}".format(uid)
+            try:
+                conMysql.cur.execute(sql)
+            except Exception as error:
+                conMysql.con.rollback()
+                print('delete fail', error)
+            finally:
+                conMysql.con.commit()
+        elif tableName == 'chat_pay_card_record':  # 清除xs_chat_pay_card_record用户数据
+            sql = "delete from xs_chat_pay_card_record where uid={}".format(uid)
             try:
                 conMysql.cur.execute(sql)
             except Exception as error:
@@ -165,6 +190,19 @@ class conMysql:
             for uid in uids:
                 sql = "update xs_user_money set money=0, money_b=0, money_cash=0, money_cash_b=0, gold_coin=0, " \
                       "money_debts=0, money_order=0, money_order_b=0 where uid={}".format(uid)
+                conMysql.cur.execute(sql)
+        except Exception as error:
+            conMysql.con.rollback()
+            print('update fail', error)
+        finally:
+            conMysql.con.commit()
+
+    #  清空用户xs_user_money_extend账户余额
+    @staticmethod
+    def updateUserextendMoneyClearSql(*uids):
+        try:
+            for uid in uids:
+                sql = "update xs_user_money_extend set money_cash_personal=0 where uid={}".format(uid)
                 conMysql.cur.execute(sql)
         except Exception as error:
             conMysql.con.rollback()
@@ -243,6 +281,58 @@ class conMysql:
     def select_user_chatroom(property, bigarea_id=1):
         sql = "select rid from xs_chatroom a left join xs_user_bigarea b on a.uid = b.uid where a.property = '{}' and b.bigarea_id = {} limit 1".format(
             property, bigarea_id)
+        try:
+            conMysql.cur.execute(sql)
+            res = conMysql.cur.fetchone()
+            if res is None:
+                return 0
+            else:
+                return res[0]
+        except Exception as error:
+            print(error)
+
+    # 更新被打赏账户testUid的人气数据
+    @staticmethod
+    def updateXsUserpopularity(uid):
+        sql = "update xs_user_popularity set popularity=0 where uid = {}".format(uid)
+        try:
+            conMysql.cur.execute(sql)
+        except Exception as error:
+            conMysql.con.rollback()
+            print('update fail', error)
+        finally:
+            conMysql.con.commit()
+
+    # 查询被打赏测试账户testUid的人气数据
+    @staticmethod
+    def sqlXsUserpopularity(uid):
+        sql = "select popularity from xs_user_popularity  where uid = {}".format(uid)
+        try:
+            conMysql.cur.execute(sql)
+            res = conMysql.cur.fetchone()
+            if res is None:
+                return 0
+            else:
+                return res[0]
+        except Exception as error:
+            print(error)
+
+    # 更新测试打赏者账户payUid的vip数据
+    @staticmethod
+    def updateXsUserprofile_pay_room_money(uid):
+        sql = "update xs_user_profile set pay_room_money=0 where uid = {}".format(uid)
+        try:
+            conMysql.cur.execute(sql)
+        except Exception as error:
+            conMysql.con.rollback()
+            print('update fail', error)
+        finally:
+            conMysql.con.commit()
+
+    # 查询测试打赏者账户payUid的vip数据
+    @staticmethod
+    def sqlXsUserprofile_pay_room_money(uid):
+        sql = "select pay_room_money from xs_user_profile  where uid = {}".format(uid)
         try:
             conMysql.cur.execute(sql)
             res = conMysql.cur.fetchone()

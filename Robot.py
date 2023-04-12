@@ -20,6 +20,7 @@ def robot(mode, reason, title='', bot='BB', color="good"):
     }
     url = robot_dict[bot]
     # url = robot_dict_wechat[bot]
+
     if mode == 'fail':
         content = "警告! 失败用例: {}, 失败原因: {}".format(title, reason)
         data = {
@@ -108,6 +109,16 @@ def robot(mode, reason, title='', bot='BB', color="good"):
             "title": title,
             "value": reason,
         }
+        requests.post(url, headers=headers, json=data)
+
+    elif mode == 'wxBot':
+        data = {
+            "msgtype": "text",
+            "text": {
+                "content": reason
+            }
+        }
+        url = robot_dict_wechat['BB']
         requests.post(url, headers=headers, json=data)
 
     else:

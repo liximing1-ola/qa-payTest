@@ -7,7 +7,8 @@ class config:
     BASE_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     appInfo = {
         'bb_dev': 'https://dev.iambanban.com/',
-        'pt_ali': 'https://pt-dev.iambanban.com/',
+        'pt_ali_dev': 'https://pt-dev.iambanban.com/',  # 指向dev服务
+        'pt_ali_main': 'https://pt-dev.iambanban.com/_testcase/',  # 指向线上拉取的main分支服务，go的还需要新启一个
         'starify': 'http://116.62.125.230/',
         "rush": 'https://192.168.11.55/',
     }
@@ -37,7 +38,7 @@ class config:
         'ali-starify': 'iZbp15ildwog86lw08ptpnZ',  # todo 修改 调试用 ubuntu / dev=iZj6cig35upuwmdws5sec2Z
     }
     # 测试域名
-    pt_host = appInfo['pt_ali']
+    pt_host = appInfo['pt_ali_main']
     # 内网支付接口
     pay_url = appInfo['bb_dev'] + 'pay/create?package=com.imbb.banban.android'
     pt_pay_url = pt_host + 'pay/create?package=com.imbb.oversea.android'
@@ -70,12 +71,12 @@ class config:
     }
     # 礼物配置
     giftId = {
-        "5": 5,  # 棒棒糖*1币
-        "7": 7,  # 大宝剑*10币
-        "11": 11,  # 老司机*30币(券-5)
-        "46": 46,  # 幸运星*6币
-        "47": 47,  # 五色星*21币
-        "54": 54,  # 小天使*99币（商城购买）
+        "5": 5,  # 棒棒糖*100钻
+        "7": 7,  # 大宝剑*1000钻
+        "11": 11,  # 老司机*3000钻(券-500钻石)
+        "46": 46,  # 幸运星*600钻
+        "47": 47,  # 五色星*2100钻
+        "54": 54,  # 小天使*9900钻（商城购买）
         "62": 62,  # 人气券*20（金币）
         "362": 362,  # 啵啵奶茶*1000（金豆）
     }
@@ -98,7 +99,7 @@ class config:
     pt_fleetUid = pt_user['fleet_uid']
     # 房间类型41
     pt_room = {
-        'business_joy': 105697423,  # 商业房
+        'business_joy': 105699329,  # 商业房
         'vip_rid': 105698376,  # 个人房
         'th_union': 105708881,  # 泰区联盟房
         'en_fleet': 105717544,  # 英语大区家族房
@@ -118,4 +119,3 @@ class config:
         "773": 773,  # 小飞机盲盒
         "774": 774,  # 飞马盲盒
     }
-

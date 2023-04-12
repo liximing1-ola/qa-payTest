@@ -10,9 +10,17 @@ from common.runFailed import Retry
 
 
 @Retry
+# @unittest.skip('cn大区有调整，待处理')
 class TestPayCreate(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()), bigarea_id=2)
 
-    def test_01_openBoxPayChange(self, des='背包开箱子场景', cid=2):
+    @classmethod
+    def tearDownClass(cls) -> None:
+        conMysql.updateUserBigArea(tuple(i for i in config.pt_user.values()))
+
+    def test_01_openBoxPayChange(self, des='背包开铜箱子场景', cid=2):
         """
         用例描述：
         验证背包内开箱子得到物品
@@ -25,7 +33,7 @@ class TestPayCreate(unittest.TestCase):
         2.openBox
         3.校验接口状态和返回值数据
         4.检查账户余额，预期值为：700 - 600 = 100
-        5.检查背包内开出物品，预期值应为：2（开出礼物个数*1 + 赠送头框*1）
+        5.检查背包内开出物品，预期值应为：1（开出礼物个数*1 + 赠送头框*1）# 头像框被取消了
         """
         conMysql.deleteUserAccountSql('user_box', config.pt_payUid)
         conMysql.deleteUserAccountSql('user_commodity', config.pt_payUid)
@@ -37,7 +45,7 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 100)
-        assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.pt_payUid), 2)
+        assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.pt_payUid), 1)
         case_list[des] = result
 
     def test_02_openMoreBoxPayChange(self, des='背包箱子多开场景', cid=3):
@@ -53,7 +61,7 @@ class TestPayCreate(unittest.TestCase):
         2.openBox
         3.校验接口状态和返回值数据
         4.检查账户余额，预期值为：12600 - 2100*6 = 0
-        5.检查背包内开出物品，预期值应为6（开出礼物个数等于*6 + 赠送头框*6）
+        5.检查背包内开出物品，预期值应为6（开出礼物个数等于*6 + 赠送头框*6）# 头像框被取消了
         """
         conMysql.deleteUserAccountSql('user_box', config.pt_payUid)
         conMysql.deleteUserAccountSql('user_commodity', config.pt_payUid)
@@ -69,7 +77,7 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 0)
-        assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.pt_payUid), 12)
+        assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.pt_payUid), 6)
         case_list[des] = result
 
     def test_03_giveBoxPayChange(self, des='房间送箱子场景'):
@@ -85,15 +93,14 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
         conMysql.updateMoneySql(config.pt_testUid)
+        conMysql.updateUserextendMoneyClearSql(config.pt_testUid)  # 非主播钱包附加表账户余额清空
         data = encodePtData(payType='package', giftId=config.giftId['46'])
         res = post_request_session(config.pt_pay_url, data, tokenName='pt')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 100)
-        assert_len(conMysql.selectUserInfoSql('sum_money', config.pt_testUid), 100)
-        assert_equal(conMysql.selectUserInfoSql('single_money',
-                                                config.pt_testUid,
-                                                money_type='money_cash_b'),
+        assert_len(conMysql.selectUserInfoSql('money_cash_personal', config.pt_testUid, money_type='money_cash_personal'), 100)
+        assert_equal(conMysql.selectUserInfoSql('money_cash_personal', config.pt_testUid, money_type='money_cash_personal'),
                      conMysql.selectUserInfoSql(accountType='pay_change', uid=config.pt_testUid))
         case_list[des] = result
 
@@ -110,6 +117,7 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, money=10000)
         conMysql.updateMoneySql(config.pt_testUid)
+        conMysql.updateUserextendMoneyClearSql(config.pt_testUid)  # 非主播钱包附加表账户余额清空
         data = encodePtData(payType='package-more',
                             num=2,
                             money=2100,
@@ -118,9 +126,7 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 1600)
-        assert_len(conMysql.selectUserInfoSql('sum_money', config.pt_testUid), 1000)
-        assert_equal(conMysql.selectUserInfoSql('single_money',
-                                                config.pt_testUid,
-                                                money_type='money_cash_b'),
+        assert_len(conMysql.selectUserInfoSql('money_cash_personal', config.pt_testUid, money_type='money_cash_personal'), 1000)
+        assert_equal(conMysql.selectUserInfoSql('money_cash_personal', config.pt_testUid, money_type='money_cash_personal'),
                      conMysql.selectUserInfoSql(accountType='pay_change', uid=config.pt_testUid))
         case_list[des] = result

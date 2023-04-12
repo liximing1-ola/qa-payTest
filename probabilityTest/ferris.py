@@ -1,10 +1,13 @@
 import requests
 import sys
 import os
+
 sys.path.append(os.path.split(os.path.abspath(os.path.dirname(__file__)))[0])
 from common.Config import config
 from common.basicData import encodeData
 from common.sqlScript import mysql
+
+
 def ferrisData():
     uids = mysql.getUids(50)
     token = 'f1e7Y__2F61q5JZ6yGwIfuiqa__2FjoNuMpm__2BumZl0y0__2BkHfTGiG8VNqi7nBlnlqIz__2BitjLGqVUWnFtiVsQ4omz3dRRguKxDUs3GQrAWnk0PxIlnH2VBfFKKJwtPKx'
