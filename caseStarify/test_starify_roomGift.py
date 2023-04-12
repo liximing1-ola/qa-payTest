@@ -1050,3 +1050,31 @@ class TestPayCreate(unittest.TestCase):
                 #  sql:被打赏者starify_rewardUid01 查询-魅力值=0
                 assert_equal(conMysql.selectUserInfoSql('charm', starify_rewardUid01), commodity['charm'])
         case_list[des] = result
+
+    def test_room_026(self, des='房间打赏,背包支付,礼物=日常宝箱-免费礼物(下架状态)'):
+        commodity = commodity_config['51']
+        #  sql:打赏者starify_payUid 修改余额=0
+        conMysql.updateMoneySql(starify_payUid, 0)
+        #  sql:打赏者starify_payUid 清空背包礼物
+        conMysql.deleteUserAccountSql('user_commodity', starify_payUid)
+        #  sql:打赏者starify_payUid 修改财富值=0
+        conMysql.updateWealthSql(starify_payUid, 0)
+        #  sql:打赏者starify_payUid 背包增加礼物:免费礼物*1个
+        conMysql.insertXsUserCommodity(starify_payUid, commodity['cid'], 1)
+        #  sql:被打赏者starify_rewardUid01 修改余额=0
+        conMysql.updateMoneySql(starify_rewardUid01, 0)
+        #  sql:被打赏者starify_rewardUid01 修改魅力值=0
+        conMysql.updateCharmSql(starify_rewardUid01, 0)
+        data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
+        res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', True, reason_starify(des, res))
+        #  sql:打赏者starify_payUid 查询余额=0
+        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
+        #  sql:被打赏者starify_rewardUid01 查询余额=0
+        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01), 0)
+        #  sql:打赏者starify_payUid 查询-财富值=0
+        assert_equal(conMysql.selectUserInfoSql('wealth', starify_payUid), 0)
+        #  sql:被打赏者starify_rewardUid01 查询-魅力值=礼物对应魅力值*连击数
+        assert_equal(conMysql.selectUserInfoSql('charm', starify_rewardUid01), 0)
+        case_list[des] = result

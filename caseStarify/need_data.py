@@ -158,7 +158,15 @@ commodity_config = {
 		"reward_lower": 0.15,
 		"reward_upper": 0.20,
 	},
-
+	# 宝箱免费礼物
+	"51": {
+		"gift_id": 51,  # 礼物id
+		"name": "音符",  # 日常宝箱-免费礼物
+		"price": 1,
+		"cid": 113,
+		"wealth": 1,
+		"charm": 0,
+	},
 
 
 	# 物品-头像框
