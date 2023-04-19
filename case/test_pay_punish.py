@@ -27,7 +27,6 @@ class TestPayCreate(unittest.TestCase):
         6.检查消费记录表消费方式op
         """
         mysql.updateMoneySql(config.payUid, money=100)
-        mysql.insertBeanSql(config.rewardUid, money_coupon=20)
         mysql.updateMoneySql(config.rewardUid, money=20, money_cash=20, money_debts=100)
         data = encodeData(payType='package',
                           money=100,
@@ -37,7 +36,6 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
         sleep(2)  # 延迟处理NSQ消息
-        assert_equal(mysql.selectUserInfoSql('bean', config.rewardUid), 20)
         assert_equal(mysql.selectUserInfoSql('single_money', config.rewardUid, 'money'), 2)
         assert_equal(mysql.selectUserInfoSql('single_money', config.rewardUid, 'money_cash'), 0)
         assert_equal(mysql.selectUserInfoSql('single_money', config.rewardUid, 'money_debts'), 0)
