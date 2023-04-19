@@ -1,7 +1,7 @@
 from common.Config import config
 from common.conMysql import conMysql as mysql
 from common.Request import post_request_session
-from common.method import getUserTitle
+from common.method import checkUserVipExp
 import unittest
 from common.Assert import assert_code, assert_equal, assert_body, assert_len
 from common.method import reason
@@ -26,6 +26,7 @@ class TestPayCreate(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：100 * 0.62 =62 (money_cash_b)
         5.检查被打赏者师徒账户，预期为：100 * 0.05 = 5（money_cash_b）
+        6.检查打赏者VIP经验值变动
         """
         mysql.updateMoneySql(config.payUid, money=30, money_cash=30, money_cash_b=30, money_b=10)
         mysql.updateMoneySql(config.rewardUid)
@@ -42,7 +43,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(mysql.selectUserInfoSql('sum_money', config.gsUid), 5)
         assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 0)
         assert_equal(mysql.selectUserInfoSql('pay_room_money', config.payUid),
-                     int(vip_level + 100 * getUserTitle(mysql.selectUserInfoSql('level', config.payUid))))
+                     vip_level + checkUserVipExp())
         case_list[des] = result
 
     def test_02_businessPayBoxNormalUser(self, des='商业房打赏箱子一代用户到账70%(mcb)'):
@@ -58,6 +59,7 @@ class TestPayCreate(unittest.TestCase):
         """
         mysql.updateMoneySql(config.payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
         mysql.updateMoneySql(config.masterUid)
+        vip_level = int(mysql.selectUserInfoSql('pay_room_money', config.payUid))
         data = encodeData(payType='package',
                           money=600,
                           uid=config.masterUid,
@@ -69,6 +71,8 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 100)
         income = mysql.selectUserInfoSql('pay_change', uid=config.masterUid, money_type='_in_c_b')
         assert_equal(mysql.selectUserInfoSql('single_money', config.masterUid), income)
+        assert_equal(mysql.selectUserInfoSql('pay_room_money', config.payUid),
+                     vip_level + checkUserVipExp(pay_off=600))
         case_list[des] = result
 
     def test_03_businessPayGiftToGs(self, des='商业房礼物打赏GS到账62%(mc)'):

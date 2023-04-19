@@ -1,6 +1,7 @@
 from common.Config import config
 from common.conMysql import conMysql as mysql
 from common.Request import post_request_session
+from common.method import checkUserVipExp
 import unittest
 from common.Assert import assert_code, assert_equal, assert_body, assert_len
 from common.method import reason
@@ -49,6 +50,7 @@ class TestPayCreate(unittest.TestCase):
         """
         mysql.updateMoneySql(config.payUid, money=1000)
         mysql.updateMoneySql(config.gsUid)
+        vip_level = int(mysql.selectUserInfoSql('pay_room_money', config.payUid))
         data = encodeData(payType='chat-gift', uid=config.gsUid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
@@ -59,6 +61,8 @@ class TestPayCreate(unittest.TestCase):
                                                 money_type='money_cash_b'), 300)
         assert_equal(mysql.selectUserInfoSql('sum_money', config.gsUid), 720)
         assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 0)
+        assert_equal(mysql.selectUserInfoSql('pay_room_money', config.payUid),
+                     vip_level + checkUserVipExp(pay_off=1000))
         case_list[des] = result
 
     def test_03_chatPayBoxNormalBroker(self, des='私聊打赏箱子GS收72%'):

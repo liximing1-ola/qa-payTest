@@ -2,6 +2,7 @@ from common.Config import config
 from common.method import reason
 from common.conMysql import conMysql as mysql
 from common.Request import post_request_session
+from common.method import checkUserVipExp
 import unittest
 from common.Assert import assert_body, assert_code, assert_equal
 from common.basicData import encodeData
@@ -45,6 +46,7 @@ class TestPayCreate(unittest.TestCase):
         """
         mysql.updateMoneySql(config.payUid, gold_coin=100)
         mysql.updateUserMoneyClearSql(config.rewardUid, config.masterUid)
+        vip_level = int(mysql.selectUserInfoSql('pay_room_money', config.payUid))
         data = encodeData(payType='package-more',
                           money=20,
                           giftId=config.giftId['62'],
@@ -55,4 +57,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(mysql.selectUserInfoSql('single_money', config.payUid, money_type='gold_coin'), 60)
         assert_equal(mysql.selectUserInfoSql('single_money', config.masterUid, money_type='gold_coin'), 12)
         assert_equal(mysql.selectUserInfoSql('single_money', config.rewardUid, money_type='gold_coin'), 12)
+        assert_equal(mysql.selectUserInfoSql('pay_room_money', config.payUid),
+                     vip_level + checkUserVipExp(money_type='coin', pay_off=100))
         case_list[des] = result
