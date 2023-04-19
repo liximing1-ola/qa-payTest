@@ -56,6 +56,7 @@ class TestPayCreate(unittest.TestCase):
         """
         mysql.insertBeanSql(config.payUid, money_coupon=6000)
         vip_level = int(mysql.selectUserInfoSql('pay_room_money', config.payUid))
+        print(vip_level)
         data = encodeData(payType='package-more',
                           giftId=config.giftId['362'],
                           giftType='bean',
@@ -66,8 +67,10 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(mysql.selectUserInfoSql('bean', config.payUid), 0)
         assert_equal(mysql.selectUserInfoSql('bean', config.rewardUid), 3000)
+        print(vip_level + checkUserVipExp(money_type='bean', pay_off=6000))
+        print(int(mysql.selectUserInfoSql('pay_room_money', config.payUid)))
         assert_equal(mysql.selectUserInfoSql('pay_room_money', config.payUid),
-                     vip_level + checkUserVipExp('bean', pay_off=6000))
+                     vip_level + checkUserVipExp(money_type='bean', pay_off=6000))
         case_list[des] = result
 
     def test_03_MoneyConvertGoldPayGift(self, des='打赏金豆礼物不足用钻转换的场景'):
