@@ -156,7 +156,7 @@ def checkUserVipExp(money_type='money', uid=config.payUid, pay_off=100):
     if money_type == 'money' or money_type == 'coin':
         return int(pay_off * getUserTitle(mysql.selectUserInfoSql('level', uid)))
     elif money_type == 'bean':
-        return int(pay_off * 2)
+        return int(pay_off * 1.5)
     else:
         return 0
 
