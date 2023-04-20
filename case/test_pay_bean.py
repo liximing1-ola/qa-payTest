@@ -55,8 +55,6 @@ class TestPayCreate(unittest.TestCase):
         5.检查被打赏者金豆余额，预期为：6000 * 0.5 = 3000
         """
         mysql.insertBeanSql(config.payUid, money_coupon=6000)
-        vip_level = int(mysql.selectUserInfoSql('pay_room_money', config.payUid))
-        print(vip_level)
         data = encodeData(payType='package-more',
                           giftId=config.giftId['362'],
                           giftType='bean',
@@ -67,10 +65,6 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', 1, reason(des, res))
         assert_equal(mysql.selectUserInfoSql('bean', config.payUid), 0)
         assert_equal(mysql.selectUserInfoSql('bean', config.rewardUid), 3000)
-        print(vip_level + checkUserVipExp(money_type='bean', pay_off=6000))
-        print(int(mysql.selectUserInfoSql('pay_room_money', config.payUid)))
-        assert_equal(mysql.selectUserInfoSql('pay_room_money', config.payUid),
-                     vip_level + checkUserVipExp(money_type='bean', pay_off=6000))
         case_list[des] = result
 
     def test_03_MoneyConvertGoldPayGift(self, des='打赏金豆礼物不足用钻转换的场景'):
@@ -88,6 +82,7 @@ class TestPayCreate(unittest.TestCase):
         mysql.updateMoneySql(config.payUid, money=10000)
         mysql.updateMoneySql(config.rewardUid)
         mysql.insertBeanSql(config.payUid, money_coupon=500)
+        vip_level = int(mysql.selectUserInfoSql('pay_room_money', config.payUid))
         data = encodeData(payType='package-exchange',
                           giftId=config.giftId['362'],
                           giftType='bean')
@@ -97,6 +92,8 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(mysql.selectUserInfoSql('bean', config.payUid), 500)
         assert_equal(mysql.selectUserInfoSql('bean', config.rewardUid), 500)
         assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 9000)
+        assert_equal(mysql.selectUserInfoSql('pay_room_money', config.payUid),
+                     vip_level + checkUserVipExp(money_type='bean', pay_off=1000))
         case_list[des] = result
 
     def test_04_ImMoneyPayChangeBeanDeduct(self, des='私聊打赏钻石礼物时金豆不再抵扣平台手续费'):
