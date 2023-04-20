@@ -83,7 +83,6 @@ class TestPayCreate(unittest.TestCase):
         mysql.updateMoneySql(config.rewardUid)
         mysql.insertBeanSql(config.payUid, money_coupon=500)
         vip_level = int(mysql.selectUserInfoSql('pay_room_money', config.payUid))
-        print(vip_level)
         data = encodeData(payType='package-exchange',
                           giftId=config.giftId['362'],
                           giftType='bean')
@@ -93,8 +92,6 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(mysql.selectUserInfoSql('bean', config.payUid), 500)
         assert_equal(mysql.selectUserInfoSql('bean', config.rewardUid), 500)
         assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 9000)
-        print(vip_level + checkUserVipExp(money_type='bean', pay_off=1000))
-        print(mysql.selectUserInfoSql('pay_room_money', config.payUid))
         assert_equal(mysql.selectUserInfoSql('pay_room_money', config.payUid),
                      vip_level + checkUserVipExp(money_type='bean', pay_off=1000))
         case_list[des] = result

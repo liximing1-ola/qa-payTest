@@ -58,5 +58,5 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(mysql.selectUserInfoSql('single_money', config.masterUid, money_type='gold_coin'), 12)
         assert_equal(mysql.selectUserInfoSql('single_money', config.rewardUid, money_type='gold_coin'), 12)
         assert_equal(mysql.selectUserInfoSql('pay_room_money', config.payUid),
-                     vip_level + checkUserVipExp(money_type='coin', pay_off=100))
+                     vip_level + checkUserVipExp(money_type='coin', pay_off=40))
         case_list[des] = result
