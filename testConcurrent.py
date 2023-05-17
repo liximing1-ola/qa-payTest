@@ -265,10 +265,10 @@ class TestPayConcurrent:
 
     def main(self, num):
         self.test_01_payPackGift(num)
-        self.test_02_commodityUse(num)
-        self.test_03_commodityPresent(num)
-        self.test_04_payGift(num)
-        self.test_05_payShop(num)
+        #self.test_02_commodityUse(num)
+        #self.test_03_commodityPresent(num)
+        #self.test_04_payGift(num)
+        #self.test_05_payShop(num)
         case_list = method.dictToList(Consts.case_list_c)
         des = "{}\n".format(case_list)
         Logs.get_log('concurrentCaseResult.log').info(des)

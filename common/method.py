@@ -159,4 +159,3 @@ def checkUserVipExp(money_type='money', uid=config.payUid, pay_off=100):
         return int(pay_off * 1.5)
     else:
         return 0
-
