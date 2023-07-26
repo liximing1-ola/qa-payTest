@@ -10,7 +10,7 @@ from common.conRedis import conRedis
 from common.runFailed import Retry
 
 
-@Retry
+@unittest.skip('马来大区已关闭合并到印尼')
 class TestPayCreate(unittest.TestCase):
     """
     马来区消费差异化验证：

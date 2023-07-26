@@ -73,9 +73,11 @@ class Session:
         elif env == config.appName['Partying']:
             try:
                 headers = Yaml.read_yaml('Basic.yml', 'header_pt')
+                params = Yaml.read_yaml('Basic.yml', 'data_pt_mobile_params')
                 body = Yaml.read_yaml('Basic.yml', 'data_pt_mobile')
+                login_url = config.pt_mobile_login_url  + '?' + params      # 7.26加包名限制
                 session = requests.session()
-                res = session.post(config.pt_mobile_login_url, data=body, headers=headers, verify=False)
+                res = session.post(login_url, data=body, headers=headers, verify=False)
                 res.raise_for_status()
                 res = res.json()
                 if not method.isExtend(res, 'token') or res['success'] != 1:

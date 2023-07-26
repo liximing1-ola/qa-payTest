@@ -129,6 +129,9 @@ def all_case(appInfo):
         return
 
     testcase = unittest.TestSuite()
+    # discover = unittest.defaultTestLoader.discover(case_dir,  # 指定待执行用例的目录
+    #                                                pattern="test_pt_cnArea.py",
+    #                                                top_level_dir=None)
     discover = unittest.defaultTestLoader.discover(case_dir,  # 指定待执行用例的目录
                                                    pattern="test_*.py",
                                                    top_level_dir=None)
