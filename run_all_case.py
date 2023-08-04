@@ -136,14 +136,14 @@ def main(appInfo):
                 robot('markdown', des_2, bot='slp')
             elif len(test_result.failures) >= 1:
                 Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
-                robot('icon', des, color='danger', bot='slp')
+                robot('fail', des, color='danger', bot='slp')
                 for case, reason in test_result.failures:
-                    robot('icon', Consts.fail_case_reason[0], title=case.id(), color='danger')
+                    robot('fail', Consts.fail_case_reason[0], title=case.id(), color='danger')
                     break
             elif len(test_result.errors) >= 1:
                 Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
                 for case, reason in test_result.errors:
-                    robot('icon', reason, case.id(), color='danger', bot='slp')
+                    robot('fail', reason, case.id(), color='danger', bot='slp')
                     break
         else:
             Logs.get_log('runCode.log').info('NoRun')
