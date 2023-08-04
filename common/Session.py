@@ -74,7 +74,7 @@ class Session:
             try:
                 headers = Yaml.read_yaml('Basic.yml', 'header_pt')
                 params = Yaml.read_yaml('Basic.yml', 'data_pt_mobile_params')
-                body = Yaml.read_yaml('Basic.yml', 'data_pt_mobile')
+                body = Yaml.read_yaml('Basic.yml', 'data_slp_mobile')
                 login_url = config.pt_mobile_login_url  + '?' + params      # 7.26加包名限制
                 session = requests.session()
                 res = session.post(login_url, data=body, headers=headers, verify=False)
@@ -123,37 +123,29 @@ class Session:
         #         Logs.get_log('getSession.log').error('session获取异常，原因： {}'.format(error))
         elif env == config.appName['不夜星球']:
             try:
-                from common.Basic_slp import header_slp, query_slp
-                from caseSlp.tools import create_sign
-                from time import time
-                from urllib.parse import urlencode, urlunparse, unquote
-                # 不去除sign验证,必须自己计算
-                headers = header_slp
-                query = query_slp.copy()
-                query['_timestamp'] = str(int(time()))
-                from caseSlp.config import slp_payPhone, slp_rewardPhoneUid01, slp_rewardPhoneUid02, slp_payUid
-                for phone in [slp_payPhone, slp_rewardPhoneUid01, slp_rewardPhoneUid02]:
-                    body = {
-                        "mobile": phone,
-                        "area": "886",
-                        "code": "1234",
-                        "password": "",
-                    }
-                    sign = create_sign(query)
-                    query['_sign'] = sign
-                    url = config.slp_mobile_login_url + "?" + unquote(urlencode(query))
-                    session = requests.session()
-                    res = session.post(url, data=body, headers=headers, timeout=30)
-                    res.raise_for_status()
-                    res = res.json()
-                    if not method.isExtend(res, 'token') or res['success'] != 1:
-                        print('failReason： {}'.format(res['msg']))
-                    tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
-                    Session.checkUserToken_slp('write', uid=res['data']['uid'], app_name=env,
-                                                   token=tokenDict['token'])
-                    # return tokenDict
+                headers = Yaml.read_yaml('Basic.yml', 'header_slp')
+                params = Yaml.read_yaml('Basic.yml', 'data_slp_mobile_params')
+                login_url = config.slp_mobile_login_url + '?' + params + '&package=com.yhl.sleepless.android'
+                body = Yaml.read_yaml('Basic.yml', 'data_dev_qq')
+                session = requests.session()
+                res = session.post(login_url, data=body, headers=headers, verify=False)
+                res.raise_for_status()
+                res = res.json()
+                if not method.isExtend(res, 'token') or res['success'] != 1:
+                    print('failReason： {}'.format(res['msg']))
+                print('使用默认方案：token:{}'.format(res['data'].get('token')))
+                tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
+                Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
+                return tokenDict
             except Exception as error:
-                Logs.get_log('getSession.log').error('session获取异常，原因： {}'.format(error))
+                Logs.get_log('getSession.log').error('默认方案session异常，原因： {}'.format(error))
+                from common.conMysql import conMysql
+                from common.getToken import getToken
+                token = getToken(config.payUid, conMysql.selectUserInfoSql('user_index', config.payUid)).get_token()
+                tokenDict = {'token': token}
+                print('默认方案失败，启用备选方案：token:{}'.format(token))
+                Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
+
         else:
             print("env input error")
 

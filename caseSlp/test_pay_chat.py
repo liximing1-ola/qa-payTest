@@ -36,7 +36,7 @@ class TestPayCreate(unittest.TestCase):
         data = encodeData(payType='chat-gift',
                           num=10,
                           giftId=config.giftId['5'])
-        res = post_request_session(config.pay_url, data)
+        res = post_request_session(config.pay_url, data, tokenName='slp')
         assert_code(res['code'])
         assert_body(res['body'], 'success', 0, reason(des, res))
         assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
