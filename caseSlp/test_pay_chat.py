@@ -3,16 +3,15 @@ __author__ = "Wu.Zhenxing"
 __title__ = ""
 __desc__ = ""
 
-# from common.Config import config
-from caseSlp import config
-from common.conSlpMysql import conMysql as mysql
-from common.Request import post_request_session
 import unittest
-from common.Assert import assert_code, assert_equal, assert_body, assert_len
-from common.method import reason
-from common.basicData import encodeData
+
+from caseSlp import config
+from common.Assert import assert_code, assert_equal, assert_body
 from common.Consts import case_list, result
-from common.method import reason_slp
+from common.Request import post_request_session
+from common.basicSlpData import encodeData
+from common.conSlpMysql import conMysql as mysql
+from common.method import reason
 from common.runFailed import Retry
 
 
