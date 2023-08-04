@@ -113,8 +113,7 @@ def main(appInfo):
     #                 break
     #     else:
     #         Logs.get_log('runCode.log').info('NoRun')
-    elif appInfo == config.appName['不夜星球']:
-        # todo
+    if appInfo == config.appName['不夜星球']:
         if updateCode.autoGitPull('slp_php') | updateCode.autoGitPull('slp_common_rpc'):
             updateTime('write', now=str(int(time())))
             test_result = unittest.TextTestRunner(verbosity=3).run(all_case(appInfo))
@@ -131,21 +130,20 @@ def main(appInfo):
                     case_list_2, test_result.testsRun,
                     len(test_result.failures) + len(test_result.errors),
                     use_time,
-                    config.codeInfo['slp_git_branch'])
-                # todo 改成 企微
-                robot('slack', des, bot='slp')
+                    config.codeInfo['bb_git_branch'])
+                robot('slack', des)
                 sleep(0.1)
-                robot('slack', des_2, bot='slp')
+                robot('slack', des_2)
             elif len(test_result.failures) >= 1:
                 Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
-                robot('slack', des, bot='slp', color="danger")
+                robot('slack', des, color='danger')
                 for case, reason in test_result.failures:
-                    robot('slack', Consts.fail_case_reason[0], title=case.id(), bot='slp', color="danger")
+                    robot('slack', Consts.fail_case_reason[0], title=case.id(), color='danger')
                     break
             elif len(test_result.errors) >= 1:
                 Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
                 for case, reason in test_result.errors:
-                    robot('slack', reason, case.id(), bot='slp', color="danger")
+                    robot('slack', reason, case.id(), color='danger')
                     break
         else:
             Logs.get_log('runCode.log').info('NoRun')
