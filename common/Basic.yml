@@ -27,12 +27,12 @@ data_slp_mobile_params:
     v=1&package=com.yhl.sleepless.android&_ipv=0&_platform=android&_index=146&_model=CPH1969&_timestamp=1691133173&_sign=747fb77e6a430e540c2b86327f6ceafa
 # slp-dev-mobile-login
 data_slp_mobile:
-    'mobile':	'15008520001'
-    'type':	'login'
-    'code':	'1111'
-    'token':	'14a80kV43nMhMv82KlKiuIAh99kudA4UumUMXDWjGISeD4DTJZDPqPq5YYDK6q__2FXOGrjnSq4Db20z__2BI74NmL'
-    'dtoken':	'352eORCi0B__2F__2F10ET__2FCLvRdPL8KvsW6pEupU0XoWZDjnQ4__2BVn6Y1K44RweqzN409JZPwDfxrj3YqqJsspIvDI8N8PVWdsmM0oeoKFUOiO4__2Fq9OfL8NzLKhLEj90sNCEz9YgWEjLjbkHJPxwI'
-    'area':	'86'
+    'mobile':'15008520001'
+    'type':'login'
+    'code':'1111'
+    'token':'14a80kV43nMhMv82KlKiuIAh99kudA4UumUMXDWjGISeD4DTJZDPqPq5YYDK6q__2FXOGrjnSq4Db20z__2BI74NmL'
+    'dtoken':'352eORCi0B__2F__2F10ET__2FCLvRdPL8KvsW6pEupU0XoWZDjnQ4__2BVn6Y1K44RweqzN409JZPwDfxrj3YqqJsspIvDI8N8PVWdsmM0oeoKFUOiO4__2Fq9OfL8NzLKhLEj90sNCEz9YgWEjLjbkHJPxwI'
+    'area':'86'
 # 192.168.11.58(测试支付服务器)
 # 伴伴
 params_dev_qq:
