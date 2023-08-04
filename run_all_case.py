@@ -115,7 +115,7 @@ def main(appInfo):
     #         Logs.get_log('runCode.log').info('NoRun')
     elif appInfo == config.appName['不夜星球']:
         # todo
-        if updateCode.autoGitPull('slp_go') | updateCode.autoGitPull('slp_room'):
+        if updateCode.autoGitPull('slp_php') | updateCode.autoGitPull('slp_common_rpc'):
             updateTime('write', now=str(int(time())))
             test_result = unittest.TextTestRunner(verbosity=3).run(all_case(appInfo))
             Consts.endTime = time()
