@@ -131,7 +131,7 @@ class Session:
                 headers = header_slp
                 query = query_slp.copy()
                 query['_timestamp'] = str(int(time()))
-                from caseSlp.need_data import slp_payPhone, slp_rewardPhoneUid01, slp_rewardPhoneUid02, slp_payUid
+                from caseSlp.config import slp_payPhone, slp_rewardPhoneUid01, slp_rewardPhoneUid02, slp_payUid
                 for phone in [slp_payPhone, slp_rewardPhoneUid01, slp_rewardPhoneUid02]:
                     body = {
                         "mobile": phone,

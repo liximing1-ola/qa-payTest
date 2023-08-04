@@ -48,13 +48,13 @@ class config:
     pay_url = appInfo['bb_dev'] + 'pay/create?package=com.imbb.banban.android'
     pt_pay_url = pt_host + 'pay/create?package=com.imbb.oversea.android'
     # starify_pay_url = appInfo['starify'] + 'go/starify/pay/create'
-    slp_pay_url = appInfo['slp'] + 'go/slp/pay/create' #todo
+    slp_pay_url = appInfo['slp'] + 'pay/create?package=com.yhl.sleepless.android'
     rush_pay_url = appInfo['bb_dev'] + "pay/create?package=com.im.duck.android"
     # app登录方式
     bb_qqLogin_url = appInfo['bb_dev'] + 'account/qqlogin'
     pt_mobile_login_url = pt_host + 'account/passwordLogin'
     # starify_mobile_login_url = appInfo['starify'] + 'go/starify/login/mobileLogin'
-    slp_mobile_login_url = appInfo['slp'] + 'go/slp/login/mobileLogin'#todo
+    slp_mobile_login_url = appInfo['slp'] + 'account/login'
 
     rate = 0.62  # GS商业房分成比，公会长和商业房房主不参与降点逻辑（公会长/房主仅作为被打赏者不扣）
 

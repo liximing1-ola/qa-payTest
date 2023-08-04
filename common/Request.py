@@ -7,7 +7,7 @@ from urllib.parse import urlencode, unquote
 import requests
 import urllib3
 # from caseStarify.need_data import starify_payUid
-from caseSlp.need_data import slp_payUid
+from caseSlp.config import slp_payUid
 # from caseStarify.tools import create_sign
 from caseSlp.tools import create_sign
 from common import Session
