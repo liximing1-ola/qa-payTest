@@ -130,20 +130,20 @@ def main(appInfo):
                     case_list_2, test_result.testsRun,
                     len(test_result.failures) + len(test_result.errors),
                     use_time,
-                    config.codeInfo['bb_git_branch'])
-                robot('slack', des)
+                    config.codeInfo['slp_git_branch'])
+                robot('slack', des, bot='slp')
                 sleep(0.1)
-                robot('slack', des_2)
+                robot('slack', des_2, bot='slp')
             elif len(test_result.failures) >= 1:
                 Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
-                robot('slack', des, color='danger')
+                robot('slack', des, color='danger', bot='slp')
                 for case, reason in test_result.failures:
                     robot('slack', Consts.fail_case_reason[0], title=case.id(), color='danger')
                     break
             elif len(test_result.errors) >= 1:
                 Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
                 for case, reason in test_result.errors:
-                    robot('slack', reason, case.id(), color='danger')
+                    robot('slack', reason, case.id(), color='danger', bot='slp')
                     break
         else:
             Logs.get_log('runCode.log').info('NoRun')
