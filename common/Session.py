@@ -121,7 +121,7 @@ class Session:
         #             # return tokenDict
         #     except Exception as error:
         #         Logs.get_log('getSession.log').error('session获取异常，原因： {}'.format(error))
-        elif env == config.appName['slp']:
+        elif env == config.appName['不夜星球']:
             try:
                 from common.Basic_slp import header_slp, query_slp
                 from caseSlp.tools import create_sign

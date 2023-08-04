@@ -161,7 +161,7 @@ def all_case(appInfo):
         case_dir += '/caseOversea'
     # elif appInfo == config.appName['starify']:
     #     case_dir += '/caseStarify'
-    elif appInfo == config.appName['slp']:
+    elif appInfo == config.appName['不夜星球']:
         case_dir += '/caseSlp'
     else:
         return
