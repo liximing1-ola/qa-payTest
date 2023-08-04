@@ -18,6 +18,8 @@ class Yaml:
                 return FileExistsError
             if platform.node() == config.linux_node['ali']:
                 yaml_data = yaml.load(open(yaml_path, 'r', encoding='utf-8'), Loader=yaml.SafeLoader)  # 添加后不会报warning
+            elif platform.node() == config.linux_node['ali-slp']:
+                yaml_data = yaml.load(open(yaml_path, 'r', encoding='utf-8'), Loader=yaml.SafeLoader)  # 添加后不会报warning
             else:
                 yaml_data = yaml.load(open(yaml_path, 'r', encoding='utf-8'))
             if yaml_data[yaml_name] is None:
