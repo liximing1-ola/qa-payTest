@@ -88,18 +88,51 @@ class Session:
             except Exception as error:
                 Logs.get_log('getSession.log').error('session获取异常，原因： {}'.format(error))
 
-        elif env == config.appName['starify']:
+        # elif env == config.appName['starify']:
+        #     try:
+        #         from common.Basic_starify import header_starify, query_starify
+        #         from caseStarify.tools import create_sign
+        #         from time import time
+        #         from urllib.parse import urlencode, urlunparse, unquote
+        #         # 不去除sign验证,必须自己计算
+        #         headers = header_starify
+        #         query = query_starify.copy()
+        #         query['_timestamp'] = str(int(time()))
+        #         from caseStarify.need_data import starify_payPhone, starify_rewardPhoneUid01, starify_rewardPhoneUid02, starify_payUid
+        #         for phone in [starify_payPhone, starify_rewardPhoneUid01, starify_rewardPhoneUid02]:
+        #             body = {
+        #                 "mobile": phone,
+        #                 "area": "886",
+        #                 "code": "1234",
+        #                 "password": "",
+        #             }
+        #             sign = create_sign(query)
+        #             query['_sign'] = sign
+        #             url = config.starify_mobile_login_url + "?" + unquote(urlencode(query))
+        #             session = requests.session()
+        #             res = session.post(url, data=body, headers=headers, timeout=30)
+        #             res.raise_for_status()
+        #             res = res.json()
+        #             if not method.isExtend(res, 'token') or res['success'] != 1:
+        #                 print('failReason： {}'.format(res['msg']))
+        #             tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
+        #             Session.checkUserToken_starify('write', uid=res['data']['uid'], app_name=env,
+        #                                            token=tokenDict['token'])
+        #             # return tokenDict
+        #     except Exception as error:
+        #         Logs.get_log('getSession.log').error('session获取异常，原因： {}'.format(error))
+        elif env == config.appName['slp']:
             try:
-                from common.Basic_starify import header_starify, query_starify
-                from caseStarify.tools import create_sign
+                from common.Basic_slp import header_slp, query_slp
+                from caseSlp.tools import create_sign
                 from time import time
                 from urllib.parse import urlencode, urlunparse, unquote
                 # 不去除sign验证,必须自己计算
-                headers = header_starify
-                query = query_starify.copy()
+                headers = header_slp
+                query = query_slp.copy()
                 query['_timestamp'] = str(int(time()))
-                from caseStarify.need_data import starify_payPhone, starify_rewardPhoneUid01, starify_rewardPhoneUid02, starify_payUid
-                for phone in [starify_payPhone, starify_rewardPhoneUid01, starify_rewardPhoneUid02]:
+                from caseSlp.need_data import slp_payPhone, slp_rewardPhoneUid01, slp_rewardPhoneUid02, slp_payUid
+                for phone in [slp_payPhone, slp_rewardPhoneUid01, slp_rewardPhoneUid02]:
                     body = {
                         "mobile": phone,
                         "area": "886",
@@ -108,7 +141,7 @@ class Session:
                     }
                     sign = create_sign(query)
                     query['_sign'] = sign
-                    url = config.starify_mobile_login_url + "?" + unquote(urlencode(query))
+                    url = config.slp_mobile_login_url + "?" + unquote(urlencode(query))
                     session = requests.session()
                     res = session.post(url, data=body, headers=headers, timeout=30)
                     res.raise_for_status()
@@ -116,12 +149,11 @@ class Session:
                     if not method.isExtend(res, 'token') or res['success'] != 1:
                         print('failReason： {}'.format(res['msg']))
                     tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
-                    Session.checkUserToken_starify('write', uid=res['data']['uid'], app_name=env,
+                    Session.checkUserToken_slp('write', uid=res['data']['uid'], app_name=env,
                                                    token=tokenDict['token'])
                     # return tokenDict
             except Exception as error:
                 Logs.get_log('getSession.log').error('session获取异常，原因： {}'.format(error))
-
         else:
             print("env input error")
 
@@ -143,7 +175,7 @@ class Session:
                     raise Exception(f"{txtPath},token为空!")
 
     @staticmethod
-    def checkUserToken_starify(operate, uid, app_name='dev', token=''):
+    def checkUserToken_slp(operate, uid, app_name='dev', token=''):
         txtPath = os.path.split(os.path.realpath(__file__))[0] + '/{}UserToken_{}.txt'.format(app_name, uid)
         if not os.path.exists(txtPath):
             os.system(r"touch {}".format(txtPath))

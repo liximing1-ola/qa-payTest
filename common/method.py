@@ -108,11 +108,14 @@ def reason(des, res):
     return 'Depiction: {},  failReason: {}'.format(des, res['body'])
 
 
-def reason_starify(des, res):
+# def reason_starify(des, res):
+#     if res['body'].get("success", None) is True and not isExtend(res['body'], 'msg'):
+#         print(res['body'])
+#     return 'Depiction: {},  failReason: {}'.format(des, res['body'])
+def reason_slp(des, res):
     if res['body'].get("success", None) is True and not isExtend(res['body'], 'msg'):
         print(res['body'])
     return 'Depiction: {},  failReason: {}'.format(des, res['body'])
-
 
 def checkPath(path):
     if not os.path.exists(path):

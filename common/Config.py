@@ -9,7 +9,8 @@ class config:
         'bb_dev': 'https://dev.iambanban.com/',
         'pt_ali_dev': 'https://pt-dev.iambanban.com/',  # 指向dev服务
         'pt_ali_main': 'https://pt-dev.iambanban.com/_testcase/',  # 指向线上拉取的main分支服务，go的还需要新启一个
-        'starify': 'http://116.62.125.230/',
+        # 'starify': 'http://116.62.125.230/',
+        'slp': 'http://116.62.125.230/',
         "rush": 'https://192.168.11.55/',
     }
     codeInfo = {
@@ -19,35 +20,41 @@ class config:
         'bb_git_branch': 'release-for-vpc',
         'bb_go_git_branch': 'master',
         'pt_git_branch': 'main',
-        'starify_go_path': r"/var/www/sta-go",
-        # todo 调试用 r"/home/spirit/code/qa-payTest" / dev r"/var/www/sta-go"
-        'starify_room_path': r"/var/www/sta-room",
-        # todo 调试 用 r"/home/spirit/code/qa-payTest" / dev r"/var/www/sta-room"
-        'starify_git_branch': "dev",  # todo 调试用 "wzx" / dev分支  dev
+        # 'starify_go_path': r"/var/www/sta-go",
+        # 'starify_room_path': r"/var/www/sta-room",
+        # 'starify_git_branch': "dev",  # todo 调试用 "wzx" / dev分支  dev
+
+        'slp_go_path': r"/var/www/slp-go",
+        'slp_room_path': r"/var/www/slp-room",
+        'slp_git_branch': "dev",  # todo 调试用 "wzx" / dev分支  dev
     }
     appName = {
         "伴伴": 'banban',
         "Partying": 'pt',
         "谁是凶手": 'games',
-        "starify": 'starify',
+        # "starify": 'starify',
+        "不夜星球": 'slp',
         "冲鸭": 'rush',
     }
     # 服务器标识
     linux_node = {
         'ali': 'iZbp1fveowr7j693hrwb48Z',
-        'ali-starify': 'iZbp15ildwog86lw08ptpnZ',  # todo 修改 调试用 ubuntu / dev=iZj6cig35upuwmdws5sec2Z
+        # 'ali-starify': 'iZbp15ildwog86lw08ptpnZ',  # todo 修改 调试用 ubuntu / dev=iZj6cig35upuwmdws5sec2Z
+        'ali-slp': 'iZbp15ildwog86lw08ptpnZ',  # todo 修改 调试用 ubuntu / dev=iZj6cig35upuwmdws5sec2Z
     }
     # 测试域名
     pt_host = appInfo['pt_ali_main']
     # 内网支付接口
     pay_url = appInfo['bb_dev'] + 'pay/create?package=com.imbb.banban.android'
     pt_pay_url = pt_host + 'pay/create?package=com.imbb.oversea.android'
-    starify_pay_url = appInfo['starify'] + 'go/starify/pay/create'
+    # starify_pay_url = appInfo['starify'] + 'go/starify/pay/create'
+    slp_pay_url = appInfo['slp'] + 'go/slp/pay/create' #todo
     rush_pay_url = appInfo['bb_dev'] + "pay/create?package=com.im.duck.android"
     # app登录方式
     bb_qqLogin_url = appInfo['bb_dev'] + 'account/qqlogin'
     pt_mobile_login_url = pt_host + 'account/passwordLogin'
-    starify_mobile_login_url = appInfo['starify'] + 'go/starify/login/mobileLogin'
+    # starify_mobile_login_url = appInfo['starify'] + 'go/starify/login/mobileLogin'
+    slp_mobile_login_url = appInfo['slp'] + 'go/slp/login/mobileLogin'#todo
 
     rate = 0.62  # GS商业房分成比，公会长和商业房房主不参与降点逻辑（公会长/房主仅作为被打赏者不扣）
 

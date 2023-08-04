@@ -23,22 +23,32 @@ class updateCode:
             git_branch = config.codeInfo['pt_git_branch']
             env = 'pt'
             bot = 'PT'
-        elif appInfo == 'starify_go':
-            gtr_path = config.codeInfo['starify_go_path']
-            git_branch = config.codeInfo['starify_git_branch']
-            env = 'starify'
-            bot = 'starify'
-        elif appInfo == 'starify_room':
-            gtr_path = config.codeInfo['starify_room_path']
-            git_branch = config.codeInfo['starify_git_branch']
-            env = 'starify'
-            bot = 'starify'
+        # elif appInfo == 'starify_go':
+        #     gtr_path = config.codeInfo['starify_go_path']
+        #     git_branch = config.codeInfo['starify_git_branch']
+        #     env = 'starify'
+        #     bot = 'starify'
+        # elif appInfo == 'starify_room':
+        #     gtr_path = config.codeInfo['starify_room_path']
+        #     git_branch = config.codeInfo['starify_git_branch']
+        #     env = 'starify'
+        #     bot = 'starify'
+        elif appInfo == 'slp_go':#todo
+            gtr_path = config.codeInfo['slp_go_path']
+            git_branch = config.codeInfo['slp_git_branch']
+            env = 'slp'
+            bot = 'slp'
+        elif appInfo == 'slp_room':
+            gtr_path = config.codeInfo['slp_room_path']
+            git_branch = config.codeInfo['slp_git_branch']
+            env = 'slp'
+            bot = 'slp'
         else:
             Logs.get_log('gitBranchError.log').error("{} error".format(appInfo))
             return
 
         g = git.cmd.Git(gtr_path)
-        g.pull() if not appInfo.startswith("starify") else print(f"{appInfo}不拉代码!")
+        g.pull() if not appInfo.startswith("slp") else print(f"{appInfo}不拉代码!")
         repo = Repo(gtr_path)
         Consts.startTime = time()
         Session.getSession(env)  # 更新userToken
