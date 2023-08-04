@@ -3,15 +3,16 @@ __author__ = "Wu.Zhenxing"
 __title__ = ""
 __desc__ = ""
 
-from common.Config import config
-from common.conMysql import conMysql as mysql
-from common.Request import post_request_session
-from common.method import checkUserVipExp
+# from common.Config import config
+# from common.conMysql import conMysql as mysql
+# from common.Request import post_request_session
+# from common.method import checkUserVipExp
 import unittest
 from common.Assert import assert_code, assert_equal, assert_body, assert_len
-from common.method import reason
-from common.basicData import encodeData
+# from common.method import reason
+# from common.basicData import encodeData
 from common.Consts import case_list, result
+from common.method import reason_slp
 from common.runFailed import Retry
 
 
@@ -39,6 +40,8 @@ class TestPayCreate(unittest.TestCase):
         # assert_code(res['code'])
         # assert_body(res['body'], 'success', 0, reason(des, res))
         # assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
-        #
-        assert 1==1,"断言错误"
+        res={
+
+        }
+        assert_body(res['body'], 'msg', '余额不足，无法支付', reason_slp(des, res))
         case_list[des] = result
