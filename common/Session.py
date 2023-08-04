@@ -126,7 +126,7 @@ class Session:
                 headers = Yaml.read_yaml('Basic.yml', 'header_slp')
                 params = Yaml.read_yaml('Basic.yml', 'data_slp_mobile_params')
                 login_url = config.slp_mobile_login_url + '?' + params + '&package=com.yhl.sleepless.android'
-                body = Yaml.read_yaml('Basic.yml', 'data_dev_qq')
+                body = Yaml.read_yaml('Basic.yml', 'data_slp_mobile')
                 session = requests.session()
                 res = session.post(login_url, data=body, headers=headers, verify=False)
                 res.raise_for_status()
