@@ -33,13 +33,13 @@ class updateCode:
         #     git_branch = config.codeInfo['starify_git_branch']
         #     env = 'starify'
         #     bot = 'starify'
-        elif appInfo == 'slp_go':#todo
-            gtr_path = config.codeInfo['slp_go_path']
+        elif appInfo == 'slp_php':#todo
+            gtr_path = config.codeInfo['slp_php_path']
             git_branch = config.codeInfo['slp_git_branch']
             env = 'slp'
             bot = 'slp'
-        elif appInfo == 'slp_room':
-            gtr_path = config.codeInfo['slp_room_path']
+        elif appInfo == 'slp_common_rpc':
+            gtr_path = config.codeInfo['slp_common_rpc_path']
             git_branch = config.codeInfo['slp_git_branch']
             env = 'slp'
             bot = 'slp'

@@ -24,8 +24,8 @@ class config:
         # 'starify_room_path': r"/var/www/sta-room",
         # 'starify_git_branch': "dev",  # todo 调试用 "wzx" / dev分支  dev
 
-        'slp_go_path': r"/var/www/slp-go",
-        'slp_room_path': r"/var/www/slp-room",
+        'slp_php_path': r"/var/www/slp/slp-php",
+        'slp_common_rpc_path': r"/var/www/slp/slp-common-rpc",
         'slp_git_branch': "dev",  # todo 调试用 "wzx" / dev分支  dev
     }
     appName = {
