@@ -8,7 +8,7 @@ payUid = 200000118
 
 # 被打赏人 01
 rewardPhoneUid = "15008520002"
-rewardUid = 124586  # 手机 15008520002
+rewardUid = 200000120  # 手机 15008520002
 
 # 礼物配置 todo
 giftId = {

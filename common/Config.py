@@ -10,7 +10,7 @@ class config:
         'pt_ali_dev': 'https://pt-dev.iambanban.com/',  # 指向dev服务
         'pt_ali_main': 'https://pt-dev.iambanban.com/_testcase/',  # 指向线上拉取的main分支服务，go的还需要新启一个
         # 'starify': 'http://116.62.125.230/',
-        'slp': 'http://116.62.125.230/',
+        'slp': 'https://116.62.125.230/',
         "rush": 'https://192.168.11.55/',
     }
     codeInfo = {
