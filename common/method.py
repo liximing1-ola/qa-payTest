@@ -4,7 +4,7 @@ import time
 import requests
 import Robot
 from common import Consts
-from common.conMysql import conMysql as mysql
+# from common.conMysql import conMysql as mysql
 from common.Config import config
 
 
@@ -154,11 +154,11 @@ def getUserTitle(level):
     elif level == 90:
         return 2.0
 
-
-def checkUserVipExp(money_type='money', uid=config.payUid, pay_off=100):
-    if money_type == 'money' or money_type == 'coin':
-        return int(pay_off * getUserTitle(mysql.selectUserInfoSql('level', uid)))
-    elif money_type == 'bean':
-        return int(pay_off * 1.5)
-    else:
-        return 0
+#
+# def checkUserVipExp(money_type='money', uid=config.payUid, pay_off=100):
+#     if money_type == 'money' or money_type == 'coin':
+#         return int(pay_off * getUserTitle(mysql.selectUserInfoSql('level', uid)))
+#     elif money_type == 'bean':
+#         return int(pay_off * 1.5)
+#     else:
+#         return 0
