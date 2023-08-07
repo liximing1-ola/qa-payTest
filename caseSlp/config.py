@@ -20,6 +20,7 @@ microphone_num = {  # todo
 # 礼物配置 todo
 giftId = {
 	"5": {
+		"id": 5,
 		"price": 100
 	},  # 棒棒糖*100钻
 	# "7": 7,  # 大宝剑*1000钻
