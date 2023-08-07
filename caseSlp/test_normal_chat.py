@@ -66,5 +66,5 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('single_money', normal_uid),
 		             default_money * rates['normal']['default'])
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid),
-		             default_money - giftId['5'] * default_num)
+		             default_money - giftId['5']['price'] * default_num)
 		case_list[des] = result
