@@ -131,19 +131,19 @@ def main(appInfo):
                     len(test_result.failures) + len(test_result.errors),
                     use_time,
                     config.codeInfo['slp_git_branch'])
-                robot('markdown', des, bot='slp')
+                robot('slack', des, bot='slp')
                 sleep(0.1)
-                robot('markdown', des_2, bot='slp')
+                robot('slack', des_2, bot='slp')
             elif len(test_result.failures) >= 1:
                 Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
-                robot('success', des, color='danger', bot='slp')
+                robot('slack', des, color='danger', bot='slp')
                 for case, reason in test_result.failures:
-                    robot('fail', Consts.fail_case_reason[0], title=case.id(), color='danger')
+                    robot('slack', Consts.fail_case_reason[0], title=case.id(), color='danger')
                     break
             elif len(test_result.errors) >= 1:
                 Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
                 for case, reason in test_result.errors:
-                    robot('fail', reason, case.id(), color='danger', bot='slp')
+                    robot('slack', reason, case.id(), color='danger', bot='slp')
                     break
         else:
             Logs.get_log('runCode.log').info('NoRun')
