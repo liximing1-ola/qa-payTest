@@ -53,7 +53,7 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：50 * 0.6 = 30(mcb)
         5.检查打赏者余额.预期为：1000 - 50 = 950
 		"""
-		mysql.updateUserMoneyClearSql(payUid, default_money)
+		mysql.updateMoneySql(payUid, money=default_money)
 		mysql.updateUserMoneyClearSql(normal_uid)
 		# mysql.deleteUserAccountSql('broker_user', normal_uid)
 		# mysql.deleteUserAccountSql('chatroom', normal_uid)
