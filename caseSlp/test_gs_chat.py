@@ -1,4 +1,4 @@
 # -*- encoding=utf8 -*-
 __author__ = "Wu.Zhenxing"
 __title__ = ""
-__desc__ = ""
+__desc__ = "公会主播-私聊"
