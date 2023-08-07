@@ -4,7 +4,7 @@ from common.Config import config as old_config
 pay_url = old_config.slp_pay_url
 default_num = 10  # 礼物个数
 default_money = 1000  # 打赏者默认金额
-payUid = 200000128  # 15008520000	支付测试0000	打赏者
+payUid = 200000128  # 15008520000	支付测试0000	打赏者/Basic.yml 登录session
 
 gs_A_ceo_uid = 200000118  # 15008520001	支付测试0001	A公会长
 gs_B_ceo_uid = 200000120  # 15008520002	支付测试0002	B公会长
