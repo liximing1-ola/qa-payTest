@@ -11,25 +11,25 @@ gs_B_ceo_uid = 200000120  # 15008520002	支付测试0002	B公会长
 gs_A_uid = 200000124  # 15008520003	支付测试0003	A工会-成员
 gs_B_uid = 200000125  # 15008520004	支付测试0004	B工会-成员
 normal_uid = rewardUid = 200000126  # 15008520005	支付测试0005	普通用户
+
+gs_A_ceo_rid = 100000388  # A工会-工会长 rid
+gs_B_ceo_rid = 100000390  # B工会-工会长 rid
+gs_A_rid = 100000368  # A工会-成员 rid
+gs_B_rid = 100000373  # B工会-成员 rid
+
 # 麦位index
 microphone_num = {  # todo
 	"接待": 0,
 	"普通": 1,
 	"老板": 8,
 }
-# 礼物配置 todo
+# 礼物配置
 giftId = {
-	"5": {
+	"5": {  # 棒棒糖*100钻
 		"id": 5,
 		"price": 100
-	},  # 棒棒糖*100钻
-	# "7": 7,  # 大宝剑*1000钻
-	# "11": 11,  # 老司机*3000钻(券-500钻石)
-	# "46": 46,  # 幸运星*600钻
-	# "47": 47,  # 五色星*2100钻
-	# "54": 54,  # 小天使*9900钻（商城购买）
-	# "62": 62,  # 人气券*20（金币）
-	# "362": 362,  # 啵啵奶茶*1000（金豆）
+	},
+
 }
 
 # 分成比例
@@ -52,13 +52,13 @@ rates = {
 	},
 }
 
-# # 角色配置 todo
-live_role = {
-	'pack_ceo': 105002314,  # 直播公会公会长
-	'pack_master_NoPack': 105002319,  # 非公会一代宗师主播
-	'pack_cal_uid': 105002313,  # 公会签约主播（打包结算），宗师等级可设置为一代和非一代
-	'live_rid': 193185577,  # 直播间(types=live)，房主:105002313
-	'auto_rid': 193185484,  # business | types: auto | room_factory_type: business-content | settlement_channel: cp-women
-}
-# 被打赏者（一代宗师） todo
-masterUid = 100500338
+# # # 角色配置 todo
+# live_role = {
+# 	'pack_ceo': 105002314,  # 直播公会公会长
+# 	'pack_master_NoPack': 105002319,  # 非公会一代宗师主播
+# 	'pack_cal_uid': 105002313,  # 公会签约主播（打包结算），宗师等级可设置为一代和非一代
+# 	'live_rid': 193185577,  # 直播间(types=live)，房主:105002313
+# 	'auto_rid': 193185484,  # business | types: auto | room_factory_type: business-content | settlement_channel: cp-women
+# }
+# # 被打赏者（一代宗师） todo
+# masterUid = 100500338

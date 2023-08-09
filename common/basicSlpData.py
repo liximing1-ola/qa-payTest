@@ -3,21 +3,23 @@ from caseSlp import config
 
 
 # 国内Slp消费场景
-def encodeData(payType='package',
-               money=1000,
-               rid=config.live_role['auto_rid'],
-               uid=config.rewardUid,
-               giftId=config.giftId['5'],
-               giftType='normal',
-               cid=5,
-               boxType='copper',
-               num=1,
-               package_cid=0,
-               ctype='',
-               duction_money=0,
-               star=0,
-               defend_id=244,
-               uids=('{}'.format(config.rewardUid), '{}'.format(config.masterUid))):
+def encodeData(
+        payType='package',
+        money=1000,
+        rid=config.gs_A_ceo_rid,
+        uid=config.rewardUid,
+        giftId=config.giftId['5'],
+        giftType='normal',
+        cid=5,
+        boxType='copper',
+        num=1,
+        package_cid=0,
+        ctype='',
+        duction_money=0,
+        star=0,
+        defend_id=244,
+        # uids=('{}'.format(config.rewardUid), '{}'.format(config.masterUid))
+):
     if payType == 'chat-gift':
         data = {
             "platform": "available",
@@ -44,35 +46,36 @@ def encodeData(payType='package',
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
         return data
-    # if payType == 'package':
-    #     data = {
-    #         "platform": "available",
-    #         "type": "package",
-    #         "money": money,
-    #         "params":
-    #             {"rid": rid,
-    #              "uids": '{}'.format(uid),
-    #              "positions": "1",
-    #              "position": -1,
-    #              "giftId": giftId,
-    #              "giftNum": num,
-    #              "price": money,
-    #              "cid": package_cid,
-    #              "ctype": ctype,
-    #              "duction_money": duction_money,
-    #              "version": 2,
-    #              "num": num,
-    #              "gift_type": "{}".format(giftType),
-    #              "useCoin": -1,
-    #              "star": star,
-    #              "show_pac_man_guide": 1,
-    #              "refer": "",
-    #              "all_mic": 0,
-    #              }
-    #     }
-    #     d = urllib.parse.urlencode(data)
-    #     data = d.replace('+', '').replace('%27', '%22')
-    #     return data
+    if payType == 'package':
+        data = {
+            "platform": "available",
+            "type": "package",
+            "money": money,
+            "params":
+                {
+                    "rid": rid,
+                    "uids": '{}'.format(uid),
+                    "positions": "1",
+                    "position": -1,
+                    "giftId": giftId,
+                    "giftNum": num,
+                    "price": money,
+                    "cid": package_cid,
+                    "ctype": ctype,
+                    "duction_money": duction_money,
+                    "version": 2,
+                    "num": num,
+                    "gift_type": "{}".format(giftType),
+                    "useCoin": -1,
+                    "star": star,
+                    "show_pac_man_guide": 1,
+                    "refer": "",
+                    "all_mic": 0,
+                }
+        }
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        return data
     # elif payType == 'package-more':
     #     p = []
     #     uid = ','.join(uids)
