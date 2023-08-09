@@ -2,13 +2,13 @@
 from common.Config import config as old_config
 
 pay_url = old_config.slp_pay_url
-default_num = 10  # 礼物个数
+default_num = 1  # 礼物个数
 default_money = 1000  # 打赏者默认金额
 payUid = 200000128  # 15008520000	支付测试0000	打赏者/Basic.yml 登录session
 
 gs_A_ceo_uid = 200000118  # 15008520001	支付测试0001	A公会长
 gs_B_ceo_uid = 200000120  # 15008520002	支付测试0002	B公会长
-gs_A_uid = 200000124  # 15008520003	支付测试0003	A工会-成员
+gs_A_uid = gsUid = 200000124  # 15008520003	支付测试0003	A工会-成员
 gs_B_uid = 200000125  # 15008520004	支付测试0004	B工会-成员
 normal_uid = rewardUid = 200000126  # 15008520005	支付测试0005	普通用户
 
@@ -37,7 +37,7 @@ rates = {
 	# 主播,mc
 	'gs': {
 		"default": 0.6,  # 默认
-		"other_room": 0.5,  # 跨档
+		# "other_room": 0,  # 跨档
 		# "room": 0,  # 房间
 		# "chat": 0,  # 私聊
 		# "defend": 0,  # 个人守护

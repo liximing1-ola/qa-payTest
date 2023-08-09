@@ -12,7 +12,7 @@ def encodeData(
         giftType='normal',
         cid=5,
         boxType='copper',
-        num=1,
+        num=config.default_num,
         package_cid=0,
         ctype='',
         duction_money=0,
@@ -66,11 +66,11 @@ def encodeData(
                     "version": 2,
                     "num": num,
                     "gift_type": "{}".format(giftType),
-                    "useCoin": -1,
                     "star": star,
                     "show_pac_man_guide": 1,
                     "refer": "",
                     "all_mic": 0,
+                    "useCoin": -1,
                 }
         }
         d = urllib.parse.urlencode(data)

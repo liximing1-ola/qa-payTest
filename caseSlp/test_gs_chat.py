@@ -30,7 +30,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查打赏者余额.预期为：1000 - 50 = 950
 		"""
 		mysql.updateMoneySql(payUid, money=default_money)
-		mysql.updateUserMoneyClearSql(gs_A_uid)
+		mysql.updateUserMoneyClearSql(gsUid)
 		# mysql.deleteUserAccountSql('broker_user', normal_uid)
 		# mysql.deleteUserAccountSql('chatroom', normal_uid)
 		data = encodeData(payType='chat-gift',
@@ -39,7 +39,7 @@ class TestPayCreate(unittest.TestCase):
 		res = post_request_session(pay_url, data, tokenName='slp')
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 1, reason(des, res))
-		assert_equal(mysql.selectUserInfoSql('single_money', gs_A_uid, 'money_cash'),
+		assert_equal(mysql.selectUserInfoSql('single_money', gsUid, 'money_cash'),
 		             default_money * rates['normal']['default'])
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid),
 		             default_money - giftId['5']['price'] * default_num)
