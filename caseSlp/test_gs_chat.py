@@ -35,7 +35,7 @@ class TestPayCreate(unittest.TestCase):
 		# mysql.deleteUserAccountSql('chatroom', normal_uid)
 		data = encodeData(payType='chat-gift',
 		                  num=default_num,
-		                  giftId=giftId['5']['id'])
+		                  giftId=giftId['5']['gid'])
 		res = post_request_session(pay_url, data, tokenName='slp')
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 1, reason(des, res))

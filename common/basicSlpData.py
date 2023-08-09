@@ -6,7 +6,7 @@ from caseSlp import config
 def encodeData(
         payType='package',
         money=1000,
-        rid=config.gs_A_ceo_rid,
+        rid=config.normal_rid,  # 商业标准9麦
         uid=config.rewardUid,
         giftId=config.giftId['5'],
         giftType='normal',

@@ -12,10 +12,11 @@ gs_A_uid = gsUid = 200000124  # 15008520003	支付测试0003	A工会-成员
 gs_B_uid = 200000125  # 15008520004	支付测试0004	B工会-成员
 normal_uid = rewardUid = 200000126  # 15008520005	支付测试0005	普通用户
 
-gs_A_ceo_rid = 100000388  # A工会-工会长 rid
-gs_B_ceo_rid = 100000390  # B工会-工会长 rid
-gs_A_rid = 100000368  # A工会-成员 rid
-gs_B_rid = 100000373  # B工会-成员 rid
+gs_A_ceo_rid = gs_soundchat_rid = 100000388  # A工会-工会长 rid  商业-直播厅/business-soundchat
+gs_B_ceo_rid = gs_friend_rid = 100000390  # B工会-工会长 rid  商业-标准9麦/business-friend
+gs_A_rid = 100000368  # A工会-成员 rid  商业-直播厅/business-soundchat
+gs_B_rid = 100000373  # B工会-成员 rid  商业-标准9麦/business-friend
+normal_rid = 100000366  # B工会-成员 rid  商业-标准9麦/business-friend
 
 # 麦位index
 microphone_num = {  # todo
@@ -26,7 +27,8 @@ microphone_num = {  # todo
 # 礼物配置
 giftId = {
 	"5": {  # 棒棒糖*100钻
-		"id": 5,
+		"gid": 5,
+		"cid": 89,
 		"price": 100
 	},
 

@@ -18,7 +18,7 @@ from common.runFailed import Retry
 @Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
 
-	def test_01_businessPayGiftToGs(self, des='商业房礼物打赏GS到账60%(mc)'):
+	def test_01_businessPayGiftToGs(self, des='商业房-直播,礼物打赏GS到账60%(mc)'):
 		"""
 		用例描述：
 		验证余额足够时，商业房打赏礼物给GS分成为：60，且收入在公会魅力值
@@ -26,14 +26,19 @@ class TestPayCreate(unittest.TestCase):
 		1.构造打赏者和被打赏者数据
 		2.房间打赏礼物（打赏100分）
 		3.校验接口状态和返回值数据
-		4.检查被打赏者余额，预期为：100 * 0.6 =60 (money_cash)
+		4.检查被打赏者余额，预期为：1000 * 0.6 =600 (money_cash)
 		"""
+		rid = gs_soundchat_rid
+		assert_equal(mysql.checkRidFactoryType(rid), "business-soundchat")
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.updateMoneySql(gsUid)
-		data = encodeData(payType='package',
-		                  money=default_money,
-		                  uid=gsUid,
-		                  giftId=giftId['5']['id'])
+		data = encodeData(
+			rid=rid,
+			payType='package',
+			money=default_money,
+			uid=gsUid,
+			giftId=giftId['5']['gid']
+		)
 		res = post_request_session(pay_url, data)
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 1, reason(des, res))

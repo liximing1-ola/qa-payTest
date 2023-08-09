@@ -361,45 +361,45 @@ class conMysql:
         finally:
             conMysql.con.commit()
 
-    # 删除用户金豆账户数据
-    @staticmethod
-    def deleteUserBeanSql(*uids):
-        try:
-            for uid in uids:
-                sql = "delete from xs_user_money_extend where uid = {} limit 1".format(uid)
-                time.sleep(0.01)
-                conMysql.cur.execute(sql)
-                conMysql.con.commit()
-        except Exception as error:
-            conMysql.con.rollback()
-            print('delete fail', error)
+    # # 删除用户金豆账户数据
+    # @staticmethod
+    # def deleteUserBeanSql(*uids):
+    #     try:
+    #         for uid in uids:
+    #             sql = "delete from xs_user_money_extend where uid = {} limit 1".format(uid)
+    #             time.sleep(0.01)
+    #             conMysql.cur.execute(sql)
+    #             conMysql.con.commit()
+    #     except Exception as error:
+    #         conMysql.con.rollback()
+    #         print('delete fail', error)
 
-    # 插入用户金豆余额
-    @staticmethod
-    def insertBeanSql(uid, money_coupon, cash=0, cash_lock=0):
-        sql = "insert into xs_user_money_extend(uid, money_coupon, cash, cash_lock) values({},{},{},{})" \
-            .format(uid, money_coupon, cash, cash_lock)
-        try:
-            conMysql.cur.execute(sql)
-        except Exception as error:
-            conMysql.con.rollback()
-            print('insert fail', error)
-        finally:
-            time.sleep(0.01)
-            conMysql.con.commit()
-
-    # 更新箱子刷新物品
-    @staticmethod
-    def insertXsUserBox(uid, gift_cid=9, box_type='copper'):
-        sql = "insert into xs_user_box (last_refresh_cid, last_refresh_sub_cid, uid, type) values ({},{},{},'{}')" \
-            .format(gift_cid, gift_cid, uid, box_type)
-        try:
-            conMysql.cur.execute(sql)
-        except Exception as error:
-            conMysql.con.rollback()
-            print('update fail', error)
-        finally:
-            conMysql.con.commit()
+    # # 插入用户金豆余额
+    # @staticmethod
+    # def insertBeanSql(uid, money_coupon, cash=0, cash_lock=0):
+    #     sql = "insert into xs_user_money_extend(uid, money_coupon, cash, cash_lock) values({},{},{},{})" \
+    #         .format(uid, money_coupon, cash, cash_lock)
+    #     try:
+    #         conMysql.cur.execute(sql)
+    #     except Exception as error:
+    #         conMysql.con.rollback()
+    #         print('insert fail', error)
+    #     finally:
+    #         time.sleep(0.01)
+    #         conMysql.con.commit()
+    #
+    # # 更新箱子刷新物品
+    # @staticmethod
+    # def insertXsUserBox(uid, gift_cid=9, box_type='copper'):
+    #     sql = "insert into xs_user_box (last_refresh_cid, last_refresh_sub_cid, uid, type) values ({},{},{},'{}')" \
+    #         .format(gift_cid, gift_cid, uid, box_type)
+    #     try:
+    #         conMysql.cur.execute(sql)
+    #     except Exception as error:
+    #         conMysql.con.rollback()
+    #         print('update fail', error)
+    #     finally:
+    #         conMysql.con.commit()
 
     # 用户背包增加测试数据
     @staticmethod
@@ -529,3 +529,17 @@ class conMysql:
             print(error)
         finally:
             conMysql.con.commit()
+
+    # 查询rid的房间类型
+    @staticmethod
+    def checkRidFactoryType(rid):
+        sql = 'select room_factory_type from xs_chatroom where rid={}'.format(rid)
+        try:
+            conMysql.cur.execute(sql)
+            res = conMysql.cur.fetchone()
+            if len(res) > 0:
+                return res[0]
+            else:
+                return None
+        except Exception as error:
+            print(error)
