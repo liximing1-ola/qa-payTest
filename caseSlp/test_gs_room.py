@@ -152,7 +152,7 @@ class TestPayCreate(unittest.TestCase):
 		3.校验接口状态和返回值数据
 		4.检查被打赏者余额，预期为：1000 * 0.6 =600 (money_cash)
 		"""
-		rid = gs_soundchat_rid
+		rid = gs_friend_rid
 		assert_equal(mysql.checkRidFactoryType(rid), "business-friend")  # 确认rid不是直播房
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.updateMoneySql(gs_B_uid)
@@ -182,7 +182,7 @@ class TestPayCreate(unittest.TestCase):
 		3.校验接口状态和返回值数据
 		4.检查被打赏者余额，预期为：1000 * 0.6 =600 (money_cash)
 		"""
-		rid = gs_soundchat_rid
+		rid = gs_friend_rid
 		assert_equal(mysql.checkRidFactoryType(rid), "business-friend")  # 确认rid不是直播房
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.updateMoneySql(gs_B_uid)
