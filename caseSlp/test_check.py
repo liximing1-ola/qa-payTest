@@ -93,7 +93,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', normal_uid), 0)
 		case_list[des] = result
 
-	def test_04_roomPayNoMoney(self, des='余余额<礼物价值-房间打赏的场景'):
+	def test_04_roomPayNoMoney(self, des='余额<礼物价值-房间打赏的场景'):
 		"""
 		用例描述：
 		检查账户余额不足时，房间打赏

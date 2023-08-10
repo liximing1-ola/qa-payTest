@@ -1,24 +1,24 @@
 import urllib.parse
-from caseSlp import config
+from caseSlp.config import *
 
 
 # 国内Slp消费场景
 def encodeData(
         payType='package',
-        money=config.giftId['5']['price'] * config.default_num,
-        rid=config.normal_rid,  # 商业标准9麦
-        uid=config.rewardUid,
-        giftId=config.giftId['5']['gid'],
+        money=giftId['5']['price'] * default_num,
+        rid=normal_rid,  # 商业标准9麦
+        uid=rewardUid,
+        giftId=giftId['5']['gid'],
         giftType='normal',
-        cid=5,
+        cid=giftId['5']['cid'],
         boxType='copper',
-        num=config.default_num,
-        package_cid=0,
+        num=default_num,
+        # package_cid=0,
         ctype='',
         duction_money=0,
         star=0,
         defend_id=244,
-        # uids=('{}'.format(config.rewardUid), '{}'.format(config.masterUid))
+        # uids=('{}'.format(rewardUid), '{}'.format(masterUid))
 ):
     if payType == 'chat-gift':
         data = {
@@ -43,6 +43,7 @@ def encodeData(
                     "useCoin": -1
                 },
         }
+        print(data)
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
         return data
@@ -73,6 +74,7 @@ def encodeData(
                     "useCoin": -1,
                 }
         }
+        print(data)
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
         return data
@@ -108,6 +110,7 @@ def encodeData(
     #              "all_mic": 0,
     #              }
     #     }
+    #     print(data)
     #     d = urllib.parse.urlencode(data)
     #     data = d.replace('+', '').replace('%27', '%22')
     #     return data
@@ -138,6 +141,7 @@ def encodeData(
     #              "exchange": 1
     #              }
     #     }
+    #     print(data)
     #     d = urllib.parse.urlencode(data)
     #     data = d.replace('+', '').replace('%27', '%22')
     #     return data
@@ -155,6 +159,7 @@ def encodeData(
     #              "useCoin": -1,
     #              }
     #     }
+    #     print(data)
     #     d = urllib.parse.urlencode(data)
     #     data = d.replace('+', '').replace('%27', '%22')
     #     return data
@@ -174,6 +179,7 @@ def encodeData(
     #              "useCoin": -1,
     #              }
     #     }
+    #     print(data)
     #     d = urllib.parse.urlencode(data)
     #     data = d.replace('+', '').replace('%27', '%22')
     #     return data
@@ -199,6 +205,7 @@ def encodeData(
     #              "useCoin": -1
     #              }
     #     }
+    #     print(data)
     #     d = urllib.parse.urlencode(data)
     #     data = d.replace('+', '').replace('%27', '%22')
     #     return data
@@ -221,6 +228,7 @@ def encodeData(
     #              "useCoin": -1
     #              }
     #     }
+    #     print(data)
     #     d = urllib.parse.urlencode(data)
     #     data = d.replace('+', '').replace('%27', '%22')
     #     return data
@@ -240,6 +248,7 @@ def encodeData(
     #              "money_type": "money",
     #              "useCoin": -1}
     #     }
+    #     print(data)
     #     d = urllib.parse.urlencode(data)
     #     data = d.replace('+', '').replace('%27', '%22')
     #     return data
@@ -257,6 +266,7 @@ def encodeData(
     #              "useCoin": -1
     #              }
     #     }
+    #     print(data)
     #     d = urllib.parse.urlencode(data)
     #     data = d.replace('+', '').replace('%27', '%22')
     #     return data
@@ -270,6 +280,7 @@ def encodeData(
     #              "useCoin": -1
     #              }
     #     }
+    #     print(data)
     #     d = urllib.parse.urlencode(data)
     #     data = d.replace('+', '').replace('%27', '%22')
     #     return data
@@ -283,6 +294,7 @@ def encodeData(
     #              "useCoin": -1
     #              }
     #     }
+    #     print(data)
     #     d = urllib.parse.urlencode(data)
     #     data = d.replace('+', '').replace('%27', '%22')
     #     return data
@@ -301,6 +313,7 @@ def encodeData(
     #              "useCoin": -1,
     #              }
     #     }
+    #     print(data)
     #     d = urllib.parse.urlencode(data)
     #     data = d.replace('+', '').replace('%27', '%22')
     #     return data
@@ -313,6 +326,7 @@ def encodeData(
     #             "type": "exchange_gold"
     #         }
     #     }
+    #     print(data)
     #     d = urllib.parse.urlencode(data)
     #     data = d.replace('+', '').replace('%27', '%22')
     #     return data
@@ -332,6 +346,7 @@ def encodeData(
     #             "rid": 105707946
     #         }
     #     }
+    #     print(data)
     #     d = urllib.parse.urlencode(data)
     #     data = d.replace('+', '').replace('%27', '%22')
     #     return data
@@ -350,6 +365,7 @@ def encodeData(
     #             "exchange": 1,
     #         }
     #     }
+    #     print(data)
     #     d = urllib.parse.urlencode(data)
     #     data = d.replace('+', '').replace('%27', '%22')
     #     return data
@@ -370,6 +386,7 @@ def encodeData(
     #             "useCoin": -1
     #         }
     #     }
+    #     print(data)
     #     d = urllib.parse.urlencode(data)
     #     data = d.replace('+', '').replace('%27', '%22')
     #     return data
@@ -385,6 +402,7 @@ def encodeData(
     #              "useCoin": -1
     #              }
     #     }
+    #     print(data)
     #     d = urllib.parse.urlencode(data)
     #     data = d.replace('+', '').replace('%27', '%22')
     #     return data
@@ -394,10 +412,10 @@ def encodeData(
 
 
 if __name__ == '__main__':
-    data = encodeData(payType='package-more',
-                      num=2,
-                      star=8,
-                      money=2100,
-                      giftId=config.giftId['47'],
-                      uids=('{}'.format(config.rewardUid), '{}'.format(config.gsUid)))
+    data = encodeData(
+        rid=100000254,
+        payType='package',
+        uid=gsUid,
+        giftId=giftId['5']['gid']
+    )
     print(data)

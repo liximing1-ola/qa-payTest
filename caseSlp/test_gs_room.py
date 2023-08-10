@@ -29,7 +29,7 @@ class TestPayCreate(unittest.TestCase):
 		4.检查被打赏者余额，预期为：1000 * 0.6 =600 (money_cash)
 		"""
 		rid = gs_soundchat_rid
-		assert_equal(mysql.checkRidFactoryType(rid), "business-soundchat")
+		assert_equal(mysql.checkRidFactoryType(rid), "business-soundchat")  # 确认rid是直播房
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.updateMoneySql(gsUid)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
@@ -38,6 +38,69 @@ class TestPayCreate(unittest.TestCase):
 			payType='package',
 			uid=gsUid,
 			giftId=giftId['5']['gid']
+		)
+		res = post_request_session(pay_url, data, tokenName='slp')
+		assert_code(res['code'])
+		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_equal(mysql.selectUserInfoSql('single_money', gsUid, money_type='money_cash'),
+		             giftId['5']['price'] * default_num * rates['gs']['default'])
+		assert_equal(mysql.selectUserInfoSql('sum_money', gsUid), giftId['5']['price'] * default_num * rates['gs']['default'])
+		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['5']['price'] * default_num)
+		case_list[des] = result
+
+	def test_02_businessChatgiftToGs(self, des='商业房-直播,房间私聊打赏GS到账60%(mc)'):
+		"""
+		用例描述：
+		验证余额足够时，商业房房间私聊打赏礼物给GS分成为：60，且收入在公会魅力值
+		脚本步骤：
+		1.构造打赏者和被打赏者数据
+		2.房间打赏礼物（打赏100分）
+		3.校验接口状态和返回值数据
+		4.检查被打赏者余额，预期为：1000 * 0.6 =600 (money_cash)
+		"""
+		rid = gs_soundchat_rid
+		assert_equal(mysql.checkRidFactoryType(rid), "business-soundchat")  # 确认rid是直播房
+		mysql.updateMoneySql(payUid, default_money)
+		mysql.updateMoneySql(gsUid)
+		mysql.deleteUserAccountSql('user_commodity', payUid)
+		data = encodeData(
+			rid=rid,
+			payType='package',
+			uid=gsUid,
+			giftId=giftId['5']['gid']
+		)
+		res = post_request_session(pay_url, data, tokenName='slp')
+		assert_code(res['code'])
+		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_equal(mysql.selectUserInfoSql('single_money', gsUid, money_type='money_cash'),
+		             giftId['5']['price'] * default_num * rates['gs']['default'])
+		assert_equal(mysql.selectUserInfoSql('sum_money', gsUid), giftId['5']['price'] * default_num * rates['gs']['default'])
+		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['5']['price'] * default_num)
+		case_list[des] = result
+
+	def test_03_businessPackageToGs(self, des='商业房-直播,背包礼物打赏GS到账60%(mc)'):
+		"""
+		用例描述：
+		商业房-直播,背包礼物打赏GS到账60%(mc)
+		脚本步骤：
+		1.构造打赏者和被打赏者数据
+		2.房间打赏礼物（打赏100分）
+		3.校验接口状态和返回值数据
+		4.检查被打赏者余额，预期为：1000 * 0.6 =600 (money_cash)
+		"""
+		rid = gs_soundchat_rid
+		assert_equal(mysql.checkRidFactoryType(rid), "business-soundchat")  # 确认rid是直播房
+		mysql.updateMoneySql(payUid, default_money)
+		mysql.updateMoneySql(gsUid)
+		mysql.deleteUserAccountSql('user_commodity', payUid)
+		mysql.insertXsUserCommodity(payUid, cid=giftId['5']['cid'], num=default_num)
+		data = encodeData(
+			rid=rid,
+			payType='package',
+			uid=gsUid,
+			giftId=giftId['5']['gid'],
+			cid=giftId['5']['cid'],
+			ctype='gift'
 		)
 		res = post_request_session(pay_url, data, tokenName='slp')
 		assert_code(res['code'])

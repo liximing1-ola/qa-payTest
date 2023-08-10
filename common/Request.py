@@ -43,7 +43,7 @@ def post_request_session(url, data, tokenName='dev'):
     except Exception as e:
         print(e)
         return ()
-    print(data)
+    # print(data)
     print(response.json())
     time_consuming = response.elapsed.microseconds/1000
     time_total = response.elapsed.total_seconds()
