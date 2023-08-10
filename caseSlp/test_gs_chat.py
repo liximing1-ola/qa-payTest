@@ -42,7 +42,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 1, reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('single_money', gsUid, 'money_cash'),
-		             default_money * rates['normal']['default'])
+		             giftId['5']['price'] * default_num * rates['gs']['default'])
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid),
 		             default_money - giftId['5']['price'] * default_num)
 		case_list[des] = result
