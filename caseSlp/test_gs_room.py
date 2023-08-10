@@ -109,5 +109,5 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('single_money', gsUid, money_type='money_cash'),
 		             giftId['69']['price'] * default_num * rates['gs']['default'])
 		assert_equal(mysql.selectUserInfoSql('sum_money', gsUid), giftId['69']['price'] * default_num * rates['gs']['default'])
-		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
+		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money)  # 不扣费
 		case_list[des] = result
