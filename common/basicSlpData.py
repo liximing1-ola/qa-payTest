@@ -413,11 +413,9 @@ def encodeData(
 
 if __name__ == '__main__':
     data = encodeData(
-			rid=gs_soundchat_rid,
+			rid=11,
 			payType='package',
-			uid=gs_B_uid,
-			giftId=giftId['69']['gid'],
-			package_cid=111,
-			ctype='gift'
+			uid=gsUid,
+			giftId=giftId['69']['gid']
 		)
     print(data)

@@ -205,3 +205,94 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', gs_B_uid), giftId['69']['price'] * default_num * rates['gs']['default'])
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money)  # 不扣费
 		case_list[des] = result
+
+	def test_07_businessPayGiftToGs(self, des='个人房-直播,礼物打赏GS到账60%(mc)'):
+		"""
+		用例描述：
+		验证余额足够时，个人房打赏礼物给GS分成为：60，且收入在公会魅力值
+		脚本步骤：
+		1.构造打赏者和被打赏者数据
+		2.房间打赏礼物（打赏100分）
+		3.校验接口状态和返回值数据
+		4.检查被打赏者余额，预期为：1000 * 0.6 =600 (money_cash)
+		"""
+		rid = mysql.selectUserInfoSql('vip')
+		mysql.updateMoneySql(payUid, default_money)
+		mysql.updateMoneySql(gsUid)
+		mysql.deleteUserAccountSql('user_commodity', payUid)
+		data = encodeData(
+			rid=rid,
+			payType='package',
+			uid=gsUid,
+			giftId=giftId['69']['gid']
+		)
+		res = post_request_session(pay_url, data, tokenName='slp')
+		assert_code(res['code'])
+		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_equal(mysql.selectUserInfoSql('single_money', gsUid, money_type='money_cash'),
+		             giftId['69']['price'] * default_num * rates['gs']['default'])
+		assert_equal(mysql.selectUserInfoSql('sum_money', gsUid), giftId['69']['price'] * default_num * rates['gs']['default'])
+		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
+		case_list[des] = result
+
+	def test_08_businessChatgiftToGs(self, des='个人房-直播,房间私聊打赏GS到账60%(mc)'):
+		"""
+		用例描述：
+		验证余额足够时，个人房房间私聊打赏礼物给GS分成为：60，且收入在公会魅力值
+		脚本步骤：
+		1.构造打赏者和被打赏者数据
+		2.房间打赏礼物（打赏100分）
+		3.校验接口状态和返回值数据
+		4.检查被打赏者余额，预期为：1000 * 0.6 =600 (money_cash)
+		"""
+		rid = mysql.selectUserInfoSql('vip')
+		mysql.updateMoneySql(payUid, default_money)
+		mysql.updateMoneySql(gsUid)
+		mysql.deleteUserAccountSql('user_commodity', payUid)
+		data = encodeData(
+			rid=rid,
+			payType='package',
+			uid=gsUid,
+			giftId=giftId['69']['gid']
+		)
+		res = post_request_session(pay_url, data, tokenName='slp')
+		assert_code(res['code'])
+		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_equal(mysql.selectUserInfoSql('single_money', gsUid, money_type='money_cash'),
+		             giftId['69']['price'] * default_num * rates['gs']['default'])
+		assert_equal(mysql.selectUserInfoSql('sum_money', gsUid), giftId['69']['price'] * default_num * rates['gs']['default'])
+		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
+		case_list[des] = result
+
+	def test_09_businessPackageToGs(self, des='个人房-直播,背包礼物打赏GS到账60%(mc)'):
+		"""
+		用例描述：
+		个人房-直播,背包礼物打赏GS到账60%(mc)
+		脚本步骤：
+		1.构造打赏者和被打赏者数据
+		2.房间打赏礼物（打赏100分）
+		3.校验接口状态和返回值数据
+		4.检查被打赏者余额，预期为：1000 * 0.6 =600 (money_cash)
+		"""
+		rid = mysql.selectUserInfoSql('vip')
+		mysql.updateMoneySql(payUid, default_money)
+		mysql.updateMoneySql(gsUid)
+		mysql.deleteUserAccountSql('user_commodity', payUid)
+		mysql.insertXsUserCommodity(payUid, cid=giftId['69']['cid'], num=default_num)
+		cid = int(mysql.selectUserInfoSql('id_commodity', payUid, cid=giftId['69']['cid']))
+		data = encodeData(
+			rid=rid,
+			payType='package',
+			uid=gsUid,
+			giftId=giftId['69']['gid'],
+			package_cid=cid,
+			ctype='gift'
+		)
+		res = post_request_session(pay_url, data, tokenName='slp')
+		assert_code(res['code'])
+		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_equal(mysql.selectUserInfoSql('single_money', gsUid, money_type='money_cash'),
+		             giftId['69']['price'] * default_num * rates['gs']['default'])
+		assert_equal(mysql.selectUserInfoSql('sum_money', gsUid), giftId['69']['price'] * default_num * rates['gs']['default'])
+		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money)  # 不扣费
+		case_list[des] = result

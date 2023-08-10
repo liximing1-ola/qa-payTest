@@ -175,6 +175,17 @@ class conMysql:
                     return res[0]
             except Exception as error:
                 print(error)
+        elif accountType == 'vip':
+            sql = " select rid from xs_chatroom where property='{}' limit 1".format(accountType)
+            try:
+                conMysql.cur.execute(sql)
+                res = conMysql.cur.fetchone()
+                if res is None:
+                    raise EnvironmentError('库表无个人房')
+                else:
+                    return res[0]
+            except Exception as error:
+                print(error)
         elif accountType == 'fleet':
             sql = " select rid from xs_chatroom where property='{}' limit 1".format(accountType)
             try:
