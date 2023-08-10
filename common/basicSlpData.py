@@ -5,15 +5,15 @@ from caseSlp.config import *
 # 国内Slp消费场景
 def encodeData(
         payType='package',
-        money=giftId['5']['price'] * default_num,
+        money=giftId['69']['price'] * default_num,
         rid=normal_rid,  # 商业标准9麦
         uid=rewardUid,
-        giftId=giftId['5']['gid'],
+        giftId=giftId['69']['gid'],
         giftType='normal',
-        cid=giftId['5']['cid'],
+        cid=5,
         boxType='copper',
         num=default_num,
-        # package_cid=0,
+        package_cid=0,  # xs_user_commodity的id
         ctype='',
         duction_money=0,
         star=0,
@@ -416,6 +416,6 @@ if __name__ == '__main__':
         rid=100000254,
         payType='package',
         uid=gsUid,
-        giftId=giftId['5']['gid']
+        giftId=giftId['69']['gid']
     )
     print(data)

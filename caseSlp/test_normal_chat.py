@@ -37,12 +37,12 @@ class TestPayCreate(unittest.TestCase):
 		data = encodeData(payType='chat-gift',
 		                  num=default_num,
 		                  uid=rewardUid,
-		                  giftId=giftId['5']['gid'])
+		                  giftId=giftId['69']['gid'])
 		res = post_request_session(pay_url, data, tokenName='slp')
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 1, reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('single_money', normal_uid),
-		             giftId['5']['price'] * default_num * rates['normal']['default'])
+		             giftId['69']['price'] * default_num * rates['normal']['default'])
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid),
-		             default_money - giftId['5']['price'] * default_num)
+		             default_money - giftId['69']['price'] * default_num)
 		case_list[des] = result

@@ -37,15 +37,15 @@ class TestPayCreate(unittest.TestCase):
 			rid=rid,
 			payType='package',
 			uid=gsUid,
-			giftId=giftId['5']['gid']
+			giftId=giftId['69']['gid']
 		)
 		res = post_request_session(pay_url, data, tokenName='slp')
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 1, reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('single_money', gsUid, money_type='money_cash'),
-		             giftId['5']['price'] * default_num * rates['gs']['default'])
-		assert_equal(mysql.selectUserInfoSql('sum_money', gsUid), giftId['5']['price'] * default_num * rates['gs']['default'])
-		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['5']['price'] * default_num)
+		             giftId['69']['price'] * default_num * rates['gs']['default'])
+		assert_equal(mysql.selectUserInfoSql('sum_money', gsUid), giftId['69']['price'] * default_num * rates['gs']['default'])
+		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
 		case_list[des] = result
 
 	def test_02_businessChatgiftToGs(self, des='商业房-直播,房间私聊打赏GS到账60%(mc)'):
@@ -67,15 +67,15 @@ class TestPayCreate(unittest.TestCase):
 			rid=rid,
 			payType='package',
 			uid=gsUid,
-			giftId=giftId['5']['gid']
+			giftId=giftId['69']['gid']
 		)
 		res = post_request_session(pay_url, data, tokenName='slp')
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 1, reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('single_money', gsUid, money_type='money_cash'),
-		             giftId['5']['price'] * default_num * rates['gs']['default'])
-		assert_equal(mysql.selectUserInfoSql('sum_money', gsUid), giftId['5']['price'] * default_num * rates['gs']['default'])
-		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['5']['price'] * default_num)
+		             giftId['69']['price'] * default_num * rates['gs']['default'])
+		assert_equal(mysql.selectUserInfoSql('sum_money', gsUid), giftId['69']['price'] * default_num * rates['gs']['default'])
+		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
 		case_list[des] = result
 
 	def test_03_businessPackageToGs(self, des='商业房-直播,背包礼物打赏GS到账60%(mc)'):
@@ -93,20 +93,21 @@ class TestPayCreate(unittest.TestCase):
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.updateMoneySql(gsUid)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
-		mysql.insertXsUserCommodity(payUid, cid=giftId['5']['cid'], num=default_num)
+		mysql.insertXsUserCommodity(payUid, cid=giftId['69']['cid'], num=default_num)
+		cid = int(mysql.selectUserInfoSql('id_commodity', payUid, cid=giftId['69']['cid']))
 		data = encodeData(
 			rid=rid,
 			payType='package',
 			uid=gsUid,
-			giftId=giftId['5']['gid'],
-			cid=giftId['5']['cid'],
+			giftId=giftId['69']['gid'],
+			package_cid=cid,
 			ctype='gift'
 		)
 		res = post_request_session(pay_url, data, tokenName='slp')
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 1, reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('single_money', gsUid, money_type='money_cash'),
-		             giftId['5']['price'] * default_num * rates['gs']['default'])
-		assert_equal(mysql.selectUserInfoSql('sum_money', gsUid), giftId['5']['price'] * default_num * rates['gs']['default'])
-		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['5']['price'] * default_num)
+		             giftId['69']['price'] * default_num * rates['gs']['default'])
+		assert_equal(mysql.selectUserInfoSql('sum_money', gsUid), giftId['69']['price'] * default_num * rates['gs']['default'])
+		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
 		case_list[des] = result

@@ -34,7 +34,7 @@ class TestPayCreate(unittest.TestCase):
 		# mysql.deleteUserAccountSql('chatroom', normal_uid)
 		data = encodeData(payType='chat-gift',
 		                  num=default_num,
-		                  giftId=giftId['5']['gid'])
+		                  giftId=giftId['69']['gid'])
 		res = post_request_session(pay_url, data, tokenName='slp')
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 0, reason(des, res))
@@ -59,7 +59,7 @@ class TestPayCreate(unittest.TestCase):
 		# mysql.deleteUserAccountSql('chatroom', normal_uid)
 		data = encodeData(payType='package',
 		                  num=default_num,
-		                  giftId=giftId['5']['gid'])
+		                  giftId=giftId['69']['gid'])
 		res = post_request_session(pay_url, data, tokenName='slp')
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 0, reason(des, res))
@@ -79,13 +79,13 @@ class TestPayCreate(unittest.TestCase):
 		5.检查被打赏者余额,预期：0
 		"""
 		mysql.updateUserMoneyClearSql(payUid, normal_uid)
-		mysql.updateMoneySql(payUid, giftId['5']['price'] - 1)
+		mysql.updateMoneySql(payUid, giftId['69']['price'] - 1)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		# mysql.deleteUserAccountSql('broker_user', normal_uid)
 		# mysql.deleteUserAccountSql('chatroom', normal_uid)
 		data = encodeData(payType='chat-gift',
 		                  num=default_num,
-		                  giftId=giftId['5']['gid'])
+		                  giftId=giftId['69']['gid'])
 		res = post_request_session(pay_url, data, tokenName='slp')
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 0, reason(des, res))
@@ -105,13 +105,13 @@ class TestPayCreate(unittest.TestCase):
 		5.检查被打赏者余额,预期：0
 		"""
 		mysql.updateUserMoneyClearSql(payUid, normal_uid)
-		mysql.updateMoneySql(payUid, giftId['5']['price'] - 1)
+		mysql.updateMoneySql(payUid, giftId['69']['price'] - 1)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		# mysql.deleteUserAccountSql('broker_user', normal_uid)
 		# mysql.deleteUserAccountSql('chatroom', normal_uid)
 		data = encodeData(payType='package',
 		                  num=default_num,
-		                  giftId=giftId['5']['gid'])
+		                  giftId=giftId['69']['gid'])
 		res = post_request_session(pay_url, data, tokenName='slp')
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 0, reason(des, res))
