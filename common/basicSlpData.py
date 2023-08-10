@@ -8,7 +8,7 @@ def encodeData(
         money=config.default_money,
         rid=config.normal_rid,  # 商业标准9麦
         uid=config.rewardUid,
-        giftId=config.giftId['5'],
+        giftId=config.giftId['5']['gid'],
         giftType='normal',
         cid=5,
         boxType='copper',

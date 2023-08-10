@@ -29,6 +29,7 @@ class TestPayCreate(unittest.TestCase):
 		5.检查被打赏者余额,预期：0
 		"""
 		mysql.updateUserMoneyClearSql(payUid, normal_uid)
+		mysql.deleteUserAccountSql('user_commodity', payUid)
 		# mysql.deleteUserAccountSql('broker_user', normal_uid)
 		# mysql.deleteUserAccountSql('chatroom', normal_uid)
 		data = encodeData(payType='chat-gift',
@@ -53,6 +54,7 @@ class TestPayCreate(unittest.TestCase):
 		5.检查被打赏者余额,预期：0
 		"""
 		mysql.updateUserMoneyClearSql(payUid, normal_uid)
+		mysql.deleteUserAccountSql('user_commodity', payUid)
 		# mysql.deleteUserAccountSql('broker_user', normal_uid)
 		# mysql.deleteUserAccountSql('chatroom', normal_uid)
 		data = encodeData(payType='package',
@@ -78,6 +80,7 @@ class TestPayCreate(unittest.TestCase):
 		"""
 		mysql.updateUserMoneyClearSql(payUid, normal_uid)
 		mysql.updateMoneySql(payUid, giftId['5']['price'] - 1)
+		mysql.deleteUserAccountSql('user_commodity', payUid)
 		# mysql.deleteUserAccountSql('broker_user', normal_uid)
 		# mysql.deleteUserAccountSql('chatroom', normal_uid)
 		data = encodeData(payType='chat-gift',
@@ -103,6 +106,7 @@ class TestPayCreate(unittest.TestCase):
 		"""
 		mysql.updateUserMoneyClearSql(payUid, normal_uid)
 		mysql.updateMoneySql(payUid, giftId['5']['price'] - 1)
+		mysql.deleteUserAccountSql('user_commodity', payUid)
 		# mysql.deleteUserAccountSql('broker_user', normal_uid)
 		# mysql.deleteUserAccountSql('chatroom', normal_uid)
 		data = encodeData(payType='package',

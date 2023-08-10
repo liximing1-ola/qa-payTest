@@ -31,6 +31,7 @@ class TestPayCreate(unittest.TestCase):
 		"""
 		mysql.updateMoneySql(payUid, money=default_money)
 		mysql.updateUserMoneyClearSql(normal_uid)
+		mysql.deleteUserAccountSql('user_commodity', payUid)
 		# mysql.deleteUserAccountSql('broker_user', normal_uid)
 		# mysql.deleteUserAccountSql('chatroom', normal_uid)
 		data = encodeData(payType='chat-gift',

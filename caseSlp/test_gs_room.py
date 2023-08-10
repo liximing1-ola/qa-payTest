@@ -32,6 +32,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.checkRidFactoryType(rid), "business-soundchat")
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.updateMoneySql(gsUid)
+		mysql.deleteUserAccountSql('user_commodity', payUid)
 		data = encodeData(
 			rid=rid,
 			payType='package',
