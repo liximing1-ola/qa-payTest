@@ -5,7 +5,7 @@ from caseSlp import config
 # 国内Slp消费场景
 def encodeData(
         payType='package',
-        money=config.default_money,
+        money=config.giftId['5']['price'] * config.default_num,
         rid=config.normal_rid,  # 商业标准9麦
         uid=config.rewardUid,
         giftId=config.giftId['5']['gid'],

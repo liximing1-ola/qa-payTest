@@ -36,7 +36,6 @@ class TestPayCreate(unittest.TestCase):
 		data = encodeData(
 			rid=rid,
 			payType='package',
-			money=default_money,
 			uid=gsUid,
 			giftId=giftId['5']['gid']
 		)
