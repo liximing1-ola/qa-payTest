@@ -41,42 +41,51 @@ room_defend = {  # 房间守护
 	'chunai': {  # 纯爱
 		'week': {
 			'knight_level': 1,
+			'duration_level': 1,
 			'price': 9900,
 		},
 		'month': {
 			'knight_level': 1,
+			'duration_level': 2,
 			'price': 29900,
 		},
 		'year': {
 			'knight_level': 1,
+			'duration_level': 3,
 			'price': 299000,
 		}
 	},
 	'zhenai': {  # 真爱
 		'week': {
 			'knight_level': 2,
+			'duration_level': 1,
 			'price': 28800,
 		},
 		'month': {
 			'knight_level': 2,
+			'duration_level': 2,
 			'price': 99900,
 		},
 		'year': {
 			'knight_level': 2,
+			'duration_level': 3,
 			'price': 999000,
 		},
 	},
 	'zhiai': {  # 挚爱
 		'week': {
 			'knight_level': 3,
+			'duration_level': 1,
 			'price': 88800,
 		},
 		'month': {
 			'knight_level': 3,
+			'duration_level': 2,
 			'price': 299900,
 		},
 		'year': {
 			'knight_level': 3,
+			'duration_level': 3,
 			'price': 29999000,
 		},
 	},
