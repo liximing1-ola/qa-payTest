@@ -286,7 +286,7 @@ class conMysql:
 
     # 更新用户数据
     @staticmethod
-    def updateUserInfoSql(tableName, uid, bid=config.live_role['pack_ceo']):
+    def updateUserInfoSql(tableName, uid, bid=config.gs_A_ceo_rid):
         if tableName == 'broker_user':  # 修改用户为打包结算主播
             sql = "update xs_broker_user set bid={}, uid={}, state=1, pack_cal=1 where id = 50 limit 1".format(bid, uid)
             try:
@@ -311,7 +311,7 @@ class conMysql:
         elif tableName == 'chatroom':  # 修改用户为房间房主
             sql = "update xs_chatroom set app_id=1, uid={}, settlement_channel='live', " \
                   "room_factory_type='business-soundchat' where rid={} limit 1".format(uid,
-                                                                                       config.live_role['live_rid'])
+                                                                                       config.gs_A_ceo_rid)
             try:
                 conMysql.cur.execute(sql)
             except Exception as error:
