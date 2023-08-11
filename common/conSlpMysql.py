@@ -28,7 +28,7 @@ class conMysql:
 
     # 查询用户账户信息
     @staticmethod
-    def selectUserInfoSql(accountType, uid=config.rewardUid, money_type='money_cash_b', cid=263, payuid=config.payUid):
+    def selectUserInfoSql(accountType, uid=config.rewardUid, money_type='money_cash_b', cid=263, payuid=config.payUid,agreement_version=1):
         if accountType == 'bean':  # 查询用户账户扩展表金豆余额
             sql = "select money_coupon from xs_user_money_extend where uid={}".format(uid)
             try:
@@ -554,3 +554,15 @@ class conMysql:
                 return None
         except Exception as error:
             print(error)
+
+    # 修改大神认证 1=同意,0=不同意
+    @staticmethod
+    def updateUserGodSql(uid, agreement_version):
+        try:
+            sql = f"update xs_user_settings set agreement_version={agreement_version} where uid={uid}"
+            conMysql.cur.execute(sql)
+        except Exception as error:
+            conMysql.con.rollback()
+            print('update fail', error)
+        finally:
+            conMysql.con.commit()
