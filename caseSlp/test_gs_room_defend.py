@@ -47,7 +47,7 @@ class TestPayCreate(unittest.TestCase):
 			knight_level=room_defend['zhenai']['month']['knight_level'],
 			duration_level=room_defend['zhenai']['month']['duration_level'],
 		)
-		res = post_request_session(pay_url, data)
+		res = post_request_session(pay_url, data, tokenName='slp')
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 1, reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - room_defend['zhenai']['month']['price'])
