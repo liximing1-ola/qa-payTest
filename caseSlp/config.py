@@ -3,7 +3,7 @@ from common.Config import config as old_config
 
 pay_url = old_config.slp_pay_url
 default_num = 1  # 礼物个数
-default_money = 10000  # 打赏者默认金额
+default_money = 100000  # 打赏者默认金额
 payUid = 200000128  # 15008520000	支付测试0000	打赏者/Basic.yml 登录session
 
 gs_A_ceo_uid = 200000118  # 15008520001	支付测试0001	A公会长
@@ -35,6 +35,59 @@ giftId = {
 		"gid": 70,
 		"cid": 330,
 		"price": 300
+	},
+}
+room_defend = {  # 房间守护
+	'chunai': {  # 纯爱
+		'week': {
+			'knight_level': 1,
+			'duration_level': 1,
+			'price': 9900,
+		},
+		'month': {
+			'knight_level': 1,
+			'duration_level': 2,
+			'price': 29900,
+		},
+		'year': {
+			'knight_level': 1,
+			'duration_level': 3,
+			'price': 299000,
+		}
+	},
+	'zhenai': {  # 真爱
+		'week': {
+			'knight_level': 2,
+			'duration_level': 1,
+			'price': 28800,
+		},
+		'month': {
+			'knight_level': 2,
+			'duration_level': 2,
+			'price': 99900,
+		},
+		'year': {
+			'knight_level': 2,
+			'duration_level': 3,
+			'price': 999000,
+		},
+	},
+	'zhiai': {  # 挚爱
+		'week': {
+			'knight_level': 3,
+			'duration_level': 1,
+			'price': 88800,
+		},
+		'month': {
+			'knight_level': 3,
+			'duration_level': 2,
+			'price': 299900,
+		},
+		'year': {
+			'knight_level': 3,
+			'duration_level': 3,
+			'price': 29999000,
+		},
 	},
 }
 

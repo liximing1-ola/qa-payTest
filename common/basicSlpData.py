@@ -18,7 +18,9 @@ def encodeData(
         duction_money=0,
         star=0,
         defend_id=244,
-        # uids=('{}'.format(rewardUid), '{}'.format(masterUid))
+        # uids=('{}'.format(rewardUid), '{}'.format(masterUid)),
+        knight_level=room_defend['zhenai']['month']['knight_level'],
+        duration_level=room_defend['zhenai']['month']['duration_level'],
 ):
     if payType == 'chat-gift':
         data = {
@@ -145,24 +147,25 @@ def encodeData(
     #     d = urllib.parse.urlencode(data)
     #     data = d.replace('+', '').replace('%27', '%22')
     #     return data
-    # elif payType == 'package-knightDefend':
-    #     data = {
-    #         "platform": "available",
-    #         "type": "package",
-    #         "money": money,
-    #         "params":
-    #             {"price": money,
-    #              "knight_level": 2,
-    #              "duration_level": 2,
-    #              "rid": rid,
-    #              "uids": "{}".format(uid),
-    #              "useCoin": -1,
-    #              }
-    #     }
-    #     print(data)
-    #     d = urllib.parse.urlencode(data)
-    #     data = d.replace('+', '').replace('%27', '%22')
-    #     return data
+    elif payType == 'package-knightDefend':
+        data = {
+            "platform": "available",
+            "type": "package",
+            "money": money,
+            "params":
+                {
+                    "price": money,
+                    "knight_level": knight_level,
+                    "duration_level": duration_level,
+                    "rid": rid,
+                    "uids": "{}".format(uid),
+                    "useCoin": -1,
+                }
+        }
+        print(data)
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        return data
     # elif payType == 'package-radioDefend':
     #     data = {
     #         "platform": "available",
@@ -413,9 +416,9 @@ def encodeData(
 
 if __name__ == '__main__':
     data = encodeData(
-			rid=11,
-			payType='package',
-			uid=gsUid,
-			giftId=giftId['69']['gid']
-		)
+        payType='package-knightDefend',
+        money=room_defend['zhenai']['month'],
+        uid=gsUid,
+        rid=111
+    )
     print(data)
