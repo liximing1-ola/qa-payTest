@@ -41,56 +41,97 @@ room_defend = {  # 房间守护
 	'chunai': {  # 纯爱
 		'week': {
 			'knight_level': 1,
-			'duration_level': 1,
 			'price': 9900,
 		},
 		'month': {
 			'knight_level': 1,
-			'duration_level': 2,
 			'price': 29900,
 		},
 		'year': {
 			'knight_level': 1,
-			'duration_level': 3,
 			'price': 299000,
 		}
 	},
 	'zhenai': {  # 真爱
 		'week': {
 			'knight_level': 2,
-			'duration_level': 1,
 			'price': 28800,
 		},
 		'month': {
 			'knight_level': 2,
-			'duration_level': 2,
 			'price': 99900,
 		},
 		'year': {
 			'knight_level': 2,
-			'duration_level': 3,
 			'price': 999000,
 		},
 	},
 	'zhiai': {  # 挚爱
 		'week': {
 			'knight_level': 3,
-			'duration_level': 1,
 			'price': 88800,
 		},
 		'month': {
 			'knight_level': 3,
-			'duration_level': 2,
 			'price': 299900,
 		},
 		'year': {
 			'knight_level': 3,
-			'duration_level': 3,
 			'price': 29999000,
 		},
 	},
 }
+defend = {  # 个人守护
+	"CP": {
+		"id": 1,
+		"price": 520000,
+		"upgrade_price": 520000,
+		"break_price": 99900,
 
+	},
+	"小宝贝": {
+		"id": 2,
+		"price": 52000,
+		"upgrade_price": 99900,
+		"break_price": 28800,
+	},
+	"知己": {
+		"id": 3,
+		"price": 52000,
+		"upgrade_price": 99900,
+		"break_price": 28800,
+	},
+	"守卫": {
+		"id": 4,
+		"price": 36000,
+		"upgrade_price": 66600,
+		"break_price": 28800,
+	},
+	"队友": {
+		"id": 5,
+		"price": 6600,
+		"upgrade_price": 66600,
+		"break_price": 28800,
+	},
+	"跟班": {
+		"id": 6,
+		"price": 36000,
+		"upgrade_price": 9900,
+		"break_price": 28800,
+	},
+	"闺蜜": {
+		"id": 7,
+		"price": 52000,
+		"upgrade_price": 520000,
+		"break_price": 28800,
+	},
+	"兄弟": {
+		"id": 8,
+		"price": 36000,
+		"upgrade_price": 66600,
+		"break_price": 28800,
+	},
+}
 # 分成比例
 rates = {
 	# 主播,mc

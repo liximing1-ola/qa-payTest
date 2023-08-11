@@ -255,24 +255,24 @@ def encodeData(
     #     d = urllib.parse.urlencode(data)
     #     data = d.replace('+', '').replace('%27', '%22')
     #     return data
-    # elif payType == 'defend':
-    #     data = {
-    #         "platform": 'available',
-    #         "type": 'defend',
-    #         "money": money,
-    #         "params":
-    #             {"defend": defend_id,
-    #              "to": uid,
-    #              "cid": 0,
-    #              "duction_money": 0,
-    #              "unified_relation_version": 1,
-    #              "useCoin": -1
-    #              }
-    #     }
-    #     print(data)
-    #     d = urllib.parse.urlencode(data)
-    #     data = d.replace('+', '').replace('%27', '%22')
-    #     return data
+    elif payType == 'defend':
+        data = {
+            "platform": 'available',
+            "type": 'defend',
+            "money": money,
+            "params":
+                {"defend": defend_id,
+                 "to": uid,
+                 "cid": 0,
+                 "duction_money": 0,
+                 "unified_relation_version": 1,
+                 "useCoin": -1
+                 }
+        }
+        print(data)
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        return data
     # elif payType == 'defend-upgrade':
     #     data = {
     #         "platform": 'available',
