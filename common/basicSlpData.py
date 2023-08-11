@@ -261,46 +261,49 @@ def encodeData(
             "type": 'defend',
             "money": money,
             "params":
-                {"defend": defend_id,
-                 "to": uid,
-                 "cid": 0,
-                 "duction_money": 0,
-                 "unified_relation_version": 1,
-                 "useCoin": -1
-                 }
+                {
+                    "defend": defend_id,
+                    "to": uid,
+                    "cid": 0,
+                    "duction_money": 0,
+                    "unified_relation_version": 1,
+                    "useCoin": -1
+                }
         }
         print(data)
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
         return data
-    # elif payType == 'defend-upgrade':
-    #     data = {
-    #         "platform": 'available',
-    #         "type": 'defend-upgrade',
-    #         "money": money,
-    #         "params":
-    #             {"id": "{}".format(defend_id),  # xs_relation_defend  id
-    #              "useCoin": -1
-    #              }
-    #     }
-    #     print(data)
-    #     d = urllib.parse.urlencode(data)
-    #     data = d.replace('+', '').replace('%27', '%22')
-    #     return data
-    # elif payType == 'defend-break':
-    #     data = {
-    #         "platform": 'available',
-    #         "type": 'defend-break',
-    #         "money": money,
-    #         "params":
-    #             {"id": "{}".format(defend_id),  # xs_relation_defend  id
-    #              "useCoin": -1
-    #              }
-    #     }
-    #     print(data)
-    #     d = urllib.parse.urlencode(data)
-    #     data = d.replace('+', '').replace('%27', '%22')
-    #     return data
+    elif payType == 'defend-upgrade':
+        data = {
+            "platform": 'available',
+            "type": 'defend-upgrade',
+            "money": money,
+            "params":
+                {
+                    "id": "{}".format(defend_id),  # xs_relation_defend  id
+                    "useCoin": -1
+                }
+        }
+        print(data)
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        return data
+    elif payType == 'defend-break':
+        data = {
+            "platform": 'available',
+            "type": 'defend-break',
+            "money": money,
+            "params":
+                {
+                    "id": "{}".format(defend_id),  # xs_relation_defend  id
+                    "useCoin": -1
+                }
+        }
+        print(data)
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        return data
     # elif payType == 'title':
     #     data = {
     #         "platform": "available",
@@ -416,9 +419,8 @@ def encodeData(
 
 if __name__ == '__main__':
     data = encodeData(
-        payType='package-knightDefend',
-        money=room_defend['zhenai']['month'],
-        uid=gsUid,
-        rid=111
+        payType='defend',
+        defend_id=defend['小宝贝']['id'],
+        money=defend['小宝贝']['price']
     )
     print(data)

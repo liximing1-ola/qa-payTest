@@ -37,6 +37,7 @@ giftId = {
 		"price": 300
 	},
 }
+
 room_defend = {  # 房间守护
 	'chunai': {  # 纯爱
 		'week': {

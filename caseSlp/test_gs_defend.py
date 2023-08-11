@@ -34,6 +34,7 @@ class TestPayCreate(unittest.TestCase):
 		mysql.updateMoneySql(payUid, money=default_money)
 		mysql.updateMoneySql(gsUid)
 		data = encodeData(
+			uid=gsUid,
 			payType='defend',
 			defend_id=defend['小宝贝']['id'],
 			money=defend['小宝贝']['price']
@@ -59,10 +60,12 @@ class TestPayCreate(unittest.TestCase):
 		 """
 		mysql.updateMoneySql(payUid, money=default_money)
 		mysql.updateMoneySql(gsUid)
+		defend_id = mysql.selectUserInfoSql('relation_id', payuid=payUid, uid=gsUid, cid=defend['小宝贝']['id'])
 		data = encodeData(
+			uid=gsUid,
 			payType='defend-upgrade',
 			money=defend['小宝贝']['upgrade_price'],
-			defend_id=defend['小宝贝']['id']
+			defend_id=defend_id
 		)
 		res = post_request_session(pay_url, data, tokenName='slp')
 		assert_code(res['code'])
@@ -84,10 +87,13 @@ class TestPayCreate(unittest.TestCase):
 		 """
 		mysql.updateMoneySql(payUid, money=default_money)
 		mysql.updateMoneySql(gsUid)
+		mysql.selectUserInfoSql('relation_id', uid=gsUid, cid=1)
+		defend_id = mysql.selectUserInfoSql('relation_id', payuid=payUid, uid=gsUid, cid=defend['小宝贝']['id'])
 		data = encodeData(
+			uid=gsUid,
 			payType='defend-break',
 			money=defend['小宝贝']['break_price'],
-			defend_id=defend['小宝贝']['id']
+			defend_id=defend_id
 		)
 		res = post_request_session(pay_url, data, tokenName='slp')
 		assert_code(res['code'])
