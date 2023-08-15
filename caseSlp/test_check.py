@@ -168,3 +168,99 @@ class TestPayCreate(unittest.TestCase):
 		assert_body(res['body'], 'success', 1, reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('sum_money', normal_uid), 0)
 		case_list[des] = result
+
+	def test_07_roomPayNoMoney(self, des='验证扣费顺序,money>mcb>mc'):
+		"""
+		用例描述：
+		验证扣费顺序,money>mcb>mc
+		脚本步骤：
+		1.构造打赏者和被打赏者数据
+		2.私聊一对一打赏流程(礼物:棒棒糖)
+		3.校验接口和返回值数据
+		4.检查预期返回msg，预期：支付失败，提示Toast
+		5.检查被打赏者余额,预期：0
+		"""
+		mysql.updateUserMoneyClearSql(payUid, normal_uid)
+		mysql.updateMoneySql(payUid,
+		                     money=giftId['69']['price'],
+		                     money_cash_b=giftId['69']['price'],
+		                     money_cash=giftId['69']['price'])
+		mysql.deleteUserAccountSql('user_commodity', payUid)
+		# mysql.deleteUserAccountSql('broker_user', normal_uid)
+		# mysql.deleteUserAccountSql('chatroom', normal_uid)
+		data = encodeData(payType='package',
+		                  num=default_num,
+		                  giftId=giftId['69']['gid'])
+		res = post_request_session(pay_url, data, tokenName='slp')
+		assert_code(res['code'])
+		assert_body(res['body'], 'success', 1, reason(des, res))
+		# money>mcb>mc
+		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money'), 0)
+		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money_cash_b'), giftId['69']['price'])
+		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money_cash'), giftId['69']['price'])
+
+	def test_08_roomPayNoMoney(self, des='验证扣费顺序,mcb>mc'):
+		"""
+		用例描述：
+		验证扣费顺序,money>mcb>mc
+		脚本步骤：
+		1.构造打赏者和被打赏者数据
+		2.私聊一对一打赏流程(礼物:棒棒糖)
+		3.校验接口和返回值数据
+		4.检查预期返回msg，预期：支付失败，提示Toast
+		5.检查被打赏者余额,预期：0
+		"""
+		mysql.updateUserMoneyClearSql(payUid, normal_uid)
+		mysql.updateMoneySql(payUid,
+		                     money=0,
+		                     money_cash_b=giftId['69']['price'],
+		                     money_cash=giftId['69']['price'])
+		mysql.deleteUserAccountSql('user_commodity', payUid)
+		# mysql.deleteUserAccountSql('broker_user', normal_uid)
+		# mysql.deleteUserAccountSql('chatroom', normal_uid)
+		data = encodeData(payType='package',
+		                  num=default_num,
+		                  giftId=giftId['69']['gid'])
+		res = post_request_session(pay_url, data, tokenName='slp')
+		assert_code(res['code'])
+		assert_body(res['body'], 'success', 1, reason(des, res))
+		# mcb > mc
+		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money'), 0)
+		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money_cash_b'), 0)
+		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money_cash'), giftId['69']['price'])
+		case_list[des] = result
+
+	def test_09_roomPayNoMoney(self, des='验证组合支付,m,mc,mcb同时扣费的场景'):
+		"""
+		用例描述：
+		验证扣费顺序,money>mcb>mc
+		脚本步骤：
+		1.构造打赏者和被打赏者数据
+		2.私聊一对一打赏流程(礼物:棒棒糖)
+		3.校验接口和返回值数据
+		4.检查预期返回msg，预期：支付失败，提示Toast
+		5.检查被打赏者余额,预期：0
+		"""
+		num=3
+		mysql.updateUserMoneyClearSql(payUid, normal_uid)
+		mysql.updateMoneySql(payUid,
+		                     money=giftId['69']['price'],
+		                     money_cash_b=giftId['69']['price'],
+		                     money_cash=giftId['69']['price'])
+		mysql.deleteUserAccountSql('user_commodity', payUid)
+		# mysql.deleteUserAccountSql('broker_user', normal_uid)
+		# mysql.deleteUserAccountSql('chatroom', normal_uid)
+		data = encodeData(
+			money=giftId['69']['price'] * num,
+			payType='package',
+			num=num,
+			giftId=giftId['69']['gid']
+		)
+		res = post_request_session(pay_url, data, tokenName='slp')
+		assert_code(res['code'])
+		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money'), 0)
+		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money_cash_b'), 0)
+		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money_cash'), 0)
+
+		case_list[des] = result
