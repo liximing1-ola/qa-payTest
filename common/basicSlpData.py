@@ -21,6 +21,7 @@ def encodeData(
         uids=('{}'.format(rewardUid), '{}'.format(gsUid)),
         knight_level=room_defend['zhenai']['month']['knight_level'],
         duration_level=room_defend['zhenai']['month']['duration_level'],
+        price=giftId['69']['price']
 ):
     if payType == 'chat-gift':
         data = {
@@ -62,7 +63,7 @@ def encodeData(
                     "position": -1,
                     "giftId": giftId,
                     "giftNum": num,
-                    "price": money,
+                    "price": price,
                     "cid": package_cid,
                     "ctype": ctype,
                     "duction_money": duction_money,
@@ -99,7 +100,7 @@ def encodeData(
                     "position": -1,
                     "giftId": giftId,
                     "giftNum": num,
-                    "price": money,
+                    "price": price,
                     "cid": 0,
                     "ctype": "",
                     "duction_money": 0,
@@ -129,7 +130,7 @@ def encodeData(
     #              "position": -1,
     #              "giftId": giftId,
     #              "giftNum": num,
-    #              "price": money,
+    #              "price": price,
     #              "cid": 0,
     #              "ctype": "",
     #              "duction_money": 0,
@@ -155,7 +156,7 @@ def encodeData(
             "money": money,
             "params":
                 {
-                    "price": money,
+                    "price": price,
                     "knight_level": knight_level,
                     "duration_level": duration_level,
                     "rid": rid,
@@ -173,7 +174,7 @@ def encodeData(
     #         "type": "package",
     #         "money": money,  # 520
     #         "params":
-    #             {"price": money,
+    #             {"price": price,
     #              "rid": rid,  # business-radio
     #              "uids": '{}'.format(uid),
     #              "positions": "0",
@@ -221,7 +222,7 @@ def encodeData(
     #         "params":
     #             {"num": num,
     #              "cid": cid,
-    #              "price": money,
+    #              "price": price,
     #              "type": "{}".format(boxType),
     #              "opennum": num,
     #              "coupon_id": 0,
@@ -244,7 +245,7 @@ def encodeData(
     #         "params":
     #             {"num": num,
     #              "cid": cid,
-    #              "price": money,
+    #              "price": price,
     #              "coupon_id": 0,
     #              "duction_money": 0,
     #              "version": 2,
@@ -386,7 +387,7 @@ def encodeData(
     #             "uids": uid,
     #             "money_type": "bean",
     #             "cid": cid,  # 1629
-    #             "price": money,
+    #             "price": price,
     #             "coupon_id": 0,
     #             "duction_money": 0,
     #             "version": 2,
