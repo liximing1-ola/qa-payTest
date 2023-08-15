@@ -212,7 +212,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money)  # 不扣费
 		case_list[des] = result
 
-	def test_07_businessPayGiftToGs(self, des='个人房-直播,礼物打赏GS到账60%(mc)'):
+	def test_07_businessPayGiftToGs(self, des='个人房,,礼物打赏GS到账60%(mc)'):
 		"""
 		用例描述：
 		验证余额足够时，个人房打赏礼物给GS分成为：60，且收入在公会魅力值
@@ -242,7 +242,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
 		case_list[des] = result
 
-	def test_08_businessChatgiftToGs(self, des='个人房-直播,房间私聊打赏GS到账60%(mc)'):
+	def test_08_businessChatgiftToGs(self, des='个人房,,房间私聊打赏GS到账60%(mc)'):
 		"""
 		用例描述：
 		验证余额足够时，个人房房间私聊打赏礼物给GS分成为：60，且收入在公会魅力值
@@ -272,10 +272,10 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
 		case_list[des] = result
 
-	def test_09_businessPackageToGs(self, des='个人房-直播,背包礼物打赏GS到账60%(mc)'):
+	def test_09_businessPackageToGs(self, des='个人房,,背包礼物打赏GS到账60%(mc)'):
 		"""
 		用例描述：
-		个人房-直播,背包礼物打赏GS到账60%(mc)
+		个人房,,背包礼物打赏GS到账60%(mc)
 		脚本步骤：
 		1.构造打赏者和被打赏者数据
 		2.房间打赏礼物（打赏100分）
@@ -531,7 +531,7 @@ class TestPayCreate(unittest.TestCase):
 # 	assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money)  # 不扣费
 # 	case_list[des] = result
 #
-# def test_17_businessPayGiftToGs(self, des='个人房-直播,礼物打赏GS(不签署大神)到账60%(mc)'):
+# def test_17_businessPayGiftToGs(self, des='个人房,,礼物打赏GS(不签署大神)到账60%(mc)'):
 # 	"""
 # 	用例描述：
 # 	验证余额足够时，个人房打赏礼物给GS分成为：60，且收入在公会魅力值
@@ -561,7 +561,7 @@ class TestPayCreate(unittest.TestCase):
 # 	assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
 # 	case_list[des] = result
 #
-# def test_18_businessChatgiftToGs(self, des='个人房-直播,房间私聊打赏GS(不签署大神)到账60%(mc)'):
+# def test_18_businessChatgiftToGs(self, des='个人房,,房间私聊打赏GS(不签署大神)到账60%(mc)'):
 # 	"""
 # 	用例描述：
 # 	验证余额足够时，个人房房间私聊打赏礼物给GS分成为：60，且收入在公会魅力值
@@ -591,10 +591,10 @@ class TestPayCreate(unittest.TestCase):
 # 	assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
 # 	case_list[des] = result
 #
-# def test_19_businessPackageToGs(self, des='个人房-直播,背包礼物打赏GS(不签署大神)到账60%(mc)'):
+# def test_19_businessPackageToGs(self, des='个人房,,背包礼物打赏GS(不签署大神)到账60%(mc)'):
 # 	"""
 # 	用例描述：
-# 	个人房-直播,背包礼物打赏GS到账60%(mc)
+# 	个人房,,背包礼物打赏GS到账60%(mc)
 # 	脚本步骤：
 # 	1.构造打赏者和被打赏者数据
 # 	2.房间打赏礼物（打赏100分）
