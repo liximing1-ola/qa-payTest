@@ -29,6 +29,7 @@ class TestPayCreate(unittest.TestCase):
 		 5.检查公会长余额，预期为： 0(不分成)
 		 6.检查被打赏者余额.预期为：99900 * 0.6 = 59940
 		 """
+		uid = gsUid
 		rid = gs_soundchat_rid
 		assert_equal(mysql.checkRidFactoryType(rid), "business-soundchat")  # 确认rid是直播房
 
@@ -37,12 +38,13 @@ class TestPayCreate(unittest.TestCase):
 		# mysql.updateUserInfoSql('chatroom', test_uid)  # 商业房房主
 		# mysql.updateUserInfoSql('broker_user', test_uid, ceo_uid)  # 打包结算
 		# mysql.checkUserXsBroker(ceo_uid)  # 公会长
+		mysql.updateUserGodSql(uid, 1)
 		mysql.updateMoneySql(payUid, default_money)
-		mysql.updateUserMoneyClearSql(gsUid, gs_A_ceo_uid)
+		mysql.updateUserMoneyClearSql(uid, gs_A_ceo_uid)
 		data = encodeData(
 			payType='package-knightDefend',
 			money=room_defend['zhenai']['month']['price'],
-			uid=gsUid,
+			uid=uid,
 			rid=rid,
 			knight_level=room_defend['zhenai']['month']['knight_level'],
 			duration_level=room_defend['zhenai']['month']['duration_level'],
@@ -51,7 +53,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 1, reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - room_defend['zhenai']['month']['price'])
-		assert_equal(mysql.selectUserInfoSql('single_money', gsUid, money_type='money_cash'),
+		assert_equal(mysql.selectUserInfoSql('single_money', uid, money_type='money_cash'),
 		             room_defend['zhenai']['month']['price'] * rates['gs']['default'])
 		assert_equal(mysql.selectUserInfoSql('single_money', gs_A_ceo_uid, money_type='money_cash'), 0)
 		case_list[des] = result

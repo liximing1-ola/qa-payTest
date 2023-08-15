@@ -31,10 +31,12 @@ class TestPayCreate(unittest.TestCase):
 		4.检查打赏者余额
 		5.检查被打赏者余额,预期：52000 * 0.62 = 32240
 		"""
+		uid = gsUid
 		mysql.updateMoneySql(payUid, money=default_money)
-		mysql.updateMoneySql(gsUid)
+		mysql.updateMoneySql(uid)
+		mysql.updateUserGodSql(uid, 1)
 		data = encodeData(
-			uid=gsUid,
+			uid=uid,
 			payType='defend',
 			defend_id=defend['小宝贝']['id'],
 			money=defend['小宝贝']['price']
@@ -43,7 +45,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 1, reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - defend['小宝贝']['price'])
-		assert_equal(mysql.selectUserInfoSql('single_money', gsUid, money_type='money_cash'), defend['小宝贝']['price'] * rates['gs']['default'])
+		assert_equal(mysql.selectUserInfoSql('single_money', uid, money_type='money_cash'), defend['小宝贝']['price'] * rates['gs']['default'])
 		case_list[des] = result
 
 	@pytest.mark.run(order=2)
@@ -58,11 +60,13 @@ class TestPayCreate(unittest.TestCase):
 		 4.检查打赏者余额，预期：100000 - 99900 = 100
 		 5.检查被打赏者余额,预期： 99900 * 0.62 = 61938
 		 """
+		uid = gsUid
 		mysql.updateMoneySql(payUid, money=default_money)
-		mysql.updateMoneySql(gsUid)
-		defend_id = mysql.selectUserInfoSql('relation_id', payuid=payUid, uid=gsUid, cid=defend['小宝贝']['id'])
+		mysql.updateMoneySql(uid)
+		mysql.updateUserGodSql(uid, 1)
+		defend_id = mysql.selectUserInfoSql('relation_id', payuid=payUid, uid=uid, cid=defend['小宝贝']['id'])
 		data = encodeData(
-			uid=gsUid,
+			uid=uid,
 			payType='defend-upgrade',
 			money=defend['小宝贝']['upgrade_price'],
 			defend_id=defend_id
@@ -71,7 +75,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 1, reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - defend['小宝贝']['upgrade_price'])
-		assert_equal(mysql.selectUserInfoSql('single_money', gsUid, money_type='money_cash'), defend['小宝贝']['upgrade_price'] * rates['gs']['default'])
+		assert_equal(mysql.selectUserInfoSql('single_money', uid, money_type='money_cash'), defend['小宝贝']['upgrade_price'] * rates['gs']['default'])
 		case_list[des] = result
 
 	@pytest.mark.run(order=3)
@@ -85,12 +89,14 @@ class TestPayCreate(unittest.TestCase):
 		 3.校验接口状态和返回值数据
 		 4.检查打赏者余额，预期：40000 - 36000 = 4000
 		 """
+		uid = gsUid
 		mysql.updateMoneySql(payUid, money=default_money)
-		mysql.updateMoneySql(gsUid)
-		mysql.selectUserInfoSql('relation_id', uid=gsUid, cid=defend['小宝贝']['id'])
-		defend_id = mysql.selectUserInfoSql('relation_id', payuid=payUid, uid=gsUid, cid=defend['小宝贝']['id'])
+		mysql.updateMoneySql(uid)
+		mysql.updateUserGodSql(uid, 1)
+		mysql.selectUserInfoSql('relation_id', uid=uid, cid=defend['小宝贝']['id'])
+		defend_id = mysql.selectUserInfoSql('relation_id', payuid=payUid, uid=uid, cid=defend['小宝贝']['id'])
 		data = encodeData(
-			uid=gsUid,
+			uid=uid,
 			payType='defend-break',
 			money=defend['小宝贝']['break_price'],
 			defend_id=defend_id
@@ -99,5 +105,5 @@ class TestPayCreate(unittest.TestCase):
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 1, reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - defend['小宝贝']['break_price'])
-		assert_equal(mysql.selectUserInfoSql('sum_money', gsUid), 0)
+		assert_equal(mysql.selectUserInfoSql('sum_money', uid), 0)
 		case_list[des] = result
