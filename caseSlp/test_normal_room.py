@@ -206,7 +206,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money)  # 不扣费
 		case_list[des] = result
 
-	def test_07_businessPayGiftToGs(self, des='个人房,,礼物打赏普通用户到账60%(mc)'):
+	def test_07_businessPayGiftToGs(self, des='个人房,礼物打赏普通用户到账60%(mc)'):
 		"""
 		用例描述：
 		验证余额足够时，个人房打赏礼物给普通用户分成为：60，且收入在公会魅力值
@@ -235,7 +235,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
 		case_list[des] = result
 
-	def test_08_businessChatgiftToGs(self, des='个人房,,房间私聊打赏普通用户到账60%(mc)'):
+	def test_08_businessChatgiftToGs(self, des='个人房,房间私聊打赏普通用户到账60%(mc)'):
 		"""
 		用例描述：
 		验证余额足够时，个人房房间私聊打赏礼物给普通用户分成为：60，且收入在公会魅力值
@@ -264,10 +264,10 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
 		case_list[des] = result
 
-	def test_09_businessPackageToGs(self, des='个人房,,背包礼物打赏普通用户到账60%(mc)'):
+	def test_09_businessPackageToGs(self, des='个人房,背包礼物打赏普通用户到账60%(mc)'):
 		"""
 		用例描述：
-		个人房,,背包礼物打赏普通用户到账60%(mcb)
+		个人房,背包礼物打赏普通用户到账60%(mcb)
 		脚本步骤：
 		1.构造打赏者和被打赏者数据
 		2.房间打赏礼物（打赏100分）

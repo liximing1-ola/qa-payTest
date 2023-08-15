@@ -17,7 +17,7 @@ from common.runFailed import Retry
 
 @Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
-	def test_01_chatPayNoMoney(self, des='余额不足-私聊打赏的场景'):
+	def test_01_chatPayNoMoney(self, des='余额=0,私聊打赏的场景'):
 		"""
 		用例描述：
 		检查账户余额不足时，私聊一对一打赏
@@ -42,7 +42,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', normal_uid), 0)
 		case_list[des] = result
 
-	def test_02_roomPayNoMoney(self, des='余额不足-房间打赏的场景'):
+	def test_02_roomPayNoMoney(self, des='余额=0,房间打赏的场景'):
 		"""
 		用例描述：
 		检查账户余额不足时，房间打赏

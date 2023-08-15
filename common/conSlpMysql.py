@@ -28,7 +28,7 @@ class conMysql:
 
     # 查询用户账户信息
     @staticmethod
-    def selectUserInfoSql(accountType, uid=config.rewardUid, money_type='money_cash_b', cid=263, payuid=config.payUid,agreement_version=1):
+    def selectUserInfoSql(accountType, uid=config.rewardUid, money_type='money_cash_b', cid=263, payuid=config.payUid):
         if accountType == 'bean':  # 查询用户账户扩展表金豆余额
             sql = "select money_coupon from xs_user_money_extend where uid={}".format(uid)
             try:
