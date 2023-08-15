@@ -18,10 +18,10 @@ from common.runFailed import Retry
 @Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
 
-	def test_01_chatPay(self, des='普通用户-私聊打赏分成60%进mcb'):
+	def test_01_chatPay(self, des='普通用户-私聊打赏分成60%(mcb)'):
 		"""
 		用例描述：
-		普通用户-私聊打赏分成60%进mcb
+		普通用户-私聊打赏分成60%(mcb)
 		脚本步骤：
 		1.构造打赏者和被打赏者数据
 		2.私聊一对一打赏流程(礼物:棒棒糖)

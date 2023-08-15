@@ -507,7 +507,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
 		case_list[des] = result
 
-	def test_16_businessPayGiftToGs(self, des='商业房-非直播,礼物打赏GS(不签署大神且是房主)到账60%(mc)'):
+	def test_16_businessPayGiftToGs(self, des='***商业房-非直播,礼物打赏GS(不签署大神且是房主)到账60%(mc)'):
 		"""
 		用例描述：
 		商业房-非直播,礼物打赏GS(签署大神且是房主)到账60%(mc)
