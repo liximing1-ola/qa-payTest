@@ -198,6 +198,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money'), 0)
 		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money_cash_b'), giftId['69']['price'])
 		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money_cash'), giftId['69']['price'])
+		case_list[des] = result
 
 	def test_08_roomPayNoMoney(self, des='验证扣费顺序,mcb>mc'):
 		"""
