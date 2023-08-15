@@ -18,7 +18,7 @@ def encodeData(
         duction_money=0,
         star=0,
         defend_id=244,
-        # uids=('{}'.format(rewardUid), '{}'.format(masterUid)),
+        uids=('{}'.format(rewardUid), '{}'.format(gsUid)),
         knight_level=room_defend['zhenai']['month']['knight_level'],
         duration_level=room_defend['zhenai']['month']['duration_level'],
 ):
@@ -80,42 +80,43 @@ def encodeData(
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
         return data
-    # elif payType == 'package-more':
-    #     p = []
-    #     uid = ','.join(uids)
-    #     num_more = len(uids)
-    #     for i in range(len(uids)):
-    #         p.append(str(i + 1))
-    #     position = ','.join(p)
-    #     data = {
-    #         "platform": "available",
-    #         "type": "package",
-    #         "money": money * num * num_more,
-    #         "params":
-    #             {"rid": rid,
-    #              "uids": '{}'.format(uid),
-    #              "positions": "{}".format(position),
-    #              "position": -1,
-    #              "giftId": giftId,
-    #              "giftNum": num,
-    #              "price": money,
-    #              "cid": 0,
-    #              "ctype": "",
-    #              "duction_money": 0,
-    #              "version": 2,
-    #              "num": num_more * num,
-    #              "gift_type": "{}".format(giftType),
-    #              "useCoin": -1,
-    #              "star": star,
-    #              "show_pac_man_guide": 1,
-    #              "refer": "",
-    #              "all_mic": 0,
-    #              }
-    #     }
-    #     print(data)
-    #     d = urllib.parse.urlencode(data)
-    #     data = d.replace('+', '').replace('%27', '%22')
-    #     return data
+    elif payType == 'package-more':
+        p = []
+        uid = ','.join(uids)
+        num_more = len(uids)
+        for i in range(len(uids)):
+            p.append(str(i + 1))
+        position = ','.join(p)
+        data = {
+            "platform": "available",
+            "type": "package",
+            "money": money * num * num_more,
+            "params":
+                {
+                    "rid": rid,
+                    "uids": '{}'.format(uid),
+                    "positions": "{}".format(position),
+                    "position": -1,
+                    "giftId": giftId,
+                    "giftNum": num,
+                    "price": money,
+                    "cid": 0,
+                    "ctype": "",
+                    "duction_money": 0,
+                    "version": 2,
+                    "num": num_more * num,
+                    "gift_type": "{}".format(giftType),
+                    "useCoin": -1,
+                    "star": star,
+                    "show_pac_man_guide": 1,
+                    "refer": "",
+                    "all_mic": 0,
+                }
+        }
+        print(data)
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        return data
     # elif payType == 'package-exchange':
     #     data = {
     #         "platform": "available",
@@ -418,9 +419,17 @@ def encodeData(
 
 
 if __name__ == '__main__':
+    # rid = gs_B_ceo_rid
+    uids = tuple([str(i) for i in [gs_A_uid, gs_B_uid, normal_uid]])
+    # num = default_num * 5
+    # money = giftId['69']['price'] * num * len(uids) + 100000
+    # data = encodeData(payType='package-more',
+    #                   num=6,
+    #                   uids=('{}'.format(gsUid), '{}'.format(rewardUid), '{}'.format(111)))
     data = encodeData(
-        payType='defend',
-        defend_id=defend['小宝贝']['id'],
-        money=defend['小宝贝']['price']
+        rid=1111111,
+        payType='package-more',
+        num=222,
+        uids=uids
     )
     print(data)
