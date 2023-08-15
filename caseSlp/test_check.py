@@ -1,7 +1,7 @@
 # -*- encoding=utf8 -*-
 __author__ = "Wu.Zhenxing"
 __title__ = ""
-__desc__ = "异常用例"
+__desc__ = "异常/边界值用例"
 
 import unittest
 
@@ -116,5 +116,55 @@ class TestPayCreate(unittest.TestCase):
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 0, reason(des, res))
 		assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
+		assert_equal(mysql.selectUserInfoSql('sum_money', normal_uid), 0)
+		case_list[des] = result
+
+	def test_05_chatPayNoMoney(self, des='余额=礼物价值-私聊打赏的场景'):
+		"""
+		用例描述：
+		余额=礼物价值-私聊打赏的场景
+		脚本步骤：
+		1.构造打赏者和被打赏者数据
+		2.私聊一对一打赏流程(礼物:棒棒糖)
+		3.校验接口和返回值数据
+		4.检查预期返回msg，预期：支付失败，提示Toast
+		5.检查被打赏者余额,预期：0
+		"""
+		mysql.updateUserMoneyClearSql(payUid, normal_uid)
+		mysql.updateMoneySql(payUid, giftId['69']['price'])
+		mysql.deleteUserAccountSql('user_commodity', payUid)
+		# mysql.deleteUserAccountSql('broker_user', normal_uid)
+		# mysql.deleteUserAccountSql('chatroom', normal_uid)
+		data = encodeData(payType='chat-gift',
+		                  num=default_num,
+		                  giftId=giftId['69']['gid'])
+		res = post_request_session(pay_url, data, tokenName='slp')
+		assert_code(res['code'])
+		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_equal(mysql.selectUserInfoSql('sum_money', normal_uid), 0)
+		case_list[des] = result
+
+	def test_06_roomPayNoMoney(self, des='余额=礼物价值-房间打赏的场景'):
+		"""
+		用例描述：
+		余额=礼物价值-房间打赏的场景
+		脚本步骤：
+		1.构造打赏者和被打赏者数据
+		2.私聊一对一打赏流程(礼物:棒棒糖)
+		3.校验接口和返回值数据
+		4.检查预期返回msg，预期：支付失败，提示Toast
+		5.检查被打赏者余额,预期：0
+		"""
+		mysql.updateUserMoneyClearSql(payUid, normal_uid)
+		mysql.updateMoneySql(payUid, giftId['69']['price'])
+		mysql.deleteUserAccountSql('user_commodity', payUid)
+		# mysql.deleteUserAccountSql('broker_user', normal_uid)
+		# mysql.deleteUserAccountSql('chatroom', normal_uid)
+		data = encodeData(payType='package',
+		                  num=default_num,
+		                  giftId=giftId['69']['gid'])
+		res = post_request_session(pay_url, data, tokenName='slp')
+		assert_code(res['code'])
+		assert_body(res['body'], 'success', 1, reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('sum_money', normal_uid), 0)
 		case_list[des] = result
