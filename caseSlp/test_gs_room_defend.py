@@ -48,6 +48,7 @@ class TestPayCreate(unittest.TestCase):
 			rid=rid,
 			knight_level=room_defend['zhenai']['month']['knight_level'],
 			duration_level=room_defend['zhenai']['month']['duration_level'],
+			price=room_defend['zhenai']['month']['price'],
 		)
 		res = post_request_session(pay_url, data, tokenName='slp')
 		assert_code(res['code'])
