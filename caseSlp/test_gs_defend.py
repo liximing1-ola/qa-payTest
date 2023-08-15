@@ -87,7 +87,7 @@ class TestPayCreate(unittest.TestCase):
 		 """
 		mysql.updateMoneySql(payUid, money=default_money)
 		mysql.updateMoneySql(gsUid)
-		mysql.selectUserInfoSql('relation_id', uid=gsUid, cid=1)
+		mysql.selectUserInfoSql('relation_id', uid=gsUid, cid=defend['小宝贝']['id'])
 		defend_id = mysql.selectUserInfoSql('relation_id', payuid=payUid, uid=gsUid, cid=defend['小宝贝']['id'])
 		data = encodeData(
 			uid=gsUid,
