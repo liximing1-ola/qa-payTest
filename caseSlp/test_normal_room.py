@@ -125,20 +125,20 @@ class TestPayCreate(unittest.TestCase):
 		rid = gs_friend_rid
 		assert_equal(mysql.checkRidFactoryType(rid), "business-friend")  # 确认rid不是直播房
 		mysql.updateMoneySql(payUid, default_money)
-		mysql.updateMoneySql(gs_B_uid)
+		mysql.updateMoneySql(normal_uid)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		data = encodeData(
 			rid=rid,
 			payType='package',
-			uid=gs_B_uid,
+			uid=normal_uid,
 			giftId=giftId['69']['gid']
 		)
 		res = post_request_session(pay_url, data, tokenName='slp')
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 1, reason(des, res))
-		assert_equal(mysql.selectUserInfoSql('single_money', gs_B_uid),
+		assert_equal(mysql.selectUserInfoSql('single_money', normal_uid),
 		             giftId['69']['price'] * default_num * rates['normal']['default'])
-		assert_equal(mysql.selectUserInfoSql('sum_money', gs_B_uid), giftId['69']['price'] * default_num * rates['normal']['default'])
+		assert_equal(mysql.selectUserInfoSql('sum_money', normal_uid), giftId['69']['price'] * default_num * rates['normal']['default'])
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
 		case_list[des] = result
 
@@ -155,20 +155,20 @@ class TestPayCreate(unittest.TestCase):
 		rid = gs_friend_rid
 		assert_equal(mysql.checkRidFactoryType(rid), "business-friend")  # 确认rid不是直播房
 		mysql.updateMoneySql(payUid, default_money)
-		mysql.updateMoneySql(gs_B_uid)
+		mysql.updateMoneySql(normal_uid)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		data = encodeData(
 			rid=rid,
 			payType='package',
-			uid=gs_B_uid,
+			uid=normal_uid,
 			giftId=giftId['69']['gid']
 		)
 		res = post_request_session(pay_url, data, tokenName='slp')
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 1, reason(des, res))
-		assert_equal(mysql.selectUserInfoSql('single_money', gs_B_uid),
+		assert_equal(mysql.selectUserInfoSql('single_money', normal_uid),
 		             giftId['69']['price'] * default_num * rates['normal']['default'])
-		assert_equal(mysql.selectUserInfoSql('sum_money', gs_B_uid), giftId['69']['price'] * default_num * rates['normal']['default'])
+		assert_equal(mysql.selectUserInfoSql('sum_money', normal_uid), giftId['69']['price'] * default_num * rates['normal']['default'])
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
 		case_list[des] = result
 
@@ -185,14 +185,14 @@ class TestPayCreate(unittest.TestCase):
 		rid = gs_friend_rid
 		assert_equal(mysql.checkRidFactoryType(rid), "business-friend")  # 确认rid不是直播房
 		mysql.updateMoneySql(payUid, default_money)
-		mysql.updateMoneySql(gs_B_uid)
+		mysql.updateMoneySql(normal_uid)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		mysql.insertXsUserCommodity(payUid, cid=giftId['69']['cid'], num=default_num)
 		cid = int(mysql.selectUserInfoSql('id_commodity', payUid, cid=giftId['69']['cid']))
 		data = encodeData(
 			rid=rid,
 			payType='package',
-			uid=gs_B_uid,
+			uid=normal_uid,
 			giftId=giftId['69']['gid'],
 			package_cid=cid,
 			ctype='gift'
@@ -200,9 +200,9 @@ class TestPayCreate(unittest.TestCase):
 		res = post_request_session(pay_url, data, tokenName='slp')
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 1, reason(des, res))
-		assert_equal(mysql.selectUserInfoSql('single_money', gs_B_uid),
+		assert_equal(mysql.selectUserInfoSql('single_money', normal_uid),
 		             giftId['69']['price'] * default_num * rates['normal']['default'])
-		assert_equal(mysql.selectUserInfoSql('sum_money', gs_B_uid), giftId['69']['price'] * default_num * rates['normal']['default'])
+		assert_equal(mysql.selectUserInfoSql('sum_money', normal_uid), giftId['69']['price'] * default_num * rates['normal']['default'])
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money)  # 不扣费
 		case_list[des] = result
 
