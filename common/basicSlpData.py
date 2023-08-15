@@ -420,17 +420,15 @@ def encodeData(
 
 
 if __name__ == '__main__':
-    # rid = gs_B_ceo_rid
-    uids = tuple([str(i) for i in [gs_A_uid, gs_B_uid, normal_uid]])
-    # num = default_num * 5
-    # money = giftId['69']['price'] * num * len(uids) + 100000
-    # data = encodeData(payType='package-more',
-    #                   num=6,
-    #                   uids=('{}'.format(gsUid), '{}'.format(rewardUid), '{}'.format(111)))
+    uid = gsUid
+    rid = gs_soundchat_rid
     data = encodeData(
-        rid=1111111,
-        payType='package-more',
-        num=222,
-        uids=uids
-    )
+			payType='package-knightDefend',
+			money=room_defend['zhenai']['month']['price'],
+			uid=uid,
+			rid=rid,
+			knight_level=room_defend['zhenai']['month']['knight_level'],
+			duration_level=room_defend['zhenai']['month']['duration_level'],
+			price=room_defend['zhenai']['month']['price'],
+		)
     print(data)

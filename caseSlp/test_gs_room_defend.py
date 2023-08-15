@@ -39,6 +39,7 @@ class TestPayCreate(unittest.TestCase):
 		# mysql.updateUserInfoSql('broker_user', test_uid, ceo_uid)  # 打包结算
 		# mysql.checkUserXsBroker(ceo_uid)  # 公会长
 		mysql.updateUserGodSql(uid, 1)
+		mysql.updateUserGodSql(gs_A_ceo_uid, 1)
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.updateUserMoneyClearSql(uid, gs_A_ceo_uid)
 		data = encodeData(
@@ -56,5 +57,5 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - room_defend['zhenai']['month']['price'])
 		assert_equal(mysql.selectUserInfoSql('single_money', uid, money_type='money_cash'),
 		             room_defend['zhenai']['month']['price'] * rates['gs']['default'])
-		assert_equal(mysql.selectUserInfoSql('single_money', gs_A_ceo_uid, money_type='money_cash'), 0)
+		assert_equal(mysql.selectUserInfoSql('sum_money', gs_A_ceo_uid), 0)
 		case_list[des] = result
