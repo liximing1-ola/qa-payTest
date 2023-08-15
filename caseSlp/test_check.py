@@ -141,7 +141,7 @@ class TestPayCreate(unittest.TestCase):
 		res = post_request_session(pay_url, data, tokenName='slp')
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 1, reason(des, res))
-		assert_equal(mysql.selectUserInfoSql('sum_money', normal_uid), 0)
+		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), 0)
 		case_list[des] = result
 
 	def test_06_roomPayNoMoney(self, des='余额=礼物价值-房间打赏的场景'):
@@ -166,7 +166,7 @@ class TestPayCreate(unittest.TestCase):
 		res = post_request_session(pay_url, data, tokenName='slp')
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 1, reason(des, res))
-		assert_equal(mysql.selectUserInfoSql('sum_money', normal_uid), 0)
+		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), 0)
 		case_list[des] = result
 
 	def test_07_roomPayNoMoney(self, des='验证扣费顺序,money>mcb>mc'):

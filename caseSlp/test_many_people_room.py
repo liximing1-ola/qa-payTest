@@ -42,7 +42,7 @@ class TestPayCreate(unittest.TestCase):
 			num=num,
 			uids=uids
 		)
-		res = post_request_session(pay_url, data)
+		res = post_request_session(pay_url, data, tokenName='slp')
 		assert_code(res['code'], 200)
 		assert_body(res['body'], 'success', 1, reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('single_money', gs_A_uid), giftId['69']['price'] * rates['gs']['default'] * num)
