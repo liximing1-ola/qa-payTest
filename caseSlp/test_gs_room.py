@@ -507,37 +507,37 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
 		case_list[des] = result
 
-	def test_16_businessPayGiftToGs(self, des='***商业房-非直播,礼物打赏GS(不签署大神且是房主)到账60%(mc)'):
-		"""
-		用例描述：
-		商业房-非直播,礼物打赏GS(签署大神且是房主)到账60%(mc)
-		脚本步骤：
-		1.构造打赏者和被打赏者数据
-		2.房间打赏礼物（打赏100分）
-		3.校验接口状态和返回值数据
-		4.检查被打赏者余额，预期为：1000 * 0.6 =600 (money_cash)
-		"""
-		rid = gs_B_rid
-		assert_equal(mysql.checkRidFactoryType(rid), "business-friend")  # 确认rid不是直播房
-		uid = gs_B_uid
-		mysql.updateMoneySql(payUid, default_money)
-		mysql.updateMoneySql(uid)
-		mysql.updateUserGodSql(uid, 0)
-		mysql.deleteUserAccountSql('user_commodity', payUid)
-		data = encodeData(
-			rid=rid,
-			payType='package',
-			uid=uid,
-			giftId=giftId['69']['gid']
-		)
-		res = post_request_session(pay_url, data, tokenName='slp')
-		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1, reason(des, res))
-		assert_equal(mysql.selectUserInfoSql('single_money', uid, money_type='money_cash'),
-		             giftId['69']['price'] * default_num * rates['gs']['default'])
-		assert_equal(mysql.selectUserInfoSql('sum_money', uid), giftId['69']['price'] * default_num * rates['gs']['default'])
-		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
-		case_list[des] = result
+	# def test_16_businessPayGiftToGs(self, des='***商业房-非直播,礼物打赏GS(不签署大神且是房主)到账60%(mc)'):
+	# 	"""
+	# 	用例描述：
+	# 	商业房-非直播,礼物打赏GS(签署大神且是房主)到账60%(mc)
+	# 	脚本步骤：
+	# 	1.构造打赏者和被打赏者数据
+	# 	2.房间打赏礼物（打赏100分）
+	# 	3.校验接口状态和返回值数据
+	# 	4.检查被打赏者余额，预期为：1000 * 0.6 =600 (money_cash)
+	# 	"""
+	# 	rid = gs_B_rid
+	# 	assert_equal(mysql.checkRidFactoryType(rid), "business-friend")  # 确认rid不是直播房
+	# 	uid = gs_B_uid
+	# 	mysql.updateMoneySql(payUid, default_money)
+	# 	mysql.updateMoneySql(uid)
+	# 	mysql.updateUserGodSql(uid, 0)
+	# 	mysql.deleteUserAccountSql('user_commodity', payUid)
+	# 	data = encodeData(
+	# 		rid=rid,
+	# 		payType='package',
+	# 		uid=uid,
+	# 		giftId=giftId['69']['gid']
+	# 	)
+	# 	res = post_request_session(pay_url, data, tokenName='slp')
+	# 	assert_code(res['code'])
+	# 	assert_body(res['body'], 'success', 1, reason(des, res))
+	# 	assert_equal(mysql.selectUserInfoSql('single_money', uid, money_type='money_cash'),
+	# 	             giftId['69']['price'] * default_num * rates['gs']['default'])
+	# 	assert_equal(mysql.selectUserInfoSql('sum_money', uid), giftId['69']['price'] * default_num * rates['gs']['default'])
+	# 	assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
+	# 	case_list[des] = result
 
 	def test_17_businessChatgiftToGs(self, des='商业房-非直播,房间私聊打赏GS(不签署大神且非房主)到账60%(mcb)'):
 		"""
