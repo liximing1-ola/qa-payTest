@@ -343,11 +343,11 @@ class conMysql:
             sql = "update xs_user_title_new set level={} where uid={}".format(level,uid)
             try:
                 conMysql.cur.execute(sql)
-                res = conMysql.cur.fetchone()
-                if len(res) > 0:
-                    return res[0]
             except Exception as error:
-                print(error)
+                conMysql.con.rollback()
+                print('update fail', error)
+            finally:
+                conMysql.con.commit()
         else:
             print('{} Error'.format(tableName))
 
