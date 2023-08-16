@@ -20,10 +20,10 @@ def robot(mode, reason, title='', bot='BB', color="good", to='wx'):
         # 'starify': 'https://hooks.slack.com/services/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',  # todo 调试
         'slp': 'https://hooks.slack.com/services/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',  # todo 调试
     }
-    if to == 'slack':
-        url = robot_dict[bot]
-    else:
+    if to == 'wx':
         url = robot_dict_wechat[bot]
+    else:
+        url = robot_dict[bot]
 
     if mode == 'fail':
         content = "警告! 失败用例: {}, 失败原因: {}".format(title, reason)
