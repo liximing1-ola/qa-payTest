@@ -3,7 +3,7 @@ import requests
 from common import method
 
 
-def robot(mode, reason, title='', bot='BB', color="good", to='wx'):
+def robot(mode, reason, title='', bot='BB', color="good", to='slack'):
     headers = {'Content-Type': 'application/json'}
     #  企微
     robot_dict_wechat = {
@@ -20,10 +20,10 @@ def robot(mode, reason, title='', bot='BB', color="good", to='wx'):
         # 'starify': 'https://hooks.slack.com/services/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',  # todo 调试
         'slp': 'https://hooks.slack.com/services/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',  # todo 调试
     }
-    if to == 'wx':
-        url = robot_dict_wechat[bot]
-    else:
+    if to == 'slack':
         url = robot_dict[bot]
+    else:
+        url = robot_dict_wechat[bot]
 
     if mode == 'fail':
         content = "警告! 失败用例: {}, 失败原因: {}".format(title, reason)
