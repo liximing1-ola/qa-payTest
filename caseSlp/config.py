@@ -16,7 +16,7 @@ gs_A_ceo_rid = gs_soundchat_rid = 100000388  # A工会-工会长 rid  商业-直
 gs_B_ceo_rid = gs_friend_rid = 100000390  # B工会-工会长 rid  商业-标准9麦/business-friend
 gs_A_rid = 100000410  # A工会-成员 rid  商业-直播厅/business-soundchat
 gs_B_rid = 100000373  # B工会-成员 rid  商业-标准9麦/business-friend
-normal_rid = 100000366  # B工会-成员 rid  商业-标准9麦/business-friend
+normal_rid = 100000366  # 普通用户 rid  商业-标准9麦/business-friend
 
 # 麦位index
 microphone_num = {  # todo
