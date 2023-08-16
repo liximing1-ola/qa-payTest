@@ -2,6 +2,8 @@
 __author__ = "Wu.Zhenxing"
 __title__ = ""
 __desc__ = "经验值相关用例"
+
+import time
 import unittest
 
 from caseSlp.config import *
@@ -45,6 +47,7 @@ class TestPayCreate(unittest.TestCase):
 		res = post_request_session(pay_url, data, tokenName='slp')
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 1, reason(des, res))
+		time.sleep(2)
 		assert_equal(mysql.selectUserInfoSql('pay_room_money', payUid), old_vip + juewei_level['骑士']['update'] * giftId['69']['price'])
 		assert_equal(mysql.selectUserInfoSql('popularity', uid), old_pop + giftId['69']['price'])
 		case_list_b[des] = result
@@ -77,7 +80,6 @@ class TestPayCreate(unittest.TestCase):
 		res = post_request_session(pay_url, data, tokenName='slp')
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 1, reason(des, res))
-		import time
 		time.sleep(2)
 		assert_equal(mysql.selectUserInfoSql('pay_room_money', payUid), old_vip + juewei_level['伯爵']['update'] * giftId['69']['price'])
 		assert_equal(mysql.selectUserInfoSql('popularity', uid), old_pop + giftId['69']['price'])
