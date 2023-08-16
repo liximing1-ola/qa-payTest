@@ -286,7 +286,7 @@ class conMysql:
 
     # 更新用户数据
     @staticmethod
-    def updateUserInfoSql(tableName, uid, bid=config.gs_A_ceo_rid):
+    def updateUserInfoSql(tableName, uid, bid=config.gs_A_ceo_rid,level=0):
         if tableName == 'broker_user':  # 修改用户为打包结算主播
             sql = "update xs_broker_user set bid={}, uid={}, state=1, pack_cal=1 where id = 50 limit 1".format(bid, uid)
             try:
@@ -330,6 +330,24 @@ class conMysql:
                 print('update fail', error)
             finally:
                 conMysql.con.commit()
+        elif tableName == 'user_title_new':  #dev开通1个月贵族
+            sql = "update xs_user_title_new set subscribe_time={},growth=10 where uid={} limit 1".format(time.time()+30*60*60,uid)
+            try:
+                conMysql.cur.execute(sql)
+            except Exception as error:
+                conMysql.con.rollback()
+                print('update fail', error)
+            finally:
+                conMysql.con.commit()
+        elif tableName == 'level':  # 查询用户爵位等级
+            sql = "update xs_user_title_new level={} where uid={}".format(level,uid)
+            try:
+                conMysql.cur.execute(sql)
+                res = conMysql.cur.fetchone()
+                if len(res) > 0:
+                    return res[0]
+            except Exception as error:
+                print(error)
         else:
             print('{} Error'.format(tableName))
 

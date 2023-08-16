@@ -161,7 +161,45 @@ rates = {
 		# "defend": 0,  # 个人守护
 	},
 }
-
+# 爵位
+juewei_level = {
+	'骑士': {
+		'level': 10,
+		'update': 1,
+	},
+	'男爵': {
+		'level': 20,
+		'update': 1.1,
+	},
+	'子爵': {
+		'level': 30,
+		'update': 1.2,
+	},
+	'伯爵': {
+		'level': 40,
+		'update': 1.3,
+	},
+	'侯爵': {
+		'level': 50,
+		'update': 1.4,
+	},
+	'公爵': {
+		'level': 60,
+		'update': 1.5,
+	},
+	'亲王': {
+		'level': 70,
+		'update': 1.6,
+	},
+	'国王': {
+		'level': 80,
+		'update': 1.8,
+	},
+	'皇帝': {
+		'level': 90,
+		'update': 1,
+	},
+}
 # # # 角色配置 todo
 # live_role = {
 # 	'pack_ceo': 105002314,  # 直播公会公会长
