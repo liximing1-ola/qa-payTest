@@ -46,7 +46,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 1, reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('pay_room_money', payUid), old_vip + juewei_level['骑士']['update'] * giftId['69']['price'])
-		assert_equal(mysql.selectUserInfoSql('popularity', payUid), old_pop + giftId['69']['price'])
+		assert_equal(mysql.selectUserInfoSql('popularity', uid), old_pop + giftId['69']['price'])
 		case_list_b[des] = result
 
 	def test_02_businessPayGiftToGs(self, des='打赏者,贵族爵位=伯爵(lv4,1.3倍)消费,vip经验值1:1.3增加'):
@@ -78,5 +78,5 @@ class TestPayCreate(unittest.TestCase):
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 1, reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('pay_room_money', payUid), old_vip + juewei_level['伯爵']['update'] * giftId['69']['price'])
-		assert_equal(mysql.selectUserInfoSql('popularity', payUid), old_pop + giftId['69']['price'])
+		assert_equal(mysql.selectUserInfoSql('popularity', uid), old_pop + giftId['69']['price'])
 		case_list_b[des] = result
