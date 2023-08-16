@@ -286,7 +286,7 @@ class conMysql:
 
     # 更新用户数据
     @staticmethod
-    def updateUserInfoSql(tableName, uid, bid=config.gs_A_ceo_rid,level=0):
+    def updateUserInfoSql(tableName, uid, bid=config.gs_A_ceo_rid, level=10):
         if tableName == 'broker_user':  # 修改用户为打包结算主播
             sql = "update xs_broker_user set bid={}, uid={}, state=1, pack_cal=1 where id = 50 limit 1".format(bid, uid)
             try:
@@ -340,7 +340,7 @@ class conMysql:
             finally:
                 conMysql.con.commit()
         elif tableName == 'level':  # 查询用户爵位等级
-            sql = "update xs_user_title_new level={} where uid={}".format(level,uid)
+            sql = "update xs_user_title_new set level={} where uid={}".format(level,uid)
             try:
                 conMysql.cur.execute(sql)
                 res = conMysql.cur.fetchone()
