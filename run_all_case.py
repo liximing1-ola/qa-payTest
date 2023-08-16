@@ -138,7 +138,7 @@ def main(appInfo):
                 Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
                 robot('slack', des, color='danger', bot='slp')
                 for case, reason in test_result.failures:
-                    robot('slack', Consts.fail_case_reason[0], title=case.id(), color='danger')
+                    robot('slack', Consts.fail_case_reason[0], title=case.id(), color='danger', bot='slp')
                     # break
             if len(test_result.errors) >= 1:
                 Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
