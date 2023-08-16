@@ -265,3 +265,30 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money_cash'), 0)
 
 		case_list[des] = result
+
+	def test_10_roomPayNoMoney(self, des='api,自己打赏自己'):
+		"""
+		用例描述：
+		api,自己打赏自己
+		脚本步骤：
+		1.构造打赏者和被打赏者数据
+		2.私聊一对一打赏流程(礼物:棒棒糖)
+		3.校验接口和返回值数据
+		4.检查预期返回msg，预期：支付失败，提示Toast
+		5.检查被打赏者余额,预期：0
+		"""
+		mysql.updateUserMoneyClearSql(payUid)
+		mysql.updateMoneySql(payUid, money=default_money)
+		mysql.deleteUserAccountSql('user_commodity', payUid)
+		# mysql.deleteUserAccountSql('broker_user', normal_uid)
+		# mysql.deleteUserAccountSql('chatroom', normal_uid)
+		data = encodeData(payType='chat-gift',
+		                  num=default_num,
+		                  uid=payUid,
+		                  giftId=giftId['69']['gid'])
+		res = post_request_session(pay_url, data, tokenName='slp')
+		assert_code(res['code'])
+		assert_body(res['body'], 'success', 0, reason(des, res))
+		assert_body(res['body'], 'msg', '不能给自己打赏', reason(des, res))
+		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money)
+		case_list[des] = result
