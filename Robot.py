@@ -3,7 +3,7 @@ import requests
 from common import method
 
 
-def robot(mode, reason, title='', bot='BB', color="good", to='slack'):
+def robot(mode, reason, title='', bot='BB', color="good", to='wx'):
     headers = {'Content-Type': 'application/json'}
     #  企微
     robot_dict_wechat = {
