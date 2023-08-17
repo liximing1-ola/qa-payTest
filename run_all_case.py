@@ -134,7 +134,7 @@ def main(appInfo):
                     config.codeInfo['slp_git_branch'])
                 robot('slack', des, bot='slp', to=to) if to == 'slack' else robot('markdown', des, bot='slp')
                 sleep(0.1)
-                robot('slack', des_2, bot='slp', to=to) if to == 'slack' else robot('markdown', des, bot='slp')
+                robot('slack', des_2, bot='slp', to=to) if to == 'slack' else robot('markdown', des_2, bot='slp')
             if len(test_result.failures) >= 1:
                 Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
                 robot('slack', des, bot='slp', to=to) if to == 'slack' else robot('fail', des, bot='slp')
@@ -145,8 +145,8 @@ def main(appInfo):
             if len(test_result.errors) >= 1:
                 Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
                 for case, reason in test_result.errors:
-                    robot('slack', reason, case.id(), color='danger', bot='slp', to=to) if to == 'slack' else robot('fail', reason, case.id(),
-                                                                                                             color='danger', bot='slp')
+                    robot('slack', reason, case.id(), color='danger', bot='slp', to=to) if to == 'slack' \
+                        else robot('fail', reason, case.id(), color='danger', bot='slp')
                     # break
         else:
             Logs.get_log('runCode.log').info('NoRun')
