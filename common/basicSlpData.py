@@ -423,12 +423,9 @@ if __name__ == '__main__':
     uid = gsUid
     rid = gs_soundchat_rid
     data = encodeData(
-			payType='package-knightDefend',
-			money=room_defend['zhenai']['month']['price'],
-			uid=uid,
 			rid=rid,
-			knight_level=room_defend['zhenai']['month']['knight_level'],
-			duration_level=room_defend['zhenai']['month']['duration_level'],
-			price=room_defend['zhenai']['month']['price'],
+			payType='package',
+			uid=uid,
+			giftId=giftId['69']['gid']
 		)
     print(data)
