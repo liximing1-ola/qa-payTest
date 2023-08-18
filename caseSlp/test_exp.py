@@ -179,6 +179,8 @@ class TestPayCreate(unittest.TestCase):
 		res = post_request_session(pay_url, data, tokenName='slp')
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 1, reason(des, res))
+		print(mysql.selectUserInfoSql('pay_room_money', payUid))
+		print(old_vip + juewei_level['侯爵']['update'] * giftId['69']['price']/100)
 		assert_equal(mysql.selectUserInfoSql('pay_room_money', payUid), old_vip + juewei_level['侯爵']['update'] * giftId['69']['price']/100)
 		assert_equal(mysql.selectUserInfoSql('popularity', uid), old_pop + giftId['69']['price'])
 		case_list_b[des] = result
