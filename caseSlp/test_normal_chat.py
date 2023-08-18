@@ -18,7 +18,7 @@ from common.runFailed import Retry
 @Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
 
-	def test_01_chatPay(self, des='普通用户-私聊打赏分成60%(mcb)'):
+	def test_001(self, des='普通用户-私聊打赏分成60%(mcb)'):
 		"""
 		用例描述：
 		普通用户-私聊打赏分成60%(mcb)

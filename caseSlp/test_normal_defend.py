@@ -20,7 +20,7 @@ from common.runFailed import Retry
 @Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
 	@pytest.mark.run(order=1)
-	def test_01_defendPayChangMoney(self, des='给普通用户开通个人守护场景60%(mcb)'):
+	def test_001(self, des='给普通用户开通个人守护场景60%(mcb)'):
 		"""
 		用例描述：
 		给普通用户开通个人守护场景60%(mcb)
@@ -48,7 +48,7 @@ class TestPayCreate(unittest.TestCase):
 		case_list[des] = result
 
 	@pytest.mark.run(order=2)
-	def test_02_defendUpgradePayChangeMoney(self, des='给普通用户开通个人守护进阶场景60%(mcb)'):
+	def test_002(self, des='给普通用户开通个人守护进阶场景60%(mcb)'):
 		"""
 		 用例描述：
 		给普通用户开通个人守护进阶场景60%(mcb)
@@ -76,7 +76,7 @@ class TestPayCreate(unittest.TestCase):
 		case_list[des] = result
 
 	@pytest.mark.run(order=3)
-	def test_03_defendBreakPayChangeMoney(self, des='普通用户个人守护解除场景,不分成'):
+	def test_003(self, des='普通用户个人守护解除场景,不分成'):
 		"""
 		 用例描述：
 		普通用户个人守护解除场景,不分成

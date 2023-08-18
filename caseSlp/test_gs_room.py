@@ -18,7 +18,7 @@ from common.runFailed import Retry
 @Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
 
-	def test_01_businessPayGiftToGs(self, des='商业房-直播,礼物打赏GS到账60%(mc)'):
+	def test_001(self, des='商业房-直播,礼物打赏GS到账60%(mc)'):
 		"""
 		用例描述：
 		验证余额足够时，商业房打赏礼物给GS分成为：60，且收入在公会魅力值
@@ -50,7 +50,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
 		case_list_b[des] = result
 
-	def test_02_businessChatgiftToGs(self, des='商业房-直播,房间私聊打赏GS到账60%(mc)'):
+	def test_002(self, des='商业房-直播,房间私聊打赏GS到账60%(mc)'):
 		"""
 		用例描述：
 		验证余额足够时，商业房房间私聊打赏礼物给GS分成为：60，且收入在公会魅力值
@@ -82,7 +82,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
 		case_list_b[des] = result
 
-	def test_03_businessPackageToGs(self, des='商业房-直播,背包礼物打赏GS到账60%(mc)'):
+	def test_003(self, des='商业房-直播,背包礼物打赏GS到账60%(mc)'):
 		"""
 		用例描述：
 		商业房-直播,背包礼物打赏GS到账60%(mc)
@@ -118,7 +118,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money)  # 不扣费
 		case_list_b[des] = result
 
-	def test_04_businessPayGiftToGs(self, des='商业房-非直播,礼物打赏GS到账60%(mc)'):
+	def test_004(self, des='商业房-非直播,礼物打赏GS到账60%(mc)'):
 		"""
 		用例描述：
 		验证余额足够时，商业房-非直播打赏礼物给GS分成为：60，且收入在公会魅力值
@@ -150,7 +150,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
 		case_list_b[des] = result
 
-	def test_05_businessChatgiftToGs(self, des='商业房-非直播,房间私聊打赏GS到账60%(mc)'):
+	def test_005(self, des='商业房-非直播,房间私聊打赏GS到账60%(mc)'):
 		"""
 		用例描述：
 		验证余额足够时，商业房-非直播房间私聊打赏礼物给GS分成为：60，且收入在公会魅力值
@@ -182,7 +182,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
 		case_list_b[des] = result
 
-	def test_06_businessPackageToGs(self, des='商业房-非直播,背包礼物打赏GS到账60%(mc)'):
+	def test_006(self, des='商业房-非直播,背包礼物打赏GS到账60%(mc)'):
 		"""
 		用例描述：
 		商业房-非直播,背包礼物打赏GS到账60%(mc)
@@ -218,7 +218,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money)  # 不扣费
 		case_list_b[des] = result
 
-	def test_07_businessPayGiftToGs(self, des='个人房,礼物打赏GS到账60%(mc)'):
+	def test_007(self, des='个人房,礼物打赏GS到账60%(mc)'):
 		"""
 		用例描述：
 		验证余额足够时，个人房打赏礼物给GS分成为：60，且收入在公会魅力值
@@ -249,7 +249,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
 		case_list_b[des] = result
 
-	def test_08_businessChatgiftToGs(self, des='个人房,房间私聊打赏GS到账60%(mc)'):
+	def test_008(self, des='个人房,房间私聊打赏GS到账60%(mc)'):
 		"""
 		用例描述：
 		验证余额足够时，个人房房间私聊打赏礼物给GS分成为：60，且收入在公会魅力值
@@ -280,7 +280,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
 		case_list_b[des] = result
 
-	def test_09_businessPackageToGs(self, des='个人房,背包礼物打赏GS到账60%(mc)'):
+	def test_009(self, des='个人房,背包礼物打赏GS到账60%(mc)'):
 		"""
 		用例描述：
 		个人房,背包礼物打赏GS到账60%(mc)
@@ -315,7 +315,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money)  # 不扣费
 		case_list_b[des] = result
 
-	def test_10_businessPayGiftToGs(self, des='商业房-直播,礼物打赏GS(签署大神且是房主),到账60%(mc)'):
+	def test_010(self, des='商业房-直播,礼物打赏GS(签署大神且是房主),到账60%(mc)'):
 		"""
 		用例描述：
 		商业房-直播,礼物打赏GS(签署大神且是房主),到账60%(mc)
@@ -347,7 +347,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
 		case_list_b[des] = result
 
-	def test_11_businessPayGiftToGs(self, des='商业房-直播,礼物打赏GS(签署大神且非房主),到账60%(mc)'):
+	def test_011(self, des='商业房-直播,礼物打赏GS(签署大神且非房主),到账60%(mc)'):
 		"""
 		用例描述：
 		商业房-直播,礼物打赏GS(签署大神且非房主),到账60%(mc)
@@ -379,7 +379,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
 		case_list_b[des] = result
 
-	def test_12_businessPayGiftToGs(self, des='商业房-直播,礼物打赏GS(不签署大神且是房主),到账60%(mcb)'):
+	def test_012(self, des='商业房-直播,礼物打赏GS(不签署大神且是房主),到账60%(mcb)'):
 		"""
 		用例描述：
 		商业房-直播,礼物打赏GS(不签署大神且是房主),到账60%(mcb)
@@ -411,7 +411,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
 		case_list_b[des] = result
 
-	def test_13_businessPayGiftToGs(self, des='商业房-直播,礼物打赏GS(不签署大神且非房主),到账60%(mcb)'):
+	def test_013(self, des='商业房-直播,礼物打赏GS(不签署大神且非房主),到账60%(mcb)'):
 		"""
 		用例描述：
 		商业房-直播,礼物打赏GS(不签署大神且非房主),到账60%(mcb)
@@ -443,7 +443,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
 		case_list_b[des] = result
 
-	def test_14_businessPayGiftToGs(self, des='商业房-非直播,礼物打赏GS(签署大神且是房主)到账60%(mc)'):
+	def test_014(self, des='商业房-非直播,礼物打赏GS(签署大神且是房主)到账60%(mc)'):
 		"""
 		用例描述：
 		商业房-非直播,礼物打赏GS(签署大神且是房主)到账60%(mc)
@@ -475,7 +475,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
 		case_list_b[des] = result
 
-	def test_15_businessChatgiftToGs(self, des='商业房-非直播,房间私聊打赏GS(签署大神且非房主)到账60%(mc)'):
+	def test_015(self, des='商业房-非直播,房间私聊打赏GS(签署大神且非房主)到账60%(mc)'):
 		"""
 		用例描述：
 		验证余额足够时，商业房-非直播房间私聊打赏礼物给GS分成为：60，且收入在公会魅力值
@@ -507,7 +507,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
 		case_list_b[des] = result
 
-	def test_16_businessPayGiftToGs(self, des='***商业房-非直播,礼物打赏GS(不签署大神且是房主)到账60%(mc)'):
+	def test_016(self, des='***商业房-非直播,礼物打赏GS(不签署大神且是房主)到账60%(mc)'):
 		"""
 		用例描述：
 		商业房-非直播,礼物打赏GS(签署大神且是房主)到账60%(mc)
@@ -539,7 +539,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - giftId['69']['price'] * default_num)
 		case_list_b[des] = result
 
-	def test_17_businessChatgiftToGs(self, des='商业房-非直播,房间私聊打赏GS(不签署大神且非房主)到账60%(mcb)'):
+	def test_017(self, des='商业房-非直播,房间私聊打赏GS(不签署大神且非房主)到账60%(mcb)'):
 		"""
 		用例描述：
 		商业房-非直播,房间私聊打赏GS(不签署大神且非房主)到账60%(mcb)		脚本步骤：

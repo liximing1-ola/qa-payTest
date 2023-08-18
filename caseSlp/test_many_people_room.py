@@ -18,7 +18,7 @@ from common.runFailed import Retry
 @Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
 
-	def test_01_RoomToMorePayChange(self, des='房间内打赏多人(gs+normal)多礼物场景'):
+	def test_001(self, des='房间内打赏多人(gs+normal)多礼物场景'):
 		"""
 		用例描述：
 		验证非直播类型房间内一对多打赏场景

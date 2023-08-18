@@ -17,7 +17,7 @@ from common.runFailed import Retry
 
 @Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
-	def test_01_chatPayNoMoney(self, des='余额=0,私聊打赏的场景'):
+	def test_001(self, des='余额=0,私聊打赏的场景'):
 		"""
 		用例描述：
 		检查账户余额不足时，私聊一对一打赏
@@ -42,7 +42,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', normal_uid), 0)
 		case_list[des] = result
 
-	def test_02_roomPayNoMoney(self, des='余额=0,房间打赏的场景'):
+	def test_002(self, des='余额=0,房间打赏的场景'):
 		"""
 		用例描述：
 		检查账户余额不足时，房间打赏
@@ -67,7 +67,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', normal_uid), 0)
 		case_list[des] = result
 
-	def test_03_chatPayNoMoney(self, des='余额<礼物价值-私聊打赏的场景'):
+	def test_003(self, des='余额<礼物价值-私聊打赏的场景'):
 		"""
 		用例描述：
 		余额<礼物价值-私聊打赏的场景
@@ -93,7 +93,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', normal_uid), 0)
 		case_list[des] = result
 
-	def test_04_roomPayNoMoney(self, des='余额<礼物价值-房间打赏的场景'):
+	def test_004(self, des='余额<礼物价值-房间打赏的场景'):
 		"""
 		用例描述：
 		检查账户余额不足时，房间打赏
@@ -119,7 +119,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', normal_uid), 0)
 		case_list[des] = result
 
-	def test_05_chatPayNoMoney(self, des='余额=礼物价值-私聊打赏的场景'):
+	def test_005(self, des='余额=礼物价值-私聊打赏的场景'):
 		"""
 		用例描述：
 		余额=礼物价值-私聊打赏的场景
@@ -144,7 +144,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), 0)
 		case_list[des] = result
 
-	def test_06_roomPayNoMoney(self, des='余额=礼物价值-房间打赏的场景'):
+	def test_006(self, des='余额=礼物价值-房间打赏的场景'):
 		"""
 		用例描述：
 		余额=礼物价值-房间打赏的场景
@@ -169,7 +169,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), 0)
 		case_list[des] = result
 
-	def test_07_roomPayNoMoney(self, des='验证扣费顺序,money>mcb>mc'):
+	def test_007(self, des='验证扣费顺序,money>mcb>mc'):
 		"""
 		用例描述：
 		验证扣费顺序,money>mcb>mc
@@ -200,7 +200,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money_cash'), giftId['69']['price'])
 		case_list[des] = result
 
-	def test_08_roomPayNoMoney(self, des='验证扣费顺序,mcb>mc'):
+	def test_008(self, des='验证扣费顺序,mcb>mc'):
 		"""
 		用例描述：
 		验证扣费顺序,money>mcb>mc
@@ -231,7 +231,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money_cash'), giftId['69']['price'])
 		case_list[des] = result
 
-	def test_09_roomPayNoMoney(self, des='验证组合支付,m,mc,mcb同时扣费的场景'):
+	def test_009(self, des='验证组合支付,m,mc,mcb同时扣费的场景'):
 		"""
 		用例描述：
 		验证扣费顺序,money>mcb>mc
@@ -266,7 +266,7 @@ class TestPayCreate(unittest.TestCase):
 
 		case_list[des] = result
 
-	def test_10_roomPayNoMoney(self, des='api,自己打赏自己'):
+	def test_010(self, des='api,自己打赏自己'):
 		"""
 		用例描述：
 		api,自己打赏自己

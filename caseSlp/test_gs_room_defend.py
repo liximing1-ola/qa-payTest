@@ -17,7 +17,7 @@ from common.runFailed import Retry
 @Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
 
-	def test_01_knightDefendPayChangeMoney(self, des='商业房-直播,开通房间守护给GS收60%（mc）'):
+	def test_001(self, des='商业房-直播,开通房间守护给GS收60%（mc）'):
 		"""
 		 用例描述：
 		商业房-直播,开通房间守护给GS收60%（mc）

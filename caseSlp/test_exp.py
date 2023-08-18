@@ -19,7 +19,7 @@ from common.runFailed import Retry
 @Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
 
-	def test_01_businessPayGiftToGs(self, des='打赏者,贵族爵位=骑士(lv1,1倍)消费,vip经验值1:1增加'):
+	def test_001(self, des='打赏者,贵族爵位=骑士(lv1,1倍)消费,vip经验值1:1增加'):
 		"""
 		用例描述：
 		验证余额足够时，商业房打赏礼物给GS分成为：60，且收入在公会魅力值
@@ -52,7 +52,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('popularity', uid), old_pop + giftId['69']['price'])
 		case_list_b[des] = result
 
-	def test_02_businessPayGiftToGs(self, des='打赏者,贵族爵位=伯爵(lv4,1.3倍)消费,vip经验值1:1.3增加'):
+	def test_002(self, des='打赏者,贵族爵位=伯爵(lv4,1.3倍)消费,vip经验值1:1.3增加'):
 		"""
 		用例描述：
 		验证余额足够时，商业房打赏礼物给GS分成为：60，且收入在公会魅力值
