@@ -165,39 +165,39 @@ rates = {
 juewei_level = {
 	'骑士': {
 		'level': 10,
-		'update': 1,
+		'update': 100,
 	},
 	'男爵': {
 		'level': 20,
-		'update':1,
+		'update': 100,
 	},
 	'子爵': {
 		'level': 30,
-		'update': 1,
+		'update': 100,
 	},
 	'伯爵': {
 		'level': 40,
-		'update': 1.05,
+		'update': 105,
 	},
 	'侯爵': {
 		'level': 50,
-		'update': 1.1,
+		'update': 110,
 	},
 	'公爵': {
 		'level': 60,
-		'update': 1.15,
+		'update': 115,
 	},
 	'亲王': {
 		'level': 70,
-		'update': 1.2,
+		'update': 120,
 	},
 	'国王': {
 		'level': 80,
-		'update': 1.25,
+		'update': 125,
 	},
 	'皇帝': {
 		'level': 90,
-		'update': 1.3,
+		'update': 130,
 	},
 }
 # # # 角色配置 todo

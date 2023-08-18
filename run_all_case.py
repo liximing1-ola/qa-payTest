@@ -141,13 +141,13 @@ def main(appInfo):
                 for case, reason in test_result.failures:
                     robot('slack', Consts.fail_case_reason[0], title=case.id(), color='danger', bot='slp', to=to) if to == 'slack' \
                         else robot('fail', Consts.fail_case_reason[0], title=case.id(), color='danger', bot='slp')
-                    # break
+                    break
             if len(test_result.errors) >= 1:
                 Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
                 for case, reason in test_result.errors:
                     robot('slack', reason, case.id(), color='danger', bot='slp', to=to) if to == 'slack' \
                         else robot('fail', reason, case.id(), color='danger', bot='slp')
-                    # break
+                    break
         else:
             Logs.get_log('runCode.log').info('NoRun')
     else:
