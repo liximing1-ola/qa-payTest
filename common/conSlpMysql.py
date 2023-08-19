@@ -246,7 +246,7 @@ class conMysql:
         #     finally:
         #         conMysql.con.commit()
         elif tableName == 'pay_room_money':  # 修改用户pay_room_money爵位数据
-            sql = "update xs_user_profile set pay_room_money=0 where uid={} limit 1".format(uid)
+            sql = "update xs_user_profile set pay_room_money=100 where uid={} limit 1".format(uid)
             try:
                 conMysql.cur.execute(sql)
             except Exception as error:
