@@ -340,7 +340,7 @@ class conMysql:
             finally:
                 conMysql.con.commit()
         elif tableName == 'user_title_new':  #dev开通1个月贵族
-            sql = "update xs_user_title_new set subscribe_time={},growth=10 where uid={} limit 1".format(time.time()+30*60*60,uid)
+            sql = "update xs_user_title_new set subscribe_time={},growth=10,level=10 where uid={} limit 1".format(time.time()+30*60*60,uid)
             try:
                 conMysql.cur.execute(sql)
             except Exception as error:
