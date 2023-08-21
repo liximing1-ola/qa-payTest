@@ -11,7 +11,7 @@ from common.Session import Session
 class updateCode:
 
     @staticmethod
-    def autoGitPull(appInfo, env='dev', bot='BB'):
+    def autoGitPull(appInfo, env='dev', bot='BB', to='slack'):
         if appInfo == 'bb_php':
             gtr_path = config.codeInfo['bb_php_path']
             git_branch = config.codeInfo['bb_git_branch']
@@ -66,6 +66,8 @@ class updateCode:
                     '最新代码提交时间: {}, 上次代码更新时间: {}'.format(times, lastTime))
                 if appInfo == 'pt':
                     robot('slack_pt', log_list[0], bot=bot)  # partying git commit update message
+                elif appInfo == 'slp':
+                    robot('slack', log_list[0], bot=bot, to=to) if to == 'slack' else robot('markdown', log_list[0], bot=bot, to=to)
                 else:
                     robot('slack', log_list[0], bot=bot)  # git commit update message
                 return True

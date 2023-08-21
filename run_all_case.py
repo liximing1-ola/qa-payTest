@@ -115,7 +115,7 @@ def main(appInfo):
     #         Logs.get_log('runCode.log').info('NoRun')
     if appInfo == config.appName['不夜星球']:
         to = 'slack'
-        if updateCode.autoGitPull('slp_php') | updateCode.autoGitPull('slp_common_rpc'):
+        if updateCode.autoGitPull('slp_php', bot='slp', to=to) | updateCode.autoGitPull('slp_common_rpc', bot='slp', to=to):
             updateTime('write', now=str(int(time())))
             test_result = unittest.TextTestRunner(verbosity=3).run(all_case(appInfo))
             Consts.endTime = time()
