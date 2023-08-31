@@ -10,7 +10,7 @@ gs_A_ceo_uid = 200000118  # 15008520001	支付测试0001	A公会长
 gs_B_ceo_uid = 200000120  # 15008520002	支付测试0002	B公会长
 gs_A_uid = gsUid = 200000124  # 15008520003	支付测试0003	A工会-成员
 gs_B_uid = 200000125  # 15008520004	支付测试0004	B工会-成员
-busine_room_uid = 200000125  # 15008520005	商业房房主
+busine_room_uid = 200000126  # 15008520005	商业房房主 不加工会,不签大神
 normal_uid = rewardUid = 200000243  # 15008520006	普通用户	普通用户
 
 gs_A_ceo_rid = gs_soundchat_rid = 100000388  # A工会-工会长 rid  商业-直播厅/business-soundchat
