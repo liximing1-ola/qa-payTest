@@ -99,7 +99,7 @@ class TestPayCreate(unittest.TestCase):
 			total_num = int(data['total_num'])
 			if price >= 10000:  # 大于10000钻+送礼人成长值
 				pay_czz_total += price * CZZ * total_num
-		assert_equal(mysql.selectUserInfoSql("growth", payUid), pay_czz_total * jw['update'] + jw['base'])
+		assert_equal(mysql.selectUserInfoSql("growth", payUid), pay_czz_total + jw['base'])
 
 		# 校验送礼人扣费
 		pay_total_money = 0
