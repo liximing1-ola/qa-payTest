@@ -3,6 +3,7 @@ __author__ = "Wu.Zhenxing"
 __title__ = ""
 __desc__ = "甄选礼盒"
 
+import time
 import unittest
 
 from caseSlp.config import *
@@ -54,6 +55,7 @@ class TestPayCreate(unittest.TestCase):
 		res = post_request_session(pay_url, data, tokenName='slp')
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 1, reason(des, res))
+		time.sleep(5)
 		# 查询 打赏人/收礼人数据,用于计算
 		send_gift_data= mysql.selectZxPayData(payUid)
 		# 校验收礼人气值
