@@ -33,8 +33,7 @@ class TestPayCreate(unittest.TestCase):
 		uid = normal_uid
 		mysql.deleteUserAccountSql('user_title_new', payUid)  # 关闭贵族,还原数据
 		mysql.deleteUserAccountSql('pay_room_money', payUid)  # 修改vip值,还原数据
-		mysql.updateUserInfoSql('user_title_new', payUid)  # 开通贵族
-		mysql.updateUserInfoSql('level', payUid, level=juewei_level['骑士']['level'])  # 修改贵族等级
+		mysql.updateUserInfoSql('user_title_new', payUid, level=juewei_level['亲王']['level'])
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		old_vip = mysql.selectUserInfoSql('pay_room_money', payUid)
@@ -67,8 +66,7 @@ class TestPayCreate(unittest.TestCase):
 		uid = normal_uid
 		mysql.deleteUserAccountSql('user_title_new', payUid)  # 关闭贵族,还原数据
 		mysql.deleteUserAccountSql('pay_room_money', payUid)  # 修改vip值,还原数据
-		mysql.updateUserInfoSql('user_title_new', payUid)  # 开通贵族
-		mysql.updateUserInfoSql('level', payUid, level=juewei_level['男爵']['level'])  # 修改贵族等级
+		mysql.updateUserInfoSql('user_title_new', payUid, level=juewei_level['男爵']['level'])
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		old_vip = mysql.selectUserInfoSql('pay_room_money', payUid)
@@ -101,8 +99,7 @@ class TestPayCreate(unittest.TestCase):
 		uid = normal_uid
 		mysql.deleteUserAccountSql('user_title_new', payUid)  # 关闭贵族,还原数据
 		mysql.deleteUserAccountSql('pay_room_money', payUid)  # 修改vip值,还原数据
-		mysql.updateUserInfoSql('user_title_new', payUid)  # 开通贵族
-		mysql.updateUserInfoSql('level', payUid, level=juewei_level['子爵']['level'])  # 修改贵族等级
+		mysql.updateUserInfoSql('user_title_new', payUid, level=juewei_level['子爵']['level'])
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		old_vip = mysql.selectUserInfoSql('pay_room_money', payUid)
@@ -135,8 +132,7 @@ class TestPayCreate(unittest.TestCase):
 		uid = normal_uid
 		mysql.deleteUserAccountSql('user_title_new', payUid)  # 关闭贵族,还原数据
 		mysql.deleteUserAccountSql('pay_room_money', payUid)  # 修改vip值,还原数据
-		mysql.updateUserInfoSql('user_title_new', payUid)  # 开通贵族
-		mysql.updateUserInfoSql('level', payUid, level=juewei_level['伯爵']['level'])  # 修改贵族等级
+		mysql.updateUserInfoSql('user_title_new', payUid, level=juewei_level['伯爵']['level'])
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		old_vip = mysql.selectUserInfoSql('pay_room_money', payUid)
@@ -169,8 +165,7 @@ class TestPayCreate(unittest.TestCase):
 		uid = normal_uid
 		mysql.deleteUserAccountSql('user_title_new', payUid)  # 关闭贵族,还原数据
 		mysql.deleteUserAccountSql('pay_room_money', payUid)  # 修改vip值,还原数据
-		mysql.updateUserInfoSql('user_title_new', payUid)  # 开通贵族
-		mysql.updateUserInfoSql('level', payUid, level=juewei_level['侯爵']['level'])  # 修改贵族等级
+		mysql.updateUserInfoSql('user_title_new', payUid, level=juewei_level['侯爵']['level'])
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		old_vip = mysql.selectUserInfoSql('pay_room_money', payUid)
@@ -203,8 +198,7 @@ class TestPayCreate(unittest.TestCase):
 		uid = normal_uid
 		mysql.deleteUserAccountSql('user_title_new', payUid)  # 关闭贵族,还原数据
 		mysql.deleteUserAccountSql('pay_room_money', payUid)  # 修改vip值,还原数据
-		mysql.updateUserInfoSql('user_title_new', payUid)  # 开通贵族
-		mysql.updateUserInfoSql('level', payUid, level=juewei_level['公爵']['level'])  # 修改贵族等级
+		mysql.updateUserInfoSql('user_title_new', payUid, level=juewei_level['公爵']['level'])
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		old_vip = mysql.selectUserInfoSql('pay_room_money', payUid)
@@ -237,8 +231,7 @@ class TestPayCreate(unittest.TestCase):
 		uid = normal_uid
 		mysql.deleteUserAccountSql('user_title_new', payUid)  # 关闭贵族,还原数据
 		mysql.deleteUserAccountSql('pay_room_money', payUid)  # 修改vip值,还原数据
-		mysql.updateUserInfoSql('user_title_new', payUid)  # 开通贵族
-		mysql.updateUserInfoSql('level', payUid, level=juewei_level['亲王']['level'])  # 修改贵族等级
+		mysql.updateUserInfoSql('user_title_new', payUid, level=juewei_level['亲王']['level'])
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		old_vip = mysql.selectUserInfoSql('pay_room_money', payUid)
@@ -271,8 +264,7 @@ class TestPayCreate(unittest.TestCase):
 		uid = normal_uid
 		mysql.deleteUserAccountSql('user_title_new', payUid)  # 关闭贵族,还原数据
 		mysql.deleteUserAccountSql('pay_room_money', payUid)  # 修改vip值,还原数据
-		mysql.updateUserInfoSql('user_title_new', payUid)  # 开通贵族
-		mysql.updateUserInfoSql('level', payUid, level=juewei_level['国王']['level'])  # 修改贵族等级
+		mysql.updateUserInfoSql('user_title_new', payUid, level=juewei_level['国王']['level'])
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		old_vip = mysql.selectUserInfoSql('pay_room_money', payUid)
@@ -305,8 +297,7 @@ class TestPayCreate(unittest.TestCase):
 		uid = normal_uid
 		mysql.deleteUserAccountSql('user_title_new', payUid)  # 关闭贵族,还原数据
 		mysql.deleteUserAccountSql('pay_room_money', payUid)  # 修改vip值,还原数据
-		mysql.updateUserInfoSql('user_title_new', payUid)  # 开通贵族
-		mysql.updateUserInfoSql('level', payUid, level=juewei_level['皇帝']['level'])  # 修改贵族等级
+		mysql.updateUserInfoSql('user_title_new', payUid, level=juewei_level['皇帝']['level'])
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		old_vip = mysql.selectUserInfoSql('pay_room_money', payUid)

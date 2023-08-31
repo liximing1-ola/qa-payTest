@@ -306,6 +306,43 @@ def encodeData(
         d = urllib.parse.urlencode(data)
         data = d.replace('+', '').replace('%27', '%22')
         return data
+    if payType == 'zx_box':  # 甄选礼盒
+        p = []
+        uid = ','.join(uids)
+        num_more = len(uids)
+        for i in range(len(uids)):
+            p.append(str(i + 1))
+        position = ','.join(p)
+        data = {
+            "platform": "available",
+            "type": "package",
+            "money": price * num_more * num,  # 单价*人数*单次送礼个数
+            "params": {
+                "rid": rid,
+                "uids": '{}'.format(uid),
+                "positions": "{}".format(position),
+                "position": -1,
+                "giftId": giftId,
+                "giftNum": num,
+                "price": price,
+                "cid": 0,
+                "ctype": "",
+                "duction_money": 0,
+                "version": 2,
+                "num": num * num_more,  # 人数*单次送礼个数
+                "gift_type": "normal",
+                "star": 0,
+                "show_pac_man_guide": 1,
+                "refer": "search:room",
+                "all_mic": 0,
+                "gift_refer": "",
+                "useCoin": -1
+            }
+        }
+        print(data)
+        d = urllib.parse.urlencode(data)
+        data = d.replace('+', '').replace('%27', '%22')
+        return data
     # elif payType == 'title':
     #     data = {
     #         "platform": "available",
@@ -423,9 +460,10 @@ if __name__ == '__main__':
     uid = gsUid
     rid = gs_soundchat_rid
     data = encodeData(
-			rid=rid,
-			payType='package',
-			uid=uid,
-			giftId=giftId['69']['gid']
-		)
+        payType='zx_box',
+        num=2,
+        giftId=zx_box['6']['gid'],
+        price=zx_box['6']['price'],
+        uids=('{}'.format(normal_uid), '{}'.format(gsUid))
+    )
     print(data)
