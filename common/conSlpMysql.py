@@ -133,6 +133,15 @@ class conMysql:
                     return res[0]
             except Exception as error:
                 print(error)
+        elif accountType == 'growth':  # 查询用户成长值
+            sql = "select growth from xs_user_title_new where uid={}".format(uid)
+            try:
+                conMysql.cur.execute(sql)
+                res = conMysql.cur.fetchone()
+                if len(res) > 0:
+                    return res[0]
+            except Exception as error:
+                print(error)
         elif accountType == 'user_index':  # 查询用户salt
             sql = "select salt from xs_user_index where uid = {}".format(uid)
             try:
