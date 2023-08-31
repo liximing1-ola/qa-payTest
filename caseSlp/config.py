@@ -172,42 +172,42 @@ juewei_level = {
 	'男爵': {
 		'level': 20,
 		'update': 100,
-		'base': 200,
+		'base': 20000,
 	},
 	'子爵': {
 		'level': 30,
 		'update': 100,
-		'base': 8000,
+		'base': 800000,
 	},
 	'伯爵': {
 		'level': 40,
 		'update': 105,
-		'base': 2500,
+		'base': 250000,
 	},
 	'侯爵': {
 		'level': 50,
 		'update': 110,
-		'base': 10000,
+		'base': 1000000,
 	},
 	'公爵': {
 		'level': 60,
 		'update': 115,
-		'base': 25000,
+		'base': 2500000,
 	},
 	'亲王': {
 		'level': 70,
 		'update': 120,
-		'base': 65000,
+		'base': 6500000,
 	},
 	'国王': {
 		'level': 80,
 		'update': 125,
-		'base': 150000,
+		'base': 15000000,
 	},
 	'皇帝': {
 		'level': 90,
 		'update': 130,
-		'base': 500000,
+		'base': 50000000,
 	},
 }
 zx_box = {
