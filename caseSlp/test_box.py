@@ -34,6 +34,7 @@ class TestPayCreate(unittest.TestCase):
 		mysql.updateUserMoneyClearSql(payUid, normal_uid, gsUid)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		mysql.deleteUserAccountSql('user_title_new', payUid)  # 关闭贵族,还原数据
+		mysql.updateUserGodSql(gsUid, 1)
 		# 清除打赏流水
 		mysql.deleteUserAccountSql('pay_change', payUid)
 		# 清空人气值
@@ -47,6 +48,7 @@ class TestPayCreate(unittest.TestCase):
 
 		data = encodeData(
 			payType='zx_box',
+			rid=gs_A_ceo_uid,
 			num=10,
 			giftId=zx_box['6']['gid'],
 			price=zx_box['6']['price'],
