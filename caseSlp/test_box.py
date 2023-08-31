@@ -55,15 +55,7 @@ class TestPayCreate(unittest.TestCase):
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 1, reason(des, res))
 		# 查询 打赏人/收礼人数据,用于计算
-		# send_gift_data= mysql.selectZxPayData(payUid)
-		send_gift_data = [
-			{'to_uid': '200000048', 'gid': '210781', 'total_num': 1.0},
-			{'to_uid': '200000048', 'gid': '210777', 'total_num': 2.0},
-			{'to_uid': '200000048', 'gid': '210786', 'total_num': 1.0},
-			{'to_uid': '200000050', 'gid': '210777', 'total_num': 2.0},
-			{'to_uid': '200000050', 'gid': '210781', 'total_num': 1.0},
-			{'to_uid': '200000050', 'gid': '210783', 'total_num': 1.0}
-		]
+		send_gift_data= mysql.selectZxPayData(payUid)
 		# 校验收礼人气值
 		normal_rq_total = 0
 		gs_rq_total = 0
