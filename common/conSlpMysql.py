@@ -388,14 +388,14 @@ class conMysql:
             jw_config = {
                 "0": 0,
                 "10": 0,
-                "20": 200,
-                "30": 800,
-                "40": 2500,
-                "50": 10000,
-                "60": 25000,
-                "70": 65000,
-                "80": 150000,
-                "90": 500000,
+                "20": 20000,
+                "30": 80000,
+                "40": 250000,
+                "50": 1000000,
+                "60": 2500000,
+                "70": 6500000,
+                "80": 15000000,
+                "90": 50000000,
             }
             subscribe_time = int(time.time()) + 1 * 24 * 60 * 60
             sql = f"""update xs_user_title_new set level={level},growth={jw_config[str(level)]},effective_value={jw_config[str(level)]},subscribe_time={subscribe_time} where uid ={uid};"""
