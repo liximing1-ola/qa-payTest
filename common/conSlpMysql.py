@@ -26,6 +26,7 @@ class conMysql:
     con.ping(reconnect=True)
     cur = con.cursor()
 
+
     # 查询用户账户信息
     @staticmethod
     def selectUserInfoSql(accountType, uid="200000126", money_type='money_cash_b', cid=263, payuid="200000128"):
@@ -640,8 +641,9 @@ class conMysql:
         SELECT JSON_EXTRACT(reason, '$.to') AS to_uid,JSON_EXTRACT(reason, '$.gid') AS gid,SUM(JSON_EXTRACT(reason, '$.num')) AS total_num FROM xs_pay_change WHERE uid = {uid} AND JSON_UNQUOTE(JSON_EXTRACT(reason, '$.obr')) IS NOT NULL GROUP BY gid, to_uid ORDER BY to_uid;
         """
         try:
-            conMysql.cur.execute(sql)
-            res = conMysql.cur.fetall()
+            cur = conMysql.con.cursor(cursor=pymysql.cursors.DictCursor)
+            cur.execute(sql)
+            res = cur.fetchall()
             if res is None:
                 return 0
             else:
