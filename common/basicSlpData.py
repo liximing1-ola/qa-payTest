@@ -6,7 +6,7 @@ from caseSlp.config import *
 def encodeData(
         payType='package',
         money=giftId['69']['price'] * default_num,
-        rid=normal_rid,  # 商业标准9麦
+        rid=business_room_rid,  # 商业标准9麦
         uid=rewardUid,
         giftId=giftId['69']['gid'],
         giftType='normal',

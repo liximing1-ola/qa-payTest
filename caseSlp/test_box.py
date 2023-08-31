@@ -48,8 +48,7 @@ class TestPayCreate(unittest.TestCase):
 
 		data = encodeData(
 			payType='zx_box',
-			rid=gs_A_ceo_uid,
-			num=10,
+			num=1000,
 			giftId=zx_box['6']['gid'],
 			price=zx_box['6']['price'],
 			uids=('{}'.format(normal_uid), '{}'.format(gsUid))

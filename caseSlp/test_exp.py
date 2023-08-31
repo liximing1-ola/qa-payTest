@@ -29,7 +29,7 @@ class TestPayCreate(unittest.TestCase):
 		3.校验接口状态和返回值数据
 		4.检查被打赏者余额，预期为：1000 * 0.6 =600 (money_cash)
 		"""
-		rid = normal_rid
+		rid = business_room_rid
 		uid = normal_uid
 		mysql.deleteUserAccountSql('user_title_new', payUid)  # 关闭贵族,还原数据
 		mysql.deleteUserAccountSql('pay_room_money', payUid)  # 修改vip值,还原数据
@@ -62,7 +62,7 @@ class TestPayCreate(unittest.TestCase):
 		3.校验接口状态和返回值数据
 		4.检查被打赏者余额，预期为：1000 * 0.6 =600 (money_cash)
 		"""
-		rid = normal_rid
+		rid = business_room_rid
 		uid = normal_uid
 		mysql.deleteUserAccountSql('user_title_new', payUid)  # 关闭贵族,还原数据
 		mysql.deleteUserAccountSql('pay_room_money', payUid)  # 修改vip值,还原数据
@@ -95,7 +95,7 @@ class TestPayCreate(unittest.TestCase):
 		3.校验接口状态和返回值数据
 		4.检查被打赏者余额，预期为：1000 * 0.6 =600 (money_cash)
 		"""
-		rid = normal_rid
+		rid = business_room_rid
 		uid = normal_uid
 		mysql.deleteUserAccountSql('user_title_new', payUid)  # 关闭贵族,还原数据
 		mysql.deleteUserAccountSql('pay_room_money', payUid)  # 修改vip值,还原数据
@@ -128,7 +128,7 @@ class TestPayCreate(unittest.TestCase):
 		3.校验接口状态和返回值数据
 		4.检查被打赏者余额，预期为：1000 * 0.6 =600 (money_cash)
 		"""
-		rid = normal_rid
+		rid = business_room_rid
 		uid = normal_uid
 		mysql.deleteUserAccountSql('user_title_new', payUid)  # 关闭贵族,还原数据
 		mysql.deleteUserAccountSql('pay_room_money', payUid)  # 修改vip值,还原数据
@@ -161,7 +161,7 @@ class TestPayCreate(unittest.TestCase):
 		3.校验接口状态和返回值数据
 		4.检查被打赏者余额，预期为：1000 * 0.6 =600 (money_cash)
 		"""
-		rid = normal_rid
+		rid = business_room_rid
 		uid = normal_uid
 		mysql.deleteUserAccountSql('user_title_new', payUid)  # 关闭贵族,还原数据
 		mysql.deleteUserAccountSql('pay_room_money', payUid)  # 修改vip值,还原数据
@@ -194,7 +194,7 @@ class TestPayCreate(unittest.TestCase):
 		3.校验接口状态和返回值数据
 		4.检查被打赏者余额，预期为：1000 * 0.6 =600 (money_cash)
 		"""
-		rid = normal_rid
+		rid = business_room_rid
 		uid = normal_uid
 		mysql.deleteUserAccountSql('user_title_new', payUid)  # 关闭贵族,还原数据
 		mysql.deleteUserAccountSql('pay_room_money', payUid)  # 修改vip值,还原数据
@@ -227,7 +227,7 @@ class TestPayCreate(unittest.TestCase):
 		3.校验接口状态和返回值数据
 		4.检查被打赏者余额，预期为：1000 * 0.6 =600 (money_cash)
 		"""
-		rid = normal_rid
+		rid = business_room_rid
 		uid = normal_uid
 		mysql.deleteUserAccountSql('user_title_new', payUid)  # 关闭贵族,还原数据
 		mysql.deleteUserAccountSql('pay_room_money', payUid)  # 修改vip值,还原数据
@@ -260,7 +260,7 @@ class TestPayCreate(unittest.TestCase):
 		3.校验接口状态和返回值数据
 		4.检查被打赏者余额，预期为：1000 * 0.6 =600 (money_cash)
 		"""
-		rid = normal_rid
+		rid = business_room_rid
 		uid = normal_uid
 		mysql.deleteUserAccountSql('user_title_new', payUid)  # 关闭贵族,还原数据
 		mysql.deleteUserAccountSql('pay_room_money', payUid)  # 修改vip值,还原数据
@@ -293,7 +293,7 @@ class TestPayCreate(unittest.TestCase):
 		3.校验接口状态和返回值数据
 		4.检查被打赏者余额，预期为：1000 * 0.6 =600 (money_cash)
 		"""
-		rid = normal_rid
+		rid = business_room_rid
 		uid = normal_uid
 		mysql.deleteUserAccountSql('user_title_new', payUid)  # 关闭贵族,还原数据
 		mysql.deleteUserAccountSql('pay_room_money', payUid)  # 修改vip值,还原数据
