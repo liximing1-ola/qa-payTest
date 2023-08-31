@@ -297,11 +297,10 @@ class TestPayCreate(unittest.TestCase):
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money)  # 不扣费
 		case_list[des] = result
 
-	def test_010(self, des='***商业房-非直播,礼物打赏普通用户(不签署大神且是房主)到账60%(mc)'):
+	def test_010(self, des='***商业房-非直播,礼物打赏普通用户(不签署大神,不加工会且是商业房房主)到账60%(mc)'):
 		"""
 		用例描述：
-		***商业房-非直播,礼物打赏普通用户(不签署大神且是房主)到账60%(mc)
-		脚本步骤：
+		***商业房-非直播,礼物打赏普通用户(不签署大神,不加工会且是商业房房主)到账60%(mc)		脚本步骤：
 		1.构造打赏者和被打赏者数据
 		2.房间打赏礼物（打赏100分）
 		3.校验接口状态和返回值数据
@@ -309,7 +308,7 @@ class TestPayCreate(unittest.TestCase):
 		"""
 		rid = business_room_rid
 		assert_equal(mysql.checkRidFactoryType(rid), "business-friend")  # 确认rid不是直播房
-		uid = normal_uid
+		uid = busine_room_uid
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.updateMoneySql(uid)
 		mysql.updateUserGodSql(uid, 0)
