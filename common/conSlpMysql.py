@@ -667,7 +667,7 @@ class conMysql:
         try:
             conMysql.cur.execute(sql)
             res = conMysql.cur.fetchone()
-            if len(res) > 0:
+            if res:
                 return True
             else:
                 return False
