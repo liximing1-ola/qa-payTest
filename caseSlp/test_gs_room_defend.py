@@ -30,8 +30,10 @@ class TestPayCreate(unittest.TestCase):
 		 6.检查被打赏者余额.预期为：99900 * 0.6 = 59940
 		 """
 		uid = gsUid
+		assert_equal(mysql.checkUserBroker(uid), True)  # 确认 uid是工会成员
 		rid = gs_soundchat_rid
 		assert_equal(mysql.checkRidFactoryType(rid), "business-soundchat")  # 确认rid是直播房
+		assert_equal(mysql.checkUserBroker(uid), True)  # 确认 uid是工会成员
 
 		# test_uid = self.live_role['pack_cal_uid']
 		# ceo_uid = self.live_role['pack_ceo']

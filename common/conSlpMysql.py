@@ -563,31 +563,31 @@ class conMysql:
         finally:
             conMysql.con.commit()
 
-    # 查询工会用户
-    @staticmethod
-    def checkUserBroker(uid, bid=136594717):
-        sql = 'select id from xs_broker_user where uid={}'.format(uid)
-        try:
-            conMysql.cur.execute(sql)
-            res = conMysql.cur.fetchone()
-            if res is None:
-                sql = "insert into xs_broker_user(bid, uid, state) values ({}, {}, 1)".format(bid, uid)
-                try:
-                    conMysql.cur.execute(sql)
-                except Exception as error:
-                    conMysql.con.rollback()
-                    print('insert fail', error)
-            else:
-                sql = 'update xs_broker_user set uid={}, bid={} where id={}'.format(uid, bid, res[0])
-                try:
-                    conMysql.cur.execute(sql)
-                except Exception as error:
-                    conMysql.con.rollback()
-                    print('update fail', error)
-        except Exception as error:
-            print(error)
-        finally:
-            conMysql.con.commit()
+    # # 查询工会用户
+    # @staticmethod
+    # def checkUserBroker(uid, bid=136594717):
+    #     sql = 'select id from xs_broker_user where uid={}'.format(uid)
+    #     try:
+    #         conMysql.cur.execute(sql)
+    #         res = conMysql.cur.fetchone()
+    #         if res is None:
+    #             sql = "insert into xs_broker_user(bid, uid, state) values ({}, {}, 1)".format(bid, uid)
+    #             try:
+    #                 conMysql.cur.execute(sql)
+    #             except Exception as error:
+    #                 conMysql.con.rollback()
+    #                 print('insert fail', error)
+    #         else:
+    #             sql = 'update xs_broker_user set uid={}, bid={} where id={}'.format(uid, bid, res[0])
+    #             try:
+    #                 conMysql.cur.execute(sql)
+    #             except Exception as error:
+    #                 conMysql.con.rollback()
+    #                 print('update fail', error)
+    #     except Exception as error:
+    #         print(error)
+    #     finally:
+    #         conMysql.con.commit()
 
     # # 查询用户分成比
     # @staticmethod
@@ -660,7 +660,21 @@ class conMysql:
         except Exception as error:
             print(error)
 
+    @staticmethod
+    def checkUserBroker(uid):
+        """校验是否是公会成员"""
+        sql = f'select * from xs_broker_user where uid={uid} and deleted=0;'
+        try:
+            conMysql.cur.execute(sql)
+            res = conMysql.cur.fetchone()
+            if len(res) > 0:
+                return True
+            else:
+                return False
+        except Exception as error:
+            print(error)
 
 if __name__ == '__main__':
-    data = conMysql().selectZxPayData("200000216")
+    mysql = conMysql()
+    data = mysql.updateUserInfoSql('user_title_new', '200000048', level=40)
     print(data)

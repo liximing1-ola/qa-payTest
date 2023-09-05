@@ -31,6 +31,7 @@ class TestPayCreate(unittest.TestCase):
 		rid = gs_soundchat_rid
 		assert_equal(mysql.checkRidFactoryType(rid), "business-soundchat")  # 确认rid是直播房
 		uid = gsUid
+		assert_equal(mysql.checkUserBroker(uid), True)  # 确认 uid是工会成员
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.updateMoneySql(uid)
 		mysql.updateUserGodSql(uid, 1)
@@ -63,6 +64,7 @@ class TestPayCreate(unittest.TestCase):
 		rid = gs_soundchat_rid
 		assert_equal(mysql.checkRidFactoryType(rid), "business-soundchat")  # 确认rid是直播房
 		uid = gsUid
+		assert_equal(mysql.checkUserBroker(uid), True)  # 确认 uid是工会成员
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.updateMoneySql(uid)
 		mysql.updateUserGodSql(uid, 1)
@@ -95,6 +97,7 @@ class TestPayCreate(unittest.TestCase):
 		rid = gs_soundchat_rid
 		assert_equal(mysql.checkRidFactoryType(rid), "business-soundchat")  # 确认rid是直播房
 		uid = gsUid
+		assert_equal(mysql.checkUserBroker(uid), True)  # 确认 uid是工会成员
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.updateMoneySql(uid)
 		mysql.updateUserGodSql(uid, 1)
@@ -131,6 +134,7 @@ class TestPayCreate(unittest.TestCase):
 		rid = gs_friend_rid
 		assert_equal(mysql.checkRidFactoryType(rid), "business-friend")  # 确认rid不是直播房
 		uid = gs_B_uid
+		assert_equal(mysql.checkUserBroker(uid), True)  # 确认 uid是工会成员
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.updateMoneySql(uid)
 		mysql.updateUserGodSql(uid, 1)
@@ -163,6 +167,7 @@ class TestPayCreate(unittest.TestCase):
 		rid = gs_friend_rid
 		assert_equal(mysql.checkRidFactoryType(rid), "business-friend")  # 确认rid不是直播房
 		uid = gs_B_uid
+		assert_equal(mysql.checkUserBroker(uid), True)  # 确认 uid是工会成员
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.updateMoneySql(uid)
 		mysql.updateUserGodSql(uid, 1)
@@ -195,6 +200,7 @@ class TestPayCreate(unittest.TestCase):
 		rid = gs_friend_rid
 		assert_equal(mysql.checkRidFactoryType(rid), "business-friend")  # 确认rid不是直播房
 		uid = gs_B_uid
+		assert_equal(mysql.checkUserBroker(uid), True)  # 确认 uid是工会成员
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.updateMoneySql(uid)
 		mysql.updateUserGodSql(uid, 1)
@@ -230,6 +236,7 @@ class TestPayCreate(unittest.TestCase):
 		"""
 		rid = mysql.selectUserInfoSql('vip')
 		uid = gsUid
+		assert_equal(mysql.checkUserBroker(uid), True)  # 确认 uid是工会成员
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.updateMoneySql(uid)
 		mysql.updateUserGodSql(uid, 1)
@@ -261,6 +268,7 @@ class TestPayCreate(unittest.TestCase):
 		"""
 		rid = mysql.selectUserInfoSql('vip')
 		uid = gsUid
+		assert_equal(mysql.checkUserBroker(uid), True)  # 确认 uid是工会成员
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.updateMoneySql(uid)
 		mysql.updateUserGodSql(uid, 1)
@@ -292,6 +300,7 @@ class TestPayCreate(unittest.TestCase):
 		"""
 		rid = mysql.selectUserInfoSql('vip')
 		uid = gsUid
+		assert_equal(mysql.checkUserBroker(uid), True)  # 确认 uid是工会成员
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.updateMoneySql(uid)
 		mysql.updateUserGodSql(uid, 1)
@@ -328,6 +337,7 @@ class TestPayCreate(unittest.TestCase):
 		rid = gs_A_rid
 		assert_equal(mysql.checkRidFactoryType(rid), "business-soundchat")  # 确认rid是直播房
 		uid = gs_A_uid
+		assert_equal(mysql.checkUserBroker(uid), True)  # 确认 uid是工会成员
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.updateMoneySql(uid)
 		mysql.updateUserGodSql(uid, 1)
@@ -360,6 +370,7 @@ class TestPayCreate(unittest.TestCase):
 		rid = gs_A_ceo_rid
 		assert_equal(mysql.checkRidFactoryType(rid), "business-soundchat")  # 确认rid是直播房
 		uid = gs_A_uid
+		assert_equal(mysql.checkUserBroker(uid), True)  # 确认 uid是工会成员
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.updateMoneySql(uid)
 		mysql.updateUserGodSql(uid, 1)
@@ -392,6 +403,7 @@ class TestPayCreate(unittest.TestCase):
 		rid = gs_A_rid
 		assert_equal(mysql.checkRidFactoryType(rid), "business-soundchat")  # 确认rid是直播房
 		uid = gs_A_uid
+		assert_equal(mysql.checkUserBroker(uid), True)  # 确认 uid是工会成员
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.updateMoneySql(uid)
 		mysql.updateUserGodSql(uid, 0)
@@ -424,6 +436,7 @@ class TestPayCreate(unittest.TestCase):
 		rid = gs_A_ceo_rid
 		assert_equal(mysql.checkRidFactoryType(rid), "business-soundchat")  # 确认rid是直播房
 		uid = gs_A_uid
+		assert_equal(mysql.checkUserBroker(uid), True)  # 确认 uid是工会成员
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.updateMoneySql(uid)
 		mysql.updateUserGodSql(uid, 0)
@@ -456,6 +469,7 @@ class TestPayCreate(unittest.TestCase):
 		rid = gs_B_rid
 		assert_equal(mysql.checkRidFactoryType(rid), "business-friend")  # 确认rid不是直播房
 		uid = gs_B_uid
+		assert_equal(mysql.checkUserBroker(uid), True)  # 确认 uid是工会成员
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.updateMoneySql(uid)
 		mysql.updateUserGodSql(uid, 1)
@@ -488,6 +502,7 @@ class TestPayCreate(unittest.TestCase):
 		rid = gs_B_ceo_rid
 		assert_equal(mysql.checkRidFactoryType(rid), "business-friend")  # 确认rid不是直播房
 		uid = gs_B_uid
+		assert_equal(mysql.checkUserBroker(uid), True)  # 确认 uid是工会成员
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.updateMoneySql(uid)
 		mysql.updateUserGodSql(uid, 1)
@@ -520,6 +535,7 @@ class TestPayCreate(unittest.TestCase):
 		rid = gs_B_rid
 		assert_equal(mysql.checkRidFactoryType(rid), "business-friend")  # 确认rid不是直播房
 		uid = gs_B_uid
+		assert_equal(mysql.checkUserBroker(uid), True)  # 确认 uid是工会成员
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.updateMoneySql(uid)
 		mysql.updateUserGodSql(uid, 0)
@@ -551,6 +567,7 @@ class TestPayCreate(unittest.TestCase):
 		rid = gs_B_ceo_rid
 		assert_equal(mysql.checkRidFactoryType(rid), "business-friend")  # 确认rid不是直播房
 		uid = gs_B_uid
+		assert_equal(mysql.checkUserBroker(uid), True)  # 确认 uid是工会成员
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.updateMoneySql(uid)
 		mysql.updateUserGodSql(uid, 0)

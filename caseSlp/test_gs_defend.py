@@ -32,6 +32,7 @@ class TestPayCreate(unittest.TestCase):
 		5.检查被打赏者余额,预期：52000 * 0.62 = 32240
 		"""
 		uid = gsUid
+		assert_equal(mysql.checkUserBroker(uid), True)  # 确认 uid是工会成员
 		mysql.updateMoneySql(payUid, money=default_money)
 		mysql.updateMoneySql(uid)
 		mysql.updateUserGodSql(uid, 1)
@@ -61,6 +62,7 @@ class TestPayCreate(unittest.TestCase):
 		 5.检查被打赏者余额,预期： 99900 * 0.62 = 61938
 		 """
 		uid = gsUid
+		assert_equal(mysql.checkUserBroker(uid), True)  # 确认 uid是工会成员
 		mysql.updateMoneySql(payUid, money=default_money)
 		mysql.updateMoneySql(uid)
 		mysql.updateUserGodSql(uid, 1)
@@ -90,6 +92,7 @@ class TestPayCreate(unittest.TestCase):
 		 4.检查打赏者余额，预期：40000 - 36000 = 4000
 		 """
 		uid = gsUid
+		assert_equal(mysql.checkUserBroker(uid), True)  # 确认 uid是工会成员
 		mysql.updateMoneySql(payUid, money=default_money)
 		mysql.updateMoneySql(uid)
 		mysql.updateUserGodSql(uid, 1)

@@ -309,7 +309,8 @@ class TestPayCreate(unittest.TestCase):
 		"""
 		rid = business_room_rid
 		assert_equal(mysql.checkRidFactoryType(rid), "business-friend")  # 确认rid不是直播房
-		uid = busine_room_uid
+		uid = business_room_uid
+		assert_equal(mysql.checkUserBroker(uid), False)  # 确认 uid是工会成员
 		mysql.updateMoneySql(payUid, default_money)
 		mysql.updateMoneySql(uid)
 		mysql.updateUserGodSql(uid, 0)

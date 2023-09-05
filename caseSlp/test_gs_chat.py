@@ -30,6 +30,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查打赏者余额.预期为：1000 - 50 = 950
 		"""
 		uid = gsUid
+		assert_equal(mysql.checkUserBroker(uid), True)  # 确认 uid是工会成员
 		mysql.updateMoneySql(payUid, money=default_money)
 		mysql.updateUserMoneyClearSql(uid)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
