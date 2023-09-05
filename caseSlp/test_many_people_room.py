@@ -31,6 +31,10 @@ class TestPayCreate(unittest.TestCase):
 		"""
 		rid = gs_B_ceo_rid
 		uids = tuple([str(i) for i in [gs_A_uid, gs_B_uid, normal_uid]])
+		assert_equal(mysql.checkUserBroker(gs_A_uid), True)  # 确认 uid是工会成员
+		assert_equal(mysql.checkUserBroker(gs_B_uid), True)  # 确认 uid是工会成员
+		assert_equal(mysql.checkUserBroker(normal_uid), False)  # 确认 uid不是工会成员
+
 		num = 5
 		mysql.updateUserGodSql(gs_A_uid, 0)
 		mysql.updateUserGodSql(gs_B_uid, 1)

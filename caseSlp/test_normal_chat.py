@@ -29,6 +29,8 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：50 * 0.6 = 30(mcb)
         5.检查打赏者余额.预期为：1000 - 50 = 950
 		"""
+		uid = rewardUid
+		assert_equal(mysql.checkUserBroker(uid), False)  # 确认 uid不是工会成员
 		mysql.updateMoneySql(payUid, money=default_money)
 		mysql.updateUserMoneyClearSql(normal_uid)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
@@ -36,7 +38,7 @@ class TestPayCreate(unittest.TestCase):
 		# mysql.deleteUserAccountSql('chatroom', normal_uid)
 		data = encodeData(payType='chat-gift',
 		                  num=default_num,
-		                  uid=rewardUid,
+		                  uid=uid,
 		                  giftId=giftId['69']['gid'])
 		res = post_request_session(pay_url, data, tokenName='slp')
 		assert_code(res['code'])
