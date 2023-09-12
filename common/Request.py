@@ -153,7 +153,7 @@ def post_request_session(url, data, tokenName='dev'):
 #     return response_dicts
 if __name__ == '__main__':
     header = {
-        'user-agent': 'Mozilla/5.0 (Linux; Android 11; CPH1969 Build/RP1A.200720.011; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/115.0.5790.138 Mobile Safari/537.36 / Xs android V2.0.0.0 / Js V1.0.0.0 / Login V1691131402',
+        'user-agent': 'Mozilla/5.0 (Linux; Android 11; CPH1969 Build/RP1A.200720.011; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/115.0.5790.138 Mobile Safari/537.36 / Xs android V5.0.31.0 / Js V1.0.0.0 / Login V1691131402',
         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8', 'Connection': 'close',
         'user-token': 'a4d3klcO2pbZg0__2BvGlU7jGTRCAPyfVdQ7nySzDPs0PZEi7rbX8VC__2BZ0QoEz2auiTnhYEWu1kYG7s7F7G__2BinZ7ZIT9QxfQ2MFc0LrVe12GOBdiICefxz82aloSw'}
     url = 'https://116.62.125.230/pay/create?package=com.yhl.sleepless.android'
