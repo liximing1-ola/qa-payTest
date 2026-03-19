@@ -37,8 +37,7 @@ class TestPayCreate(unittest.TestCase):
         mysql.checkUserXsBroker(ceo_uid)  # 公会长
         mysql.updateMoneySql(config.payUid, money=1000)
         mysql.updateUserMoneyClearSql(test_uid, ceo_uid)
-        data = encodeData(payType='package',
-                          rid=self.live_role['live_rid'],
+        data = encodeData(rid=self.live_role['live_rid'],
                           uid=test_uid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
@@ -68,8 +67,7 @@ class TestPayCreate(unittest.TestCase):
         mysql.checkUserXsBroker(ceo_uid)
         mysql.updateMoneySql(config.payUid, money=700)
         mysql.updateUserMoneyClearSql(test_uid, ceo_uid)
-        data = encodeData(payType='package',
-                          money=600,
+        data = encodeData(money=600,
                           rid=self.live_role['live_rid'],
                           giftId=config.giftId['46'],
                           uid=test_uid,
@@ -193,8 +191,7 @@ class TestPayCreate(unittest.TestCase):
         mysql.updateMoneySql(config.payUid, money=1000)
         mysql.updateUserMoneyClearSql(test_uid, ceo_uid)
         mysql.checkUserXsMentorLevel(test_uid, level=1)  # 师父等级改为非一代宗师
-        data = encodeData(payType='package',
-                          rid=self.live_role['live_rid'],
+        data = encodeData(rid=self.live_role['live_rid'],
                           uid=test_uid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
@@ -217,8 +214,7 @@ class TestPayCreate(unittest.TestCase):
         """
         mysql.updateMoneySql(config.payUid, money=100)
         mysql.updateMoneySql(config.rewardUid)
-        data = encodeData(payType='package',
-                          giftId=config.giftId['5'],
+        data = encodeData(giftId=config.giftId['5'],
                           rid=self.live_role['live_rid'],
                           money=100)
         res = post_request_session(config.pay_url, data)
@@ -242,7 +238,7 @@ class TestPayCreate(unittest.TestCase):
         test_uid = self.live_role['pack_cal_uid']
         mysql.updateMoneySql(config.payUid, money=1000)
         mysql.updateMoneySql(test_uid)
-        data = encodeData(payType='package', uid=test_uid)
+        data = encodeData(uid=test_uid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))

@@ -19,10 +19,10 @@ def robot():
     url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e317861a-d1ec-4ac4-af96-9d4b8f12d9d6'
     # url= 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=ddf98ffd-fd35-42be-8362-5e485b08226a'  # 测试用
     headers = {'Content-Type': 'application/json'}
-    reason = {'【曼哈顿博士】': '{}'.format(random.choice(reason_list))}
+    reason = {'【】': '{}'.format(random.choice(reason_list))}
     now = time.strftime('%H:%M', time.localtime(time.time()))
-    title = "下午茶时间到:当前时间-{}, 放松一下".format(now)
-    des = '跪求大哥赞助'
+    title = "".format(now)
+    des = ''
     data = {
         "msgtype": "news",
         "news": {

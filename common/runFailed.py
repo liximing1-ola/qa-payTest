@@ -70,7 +70,7 @@ class ClassD(unittest.TestCase):
                             traceback_info = str()
                             for trace_line in traceback.format_exception(trace[0], trace[1], trace[2], 3):
                                 traceback_info += trace_line
-                            print(traceback_info, error)  # 输出组装错误信息
+                            print(traceback_info, error)  # error log
                             args[0].tearDown()
                             args[0].setUp()
                         else:

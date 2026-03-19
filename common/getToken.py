@@ -85,6 +85,8 @@ class getToken:
 
 
 if __name__ == "__main__":
-    get_token = getToken(100287189, getToken.get_salt())
-    print(get_token.get_token())
-    #  处理礼物打赏并发场景
+    get_token1 = getToken(100287189, getToken.get_salt())
+    get_token2 = getToken(100797678, getToken.get_salt())
+    print(get_token1.get_token())
+    print(get_token2.get_token())
+

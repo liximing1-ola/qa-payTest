@@ -17,19 +17,19 @@ header_starify = {
 	'user-imei': 'f576d6f31f83dea5',
 	'user-language': 'zh_CN',
 	'accept-encoding': 'gzip',
-	'host': '116.62.125.230',
+	'host': '126.82.145.250',
 	'content-type': 'application/x-www-form-urlencoded; charset=utf-8'
 }
 
 query_starify = {
 	'package': "com.starify.ola.android",
-	'_ipv': '1',
+	'_ipv': '8',
 	'_platform': "android",
-	'_index': '1',
-	'_model': "vivo 1915",
-	'_timestamp': "1577808000",
+	'_index': '4',
+	'_model': "meizu 1915",
+	'_timestamp': "15778900870",
 	'_abi': "arm64-v8a",
-	'format': 'json',
-	'_versionName': '1.0.5.2',
-	'_versionCode': '100005002',
+	'format': 'pb',
+	'_versionName': '2.0.3.2',
+	'_versionCode': '108905002',
 }

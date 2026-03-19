@@ -26,7 +26,6 @@ class conMysql:
     con.ping(reconnect=True)
     cur = con.cursor()
 
-
     # 查询用户账户信息
     @staticmethod
     def selectUserInfoSql(accountType, uid="200000126", money_type='money_cash_b', cid=263, payuid="200000128"):
@@ -674,7 +673,7 @@ class conMysql:
         except Exception as error:
             print(error)
 
+
 if __name__ == '__main__':
     mysql = conMysql()
-    data = mysql.updateUserInfoSql('user_title_new', '200000048', level=40)
-    print(data)
+    mysql.updateUserInfoSql('user_title_new', '200000048', level=40)

@@ -193,7 +193,7 @@ class TestPayCreate(unittest.TestCase):
 		                  giftId=giftId['69']['gid'])
 		res = post_request_session(pay_url, data, tokenName='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_body(res['body'],'success', 1, reason(des, res))
 		# money>mcb>mc
 		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money'), 0)
 		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money_cash_b'), giftId['69']['price'])
@@ -242,7 +242,7 @@ class TestPayCreate(unittest.TestCase):
 		4.检查预期返回msg，预期：支付失败，提示Toast
 		5.检查被打赏者余额,预期：0
 		"""
-		num=3
+		num = 3
 		mysql.updateUserMoneyClearSql(payUid, normal_uid)
 		mysql.updateMoneySql(payUid,
 		                     money=giftId['69']['price'],

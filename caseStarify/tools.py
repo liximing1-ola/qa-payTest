@@ -23,8 +23,8 @@ def merge_dicts(*args):
 def create_sign(query, salt="!rilegoule#"):
     """
 	生成sign
-	:param query: 路径参数,以dict形式传递
-	:param salt: 盐,可能不一样
+	:param query: 路径参数 dict
+	:param salt:
 	:return:
 	"""
     keys = ['_abi', '_index', '_ipv', '_model', '_platform', '_timestamp', 'format', 'package']

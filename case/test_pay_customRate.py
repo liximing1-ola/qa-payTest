@@ -36,8 +36,7 @@ class TestPayCreate(unittest.TestCase):
         mysql.updateUserMoneyClearSql(self.customUid, self.ceoUid)
         mysql.checkUserBroker(self.customUid, bid=self.ceoUid)  # bid=100500205 被打赏者加入工会
         mysql.checkBrokerUserRate(self.customUid, self.ceoUid, rate=50)  # config.bbc_broker_user_rate 设置分成比
-        data = encodeData(payType='package',
-                          money=100,
+        data = encodeData(money=100,
                           uid=self.customUid,
                           giftId=config.giftId['5'])
         res = post_request_session(config.pay_url, data)
@@ -124,8 +123,7 @@ class TestPayCreate(unittest.TestCase):
         mysql.updateMoneySql(config.payUid, money=30, money_cash=30, money_cash_b=30, money_b=10)
         mysql.updateUserMoneyClearSql(self.pack_cal_uid, self.ceoUid)
         mysql.checkBrokerUserRate(self.pack_cal_uid, self.ceoUid, rate=70)
-        data = encodeData(payType='package',
-                          money=100,
+        data = encodeData(money=100,
                           rid=config.live_role['live_rid'],
                           uid=self.pack_cal_uid,
                           giftId=config.giftId['5'])

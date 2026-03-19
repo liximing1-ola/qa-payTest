@@ -91,7 +91,7 @@ class conMysql:
         if tableName == 'user_commodity':  # 清除用户背包数据
             sql = f"delete from xs_user_commodity where uid={uid}"
             conMysql.sql_execute(sql)
-        if tableName == 'user_work_reward':  # 清除用户打赏作品的标记
+        if tableName == 'user_work_reward':  # 清除用户打赏作品的标记 清除用户打赏作品
             sql = f"delete from xs_user_work_reward where uid={uid} and wid={wid};"
             conMysql.sql_execute(sql)
 

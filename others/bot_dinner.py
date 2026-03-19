@@ -64,9 +64,6 @@ def getImage(mode=2):
         res = requests.get(url_dog)
         res = res.json()
         return res[0]
-    elif mode == 3:
-        icon = random.randint(1, 600)
-        return 'http://xs-image.oss-cn-hangzhou.aliyuncs.com/static/gift_big/{}.png'.format(icon)
 
 
 if __name__ == '__main__':

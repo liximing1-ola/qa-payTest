@@ -80,8 +80,7 @@ class TestPayCreate(unittest.TestCase):
         """
         mysql.updateUserMoneyClearSql(config.payUid, config.rewardUid)
         cid = int(mysql.selectUserInfoSql('id_commodity', config.payUid, cid=self.gift_cid['gift_340']))
-        data = encodeData(payType='package',
-                          rid=config.live_role['auto_rid'],
+        data = encodeData(rid=config.live_role['auto_rid'],
                           giftId=config.giftId['54'],
                           money=9900,
                           package_cid=cid,
@@ -108,8 +107,7 @@ class TestPayCreate(unittest.TestCase):
         """
         mysql.updateUserMoneyClearSql(config.payUid, config.rewardUid)
         cid = int(mysql.selectUserInfoSql('id_commodity', config.payUid, cid=self.gift_cid['gift_340']))
-        data = encodeData(payType='package',
-                          rid=config.live_role['auto_rid'],
+        data = encodeData(rid=config.live_role['auto_rid'],
                           giftId=config.giftId['54'],
                           money=99000,
                           package_cid=cid,

@@ -15,7 +15,7 @@ def assert_code(actual_code, expected_code=200):
     :param expected_code: 预期结果
     """
     if platform.node() != config.linux_node['ali']:
-        time.sleep(0.3)  # rpc接口延迟，防止结果失败！！！
+        time.sleep(0.6)  # rpc接口延迟，防止结果失败！！！
     try:
         assert actual_code == expected_code
         return True

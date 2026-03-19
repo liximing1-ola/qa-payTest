@@ -11,7 +11,6 @@ from common.runFailed import Retry
 
 @Retry(max_n=3)
 class TestPayBean(unittest.TestCase):
-    """金豆支付测试类"""
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -50,7 +49,7 @@ class TestPayBean(unittest.TestCase):
         验证账户内金豆不足时打赏金豆礼物的场景
         脚本步骤：
         1.构造打赏者和被打赏者数据
-        2.房间内打赏金豆礼物流程(啵啵奶茶)
+        2.房间内打赏金豆礼物流程(道具：啵啵奶茶，数量：1)
         3.校验接口状态和返回值数据
         4.检查Toast，预期提示'金豆不足'
         5.检查被打赏者金豆余额,预期：0

@@ -33,7 +33,7 @@ class crazySpin:
             '_platform': 'android',
             '_index': '878',
             '_model': 'Pixel 3a',
-            '_timestamp': '1656067298',
+            '_timestamp': '1899475859',
             '_abi': 'arm64-v8a',
             'format': 'json',
             '_sign': '12c5970528bf21e8aac9586534606432',
@@ -91,7 +91,7 @@ class crazySpin:
             "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko)\
                                 Chrome/67.0.3396.99 Safari/537.36",
             "Content-Type": "application/x-www-form-urlencoded",
-            'Connection': 'close',
+            'Connection': '',
             "user-token": Session.checkUserToken(operate='read', app_name=tokenName)
         }
         return requests.get(url7, params=params, headers=header)

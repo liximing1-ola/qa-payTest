@@ -1,11 +1,8 @@
 """
 全局变量
 """
-# 用例名称字典1
 case_list = {}
-# 用例名称字典2
 case_list_b = {}
-# 并发case
 case_list_c = {}
 # 失败结果列表
 fail_case_reason = []

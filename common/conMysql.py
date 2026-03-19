@@ -162,7 +162,7 @@ class conMysql:
                 return data_dict[0]
             except Exception as error:
                 print(error)
-        elif accountType == 'union':
+        elif accountType == 'union':  # 查询用户联盟房
             sql = " select rid from xs_chatroom where property='{}' limit 1".format(accountType)
             try:
                 conMysql.cur.execute(sql)
@@ -173,7 +173,7 @@ class conMysql:
                     return res[0]
             except Exception as error:
                 print(error)
-        elif accountType == 'fleet':
+        elif accountType == 'fleet':  # 查询用户家族房
             sql = " select rid from xs_chatroom where property='{}' limit 1".format(accountType)
             try:
                 conMysql.cur.execute(sql)

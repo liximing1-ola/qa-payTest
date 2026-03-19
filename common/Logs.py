@@ -14,7 +14,7 @@ def get_log(log_name, level=logging.DEBUG, when='midnight', back_count=0):
     :return:
     """
     logs = logging.getLogger(log_name)
-    logs.setLevel(level)  # log打印级别
+    logs.setLevel(level)  # 打印级别
     LOG_PATH = os.path.join(config.BASE_PATH, 'log')
     if not os.path.exists(LOG_PATH):
         os.makedirs(LOG_PATH)
@@ -24,7 +24,6 @@ def get_log(log_name, level=logging.DEBUG, when='midnight', back_count=0):
     ch.setLevel(level='INFO')
     ch.setFormatter(formatter)  # 设置日志输出格式
     # logging.handlers.TimedRotatingFileHandler(filename, when, backupCount, encoding)
-    # 各参数含义：
     #  1.filename:log文件名
     #  2.when：间隔的时间单位
     #        S:秒

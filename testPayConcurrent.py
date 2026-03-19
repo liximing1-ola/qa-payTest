@@ -29,7 +29,7 @@ class PayConcurrent:
 
     def release_test2(self):
         threads = []
-        for i in range(20):
+        for i in range(30):
             thread = gevent.spawn(self.release_test)
             threads.append(thread)
         gevent.joinall(threads)
@@ -38,7 +38,6 @@ class PayConcurrent:
         res = requests.get(self.commodity_id_url, headers=self.headers).json()
         if res['success'] == 0 or len(res['data']) == 0:
             return 0
-
         return res['data'][0]['id']
 
 

@@ -1,8 +1,11 @@
 import urllib.parse
 from common.Config import config
+DEFAULT_VERSION = 2
+DEFAULT_USE_COIN = -1
+DEFAULT_SHOW_PAC_MAN_GUIDE = 1
 
 
-# 国内消费场景
+# 消费场景
 def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'],
                uid=config.rewardUid, giftId=config.giftId['7'],
                giftType='normal', cid=5, boxType='copper', num=1, package_cid=0,
@@ -24,19 +27,17 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'],
                  "cid": package_cid,
                  "ctype": ctype,
                  "duction_money": duction_money,
-                 "version": 2,
+                 "version": DEFAULT_VERSION,
                  "num": num,
                  "gift_type": "{}".format(giftType),
-                 "useCoin": -1,
+                 "useCoin": DEFAULT_USE_COIN,
                  "star": star,
-                 "show_pac_man_guide": 1,
+                 "show_pac_man_guide": DEFAULT_SHOW_PAC_MAN_GUIDE,
                  "refer": "",
                  "all_mic": 0,
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
+        return _encode_data_helper(data)
     elif payType == 'package-more':
         p = []
         uid = ','.join(uids)
@@ -59,19 +60,17 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'],
                  "cid": 0,
                  "ctype": "",
                  "duction_money": 0,
-                 "version": 2,
+                 "version": DEFAULT_VERSION,
                  "num": num_more * num,
                  "gift_type": "{}".format(giftType),
-                 "useCoin": -1,
+                 "useCoin": DEFAULT_USE_COIN,
                  "star": star,
-                 "show_pac_man_guide": 1,
+                 "show_pac_man_guide": DEFAULT_SHOW_PAC_MAN_GUIDE,
                  "refer": "",
                  "all_mic": 0,
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
+        return _encode_data_helper(data)
     elif payType == 'package-exchange':
         data = {
             "platform": "available",
@@ -88,20 +87,18 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'],
                  "cid": 0,
                  "ctype": "",
                  "duction_money": 0,
-                 "version": 2,
+                 "version": DEFAULT_VERSION,
                  "num": num,
                  "gift_type": "{}".format(giftType),
-                 "useCoin": -1,
+                 "useCoin": DEFAULT_USE_COIN,
                  "star": star,
-                 "show_pac_man_guide": 1,
+                 "show_pac_man_guide": DEFAULT_SHOW_PAC_MAN_GUIDE,
                  "refer": "",
                  "all_mic": 0,
                  "exchange": 1
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
+        return _encode_data_helper(data)
     elif payType == 'package-knightDefend':
         data = {
             "platform": "available",
@@ -113,12 +110,10 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'],
                  "duration_level": 2,
                  "rid": rid,
                  "uids": "{}".format(uid),
-                 "useCoin": -1,
+                 "useCoin": DEFAULT_USE_COIN,
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
+        return _encode_data_helper(data)
     elif payType == 'package-radioDefend':
         data = {
             "platform": "available",
@@ -132,12 +127,10 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'],
                  "defend": 3,
                  "cid": package_cid,
                  "duction_money": 0,
-                 "useCoin": -1,
+                 "useCoin": DEFAULT_USE_COIN,
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
+        return _encode_data_helper(data)
     elif payType == 'chat-gift':
         data = {
             "platform": "available",
@@ -151,18 +144,16 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'],
                  "cid": 0,
                  "ctype": "",
                  "duction_money": 0,
-                 "version": 2,
+                 "version": DEFAULT_VERSION,
                  "num": num,
                  "gift_type": "normal",
                  "star": star,
-                 "show_pac_man_guide": 1,
+                 "show_pac_man_guide": DEFAULT_SHOW_PAC_MAN_GUIDE,
                  "all_mic": 0,
-                 "useCoin": -1
+                 "useCoin": DEFAULT_USE_COIN
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
+        return _encode_data_helper(data)
     elif payType == 'shop-buy-box':
         data = {
             "platform": 'available',
@@ -176,15 +167,13 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'],
                  "opennum": num,
                  "coupon_id": 0,
                  "duction_money": 0,
-                 "version": 2,
+                 "version": DEFAULT_VERSION,
                  "star": 4,
-                 "show_pac_man_guide": 0,
-                 "useCoin": -1
+                 "show_pac_man_guide": DEFAULT_SHOW_PAC_MAN_GUIDE,
+                 "useCoin": DEFAULT_USE_COIN
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
+        return _encode_data_helper(data)
     elif payType == 'shop-buy':
         data = {
             "platform": 'available',
@@ -196,14 +185,13 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'],
                  "price": money,
                  "coupon_id": 0,
                  "duction_money": 0,
-                 "version": 2,
+                 "version": DEFAULT_VERSION,
                  "gift_scene": "shop",
                  "money_type": "money",
-                 "useCoin": -1}
+                 "useCoin": DEFAULT_USE_COIN
+                 }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
+        return _encode_data_helper(data)
     elif payType == 'defend':
         data = {
             "platform": 'available',
@@ -215,12 +203,10 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'],
                  "cid": 0,
                  "duction_money": 0,
                  "unified_relation_version": 1,
-                 "useCoin": -1
+                 "useCoin": DEFAULT_USE_COIN
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
+        return _encode_data_helper(data)
     elif payType == 'defend-upgrade':
         data = {
             "platform": 'available',
@@ -228,12 +214,10 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'],
             "money": money,
             "params":
                 {"id": "{}".format(defend_id),  # xs_relation_defend  id
-                 "useCoin": -1
+                 "useCoin": DEFAULT_USE_COIN
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
+        return _encode_data_helper(data)
     elif payType == 'defend-break':
         data = {
             "platform": 'available',
@@ -241,12 +225,11 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'],
             "money": money,
             "params":
                 {"id": "{}".format(defend_id),  # xs_relation_defend  id
-                 "useCoin": -1
+                 "useCoin": DEFAULT_USE_COIN
                  }
         }
         d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
+        return _encode_data_helper(data)
     elif payType == 'title':
         data = {
             "platform": "available",
@@ -259,12 +242,10 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'],
                  "cid": 0,
                  "ctype": "",
                  "duction_money": 0,
-                 "useCoin": -1,
+                 "useCoin": DEFAULT_USE_COIN
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
+        return _encode_data_helper(data)
     elif payType == 'exchange_gold':
         data = {
             "platform": 'available',
@@ -274,9 +255,7 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'],
                 "type": "exchange_gold"
             }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
+        return _encode_data_helper(data)
     elif payType == 'unity-game-buy':
         data = {
             "platform": 'available',
@@ -293,9 +272,7 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'],
                 "rid": 105707946
             }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
+        return _encode_data_helper(data)
     elif payType == 'pub-drink-buy':
         data = {
             "platform": 'available',
@@ -305,15 +282,13 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'],
                 "pub_club_rid": rid,
                 "menu_id": 6,
                 "num": 1,
-                "useCoin": -1,
+                "useCoin": DEFAULT_USE_COIN,
                 "gift_type": 'bean',
                 "refer": "",
                 "exchange": 1,
             }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
+        return _encode_data_helper(data)
     elif payType == 'deco-present':
         data = {
             "platform": 'available',
@@ -327,13 +302,11 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'],
                 "price": money,
                 "coupon_id": 0,
                 "duction_money": 0,
-                "version": 2,
-                "useCoin": -1
+                "version": DEFAULT_VERSION,
+                "useCoin": DEFAULT_USE_COIN
             }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
+        return _encode_data_helper(data)
     elif payType == 'banban-consume':
         data = {
             "platform": 'available',
@@ -343,17 +316,15 @@ def encodeData(payType='package', money=1000, rid=config.live_role['auto_rid'],
                 {"consume_type": "music_order",
                  "rid": rid,
                  "order_songs": [{"song_id": 10282, "singer_id": uid}],
-                 "useCoin": -1
+                 "useCoin": DEFAULT_USE_COIN
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
+        return _encode_data_helper(data)
     else:
         raise Exception('payType is error')
 
 
-# 海外消费场景
+# oversea消费场景
 def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'],
                  uid=config.pt_testUid, giftId=10, giftType='normal', cid=5,
                  boxType='copper', num=1, package_cid=0, ctype='', duction_money=0, star=0,
@@ -362,30 +333,28 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
         data = {
             "platform": "available",
             "type": "package",
-            "money": money,
+            "money": money,  # money
             "params":
-                {"rid": rid,
+                {"rid": rid,  # 房间id
                  "uids": '{}'.format(uid),
-                 "positions": "1",
-                 "position": -1,
+                 "positions": "1",  # 默认麦位数
+                 "position": -1,  # 默认打赏位置 麦位-1，默认第一个位置
                  "giftId": giftId,
                  "giftNum": num,
-                 "price": money,
+                 "price": money,  # 199
                  "cid": package_cid,
-                 "ctype": ctype,
-                 "duction_money": duction_money,
-                 "version": 2,
-                 "num": num,
+                 "ctype": ctype,  # 物品类型
+                 "duction_money": duction_money,  #
+                 "version": DEFAULT_VERSION,  # version=2
+                 "num": num,  # 默认赠送数量1
                  "gift_type": "{}".format(giftType),
-                 "useCoin": -1,
+                 "useCoin": DEFAULT_USE_COIN,  # 默认不使用金币
                  "star": star,
-                 "refer": "",
+                 "refer": "",  # 传
                  "all_mic": 0,
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
+        return _encode_data_helper(data)
     elif payType == 'package-more':
         p = []
         uid = ','.join(uids)
@@ -398,29 +367,27 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
             "type": "package",
             "money": money * num * num_more,
             "params":
-                {"rid": rid,
-                 "uids": '{}'.format(uid),
+                {"rid": rid,  # 房间id
+                 "uids": '{}'.format(uid),  # 用户id
                  "positions": "{}".format(position),
                  "position": -1,
-                 "giftId": giftId,
-                 "giftNum": num,
-                 "price": money,
-                 "cid": 0,
-                 "ctype": "",
-                 "duction_money": 0,
-                 "version": 2,
+                 "giftId": giftId,  # 礼物id，只传一个
+                 "giftNum": num,  # 礼物数量
+                 "price": money,  # 礼物单价
+                 "cid": 0,  # 优惠券id
+                 "ctype": "",  # 类型
+                 "duction_money": 0,  # 优惠金额
+                 "version": DEFAULT_VERSION,
                  "num": num_more * num,
                  "gift_type": "{}".format(giftType),
-                 "useCoin": -1,
+                 "useCoin": DEFAULT_USE_COIN,
                  "star": star,
-                 "show_pac_man_guide": 1,
+                 "show_pac_man_guide": DEFAULT_SHOW_PAC_MAN_GUIDE,
                  "refer": "",
                  "all_mic": 0,
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
+        return _encode_data_helper(data)
     elif payType == 'package-exchange':
         data = {
             "platform": "available",
@@ -437,20 +404,18 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
                  "cid": 0,
                  "ctype": "",
                  "duction_money": 0,
-                 "version": 2,
+                 "version": DEFAULT_VERSION,
                  "num": num,
                  "gift_type": "{}".format(giftType),
-                 "useCoin": -1,
+                 "useCoin": DEFAULT_USE_COIN,
                  "star": star,
-                 "show_pac_man_guide": 1,
+                 "show_pac_man_guide": DEFAULT_SHOW_PAC_MAN_GUIDE,
                  "refer": "",
                  "all_mic": 0,
                  "exchange": 1
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
+        return _encode_data_helper(data)
     elif payType == 'chat-gift':
         data = {
             "platform": "available",
@@ -463,18 +428,16 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
                  "cid": 0,
                  "ctype": "",
                  "duction_money": 0,
-                 "version": 2,
+                 "version": DEFAULT_VERSION,
                  "num": num,
                  "gift_type": "normal",
                  "star": 0,
                  "hideErrorToast": 1,
                  "all_mic": 0,
-                 "useCoin": -1
+                 "useCoin": DEFAULT_USE_COIN
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
+        return _encode_data_helper(data)
     elif payType == 'shop-buy':
         data = {
             "platform": 'available',
@@ -486,13 +449,12 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
                  "price": money,
                  "coupon_id": 0,
                  "duction_money": 0,
-                 "version": 2,
+                 "version": DEFAULT_VERSION,
                  "gift_scene": "shop",
-                 "useCoin": -1}
+                 "useCoin": DEFAULT_USE_COIN
+                 }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
+        return _encode_data_helper(data)
     elif payType == 'shop-buy-box':
         data = {
             "platform": 'available',
@@ -506,15 +468,13 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
                  "opennum": num,
                  "coupon_id": 0,
                  "duction_money": 0,
-                 "version": 2,
+                 "version": DEFAULT_VERSION,
                  "star": 0,
                  "scene": "shop_box",
-                 "useCoin": -1
+                 "useCoin": DEFAULT_USE_COIN
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
+        return _encode_data_helper(data)
     elif payType == 'coin-shop-buy':
         data = {
             "platform": 'available',
@@ -529,9 +489,7 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
                  "version": 2,
                  "useCoin": -1}
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
+        return _encode_data_helper(data)
     elif payType == 'exchange_gold':
         data = {
             "platform": 'available',
@@ -541,9 +499,7 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
                 "type": "exchange_gold"
             }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
+        return _encode_data_helper(data)
     elif payType == 'defend':
         data = {
             "platform": 'available',
@@ -555,12 +511,10 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
                  "cid": 0,
                  "duction_money": 0,
                  "unified_relation_version": 1,
-                 "useCoin": -1
+                 "useCoin": DEFAULT_USE_COIN
                  }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
+        return _encode_data_helper(data)
     elif payType == 'shop-buy-crazyspin':
         data = {
             "platform": 'available',
@@ -572,23 +526,20 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
                  "price": 100,
                  "coupon_id": 0,
                  "duction_money": 0,
-                 "version": 2,
+                 "version": DEFAULT_VERSION,
                  "gift_scene": "shop",
                  "rid": rid,
-                 "useCoin": -1}
+                 "useCoin": DEFAULT_USE_COIN
+                 }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
+        return _encode_data_helper(data)
     elif payType == 'play-crazyspin':
         data = {
             "rid": rid,
             "draw_type": 10,
             "turntable_type": 1,
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
+        return _encode_data_helper(data)
     elif payType == 'journey_planet_draw':
         data = {
             "platform": "available",
@@ -598,12 +549,10 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
                        "floor": 1,
                        "price": 1500,
                        "rid": rid,
-                       "useCoin": -1}
+                       "useCoin": DEFAULT_USE_COIN
+                       }
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
-
+        return _encode_data_helper(data)
     elif payType == 'chat-pay-card':
         data = {
             'platform': 'available',
@@ -611,12 +560,14 @@ def encodePtData(payType='package', money=600, rid=config.pt_room['business_joy'
             'money': '160',
             'params': '{"cid":42598,"num":10,"price":16.0,"useCoin":-1}',
         }
-        d = urllib.parse.urlencode(data)
-        data = d.replace('+', '').replace('%27', '%22')
-        return data
-
+        return _encode_data_helper(data)
     else:
         raise Exception('payType is error')
+
+
+# Helper function to handle common URL encoding logic
+def _encode_data_helper(data):
+    return urllib.parse.urlencode(data).replace('+', '').replace('%27', '%22')
 
 
 if __name__ == '__main__':

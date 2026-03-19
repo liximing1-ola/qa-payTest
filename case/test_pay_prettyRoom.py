@@ -25,8 +25,7 @@ class TestPayCreate(unittest.TestCase):
         """
         mysql.updateMoneySql(config.payUid, money_cash_b=250)
         mysql.updateMoneySql(config.gsUid)
-        data = encodeData(payType='package',
-                          money=100,
+        data = encodeData(money=100,
                           rid=self.prettyRid,
                           uid=config.gsUid,
                           giftId=config.giftId['5'])
@@ -52,8 +51,7 @@ class TestPayCreate(unittest.TestCase):
         """
         mysql.updateMoneySql(config.payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
         mysql.updateMoneySql(config.gsUid)
-        data = encodeData(payType='package',
-                          money=600,
+        data = encodeData(money=600,
                           uid=config.gsUid,
                           rid=self.prettyRid,
                           giftId=config.giftId['46'],
@@ -79,8 +77,7 @@ class TestPayCreate(unittest.TestCase):
         """
         mysql.updateMoneySql(config.payUid, money_cash=100)
         mysql.updateMoneySql(config.rewardUid)
-        data = encodeData(payType='package',
-                          money=100,
+        data = encodeData(money=100,
                           rid=self.prettyRid,
                           uid=config.rewardUid,
                           giftId=config.giftId['5'])

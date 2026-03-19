@@ -3,9 +3,9 @@ import unittest
 import pytest
 
 
-@unittest.skip('网赚分成下线-2022/11/1 ')
+@unittest.skip('网赚分成逻辑 ')
 class TestPayCreate(unittest.TestCase):
-    # 网赚房角色配置
+    # 角色配置
     star_role = {}
 
     @classmethod

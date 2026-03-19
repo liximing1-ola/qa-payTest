@@ -26,8 +26,7 @@ class TestPayCreate(unittest.TestCase):
         5.检查被打赏者余额,预期：0
         """
         mysql.updateUserMoneyClearSql(config.payUid, config.rewardUid)
-        data = encodeData(payType='package',
-                          money=100,
+        data = encodeData(money=100,
                           giftId=config.giftId['5'])
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
@@ -53,8 +52,7 @@ class TestPayCreate(unittest.TestCase):
         mysql.updateMoneySql(config.payUid, money=3000)
         mysql.updateMoneySql(config.rewardUid)
         cid = mysql.selectUserInfoSql('id_commodity', config.payUid, cid=gift_cid)
-        data = encodeData(payType='package',
-                          giftId=config.giftId['11'],
+        data = encodeData(giftId=config.giftId['11'],
                           money=3000,
                           package_cid=cid,
                           ctype='coupon',
@@ -83,8 +81,7 @@ class TestPayCreate(unittest.TestCase):
         mysql.updateMoneySql(config.payUid, money=3000)
         mysql.updateMoneySql(config.rewardUid)
         cid = mysql.selectUserInfoSql('id_commodity', config.payUid, cid=gift_cid)
-        data = encodeData(payType='package',
-                          giftId=config.giftId['11'],
+        data = encodeData(giftId=config.giftId['11'],
                           money=3000,
                           package_cid=cid,
                           ctype='coupon',

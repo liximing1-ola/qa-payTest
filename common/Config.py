@@ -1,19 +1,20 @@
 # coding=utf-8
 import os
+from typing import Dict
 
 
 class config:
     # 工程目录
     BASE_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-    appInfo = {
+    appInfo: Dict[str, str] = {
         'bb_dev': 'https://dev.iambanban.com/',
         'pt_ali_dev': 'https://pt-dev.iambanban.com/',  # 指向dev服务
         'pt_ali_main': 'https://pt-dev.iambanban.com/_testcase/',  # 指向线上拉取的main分支服务，go的还需要新启一个
-        # 'starify': 'http://116.62.125.230/',
+        'starify': 'http://116.62.125.230/',
         'slp': 'https://116.62.125.230/',
         "rush": 'https://192.168.11.55/',
     }
-    codeInfo = {
+    codeInfo: Dict[str, str] = {
         'bb_php_path': '/home/webroot/banban',
         'bb_go_path': '/home/webroot/bb-consume',
         'pt_php_path': '/home/webroot/release_oversea/banban',
@@ -28,38 +29,35 @@ class config:
         'slp_common_rpc_path': r"/var/www/slp/slp-common-rpc",
         'slp_git_branch': "dev",  # todo 调试用 "wzx" / dev分支  dev
     }
-    appName = {
-        "伴伴": 'banban',
-        "Partying": 'pt',
+    appName: Dict[str, str] = {
+        "1": '1',
+        "2": '2',
         "谁是凶手": 'games',
         # "starify": 'starify',
         "不夜星球": 'slp',
         "冲鸭": 'rush',
     }
     # 服务器标识
-    linux_node = {
+    linux_node: Dict[str, str] = {
         'ali': 'iZbp1fveowr7j693hrwb48Z',
-        # 'ali-starify': 'iZbp15ildwog86lw08ptpnZ',  # todo 修改 调试用 ubuntu / dev=iZj6cig35upuwmdws5sec2Z
+        'ali-starify': 'iZbp15ildwog86lw08ptpnZ',  # todo 修改 调试用 ubuntu / dev=iZj6cig35upuwmdws5sec2Z
         'ali-slp': 'iZbp15ildwog86lw08ptpnZ',  # todo 修改 调试用 ubuntu / dev=iZj6cig35upuwmdws5sec2Z
     }
     # 测试域名
     pt_host = appInfo['pt_ali_main']
     # 内网支付接口
-    pay_url = appInfo['bb_dev'] + 'pay/create?package=com.imbb.banban.android'
-    pt_pay_url = pt_host + 'pay/create?package=com.imbb.oversea.android'
-    # starify_pay_url = appInfo['starify'] + 'go/starify/pay/create'
-    slp_pay_url = appInfo['slp'] + 'pay/create?package=com.yhl.sleepless.android'
-    rush_pay_url = appInfo['bb_dev'] + "pay/create?package=com.im.duck.android"
+    pay_url = f"{appInfo['bb_dev']}pay/create?package="
+    slp_pay_url = f"{appInfo['slp']}pay/create?package=com.yhl.sleepless.android"
     # app登录方式
-    bb_qqLogin_url = appInfo['bb_dev'] + 'account/qqlogin'
-    pt_mobile_login_url = pt_host + 'account/passwordLogin'
-    # starify_mobile_login_url = appInfo['starify'] + 'go/starify/login/mobileLogin'
-    slp_mobile_login_url = appInfo['slp'] + 'account/login'
+    bb_qqLogin_url = f"{appInfo['bb_dev']}account/qqlogin"
+    pt_mobile_login_url = f"{pt_host}account/passwordLogin"
+    starify_mobile_login_url = f"{appInfo['starify']}go/starify/login/mobileLogin"
+    slp_mobile_login_url = f"{appInfo['slp']}account/login"
 
-    rate = 0.62  # GS商业房分成比，公会长和商业房房主不参与降点逻辑（公会长/房主仅作为被打赏者不扣）
+    rate: float = 0.62  # GS商业房分成比，公会长和商业房房主不参与降点逻辑（公会长/房主仅作为被打赏者不扣）
 
     # 用户配置
-    bb_user = {
+    bb_user: Dict[str, int] = {
         'payUid': 103273407,  # boss
         'testUid': 105002312,  # 非一代宗师
         'pack_cal_uid': 105002313,  # 打包结算签约主播
@@ -69,15 +67,16 @@ class config:
         'fleetRid': 200091067,  # 家族房，家主uid=103273407，成员105002325/100500205/100500338
     }
     # 角色配置
-    live_role = {
+    live_role: Dict[str, int] = {
         'pack_ceo': 105002314,  # 直播公会公会长
         'pack_master_NoPack': 105002319,  # 非公会一代宗师主播
         'pack_cal_uid': 105002313,  # 公会签约主播（打包结算），宗师等级可设置为一代和非一代
         'live_rid': 193185577,  # 直播间(types=live)，房主:105002313
-        'auto_rid': 193185484,  # business | types: auto | room_factory_type: business-content | settlement_channel: cp-women
+        'auto_rid': 193185484,
+        # business | types: auto | room_factory_type: business-content | settlement_channel: cp-women
     }
     # 礼物配置
-    giftId = {
+    giftId: Dict[str, int] = {
         "5": 5,  # 棒棒糖*100钻
         "7": 7,  # 大宝剑*1000钻
         "11": 11,  # 老司机*3000钻(券-500钻石)
@@ -94,7 +93,7 @@ class config:
     gsUid = bb_user['gsUid']  # 公会用户
 
     # PT
-    pt_user = {
+    pt_user: Dict[str, int] = {
         # 'payUid': 800240376,
         'payUid': 800350557,
         'testUid': 800022872,
@@ -106,7 +105,7 @@ class config:
     pt_brokerUid = pt_user['brokerUid']  # 公会成员
     pt_fleetUid = pt_user['fleet_uid']
     # 房间类型41
-    pt_room = {
+    pt_room: Dict[str, int] = {
         'business_joy': 105699329,  # 商业房
         'vip_rid': 105698376,  # 个人房
         'th_union': 105708881,  # 泰区联盟房
@@ -120,10 +119,14 @@ class config:
 
     }
     # 礼物配置
-    pt_giftId = {
+    pt_giftId: Dict[str, int] = {
         "10": 10,  # 么么哒*6币
         "46": 46,  # 幸运星*6币
         "47": 47,  # 五色星*21币
         "773": 773,  # 小飞机盲盒
         "774": 774,  # 飞马盲盒
     }
+
+
+if __name__ == '__main__':
+    print(config.pay_url)

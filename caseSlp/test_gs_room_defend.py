@@ -14,11 +14,12 @@ from common.conSlpMysql import conMysql as mysql
 from common.method import reason
 from common.runFailed import Retry
 
+
 @Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
 
-	def test_001(self, des='商业房-直播,开通房间守护给GS收60%（mc）'):
-		"""
+    def test_001(self, des='商业房-直播,开通房间守护给GS收60%（mc）'):
+        """
 		 用例描述：
 		商业房-直播,开通房间守护给GS收60%（mc）
 		 脚本步骤：
@@ -29,34 +30,29 @@ class TestPayCreate(unittest.TestCase):
 		 5.检查公会长余额，预期为： 0(不分成)
 		 6.检查被打赏者余额.预期为：99900 * 0.6 = 59940
 		 """
-		uid = gsUid
-		assert_equal(mysql.checkUserBroker(uid), True)  # 确认 uid是工会成员
-		rid = gs_soundchat_rid
-		assert_equal(mysql.checkRidFactoryType(rid), "business-soundchat")  # 确认rid是直播房
-
-		# test_uid = self.live_role['pack_cal_uid']
-		# ceo_uid = self.live_role['pack_ceo']
-		# mysql.updateUserInfoSql('chatroom', test_uid)  # 商业房房主
-		# mysql.updateUserInfoSql('broker_user', test_uid, ceo_uid)  # 打包结算
-		# mysql.checkUserXsBroker(ceo_uid)  # 公会长
-		mysql.updateUserGodSql(uid, 1)
-		mysql.updateUserGodSql(gs_A_ceo_uid, 1)
-		mysql.updateMoneySql(payUid, default_money)
-		mysql.updateUserMoneyClearSql(uid, gs_A_ceo_uid)
-		data = encodeData(
-			payType='package-knightDefend',
-			money=room_defend['zhenai']['month']['price'],
-			uid=uid,
-			rid=rid,
-			knight_level=room_defend['zhenai']['month']['knight_level'],
-			duration_level=room_defend['zhenai']['month']['duration_level'],
-			price=room_defend['zhenai']['month']['price'],
-		)
-		res = post_request_session(pay_url, data, tokenName='slp')
-		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1, reason(des, res))
-		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - room_defend['zhenai']['month']['price'])
-		assert_equal(mysql.selectUserInfoSql('single_money', uid, money_type='money_cash'),
-		             room_defend['zhenai']['month']['price'] * rates['gs']['default'])
-		assert_equal(mysql.selectUserInfoSql('sum_money', gs_A_ceo_uid), 0)
-		case_list[des] = result
+        uid = gsUid
+        assert_equal(mysql.checkUserBroker(uid), True)  # 确认 uid是工会成员
+        rid = gs_soundchat_rid
+        assert_equal(mysql.checkRidFactoryType(rid), "business-soundchat")  # 确认rid是直播房
+        mysql.updateUserGodSql(uid, 1)
+        mysql.updateUserGodSql(gs_A_ceo_uid, 1)
+        mysql.updateMoneySql(payUid, default_money)
+        mysql.updateUserMoneyClearSql(uid, gs_A_ceo_uid)
+        data = encodeData(
+            payType='package-knightDefend',
+            money=room_defend['zhenai']['month']['price'],
+            uid=uid,
+            rid=rid,
+            knight_level=room_defend['zhenai']['month']['knight_level'],
+            duration_level=room_defend['zhenai']['month']['duration_level'],
+            price=room_defend['zhenai']['month']['price'],
+        )
+        res = post_request_session(pay_url, data, tokenName='slp')
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(mysql.selectUserInfoSql('sum_money', payUid),
+                     default_money - room_defend['zhenai']['month']['price'])
+        assert_equal(mysql.selectUserInfoSql('single_money', uid, money_type='money_cash'),
+                     room_defend['zhenai']['month']['price'] * rates['gs']['default'])
+        assert_equal(mysql.selectUserInfoSql('sum_money', gs_A_ceo_uid), 0)
+        case_list[des] = result

@@ -2,7 +2,7 @@ import unittest
 import pytest
 
 
-@unittest.skip('爵位购买已下线')
+@unittest.skip('爵位购买')
 class TestPayCreate(unittest.TestCase):
 
     @pytest.mark.run(order=1)

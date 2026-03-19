@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#  @author: WuBingBing
 from common.Config import config
 from common.Request import post_request_session
 from common.conPtMysql import conMysql
@@ -30,7 +29,7 @@ class Greedy:
     @staticmethod
     def bet(money_type):
         try:
-            # 获取摩天轮信息
+            # 获取摩天轮玩法信息
             greed_round_id = 0
             greed_counter = []
             for i in range(10):
@@ -41,7 +40,7 @@ class Greedy:
                     greed_counter = greed_index['body']['data']['counter_range']
                     break
                 else:
-                    time.sleep(5)  # 等待摩天轮变为可投注状态
+                    time.sleep(5)  # 等待摩天轮状态变为可投注
                     continue
 
             # 下注
@@ -49,13 +48,13 @@ class Greedy:
                 greed_vid = random.randint(1, 8)
                 Greedy.greedy_stake(config.pt_payUid, greed_vid, greed_counter, greed_round_id, money_type)
 
-            # 获取开奖数据
+            # 获取数据
             greed_counter_all = 0
             greedy_prize = 0
             for i in range(10):
                 greedy_player_data = conMysql.select_greedy_prize(config.pt_payUid, greed_round_id)
                 if greedy_player_data == 0:
-                    time.sleep(5)  # 等待摩天轮开奖
+                    time.sleep(5)  # 等待开奖
                     continue
                 else:
                     greed_counter_all = greedy_player_data[0]

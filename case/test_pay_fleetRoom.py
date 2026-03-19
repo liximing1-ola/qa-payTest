@@ -29,8 +29,7 @@ class TestPayCreate(unittest.TestCase):
         """
         mysql.updateMoneySql(config.payUid, money=1000)
         mysql.updateMoneySql(self.pack_cal_uid)
-        data = encodeData(payType='package',
-                          rid=self.fleet_rid,
+        data = encodeData(rid=self.fleet_rid,
                           uid=self.pack_cal_uid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
@@ -53,8 +52,7 @@ class TestPayCreate(unittest.TestCase):
         """
         mysql.updateMoneySql(config.payUid, money=1000)
         mysql.updateMoneySql(self.pack_cal_uid)
-        data = encodeData(payType='package',
-                          rid=self.other_fleet_rid,
+        data = encodeData(rid=self.other_fleet_rid,
                           uid=self.pack_cal_uid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
@@ -64,7 +62,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 0)
         case_list_b[des] = result
 
-    def test_03_sameFleetRoomNormalGsRate(self, des='家族房打赏普通公会gs场景'):
+    def test_03_sameFleetRoomNormalGsRate(self, des='fleetRoom打赏普通公会gs场景'):
         """
         用例描述：
         tdr：家族房内普通公会成员礼物打赏到账80%个人魅力值
@@ -77,8 +75,7 @@ class TestPayCreate(unittest.TestCase):
         """
         mysql.updateMoneySql(config.payUid, money=1000)
         mysql.updateMoneySql(config.gsUid)
-        data = encodeData(payType='package',
-                          rid=self.fleet_rid,
+        data = encodeData(rid=self.fleet_rid,
                           uid=config.gsUid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
@@ -101,8 +98,7 @@ class TestPayCreate(unittest.TestCase):
         """
         mysql.updateMoneySql(config.payUid, money=600)
         mysql.updateMoneySql(config.gsUid)
-        data = encodeData(payType='package',
-                          money=600,
+        data = encodeData(money=600,
                           rid=self.other_fleet_rid,
                           giftId=config.giftId['46'],
                           uid=config.gsUid,
@@ -114,7 +110,7 @@ class TestPayCreate(unittest.TestCase):
         assert_len(mysql.selectUserInfoSql('single_money', config.gsUid), 210)
         case_list_b[des] = result
 
-    def test_05_sameFleetRoomPayNormalUser(self, des='家族房打赏一代用户场景'):
+    def test_05_sameFleetRoomPayNormalUser(self, des='fleetRoom打赏一代用户场景'):
         """
         用例描述：
         tdr：家族房内一代宗师普通用户箱子打赏到账80%个人魅力值
@@ -127,8 +123,7 @@ class TestPayCreate(unittest.TestCase):
         """
         mysql.updateMoneySql(config.payUid, money=600)
         mysql.updateMoneySql(config.masterUid)
-        data = encodeData(payType='package',
-                          money=600,
+        data = encodeData(money=600,
                           rid=self.fleet_rid,
                           giftId=config.giftId['46'],
                           uid=config.masterUid,
@@ -140,7 +135,7 @@ class TestPayCreate(unittest.TestCase):
         assert_len(mysql.selectUserInfoSql('single_money', config.masterUid), 300 * 0.8)
         case_list_b[des] = result
 
-    def test_06_otherFleetRoomNormalGsRate(self, des='非本家族房打赏用户场景'):
+    def test_06_otherFleetRoomNormalGsRate(self, des='非本fleet房打赏场景'):
         """
        用例描述：
         tdr：other家族房内普通用户礼物打赏到账62%个人魅力值
@@ -153,8 +148,7 @@ class TestPayCreate(unittest.TestCase):
         """
         mysql.updateMoneySql(config.payUid, money=1000)
         mysql.updateMoneySql(config.rewardUid)
-        data = encodeData(payType='package',
-                          rid=self.other_fleet_rid)
+        data = encodeData(rid=self.other_fleet_rid)
         res = post_request_session(config.pay_url, data)
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))

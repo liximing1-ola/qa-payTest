@@ -2,6 +2,8 @@
 import time
 import urllib.parse
 import requests
+
+
 # PK房
 def postPayCreate():
     url = "https://dev.iambanban.com/pay/create?package=com.imbb.banban.android"

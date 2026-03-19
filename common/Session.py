@@ -13,6 +13,8 @@ from common.paramsYaml import Yaml
 class Session:
     def __init__(self):
         self.config = config
+        urllib3.disable_warnings()
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
     @staticmethod
     def getSession(env):
@@ -21,16 +23,29 @@ class Session:
         :param env: 环境
         :return: 登陆token
         """
-        urllib3.disable_warnings()
-        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+        env_configs = {
+            "dev": {
+                "header_dev": Yaml.read_yaml('Basic.yml', 'header_dev'),
+                "params_dev_qq": Yaml.read_yaml('Basic.yml', 'params_dev_qq'),
+                "data_dev_qq": Yaml.read_yaml('Basic.yml', 'data_dev_qq'),
+                "package_dev": 'x.x.x.x',
+                "login_url_dev": config.bb_qqLogin_url,
+                "use_backup": True,
+            }
+        }
+
+        if env not in env_configs:
+            print("env input error")
+            return None
+
         if env == "release":
             pass
-        elif env == "dev":  # 伴伴
+        elif env == "dev":
             # noinspection PyBroadException
             try:
                 headers = Yaml.read_yaml('Basic.yml', 'header_dev')
                 params = Yaml.read_yaml('Basic.yml', 'params_dev_qq')
-                login_url = config.bb_qqLogin_url + '?' + params + '&package=com.imbb.banban.android'  # 7.22修改，请求接口加包名限制
+                login_url = config.bb_qqLogin_url + '?' + params + '&package=x.x.x.x'  # 2022.7.22修改，请求接口加包名限制
                 body = Yaml.read_yaml('Basic.yml', 'data_dev_qq')
                 session = requests.session()
                 res = session.post(login_url, data=body, headers=headers, verify=False)
@@ -38,20 +53,20 @@ class Session:
                 res = res.json()
                 if not method.isExtend(res, 'token') or res['success'] != 1:
                     print('failReason： {}'.format(res['msg']))
-                print('使用默认方案：token:{}'.format(res['data'].get('token')))
+                print('Default Plan：token:{}'.format(res['data'].get('token')))
                 tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
                 Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
                 return tokenDict
             except Exception as error:
-                Logs.get_log('getSession.log').error('默认方案session异常，原因： {}'.format(error))
+                Logs.get_log('getSession.log').error('session error，reason： {}'.format(error))
                 from common.conMysql import conMysql
                 from common.getToken import getToken
                 token = getToken(config.payUid, conMysql.selectUserInfoSql('user_index', config.payUid)).get_token()
                 tokenDict = {'token': token}
-                print('默认方案失败，启用备选方案：token:{}'.format(token))
+                print('Default Plan Error，Use Backup Plan：token:{}'.format(token))
                 Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
 
-        elif env == "rush":  # 冲鸭
+        elif env == "rush":
             # noinspection PyBroadException
             try:
                 headers = Yaml.read_yaml('Basic.yml', 'header_dev')
@@ -70,12 +85,12 @@ class Session:
             except Exception as error:
                 Logs.get_log('getSession.log').error('session异常，原因： {}'.format(error))
 
-        elif env == config.appName['Partying']:
+        elif env == config.appName['1']:
             try:
                 headers = Yaml.read_yaml('Basic.yml', 'header_pt')
                 params = Yaml.read_yaml('Basic.yml', 'data_pt_mobile_params')
                 body = Yaml.read_yaml('Basic.yml', 'data_slp_mobile')
-                login_url = config.pt_mobile_login_url  + '?' + params      # 7.26加包名限制
+                login_url = config.pt_mobile_login_url + '?' + params      # 7.26加包名限制
                 session = requests.session()
                 res = session.post(login_url, data=body, headers=headers, verify=False)
                 res.raise_for_status()
@@ -164,7 +179,7 @@ class Session:
                 if f:
                     return f
                 else:
-                    raise Exception(f"{txtPath},token为空!")
+                    raise Exception(f"{txtPath}-为空!")
 
     @staticmethod
     def checkUserToken_slp(operate, uid, app_name='dev', token=''):
@@ -181,4 +196,4 @@ class Session:
                 if f:
                     return f
                 else:
-                    raise Exception(f"{txtPath},token为空!")
+                    raise Exception(f"{txtPath},Token is not exists！！！")

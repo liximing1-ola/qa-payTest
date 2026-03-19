@@ -87,8 +87,7 @@ class TestPayCreate(unittest.TestCase):
         """
         mysql.updateMoneySql(config.payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
         mysql.updateMoneySql(config.rewardUid)
-        data = encodeData(payType='package',
-                          money=600,
+        data = encodeData(money=600,
                           giftId=config.giftId['46'],
                           star=1)
         res = post_request_session(config.pay_url, data)

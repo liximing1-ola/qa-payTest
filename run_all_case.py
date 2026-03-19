@@ -10,7 +10,7 @@ from common.method import checkPath
 
 
 def main(appInfo):
-    if appInfo == config.appName['伴伴']:
+    if appInfo == config.appName['1']:
         if updateCode.autoGitPull('bb_php') | updateCode.autoGitPull('bb_go'):
             updateTime('write', now=str(int(time())))
             test_result = unittest.TextTestRunner(verbosity=3).run(all_case(appInfo))
@@ -44,7 +44,7 @@ def main(appInfo):
                     break
         else:
             Logs.get_log('runCode.log').info('NoRun')
-    elif appInfo == config.appName['Partying']:
+    elif appInfo == config.appName['2']:
         checkPath(config.codeInfo['pt_php_path'])
         if updateCode.autoGitPull(appInfo):
             updateTime('write', now=str(int(time())))
@@ -79,40 +79,6 @@ def main(appInfo):
                     break
         else:
             Logs.get_log('runCode.log').info('NoRun')
-    # elif appInfo == config.appName['starify']:
-    #     if updateCode.autoGitPull('starify_go') | updateCode.autoGitPull('starify_room'):
-    #         updateTime('write', now=str(int(time())))
-    #         test_result = unittest.TextTestRunner(verbosity=3).run(all_case(appInfo))
-    #         Consts.endTime = time()
-    #         des = "用例总数: {}, 失败用例数: {}, 异常用例数: {}" \
-    #             .format(test_result.testsRun, len(test_result.failures), len(test_result.errors))
-    #         Logs.get_log('caseResult.log').info(des)
-    #         case_list = method.dictToList(Consts.case_list)
-    #         case_list_2 = method.dictToList(Consts.case_list_b)
-    #         use_time = str(int(Consts.endTime - Consts.startTime)) + 's'
-    #         if len(test_result.failures) == 0 and len(test_result.errors) == 0:
-    #             des = "{}\n".format(case_list)
-    #             des_2 = "{}\n用例数: {}, 失败数: {}, 总耗时: {}, 代码分支：{}".format(
-    #                 case_list_2, test_result.testsRun,
-    #                 len(test_result.failures) + len(test_result.errors),
-    #                 use_time,
-    #                 config.codeInfo['starify_git_branch'])
-    #             robot('slack', des, bot='starify')
-    #             sleep(0.1)
-    #             robot('slack', des_2, bot='starify')
-    #         elif len(test_result.failures) >= 1:
-    #             Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
-    #             robot('slack', des, bot='starify', color="danger")
-    #             for case, reason in test_result.failures:
-    #                 robot('slack', Consts.fail_case_reason[0], title=case.id(), bot='starify', color="danger")
-    #                 break
-    #         elif len(test_result.errors) >= 1:
-    #             Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
-    #             for case, reason in test_result.errors:
-    #                 robot('slack', reason, case.id(), bot='starify', color="danger")
-    #                 break
-    #     else:
-    #         Logs.get_log('runCode.log').info('NoRun')
     if appInfo == config.appName['不夜星球']:
         to = 'slack'
         print("*"*50)
@@ -159,9 +125,9 @@ def main(appInfo):
 
 def all_case(appInfo):
     case_dir = config.BASE_PATH
-    if appInfo == config.appName['伴伴']:
+    if appInfo == config.appName['1']:
         case_dir += '/case'
-    elif appInfo == config.appName['Partying']:
+    elif appInfo == config.appName['2']:
         case_dir += '/caseOversea'
     # elif appInfo == config.appName['starify']:
     #     case_dir += '/caseStarify'
@@ -183,10 +149,10 @@ def all_case(appInfo):
 
 if __name__ == "__main__":
     if platform.node() == config.linux_node['ali']:
-        main(config.appName['Partying'])
+        main(config.appName['2'])
     # elif platform.node() == config.linux_node['ali-starify']:
     #     main(config.appName['starify'])
     elif platform.node() == config.linux_node['ali-slp']:
         main(config.appName['不夜星球'])
     else:
-        main(config.appName['伴伴'])
+        main(config.appName['1'])

@@ -8,7 +8,7 @@ import platform
 
 def all_case(appInfo):
     case_dir = config.BASE_PATH
-    if appInfo == config.appName['伴伴']:
+    if appInfo == config.appName['1']:
         case_dir += '/case'
         case_name = 'test_pay_punish.py'
     elif appInfo == config.appName['Partying']:
@@ -73,6 +73,6 @@ def main(appInfo):
 
 if __name__ == "__main__":
     if platform.node() == config.linux_node['ali']:
-        main(config.appName['Partying'])
+        main(config.appName['2'])
     else:
-        main(config.appName['伴伴'])
+        main(config.appName['1'])

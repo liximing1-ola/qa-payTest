@@ -29,5 +29,5 @@ class conRedis:
 
 
 if __name__ == '__main__':
-    conRedis.checkSetKey('Xs.WhiteList.SuperVoice.White', 105002338)
+    conRedis.checkSetKey('Xs.WhiteList.SuperVoice.White', 100287189)
     # conRedis.delKey('User.Big.Area.Id', tuple(i for i in conRedis.pt_user.values()))

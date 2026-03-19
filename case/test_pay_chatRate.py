@@ -11,9 +11,40 @@ from common.runFailed import Retry
 
 
 @Retry(max_n=3)
-class TestPayCreate(unittest.TestCase):
+class TestPayChatRate(unittest.TestCase):
+    """私聊打赏分成测试类"""
 
-    def test_01_chatPayNoMoney(self, des='私聊打赏余额不足的场景'):
+    def setUp(self):
+        """测试前置清理"""
+        pass
+
+    def tearDown(self):
+        """测试后置清理"""
+        pass
+
+    def _prepare_test_data(self, setup_steps):
+        """准备测试数据"""
+        for step in setup_steps:
+            if step['action'] == 'update_money':
+                mysql.updateMoneySql(**step['params'])
+            elif step['action'] == 'clear_user_data':
+                mysql.updateUserMoneyClearSql(config.payUid, config.rewardUid)
+            elif step['action'] == 'delete_account':
+                mysql.deleteUserAccountSql(step['table'], step['uid'])
+
+    def _validate_db_state(self, checks):
+        """验证数据库状态"""
+        for check in checks:
+            field = check['field']
+            uid = check['uid']
+            expected = check['expected']
+            kwargs = check.get('kwargs', {})
+            if 'assert_func' in check:
+                check['assert_func'](mysql.selectUserInfoSql(field, uid, **kwargs), expected)
+            else:
+                assert_equal(mysql.selectUserInfoSql(field, uid, **kwargs), expected)
+
+    def test_01_chatPayNoMoney(self):
         """
         用例描述：
         检查账户余额不足时，私聊一对一打赏
@@ -24,20 +55,32 @@ class TestPayCreate(unittest.TestCase):
         4.检查预期返回msg，预期：支付失败，提示Toast
         5.检查被打赏者余额,预期：0
         """
-        mysql.updateUserMoneyClearSql(config.payUid, config.rewardUid)
-        mysql.deleteUserAccountSql('broker_user', config.rewardUid)
-        mysql.deleteUserAccountSql('chatroom', config.rewardUid)
-        data = encodeData(payType='chat-gift',
-                          num=10,
-                          giftId=config.giftId['5'])
+        des = '私聊打赏钱不足的场景'
+        
+        # 准备测试数据
+        self._prepare_test_data([
+            {'action': 'clear_user_data'},
+            {'action': 'delete_account', 'table': 'broker_user', 'uid': config.rewardUid},
+            {'action': 'delete_account', 'table': 'chatroom', 'uid': config.rewardUid}
+        ])
+        
+        # 发送请求
+        data = encodeData(payType='chat-gift', num=10, giftId=config.giftId['5'])
         res = post_request_session(config.pay_url, data)
+        
+        # 验证响应
         assert_code(res['code'])
         assert_body(res['body'], 'success', 0, reason(des, res))
         assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
-        assert_equal(mysql.selectUserInfoSql('sum_money', config.rewardUid), 0)
+        
+        # 验证数据库
+        self._validate_db_state([
+            {'field': 'sum_money', 'uid': config.rewardUid, 'expected': 0}
+        ])
+        
         case_list[des] = result
 
-    def test_02_chatPayGiftNormalBroker(self, des='私聊打赏礼物GS收72%'):
+    def test_02_chatPayGiftNormalBroker(self):
         """
         用例描述：
         验证私聊打赏礼物给GS时，到账为42%公会魅力值+30%个人魅力值
@@ -48,24 +91,37 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：1000 * 0.42 = 420(money_cash) + 1000 * 0.3 = 300（money_cash_b）
         6.检查打赏者余额.预期为：1000 - 1000 = 0
         """
-        mysql.updateMoneySql(config.payUid, money=1000)
-        mysql.updateMoneySql(config.gsUid)
+        des = '私聊打赏礼物GS收72%'
+        
+        # 准备测试数据
+        self._prepare_test_data([
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
+            {'action': 'update_money', 'params': {'uid': config.gsUid}}
+        ])
+        
+        # 记录初始VIP等级
         vip_level = int(mysql.selectUserInfoSql('pay_room_money', config.payUid))
+        
+        # 发送请求
         data = encodeData(payType='chat-gift', uid=config.gsUid)
         res = post_request_session(config.pay_url, data)
+        
+        # 验证响应
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(mysql.selectUserInfoSql('single_money', config.gsUid,
-                                                money_type='money_cash'), 1000 * (config.rate - 0.2))
-        assert_equal(mysql.selectUserInfoSql('single_money', config.gsUid,
-                                                money_type='money_cash_b'), 300)
-        assert_equal(mysql.selectUserInfoSql('sum_money', config.gsUid), 720)
-        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 0)
-        assert_equal(mysql.selectUserInfoSql('pay_room_money', config.payUid),
-                     vip_level + checkUserVipExp(pay_off=1000))
+        
+        # 验证数据库
+        self._validate_db_state([
+            {'field': 'single_money', 'uid': config.gsUid, 'expected': 1000 * (config.rate - 0.2), 'kwargs': {'money_type': 'money_cash'}},
+            {'field': 'single_money', 'uid': config.gsUid, 'expected': 300, 'kwargs': {'money_type': 'money_cash_b'}},
+            {'field': 'sum_money', 'uid': config.gsUid, 'expected': 720},
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0},
+            {'field': 'pay_room_money', 'uid': config.payUid, 'expected': vip_level + checkUserVipExp(pay_off=1000)}
+        ])
+        
         case_list[des] = result
 
-    def test_03_chatPayBoxNormalBroker(self, des='私聊打赏箱子GS收72%'):
+    def test_03_chatPayBoxNormalBroker(self):
         """
         用例描述：
         验证私聊打赏箱子给GS时，到账为42%公会魅力值+30%个人魅力值
@@ -76,23 +132,38 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为不小于： 300 * 0.42 = 126(money_cash) + 300 * 0.3 = 90（money_cash_b）
         5.检查打赏者余额.预期为：600 - 600 = 0
         """
-        mysql.updateMoneySql(config.payUid, money=600)
-        mysql.updateMoneySql(config.gsUid)
-        data = encodeData(payType='chat-gift',
-                          uid=config.gsUid,
-                          money=600,
-                          giftId=config.giftId['46'],
-                          star=1)
+        des = '私聊打赏箱子GS收72%'
+        
+        # 准备测试数据
+        self._prepare_test_data([
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 600}},
+            {'action': 'update_money', 'params': {'uid': config.gsUid}}
+        ])
+        
+        # 发送请求
+        data = encodeData(
+            payType='chat-gift',
+            uid=config.gsUid,
+            money=600,
+            giftId=config.giftId['46'],
+            star=1
+        )
         res = post_request_session(config.pay_url, data)
+        
+        # 验证响应
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_len(mysql.selectUserInfoSql('single_money', config.gsUid), 300 * 0.3)
-        assert_len(mysql.selectUserInfoSql('single_money', config.gsUid,
-                                              money_type='money_cash'), 300 * (config.rate - 0.2))
-        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 0)
+        
+        # 验证数据库
+        self._validate_db_state([
+            {'field': 'single_money', 'uid': config.gsUid, 'expected': 300 * 0.3, 'assert_func': assert_len},
+            {'field': 'single_money', 'uid': config.gsUid, 'expected': 300 * (config.rate - 0.2), 'kwargs': {'money_type': 'money_cash'}, 'assert_func': assert_len},
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
+        ])
+        
         case_list[des] = result
 
-    def test_04_chatPayGiftNormalUser(self, des='私聊打赏非一代宗师用户分成72%（mcb）'):
+    def test_04_chatPayGiftNormalUser(self):
         """
         用例描述：
         验证消费打赏礼物时，非一代宗师用户收72%个人魅力值
@@ -103,17 +174,31 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：1000 * 0.72 = 720(money_cash_b)
         5.检查打赏者余额.预期为：1000 - 1000 = 0
         """
-        mysql.updateMoneySql(config.payUid, money=1000)
-        mysql.updateMoneySql(config.rewardUid)
+        des = '私聊打赏非一代宗师用户分成72%（mcb）'
+        
+        # 准备测试数据
+        self._prepare_test_data([
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
+            {'action': 'update_money', 'params': {'uid': config.rewardUid}}
+        ])
+        
+        # 发送请求
         data = encodeData(payType='chat-gift')
         res = post_request_session(config.pay_url, data)
+        
+        # 验证响应
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(mysql.selectUserInfoSql('single_money', config.rewardUid), 720)
-        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 0)
+        
+        # 验证数据库
+        self._validate_db_state([
+            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 720},
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
+        ])
+        
         case_list[des] = result
 
-    def test_05_chatPayBoxNormalUser(self, des='私聊打赏一代宗师用户分成80%（mcb）'):
+    def test_05_chatPayBoxNormalUser(self):
         """
         用例描述：
         验证消费打赏箱子时，一代宗师用户收80%个人魅力值
@@ -124,18 +209,34 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为不小于：300 * 0.8 = 240(money_cash_b)
         5.检查打赏者余额.预期为：1000 - 600 = 400
         """
-        mysql.updateMoneySql(config.payUid, money=1000)
-        mysql.updateMoneySql(config.masterUid)
-        data = encodeData(payType='chat-gift',
-                          uid=config.masterUid,
-                          money=600,
-                          giftId=config.giftId['46'],
-                          star=1)
+        des = '私聊打赏一代宗师分成80%（mcb）'
+        
+        # 准备测试数据
+        self._prepare_test_data([
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
+            {'action': 'update_money', 'params': {'uid': config.masterUid}}
+        ])
+        
+        # 发送请求
+        data = encodeData(
+            payType='chat-gift',
+            uid=config.masterUid,
+            money=600,
+            giftId=config.giftId['66'],
+            star=1
+        )
         res = post_request_session(config.pay_url, data)
+        
+        # 验证响应
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_len(mysql.selectUserInfoSql('single_money', config.masterUid), 300 * 0.8)
-        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 400)
+        
+        # 验证数据库
+        self._validate_db_state([
+            {'field': 'single_money', 'uid': config.masterUid, 'expected': 300 * 0.8, 'assert_func': assert_len},
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 400}
+        ])
+        
         case_list[des] = result
 
 

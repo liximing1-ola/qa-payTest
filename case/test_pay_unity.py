@@ -1,7 +1,7 @@
 import unittest
 
 
-@unittest.skip('unity已下线')
+@unittest.skip('unity')
 class TestPayCreate(unittest.TestCase):
 
     def test_01_unityGamePayChange(self, des='unity道具购买场景'):

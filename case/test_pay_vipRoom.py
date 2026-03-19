@@ -76,8 +76,7 @@ class TestPayCreate(unittest.TestCase):
         """
         mysql.updateMoneySql(config.payUid, money_cash_b=100)
         mysql.updateMoneySql(config.gsUid)
-        data = encodeData(payType='package',
-                          money=100,
+        data = encodeData(money=100,
                           rid=self.vipRoomRid,
                           uid=config.gsUid,
                           giftId=config.giftId['5'])

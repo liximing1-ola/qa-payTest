@@ -84,6 +84,7 @@ class TestPayCreate(unittest.TestCase):
 
     def test_work_005(self, des='作品打赏,星币余额充足,礼物类型=星币'):
         commodity = commodity_config['1']
+        commodity = commodity_config['2']
         #  sql:清除作品已被打赏的标记
         conMysql.deleteUserAccountSql("user_work_reward", starify_payUid, starify_work_state['todo'])
         #  sql:starify_payUid 修改余额
@@ -96,6 +97,7 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', True, reason_starify(des, res))
         #  sql:starify_payUid 查询余额
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('star_coin',))
         #  sql:打赏者starify_payUid 查询-财富值=礼物价值
         assert_equal(conMysql.selectUserInfoSql('wealth', starify_payUid), commodity['wealth'])
         case_list[des] = result

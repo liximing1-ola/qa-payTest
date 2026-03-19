@@ -4,7 +4,7 @@ import time
 import requests
 import Robot
 from common import Consts
-# from common.conMysql import conMysql as mysql
+from common.conMysql import conMysql as mysql
 from common.Config import config
 
 
@@ -18,6 +18,7 @@ def dictToListSlack(result_dict):
             "short": False
         }
         case.append(field)
+        # case.index(1)
     return case
 
 
@@ -51,9 +52,6 @@ def getImage(mode=2):
         res = requests.get(url_dog)
         res = res.json()
         return res[0]
-    elif mode == 3:
-        icon = random.randint(1, 1000)
-        return 'http://xs-image.oss-cn-hangzhou.aliyuncs.com/static/gift_big/{}.png'.format(icon)
 
 
 # 检查当前字段是否在Json中存在
@@ -71,7 +69,7 @@ def isExtend(data, tag):
 def getKeys(data):
     keysAll_list = []
 
-    def getKey(json_data):  # 遍历json所有key
+    def getKey(json_data):  # 遍历json里面所有key
         if type(json_data) == type({}):
             keys = json_data.keys()
             for key in keys:
@@ -94,28 +92,41 @@ def getKeys(data):
 
 
 def getValue(res):
-    if res['body']['success'] is True:
-        print('结果：{}, 时间：{}'.format(res['body']['success'], time.time()))
+    # if res['body']['success'] is True:
+    #   print('结果：{}, 时间：{}'.format(res['body']['success'], time.time()))
+    #   Consts.success_num += 1
+    # else:
+    #   print('结果：{}， 时间：{}'.format(res['body'], time.time()))
+    #     Consts.fail_num += 1
+    current_time = time.time()
+    if 'body' not in res:
+        print(f'结果：缺少body字段，时间：{current_time}')
+        Consts.fail_num += 1
+        return
+    body = res['body']
+    if 'success' in body and body['success']:
+        print(f'结果：{body["success"]}, 时间：{current_time}')
         Consts.success_num += 1
     else:
-        print('结果：{}， 时间：{}'.format(res['body'], time.time()))
+        print(f'结果：{body}，时间：{current_time}')
         Consts.fail_num += 1
 
 
 def reason(des, res):
-    if res['body']['success'] == 0 and not isExtend(res['body'], 'msg'):
-        print(res['body'])
-    return 'Depiction: {},  failReason: {}'.format(des, res['body'])
+    # Safely get body with default empty dict to prevent KeyError
+    body = res.get('body', {})
+    # Check if success is 0 and 'msg' key doesn't exist in body (including nested)
+    if body.get('success') == 0 and not isExtend(body, 'msg'):
+        print(body)
+    # Use f-string for more readable formatting
+    return f'Depiction: {des},  failReason: {body}'
 
 
-# def reason_starify(des, res):
-#     if res['body'].get("success", None) is True and not isExtend(res['body'], 'msg'):
-#         print(res['body'])
-#     return 'Depiction: {},  failReason: {}'.format(des, res['body'])
 def reason_slp(des, res):
     if res['body'].get("success", None) is True and not isExtend(res['body'], 'msg'):
         print(res['body'])
     return 'Depiction: {},  failReason: {}'.format(des, res['body'])
+
 
 def checkPath(path):
     if not os.path.exists(path):
@@ -135,30 +146,25 @@ def getUserTitle(level):
     UserNewTitleSrv::TITLE_GUO_KING => 1.8,
     UserNewTitleSrv::TITLE_HUANG_DI => 2.0,
     """
-    if level == 10:
-        return 1.0
-    elif level == 20:
-        return 1.1
-    elif level == 30:
-        return 1.2
-    elif level == 40:
-        return 1.3
-    elif level == 50:
-        return 1.4
-    elif level == 60:
-        return 1.5
-    elif level == 70:
-        return 1.6
-    elif level == 80:
-        return 1.8
-    elif level == 90:
-        return 2.0
+    level_map = {
+        10: 1.0,
+        20: 1.1,
+        30: 1.2,
+        40: 1.3,
+        50: 1.4,
+        60: 1.5,
+        70: 1.6,
+        80: 1.8,
+        90: 2.0,
+    }
+    return level_map.get(level)
 
-#
-# def checkUserVipExp(money_type='money', uid=config.payUid, pay_off=100):
-#     if money_type == 'money' or money_type == 'coin':
-#         return int(pay_off * getUserTitle(mysql.selectUserInfoSql('level', uid)))
-#     elif money_type == 'bean':
-#         return int(pay_off * 1.5)
-#     else:
-#         return 0
+
+def checkUserVipExp(money_type='money', uid=config.payUid, pay_off=100):
+    if money_type in {'money', 'coin'}:
+        title = getUserTitle(mysql.selectUserInfoSql('level', uid))
+        return int(pay_off * title) if title is not None else 0
+    elif money_type == 'bean':
+        return int(pay_off * 1.5)
+    else:
+        return ValueError

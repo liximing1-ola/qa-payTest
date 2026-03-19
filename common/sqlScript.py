@@ -55,7 +55,7 @@ class mysql:
         except Exception as error:
             print(error)
 
-    # 清空用户背包
+    # 清空用户背包内的道具
     @staticmethod
     def deleteUserCommoditySql(uid):
         con, cur = mysql.conMysql()
@@ -68,7 +68,7 @@ class mysql:
         finally:
             con.commit()
 
-    # 检查用户背包指定物品数量
+    # 检查用户背包指定物品id数量
     @staticmethod
     def checkUserCommoditySql(uid, cid):
         con, cur = mysql.conMysql()

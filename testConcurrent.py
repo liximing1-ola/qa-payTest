@@ -93,10 +93,10 @@ class TestPayConcurrent:
     def startCommodityUseReady(self):
         """
         用例描述：
-        使用商城购买的道具
+        使用商城购买的道具使用不同的路径，
         脚本步骤：
         1.构造使用者数据
-        2.校验【status code】和返回值【body】状态
+        2.根据数据校验【status code】和返回值【body】状态
         3.检查背包内物品
         """
         mysql.insertXsUserCommodity(config.payUid, self.commodity_id['cid_264'], 1)
@@ -115,7 +115,7 @@ class TestPayConcurrent:
         assert_equal(Consts.fail_num, num_times - 1)
         Consts.success_num = 0
 
-    def test_02_commodityUse(self, num_times, des='使用背包物品时的并发场景'):
+    def test_02_commodityUse(self, num_times, des='使用背包内物料的并发场景'):
         print('--------------------------{}----------------------------------------------'.format(des))
         self.startCommodityUseReady()
         threads = []

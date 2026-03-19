@@ -8,12 +8,6 @@ except ModuleNotFoundError as e:
     os.system("pip3 install python-markdown-math")
     os.system("pip3 install markdown_checklist")
     from markdown import markdown
-try:
-    from pymdownx import superfences
-except ModuleNotFoundError as e:
-    os.system("pip3 install pymdown-extensions")
-    from pymdownx import superfences
-
 
 # pip3 install xx -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com
 # 如果不行换个源
@@ -32,7 +26,6 @@ class mdtox:
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
                 <title>{}</title>
-                <link rel="stylesheet" href="https://files.cnblogs.com/files/bpf-1024/linenum.css">
                 <link rel="stylesheet" href="https://files.cnblogs.com/files/bpf-1024/markdown.css">
                 <link rel="stylesheet" href="https://files.cnblogs.com/files/bpf-1024/tasklist.css">
                 <link rel="stylesheet" href="https://files.cnblogs.com/files/bpf-1024/codehighlight.css">
@@ -57,7 +50,7 @@ class mdtox:
             'extra',  # 缩写词、属性列表、释义列表、围栏式代码块、脚注、在HTML的Markdown、表格
         ]
         third_party_extensions = [
-            'mdx_math',  # KaTeX数学公式，$E=mc^2$和$$E=mc^2$$
+            'mdx_math',  # 防护呼呼呼
             'markdown_checklist.extension',  # checklist，- [ ]和- [x]
             'pymdownx.magiclink',  # 自动转超链接，
             'pymdownx.caret',  # 上标下标，
@@ -78,17 +71,16 @@ class mdtox:
                     {
                         'name': 'mermaid',  # 开启流程图等图
                         'class': 'mermaid',
-                        'format': superfences.fence_div_format
                     }
                 ]
             },
             'pymdownx.highlight': {
                 'linenums': True,  # 显示行号
-                'linenums_style': 'pymdownx-inline'  # 代码和行号分开
+                'linenums_style': 'pymdownx-inline' # 显示风格
             },
             'pymdownx.tasklist': {
-                'clickable_checkbox': True,  # 任务列表可点击
-            }
+                'clickable_checkbox': True,
+        }
         }
 
     def to_html(self, html_path):
@@ -109,7 +101,7 @@ class mdtox:
                 file_html.write(self.html)
         except Exception as error:
             print("<Error>", error)
-            return False
+            return 0
 
         return True
 
