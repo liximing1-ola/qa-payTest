@@ -11,7 +11,7 @@ from common.conMysql import conMysql as mysql
 
 
 @Retry(max_n=3)
-class TestPayCreate(unittest.TestCase):
+class TestPayPersonDefend(unittest.TestCase):
 
     # {'id': 2, 'name': '小宝贝', 'money_value': 52000, 'break_money': 28800, 'upgrade_money': 99900}
     # {'id': 1, 'name': 'CP', 'money_value': 520000, 'break_money': 99900, 'upgrade_money': 520000}
@@ -20,8 +20,22 @@ class TestPayCreate(unittest.TestCase):
     defend_520_id = mysql.selectUserInfoSql('relation_id', cid=2)
     defend_cp_id = mysql.selectUserInfoSql('relation_id', uid=config.gsUid, cid=1)
 
+    def _prepare_test_data(self, setup_steps):
+        """准备测试数据"""
+        for step in setup_steps:
+            mysql.updateMoneySql(**step)
+
+    def _validate_db_state(self, checks):
+        """验证数据库状态"""
+        for check in checks:
+            field = check['field']
+            uid = check.get('uid', config.payUid)
+            expected = check['expected']
+            kwargs = check.get('kwargs', {})
+            assert_equal(mysql.selectUserInfoSql(field, uid, **kwargs), expected)
+
     @pytest.mark.run(order=1)
-    def test_01_defendPayChangMoney(self, des='开通个人守护场景'):
+    def test_01_defendPayChangMoney(self):
         """
         用例描述：
         开通个人守护，收益分成在师父收益(非一代宗师)的基础上为 62:38
@@ -32,20 +46,36 @@ class TestPayCreate(unittest.TestCase):
         4.检查打赏者余额
         5.检查被打赏者余额,预期：52000 * 0.62 = 32240
         """
-        mysql.updateMoneySql(config.payUid, money=52000)
-        mysql.updateMoneySql(config.rewardUid)
-        data = encodeData(payType='defend',
-                          defend_id=self.defend_520_config['id'],
-                          money=self.defend_520_config['money_value'])
+        des = '开通个人守护场景'
+
+        # 准备测试数据
+        self._prepare_test_data([
+            {'uid': config.payUid, 'money': 52000},
+            {'uid': config.rewardUid}
+        ])
+
+        # 发送请求
+        data = encodeData(
+            payType='defend',
+            defend_id=self.defend_520_config['id'],
+            money=self.defend_520_config['money_value']
+        )
         res = post_request_session(config.pay_url, data)
+
+        # 验证响应
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 0)
-        assert_equal(mysql.selectUserInfoSql('single_money', config.rewardUid), 32240)
+
+        # 验证数据库
+        self._validate_db_state([
+            {'field': 'sum_money', 'expected': 0},
+            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 32240}
+        ])
+
         case_list[des] = result
 
     @pytest.mark.run(order=2)
-    def test_02_defendUpgradePayChangeMoney(self, des='守护进阶场景'):
+    def test_02_defendUpgradePayChangeMoney(self):
         """
          用例描述：
          个人守护关系开通后，购买进阶版特权，收益分成在师父收益（非一代宗师）的基础上为：62:38
@@ -56,20 +86,36 @@ class TestPayCreate(unittest.TestCase):
          4.检查打赏者余额，预期：100000 - 99900 = 100
          5.检查被打赏者余额,预期： 99900 * 0.62 = 61938
          """
-        mysql.updateMoneySql(config.payUid, money=100000)
-        mysql.updateMoneySql(config.rewardUid)
-        data = encodeData(payType='defend-upgrade',
-                          money=self.defend_520_config['upgrade_money'],
-                          defend_id=self.defend_520_id)
+        des = '守护进阶场景'
+
+        # 准备测试数据
+        self._prepare_test_data([
+            {'uid': config.payUid, 'money': 100000},
+            {'uid': config.rewardUid}
+        ])
+
+        # 发送请求
+        data = encodeData(
+            payType='defend-upgrade',
+            money=self.defend_520_config['upgrade_money'],
+            defend_id=self.defend_520_id
+        )
         res = post_request_session(config.pay_url, data)
+
+        # 验证响应
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 100)
-        assert_equal(mysql.selectUserInfoSql('single_money', config.rewardUid), 61938)
+
+        # 验证数据库
+        self._validate_db_state([
+            {'field': 'sum_money', 'expected': 100},
+            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 61938}
+        ])
+
         case_list[des] = result
 
     @pytest.mark.run(order=3)
-    def test_03_defendBreakPayChangeMoney(self, des='守护解除场景'):
+    def test_03_defendBreakPayChangeMoney(self):
         """
          用例描述：
          个人守护关系开通后，购买进阶版特权后，强行解除关系，收益归官方
@@ -79,18 +125,34 @@ class TestPayCreate(unittest.TestCase):
          3.校验接口状态和返回值数据
          4.检查打赏者余额，预期：40000 - 36000 = 4000
          """
-        mysql.updateMoneySql(config.payUid, money=40000)
-        data = encodeData(payType='defend-break',
-                          money=self.defend_520_config['break_money'],
-                          defend_id=self.defend_520_id)
+        des = '守护解除场景'
+
+        # 准备测试数据
+        self._prepare_test_data([
+            {'uid': config.payUid, 'money': 40000}
+        ])
+
+        # 发送请求
+        data = encodeData(
+            payType='defend-break',
+            money=self.defend_520_config['break_money'],
+            defend_id=self.defend_520_id
+        )
         res = post_request_session(config.pay_url, data)
+
+        # 验证响应
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 11200)
+
+        # 验证数据库
+        self._validate_db_state([
+            {'field': 'sum_money', 'expected': 11200}
+        ])
+
         case_list[des] = result
 
     @pytest.mark.run(order=4)
-    def test_04_defendPayToGs(self, des='守护消费GS收62%（mc）'):
+    def test_04_defendPayToGs(self):
         """
         用例描述：
         给公会用户开通个人守护
@@ -101,22 +163,37 @@ class TestPayCreate(unittest.TestCase):
         4.检查打赏者余额
         5.检查被打赏者余额,预期：520000 * 0.62 = 322400
         """
-        mysql.updateMoneySql(config.payUid, money=520000)
-        mysql.updateMoneySql(config.gsUid)
-        data = encodeData(payType='defend',
-                          uid=config.gsUid,
-                          defend_id=self.defend_cp_config['id'],
-                          money=self.defend_cp_config['money_value'])
+        des = '守护消费GS收62%（mc）'
+
+        # 准备测试数据
+        self._prepare_test_data([
+            {'uid': config.payUid, 'money': 520000},
+            {'uid': config.gsUid}
+        ])
+
+        # 发送请求
+        data = encodeData(
+            payType='defend',
+            uid=config.gsUid,
+            defend_id=self.defend_cp_config['id'],
+            money=self.defend_cp_config['money_value']
+        )
         res = post_request_session(config.pay_url, data)
+
+        # 验证响应
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 0)
-        assert_equal(mysql.selectUserInfoSql('single_money', config.gsUid,
-                                                money_type='money_cash'), 520000 * config.rate)
+
+        # 验证数据库
+        self._validate_db_state([
+            {'field': 'sum_money', 'expected': 0},
+            {'field': 'single_money', 'uid': config.gsUid, 'expected': 520000 * config.rate, 'kwargs': {'money_type': 'money_cash'}}
+        ])
+
         case_list[des] = result
 
     @pytest.mark.run(order=5)
-    def test_05_defendUpgradeToGs(self, des='守护进阶消费GS收62%（mc）'):
+    def test_05_defendUpgradeToGs(self):
         """
          用例描述：
          个人守护关系开通后，购买进阶版特权，收益分成给公会用户分成为62%
@@ -127,21 +204,36 @@ class TestPayCreate(unittest.TestCase):
          4.检查打赏者余额，预期：1000000 - 520000 = 480000
          5.检查被打赏者余额,预期： 520000 * 0.62 = 322400
          """
-        mysql.updateMoneySql(config.payUid, money=1000000)
-        mysql.updateMoneySql(config.gsUid)
-        data = encodeData(payType='defend-upgrade',
-                          money=self.defend_cp_config['upgrade_money'],
-                          defend_id=self.defend_cp_id)
+        des = '守护进阶消费GS收62%（mc）'
+
+        # 准备测试数据
+        self._prepare_test_data([
+            {'uid': config.payUid, 'money': 1000000},
+            {'uid': config.gsUid}
+        ])
+
+        # 发送请求
+        data = encodeData(
+            payType='defend-upgrade',
+            money=self.defend_cp_config['upgrade_money'],
+            defend_id=self.defend_cp_id
+        )
         res = post_request_session(config.pay_url, data)
+
+        # 验证响应
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 480000)
-        assert_equal(mysql.selectUserInfoSql('single_money', config.gsUid,
-                                                money_type='money_cash'), 520000 * config.rate)
+
+        # 验证数据库
+        self._validate_db_state([
+            {'field': 'sum_money', 'expected': 480000},
+            {'field': 'single_money', 'uid': config.gsUid, 'expected': 520000 * config.rate, 'kwargs': {'money_type': 'money_cash'}}
+        ])
+
         case_list[des] = result
 
     @pytest.mark.run(order=6)
-    def test_06_defendBreakPayMoney(self, des='守护解除场景'):
+    def test_06_defendBreakPayMoney(self):
         """
          用例描述：
          个人守护关系开通后，购买进阶版特权后，强行解除关系，收益归官方
@@ -151,13 +243,28 @@ class TestPayCreate(unittest.TestCase):
          3.校验接口状态和返回值数据
          4.检查打赏者余额，预期：100000 - 99900 = 100
          """
-        mysql.updateMoneySql(config.payUid, money=100000)
-        data = encodeData(payType='defend-break',
-                          money=self.defend_cp_config['break_money'],
-                          defend_id=self.defend_cp_id)
+        des = '守护解除场景'
+
+        # 准备测试数据
+        self._prepare_test_data([
+            {'uid': config.payUid, 'money': 100000}
+        ])
+
+        # 发送请求
+        data = encodeData(
+            payType='defend-break',
+            money=self.defend_cp_config['break_money'],
+            defend_id=self.defend_cp_id
+        )
         res = post_request_session(config.pay_url, data)
+
+        # 验证响应
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 100)
-        case_list[des] = result
 
+        # 验证数据库
+        self._validate_db_state([
+            {'field': 'sum_money', 'expected': 100}
+        ])
+
+        case_list[des] = result
