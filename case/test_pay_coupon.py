@@ -10,11 +10,40 @@ from common.runFailed import Retry
 
 
 @Retry(max_n=3)
-class TestPayCreate(unittest.TestCase):
-
+class TestPayCoupon(unittest.TestCase):
+    """优惠券支付测试类"""
     businessRid = config.live_role['auto_rid']
 
-    def test_01_RoomPayNoMoney(self, des='房间打赏但余额不足的场景'):
+    def setUp(self):
+        """测试前置清理"""
+        pass
+
+    def tearDown(self):
+        """测试后置清理"""
+        pass
+
+    def _prepare_test_data(self, setup_steps):
+        """准备测试数据"""
+        for step in setup_steps:
+            if step['action'] == 'clear_user_money':
+                mysql.updateUserMoneyClearSql(*step['uids'])
+            elif step['action'] == 'delete_commodity':
+                mysql.deleteUserAccountSql('user_commodity', step['uid'])
+            elif step['action'] == 'insert_commodity':
+                mysql.insertXsUserCommodity(**step['params'])
+            elif step['action'] == 'update_money':
+                mysql.updateMoneySql(**step['params'])
+
+    def _validate_db_state(self, checks):
+        """验证数据库状态"""
+        for check in checks:
+            field = check['field']
+            uid = check['uid']
+            expected = check['expected']
+            kwargs = check.get('kwargs', {})
+            assert_equal(mysql.selectUserInfoSql(field, uid, **kwargs), expected)
+
+    def test_01_RoomPayNoMoney(self):
         """
         用例描述：
         验证余额不足时，房间一对一打赏
@@ -25,17 +54,30 @@ class TestPayCreate(unittest.TestCase):
         4.检查预期返回msg，预期：支付失败
         5.检查被打赏者余额,预期：0
         """
-        mysql.updateUserMoneyClearSql(config.payUid, config.rewardUid)
-        data = encodeData(money=100,
-                          giftId=config.giftId['5'])
+        des = '房间打赏但余额不足的场景'
+        
+        # 准备测试数据
+        self._prepare_test_data([
+            {'action': 'clear_user_money', 'uids': (config.payUid, config.rewardUid)}
+        ])
+        
+        # 发送请求
+        data = encodeData(money=100, giftId=config.giftId['5'])
         res = post_request_session(config.pay_url, data)
+        
+        # 验证响应
         assert_code(res['code'])
         assert_body(res['body'], 'success', 0, reason(des, res))
         assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
-        assert_equal(mysql.selectUserInfoSql('sum_money', config.rewardUid), 0)
+        
+        # 验证数据库
+        self._validate_db_state([
+            {'field': 'sum_money', 'uid': config.rewardUid, 'expected': 0}
+        ])
+        
         case_list[des] = result
 
-    def test_02_couponNoStatePayChange(self, des='打赏礼物使用未激活券的场景', gift_cid=54):
+    def test_02_couponNoStatePayChange(self):
         """
         用例描述：
         有未激活券(state=0)的情况下，验证打赏
@@ -47,25 +89,44 @@ class TestPayCreate(unittest.TestCase):
         5.检查被打赏者余额和账户，预期为：0
         6.检查打赏者余额,预期为：3000
         """
-        mysql.deleteUserAccountSql('user_commodity', config.payUid)
-        mysql.insertXsUserCommodity(config.payUid, gift_cid, num=1)
-        mysql.updateMoneySql(config.payUid, money=3000)
-        mysql.updateMoneySql(config.rewardUid)
+        des = '打赏礼物使用未激活券的场景'
+        gift_cid = 54
+        
+        # 准备测试数据
+        self._prepare_test_data([
+            {'action': 'delete_commodity', 'uid': config.payUid},
+            {'action': 'insert_commodity', 'params': {'uid': config.payUid, 'cid': gift_cid, 'num': 1}},
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 3000}},
+            {'action': 'update_money', 'params': {'uid': config.rewardUid}}
+        ])
+        
+        # 获取商品ID
         cid = mysql.selectUserInfoSql('id_commodity', config.payUid, cid=gift_cid)
-        data = encodeData(giftId=config.giftId['11'],
-                          money=3000,
-                          package_cid=cid,
-                          ctype='coupon',
-                          duction_money=500)
+        
+        # 发送请求
+        data = encodeData(
+            giftId=config.giftId['11'],
+            money=3000,
+            package_cid=cid,
+            ctype='coupon',
+            duction_money=500
+        )
         res = post_request_session(config.pay_url, data)
+        
+        # 验证响应
         assert_code(res['code'])
         assert_body(res['body'], 'success', 0, reason(des, res))
         assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
-        assert_equal(mysql.selectUserInfoSql('sum_money', config.rewardUid), 0)
-        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 3000)
+        
+        # 验证数据库
+        self._validate_db_state([
+            {'field': 'sum_money', 'uid': config.rewardUid, 'expected': 0},
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 3000}
+        ])
+        
         case_list[des] = result
 
-    def test_03_couponStatePayChange(self, des='打赏礼物时有激活券的场景', gift_cid=54):
+    def test_03_couponStatePayChange(self):
         """
         用例描述：
         有激活券(state=1)的情况下，验证打赏流程
@@ -76,24 +137,43 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：3000 * 0.62 = 1860
         5.检查打赏者余额,预期为：3000 -2500 = 500
         """
-        mysql.deleteUserAccountSql('user_commodity', config.payUid)
-        mysql.insertXsUserCommodity(config.payUid, gift_cid, num=1, state=1)
-        mysql.updateMoneySql(config.payUid, money=3000)
-        mysql.updateMoneySql(config.rewardUid)
+        des = '打赏礼物时有激活券的场景'
+        gift_cid = 54
+        
+        # 准备测试数据
+        self._prepare_test_data([
+            {'action': 'delete_commodity', 'uid': config.payUid},
+            {'action': 'insert_commodity', 'params': {'uid': config.payUid, 'cid': gift_cid, 'num': 1, 'state': 1}},
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 3000}},
+            {'action': 'update_money', 'params': {'uid': config.rewardUid}}
+        ])
+        
+        # 获取商品ID
         cid = mysql.selectUserInfoSql('id_commodity', config.payUid, cid=gift_cid)
-        data = encodeData(giftId=config.giftId['11'],
-                          money=3000,
-                          package_cid=cid,
-                          ctype='coupon',
-                          duction_money=500)
+        
+        # 发送请求
+        data = encodeData(
+            giftId=config.giftId['11'],
+            money=3000,
+            package_cid=cid,
+            ctype='coupon',
+            duction_money=500
+        )
         res = post_request_session(config.pay_url, data)
+        
+        # 验证响应
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(mysql.selectUserInfoSql('sum_money', config.rewardUid), 1860)
-        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 500)
+        
+        # 验证数据库
+        self._validate_db_state([
+            {'field': 'sum_money', 'uid': config.rewardUid, 'expected': 1860},
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 500}
+        ])
+        
         case_list[des] = result
 
-    def test_04_RoomToMorePayChange(self, des='房间内打赏多人场景'):
+    def test_04_RoomToMorePayChange(self):
         """
         用例描述：
         验证非直播类型房间内一对多打赏场景
@@ -104,22 +184,37 @@ class TestPayCreate(unittest.TestCase):
         4.检查打赏者余额,预期为：20000-1000*6*3 = 2000
         5.检查被打赏者余额，预期为：1000*6*0.62 = 3720(非一代宗师) 1000*6*0.7=4200(一代宗师) 1000*6*0.62=3720（公会）
         """
-        mysql.updateMoneySql(config.payUid, money=5000, money_cash=5000, money_cash_b=5000, money_b=5000)
-        mysql.updateUserMoneyClearSql(config.masterUid, config.rewardUid, config.gsUid)
-        data = encodeData(payType='package-more',
-                          num=6,
-                          uids=('{}'.format(config.gsUid), '{}'.format(config.rewardUid), '{}'.format(config.masterUid)))
+        des = '房间内打赏多人场景'
+        
+        # 准备测试数据
+        self._prepare_test_data([
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 5000, 'money_cash': 5000, 'money_cash_b': 5000, 'money_b': 5000}},
+            {'action': 'clear_user_money', 'uids': (config.masterUid, config.rewardUid, config.gsUid)}
+        ])
+        
+        # 发送请求
+        data = encodeData(
+            payType='package-more',
+            num=6,
+            uids=('{}'.format(config.gsUid), '{}'.format(config.rewardUid), '{}'.format(config.masterUid))
+        )
         res = post_request_session(config.pay_url, data)
+        
+        # 验证响应
         assert_code(res['code'], 200)
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(mysql.selectUserInfoSql('single_money', config.rewardUid), 3720)
-        assert_equal(mysql.selectUserInfoSql('single_money', config.masterUid), 4200)
-        assert_equal(mysql.selectUserInfoSql('single_money', config.gsUid,
-                                                money_type='money_cash'), 6000 * config.rate)
-        assert_equal(mysql.selectUserInfoSql('single_money', config.payUid, money_type='money_cash'), 2000)
+        
+        # 验证数据库
+        self._validate_db_state([
+            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 3720},
+            {'field': 'single_money', 'uid': config.masterUid, 'expected': 4200},
+            {'field': 'single_money', 'uid': config.gsUid, 'expected': 6000 * config.rate, 'kwargs': {'money_type': 'money_cash'}},
+            {'field': 'single_money', 'uid': config.payUid, 'expected': 2000, 'kwargs': {'money_type': 'money_cash'}}
+        ])
+        
         case_list[des] = result
 
-    def test_05_couponNoStatePayChange(self, des='电台使用青铜体验券', gift_cid=21980):
+    def test_05_couponNoStatePayChange(self):
         """
         用例描述：
         在电台房使用24小时体验青铜坑位券，不分成
@@ -131,18 +226,37 @@ class TestPayCreate(unittest.TestCase):
         5.检查被打赏者余额和账户，预期为：0
         6.检查打赏者余额,预期为：0
         """
-        mysql.deleteUserAccountSql('user_commodity', config.payUid)
-        mysql.insertXsUserCommodity(config.payUid, gift_cid, num=1)
-        mysql.updateUserMoneyClearSql(config.payUid, config.rewardUid)
+        des = '电台使用青铜体验券'
+        gift_cid = 21980
+        
+        # 准备测试数据
+        self._prepare_test_data([
+            {'action': 'delete_commodity', 'uid': config.payUid},
+            {'action': 'insert_commodity', 'params': {'uid': config.payUid, 'cid': gift_cid, 'num': 1}},
+            {'action': 'clear_user_money', 'uids': (config.payUid, config.rewardUid)}
+        ])
+        
+        # 获取商品ID
         cid = mysql.selectUserInfoSql('id_commodity', config.payUid, cid=gift_cid)
-        data = encodeData(payType='package-radioDefend',
-                          rid=200022566,  # rid=200022566， error先检查电台房在不在
-                          money=520,
-                          package_cid=cid)
+        
+        # 发送请求
+        data = encodeData(
+            payType='package-radioDefend',
+            rid=200022566,
+            money=520,
+            package_cid=cid
+        )
         res = post_request_session(config.pay_url, data)
+        
+        # 验证响应
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, reason(des, res))
-        assert_equal(mysql.selectUserInfoSql('sum_money', config.rewardUid), 0)
-        assert_equal(mysql.selectUserInfoSql('sum_money', config.payUid), 0)
-        assert_equal(mysql.selectUserInfoSql('num_commodity', config.payUid, cid=gift_cid), 0)
+        
+        # 验证数据库
+        self._validate_db_state([
+            {'field': 'sum_money', 'uid': config.rewardUid, 'expected': 0},
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0},
+            {'field': 'num_commodity', 'uid': config.payUid, 'expected': 0, 'kwargs': {'cid': gift_cid}}
+        ])
+        
         case_list[des] = result
