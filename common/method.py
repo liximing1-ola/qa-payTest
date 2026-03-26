@@ -111,7 +111,7 @@ def format_reason_slp(des, res):
 def check_path(path):
     """检查路径是否存在"""
     if not os.path.exists(path):
-        Robot.robot('icon', f'php代码路径异常: {path}', bot='PT')
+        Robot.robot('icon', f'php代码路径异常: {path}', bot='APP')
         raise EnvironmentError('代码路径异常')
 
 

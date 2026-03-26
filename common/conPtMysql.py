@@ -1,6 +1,6 @@
 # coding=utf-8
 """
-PT MySQL数据库操作模块
+APP MySQL数据库操作模块
 """
 import pymysql
 from pymysql import cursors

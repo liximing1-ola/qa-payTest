@@ -40,11 +40,10 @@ class CodeConfig:
 @dataclass
 class AppNameConfig:
     """应用名称映射"""
-    _1: str = '1'  # 伴伴
-    _2: str = '2'  # PT
+    _1: str = '1'
+    _2: str = '2'
     谁是凶手: str = 'games'
     不夜星球: str = 'slp'
-    冲鸭: str = 'rush'
 
     def __getitem__(self, key):
         """支持 config.appName['1'] 访问方式"""
@@ -66,7 +65,7 @@ class LinuxNodeConfig:
 
 @dataclass
 class BBUserConfig:
-    """伴伴用户配置"""
+    """APP用户配置"""
     payUid: int = 103273407
     testUid: int = 105002312
     pack_cal_uid: int = 105002313
@@ -92,7 +91,7 @@ class LiveRoleConfig:
 
 @dataclass
 class PTUserConfig:
-    """PT用户配置"""
+    """APP用户配置"""
     payUid: int = 800350557
     testUid: int = 800022872
     brokerUid: int = 800018895
@@ -101,7 +100,7 @@ class PTUserConfig:
 
 @dataclass
 class PTRoomConfig:
-    """PT房间配置"""
+    """APP房间配置"""
     business_joy: int = 105699329
     vip_rid: int = 105698376
     th_union: int = 105708881
@@ -159,7 +158,7 @@ class Config:
     # ============ 便捷访问属性 ============
     @property
     def payUid(self) -> int:
-        """打赏者UID（伴伴）"""
+        """打赏者UID"""
         return self.bb_user.payUid
 
     @property
