@@ -31,7 +31,7 @@ class TestPayCreate(unittest.TestCase):
 		"""
 		uid = rewardUid
 		assert_equal(mysql.checkUserBroker(uid), False)  # 确认 uid不是工会成员
-		mysql.updateMoneySql(payUid, money=default_money)
+		UserMoneyOperations.update(payUid, money=default_money)
 		mysql.updateUserMoneyClearSql(normal_uid)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		# mysql.deleteUserAccountSql('broker_user', normal_uid)
@@ -40,9 +40,9 @@ class TestPayCreate(unittest.TestCase):
 		                  num=default_num,
 		                  uid=uid,
 		                  giftId=giftId['69']['gid'])
-		res = post_request_session(pay_url, data, tokenName='slp')
+		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_body(res['body'], 'success', 1, format_reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('single_money', normal_uid),
 		             giftId['69']['price'] * default_num * rates['normal']['default'])
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid),

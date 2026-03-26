@@ -33,8 +33,8 @@ class TestPayCreate(unittest.TestCase):
 		"""
 		uid = gsUid
 		assert_equal(mysql.checkUserBroker(uid), True)  # 确认 uid是工会成员
-		mysql.updateMoneySql(payUid, money=default_money)
-		mysql.updateMoneySql(uid)
+		UserMoneyOperations.update(payUid, money=default_money)
+		UserMoneyOperations.update(uid)
 		mysql.updateUserGodSql(uid, 1)
 		data = encodeData(
 			uid=uid,
@@ -42,9 +42,9 @@ class TestPayCreate(unittest.TestCase):
 			defend_id=defend['小宝贝']['id'],
 			money=defend['小宝贝']['price']
 		)
-		res = post_request_session(pay_url, data, tokenName='slp')
+		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_body(res['body'], 'success', 1, format_reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - defend['小宝贝']['price'])
 		assert_equal(mysql.selectUserInfoSql('single_money', uid, money_type='money_cash'), defend['小宝贝']['price'] * rates['gs']['default'])
 		case_list[des] = result
@@ -63,8 +63,8 @@ class TestPayCreate(unittest.TestCase):
 		 """
 		uid = gsUid
 		assert_equal(mysql.checkUserBroker(uid), True)  # 确认 uid是工会成员
-		mysql.updateMoneySql(payUid, money=default_money)
-		mysql.updateMoneySql(uid)
+		UserMoneyOperations.update(payUid, money=default_money)
+		UserMoneyOperations.update(uid)
 		mysql.updateUserGodSql(uid, 1)
 		defend_id = mysql.selectUserInfoSql('relation_id', payuid=payUid, uid=uid, cid=defend['小宝贝']['id'])
 		data = encodeData(
@@ -73,9 +73,9 @@ class TestPayCreate(unittest.TestCase):
 			money=defend['小宝贝']['upgrade_price'],
 			defend_id=defend_id
 		)
-		res = post_request_session(pay_url, data, tokenName='slp')
+		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_body(res['body'], 'success', 1, format_reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - defend['小宝贝']['upgrade_price'])
 		assert_equal(mysql.selectUserInfoSql('single_money', uid, money_type='money_cash'), defend['小宝贝']['upgrade_price'] * rates['gs']['default'])
 		case_list[des] = result
@@ -93,8 +93,8 @@ class TestPayCreate(unittest.TestCase):
 		 """
 		uid = gsUid
 		assert_equal(mysql.checkUserBroker(uid), True)  # 确认 uid是工会成员
-		mysql.updateMoneySql(payUid, money=default_money)
-		mysql.updateMoneySql(uid)
+		UserMoneyOperations.update(payUid, money=default_money)
+		UserMoneyOperations.update(uid)
 		mysql.updateUserGodSql(uid, 1)
 		mysql.selectUserInfoSql('relation_id', uid=uid, cid=defend['小宝贝']['id'])
 		defend_id = mysql.selectUserInfoSql('relation_id', payuid=payUid, uid=uid, cid=defend['小宝贝']['id'])
@@ -104,9 +104,9 @@ class TestPayCreate(unittest.TestCase):
 			money=defend['小宝贝']['break_price'],
 			defend_id=defend_id
 		)
-		res = post_request_session(pay_url, data, tokenName='slp')
+		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_body(res['body'], 'success', 1, format_reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - defend['小宝贝']['break_price'])
 		assert_equal(mysql.selectUserInfoSql('sum_money', uid), 0)
 		case_list[des] = result

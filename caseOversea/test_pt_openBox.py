@@ -41,9 +41,9 @@ class TestPayCreate(unittest.TestCase):
         conMysql.insertXsUserBox(config.pt_payUid)
         conMysql.updateMoneySql(config.pt_payUid, money=400, money_cash=100, money_cash_b=100, money_b=100)
         data = encodePtData(payType='shop-buy-box')
-        res = post_request_session(config.pt_pay_url, data, tokenName='pt')
+        res = post_request_session(config.pt_pay_url, data, token_name='pt')
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 100)
         assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.pt_payUid), 1)
         case_list[des] = result
@@ -73,9 +73,9 @@ class TestPayCreate(unittest.TestCase):
                             num=6,
                             cid=6,
                             boxType='silver')
-        res = post_request_session(config.pt_pay_url, data, tokenName='pt')
+        res = post_request_session(config.pt_pay_url, data, token_name='pt')
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 0)
         assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.pt_payUid), 6)
         case_list[des] = result
@@ -95,9 +95,9 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.pt_testUid)
         conMysql.updateUserextendMoneyClearSql(config.pt_testUid)  # 非主播钱包附加表账户余额清空
         data = encodePtData(payType='package', giftId=config.giftId['46'])
-        res = post_request_session(config.pt_pay_url, data, tokenName='pt')
+        res = post_request_session(config.pt_pay_url, data, token_name='pt')
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 100)
         assert_len(conMysql.selectUserInfoSql('money_cash_personal', config.pt_testUid, money_type='money_cash_personal'), 100)
         assert_equal(conMysql.selectUserInfoSql('money_cash_personal', config.pt_testUid, money_type='money_cash_personal'),
@@ -122,9 +122,9 @@ class TestPayCreate(unittest.TestCase):
                             num=2,
                             money=2100,
                             giftId=config.giftId['47'])
-        res = post_request_session(config.pt_pay_url, data, tokenName='pt')
+        res = post_request_session(config.pt_pay_url, data, token_name='pt')
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 1600)
         assert_len(conMysql.selectUserInfoSql('money_cash_personal', config.pt_testUid, money_type='money_cash_personal'), 1000)
         assert_equal(conMysql.selectUserInfoSql('money_cash_personal', config.pt_testUid, money_type='money_cash_personal'),

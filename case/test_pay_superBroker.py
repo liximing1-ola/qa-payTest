@@ -4,16 +4,36 @@ import pytest
 
 
 @unittest.skip('网赚分成逻辑 ')
-class TestPayCreate(unittest.TestCase):
+class TestPaySuperBroker(unittest.TestCase):
     # 角色配置
     star_role = {}
 
     @classmethod
     def setUpClass(cls) -> None:
-        mysql.updateUserInfoSql('super_chatroom', TestPayCreate.star_role['super-voice-fresh'])
+        mysql.updateUserInfoSql('super_chatroom', TestPaySuperBroker.star_role['super-voice-fresh'])
+
+    def _prepare_test_data(self, setup_steps):
+        """准备测试数据"""
+        for step in setup_steps:
+            action = step['action']
+            params = step.get('params', {})
+            if action == 'update_money':
+                UserMoneyOperations.update(**params)
+            elif action == 'update_user_info':
+                mysql.updateUserInfoSql(params['field'], params['value'])
+
+    def _validate_db_state(self, checks):
+        """验证数据库状态"""
+        for check in checks:
+            field = check['field']
+            uid = check.get('uid')
+            money_type = check.get('money_type')
+            expected = check['expected']
+            # 具体验证逻辑待实现
+            pass
 
     @pytest.mark.run(order=1)
-    def test_01_starRoomNoBrokerArtistPay_35(self, des='网赚房无公会无经纪人初级艺人收35%个人魅力值'):
+    def test_01_starRoomNoBrokerArtistPay_35(self):
         """
         用例描述：
         tdr：网赚频道非公会无经纪人的初级艺人（0-3500）被打赏后收到35%的个人魅力值（此类房间不走师徒分成）
@@ -23,10 +43,11 @@ class TestPayCreate(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：1000 * 0.35 = 350(个人魅力值)
         """
+        des = '网赚房无公会无经纪人初级艺人收35%个人魅力值'
         pass
 
     @pytest.mark.run(order=2)
-    def test_02_starRoomNoBrokerArtistPay_45(self, des='网赚房无公会无经纪人中级艺人收45%个人魅力值'):
+    def test_02_starRoomNoBrokerArtistPay_45(self):
         """
         用例描述：
         tdr：网赚频道非公会无经纪人的中级艺人（3501-10000）被打赏后收到45%的个人魅力值
@@ -36,10 +57,11 @@ class TestPayCreate(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：1000 * 0.45 = 450(个人魅力值)
         """
+        des = '网赚房无公会无经纪人中级艺人收45%个人魅力值'
         pass
 
     @pytest.mark.run(order=3)
-    def test_03_starRoomNoBrokerArtistPay_55(self, des='网赚房无公会无经纪人高级艺人收55%个人魅力值'):
+    def test_03_starRoomNoBrokerArtistPay_55(self):
         """
         用例描述：
         tdr：网赚频道非公会无经纪人的高级艺人（>10001）被打赏后收到55%的个人魅力值
@@ -49,10 +71,11 @@ class TestPayCreate(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：1000 * 0.55 = 550(个人魅力值)
         """
+        des = '网赚房无公会无经纪人高级艺人收55%个人魅力值'
         pass
 
     @pytest.mark.run(order=4)
-    def test_05_starRoomNoAgentPay_45(self, des='网赚指定工会无经纪人中级艺人收45%公会魅力值'):
+    def test_04_starRoomNoAgentPay_45(self):
         """
         用例描述：
         tdr：网赚频道有公会无经纪人的中级艺人（3501-10000）被打赏后收到45%的公会魅力值
@@ -62,10 +85,11 @@ class TestPayCreate(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：1000 * 0.45 = 450（公会魅力值）
         """
+        des = '网赚指定工会无经纪人中级艺人收45%公会魅力值'
         pass
 
     @pytest.mark.run(order=5)
-    def test_05_starRoomSuperVoicePay_508(self, des='网赚无工会有经纪人(1j)初级艺人分成50:8'):
+    def test_05_starRoomSuperVoicePay_508(self):
         """
         用例描述：
         tdr：网赚频道无公会有经纪人的初级艺人（0-3500）被打赏后收到50%的个人魅力值，初级经纪人（公会）收到8%公会魅力值
@@ -76,10 +100,11 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：1000 * 0.5 = 500（个人魅力值）
         5.检查经纪人余额，预期为：1000 * 0.8 = 80（个人魅力值）
         """
+        des = '网赚无工会有经纪人(1j)初级艺人分成50:8'
         pass
 
     @pytest.mark.run(order=6)
-    def test_06_starRoomArtistAgent_608(self, des='网赚指定工会有经纪人(1j)的中级艺人分成60:8'):
+    def test_06_starRoomArtistAgent_608(self):
         """
         用例描述：
         tdr：网赚频道有公会有经纪人的中级艺人（3501-10000）被打赏后收到60%的公会魅力值，初级经纪人（公会）收到8%公会魅力值
@@ -90,10 +115,11 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：1000 * 0.6 = 600
         5.检查经纪人余额，预期为：1000 * 0.08 = 80
         """
+        des = '网赚指定工会有经纪人(1j)的中级艺人分成60:8'
         pass
 
     @pytest.mark.run(order=7)
-    def test_07_starRoomArtistAgent_7012(self, des='网赚有工会有经纪人(7j)高级艺人分成70:12'):
+    def test_07_starRoomArtistAgent_7012(self):
         """
         用例描述：
         tdr：网赚频道有公会有经纪人的高级艺人（>10001）被打赏后收到70%的公会魅力值，高级经纪人（公会）收到12%公会魅力值
@@ -104,10 +130,11 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：1000 * 0.7 = 700（money_cash）
         5.检查经纪人余额，预期为： 1000 * 0.12 = 120(money_cash)
         """
+        des = '网赚有工会有经纪人(7j)高级艺人分成70:12'
         pass
 
     @pytest.mark.run(order=8)
-    def test_08_NormalRoomPayArtist_620(self, des='普通房指定工会有经纪人(1j)只艺人收到62%'):
+    def test_08_NormalRoomPayArtist_620(self):
         """
         用例描述：
         tdr：非网赚频道王牌公会中有经纪人的艺人被打赏后收到62%的个人魅力值，经纪人无收入
@@ -118,10 +145,11 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额，预期为：1000 * 0.62 = 620（个人魅力值）
         5.检查经纪人余额，预期为：0
         """
+        des = '普通房指定工会有经纪人(1j)只艺人收到62%'
         pass
 
     @pytest.mark.run(order=9)
-    def test_09_starRoomWhiteUserPay_70(self, des='网赚房无公会无经纪人白名单艺人收70%个人魅力值'):
+    def test_09_starRoomWhiteUserPay_70(self):
         """
         用例描述：
         tdr：网赚频道非公会无经纪人的白名单初级艺人（0-3500）被打赏后收到70%的个人魅力值
@@ -131,4 +159,5 @@ class TestPayCreate(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：1000 * 0.7 = 700(个人魅力值)
         """
+        des = '网赚房无公会无经纪人白名单艺人收70%个人魅力值'
         pass

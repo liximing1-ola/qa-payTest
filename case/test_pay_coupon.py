@@ -30,9 +30,9 @@ class TestPayCoupon(unittest.TestCase):
             elif step['action'] == 'delete_commodity':
                 mysql.deleteUserAccountSql('user_commodity', step['uid'])
             elif step['action'] == 'insert_commodity':
-                mysql.insertXsUserCommodity(**step['params'])
+                UserCommodityOperations.insert(**step['params'])
             elif step['action'] == 'update_money':
-                mysql.updateMoneySql(**step['params'])
+                UserMoneyOperations.update(**step['params'])
 
     def _validate_db_state(self, checks):
         """验证数据库状态"""
@@ -67,8 +67,8 @@ class TestPayCoupon(unittest.TestCase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 0, reason(des, res))
-        assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
+        assert_body(res['body'], 'success', 0, format_reason(des, res))
+        assert_body(res['body'], 'msg', '余额不足，无法支付', format_reason(des, res))
         
         # 验证数据库
         self._validate_db_state([
@@ -115,8 +115,8 @@ class TestPayCoupon(unittest.TestCase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 0, reason(des, res))
-        assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
+        assert_body(res['body'], 'success', 0, format_reason(des, res))
+        assert_body(res['body'], 'msg', '余额不足，无法支付', format_reason(des, res))
         
         # 验证数据库
         self._validate_db_state([
@@ -163,7 +163,7 @@ class TestPayCoupon(unittest.TestCase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         
         # 验证数据库
         self._validate_db_state([
@@ -202,7 +202,7 @@ class TestPayCoupon(unittest.TestCase):
         
         # 验证响应
         assert_code(res['code'], 200)
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         
         # 验证数据库
         self._validate_db_state([
@@ -250,7 +250,7 @@ class TestPayCoupon(unittest.TestCase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         
         # 验证数据库
         self._validate_db_state([

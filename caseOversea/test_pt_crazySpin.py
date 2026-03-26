@@ -30,11 +30,11 @@ class TestPayCreate(unittest.TestCase):
         conMysql.deleteUserAccountSql('user_commodity', config.pt_payUid)
         conMysql.updateMoneySql(config.pt_payUid, money=2000)
         data = encodePtData(payType='shop-buy-crazyspin')
-        res = post_request_session(url=crazySpin.spinBuy(uid=config.pt_payUid),
+        res = post_request_session(url=CrazySpin.spin_buy_url(uid=config.pt_payUid),
                                    data=data,
-                                   tokenName='pt')
+                                   token_name='pt')
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 1000)
         assert_equal(conMysql.selectUserInfoSql('sum_commodity_32', config.pt_payUid), 10)
         case_list[des] = result
@@ -58,16 +58,16 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.deleteUserAccountSql('user_commodity', config.pt_payUid)
         conMysql.insertXsUserCommodity(config.pt_payUid, cid=cid, num=100)  # 背包插入100个欢乐券
-        crazySpin.turntablelist(config.pt_room['business_joy'],
+        CrazySpin.get_turntable_list(config.pt_room['business_joy'],
                                 config.pt_payUid,
-                                tokenName='pt')
-        crazySpin.turntablehorn(config.pt_payUid, tokenName='pt')
+                                token_name='pt')
+        CrazySpin.get_turntable_horn(config.pt_payUid, token_name='pt')
         data = encodePtData(payType='play-crazyspin')
-        res = post_request_session(url=crazySpin.spinPlay(uid=config.pt_payUid),
+        res = post_request_session(url=CrazySpin.spin_play_url(uid=config.pt_payUid),
                                    data=data,
-                                   tokenName='pt')
+                                   token_name='pt')
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.pt_payUid), 100)
         assert_equal(conMysql.selectUserInfoSql('sum_commodity_32', config.pt_payUid), 90)
         case_list[des] = result

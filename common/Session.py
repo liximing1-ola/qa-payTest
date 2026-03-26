@@ -5,195 +5,139 @@
 import os
 import requests
 import urllib3
-from common import Logs, method
+from common import Logs
 from common.Config import config
 from common.paramsYaml import Yaml
 
+urllib3.disable_warnings()
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
 
 class Session:
-    def __init__(self):
-        self.config = config
-        urllib3.disable_warnings()
-        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    """会话管理类"""
+
+    # 环境配置映射
+    ENV_CONFIGS = {
+        "dev": {
+            "headers_key": 'header_dev',
+            "params_key": 'params_dev_qq',
+            "body_key": 'data_dev_qq',
+            "package": 'x.x.x.x',
+            "login_url": config.bb_qqLogin_url,
+            "use_backup": True,
+        },
+        "rush": {
+            "headers_key": 'header_dev',
+            "params_key": 'params_teammate_qq',
+            "body_key": 'data_teammate_qq',
+            "package": 'com.im.duck.android',
+            "login_url": config.bb_qqLogin_url,
+            "use_backup": False,
+        },
+        config.appName['1']: {
+            "headers_key": 'header_pt',
+            "params_key": 'data_pt_mobile_params',
+            "body_key": 'data_slp_mobile',
+            "package": None,
+            "login_url": config.pt_mobile_login_url,
+            "use_backup": False,
+        },
+        config.appName['不夜星球']: {
+            "headers_key": 'header_slp',
+            "params_key": 'data_slp_mobile_params',
+            "body_key": 'data_slp_mobile',
+            "package": 'com.yhl.sleepless.android',
+            "login_url": config.slp_mobile_login_url,
+            "use_backup": True,
+        },
+    }
+
+    @staticmethod
+    def _login(env_config, env):
+        """执行登录请求"""
+        headers = Yaml.read('Basic.yml', env_config['headers_key'])
+        params = Yaml.read('Basic.yml', env_config['params_key'])
+        body = Yaml.read('Basic.yml', env_config['body_key'])
+
+        login_url = env_config['login_url'] + '?' + params
+        if env_config['package']:
+            login_url += f"&package={env_config['package']}"
+
+        session = requests.session()
+        res = session.post(login_url, data=body, headers=headers, verify=False)
+        res.raise_for_status()
+        return res.json()
+
+    @staticmethod
+    def _handle_response(res, env):
+        """处理响应结果"""
+        if not res.get('success') or 'token' not in res.get('data', {}):
+            print(f'failReason： {res.get("msg", "")}')
+            return None
+
+        token = res['data'].get('token')
+        uid = res['data'].get('uid')
+        print(f'{env}：token:{token}')
+
+        Session.checkUserToken('write', app_name=env, token=token)
+        return {'token': token, 'uid': uid}
+
+    @staticmethod
+    def _use_backup_plan(env, error_msg):
+        """使用备选方案获取token"""
+        Logs.get_logger('getSession.log').error(f'{error_msg}，原因： {error_msg}')
+        from common.conMysql import conMysql
+        from common.getToken import TokenGenerator
+
+        token = TokenGenerator(config.payUid, conMysql.selectUserInfoSql('user_index', config.payUid)).generate()
+        Session.checkUserToken('write', app_name=env, token=token)
+        print(f'默认方案失败，启用备选方案：token:{token}')
+        return {'token': token}
 
     @staticmethod
     def getSession(env):
         """
-        获取qq登陆session
+        获取登录session
         :param env: 环境
-        :return: 登陆token
+        :return: 登录token
         """
-        env_configs = {
-            "dev": {
-                "header_dev": Yaml.read_yaml('Basic.yml', 'header_dev'),
-                "params_dev_qq": Yaml.read_yaml('Basic.yml', 'params_dev_qq'),
-                "data_dev_qq": Yaml.read_yaml('Basic.yml', 'data_dev_qq'),
-                "package_dev": 'x.x.x.x',
-                "login_url_dev": config.bb_qqLogin_url,
-                "use_backup": True,
-            }
-        }
+        if env == "release":
+            return None
 
-        if env not in env_configs:
+        env_config = Session.ENV_CONFIGS.get(env)
+        if not env_config:
             print("env input error")
             return None
 
-        if env == "release":
-            pass
-        elif env == "dev":
-            # noinspection PyBroadException
-            try:
-                headers = Yaml.read_yaml('Basic.yml', 'header_dev')
-                params = Yaml.read_yaml('Basic.yml', 'params_dev_qq')
-                login_url = config.bb_qqLogin_url + '?' + params + '&package=x.x.x.x'  # 2022.7.22修改，请求接口加包名限制
-                body = Yaml.read_yaml('Basic.yml', 'data_dev_qq')
-                session = requests.session()
-                res = session.post(login_url, data=body, headers=headers, verify=False)
-                res.raise_for_status()
-                res = res.json()
-                if not method.isExtend(res, 'token') or res['success'] != 1:
-                    print('failReason： {}'.format(res['msg']))
-                print('Default Plan：token:{}'.format(res['data'].get('token')))
-                tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
-                Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
-                return tokenDict
-            except Exception as error:
-                Logs.get_log('getSession.log').error('session error，reason： {}'.format(error))
-                from common.conMysql import conMysql
-                from common.getToken import getToken
-                token = getToken(config.payUid, conMysql.selectUserInfoSql('user_index', config.payUid)).get_token()
-                tokenDict = {'token': token}
-                print('Default Plan Error，Use Backup Plan：token:{}'.format(token))
-                Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
+        try:
+            res = Session._login(env_config, env)
+            result = Session._handle_response(res, env)
+            if result:
+                return result
+        except Exception as error:
+            if env_config.get('use_backup'):
+                return Session._use_backup_plan(env, str(error))
+            Logs.get_logger('getSession.log').error(f'session获取异常，原因： {error}')
 
-        elif env == "rush":
-            # noinspection PyBroadException
-            try:
-                headers = Yaml.read_yaml('Basic.yml', 'header_dev')
-                params = Yaml.read_yaml('Basic.yml', 'params_teammate_qq')
-                login_url = config.bb_qqLogin_url + '?' + params + '&package=com.im.duck.android'  # 7.22修改，请求接口加包名限制
-                body = Yaml.read_yaml('Basic.yml', 'data_teammate_qq')
-                session = requests.session()
-                res = session.post(login_url, data=body, headers=headers, verify=False)
-                res.raise_for_status()
-                res = res.json()
-                if not method.isExtend(res, 'token') or res['success'] != 1:
-                    print('failReason： {}'.format(res['msg']))
-                tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
-                Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
-                return tokenDict
-            except Exception as error:
-                Logs.get_log('getSession.log').error('session异常，原因： {}'.format(error))
-
-        elif env == config.appName['1']:
-            try:
-                headers = Yaml.read_yaml('Basic.yml', 'header_pt')
-                params = Yaml.read_yaml('Basic.yml', 'data_pt_mobile_params')
-                body = Yaml.read_yaml('Basic.yml', 'data_slp_mobile')
-                login_url = config.pt_mobile_login_url + '?' + params      # 7.26加包名限制
-                session = requests.session()
-                res = session.post(login_url, data=body, headers=headers, verify=False)
-                res.raise_for_status()
-                res = res.json()
-                if not method.isExtend(res, 'token') or res['success'] != 1:
-                    print('failReason： {}'.format(res['msg']))
-                tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
-                Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
-                return tokenDict
-            except Exception as error:
-                Logs.get_log('getSession.log').error('session获取异常，原因： {}'.format(error))
-
-        # elif env == config.appName['starify']:
-        #     try:
-        #         from common.Basic_starify import header_starify, query_starify
-        #         from caseStarify.tools import create_sign
-        #         from time import time
-        #         from urllib.parse import urlencode, urlunparse, unquote
-        #         # 不去除sign验证,必须自己计算
-        #         headers = header_starify
-        #         query = query_starify.copy()
-        #         query['_timestamp'] = str(int(time()))
-        #         from caseStarify.need_data import starify_payPhone, starify_rewardPhoneUid01, starify_rewardPhoneUid02, starify_payUid
-        #         for phone in [starify_payPhone, starify_rewardPhoneUid01, starify_rewardPhoneUid02]:
-        #             body = {
-        #                 "mobile": phone,
-        #                 "area": "886",
-        #                 "code": "1234",
-        #                 "password": "",
-        #             }
-        #             sign = create_sign(query)
-        #             query['_sign'] = sign
-        #             url = config.starify_mobile_login_url + "?" + unquote(urlencode(query))
-        #             session = requests.session()
-        #             res = session.post(url, data=body, headers=headers, timeout=30)
-        #             res.raise_for_status()
-        #             res = res.json()
-        #             if not method.isExtend(res, 'token') or res['success'] != 1:
-        #                 print('failReason： {}'.format(res['msg']))
-        #             tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
-        #             Session.checkUserToken_starify('write', uid=res['data']['uid'], app_name=env,
-        #                                            token=tokenDict['token'])
-        #             # return tokenDict
-        #     except Exception as error:
-        #         Logs.get_log('getSession.log').error('session获取异常，原因： {}'.format(error))
-        elif env == config.appName['不夜星球']:
-            try:
-                headers = Yaml.read_yaml('Basic.yml', 'header_slp')
-                params = Yaml.read_yaml('Basic.yml', 'data_slp_mobile_params')
-                login_url = config.slp_mobile_login_url + '?' + params + '&package=com.yhl.sleepless.android'
-                body = Yaml.read_yaml('Basic.yml', 'data_slp_mobile')
-                session = requests.session()
-                res = session.post(login_url, data=body, headers=headers, verify=False)
-                res.raise_for_status()
-                res = res.json()
-                if not method.isExtend(res, 'token') or res['success'] != 1:
-                    print('failReason： {}'.format(res['msg']))
-                print('使用默认方案：token:{}'.format(res['data'].get('token')))
-                tokenDict = {'token': res['data'].get('token'), 'uid': res['data']['uid']}
-                Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
-                return tokenDict
-            except Exception as error:
-                Logs.get_log('getSession.log').error('默认方案session异常，原因： {}'.format(error))
-                from common.conMysql import conMysql
-                from common.getToken import getToken
-                token = getToken(config.payUid, conMysql.selectUserInfoSql('user_index', config.payUid)).get_token()
-                tokenDict = {'token': token}
-                print('默认方案失败，启用备选方案：token:{}'.format(token))
-                Session.checkUserToken('write', app_name=env, token=tokenDict['token'])
-
-        else:
-            print("env input error")
+        return None
 
     @staticmethod
-    def checkUserToken(operate, app_name='dev', token=''):
-        txtPath = os.path.split(os.path.realpath(__file__))[0] + '/{}UserToken.txt'.format(app_name)
-        if not os.path.exists(txtPath):
-            os.system(r"touch {}".format(txtPath))
+    def checkUserToken(operate, app_name='dev', token='', uid=None):
+        """检查/写入用户token"""
+        base_path = os.path.split(os.path.realpath(__file__))[0]
+        filename = f'{app_name}UserToken_{uid}.txt' if uid else f'{app_name}UserToken.txt'
+        txt_path = os.path.join(base_path, filename)
+
+        if not os.path.exists(txt_path):
+            open(txt_path, 'w').close()
+
         if operate == 'write':
-            with open(txtPath, 'w') as f:
+            with open(txt_path, 'w') as f:
                 f.write(token)
                 f.flush()
         elif operate == 'read':
-            with open(txtPath, 'r') as f:
-                f = f.read()
-                if f:
-                    return f
-                else:
-                    raise Exception(f"{txtPath}-为空!")
-
-    @staticmethod
-    def checkUserToken_slp(operate, uid, app_name='dev', token=''):
-        txtPath = os.path.split(os.path.realpath(__file__))[0] + '/{}UserToken_{}.txt'.format(app_name, uid)
-        if not os.path.exists(txtPath):
-            os.system(r"touch {}".format(txtPath))
-        if operate == 'write':
-            with open(txtPath, 'w') as f:
-                f.write(token)
-                f.flush()
-        elif operate == 'read':
-            with open(txtPath, 'r') as f:
-                f = f.read()
-                if f:
-                    return f
-                else:
-                    raise Exception(f"{txtPath},Token is not exists！！！")
+            with open(txt_path, 'r') as f:
+                content = f.read()
+                if content:
+                    return content
+                raise Exception(f"{txt_path}-为空!")

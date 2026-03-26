@@ -26,9 +26,9 @@ class TestPayCreate(unittest.TestCase):
         data = encodePtData(payType='coin-shop-buy',
                             money=21000,
                             cid=cid)
-        res = post_request_session(config.pt_pay_url, data, tokenName='pt')
+        res = post_request_session(config.pt_pay_url, data, token_name='pt')
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_payUid, money_type='gold_coin'), 9000)
         assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.pt_payUid), 1)
         case_list[des] = result
@@ -49,9 +49,9 @@ class TestPayCreate(unittest.TestCase):
         data = encodePtData(payType='shop-buy',
                             money=3000,
                             cid=cid)
-        res = post_request_session(config.pt_pay_url, data, tokenName='pt')
+        res = post_request_session(config.pt_pay_url, data, token_name='pt')
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 0)
         assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.pt_payUid), 1)
         case_list[des] = result

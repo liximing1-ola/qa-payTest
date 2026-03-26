@@ -1,69 +1,78 @@
 import requests
 import datetime
 import time
-import random
 from chinese_calendar import is_holiday
 
 
-def getHoliday():
-    now_year = int(time.strftime('%Y', time.localtime(time.time())))
-    now_month = int(time.strftime('%m', time.localtime(time.time())))
-    now_day = int(time.strftime('%d', time.localtime(time.time())))
-    holiday = datetime.date(now_year, now_month, now_day)
-    print(holiday)
-    print(is_holiday(holiday))
-    return is_holiday(holiday)
+# 配置
+WEBHOOK_URL = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e317861a-d1ec-4ac4-af96-9d4b8f12d9d6'
+IMAGE_APIS = {
+    1: 'https://www.mxnzp.com/api/image/girl/list/random?app_id=kilmc0p2ytsnawyp&app_secret=bnNoWElSVDBYbEhsc1EvYVM2WnVnZz09',
+    2: 'https://shibe.online/api/shibes?count=1'
+}
 
 
-def robot():
-    url = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e317861a-d1ec-4ac4-af96-9d4b8f12d9d6'
-    # url1= 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=0179d8d1-2078-41ba-a8da-0fb11bd51880'
-    # url_slack = 'https://hooks.slack.com/services/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'
-    headers = {'Content-Type': 'application/json'}
-    now = time.strftime('%H:%M', time.localtime(time.time()))
-    title = "{}-点餐时间到,上微信【丰食】预约晚餐".format(now)
-    des = '点餐截止到下午17:00，供餐时间19:30'
-    icon = getImage(mode=2)
+def is_holiday_today():
+    """检查今天是否是节假日"""
+    today = datetime.date.today()
+    print(today)
+    print(is_holiday(today))
+    return is_holiday(today)
+
+
+def get_image(mode=2):
+    """随机获取图片"""
+    url = IMAGE_APIS.get(mode)
+    if not url:
+        return None
+    
+    res = requests.get(url)
+    res.raise_for_status()
+    data = res.json()
+    
+    if mode == 1 and data.get('code') == 1:
+        return data['data'][0]['imageUrl']
+    elif mode == 2:
+        return data[0]
+    return None
+
+
+def send_news(url, title, description, picurl, link="http://iambanban.com/recharge/"):
+    """发送图文消息"""
     data = {
         "msgtype": "news",
         "news": {
             "articles": [{
                 "title": title,
-                "description": des,
-                "url": "http://iambanban.com/recharge/",
-                "picurl": icon, }
-            ]
+                "description": description,
+                "url": link,
+                "picurl": picurl
+            }]
         }
     }
-    if getHoliday():
+    return requests.post(url, headers={'Content-Type': 'application/json'}, json=data)
+
+
+def send_at_all(url):
+    """发送@所有人消息"""
+    data = {"msgtype": "text", "text": {"mentioned_mobile_list": ["@all"]}}
+    return requests.post(url, headers={'Content-Type': 'application/json'}, json=data)
+
+
+def robot():
+    """点餐机器人"""
+    if is_holiday_today():
         return False
-    r = requests.post(
-        url,
-        headers=headers, json=data)
-    if r.status_code == 200 and r.text.find('ok'):
-        data = {
-            "msgtype": "text",
-            "text": {
-                "mentioned_mobile_list": ["@all"]
-            }
-        }
-        requests.post(url, headers=headers, json=data)
-
-
-# 随机获取图片
-def getImage(mode=2):
-    url = 'https://www.mxnzp.com/api/image/girl/list/random?app_id=kilmc0p2ytsnawyp&app_secret=bnNoWElSVDBYbEhsc1EvYVM2WnVnZz09'
-    url_dog = 'https://shibe.online/api/shibes?count=1'
-    if mode == 1:
-        res = requests.get(url)
-        res.raise_for_status()
-        res = res.json()
-        if res['code'] == 1:
-            return res['data'][0]['imageUrl']
-    elif mode == 2:
-        res = requests.get(url_dog)
-        res = res.json()
-        return res[0]
+    
+    now = time.strftime('%H:%M')
+    title = f"{now}-点餐时间到,上微信【丰食】预约晚餐"
+    description = '点餐截止到下午17:00，供餐时间19:30'
+    
+    res = send_news(WEBHOOK_URL, title, description, get_image(mode=2))
+    
+    if res.status_code == 200 and 'ok' in res.text:
+        send_at_all(WEBHOOK_URL)
+    return True
 
 
 if __name__ == '__main__':

@@ -35,10 +35,10 @@ class TestPayCreate(unittest.TestCase):
 		data = encodeData(payType='chat-gift',
 		                  num=default_num,
 		                  giftId=giftId['69']['gid'])
-		res = post_request_session(pay_url, data, tokenName='slp')
+		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 0, reason(des, res))
-		assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
+		assert_body(res['body'], 'success', 0, format_reason(des, res))
+		assert_body(res['body'], 'msg', '余额不足，无法支付', format_reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('sum_money', normal_uid), 0)
 		case_list[des] = result
 
@@ -60,10 +60,10 @@ class TestPayCreate(unittest.TestCase):
 		data = encodeData(payType='package',
 		                  num=default_num,
 		                  giftId=giftId['69']['gid'])
-		res = post_request_session(pay_url, data, tokenName='slp')
+		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 0, reason(des, res))
-		assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
+		assert_body(res['body'], 'success', 0, format_reason(des, res))
+		assert_body(res['body'], 'msg', '余额不足，无法支付', format_reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('sum_money', normal_uid), 0)
 		case_list[des] = result
 
@@ -79,17 +79,17 @@ class TestPayCreate(unittest.TestCase):
 		5.检查被打赏者余额,预期：0
 		"""
 		mysql.updateUserMoneyClearSql(payUid, normal_uid)
-		mysql.updateMoneySql(payUid, giftId['69']['price'] - 1)
+		UserMoneyOperations.update(payUid, giftId['69']['price'] - 1)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		# mysql.deleteUserAccountSql('broker_user', normal_uid)
 		# mysql.deleteUserAccountSql('chatroom', normal_uid)
 		data = encodeData(payType='chat-gift',
 		                  num=default_num,
 		                  giftId=giftId['69']['gid'])
-		res = post_request_session(pay_url, data, tokenName='slp')
+		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 0, reason(des, res))
-		assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
+		assert_body(res['body'], 'success', 0, format_reason(des, res))
+		assert_body(res['body'], 'msg', '余额不足，无法支付', format_reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('sum_money', normal_uid), 0)
 		case_list[des] = result
 
@@ -105,17 +105,17 @@ class TestPayCreate(unittest.TestCase):
 		5.检查被打赏者余额,预期：0
 		"""
 		mysql.updateUserMoneyClearSql(payUid, normal_uid)
-		mysql.updateMoneySql(payUid, giftId['69']['price'] - 1)
+		UserMoneyOperations.update(payUid, giftId['69']['price'] - 1)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		# mysql.deleteUserAccountSql('broker_user', normal_uid)
 		# mysql.deleteUserAccountSql('chatroom', normal_uid)
 		data = encodeData(payType='package',
 		                  num=default_num,
 		                  giftId=giftId['69']['gid'])
-		res = post_request_session(pay_url, data, tokenName='slp')
+		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 0, reason(des, res))
-		assert_body(res['body'], 'msg', '余额不足，无法支付', reason(des, res))
+		assert_body(res['body'], 'success', 0, format_reason(des, res))
+		assert_body(res['body'], 'msg', '余额不足，无法支付', format_reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('sum_money', normal_uid), 0)
 		case_list[des] = result
 
@@ -131,16 +131,16 @@ class TestPayCreate(unittest.TestCase):
 		5.检查被打赏者余额,预期：0
 		"""
 		mysql.updateUserMoneyClearSql(payUid, normal_uid)
-		mysql.updateMoneySql(payUid, giftId['69']['price'])
+		UserMoneyOperations.update(payUid, giftId['69']['price'])
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		# mysql.deleteUserAccountSql('broker_user', normal_uid)
 		# mysql.deleteUserAccountSql('chatroom', normal_uid)
 		data = encodeData(payType='chat-gift',
 		                  num=default_num,
 		                  giftId=giftId['69']['gid'])
-		res = post_request_session(pay_url, data, tokenName='slp')
+		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_body(res['body'], 'success', 1, format_reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), 0)
 		case_list[des] = result
 
@@ -156,16 +156,16 @@ class TestPayCreate(unittest.TestCase):
 		5.检查被打赏者余额,预期：0
 		"""
 		mysql.updateUserMoneyClearSql(payUid, normal_uid)
-		mysql.updateMoneySql(payUid, giftId['69']['price'])
+		UserMoneyOperations.update(payUid, giftId['69']['price'])
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		# mysql.deleteUserAccountSql('broker_user', normal_uid)
 		# mysql.deleteUserAccountSql('chatroom', normal_uid)
 		data = encodeData(payType='package',
 		                  num=default_num,
 		                  giftId=giftId['69']['gid'])
-		res = post_request_session(pay_url, data, tokenName='slp')
+		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_body(res['body'], 'success', 1, format_reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), 0)
 		case_list[des] = result
 
@@ -181,7 +181,7 @@ class TestPayCreate(unittest.TestCase):
 		5.检查被打赏者余额,预期：0
 		"""
 		mysql.updateUserMoneyClearSql(payUid, normal_uid)
-		mysql.updateMoneySql(payUid,
+		UserMoneyOperations.update(payUid,
 		                     money=giftId['69']['price'],
 		                     money_cash_b=giftId['69']['price'],
 		                     money_cash=giftId['69']['price'])
@@ -191,9 +191,9 @@ class TestPayCreate(unittest.TestCase):
 		data = encodeData(payType='package',
 		                  num=default_num,
 		                  giftId=giftId['69']['gid'])
-		res = post_request_session(pay_url, data, tokenName='slp')
+		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'],'success', 1, reason(des, res))
+		assert_body(res['body'],'success', 1, format_reason(des, res))
 		# money>mcb>mc
 		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money'), 0)
 		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money_cash_b'), giftId['69']['price'])
@@ -212,7 +212,7 @@ class TestPayCreate(unittest.TestCase):
 		5.检查被打赏者余额,预期：0
 		"""
 		mysql.updateUserMoneyClearSql(payUid, normal_uid)
-		mysql.updateMoneySql(payUid,
+		UserMoneyOperations.update(payUid,
 		                     money=0,
 		                     money_cash_b=giftId['69']['price'],
 		                     money_cash=giftId['69']['price'])
@@ -222,9 +222,9 @@ class TestPayCreate(unittest.TestCase):
 		data = encodeData(payType='package',
 		                  num=default_num,
 		                  giftId=giftId['69']['gid'])
-		res = post_request_session(pay_url, data, tokenName='slp')
+		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_body(res['body'], 'success', 1, format_reason(des, res))
 		# mcb > mc
 		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money'), 0)
 		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money_cash_b'), 0)
@@ -244,7 +244,7 @@ class TestPayCreate(unittest.TestCase):
 		"""
 		num = 3
 		mysql.updateUserMoneyClearSql(payUid, normal_uid)
-		mysql.updateMoneySql(payUid,
+		UserMoneyOperations.update(payUid,
 		                     money=giftId['69']['price'],
 		                     money_cash_b=giftId['69']['price'],
 		                     money_cash=giftId['69']['price'])
@@ -257,9 +257,9 @@ class TestPayCreate(unittest.TestCase):
 			num=num,
 			giftId=giftId['69']['gid']
 		)
-		res = post_request_session(pay_url, data, tokenName='slp')
+		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_body(res['body'], 'success', 1, format_reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money'), 0)
 		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money_cash_b'), 0)
 		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money_cash'), 0)
@@ -278,7 +278,7 @@ class TestPayCreate(unittest.TestCase):
 		5.检查被打赏者余额,预期：0
 		"""
 		mysql.updateUserMoneyClearSql(payUid)
-		mysql.updateMoneySql(payUid, money=default_money)
+		UserMoneyOperations.update(payUid, money=default_money)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		# mysql.deleteUserAccountSql('broker_user', normal_uid)
 		# mysql.deleteUserAccountSql('chatroom', normal_uid)
@@ -286,9 +286,9 @@ class TestPayCreate(unittest.TestCase):
 		                  num=default_num,
 		                  uid=payUid,
 		                  giftId=giftId['69']['gid'])
-		res = post_request_session(pay_url, data, tokenName='slp')
+		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 0, reason(des, res))
-		assert_body(res['body'], 'msg', '不能给自己打赏', reason(des, res))
+		assert_body(res['body'], 'success', 0, format_reason(des, res))
+		assert_body(res['body'], 'msg', '不能给自己打赏', format_reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money)
 		case_list[des] = result

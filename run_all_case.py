@@ -6,153 +6,157 @@ from Robot import robot
 from autoGitPull import updateTime, updateCode
 from common import Logs, method, Consts
 from common.Config import config
-from common.method import checkPath
+from common.method import check_path
 
 
-def main(appInfo):
-    if appInfo == config.appName['1']:
-        if updateCode.autoGitPull('bb_php') | updateCode.autoGitPull('bb_go'):
-            updateTime('write', now=str(int(time())))
-            test_result = unittest.TextTestRunner(verbosity=3).run(all_case(appInfo))
-            Consts.endTime = time()
-            des = "用例总数: {}, 失败用例数: {}, 异常用例数: {}" \
-                .format(test_result.testsRun, len(test_result.failures), len(test_result.errors))
-            Logs.get_log('caseResult.log').info(des)
-            case_list = method.dictToList(Consts.case_list)
-            case_list_2 = method.dictToList(Consts.case_list_b)
-            use_time = str(int(Consts.endTime - Consts.startTime)) + 's'
-            if len(test_result.failures) == 0 and len(test_result.errors) == 0:
-                des = "{}\n".format(case_list)
-                des_2 = "{}\n用例数: {}, 失败数: {}, 总耗时: {}, 代码分支：{}".format(
-                    case_list_2, test_result.testsRun,
-                    len(test_result.failures) + len(test_result.errors),
-                    use_time,
-                    config.codeInfo['bb_git_branch'])
-                robot('slack', des)
-                sleep(0.1)
-                robot('slack', des_2)
-            elif len(test_result.failures) >= 1:
-                Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
-                robot('slack', des, color='danger')
-                for case, reason in test_result.failures:
-                    robot('slack', Consts.fail_case_reason[0], title=case.id(), color='danger')
-                    break
-            elif len(test_result.errors) >= 1:
-                Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
-                for case, reason in test_result.errors:
-                    robot('slack', reason, case.id(), color='danger')
-                    break
-        else:
-            Logs.get_log('runCode.log').info('NoRun')
-    elif appInfo == config.appName['2']:
-        checkPath(config.codeInfo['pt_php_path'])
-        if updateCode.autoGitPull(appInfo):
-            updateTime('write', now=str(int(time())))
-            test_result = unittest.TextTestRunner(verbosity=3).run(all_case(appInfo))
-            Consts.endTime = time()
-            des = "Total: {}, failures: {}, errors: {}" \
-                .format(test_result.testsRun, len(test_result.failures), len(test_result.errors))
-            Logs.get_log('caseResult.log').info(des)
-            case_list = method.dictToList(Consts.case_list)
-            case_list_2 = method.dictToList(Consts.case_list_b)
-            use_time = str(int(Consts.endTime - Consts.startTime)) + 's'
-            if len(test_result.failures) == 0 and len(test_result.errors) == 0:
-                des = "{}\n".format(case_list)
-                des_2 = "{}\nTotal: {}, Failures: {}, Times: {}, Branch：{}".format(
-                    case_list_2, test_result.testsRun,
-                    len(test_result.failures) + len(test_result.errors),
-                    use_time,
-                    config.codeInfo['pt_git_branch'])
-                robot('slack_pt', des, bot='PT')
-                sleep(0.1)
-                robot('slack_pt', des_2, bot='PT')
-            elif len(test_result.failures) >= 1:
-                Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
-                robot('slack_pt', des, bot='PT')
-                for case, reason in test_result.failures:
-                    robot('slack_pt', Consts.fail_case_reason[0], title=case.id(), bot='PT')
-                    break
-            elif len(test_result.errors) >= 1:
-                Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
-                for case, reason in test_result.errors:
-                    robot('slack_pt', reason, case.id(), bot='PT')
-                    break
-        else:
-            Logs.get_log('runCode.log').info('NoRun')
-    if appInfo == config.appName['不夜星球']:
-        to = 'slack'
-        print("*"*50)
-        print(f"消息推送到:{to}")
-        print("*"*50)
-        if updateCode.autoGitPull('slp_php', bot='slp', to=to) | updateCode.autoGitPull('slp_common_rpc', bot='slp', to=to):
-            updateTime('write', now=str(int(time())))
-            test_result = unittest.TextTestRunner(verbosity=3).run(all_case(appInfo))
-            Consts.endTime = time()
-            des = "用例总数: {}, 失败用例数: {}, 异常用例数: {}" \
-                .format(test_result.testsRun, len(test_result.failures), len(test_result.errors))
-            Logs.get_log('caseResult.log').info(des)
-            case_list = method.dictToList(Consts.case_list)
-            case_list_2 = method.dictToList(Consts.case_list_b)
-            use_time = str(int(Consts.endTime - Consts.startTime)) + 's'
-            if len(test_result.failures) == 0 and len(test_result.errors) == 0:
-                des = "{}\n".format(case_list)
-                des_2 = "{}\n用例数: {}, 失败数: {}, 总耗时: {}, 代码分支：{}".format(
-                    case_list_2, test_result.testsRun,
-                    len(test_result.failures) + len(test_result.errors),
-                    use_time,
-                    config.codeInfo['slp_git_branch'])
-                robot('slack', des, bot='slp', to=to) if to == 'slack' else robot('markdown', des, bot='slp')
-                sleep(0.1)
-                robot('slack', des_2, bot='slp', to=to) if to == 'slack' else robot('markdown', des_2, bot='slp')
-            if len(test_result.failures) >= 1:
-                Logs.get_log('failCase.log').error("failures: {}".format(test_result.failures))
-                robot('slack', des, bot='slp', to=to) if to == 'slack' else robot('fail', des, bot='slp')
-                for case, reason in test_result.failures:
-                    robot('slack', Consts.fail_case_reason[0], title=case.id(), color='danger', bot='slp', to=to) if to == 'slack' \
-                        else robot('fail', Consts.fail_case_reason[0], title=case.id(), color='danger', bot='slp')
-                    break
-            if len(test_result.errors) >= 1:
-                Logs.get_log('failCase.log').error("error: {}".format(test_result.errors))
-                for case, reason in test_result.errors:
-                    robot('slack', reason, case.id(), color='danger', bot='slp', to=to) if to == 'slack' \
-                        else robot('fail', reason, case.id(), color='danger', bot='slp')
-                    break
-        else:
-            Logs.get_log('runCode.log').info('NoRun')
-    else:
-        Logs.get_log('runCode.log').error('{} 执行异常'.format(appInfo))
+# 应用配置映射
+APP_CONFIG = {
+    config.appName['1']: {
+        'dir': '/case',
+        'git_repos': ['bb_php', 'bb_go'],
+        'bot': 'BB',
+        'mode': 'slack',
+        'branch_key': 'bb_git_branch',
+        'lang': 'zh'
+    },
+    config.appName['2']: {
+        'dir': '/caseOversea',
+        'git_repos': None,  # 使用 appInfo
+        'bot': 'PT',
+        'mode': 'slack_pt',
+        'branch_key': 'pt_git_branch',
+        'lang': 'en'
+    },
+    config.appName['不夜星球']: {
+        'dir': '/caseSlp',
+        'git_repos': ['slp_php', 'slp_common_rpc'],
+        'bot': 'slp',
+        'mode': 'slack',
+        'branch_key': 'slp_git_branch',
+        'lang': 'zh',
+        'to': 'slack'
+    },
+}
 
 
-def all_case(appInfo):
-    case_dir = config.BASE_PATH
-    if appInfo == config.appName['1']:
-        case_dir += '/case'
-    elif appInfo == config.appName['2']:
-        case_dir += '/caseOversea'
-    # elif appInfo == config.appName['starify']:
-    #     case_dir += '/caseStarify'
-    elif appInfo == config.appName['不夜星球']:
-        case_dir += '/caseSlp'
-    else:
-        return
-
+def load_cases(app_info):
+    """加载测试用例"""
+    cfg = APP_CONFIG.get(app_info)
+    if not cfg:
+        return None
+    case_dir = config.BASE_PATH + cfg['dir']
+    discover = unittest.defaultTestLoader.discover(case_dir, pattern="test_*.py", top_level_dir=None)
     testcase = unittest.TestSuite()
-    # discover = unittest.defaultTestLoader.discover(case_dir,  # 指定待执行用例的目录
-    #                                                pattern="test_pt_cnArea.py",
-    #                                                top_level_dir=None)
-    discover = unittest.defaultTestLoader.discover(case_dir,  # 指定待执行用例的目录
-                                                   pattern="test_*.py",
-                                                   top_level_dir=None)
     testcase.addTests(discover)
     return testcase
 
 
+def run_tests(app_info):
+    """执行测试"""
+    return unittest.TextTestRunner(verbosity=3).run(load_cases(app_info))
+
+
+def log_result(test_result, lang='zh'):
+    """记录测试结果"""
+    if lang == 'en':
+        des = f"Total: {test_result.testsRun}, failures: {len(test_result.failures)}, errors: {len(test_result.errors)}"
+    else:
+        des = f"用例总数: {test_result.testsRun}, 失败用例数: {len(test_result.failures)}, 异常用例数: {len(test_result.errors)}"
+    Logs.get_logger('caseResult.log').info(des)
+    return des
+
+
+def get_summary_data(test_result, branch_key):
+    """获取汇总数据"""
+    case_list = method.dict_to_markdown(Consts.case_list)
+    case_list_2 = method.dict_to_markdown(Consts.case_list_b)
+    use_time = str(int(Consts.endTime - Consts.startTime)) + 's'
+    branch = config.codeInfo[branch_key]
+    return case_list, case_list_2, use_time, branch
+
+
+def notify_success(app_info, test_result):
+    """通知成功结果"""
+    cfg = APP_CONFIG[app_info]
+    case_list, case_list_2, use_time, branch = get_summary_data(test_result, cfg['branch_key'])
+    
+    if cfg['lang'] == 'en':
+        des_2 = f"{case_list_2}\nTotal: {test_result.testsRun}, Failures: 0, Times: {use_time}, Branch：{branch}"
+    else:
+        des_2 = f"{case_list_2}\n用例数: {test_result.testsRun}, 失败数: 0, 总耗时: {use_time}, 代码分支：{branch}"
+    
+    to = cfg.get('to', 'wx')
+    robot(cfg['mode'], case_list, bot=cfg['bot'], to=to)
+    sleep(0.1)
+    robot(cfg['mode'], des_2, bot=cfg['bot'], to=to)
+
+
+def notify_failures(app_info, test_result, des):
+    """通知失败结果"""
+    cfg = APP_CONFIG[app_info]
+    failures = test_result.failures
+    errors = test_result.errors
+    to = cfg.get('to', 'wx')
+    
+    if failures:
+        Logs.get_logger('failCase.log').error(f"failures: {failures}")
+        robot(cfg['mode'], des, bot=cfg['bot'], color='danger', to=to)
+        for case, _ in failures:
+            robot(cfg['mode'], Consts.fail_case_reason[0], title=case.id(), color='danger', bot=cfg['bot'], to=to)
+            break
+    elif errors:
+        Logs.get_logger('failCase.log').error(f"error: {errors}")
+        for case, reason in errors:
+            robot(cfg['mode'], reason, case.id(), color='danger', bot=cfg['bot'], to=to)
+            break
+
+
+def handle_result(app_info, test_result):
+    """处理测试结果"""
+    cfg = APP_CONFIG[app_info]
+    des = log_result(test_result, cfg['lang'])
+    
+    if len(test_result.failures) == 0 and len(test_result.errors) == 0:
+        notify_success(app_info, test_result)
+    else:
+        notify_failures(app_info, test_result, des)
+
+
+def pull_code(app_info):
+    """拉取代码"""
+    cfg = APP_CONFIG[app_info]
+    repos = cfg.get('git_repos')
+    
+    if repos:
+        results = [updateCode.autoGitPull(repo, bot=cfg.get('bot'), to=cfg.get('to')) for repo in repos]
+        return any(results)
+    else:
+        return updateCode.autoGitPull(app_info)
+
+
+def main(app_info):
+    """主入口"""
+    if app_info not in APP_CONFIG:
+        Logs.get_logger('runCode.log').error(f'{app_info} 执行异常')
+        return
+    
+    if app_info == config.appName['2']:
+        check_path(config.codeInfo['pt_php_path'])
+    
+    if pull_code(app_info):
+        updateTime('write', now=str(int(time())))
+        test_result = run_tests(app_info)
+        Consts.endTime = time()
+        handle_result(app_info, test_result)
+    else:
+        Logs.get_logger('runCode.log').info('NoRun')
+
+
 if __name__ == "__main__":
-    if platform.node() == config.linux_node['ali']:
+    node = platform.node()
+    if node == config.linux_node['ali']:
         main(config.appName['2'])
-    # elif platform.node() == config.linux_node['ali-starify']:
-    #     main(config.appName['starify'])
-    elif platform.node() == config.linux_node['ali-slp']:
+    elif node == config.linux_node['ali-slp']:
         main(config.appName['不夜星球'])
     else:
         main(config.appName['1'])

@@ -30,9 +30,9 @@ class TestPayCreate(unittest.TestCase):
         conMysql.deleteUserAccountSql('user_journey_planet_draw_record', config.pt_payUid)
         conMysql.updateMoneySql(config.pt_payUid, money=2000)
         data = encodePtData(payType='journey_planet_draw')
-        res = post_request_session(url=config.pt_pay_url, data=data, tokenName='pt')
+        res = post_request_session(url=config.pt_pay_url, data=data, token_name='pt')
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 500)
         assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.pt_payUid), 1)
         case_list[des] = result

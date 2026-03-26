@@ -1,132 +1,243 @@
 # coding=utf-8
+"""
+全局配置管理模块
+
+使用方式:
+    from common.Config import config
+    url = config.pay_url
+    uid = config.payUid
+"""
 import os
-from typing import Dict
+from dataclasses import dataclass, field
+from typing import Dict, Any
 
 
-class config:
-    # 工程目录
-    BASE_PATH = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-    appInfo: Dict[str, str] = {
-        'bb_dev': 'https://dev.iambanban.com/',
-        'pt_ali_dev': 'https://pt-dev.iambanban.com/',  # 指向dev服务
-        'pt_ali_main': 'https://pt-dev.iambanban.com/_testcase/',  # 指向线上拉取的main分支服务，go的还需要新启一个
-        'starify': 'http://116.62.125.230/',
-        'slp': 'https://116.62.125.230/',
-        "rush": 'https://192.168.11.55/',
-    }
-    codeInfo: Dict[str, str] = {
-        'bb_php_path': '/home/webroot/banban',
-        'bb_go_path': '/home/webroot/bb-consume',
-        'pt_php_path': '/home/webroot/release_oversea/banban',
-        'bb_git_branch': 'release-for-vpc',
-        'bb_go_git_branch': 'master',
-        'pt_git_branch': 'main',
-        # 'starify_go_path': r"/var/www/sta-go",
-        # 'starify_room_path': r"/var/www/sta-room",
-        # 'starify_git_branch': "dev",  # todo 调试用 "wzx" / dev分支  dev
+@dataclass
+class AppConfig:
+    """应用配置"""
+    bb_dev: str = 'https://dev.iambanban.com/'
+    pt_ali_dev: str = 'https://pt-dev.iambanban.com/'
+    pt_ali_main: str = 'https://pt-dev.iambanban.com/_testcase/'
+    starify: str = 'http://116.62.125.230/'
+    slp: str = 'https://116.62.125.230/'
+    rush: str = 'https://192.168.11.55/'
 
-        'slp_php_path': r"/var/www/slp/slp-php",
-        'slp_common_rpc_path': r"/var/www/slp/slp-common-rpc",
-        'slp_git_branch': "dev",  # todo 调试用 "wzx" / dev分支  dev
-    }
-    appName: Dict[str, str] = {
-        "1": '1',
-        "2": '2',
-        "谁是凶手": 'games',
-        # "starify": 'starify',
-        "不夜星球": 'slp',
-        "冲鸭": 'rush',
-    }
-    # 服务器标识
-    linux_node: Dict[str, str] = {
-        'ali': 'iZbp1fveowr7j693hrwb48Z',
-        'ali-starify': 'iZbp15ildwog86lw08ptpnZ',  # todo 修改 调试用 ubuntu / dev=iZj6cig35upuwmdws5sec2Z
-        'ali-slp': 'iZbp15ildwog86lw08ptpnZ',  # todo 修改 调试用 ubuntu / dev=iZj6cig35upuwmdws5sec2Z
-    }
-    # 测试域名
-    pt_host = appInfo['pt_ali_main']
-    # 内网支付接口
-    pay_url = f"{appInfo['bb_dev']}pay/create?package="
-    slp_pay_url = f"{appInfo['slp']}pay/create?package=com.yhl.sleepless.android"
-    # app登录方式
-    bb_qqLogin_url = f"{appInfo['bb_dev']}account/qqlogin"
-    pt_mobile_login_url = f"{pt_host}account/passwordLogin"
-    starify_mobile_login_url = f"{appInfo['starify']}go/starify/login/mobileLogin"
-    slp_mobile_login_url = f"{appInfo['slp']}account/login"
 
-    rate: float = 0.62  # GS商业房分成比，公会长和商业房房主不参与降点逻辑（公会长/房主仅作为被打赏者不扣）
+@dataclass
+class CodeConfig:
+    """代码路径配置"""
+    bb_php_path: str = '/home/webroot/banban'
+    bb_go_path: str = '/home/webroot/bb-consume'
+    pt_php_path: str = '/home/webroot/release_oversea/banban'
+    bb_git_branch: str = 'release-for-vpc'
+    bb_go_git_branch: str = 'master'
+    pt_git_branch: str = 'main'
+    slp_php_path: str = "/var/www/slp/slp-php"
+    slp_common_rpc_path: str = "/var/www/slp/slp-common-rpc"
+    slp_git_branch: str = "dev"
 
-    # 用户配置
-    bb_user: Dict[str, int] = {
-        'payUid': 103273407,  # boss
-        'testUid': 105002312,  # 非一代宗师
-        'pack_cal_uid': 105002313,  # 打包结算签约主播
-        'vipRoomRid': 200089706,  # 个人房，房主uid=103273407
-        'gsUid': 105002325,  # GS用户,直播公会未签约打包结算等同于普通公会（一代宗师，徒弟：105002312）
-        'prettyRid': 200089942,  # 靓号房, 房主uid=105002325
-        'fleetRid': 200091067,  # 家族房，家主uid=103273407，成员105002325/100500205/100500338
-    }
-    # 角色配置
-    live_role: Dict[str, int] = {
-        'pack_ceo': 105002314,  # 直播公会公会长
-        'pack_master_NoPack': 105002319,  # 非公会一代宗师主播
-        'pack_cal_uid': 105002313,  # 公会签约主播（打包结算），宗师等级可设置为一代和非一代
-        'live_rid': 193185577,  # 直播间(types=live)，房主:105002313
-        'auto_rid': 193185484,
-        # business | types: auto | room_factory_type: business-content | settlement_channel: cp-women
-    }
-    # 礼物配置
-    giftId: Dict[str, int] = {
-        "5": 5,  # 棒棒糖*100钻
-        "7": 7,  # 大宝剑*1000钻
-        "11": 11,  # 老司机*3000钻(券-500钻石)
-        "46": 46,  # 幸运星*600钻
-        "47": 47,  # 五色星*2100钻
-        "54": 54,  # 小天使*9900钻（商城购买）
-        "62": 62,  # 人气券*20（金币）
+
+@dataclass
+class AppNameConfig:
+    """应用名称映射"""
+    _1: str = '1'  # 伴伴
+    _2: str = '2'  # PT
+    谁是凶手: str = 'games'
+    不夜星球: str = 'slp'
+    冲鸭: str = 'rush'
+
+    def __getitem__(self, key):
+        """支持 config.appName['1'] 访问方式"""
+        attr = f'_{key}' if key.isdigit() else key
+        return getattr(self, attr, key)
+
+
+@dataclass
+class LinuxNodeConfig:
+    """服务器节点配置"""
+    ali: str = 'iZbp1fveowr7j693hrwb48Z'
+    ali_starify: str = 'iZbp15ildwog86lw08ptpnZ'
+    ali_slp: str = 'iZbp15ildwog86lw08ptpnZ'
+
+    def __getitem__(self, key):
+        """支持下划线或中划线访问"""
+        return getattr(self, key.replace('-', '_'), None)
+
+
+@dataclass
+class BBUserConfig:
+    """伴伴用户配置"""
+    payUid: int = 103273407
+    testUid: int = 105002312
+    pack_cal_uid: int = 105002313
+    vipRoomRid: int = 200089706
+    gsUid: int = 105002325
+    prettyRid: int = 200089942
+    fleetRid: int = 200091067
+
+
+@dataclass
+class LiveRoleConfig:
+    """直播角色配置"""
+    pack_ceo: int = 105002314
+    pack_master_NoPack: int = 105002319
+    pack_cal_uid: int = 105002313
+    live_rid: int = 193185577
+    auto_rid: int = 193185484
+
+    def __getitem__(self, key):
+        """支持下标访问"""
+        return getattr(self, key, None)
+
+
+@dataclass
+class PTUserConfig:
+    """PT用户配置"""
+    payUid: int = 800350557
+    testUid: int = 800022872
+    brokerUid: int = 800018895
+    fleet_uid: int = 800041062
+
+
+@dataclass
+class PTRoomConfig:
+    """PT房间配置"""
+    business_joy: int = 105699329
+    vip_rid: int = 105698376
+    th_union: int = 105708881
+    en_fleet: int = 105717544
+    id_fleet: int = 105711999
+    ms_fleet: int = 105725790
+    business_joy_ar: int = 105726673
+    union_ar: int = 105713367
+    business_joy_vi: int = 105726676
+    union_vi: int = 105718889
+
+
+@dataclass
+class Config:
+    """全局配置类"""
+
+    # ============ 基础路径 ============
+    BASE_PATH: str = field(default_factory=lambda: os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+
+    # ============ 应用配置 ============
+    appInfo: AppConfig = field(default_factory=AppConfig)
+    codeInfo: CodeConfig = field(default_factory=CodeConfig)
+    appName: AppNameConfig = field(default_factory=AppNameConfig)
+    linux_node: LinuxNodeConfig = field(default_factory=LinuxNodeConfig)
+
+    # ============ 分成比例 ============
+    rate: float = 0.62
+
+    # ============ 用户配置 ============
+    bb_user: BBUserConfig = field(default_factory=BBUserConfig)
+    live_role: LiveRoleConfig = field(default_factory=LiveRoleConfig)
+    pt_user: PTUserConfig = field(default_factory=PTUserConfig)
+    pt_room: PTRoomConfig = field(default_factory=PTRoomConfig)
+
+    # ============ 礼物配置 ============
+    giftId: Dict[str, int] = field(default_factory=lambda: {
+        "5": 5,      # 棒棒糖*100钻
+        "7": 7,      # 大宝剑*1000钻
+        "11": 11,    # 老司机*3000钻(券-500钻石)
+        "46": 46,    # 幸运星*600钻
+        "47": 47,    # 五色星*2100钻
+        "54": 54,    # 小天使*9900钻（商城购买）
+        "62": 62,    # 人气券*20（金币）
         "362": 362,  # 啵啵奶茶*1000（金豆）
-    }
+    })
 
-    payUid = bb_user['payUid']  # 打赏者
-    rewardUid = bb_user['testUid']  # 被打赏者(非一代宗师)
-    masterUid = 100500338  # 被打赏者（一代宗师）
-    gsUid = bb_user['gsUid']  # 公会用户
-
-    # PT
-    pt_user: Dict[str, int] = {
-        # 'payUid': 800240376,
-        'payUid': 800350557,
-        'testUid': 800022872,
-        'brokerUid': 800018895,
-        'fleet_uid': 800041062
-    }
-    pt_payUid = pt_user['payUid']
-    pt_testUid = pt_user['testUid']  # 非公会成员，是一代宗师
-    pt_brokerUid = pt_user['brokerUid']  # 公会成员
-    pt_fleetUid = pt_user['fleet_uid']
-    # 房间类型41
-    pt_room: Dict[str, int] = {
-        'business_joy': 105699329,  # 商业房
-        'vip_rid': 105698376,  # 个人房
-        'th_union': 105708881,  # 泰区联盟房
-        'en_fleet': 105717544,  # 英语大区家族房
-        'id_fleet': 105711999,  # 印尼大区家族房
-        'ms_fleet': 105725790,  # 马来大区家族房
-        'business_joy_ar': 105726673,  # 阿语商业房
-        'union_ar': 105713367,  # 阿语联盟房
-        'business_joy_vi': 105726676,  # 越南商业房
-        'union_vi': 105718889,  # 越南联盟房
-
-    }
-    # 礼物配置
-    pt_giftId: Dict[str, int] = {
-        "10": 10,  # 么么哒*6币
-        "46": 46,  # 幸运星*6币
-        "47": 47,  # 五色星*21币
+    pt_giftId: Dict[str, int] = field(default_factory=lambda: {
+        "10": 10,    # 么么哒*6币
+        "46": 46,    # 幸运星*6币
+        "47": 47,    # 五色星*21币
         "773": 773,  # 小飞机盲盒
         "774": 774,  # 飞马盲盒
-    }
+    })
 
+    # ============ 便捷访问属性 ============
+    @property
+    def payUid(self) -> int:
+        """打赏者UID（伴伴）"""
+        return self.bb_user.payUid
+
+    @property
+    def rewardUid(self) -> int:
+        """被打赏者UID（非一代宗师）"""
+        return self.bb_user.testUid
+
+    @property
+    def masterUid(self) -> int:
+        """被打赏者UID（一代宗师）"""
+        return 100500338
+
+    @property
+    def gsUid(self) -> int:
+        """公会用户UID"""
+        return self.bb_user.gsUid
+
+    @property
+    def pt_payUid(self) -> int:
+        """PT打赏者UID"""
+        return self.pt_user.payUid
+
+    @property
+    def pt_testUid(self) -> int:
+        """PT测试UID"""
+        return self.pt_user.testUid
+
+    @property
+    def pt_brokerUid(self) -> int:
+        """PT公会成员UID"""
+        return self.pt_user.brokerUid
+
+    @property
+    def pt_fleetUid(self) -> int:
+        """PT家族UID"""
+        return self.pt_user.fleet_uid
+
+    # ============ URL配置 ============
+    @property
+    def pt_host(self) -> str:
+        """PT测试域名"""
+        return self.appInfo.pt_ali_main
+
+    @property
+    def pay_url(self) -> str:
+        """支付接口URL"""
+        return f"{self.appInfo.bb_dev}pay/create?package="
+
+    @property
+    def slp_pay_url(self) -> str:
+        """SLP支付接口URL"""
+        return f"{self.appInfo.slp}pay/create?package=com.yhl.sleepless.android"
+
+    @property
+    def bb_qqLogin_url(self) -> str:
+        """伴伴QQ登录URL"""
+        return f"{self.appInfo.bb_dev}account/qqlogin"
+
+    @property
+    def pt_mobile_login_url(self) -> str:
+        """PT手机号登录URL"""
+        return f"{self.pt_host}account/passwordLogin"
+
+    @property
+    def starify_mobile_login_url(self) -> str:
+        """Starify手机号登录URL"""
+        return f"{self.appInfo.starify}go/starify/login/mobileLogin"
+
+    @property
+    def slp_mobile_login_url(self) -> str:
+        """SLP手机号登录URL"""
+        return f"{self.appInfo.slp}account/login"
+
+
+# 全局配置实例
+config = Config()
 
 if __name__ == '__main__':
     print(config.pay_url)
+    print(f"payUid: {config.payUid}")
+    print(f"giftId['5']: {config.giftId['5']}")

@@ -36,7 +36,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(mysql.checkRidFactoryType(rid), "business-soundchat")  # 确认rid是直播房
         mysql.updateUserGodSql(uid, 1)
         mysql.updateUserGodSql(gs_A_ceo_uid, 1)
-        mysql.updateMoneySql(payUid, default_money)
+        UserMoneyOperations.update(payUid, default_money)
         mysql.updateUserMoneyClearSql(uid, gs_A_ceo_uid)
         data = encodeData(
             payType='package-knightDefend',
@@ -47,9 +47,9 @@ class TestPayCreate(unittest.TestCase):
             duration_level=room_defend['zhenai']['month']['duration_level'],
             price=room_defend['zhenai']['month']['price'],
         )
-        res = post_request_session(pay_url, data, tokenName='slp')
+        res = post_request_session(pay_url, data, token_name='slp')
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         assert_equal(mysql.selectUserInfoSql('sum_money', payUid),
                      default_money - room_defend['zhenai']['month']['price'])
         assert_equal(mysql.selectUserInfoSql('single_money', uid, money_type='money_cash'),

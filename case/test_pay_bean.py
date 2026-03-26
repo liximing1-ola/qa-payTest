@@ -2,7 +2,7 @@ from common.Config import config
 from common.conMysql import conMysql as mysql
 import unittest
 from common.Request import post_request_session
-from common.method import reason, checkUserVipExp
+from common.method import reason, calculate_vip_exp
 from common.Assert import assert_code, assert_equal, assert_body
 from common.basicData import encodeData
 from common.Consts import result, case_list
@@ -30,7 +30,7 @@ class TestPayBean(unittest.TestCase):
             if step['action'] == 'delete_beans':
                 mysql.deleteUserBeanSql(config.payUid, config.rewardUid)
             elif step['action'] == 'update_money':
-                mysql.updateMoneySql(**step['params'])
+                UserMoneyOperations.update(**step['params'])
             elif step['action'] == 'insert_beans':
                 mysql.insertBeanSql(**step['params'])
 
@@ -68,8 +68,8 @@ class TestPayBean(unittest.TestCase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 0, reason(des, res))
-        assert_body(res['body'], 'msg', '金豆不足', reason(des, res))
+        assert_body(res['body'], 'success', 0, format_reason(des, res))
+        assert_body(res['body'], 'msg', '金豆不足', format_reason(des, res))
         
         # 验证数据库
         self._validate_db_state([
@@ -108,7 +108,7 @@ class TestPayBean(unittest.TestCase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         
         # 验证数据库
         self._validate_db_state([
@@ -152,7 +152,7 @@ class TestPayBean(unittest.TestCase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         
         # 验证数据库
         self._validate_db_state([
@@ -164,7 +164,7 @@ class TestPayBean(unittest.TestCase):
         # 验证VIP经验值增长
         assert_equal(
             mysql.selectUserInfoSql('pay_room_money', config.payUid),
-            vip_level + checkUserVipExp(money_type='bean', pay_off=1000)
+            vip_level + calculate_vip_exp(money_type='bean', pay_off=1000)
         )
         
         case_list[des] = result
@@ -196,7 +196,7 @@ class TestPayBean(unittest.TestCase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         
         # 验证数据库
         self._validate_db_state([
@@ -234,7 +234,7 @@ class TestPayBean(unittest.TestCase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         
         # 验证数据库
         self._validate_db_state([

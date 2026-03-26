@@ -2,7 +2,7 @@ from common.Config import config
 from common.method import reason
 from common.conMysql import conMysql as mysql
 from common.Request import post_request_session
-from common.method import checkUserVipExp
+from common.method import calculate_vip_exp
 import unittest
 from common.Assert import assert_body, assert_code, assert_equal
 from common.basicData import encodeData
@@ -26,7 +26,7 @@ class TestPayCoin(unittest.TestCase):
         """准备测试数据"""
         for step in setup_steps:
             if step['action'] == 'update_money':
-                mysql.updateMoneySql(**step['params'])
+                UserMoneyOperations.update(**step['params'])
             elif step['action'] == 'clear_user_data':
                 mysql.updateUserMoneyClearSql(*step['uids'])
 
@@ -63,7 +63,7 @@ class TestPayCoin(unittest.TestCase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         
         # 验证数据库
         self._validate_db_state([
@@ -106,14 +106,14 @@ class TestPayCoin(unittest.TestCase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         
         # 验证数据库
         self._validate_db_state([
             {'field': 'single_money', 'uid': config.payUid, 'expected': 60, 'kwargs': {'money_type': 'gold_coin'}},
             {'field': 'single_money', 'uid': config.masterUid, 'expected': 12, 'kwargs': {'money_type': 'gold_coin'}},
             {'field': 'single_money', 'uid': config.rewardUid, 'expected': 12, 'kwargs': {'money_type': 'gold_coin'}},
-            {'field': 'pay_room_money', 'uid': config.payUid, 'expected': vip_level + checkUserVipExp(money_type='coin', pay_off=40)}
+            {'field': 'pay_room_money', 'uid': config.payUid, 'expected': vip_level + calculate_vip_exp(money_type='coin', pay_off=40)}
         ])
         
         case_list[des] = result

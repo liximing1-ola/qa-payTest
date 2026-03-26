@@ -31,17 +31,17 @@ class TestPayCreate(unittest.TestCase):
 		4.检查打赏者余额
 		5.检查被打赏者余额,预期：52000 * 0.62 = 32240
 		"""
-		mysql.updateMoneySql(payUid, money=default_money)
-		mysql.updateMoneySql(normal_uid)
+		UserMoneyOperations.update(payUid, money=default_money)
+		UserMoneyOperations.update(normal_uid)
 		data = encodeData(
 			uid=normal_uid,
 			payType='defend',
 			defend_id=defend['小宝贝']['id'],
 			money=defend['小宝贝']['price']
 		)
-		res = post_request_session(pay_url, data, tokenName='slp')
+		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_body(res['body'], 'success', 1, format_reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - defend['小宝贝']['price'])
 		assert_equal(mysql.selectUserInfoSql('single_money', normal_uid),
 		             defend['小宝贝']['price'] * rates['normal']['default'])
@@ -59,8 +59,8 @@ class TestPayCreate(unittest.TestCase):
 		 4.检查打赏者余额，预期：100000 - 99900 = 100
 		 5.检查被打赏者余额,预期： 99900 * 0.62 = 61938
 		 """
-		mysql.updateMoneySql(payUid, money=default_money)
-		mysql.updateMoneySql(normal_uid)
+		UserMoneyOperations.update(payUid, money=default_money)
+		UserMoneyOperations.update(normal_uid)
 		defend_id = mysql.selectUserInfoSql('relation_id', payuid=payUid, uid=normal_uid, cid=defend['小宝贝']['id'])
 		data = encodeData(
 			uid=normal_uid,
@@ -68,9 +68,9 @@ class TestPayCreate(unittest.TestCase):
 			money=defend['小宝贝']['upgrade_price'],
 			defend_id=defend_id
 		)
-		res = post_request_session(pay_url, data, tokenName='slp')
+		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_body(res['body'], 'success', 1, format_reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - defend['小宝贝']['upgrade_price'])
 		assert_equal(mysql.selectUserInfoSql('single_money', normal_uid), defend['小宝贝']['upgrade_price'] * rates['normal']['default'])
 		case_list[des] = result
@@ -86,8 +86,8 @@ class TestPayCreate(unittest.TestCase):
 		 3.校验接口状态和返回值数据
 		 4.检查打赏者余额，预期：40000 - 36000 = 4000
 		 """
-		mysql.updateMoneySql(payUid, money=default_money)
-		mysql.updateMoneySql(normal_uid)
+		UserMoneyOperations.update(payUid, money=default_money)
+		UserMoneyOperations.update(normal_uid)
 		mysql.selectUserInfoSql('relation_id', uid=normal_uid, cid=defend['小宝贝']['id'])
 		defend_id = mysql.selectUserInfoSql('relation_id', payuid=payUid, uid=normal_uid, cid=defend['小宝贝']['id'])
 		data = encodeData(
@@ -96,9 +96,9 @@ class TestPayCreate(unittest.TestCase):
 			money=defend['小宝贝']['break_price'],
 			defend_id=defend_id
 		)
-		res = post_request_session(pay_url, data, tokenName='slp')
+		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_body(res['body'], 'success', 1, format_reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - defend['小宝贝']['break_price'])
 		assert_equal(mysql.selectUserInfoSql('sum_money', normal_uid), 0)
 		case_list[des] = result

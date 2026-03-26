@@ -35,7 +35,7 @@ class TestPayCreate(unittest.TestCase):
 		mysql.deleteUserAccountSql('user_title_new', payUid)  # 关闭贵族,还原数据
 		mysql.deleteUserAccountSql('pay_room_money', payUid)  # 修改vip值,还原数据
 		mysql.updateUserInfoSql('user_title_new', payUid, level=juewei_level['骑士']['level'])
-		mysql.updateMoneySql(payUid, default_money)
+		UserMoneyOperations.update(payUid, default_money)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		old_vip = mysql.selectUserInfoSql('pay_room_money', payUid)
 		old_pop = mysql.selectUserInfoSql('popularity', uid)
@@ -45,9 +45,9 @@ class TestPayCreate(unittest.TestCase):
 			uid=uid,
 			giftId=giftId['69']['gid']
 		)
-		res = post_request_session(pay_url, data, tokenName='slp')
+		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_body(res['body'], 'success', 1, format_reason(des, res))
 		time.sleep(0.5)
 		assert_equal(mysql.selectUserInfoSql('pay_room_money', payUid), old_vip + juewei_level['骑士']['update'] * giftId['69']['price']/100)
 		assert_equal(mysql.selectUserInfoSql('popularity', uid), old_pop + giftId['69']['price'])
@@ -69,7 +69,7 @@ class TestPayCreate(unittest.TestCase):
 		mysql.deleteUserAccountSql('user_title_new', payUid)  # 关闭贵族,还原数据
 		mysql.deleteUserAccountSql('pay_room_money', payUid)  # 修改vip值,还原数据
 		mysql.updateUserInfoSql('user_title_new', payUid, level=juewei_level['男爵']['level'])
-		mysql.updateMoneySql(payUid, default_money)
+		UserMoneyOperations.update(payUid, default_money)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		old_vip = mysql.selectUserInfoSql('pay_room_money', payUid)
 		old_pop = mysql.selectUserInfoSql('popularity', uid)
@@ -79,9 +79,9 @@ class TestPayCreate(unittest.TestCase):
 			uid=uid,
 			giftId=giftId['69']['gid']
 		)
-		res = post_request_session(pay_url, data, tokenName='slp')
+		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_body(res['body'], 'success', 1, format_reason(des, res))
 		time.sleep(0.5)
 		assert_equal(mysql.selectUserInfoSql('pay_room_money', payUid), old_vip + juewei_level['男爵']['update'] * giftId['69']['price']/100)
 		assert_equal(mysql.selectUserInfoSql('popularity', uid), old_pop + giftId['69']['price'])
@@ -103,7 +103,7 @@ class TestPayCreate(unittest.TestCase):
 		mysql.deleteUserAccountSql('user_title_new', payUid)  # 关闭贵族,还原数据
 		mysql.deleteUserAccountSql('pay_room_money', payUid)  # 修改vip值,还原数据
 		mysql.updateUserInfoSql('user_title_new', payUid, level=juewei_level['子爵']['level'])
-		mysql.updateMoneySql(payUid, default_money)
+		UserMoneyOperations.update(payUid, default_money)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		old_vip = mysql.selectUserInfoSql('pay_room_money', payUid)
 		old_pop = mysql.selectUserInfoSql('popularity', uid)
@@ -113,9 +113,9 @@ class TestPayCreate(unittest.TestCase):
 			uid=uid,
 			giftId=giftId['69']['gid']
 		)
-		res = post_request_session(pay_url, data, tokenName='slp')
+		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_body(res['body'], 'success', 1, format_reason(des, res))
 		time.sleep(0.5)
 		assert_equal(mysql.selectUserInfoSql('pay_room_money', payUid), old_vip + juewei_level['子爵']['update'] * giftId['69']['price']/100)
 		assert_equal(mysql.selectUserInfoSql('popularity', uid), old_pop + giftId['69']['price'])
@@ -137,7 +137,7 @@ class TestPayCreate(unittest.TestCase):
 		mysql.deleteUserAccountSql('user_title_new', payUid)  # 关闭贵族,还原数据
 		mysql.deleteUserAccountSql('pay_room_money', payUid)  # 修改vip值,还原数据
 		mysql.updateUserInfoSql('user_title_new', payUid, level=juewei_level['伯爵']['level'])
-		mysql.updateMoneySql(payUid, default_money)
+		UserMoneyOperations.update(payUid, default_money)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		old_vip = mysql.selectUserInfoSql('pay_room_money', payUid)
 		old_pop = mysql.selectUserInfoSql('popularity', uid)
@@ -147,9 +147,9 @@ class TestPayCreate(unittest.TestCase):
 			uid=uid,
 			giftId=giftId['69']['gid']
 		)
-		res = post_request_session(pay_url, data, tokenName='slp')
+		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_body(res['body'], 'success', 1, format_reason(des, res))
 		time.sleep(0.5)
 		assert_equal(mysql.selectUserInfoSql('pay_room_money', payUid), old_vip + juewei_level['伯爵']['update'] * giftId['69']['price']/100)
 		assert_equal(mysql.selectUserInfoSql('popularity', uid), old_pop + giftId['69']['price'])
@@ -171,7 +171,7 @@ class TestPayCreate(unittest.TestCase):
 		mysql.deleteUserAccountSql('user_title_new', payUid)  # 关闭贵族,还原数据
 		mysql.deleteUserAccountSql('pay_room_money', payUid)  # 修改vip值,还原数据
 		mysql.updateUserInfoSql('user_title_new', payUid, level=juewei_level['侯爵']['level'])
-		mysql.updateMoneySql(payUid, default_money)
+		UserMoneyOperations.update(payUid, default_money)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		old_vip = mysql.selectUserInfoSql('pay_room_money', payUid)
 		old_pop = mysql.selectUserInfoSql('popularity', uid)
@@ -181,9 +181,9 @@ class TestPayCreate(unittest.TestCase):
 			uid=uid,
 			giftId=giftId['69']['gid']
 		)
-		res = post_request_session(pay_url, data, tokenName='slp')
+		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_body(res['body'], 'success', 1, format_reason(des, res))
 		time.sleep(0.5)
 		assert_equal(mysql.selectUserInfoSql('pay_room_money', payUid), old_vip + juewei_level['侯爵']['update'] * giftId['69']['price']/100)
 		assert_equal(mysql.selectUserInfoSql('popularity', uid), old_pop + giftId['69']['price'])
@@ -205,7 +205,7 @@ class TestPayCreate(unittest.TestCase):
 		mysql.deleteUserAccountSql('user_title_new', payUid)  # 关闭贵族,还原数据
 		mysql.deleteUserAccountSql('pay_room_money', payUid)  # 修改vip值,还原数据
 		mysql.updateUserInfoSql('user_title_new', payUid, level=juewei_level['公爵']['level'])
-		mysql.updateMoneySql(payUid, default_money)
+		UserMoneyOperations.update(payUid, default_money)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		old_vip = mysql.selectUserInfoSql('pay_room_money', payUid)
 		old_pop = mysql.selectUserInfoSql('popularity', uid)
@@ -215,9 +215,9 @@ class TestPayCreate(unittest.TestCase):
 			uid=uid,
 			giftId=giftId['69']['gid']
 		)
-		res = post_request_session(pay_url, data, tokenName='slp')
+		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_body(res['body'], 'success', 1, format_reason(des, res))
 		time.sleep(0.5)
 		assert_equal(mysql.selectUserInfoSql('pay_room_money', payUid), old_vip + juewei_level['公爵']['update'] * giftId['69']['price']/100)
 		assert_equal(mysql.selectUserInfoSql('popularity', uid), old_pop + giftId['69']['price'])
@@ -239,7 +239,7 @@ class TestPayCreate(unittest.TestCase):
 		mysql.deleteUserAccountSql('user_title_new', payUid)  # 关闭贵族,还原数据
 		mysql.deleteUserAccountSql('pay_room_money', payUid)  # 修改vip值,还原数据
 		mysql.updateUserInfoSql('user_title_new', payUid, level=juewei_level['亲王']['level'])
-		mysql.updateMoneySql(payUid, default_money)
+		UserMoneyOperations.update(payUid, default_money)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		old_vip = mysql.selectUserInfoSql('pay_room_money', payUid)
 		old_pop = mysql.selectUserInfoSql('popularity', uid)
@@ -249,9 +249,9 @@ class TestPayCreate(unittest.TestCase):
 			uid=uid,
 			giftId=giftId['69']['gid']
 		)
-		res = post_request_session(pay_url, data, tokenName='slp')
+		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_body(res['body'], 'success', 1, format_reason(des, res))
 		time.sleep(0.5)
 		assert_equal(mysql.selectUserInfoSql('pay_room_money', payUid), old_vip + juewei_level['亲王']['update'] * giftId['69']['price']/100)
 		assert_equal(mysql.selectUserInfoSql('popularity', uid), old_pop + giftId['69']['price'])
@@ -273,7 +273,7 @@ class TestPayCreate(unittest.TestCase):
 		mysql.deleteUserAccountSql('user_title_new', payUid)  # 关闭贵族,还原数据
 		mysql.deleteUserAccountSql('pay_room_money', payUid)  # 修改vip值,还原数据
 		mysql.updateUserInfoSql('user_title_new', payUid, level=juewei_level['国王']['level'])
-		mysql.updateMoneySql(payUid, default_money)
+		UserMoneyOperations.update(payUid, default_money)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		old_vip = mysql.selectUserInfoSql('pay_room_money', payUid)
 		old_pop = mysql.selectUserInfoSql('popularity', uid)
@@ -283,9 +283,9 @@ class TestPayCreate(unittest.TestCase):
 			uid=uid,
 			giftId=giftId['69']['gid']
 		)
-		res = post_request_session(pay_url, data, tokenName='slp')
+		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_body(res['body'], 'success', 1, format_reason(des, res))
 		time.sleep(0.5)
 		assert_equal(mysql.selectUserInfoSql('pay_room_money', payUid), old_vip + juewei_level['国王']['update'] * giftId['69']['price']/100)
 		assert_equal(mysql.selectUserInfoSql('popularity', uid), old_pop + giftId['69']['price'])
@@ -307,7 +307,7 @@ class TestPayCreate(unittest.TestCase):
 		mysql.deleteUserAccountSql('user_title_new', payUid)  # 关闭贵族,还原数据
 		mysql.deleteUserAccountSql('pay_room_money', payUid)  # 修改vip值,还原数据
 		mysql.updateUserInfoSql('user_title_new', payUid, level=juewei_level['皇帝']['level'])
-		mysql.updateMoneySql(payUid, default_money)
+		UserMoneyOperations.update(payUid, default_money)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		old_vip = mysql.selectUserInfoSql('pay_room_money', payUid)
 		old_pop = mysql.selectUserInfoSql('popularity', uid)
@@ -317,9 +317,9 @@ class TestPayCreate(unittest.TestCase):
 			uid=uid,
 			giftId=giftId['69']['gid']
 		)
-		res = post_request_session(pay_url, data, tokenName='slp')
+		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_body(res['body'], 'success', 1, format_reason(des, res))
 		time.sleep(0.5)
 		assert_equal(mysql.selectUserInfoSql('pay_room_money', payUid), old_vip + juewei_level['皇帝']['update'] * giftId['69']['price']/100)
 		assert_equal(mysql.selectUserInfoSql('popularity', uid), old_pop + giftId['69']['price'])

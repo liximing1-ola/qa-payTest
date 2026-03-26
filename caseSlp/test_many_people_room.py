@@ -38,7 +38,7 @@ class TestPayCreate(unittest.TestCase):
 		num = 5
 		mysql.updateUserGodSql(gs_A_uid, 0)
 		mysql.updateUserGodSql(gs_B_uid, 1)
-		mysql.updateMoneySql(payUid, giftId['69']['price'] * num * len(uids))
+		UserMoneyOperations.update(payUid, giftId['69']['price'] * num * len(uids))
 		mysql.updateUserMoneyClearSql(gs_A_uid, gs_B_uid, normal_uid)
 		data = encodeData(
 			rid=rid,
@@ -46,9 +46,9 @@ class TestPayCreate(unittest.TestCase):
 			num=num,
 			uids=uids
 		)
-		res = post_request_session(pay_url, data, tokenName='slp')
+		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'], 200)
-		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_body(res['body'], 'success', 1, format_reason(des, res))
 		assert_equal(mysql.selectUserInfoSql('single_money', gs_A_uid), giftId['69']['price'] * rates['gs']['default'] * num)
 		assert_equal(mysql.selectUserInfoSql('single_money', gs_B_uid, money_type='money_cash'), giftId['69']['price'] * rates['gs']['default'] * num)
 		assert_equal(mysql.selectUserInfoSql('single_money', normal_uid), giftId['69']['price'] * rates['normal']['default'] * num)

@@ -16,6 +16,13 @@
 - [README.md](file://README.md)
 </cite>
 
+## 更新摘要
+**所做更改**
+- 更新了测试生命周期管理改进部分，反映新的重试机制和测试用例结构标准化
+- 新增了测试用例结构标准化的具体实现细节
+- 增强了测试数据准备和验证方法的说明
+- 补充了测试用例组织和命名规范的改进
+
 ## 目录
 1. [简介](#简介)
 2. [项目结构](#项目结构)
@@ -25,15 +32,17 @@
 6. [VIP房支付场景设计](#vip房支付场景设计)
 7. [权限验证机制](#权限验证机制)
 8. [功能测试用例](#功能测试用例)
-9. [性能考虑](#性能考虑)
-10. [故障排除指南](#故障排除指南)
-11. [结论](#结论)
+9. [测试生命周期管理](#测试生命周期管理)
+10. [测试用例结构标准化](#测试用例结构标准化)
+11. [性能考虑](#性能考虑)
+12. [故障排除指南](#故障排除指南)
+13. [结论](#结论)
 
 ## 简介
 
 VIP房支付测试系统是一个专门针对VIP房间支付场景的自动化测试框架，专注于验证VIP会员在VIP房间内的特权使用、权限验证、功能解锁和服务激活等核心功能。该系统通过模拟真实的支付流程，验证VIP会员等级要求、VIP功能限制、VIP权限验证以及VIP服务费用计算机制。
 
-系统采用模块化设计，包含完整的支付流程验证、数据库状态检查、异常处理和重试机制，确保VIP房支付场景的稳定性和可靠性。
+系统采用模块化设计，包含完整的支付流程验证、数据库状态检查、异常处理和重试机制，确保VIP房支付场景的稳定性和可靠性。最新的重构改进包括测试生命周期管理的优化和测试用例结构的标准化，提升了测试的可维护性和执行效率。
 
 ## 项目结构
 
@@ -314,6 +323,101 @@ PaymentValidator --> User : "验证"
 **章节来源**
 - [test_pay_vipRoom.py:18-89](file://case/test_pay_vipRoom.py#L18-L89)
 
+## 测试生命周期管理
+
+### 重试机制改进
+
+系统引入了智能重试机制，通过`@Retry(max_n=3)`装饰器实现：
+
+```mermaid
+flowchart TD
+Start([测试开始]) --> ExecuteTest["执行测试用例"]
+ExecuteTest --> Success{"执行成功?"}
+Success --> |是| RecordResult["记录成功结果"]
+Success --> |否| CheckRetry{"还有重试次数?"}
+CheckRetry --> |是| Cleanup["调用tearDown清理"]
+Cleanup --> Setup["调用setUp重新初始化"]
+Setup --> ExecuteTest
+CheckRetry --> |否| RecordFailure["记录失败原因"]
+RecordResult --> End([结束])
+RecordFailure --> End
+```
+
+**图表来源**
+- [runFailed.py:10-87](file://common/runFailed.py#L10-L87)
+
+### 测试数据准备标准化
+
+每个测试用例都遵循统一的数据准备模式：
+
+1. **测试数据准备**：使用`mysql.updateMoneySql()`统一设置账户状态
+2. **请求构造**：通过`encodeData()`函数标准化请求参数
+3. **响应验证**：使用统一的断言方法进行结果验证
+4. **状态清理**：测试结束后自动清理临时数据
+
+**章节来源**
+- [runFailed.py:57-84](file://common/runFailed.py#L57-L84)
+- [test_pay_vipRoom.py:28-39](file://case/test_pay_vipRoom.py#L28-L39)
+
+## 测试用例结构标准化
+
+### 统一的测试模板
+
+最新的重构引入了标准化的测试用例结构：
+
+```python
+@Retry(max_n=3)
+class TestPayCreate(unittest.TestCase):
+    def setUp(self):
+        """测试前准备工作"""
+        # 初始化测试环境
+        
+    def tearDown(self):
+        """测试后清理工作"""
+        # 清理测试数据
+        
+    def test_01_personRoomPayGift(self, des='个人房礼物打赏给用户（mcb）'):
+        """
+        用例描述：验证余额足够时，个人房打赏礼物分成满足师徒收益(非一代宗师)的基础上为：62:38，且收入在个人魅力值
+        脚本步骤：
+        1.构造打赏者和被打赏者数据
+        2.个人房房间打赏礼物（打赏100分）
+        3.校验接口状态和返回值数据
+        4.检查被打赏者余额，预期为：100 * 0.62 =62 (money_cash_b)
+        """
+        # 准备测试数据
+        mysql.updateMoneySql(config.payUid, money=30, money_cash=30, money_cash_b=30, money_b=10)
+        mysql.updateMoneySql(config.rewardUid)
+        
+        # 构造请求数据
+        data = encodeData(payType='package',
+                          money=100,
+                          rid=self.vipRoomRid,
+                          giftId=config.giftId['5'])
+        
+        # 执行请求
+        res = post_request_session(config.pay_url, data)
+        
+        # 验证结果
+        assert_code(res['code'])
+        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_equal(mysql.selectUserInfoSql('single_money', config.rewardUid), 62)
+        
+        # 记录测试结果
+        case_list_b[des] = result
+```
+
+### 测试命名规范
+
+- **测试类命名**：`TestPay{RoomType}`格式
+- **测试方法命名**：`test_{序号}_{场景描述}`格式
+- **描述参数**：每个测试方法都包含`des`参数用于结果记录
+- **注释规范**：详细的用例描述和步骤说明
+
+**章节来源**
+- [test_pay_vipRoom.py:12-90](file://case/test_pay_vipRoom.py#L12-L90)
+- [test_pay_prettyRoom.py:12-142](file://case/test_pay_prettyRoom.py#L12-L142)
+
 ## 性能考虑
 
 ### 并发处理优化
@@ -370,11 +474,14 @@ PaymentValidator --> User : "验证"
 
 VIP房支付测试系统通过模块化的设计和完善的测试覆盖，为VIP房间支付场景提供了全面的自动化测试解决方案。系统不仅验证了基本的支付功能，更重要的是确保了VIP特权的正确应用和VIP功能的完整实现。
 
+最新的重构改进包括测试生命周期管理的优化和测试用例结构的标准化，显著提升了测试的可靠性和可维护性。通过智能重试机制、统一的测试模板和标准化的命名规范，系统能够更有效地处理网络波动和环境不稳定因素。
+
 通过本系统的测试，可以确保：
 - VIP会员资格验证的准确性
 - VIP权限控制的有效性
 - VIP功能解锁的正确性
 - VIP专属服务的可靠性
 - VIP支付流程的稳定性
+- 测试用例的可维护性和可扩展性
 
 该系统为VIP房支付场景的质量保证提供了坚实的技术基础，能够有效提升用户体验和系统稳定性。

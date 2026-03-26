@@ -1,144 +1,159 @@
 # coding=utf-8
 import pymysql
+from contextlib import contextmanager
 
 
-class mysql:
-    db_config = {"dev_46_db": '192.168.11.46',
-                 "dev_46_user": 'root',
-                 "dev_46_pas": '123456',
-                 "ali_db": 'rm-bp1nfl3dp096d5o39.mysql.rds.aliyuncs.com',
-                 "ali_user": 'super',
-                 "ali_pas": 'dev123456'}
-    _dbUrl = db_config['dev_46_db']
-    _user = db_config['dev_46_user']
-    _password = db_config['dev_46_pas']
-    _dbName = 'xianshi'
-    _dbPort = 3306
+class MySQLConfig:
+    """MySQL配置"""
+    DEV = {
+        'host': '192.168.11.46',
+        'port': 3306,
+        'user': 'root',
+        'password': '123456',
+        'database': 'xianshi',
+        'charset': 'utf8'
+    }
+    ALI = {
+        'host': 'rm-bp1nfl3dp096d5o39.mysql.rds.aliyuncs.com',
+        'port': 3306,
+        'user': 'super',
+        'password': 'dev123456',
+        'database': 'xianshi',
+        'charset': 'utf8'
+    }
 
-    @staticmethod
-    def conMysql():
-        con = pymysql.connect(host=mysql._dbUrl,
-                              port=mysql._dbPort,
-                              user=mysql._user,
-                              passwd=mysql._password,
-                              charset='utf8')
-        con.select_db(mysql._dbName)
-        cursor = con.cursor()
-        return con, cursor
 
-    # 更新用户的账户余额
-    @staticmethod
-    def updateMoneySql(uid, money=0, money_cash=0, money_cash_b=0, money_b=0, gold_coin=0):
-        con, cur = mysql.conMysql()
-        sql = "update xs_user_money set money={}, money_b={}, money_cash={}, money_cash_b={},gold_coin={} where uid={} limit 1" \
-            .format(money, money_b, money_cash, money_cash_b, gold_coin, uid)
+class MySQLClient:
+    """MySQL客户端"""
+    _config = MySQLConfig.DEV
+
+    @classmethod
+    def set_config(cls, config_name='dev'):
+        """切换配置"""
+        cls._config = getattr(MySQLConfig, config_name.upper(), MySQLConfig.DEV)
+
+    @classmethod
+    @contextmanager
+    def get_connection(cls):
+        """获取数据库连接（上下文管理器）"""
+        con = pymysql.connect(**cls._config)
         try:
-            cur.execute(sql)
-        except Exception as error:
-            con.rollback()
-            print('update fail', error)
+            yield con
         finally:
-            con.commit()
+            con.close()
 
-    # 查询用户当前所有账户余额之和
-    @staticmethod
-    def selectAllMoneySql(uid):
-        con, cur = mysql.conMysql()
-        sql = "select money+money_b+money_cash_b+money_cash from xs_user_money where uid={}".format(uid)
-        try:
-            cur.execute(sql)
-            res = cur.fetchone()
-            if len(res) > 0:
-                return res[0]
-            else:
-                return None
-        except Exception as error:
-            print(error)
+    @classmethod
+    @contextmanager
+    def get_cursor(cls):
+        """获取游标（上下文管理器）"""
+        with cls.get_connection() as con:
+            cursor = con.cursor()
+            try:
+                yield con, cursor
+            finally:
+                cursor.close()
 
-    # 清空用户背包内的道具
-    @staticmethod
-    def deleteUserCommoditySql(uid):
-        con, cur = mysql.conMysql()
-        sql = "delete from xs_user_commodity where uid={}".format(uid)
-        try:
-            cur.execute(sql)
-        except Exception as error:
-            con.rollback()
-            print('delete fail', error)
-        finally:
-            con.commit()
+    @classmethod
+    def execute(cls, sql, fetch_one=False, fetch_all=False):
+        """执行SQL语句"""
+        with cls.get_cursor() as (con, cur):
+            try:
+                cur.execute(sql)
+                if fetch_one:
+                    return cur.fetchone()
+                if fetch_all:
+                    return cur.fetchall()
+                con.commit()
+            except Exception as e:
+                con.rollback()
+                raise e
 
-    # 检查用户背包指定物品id数量
-    @staticmethod
-    def checkUserCommoditySql(uid, cid):
-        con, cur = mysql.conMysql()
-        sql = "select num from xs_user_commodity where cid={} and uid={}".format(cid, uid)
+    @classmethod
+    def execute_write(cls, sql, error_msg='execute fail'):
+        """执行写操作"""
         try:
-            cur.execute(sql)
-            res = cur.fetchone()
-            if res is None:
-                return 0
-            else:
-                return res[0]
-        except Exception as error:
-            print(error)
+            cls.execute(sql)
+        except Exception as e:
+            print(error_msg, e)
 
-    # 检查用户背包所有物品数量
-    @staticmethod
-    def checkUserAllCommoditySql(uid):
-        con, cur = mysql.conMysql()
-        sql = 'select sum(num) from xs_user_commodity where uid ={}'.format(uid)
+    @classmethod
+    def execute_read(cls, sql, default=None):
+        """执行读操作"""
         try:
-            cur.execute(sql)
-            res = cur.fetchone()
-            return int(res[0])
-        except Exception as error:
-            print(error)
+            res = cls.execute(sql, fetch_one=True)
+            return res[0] if res else default
+        except Exception as e:
+            print(e)
+            return default
 
-    # 获得用户物品表的对应id
-    @staticmethod
-    def getUserCommodityIdSql(cid, uid):
-        con, cur = mysql.conMysql()
-        sql = "select id from xs_user_commodity where cid={} and uid={}".format(cid, uid)
-        try:
-            cur.execute(sql)
-            res = cur.fetchone()
-            if len(res) > 0:
-                return res[0]
-        except Exception as error:
-            print(error)
 
-    # 用户背包增加测试数据
-    @staticmethod
-    def insertXsUserCommodity(uid, cid, num, state=0):
-        con, cur = mysql.conMysql()
-        sql = "insert into xs_user_commodity (uid, cid, num, state) values ({}, {}, {}, {})".format(uid, cid, num,
-                                                                                                    state)
-        try:
-            cur.execute(sql)
-        except Exception as error:
-            con.rollback()
-            print('insert fail', error)
-        finally:
-            con.commit()
+# 内部引用
+mysql = MySQLClient
 
-    #  生成一批uid
+
+class UserMoneyOperations:
+    """用户资金相关操作"""
+
     @staticmethod
-    def getUids(limit_num):
-        con, cur = mysql.conMysql()
-        sql = "select uid from xs_user_profile where uid>131542080 and app_id=1 limit {}".format(limit_num)
-        uids = []
+    def update(uid, money=0, money_cash=0, money_cash_b=0, money_b=0, gold_coin=0):
+        """更新用户账户余额"""
+        sql = f"UPDATE xs_user_money SET money={money}, money_b={money_b}, money_cash={money_cash}, money_cash_b={money_cash_b}, gold_coin={gold_coin} WHERE uid={uid} LIMIT 1"
+        mysql.execute_write(sql, 'update fail')
+
+    @staticmethod
+    def select_all(uid):
+        """查询用户所有账户余额之和"""
+        sql = f"SELECT money+money_b+money_cash_b+money_cash FROM xs_user_money WHERE uid={uid}"
+        return mysql.execute_read(sql)
+
+
+class UserCommodityOperations:
+    """用户背包相关操作"""
+
+    @staticmethod
+    def delete_all(uid):
+        """清空用户背包"""
+        sql = f"DELETE FROM xs_user_commodity WHERE uid={uid}"
+        mysql.execute_write(sql, 'delete fail')
+
+    @staticmethod
+    def check(uid, cid):
+        """检查指定物品数量"""
+        sql = f"SELECT num FROM xs_user_commodity WHERE cid={cid} AND uid={uid}"
+        return mysql.execute_read(sql, 0)
+
+    @staticmethod
+    def check_all(uid):
+        """检查所有物品数量"""
+        sql = f"SELECT SUM(num) FROM xs_user_commodity WHERE uid={uid}"
+        result = mysql.execute_read(sql, 0)
+        return int(result) if result else 0
+
+    @staticmethod
+    def get_id(cid, uid):
+        """获取物品表ID"""
+        sql = f"SELECT id FROM xs_user_commodity WHERE cid={cid} AND uid={uid}"
+        return mysql.execute_read(sql)
+
+    @staticmethod
+    def insert(uid, cid, num, state=0):
+        """插入物品"""
+        sql = f"INSERT INTO xs_user_commodity (uid, cid, num, state) VALUES ({uid}, {cid}, {num}, {state})"
+        mysql.execute_write(sql, 'insert fail')
+
+
+class UserProfileOperations:
+    """用户资料相关操作"""
+
+    @staticmethod
+    def get_uids(limit_num, min_uid=131542080, app_id=1):
+        """生成一批UID"""
+        sql = f"SELECT uid FROM xs_user_profile WHERE uid>{min_uid} AND app_id={app_id} LIMIT {limit_num}"
         try:
-            cur.execute(sql)
-            res = cur.fetchall()
-            if res is None:
-                print('error')
-            else:
-                for i in res:
-                    uids.append(str(i[0]))
-                print(tuple(uids))
-                return tuple(uids)
-        except Exception as error:
-            print('fail', error)
-        finally:
-            con.commit()
+            results = mysql.execute(sql, fetch_all=True)
+            uids = tuple(str(i[0]) for i in results) if results else ()
+            print(uids)
+            return uids
+        except Exception as e:
+            print('fail', e)
+            return ()

@@ -32,7 +32,7 @@ class TestPayCustomRate(unittest.TestCase):
         """准备测试数据"""
         for step in setup_steps:
             if step['action'] == 'update_money':
-                mysql.updateMoneySql(**step['params'])
+                UserMoneyOperations.update(**step['params'])
             elif step['action'] == 'clear_user_money':
                 mysql.updateUserMoneyClearSql(*step['uids'])
             elif step['action'] == 'check_user_broker':
@@ -77,7 +77,7 @@ class TestPayCustomRate(unittest.TestCase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         
         # 验证数据库
         self._validate_db_state([
@@ -117,7 +117,7 @@ class TestPayCustomRate(unittest.TestCase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         
         # 验证数据库
         self._validate_db_state([
@@ -157,7 +157,7 @@ class TestPayCustomRate(unittest.TestCase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         
         # 验证数据库
         self._validate_db_state([
@@ -195,7 +195,7 @@ class TestPayCustomRate(unittest.TestCase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         
         # 验证数据库
         self._validate_db_state([
@@ -233,7 +233,7 @@ class TestPayCustomRate(unittest.TestCase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         
         # 验证数据库
         self._validate_db_state([

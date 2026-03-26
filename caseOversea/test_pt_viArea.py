@@ -47,9 +47,9 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.pt_testUid)  # 账户余额清空
         conMysql.updateUserextendMoneyClearSql(config.pt_testUid)  # 非主播钱包附加表账户余额清空
         data = encodePtData(payType='package', rid=conMysql.select_user_chatroom('business',bigarea_id=7))
-        res = post_request_session(config.pt_pay_url, data, tokenName='pt')
+        res = post_request_session(config.pt_pay_url, data, token_name='pt')
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 100)
         assert_equal(conMysql.selectUserInfoSql('money_cash_personal', config.pt_testUid, money_type='money_cash_personal'), 420)
         case_list[des] = result
@@ -71,9 +71,9 @@ class TestPayCreate(unittest.TestCase):
         data = encodePtData(payType='package',
                             giftId=config.giftId['46'],
                             rid=conMysql.select_user_chatroom('business',bigarea_id=7))
-        res = post_request_session(config.pt_pay_url, data, tokenName='pt')
+        res = post_request_session(config.pt_pay_url, data, token_name='pt')
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 100)
         assert_len(conMysql.selectUserInfoSql('money_cash_personal', config.pt_testUid, money_type='money_cash_personal'), 210)
         assert_equal(conMysql.selectUserInfoSql('money_cash_personal', config.pt_testUid, money_type='money_cash_personal'),
@@ -95,9 +95,9 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.pt_testUid)  # 账户余额清空
         conMysql.updateUserextendMoneyClearSql(config.pt_testUid)  # 非主播钱包附加表账户余额清空
         data = encodePtData(payType='chat-gift')
-        res = post_request_session(config.pt_pay_url, data, tokenName='pt')
+        res = post_request_session(config.pt_pay_url, data, token_name='pt')
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 100)
         assert_equal(conMysql.selectUserInfoSql('money_cash_personal', config.pt_testUid, money_type='money_cash_personal'), 300)
         case_list[des] = result
@@ -117,9 +117,9 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.pt_testUid)
         conMysql.updateUserextendMoneyClearSql(config.pt_testUid)  # 非主播钱包附加表账户余额清空
         data = encodePtData(payType='package', rid=conMysql.select_user_chatroom('vip',bigarea_id=7))
-        res = post_request_session(config.pt_pay_url, data, tokenName='pt')
+        res = post_request_session(config.pt_pay_url, data, token_name='pt')
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 100)
         assert_equal(conMysql.selectUserInfoSql('money_cash_personal', config.pt_testUid, money_type='money_cash_personal'), 480)
         case_list[des] = result
@@ -138,9 +138,9 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.pt_payUid, 700)
         conMysql.updateMoneySql(config.pt_brokerUid)  # 账户余额清空
         data = encodePtData(payType='package', rid=conMysql.select_user_chatroom('business',bigarea_id=7),uid=config.pt_brokerUid)
-        res = post_request_session(config.pt_pay_url, data, tokenName='pt')
+        res = post_request_session(config.pt_pay_url, data, token_name='pt')
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 100)
         assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_brokerUid, money_type='money_cash_b'), 420)
         case_list[des] = result
@@ -159,9 +159,9 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.pt_payUid, 700)
         conMysql.updateMoneySql(config.pt_brokerUid)  # 账户余额清空
         data = encodePtData(payType='chat-gift',uid=config.pt_brokerUid)
-        res = post_request_session(config.pt_pay_url, data, tokenName='pt')
+        res = post_request_session(config.pt_pay_url, data, token_name='pt')
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 100)
         assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_brokerUid, money_type='money_cash_b'), 300)
         case_list[des] = result
@@ -180,9 +180,9 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateMoneySql(config.pt_payUid, 700)
         conMysql.updateMoneySql(config.pt_brokerUid)
         data = encodePtData(payType='package', rid=conMysql.select_user_chatroom('vip',bigarea_id=7),uid=config.pt_brokerUid)
-        res = post_request_session(config.pt_pay_url, data, tokenName='pt')
+        res = post_request_session(config.pt_pay_url, data, token_name='pt')
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 100)
         assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_brokerUid, money_type='money_cash_b'), 420)
         case_list[des] = result

@@ -44,7 +44,7 @@ class TestPayCreate(unittest.TestCase):
 		mysql.deleteUserAccountSql('pay_room_money', payUid)
 		# 开启爵位
 		mysql.updateUserInfoSql('user_title_new', payUid, level=jw['level'])
-		mysql.updateMoneySql(payUid, base_money)
+		UserMoneyOperations.update(payUid, base_money)
 
 		data = encodeData(
 			payType='zx_box',
@@ -53,9 +53,9 @@ class TestPayCreate(unittest.TestCase):
 			price=zx_box['6']['price'],
 			uids=('{}'.format(normal_uid), '{}'.format(gsUid))
 		)
-		res = post_request_session(pay_url, data, tokenName='slp')
+		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1, reason(des, res))
+		assert_body(res['body'], 'success', 1, format_reason(des, res))
 		time.sleep(5)
 		# 查询 打赏人/收礼人数据,用于计算
 		send_gift_data= mysql.selectZxPayData(payUid)

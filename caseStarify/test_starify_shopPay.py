@@ -25,7 +25,7 @@ class TestPayCreate(unittest.TestCase):
         #  sql:打赏者starify_payUid 修改财富值=0
         conMysql.updateWealthSql(starify_payUid, 0)
         data = deal_pay_data("shop_buy", commodity, sale_level=sale_level)
-        res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
         assert_code(res['code'])
         assert_body(res['body'], 'success', True, reason_starify(des, res))
         #  sql:starify_payUid 查询余额=0
@@ -48,7 +48,7 @@ class TestPayCreate(unittest.TestCase):
         #  sql:打赏者starify_payUid 修改财富值=0
         conMysql.updateWealthSql(starify_payUid, 0)
         data = deal_pay_data("shop_buy", commodity, sale_level=sale_level)
-        res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
         assert_code(res['code'])
         assert_body(res['body'], 'success', True, reason_starify(des, res))
         #  sql:starify_payUid 查询余额=0
@@ -71,7 +71,7 @@ class TestPayCreate(unittest.TestCase):
         #  sql:打赏者starify_payUid 修改财富值=0
         conMysql.updateWealthSql(starify_payUid, 0)
         data = deal_pay_data("shop_buy", commodity, sale_level=sale_level)
-        res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
         assert_code(res['code'])
         assert_body(res['body'], 'success', True, reason_starify(des, res))
         #  sql:starify_payUid 查询余额=0
@@ -94,7 +94,7 @@ class TestPayCreate(unittest.TestCase):
         #  sql:打赏者starify_payUid 修改财富值=0
         conMysql.updateWealthSql(starify_payUid, 0)
         data = deal_pay_data("shop_buy", commodity, sale_level=sale_level)
-        res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
         assert_code(res['code'])
         assert_body(res['body'], 'success', True, reason_starify(des, res))
         #  sql:starify_payUid 查询余额=0
@@ -117,7 +117,7 @@ class TestPayCreate(unittest.TestCase):
         #  sql:打赏者starify_payUid 修改财富值=0
         conMysql.updateWealthSql(starify_payUid, 0)
         data = deal_pay_data("shop_buy", commodity, sale_level=sale_level)
-        res = post_request_session_starify(config.starify_pay_url, data, tokenName='starify')
+        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
         assert_code(res['code'])
         assert_body(res['body'], 'success', True, reason_starify(des, res))
         #  sql:starify_payUid 查询余额=0

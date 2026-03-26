@@ -20,11 +20,11 @@ class TestPayOpenBox(unittest.TestCase):
             if action == 'delete_user_account':
                 mysql.deleteUserAccountSql(params['table'], config.payUid)
             elif action == 'insert_commodity':
-                mysql.insertXsUserCommodity(config.payUid, **params)
+                UserCommodityOperations.insert(config.payUid, **params)
             elif action == 'insert_user_box':
                 mysql.insertXsUserBox(config.payUid, **params)
             elif action == 'update_money':
-                mysql.updateMoneySql(**params)
+                UserMoneyOperations.update(**params)
 
     def _validate_db_state(self, checks):
         """验证数据库状态"""
@@ -40,17 +40,17 @@ class TestPayOpenBox(unittest.TestCase):
     def test_01_openBoxPayChange(self):
         """
         用例描述：
-        验证背包内开箱子得到物品
+        验证背包内openBox得到物品
         脚本步骤：
         1.构造数据（更新xs_user_money，xs_user_commodity，xs_user_box）
          * 清空用户背包内所有物品
-         * 用户背包内插入箱子(cid=2 铜箱子)
-         * 修改用户指定箱子礼物刷新
+         * 用户背包内插入箱子(cid=2)
+         * 修改用户指定box礼物刷新
          * 修改用户钱包余额
         2.openBox
         3.校验接口状态和返回值数据
         4.检查账户余额，预期值为：700 - 600 = 100
-        5.检查背包内开出物品，预期值应为：2（赠送头像框*1 + 开出礼物个数*1）
+        5.检查背包内openBox开出物品，预期值应为：2（赠送头像框*1 + openBox开出礼物个数*1）
         """
         des = '背包开箱子场景'
 
@@ -69,7 +69,7 @@ class TestPayOpenBox(unittest.TestCase):
 
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
 
         # 验证数据库
         self._validate_db_state([
@@ -86,15 +86,15 @@ class TestPayOpenBox(unittest.TestCase):
         脚本步骤：
         1.构造数据（更新xs_user_money，xs_user_commodity，xs_user_box）
             * 清空用户背包内所有物品
-            * 用户背包内插入多个箱子*6 2100*6=12600
-            * 修改用户指定箱子礼物刷新
+            * 用户背包内插入多个box*6 2100*6=12600
+            * 修改用户指定box礼物刷新
             * 修改用户钱包余额
         2.openBox
         3.校验接口状态和返回值数据
         4.检查账户余额，预期值为：12600 - 2100*6 = 0
         5.检查背包内开出物品，预期值应为12（赠送头像框*6，开出礼物个数等于*6）
         """
-        des = '背包箱子多开场景'
+        des = '背包box开场景'
 
         # 准备测试数据
         self._prepare_test_data([
@@ -111,7 +111,7 @@ class TestPayOpenBox(unittest.TestCase):
 
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
 
         # 验证数据库
         self._validate_db_state([
@@ -124,7 +124,7 @@ class TestPayOpenBox(unittest.TestCase):
     def test_03_giveBoxPayChange(self):
         """
         用例描述：
-        验证房间内送箱子逻辑正常
+        验证房间内sendBox逻辑正常
         脚本步骤：
         1.构造数据（更新xs_user_money，xs_user_commodity，xs_user_box）
         2.giveBox
@@ -132,7 +132,7 @@ class TestPayOpenBox(unittest.TestCase):
         4.检查打赏者账户余额，预期值为：700 - 600 = 100
         5.检查收箱用户账户余额，预期值为：大于186
         """
-        des = '房间送箱子场景'
+        des = '房间sendBox场景'
 
         # 准备测试数据
         self._prepare_test_data([
@@ -146,7 +146,7 @@ class TestPayOpenBox(unittest.TestCase):
 
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
 
         # 验证数据库
         self._validate_db_state([
@@ -159,7 +159,7 @@ class TestPayOpenBox(unittest.TestCase):
     def test_04_giveBoxMorePeople(self):
         """
         用例描述：
-        验证房间内送箱子给多个人时逻辑正常
+        验证房间内sendBox给多个人时逻辑正常
         脚本步骤：
         1.构造数据（更新xs_user_money，xs_user_commodity，xs_user_box）
         2.giveBox
@@ -167,7 +167,7 @@ class TestPayOpenBox(unittest.TestCase):
         4.检查账户余额，预期值为：10000 - 2100*2*2 = 1600
         5.检查收箱用户账户余额，预期值为：大于1000
         """
-        des = '房间送多人多个箱子场景'
+        des = '房间送多人多个box场景'
 
         # 准备测试数据
         self._prepare_test_data([
@@ -181,7 +181,7 @@ class TestPayOpenBox(unittest.TestCase):
 
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
 
         # 验证数据库
         self._validate_db_state([

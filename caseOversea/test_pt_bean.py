@@ -29,9 +29,9 @@ class TestPayCreate(unittest.TestCase):
         """
         conMysql.updateMoneySql(config.pt_payUid, money=300)
         data = encodePtData(payType='exchange_gold')
-        res = post_request_session(config.pt_pay_url, data, tokenName='pt')
+        res = post_request_session(config.pt_pay_url, data, token_name='pt')
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 0)
         assert_equal(conMysql.selectUserInfoSql('single_money', config.pt_payUid, money_type='gold_coin'), 600)
         case_list[des] = result

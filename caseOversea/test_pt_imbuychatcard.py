@@ -31,9 +31,9 @@ class TestPayCreate(unittest.TestCase):
         conMysql.deleteUserAccountSql('user_commodity',config.pt_payUid)
         conMysql.deleteUserAccountSql('chat_pay_card_record',config.pt_payUid)
         data = encodePtData(payType='chat-pay-card')
-        res = post_request_session(config.pt_pay_url, data, tokenName='pt')
+        res = post_request_session(config.pt_pay_url, data, token_name='pt')
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 0)
         assert_equal(conMysql.selectUserInfoSql('chat-pay-card', config.pt_payUid),10)
         case_list[des] = result

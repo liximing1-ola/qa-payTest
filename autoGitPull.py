@@ -15,39 +15,6 @@ from common.Session import Session
 
 
 # Constants
-APP_CONFIGS = {
-    'bb_php': {
-        'path_key': 'bb_php_path',
-        'branch_key': 'bb_git_branch',
-        'env': 'dev',
-        'bot': 'BB'
-    },
-    'bb_go': {
-        'path_key': 'bb_go_path',
-        'branch_key': 'bb_go_git_branch',
-        'env': 'dev',
-        'bot': 'BB'
-    },
-    'pt': {
-        'path_key': 'pt_php_path',
-        'branch_key': 'pt_git_branch',
-        'env': 'pt',
-        'bot': 'PT'
-    },
-    'slp_php': {
-        'path_key': 'slp_php_path',
-        'branch_key': 'slp_git_branch',
-        'env': 'slp',
-        'bot': 'slp'
-    },
-    'slp_common_rpc': {
-        'path_key': 'slp_common_rpc_path',
-        'branch_key': 'slp_git_branch',
-        'env': 'slp',
-        'bot': 'slp'
-    }
-}
-
 TIME_FILE = 'time.txt'
 DEFAULT_TIMESTAMP = '1600000000'
 DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
@@ -56,171 +23,136 @@ DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 class GitUpdater:
     """Git code updater with notification"""
 
-    def __init__(self):
-        self.logger_pull = Logs.get_log('gitCommitPull.log')
-        self.logger_update = Logs.get_log('updateGitCode.log')
-        self.logger_error = Logs.get_log('gitBranchError.log')
+    APP_CONFIGS = {
+        'bb_php': {'path_key': 'bb_php_path', 'branch_key': 'bb_git_branch', 'env': 'dev', 'bot': 'BB'},
+        'bb_go': {'path_key': 'bb_go_path', 'branch_key': 'bb_go_git_branch', 'env': 'dev', 'bot': 'BB'},
+        'pt': {'path_key': 'pt_php_path', 'branch_key': 'pt_git_branch', 'env': 'pt', 'bot': 'PT'},
+        'slp_php': {'path_key': 'slp_php_path', 'branch_key': 'slp_git_branch', 'env': 'slp', 'bot': 'slp'},
+        'slp_common_rpc': {'path_key': 'slp_common_rpc_path', 'branch_key': 'slp_git_branch', 'env': 'slp', 'bot': 'slp'}
+    }
 
-    def _get_app_config(self, app_info):
-        """Get application configuration by app info"""
-        if app_info not in APP_CONFIGS:
+    NOTIFICATION_MODES = {
+        'pt': 'slack_pt',
+        'slp_php': 'slack',
+        'slp_common_rpc': 'slack'
+    }
+
+    def __init__(self):
+        self.logger_pull = Logs.get_logger('gitCommitPull.log')
+        self.logger_update = Logs.get_logger('updateGitCode.log')
+        self.logger_error = Logs.get_logger('gitBranchError.log')
+
+    def _get_config(self, app_info):
+        """Get application configuration"""
+        cfg = self.APP_CONFIGS.get(app_info)
+        if not cfg:
             self.logger_error.error(f"Unknown app info: {app_info}")
             return None
-        
-        config_data = APP_CONFIGS[app_info]
         return {
-            'path': config.codeInfo[config_data['path_key']],
-            'branch': config.codeInfo[config_data['branch_key']],
-            'env': config_data['env'],
-            'bot': config_data['bot']
+            'path': config.codeInfo[cfg['path_key']],
+            'branch': config.codeInfo[cfg['branch_key']],
+            'env': cfg['env'],
+            'bot': cfg['bot']
         }
 
-    def _should_pull_code(self, app_info):
-        """Check if code should be pulled for this app"""
-        return not app_info.startswith('slp')
-
-    def _parse_commit_date(self, commit_data):
-        """Parse commit date string to timestamp"""
+    def _parse_commit_time(self, commit_data):
+        """Parse commit date to timestamp"""
         try:
             commit_dict = json.loads(commit_data)
-            date_str = commit_dict['date']
-            dt = datetime.strptime(date_str, DATETIME_FORMAT)
+            dt = datetime.strptime(commit_dict['date'], DATETIME_FORMAT)
             return int(dt.timestamp())
         except (json.JSONDecodeError, KeyError, ValueError) as e:
             self.logger_error.error(f"Failed to parse commit date: {e}")
             return 0
 
     def _send_notification(self, app_info, commit_info, bot, to='slack'):
-        """Send notification based on app type"""
-        notification_map = {
-            'pt': lambda: robot('slack_pt', commit_info, bot=bot),
-            'slp_php': lambda: self._send_slp_notification(commit_info, bot, to),
-            'slp_common_rpc': lambda: self._send_slp_notification(commit_info, bot, to),
-        }
-        
-        handler = notification_map.get(app_info)
-        if handler:
-            handler()
-        else:
-            robot('slack', commit_info, bot=bot)
+        """Send notification"""
+        mode = self.NOTIFICATION_MODES.get(app_info, 'slack')
+        robot(mode, commit_info, bot=bot, to=to)
 
-    def _send_slp_notification(self, commit_info, bot, to):
-        """Send SLP notification"""
-        if to == 'slack':
-            robot('slack', commit_info, bot=bot, to=to)
+    def _pull_code(self, path, app_info):
+        """Pull code if needed"""
+        if not app_info.startswith('slp'):
+            git.cmd.Git(path).pull()
+            self.logger_pull.info(f"Pulled code for {app_info}")
         else:
-            robot('markdown', commit_info, bot=bot, to=to)
+            self.logger_pull.info(f"Skipped pulling code for {app_info}")
 
-    def auto_git_pull(self, app_info, env='dev', bot='BB', to='slack'):
+    def _get_commits(self, repo):
+        """Get latest commits"""
+        log = repo.git.log(
+            '--pretty={"commit":"%h","author":"%an","summary":"%s","date":"%cd"}',
+            max_count=3,
+            date=f'format:{DATETIME_FORMAT}'
+        )
+        return log.strip().split('\n')
+
+    def autoGitPull(self, app_info, env='dev', bot='BB', to='slack'):
         """
         Automatically pull git code and send notifications
         
-        Args:
-            app_info (str): Application identifier
-            env (str): Environment name
-            bot (str): Bot identifier
-            to (str): Notification target
-            
         Returns:
             bool: True if update successful, False otherwise
         """
-        # Get app configuration
-        app_config = self._get_app_config(app_info)
-        if not app_config:
+        cfg = self._get_config(app_info)
+        if not cfg:
             return False
 
-        path = app_config['path']
-        expected_branch = app_config['branch']
-        actual_env = app_config['env']
-        actual_bot = app_config['bot']
-
         try:
-            # Pull code if needed
-            if self._should_pull_code(app_info):
-                git_client = git.cmd.Git(path)
-                git_client.pull()
-                self.logger_pull.info(f"Pulled code for {app_info}")
-            else:
-                self.logger_pull.info(f"Skipped pulling code for {app_info}")
+            # Pull code
+            self._pull_code(cfg['path'], app_info)
 
-            # Initialize repository
-            repo = Repo(path)
-            
-            # Update session token
+            # Init repo and session
+            repo = Repo(cfg['path'])
             Consts.startTime = time()
-            Session.getSession(actual_env)
-            
-            # Get latest commits
-            commit_log = repo.git.log(
-                '--pretty={"commit":"%h","author":"%an","summary":"%s","date":"%cd"}',
-                max_count=3,
-                date='format:%Y-%m-%d %H:%M:%S'
-            )
-            commit_list = commit_log.strip().split('\n')
-            
+            Session.getSession(cfg['env'])
+
+            # Get commits
+            commits = self._get_commits(repo)
             current_branch = str(repo.active_branch)
-            self.logger_pull.info(f'Current branch: {current_branch}, Latest commit: {commit_list[0]}')
+            self.logger_pull.info(f'Branch: {current_branch}, Latest: {commits[0]}')
 
             # Check branch
-            if current_branch != expected_branch:
-                self.logger_error.error(f"Branch mismatch: expected {expected_branch}, got {current_branch}")
+            if current_branch != cfg['branch']:
+                self.logger_error.error(f"Branch mismatch: expected {cfg['branch']}, got {current_branch}")
                 return False
 
             # Check commit time
-            latest_commit_time = self._parse_commit_date(commit_list[0])
-            last_update_time = int(update_time('read'))
-            
-            self.logger_update.info(
-                f'Latest commit time: {latest_commit_time}, Last update time: {last_update_time}'
-            )
+            latest_time = self._parse_commit_time(commits[0])
+            last_time = int(update_time('read'))
+            self.logger_update.info(f'Latest: {latest_time}, Last: {last_time}')
 
-            if latest_commit_time > last_update_time:
-                # Send notification
-                self._send_notification(app_info, commit_list[0], actual_bot, to)
+            if latest_time > last_time:
+                self._send_notification(app_info, commits[0], cfg['bot'], to)
                 self.logger_update.info("Code update notification sent")
                 return True
             else:
-                self.logger_update.info(
-                    f"No new code pulled for branch {current_branch}. "
-                    f"Latest commit time: {latest_commit_time}, Last update time: {last_update_time}"
-                )
+                self.logger_update.info(f"No new code for branch {current_branch}")
                 return False
 
         except Exception as e:
-            self.logger_error.error(f"Error processing {app_info}: {str(e)}")
+            self.logger_error.error(f"Error processing {app_info}: {e}")
             return False
 
 
 def update_time(operate, now=''):
-    """
-    Manage update timestamp file
-    
-    Args:
-        operate (str): Operation type ('read', 'write', 'change')
-        now (str): Timestamp to write (used with 'write' operation)
-        
-    Returns:
-        str: File content for 'read' operation
-    """
-    script_dir = os.path.dirname(os.path.realpath(__file__))
-    time_file_path = os.path.join(script_dir, TIME_FILE)
+    """Manage update timestamp file"""
+    file_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), TIME_FILE)
     
     try:
         if operate == 'write':
-            with open(time_file_path, 'w', encoding='utf-8') as f:
+            with open(file_path, 'w', encoding='utf-8') as f:
                 f.write(now)
                 
         elif operate == 'read':
-            # Create file with default timestamp if not exists
-            if not os.path.exists(time_file_path):
-                with open(time_file_path, 'w', encoding='utf-8') as f:
+            if not os.path.exists(file_path):
+                with open(file_path, 'w', encoding='utf-8') as f:
                     f.write(DEFAULT_TIMESTAMP)
-            
-            with open(time_file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, 'r', encoding='utf-8') as f:
                 return f.read().strip()
                 
         elif operate == 'change':
-            with open(time_file_path, 'w', encoding='utf-8') as f:
+            with open(file_path, 'w', encoding='utf-8') as f:
                 f.write(DEFAULT_TIMESTAMP)
                 
     except IOError as e:

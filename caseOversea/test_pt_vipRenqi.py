@@ -34,9 +34,9 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateXsUserprofile_pay_room_money(config.pt_payUid)
         conMysql.updateXsUserpopularity(config.pt_testUid)
         data = encodePtData(payType='package')
-        res = post_request_session(config.pt_pay_url, data, tokenName='pt')
+        res = post_request_session(config.pt_pay_url, data, token_name='pt')
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 0)
         assert_equal(conMysql.sqlXsUserprofile_pay_room_money(config.pt_payUid), 600)
         time.sleep(2)  # 人气值需要task更新处理
@@ -59,9 +59,9 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateXsUserprofile_pay_room_money(config.pt_payUid)
         conMysql.updateXsUserpopularity(config.pt_testUid)
         data = encodePtData(payType='chat-gift')
-        res = post_request_session(config.pt_pay_url, data, tokenName='pt')
+        res = post_request_session(config.pt_pay_url, data, token_name='pt')
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, reason(des, res))
+        assert_body(res['body'], 'success', 1, format_reason(des, res))
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.pt_payUid), 0)
         assert_equal(conMysql.sqlXsUserprofile_pay_room_money(config.pt_payUid), 600)
         time.sleep(2)  # 人气值需要task更新处理
