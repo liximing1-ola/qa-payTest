@@ -8,7 +8,7 @@
 
 ```
 qa-payTest/
-├── case/              # bb平台测试用例
+├── case/              # 测试用例
 ├── caseOversea/       # 海外版测试用例
 ├── caseSlp/           # slp平台测试用例
 ├── caseStarify/       # Starify平台测试用例
