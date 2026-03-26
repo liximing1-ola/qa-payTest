@@ -88,8 +88,8 @@ python testConcurrent.py
 
 | 目录 | 说明 |
 |------|------|
-| `case/` | bb平台核心支付测试 |
-| `caseOversea/` | 海外版多区域测试 |
+| `case/` | 核心支付测试 |
+| `caseOversea/` | 海外多区域测试 |
 | `caseSlp/` | slp平台测试 |
 | `caseStarify/` | Starify平台测试 |
 | `caseGames/` | 游戏相关支付测试 |

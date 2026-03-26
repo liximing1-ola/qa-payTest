@@ -1,9 +1,7 @@
 # coding=utf-8
-"""
-YAML配置文件读取工具
-"""
 import yaml
 import os
+import platform
 from common.Config import config
 
 
@@ -56,8 +54,3 @@ class YamlReader:
         except Exception as e:
             print(f"Error reading YAML: {e}")
             return None
-
-
-# 向后兼容
-Yaml = YamlReader
-YamlReader.read = YamlReader.read

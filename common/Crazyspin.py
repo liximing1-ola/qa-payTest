@@ -1,8 +1,3 @@
-"""
-疯狂转盘API封装模块
-
-提供疯狂转盘的购买、抽奖、列表查询等功能
-"""
 import urllib.parse
 import requests
 import urllib3
@@ -32,7 +27,7 @@ DEFAULT_HEADERS = {
 
 
 class CrazySpin:
-    """疯狂转盘操作类"""
+    """操作类"""
 
     @staticmethod
     def _build_url(endpoint: str, params: dict) -> str:
@@ -49,7 +44,7 @@ class CrazySpin:
 
     @staticmethod
     def spin_buy_url(uid: int) -> str:
-        """获取购买转盘URL"""
+        """获取购买URL"""
         params = {
             **DEFAULT_PARAMS,
             '_index': '218',
@@ -61,7 +56,7 @@ class CrazySpin:
 
     @staticmethod
     def spin_play_url(uid: int) -> str:
-        """获取转盘抽奖URL"""
+        """获取抽奖URL"""
         params = {
             **DEFAULT_PARAMS,
             '_index': '878',
@@ -101,11 +96,3 @@ class CrazySpin:
         headers = CrazySpin._build_headers(token_name)
         headers['Connection'] = ''  # 特殊处理
         return requests.get(url, params=params, headers=headers)
-
-
-# 向后兼容
-crazySpin = CrazySpin
-CrazySpin.spin_buy_url = CrazySpin.spin_buy_url
-CrazySpin.spin_play_url = CrazySpin.spin_play_url
-CrazySpin.get_turntable_list = CrazySpin.get_turntable_list
-CrazySpin.get_turntable_horn = CrazySpin.get_turntable_horn

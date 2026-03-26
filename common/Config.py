@@ -179,28 +179,28 @@ class Config:
 
     @property
     def pt_payUid(self) -> int:
-        """PT打赏者UID"""
+        """打赏者UID"""
         return self.pt_user.payUid
 
     @property
     def pt_testUid(self) -> int:
-        """PT测试UID"""
+        """测试UID"""
         return self.pt_user.testUid
 
     @property
     def pt_brokerUid(self) -> int:
-        """PT公会成员UID"""
+        """公会成员UID"""
         return self.pt_user.brokerUid
 
     @property
     def pt_fleetUid(self) -> int:
-        """PT家族UID"""
+        """家族UID"""
         return self.pt_user.fleet_uid
 
     # ============ URL配置 ============
     @property
     def pt_host(self) -> str:
-        """PT测试域名"""
+        """测试域名"""
         return self.appInfo.pt_ali_main
 
     @property
@@ -215,12 +215,12 @@ class Config:
 
     @property
     def bb_qqLogin_url(self) -> str:
-        """伴伴QQ登录URL"""
+        """QQ登录URL"""
         return f"{self.appInfo.bb_dev}account/qqlogin"
 
     @property
     def pt_mobile_login_url(self) -> str:
-        """PT手机号登录URL"""
+        """手机号登录URL"""
         return f"{self.pt_host}account/passwordLogin"
 
     @property
