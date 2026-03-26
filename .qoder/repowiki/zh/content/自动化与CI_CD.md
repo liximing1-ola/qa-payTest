@@ -312,7 +312,7 @@ end
 
 ### 定时任务调度（run_crontab_case）
 - **功能要点**
-  - 针对"派对"与"伴伴"两类应用，分别发现并执行特定用例或通配用例
+  - 针对"派对"与"APP"两类应用，分别发现并执行特定用例或通配用例
   - 执行完成后生成统计日志并推送markdown通知
 - **关键流程**
 
@@ -320,7 +320,7 @@ end
 flowchart TD
 Start(["定时触发"]) --> ChooseApp{"应用类型"}
 ChooseApp --> |派对| LoadPT["discover(caseLuckyPlay, pattern='test_*.py')"]
-ChooseApp --> |伴伴| LoadBB["discover(case, pattern='test_pay_punish.py')"]
+ChooseApp --> |APP| LoadBB["discover(case, pattern='test_pay_punish.py')"]
 LoadPT --> RunPT["TextTestRunner.run()"]
 LoadBB --> RunBB["TextTestRunner.run()"]
 RunPT --> StatPT["统计并写日志"]

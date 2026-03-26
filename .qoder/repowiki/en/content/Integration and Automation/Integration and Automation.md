@@ -268,7 +268,7 @@ end
 
 Supported apps and patterns:
 - Partying: caseLuckyPlay with wildcard pattern
-- 伴伴: case with specific test file
+- APP: case with specific test file
 
 **Diagram sources**
 - [run_crontab_case.py](file://run_crontab_case.py)
