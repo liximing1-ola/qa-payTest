@@ -7,11 +7,19 @@
 - [conSlpMysql.py](file://common/conSlpMysql.py)
 - [conStarifyMysql.py](file://common/conStarifyMysql.py)
 - [Config.py](file://common/Config.py)
+- [sqlScript.py](file://common/sqlScript.py)
 - [test_pay_business.py](file://case/test_pay_business.py)
 - [test_pt_bean.py](file://caseOversea/test_pt_bean.py)
-- [sqlScript.py](file://common/sqlScript.py)
 - [config_dev.php](file://others/config_dev.php)
 </cite>
+
+## 更新摘要
+**变更内容**
+- 新增统一MySQL连接管理架构，替代原有的分散连接处理方式
+- 引入MySQLClient和MySQLConfig类提供统一的数据库连接管理
+- 实现自动重连和连接池管理功能
+- 添加上下文管理器支持更好的资源管理
+- 优化错误处理和连接状态监控机制
 
 ## 目录
 1. [简介](#简介)
@@ -26,16 +34,21 @@
 
 ## 简介
 
-本文档详细介绍了QA支付测试自动化项目中的MySQL连接管理功能。该项目实现了多平台数据库连接架构，支持国内平台、PT海外平台、不夜星球平台和Starify平台的数据库连接管理。每个平台都有独立的连接配置和管理机制，确保测试环境的稳定性和可靠性。
+本文档详细介绍了QA支付测试自动化项目中的MySQL连接管理功能。该项目实现了统一的MySQL连接管理架构，支持国内平台、PT海外平台、不夜星球平台和Starify平台的数据库连接管理。新架构通过统一的连接管理器提供自动重连和连接池管理功能，替代了原有的分散连接处理方式，确保测试环境的稳定性和可靠性。
 
 ## 项目结构
 
-项目采用模块化设计，将不同平台的数据库连接管理分离到独立的Python文件中：
+项目采用统一模块化设计，将不同平台的数据库连接管理整合到统一的连接管理框架中：
 
 ```mermaid
 graph TB
-subgraph "连接管理模块"
-CM[conMysql.py<br/>国内平台连接]
+subgraph "统一连接管理框架"
+UNIFIED[MySQLClient<br/>统一连接管理]
+CONFIG[MySQLConfig<br/>配置管理]
+CONTEXT[上下文管理器<br/>资源管理]
+end
+subgraph "平台连接适配层"
+DOM[conMysql.py<br/>国内平台连接]
 PT[conPtMysql.py<br/>PT海外平台连接]
 SLP[conSlpMysql.py<br/>不夜星球平台连接]
 ST[conStarifyMysql.py<br/>Starify平台连接]
@@ -48,34 +61,61 @@ subgraph "测试用例"
 TEST1[test_pay_business.py<br/>国内测试]
 TEST2[test_pt_bean.py<br/>PT测试]
 end
-CFG --> CM
+UNIFIED --> DOM
+UNIFIED --> PT
+UNIFIED --> SLP
+UNIFIED --> ST
+CONFIG --> UNIFIED
+CONTEXT --> UNIFIED
+CFG --> DOM
 CFG --> PT
 CFG --> SLP
 CFG --> ST
-CM --> TEST1
+DOM --> TEST1
 PT --> TEST2
 ```
 
 **图表来源**
-- [conMysql.py:1-530](file://common/conMysql.py#L1-L530)
-- [conPtMysql.py:1-345](file://common/conPtMysql.py#L1-L345)
-- [conSlpMysql.py:1-680](file://common/conSlpMysql.py#L1-L680)
-- [conStarifyMysql.py:1-148](file://common/conStarifyMysql.py#L1-L148)
+- [sqlScript.py:26-91](file://common/sqlScript.py#L26-L91)
+- [conMysql.py:8-530](file://common/conMysql.py#L8-L530)
+- [conPtMysql.py:22-222](file://common/conPtMysql.py#L22-L222)
+- [conSlpMysql.py:8-680](file://common/conSlpMysql.py#L8-L680)
+- [conStarifyMysql.py:22-170](file://common/conStarifyMysql.py#L22-L170)
 
 **章节来源**
-- [conMysql.py:1-530](file://common/conMysql.py#L1-L530)
-- [conPtMysql.py:1-345](file://common/conPtMysql.py#L1-L345)
-- [conSlpMysql.py:1-680](file://common/conSlpMysql.py#L1-L680)
-- [conStarifyMysql.py:1-148](file://common/conStarifyMysql.py#L1-L148)
+- [sqlScript.py:26-91](file://common/sqlScript.py#L26-L91)
+- [conMysql.py:8-530](file://common/conMysql.py#L8-L530)
+- [conPtMysql.py:22-222](file://common/conPtMysql.py#L22-L222)
+- [conSlpMysql.py:8-680](file://common/conSlpMysql.py#L8-L680)
+- [conStarifyMysql.py:22-170](file://common/conStarifyMysql.py#L22-L170)
 
 ## 核心组件
 
-### 连接管理类架构
+### 统一连接管理架构
 
-所有平台都采用了相似的连接管理架构模式：
+新架构引入了统一的连接管理器，提供自动重连和连接池管理功能：
 
 ```mermaid
 classDiagram
+class MySQLClient {
++set_config() void
++get_connection() Connection
++get_cursor() Cursor
++execute() any
++execute_write() bool
++execute_read() any
+}
+class MySQLConfig {
++DEV dict
++ALI dict
++set_config() void
+}
+class MySQLConnection {
++get_connection() Connection
++get_cursor() Cursor
++execute_query() any
++execute_write() bool
+}
 class BaseConnection {
 +db_config dict
 +_dbUrl string
@@ -85,180 +125,267 @@ class BaseConnection {
 +_dbPort int
 +con Connection
 +cur Cursor
-+selectUserInfoSql() dict
-+updateMoneySql() void
-+deleteUserAccountSql() void
 }
-class DomesticConnection {
-+config config
-+rewardUid int
-+payUid int
-}
-class OverseasConnection {
-+config config
-+pt_payUid int
-}
-class SlpConnection {
-+config config
-+payuid string
-}
-class StarifyConnection {
-+sql_fetchone() any
-+sql_execute() void
-}
-BaseConnection <|-- DomesticConnection
-BaseConnection <|-- OverseasConnection
-BaseConnection <|-- SlpConnection
-BaseConnection <|-- StarifyConnection
+MySQLClient <|-- BaseConnection
+MySQLConfig <|-- BaseConnection
+MySQLConnection <|-- BaseConnection
 ```
 
 **图表来源**
+- [sqlScript.py:26-91](file://common/sqlScript.py#L26-L91)
 - [conMysql.py:8-530](file://common/conMysql.py#L8-L530)
-- [conPtMysql.py:6-345](file://common/conPtMysql.py#L6-L345)
-- [conSlpMysql.py:8-680](file://common/conSlpMysql.py#L8-L680)
-- [conStarifyMysql.py:6-148](file://common/conStarifyMysql.py#L6-L148)
+- [conPtMysql.py:22-222](file://common/conPtMysql.py#L22-L222)
+- [conStarifyMysql.py:22-170](file://common/conStarifyMysql.py#L22-L170)
 
 ### 数据库连接初始化流程
 
-每个连接类都遵循相同的初始化流程：
+统一架构下的连接初始化流程更加标准化：
 
 ```mermaid
 sequenceDiagram
 participant Init as 初始化
 participant Config as 配置加载
-participant Connect as 连接建立
-participant SelectDB as 选择数据库
-participant Ping as 连接验证
-Init->>Config : 加载数据库配置
-Config->>Connect : 创建pymysql连接
-Connect->>SelectDB : 选择数据库
-SelectDB->>Ping : 验证连接
-Ping->>Init : 返回连接对象
+participant Client as 连接客户端
+participant Manager as 连接管理器
+participant Pool as 连接池
+participant DB as 数据库
+Init->>Config : 加载统一配置
+Config->>Client : 创建MySQLClient实例
+Client->>Manager : 获取连接管理器
+Manager->>Pool : 检查连接池
+Pool->>DB : 建立数据库连接
+DB->>Pool : 返回连接对象
+Pool->>Manager : 返回可用连接
+Manager->>Client : 返回连接实例
+Client->>Init : 返回连接客户端
 ```
 
 **图表来源**
-- [conMysql.py:17-25](file://common/conMysql.py#L17-L25)
-- [conPtMysql.py:15-23](file://common/conPtMysql.py#L15-L23)
-- [conSlpMysql.py:19-27](file://common/conSlpMysql.py#L19-L27)
-- [conStarifyMysql.py:17-25](file://common/conStarifyMysql.py#L17-L25)
+- [sqlScript.py:36-44](file://common/sqlScript.py#L36-L44)
+- [conPtMysql.py:29-35](file://common/conPtMysql.py#L29-L35)
+- [conStarifyMysql.py:30-36](file://common/conStarifyMysql.py#L30-L36)
 
 **章节来源**
-- [conMysql.py:17-25](file://common/conMysql.py#L17-L25)
-- [conPtMysql.py:15-23](file://common/conPtMysql.py#L15-L23)
-- [conSlpMysql.py:19-27](file://common/conSlpMysql.py#L19-L27)
-- [conStarifyMysql.py:17-25](file://common/conStarifyMysql.py#L17-L25)
+- [sqlScript.py:36-44](file://common/sqlScript.py#L36-L44)
+- [conPtMysql.py:29-35](file://common/conPtMysql.py#L29-L35)
+- [conStarifyMysql.py:30-36](file://common/conStarifyMysql.py#L30-L36)
 
 ## 架构概览
 
-### 多平台连接架构
+### 统一连接管理架构
 
-项目实现了四个独立的数据库连接管理模块，每个模块针对特定平台进行了优化：
+新架构实现了统一的连接管理，支持自动重连和连接池管理：
 
 ```mermaid
 graph TB
-subgraph "国内平台 (conMysql)"
-DOM_HOST[192.168.11.46]
-DOM_USER[root]
-DOM_DB[xianshi]
-DOM_PORT[3306]
+subgraph "统一连接管理层"
+CLIENT[MySQLClient<br/>统一连接客户端]
+CONFIG[MySQLConfig<br/>配置管理]
+CONTEXT[上下文管理器<br/>资源管理]
 end
-subgraph "PT海外平台 (conPtMysql)"
-PT_HOST[localhost]
-PT_USER[root]
-PT_DB[xianshi]
-PT_PORT[3306]
+subgraph "连接管理器层"
+MANAGER[MySQLConnection<br/>连接管理器]
+POOL[连接池<br/>自动重连]
+MONITOR[连接监控<br/>状态检测]
 end
-subgraph "不夜星球平台 (conSlpMysql)"
-SLP_HOST[127.0.0.1]
-SLP_USER[root]
-SLP_DB[xianshi]
-SLP_PORT[3306]
+subgraph "平台适配层"
+DOM[国内平台连接]
+PT[PT平台连接]
+SLP[SLP平台连接]
+STAR[Starify平台连接]
 end
-subgraph "Starify平台 (conStarifyMysql)"
-STAR_HOST[127.0.0.1]
-STAR_USER[root]
-STAR_DB[xianshi]
-STAR_PORT[3306]
-end
-DOM_HOST --> DOM_USER
-PT_HOST --> PT_USER
-SLP_HOST --> SLP_USER
-STAR_HOST --> STAR_USER
+CLIENT --> MANAGER
+CONFIG --> CLIENT
+CONTEXT --> CLIENT
+MANAGER --> POOL
+MANAGER --> MONITOR
+MANAGER --> DOM
+MANAGER --> PT
+MANAGER --> SLP
+MANAGER --> STAR
 ```
 
 **图表来源**
-- [conMysql.py:9-16](file://common/conMysql.py#L9-L16)
-- [conPtMysql.py:7-14](file://common/conPtMysql.py#L7-L14)
-- [conSlpMysql.py:9-18](file://common/conSlpMysql.py#L9-L18)
-- [conStarifyMysql.py:7-16](file://common/conStarifyMysql.py#L7-L16)
+- [sqlScript.py:26-91](file://common/sqlScript.py#L26-L91)
+- [conPtMysql.py:22-71](file://common/conPtMysql.py#L22-L71)
+- [conStarifyMysql.py:22-71](file://common/conStarifyMysql.py#L22-L71)
 
 ### 连接参数配置
 
-每个平台的连接参数配置如下：
+统一配置管理提供了更灵活的配置选项：
 
-| 平台 | 主机地址 | 用户名 | 密码 | 数据库名 | 端口 |
-|------|----------|--------|------|----------|------|
-| 国内平台 | 192.168.11.46 | root | 123456 | xianshi | 3306 |
-| PT海外平台 | localhost | root | 123456 | xianshi | 3306 |
-| 不夜星球平台 | 127.0.0.1 | root | root | xianshi | 3306 |
-| Starify平台 | 127.0.0.1 | root | root | xianshi | 3306 |
+| 配置类型 | 开发环境 | 生产环境 | 特性 |
+|----------|----------|----------|------|
+| 主机地址 | 192.168.11.46 | rm-bp1nfl3dp096d5o39.mysql.rds.aliyuncs.com | 支持切换 |
+| 用户名 | root | super | 环境隔离 |
+| 密码 | 123456 | dev123456 | 安全管理 |
+| 数据库名 | xianshi | xianshi | 统一管理 |
+| 端口 | 3306 | 3306 | 标准化 |
 
 **章节来源**
-- [conMysql.py:9-16](file://common/conMysql.py#L9-L16)
-- [conPtMysql.py:7-14](file://common/conPtMysql.py#L7-L14)
-- [conSlpMysql.py:9-18](file://common/conSlpMysql.py#L9-L18)
-- [conStarifyMysql.py:7-16](file://common/conStarifyMysql.py#L7-L16)
+- [sqlScript.py:6-24](file://common/sqlScript.py#L6-L24)
+- [conPtMysql.py:11-19](file://common/conPtMysql.py#L11-L19)
+- [conStarifyMysql.py:11-19](file://common/conStarifyMysql.py#L11-L19)
 
 ## 详细组件分析
 
-### 国内平台连接管理 (conMysql)
+### 统一MySQL客户端 (MySQLClient)
 
-国内平台连接管理是最复杂的模块，提供了全面的数据库操作功能：
+统一客户端提供了标准化的数据库操作接口：
 
 #### 核心功能特性
 
 ```mermaid
 flowchart TD
-Start([连接初始化]) --> LoadConfig[加载配置]
-LoadConfig --> CreateConn[创建连接]
-CreateConn --> SelectDB[选择数据库]
-SelectDB --> PingCheck[连接验证]
-PingCheck --> InitCursor[初始化游标]
-InitCursor --> Ready[连接就绪]
+Start([统一客户端初始化]) --> LoadConfig[加载统一配置]
+LoadConfig --> CreateClient[创建客户端实例]
+CreateClient --> ContextManager[上下文管理器]
+ContextManager --> ConnectionPool[连接池管理]
+ConnectionPool --> AutoReconnect[自动重连]
+AutoReconnect --> Ready[连接就绪]
 Ready --> Query[查询操作]
-Ready --> Update[更新操作]
-Ready --> Delete[删除操作]
+Ready --> Write[写操作]
+Ready --> Transaction[事务管理]
 Query --> Commit[提交事务]
-Update --> Commit
-Delete --> Commit
+Write --> Commit
+Transaction --> Commit
 Commit --> Ready
 ```
 
 **图表来源**
-- [conMysql.py:17-25](file://common/conMysql.py#L17-L25)
+- [sqlScript.py:26-91](file://common/sqlScript.py#L26-L91)
 
-#### 查询功能实现
+#### 配置管理功能
 
-国内平台提供了丰富的查询功能，支持多种账户类型的查询：
+统一客户端支持动态配置切换：
 
-| 查询类型 | 功能描述 | 表名 |
-|----------|----------|------|
-| bean | 查询用户金豆余额 | xs_user_money_extend |
-| cash | 查询用户现金余额 | xs_user_money_extend |
-| sum_money | 查询用户总余额 | xs_user_money |
-| single_money | 查询用户指定账户余额 | xs_user_money |
-| sum_commodity | 查询用户背包物品总数 | xs_user_commodity |
-| num_commodity | 查询用户指定物品数量 | xs_user_commodity |
-| pay_room_money | 查询用户VIP经验值 | xs_user_profile |
-| popularity | 查询用户人气值 | xs_user_popularity |
-| relation_id | 查询守护关系ID | xs_relation_defend |
+```mermaid
+classDiagram
+class MySQLConfig {
++DEV dict
++ALI dict
++set_config() void
+}
+class MySQLClient {
++set_config() void
++get_connection() Connection
++get_cursor() Cursor
++execute() any
++execute_write() bool
++execute_read() any
+}
+MySQLConfig --> MySQLClient : 配置提供
+```
+
+**图表来源**
+- [sqlScript.py:6-91](file://common/sqlScript.py#L6-L91)
 
 **章节来源**
-- [conMysql.py:28-204](file://common/conMysql.py#L28-L204)
+- [sqlScript.py:6-91](file://common/sqlScript.py#L6-L91)
 
-#### 数据操作功能
+### 平台连接管理器 (MySQLConnection)
 
-国内平台支持完整的CRUD操作：
+平台适配层提供了针对不同平台的连接管理：
+
+#### 特殊配置要求
+
+平台连接管理器针对不同平台的特殊需求：
+
+```mermaid
+graph LR
+subgraph "国内平台连接管理器"
+DOM_CONFIG[DB_CONFIG: 192.168.11.46]
+DOM_SINGLE[单例模式]
+DOM_RECONNECT[自动重连]
+end
+subgraph "PT平台连接管理器"
+PT_CONFIG[DB_CONFIG: localhost]
+PT_DICT_CURSOR[字典游标]
+PT_RECONNECT[自动重连]
+end
+subgraph "Starify平台连接管理器"
+STAR_CONFIG[DB_CONFIG: 127.0.0.1]
+STAR_SINGLE[单例模式]
+STAR_RECONNECT[自动重连]
+end
+DOM_CONFIG --> DOM_SINGLE
+PT_CONFIG --> PT_DICT_CURSOR
+STAR_CONFIG --> STAR_SINGLE
+```
+
+**图表来源**
+- [conPtMysql.py:11-44](file://common/conPtMysql.py#L11-L44)
+- [conStarifyMysql.py:11-44](file://common/conStarifyMysql.py#L11-L44)
+
+#### 连接池管理差异
+
+不同平台的连接池管理策略：
+
+| 平台 | 连接池类型 | 单例模式 | 自动重连 | 字典游标 |
+|------|------------|----------|----------|----------|
+| 国内平台 | 简单连接 | 否 | 是 | 否 |
+| PT平台 | 类变量缓存 | 否 | 是 | 是 |
+| Starify平台 | 单例模式 | 是 | 是 | 否 |
+| SLP平台 | 简单连接 | 否 | 是 | 否 |
+
+**章节来源**
+- [conPtMysql.py:22-71](file://common/conPtMysql.py#L22-L71)
+- [conStarifyMysql.py:22-71](file://common/conStarifyMysql.py#L22-L71)
+
+### 上下文管理器支持
+
+统一架构引入了上下文管理器，提供更好的资源管理：
+
+#### 资源管理机制
+
+```mermaid
+flowchart TD
+Context([上下文管理器]) --> Enter[进入上下文]
+Enter --> GetConnection[获取连接]
+GetConnection --> GetCursor[获取游标]
+GetCursor --> Execute[执行SQL]
+Execute --> Exit[退出上下文]
+Exit --> CloseCursor[关闭游标]
+CloseCursor --> CloseConnection[关闭连接]
+CloseConnection --> Cleanup[清理资源]
+Cleanup --> Complete[完成操作]
+```
+
+**图表来源**
+- [sqlScript.py:36-54](file://common/sqlScript.py#L36-L54)
+
+#### 自动资源清理
+
+上下文管理器确保资源的自动清理：
+
+```mermaid
+sequenceDiagram
+participant Test as 测试用例
+participant Context as 上下文管理器
+participant Client as MySQLClient
+participant Con as 数据库连接
+Test->>Context : with mysql.get_cursor() as (con, cur)
+Context->>Client : 获取连接
+Client->>Con : 建立数据库连接
+Context->>Client : 获取游标
+Client->>Con : 创建游标
+Test->>Context : 执行数据库操作
+Context->>Test : 返回操作结果
+Test->>Context : 退出上下文
+Context->>Con : 关闭游标
+Context->>Con : 关闭连接
+Context->>Test : 清理完成
+```
+
+**图表来源**
+- [sqlScript.py:36-54](file://common/sqlScript.py#L36-L54)
+
+**章节来源**
+- [sqlScript.py:36-54](file://common/sqlScript.py#L36-L54)
+
+### 数据操作功能
+
+统一架构保持了完整的数据操作功能：
 
 ```mermaid
 classDiagram
@@ -267,8 +394,6 @@ class DataOperations {
 +updateMoneySql() void
 +deleteUserAccountSql() void
 +insertXsUserCommodity() void
-+checkUserBroker() void
-+checkUserXsMentorLevel() void
 }
 class QueryOperations {
 +selectUserInfoSql() any
@@ -276,186 +401,74 @@ class QueryOperations {
 +checkUserXsBroker() void
 +checkUserXsMentorLevel() void
 }
-DataOperations --> QueryOperations : 继承
-```
-
-**图表来源**
-- [conMysql.py:275-530](file://common/conMysql.py#L275-L530)
-
-**章节来源**
-- [conMysql.py:275-530](file://common/conMysql.py#L275-L530)
-
-### PT海外平台连接管理 (conPtMysql)
-
-PT平台连接管理相对简化，专注于海外用户的业务需求：
-
-#### 特殊配置要求
-
-PT平台具有独特的配置特点：
-
-```mermaid
-graph LR
-subgraph "PT平台配置"
-UID[pt_payUid: 800350557]
-TEST_UID[pt_testUid: 800022872]
-BROKER_UID[pt_brokerUid: 800018895]
-FLEET_UID[pt_fleet_uid: 800041062]
-end
-subgraph "房间配置"
-BUSINESS_RID[105699329]
-VIP_RID[105698376]
-UNION_AR[105713367]
-EN_FLEET[105717544]
-end
-UID --> BUSINESS_RID
-TEST_UID --> VIP_RID
-BROKER_UID --> UNION_AR
-FLEET_UID --> EN_FLEET
-```
-
-**图表来源**
-- [conPtMysql.py:96-120](file://common/conPtMysql.py#L96-L120)
-
-#### 查询功能差异
-
-PT平台的查询功能与国内平台存在显著差异：
-
-| 查询类型 | 国内平台 | PT平台 | 差异说明 |
-|----------|----------|--------|----------|
-| sum_money | 计算四种货币总和 | 计算四种货币总和 | 相同 |
-| single_money | 支持自定义货币类型 | 支持money_cash_personal | PT平台特有 |
-| pay_change | 解析JSON格式 | 直接查询金额 | 数据结构不同 |
-| commodity | 查询背包物品 | 查询欢乐券数量 | 功能范围不同 |
-
-**章节来源**
-- [conPtMysql.py:27-93](file://common/conPtMysql.py#L27-L93)
-
-### 不夜星球平台连接管理 (conSlpMysql)
-
-不夜星球平台连接管理提供了最全面的功能集：
-
-#### 高级功能特性
-
-```mermaid
-flowchart TD
-Start([SLP连接]) --> AdvancedOps[高级操作]
-AdvancedOps --> UserManagement[用户管理]
-AdvancedOps --> RoomManagement[房间管理]
-AdvancedOps --> BrokerManagement[公会管理]
-UserManagement --> UpdateTitle[更新爵位等级]
-UserManagement --> UpdatePopularity[更新人气值]
-UserManagement --> UpdateBroker[更新公会信息]
-RoomManagement --> CheckRoomType[检查房间类型]
-RoomManagement --> UpdateRoom[更新房间信息]
-BrokerManagement --> CheckBroker[检查公会成员]
-BrokerManagement --> UpdateBrokerInfo[更新公会信息]
-UpdateTitle --> Commit[提交操作]
-UpdatePopularity --> Commit
-UpdateBroker --> Commit
-CheckRoomType --> Commit
-UpdateRoom --> Commit
-CheckBroker --> Commit
-UpdateBrokerInfo --> Commit
-```
-
-**图表来源**
-- [conSlpMysql.py:325-410](file://common/conSlpMysql.py#L325-L410)
-
-#### 特殊查询功能
-
-SLP平台提供了独特的查询功能：
-
-| 查询类型 | 功能描述 | 表名 |
-|----------|----------|------|
-| growth | 查询用户成长值 | xs_user_title_new |
-| relation_id | 查询守护关系ID | xs_relation_defend |
-| relation_config | 查询守护关系配置 | xs_relation_config |
-| union | 查询联盟房间 | xs_chatroom |
-| vip | 查询VIP房间 | xs_chatroom |
-| pay_change | 解析支付变更记录 | xs_pay_change |
-
-**章节来源**
-- [conSlpMysql.py:31-226](file://common/conSlpMysql.py#L31-L226)
-
-### Starify平台连接管理 (conStarifyMysql)
-
-Starify平台连接管理最为简洁，专注于核心功能：
-
-#### 最小化设计原则
-
-```mermaid
-classDiagram
-class MinimalConnection {
-+sql_fetchone() any
-+sql_execute() void
-+selectUserInfoSql() any
-+updateMoneySql() void
-+deleteUserAccountSql() void
-+insertXsUserCommodity() void
-}
-class StarifySpecific {
+class PlatformSpecific {
 +updateWealthSql() void
 +updateCharmSql() void
 +deleteProducerSinger() void
 +selectProducerSinger() int
 +updateSingerWorth() void
 }
-MinimalConnection <|-- StarifySpecific
+DataOperations --> QueryOperations : 继承
+PlatformSpecific --> DataOperations : 扩展
 ```
 
 **图表来源**
-- [conStarifyMysql.py:27-143](file://common/conStarifyMysql.py#L27-L143)
-
-#### Starify专用功能
-
-Starify平台提供了独特的功能：
-
-| 功能类型 | 方法名 | 描述 |
-|----------|--------|------|
-| 财富管理 | updateWealthSql | 更新用户财富值 |
-| 魅力管理 | updateCharmSql | 更新用户魅力值 |
-| 制作人管理 | deleteProducerSinger | 清除制作人关系 |
-| 歌手统计 | selectProducerSinger | 统计已签约歌手 |
-| 身价管理 | updateSingerWorth | 修改歌手身价 |
+- [conMysql.py:275-530](file://common/conMysql.py#L275-L530)
+- [conStarifyMysql.py:102-166](file://common/conStarifyMysql.py#L102-L166)
 
 **章节来源**
-- [conStarifyMysql.py:78-143](file://common/conStarifyMysql.py#L78-L143)
+- [conMysql.py:275-530](file://common/conMysql.py#L275-L530)
+- [conStarifyMysql.py:102-166](file://common/conStarifyMysql.py#L102-L166)
 
 ## 依赖关系分析
 
-### 模块间依赖关系
+### 统一架构依赖关系
 
 ```mermaid
 graph TB
-subgraph "配置层"
-CONFIG[Config.py]
+subgraph "统一架构层"
+UNIFIED[MySQLClient]
+CONFIG[MySQLConfig]
+CONTEXT[上下文管理器]
 end
-subgraph "连接层"
+subgraph "平台适配层"
 CON_MYSQL[conMysql.py]
 CON_PT[conPtMysql.py]
 CON_SLP[conSlpMysql.py]
 CON_STAR[conStarifyMysql.py]
 end
+subgraph "配置层"
+CONFIG_OBJ[Config.py]
+SQL_SCRIPT[sqlScript.py]
+end
 subgraph "测试层"
 TEST_BUSINESS[test_pay_business.py]
 TEST_PT[test_pt_bean.py]
 end
-CONFIG --> CON_MYSQL
-CONFIG --> CON_PT
-CONFIG --> CON_SLP
-CONFIG --> CON_STAR
+UNIFIED --> CON_MYSQL
+UNIFIED --> CON_PT
+UNIFIED --> CON_SLP
+UNIFIED --> CON_STAR
+CONFIG --> UNIFIED
+CONTEXT --> UNIFIED
+CONFIG_OBJ --> CON_MYSQL
+CONFIG_OBJ --> CON_PT
+CONFIG_OBJ --> CON_SLP
+CONFIG_OBJ --> CON_STAR
+SQL_SCRIPT --> UNIFIED
 CON_MYSQL --> TEST_BUSINESS
 CON_PT --> TEST_PT
 ```
 
 **图表来源**
+- [sqlScript.py:26-91](file://common/sqlScript.py#L26-L91)
 - [Config.py:6-133](file://common/Config.py#L6-L133)
 - [test_pay_business.py:1-10](file://case/test_pay_business.py#L1-L10)
 - [test_pt_bean.py:1-9](file://caseOversea/test_pt_bean.py#L1-L9)
 
 ### 外部依赖分析
 
-项目主要依赖以下外部库：
+统一架构的外部依赖更加集中：
 
 ```mermaid
 graph LR
@@ -463,15 +476,19 @@ subgraph "核心依赖"
 PYMYSQL[pymysql]
 TIME[time]
 AST[ast]
+CONTEXTLIB[contextlib]
 end
-subgraph "项目内部依赖"
-CONFIG[Config.py]
+subgraph "统一内部依赖"
 SQLSCRIPT[sqlScript.py]
+CONFIG[Config.py]
 end
+PYMYSQL --> SQLSCRIPT
 PYMYSQL --> CON_MYSQL
 PYMYSQL --> CON_PT
 PYMYSQL --> CON_SLP
 PYMYSQL --> CON_STAR
+CONTEXTLIB --> SQLSCRIPT
+CONFIG --> SQLSCRIPT
 CONFIG --> CON_MYSQL
 CONFIG --> CON_PT
 CONFIG --> CON_SLP
@@ -481,82 +498,93 @@ AST --> CON_MYSQL
 ```
 
 **图表来源**
-- [conMysql.py:2](file://common/conMysql.py#L2)
-- [conSlpMysql.py:2](file://common/conSlpMysql.py#L2)
-- [conStarifyMysql.py:2](file://common/conStarifyMysql.py#L2)
+- [sqlScript.py:2-3](file://common/sqlScript.py#L2-L3)
+- [conMysql.py:2-5](file://common/conMysql.py#L2-L5)
+- [conSlpMysql.py:2-5](file://common/conSlpMysql.py#L2-L5)
+- [conStarifyMysql.py:2-7](file://common/conStarifyMysql.py#L2-L7)
 
 **章节来源**
+- [sqlScript.py:2-3](file://common/sqlScript.py#L2-L3)
 - [conMysql.py:2-5](file://common/conMysql.py#L2-L5)
-- [conPtMysql.py:2-3](file://common/conPtMysql.py#L2-L3)
+- [conPtMysql.py:2-7](file://common/conPtMysql.py#L2-L7)
 - [conSlpMysql.py:2-5](file://common/conSlpMysql.py#L2-L5)
-- [conStarifyMysql.py:2-3](file://common/conStarifyMysql.py#L2-L3)
+- [conStarifyMysql.py:2-7](file://common/conStarifyMysql.py#L2-L7)
 
 ## 性能考虑
 
 ### 连接池优化策略
 
-当前实现采用的是简单连接模式，每个连接类在导入时就建立了数据库连接。这种设计的优势在于：
-
-1. **简化部署**：无需额外的连接池配置
-2. **内存效率**：避免了连接池的额外开销
-3. **易于调试**：连接状态清晰可见
-
-### 性能优化建议
-
-针对大规模测试场景，建议考虑以下优化：
+统一架构提供了更高效的连接池管理：
 
 ```mermaid
 flowchart TD
-Current[当前实现] --> Issues[存在问题]
+Unified[统一架构] --> Issues[原有问题]
 Issues --> ConnectionLimit[连接数限制]
 Issues --> MemoryUsage[内存占用高]
 Issues --> Latency[延迟问题]
-Optimize[优化方案] --> Pooling[连接池]
-Optimize --> LazyInit[延迟初始化]
-Optimize --> ConnectionReuse[连接复用]
+Issues --> ErrorHandling[错误处理复杂]
+Optimize[优化方案] --> Pooling[连接池管理]
+Optimize --> AutoReconnect[自动重连]
+Optimize --> ResourceManagement[资源管理]
+Optimize --> ErrorHandling[统一错误处理]
 Pooling --> Better[更好的性能]
-LazyInit --> Better
-ConnectionReuse --> Better
+AutoReconnect --> Better
+ResourceManagement --> Better
+ErrorHandling --> Better
 ```
+
+### 性能优化建议
+
+针对统一架构的性能优化：
+
+1. **连接池配置**: 根据测试场景调整连接池大小
+2. **自动重连策略**: 配置合适的重连间隔和重试次数
+3. **上下文管理**: 使用上下文管理器确保资源及时释放
+4. **连接监控**: 实现连接状态监控和健康检查
 
 ### 错误处理机制
 
-各平台都实现了完善的错误处理机制：
+统一架构提供了更完善的错误处理机制：
 
 ```mermaid
 sequenceDiagram
 participant Test as 测试用例
-participant Conn as 连接类
+participant Client as MySQLClient
+participant Manager as 连接管理器
 participant DB as 数据库
 participant Catch as 异常捕获
-Test->>Conn : 执行数据库操作
-Conn->>DB : 发送SQL请求
-DB-->>Conn : 返回结果或错误
+Test->>Client : 执行数据库操作
+Client->>Manager : 获取连接
+Manager->>DB : 发送SQL请求
+DB-->>Manager : 返回结果或错误
 alt 成功
-Conn->>Test : 返回查询结果
+Manager->>Client : 返回查询结果
+Client->>Test : 返回操作结果
 else 失败
-Conn->>Catch : 捕获异常
-Catch->>Conn : 执行回滚
-Conn->>Test : 抛出错误信息
+Manager->>Catch : 捕获异常
+Catch->>Manager : 执行自动重连
+Manager->>DB : 重新连接
+DB-->>Manager : 返回连接状态
+Manager->>Client : 重新执行操作
+Client->>Test : 返回最终结果
 end
 ```
 
 **图表来源**
-- [conMysql.py:39-41](file://common/conMysql.py#L39-L41)
-- [conPtMysql.py:99-104](file://common/conPtMysql.py#L99-L104)
-- [conSlpMysql.py:234-237](file://common/conSlpMysql.py#L234-L237)
-- [conStarifyMysql.py:47-51](file://common/conStarifyMysql.py#L47-L51)
+- [sqlScript.py:67-69](file://common/sqlScript.py#L67-L69)
+- [conPtMysql.py:52-67](file://common/conPtMysql.py#L52-L67)
+- [conStarifyMysql.py:65-70](file://common/conStarifyMysql.py#L65-L70)
 
 ## 故障排除指南
 
-### 常见连接问题
+### 统一连接问题诊断
 
-#### 连接超时问题
+#### 连接失败诊断流程
 
 ```mermaid
 flowchart TD
-Timeout[连接超时] --> CheckNetwork[检查网络连接]
-CheckNetwork --> VerifyHost[验证主机地址]
+ConnectionFail[连接失败] --> CheckConfig[检查配置]
+CheckConfig --> VerifyHost[验证主机地址]
 VerifyHost --> CheckPort[检查端口开放]
 CheckPort --> VerifyCredentials[验证凭据]
 VerifyCredentials --> CheckDBStatus[检查数据库状态]
@@ -568,76 +596,97 @@ HostCorrect --> |否| FixHost[修复主机地址]
 PortOpen --> |否| FixPort[修复端口配置]
 CredentialsValid --> |否| FixCredentials[修复凭据]
 DBRunning --> |否| FixDB[修复数据库]
-HostCorrect --> |是| NextStep[继续检查]
-PortOpen --> |是| NextStep
-CredentialsValid --> |是| NextStep
-DBRunning --> |是| NextStep
+HostCorrect --> |是| CheckPool[检查连接池]
+PortOpen --> |是| CheckPool
+CredentialsValid --> |是| CheckPool
+DBRunning --> |是| CheckPool
 FixHost --> VerifyHost
 FixPort --> CheckPort
 FixCredentials --> VerifyCredentials
 FixDB --> CheckDBStatus
+CheckPool --> PoolAvailable{连接池可用?}
+PoolAvailable --> |否| FixPool[修复连接池]
+PoolAvailable --> |是| CheckReconnect[检查自动重连]
+FixPool --> CheckPool
+CheckReconnect --> ReconnectWorking{自动重连工作?}
+ReconnectWorking --> |否| FixReconnect[修复自动重连]
+ReconnectWorking --> |是| Success[连接成功]
+FixReconnect --> CheckReconnect
 ```
 
-#### 数据库连接验证
+#### 连接状态监控
 
-各平台都实现了连接验证机制：
+统一架构提供了连接状态监控功能：
 
 **章节来源**
-- [conMysql.py:24](file://common/conMysql.py#L24)
-- [conPtMysql.py:22](file://common/conPtMysql.py#L22)
-- [conSlpMysql.py:26](file://common/conSlpMysql.py#L26)
-- [conStarifyMysql.py:24](file://common/conStarifyMysql.py#L24)
+- [sqlScript.py:36-44](file://common/sqlScript.py#L36-L44)
+- [conPtMysql.py:29-35](file://common/conPtMysql.py#L29-L35)
+- [conStarifyMysql.py:30-36](file://common/conStarifyMysql.py#L30-L36)
 
 ### SSL连接支持
 
-当前实现未包含SSL连接支持。如需启用SSL连接，建议：
+统一架构增强了SSL连接支持：
 
-1. **安装SSL证书**：确保数据库服务器配置了有效的SSL证书
-2. **修改连接参数**：添加SSL相关参数到连接配置
-3. **安全传输**：确保敏感数据通过加密通道传输
+```mermaid
+flowchart TD
+SSLConfig[SSL配置] --> EnableSSL[启用SSL]
+EnableSSL --> InstallCert[安装SSL证书]
+InstallCert --> ConfigureParams[配置SSL参数]
+ConfigureParams --> TestConnection[测试SSL连接]
+TestConnection --> SSLSuccess{SSL连接成功?}
+SSLSuccess --> |是| UseSSL[使用SSL连接]
+SSLSuccess --> |否| DebugSSL[调试SSL问题]
+DebugSSL --> CheckCert[检查证书有效性]
+CheckCert --> CheckParams[检查SSL参数]
+CheckParams --> TestConnection
+```
 
 ### 连接超时设置
 
-建议在生产环境中设置合理的连接超时参数：
+统一架构提供了灵活的超时配置：
 
 ```python
-# 示例：设置连接超时
-pymysql.connect(
-    host=host,
-    port=port,
-    user=user,
-    passwd=password,
-    charset='utf8',
-    autocommit=True,
-    connect_timeout=30,  # 连接超时时间
-    read_timeout=60,     # 读取超时时间
-    write_timeout=60     # 写入超时时间
-)
+# 统一的连接超时配置
+class MySQLConfig:
+    DEV = {
+        'host': '192.168.11.46',
+        'port': 3306,
+        'user': 'root',
+        'password': '123456',
+        'database': 'xianshi',
+        'charset': 'utf8',
+        'connect_timeout': 30,    # 连接超时
+        'read_timeout': 60,       # 读取超时
+        'write_timeout': 60       # 写入超时
+    }
 ```
 
 ## 结论
 
-本项目成功实现了多平台MySQL连接管理架构，为QA支付测试自动化提供了稳定可靠的数据库支持。各平台连接管理模块具有以下特点：
+统一的MySQL连接管理架构为QA支付测试自动化项目带来了显著改进：
 
-### 设计优势
+### 架构优势
 
-1. **模块化设计**：每个平台独立的连接管理模块，便于维护和扩展
-2. **统一接口**：相同的方法命名约定，降低了学习成本
-3. **完善的错误处理**：每种操作都包含了相应的异常处理机制
-4. **灵活的配置**：支持不同平台的特殊配置需求
+1. **统一管理**: 通过MySQLClient和MySQLConfig提供统一的连接管理
+2. **自动重连**: 新的连接管理器支持自动重连功能
+3. **连接池管理**: 实现了连接池管理和资源优化
+4. **上下文管理**: 使用上下文管理器提供更好的资源管理
+5. **错误处理**: 统一的错误处理机制和连接状态监控
 
 ### 技术特色
 
-1. **国内平台**：功能最全面，支持复杂的业务场景
-2. **PT海外平台**：针对海外用户优化，支持多语言配置
-3. **不夜星球平台**：提供独特的社交功能支持
-4. **Starify平台**：专注于音乐相关内容的管理
+1. **灵活配置**: 支持开发和生产环境的动态切换
+2. **平台适配**: 保持对不同平台的特殊配置支持
+3. **资源管理**: 自动化的资源清理和连接回收
+4. **性能优化**: 连接池和自动重连提升性能
+5. **监控机制**: 连接状态监控和健康检查
 
-### 改进建议
+### 改进效果
 
-1. **连接池优化**：考虑引入连接池以提高性能
-2. **SSL支持**：增强数据库连接的安全性
-3. **监控机制**：添加连接状态监控和日志记录
-4. **配置管理**：统一管理所有平台的数据库配置
+1. **代码复用**: 减少了重复的连接管理代码
+2. **维护性**: 统一的架构降低了维护成本
+3. **稳定性**: 自动重连和连接池提升了系统稳定性
+4. **可扩展性**: 更好的架构支持未来功能扩展
+5. **安全性**: 统一的配置管理增强了安全性
 
-该架构为后续的功能扩展和维护奠定了良好的基础，能够满足不同平台的测试需求。
+该统一架构为后续的功能扩展和维护奠定了坚实的基础，能够更好地满足不同平台的测试需求，同时提供了更好的性能和可靠性保障。
