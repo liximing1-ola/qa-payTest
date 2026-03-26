@@ -33,7 +33,7 @@ class TestPayPunish(unittest.TestCase):
     def test_01_PayChangeTriggerPunish(self):
         """
         用例描述：
-        验证收到打赏时，触发罚款流程，扣款账户：个人魅力值 -》现金余额 -》公会魅力值 -》伴伴币
+        验证收到打赏时，触发罚款流程，扣款账户：个人魅力值 -》现金余额 -》公会魅力值 -》APP币
         脚本步骤：
         1.构造打赏者和被罚款者数据
         2.被罚款者欠款：100分
