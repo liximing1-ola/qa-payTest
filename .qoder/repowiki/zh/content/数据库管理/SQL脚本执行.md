@@ -15,6 +15,12 @@
 - [requirements.txt](file://requirements.txt)
 </cite>
 
+## 更新摘要
+**变更内容**
+- 提升了SQL脚本执行模块的类型注解质量，增强了代码的可维护性和IDE支持
+- 改进了错误处理机制，包括execute方法的参数类型和返回值类型标注
+- 增强了代码的类型安全性和开发体验
+
 ## 目录
 1. [简介](#简介)
 2. [项目结构](#项目结构)
@@ -73,51 +79,41 @@ C --> F
 D --> F
 ```
 
-图表来源
-- [common/sqlScript.py:1-145](file://common/sqlScript.py#L1-L145)
+**图表来源**
+- [common/sqlScript.py:1-258](file://common/sqlScript.py#L1-L258)
 - [common/conMysql.py:1-530](file://common/conMysql.py#L1-L530)
-- [common/conPtMysql.py:121-252](file://common/conPtMysql.py#L121-L252)
-- [common/conStarifyMysql.py:1-52](file://common/conStarifyMysql.py#L1-L52)
+- [common/conPtMysql.py:1-222](file://common/conPtMysql.py#L1-L222)
+- [common/conStarifyMysql.py:1-170](file://common/conStarifyMysql.py#L1-L170)
 - [common/Logs.py:1-48](file://common/Logs.py#L1-L48)
 - [common/Config.py:1-133](file://common/Config.py#L1-L133)
 - [caseStarify/test_starify_contractPay.py:1-200](file://caseStarify/test_starify_contractPay.py#L1-L200)
-- [caseLuckyPlay/test_pt_greedy.py:35-63](file://caseLuckyPlay/test_pt_greedy.py#L35-L63)
+- [caseLuckyPlay/test_pt_greedy.py:1-106](file://caseLuckyPlay/test_pt_greedy.py#L1-L106)
 - [caseStarify/sql.txt:1-34](file://caseStarify/sql.txt#L1-L34)
 - [probabilityTest/egg.py:222-258](file://probabilityTest/egg.py#L222-L258)
-- [requirements.txt:1-85](file://requirements.txt#L1-L85)
-
-章节来源
-- [common/sqlScript.py:1-145](file://common/sqlScript.py#L1-L145)
-- [common/conMysql.py:1-530](file://common/conMysql.py#L1-L530)
-- [common/conPtMysql.py:121-252](file://common/conPtMysql.py#L121-L252)
-- [common/conStarifyMysql.py:1-52](file://common/conStarifyMysql.py#L1-L52)
-- [common/Logs.py:1-48](file://common/Logs.py#L1-L48)
-- [common/Config.py:1-133](file://common/Config.py#L1-L133)
-- [caseStarify/test_starify_contractPay.py:1-200](file://caseStarify/test_starify_contractPay.py#L1-L200)
-- [caseLuckyPlay/test_pt_greedy.py:35-63](file://caseLuckyPlay/test_pt_greedy.py#L35-L63)
-- [caseStarify/sql.txt:1-34](file://caseStarify/sql.txt#L1-L34)
-- [probabilityTest/egg.py:222-258](file://probabilityTest/egg.py#L222-L258)
-- [requirements.txt:1-85](file://requirements.txt#L1-L85)
+- [requirements.txt:1-91](file://requirements.txt#L1-L91)
 
 ## 核心组件
 - MySQL连接与执行器
   - 统一连接池与游标管理：通过类静态方法集中管理连接与游标，避免重复创建带来的资源浪费
   - 事务控制：在执行写操作时显式try/except/finally确保commit或rollback，保证数据一致性
   - SQL拼接：采用字符串格式化拼接SQL，便于快速构造不同查询/更新语句
+- 类型注解增强
+  - 完整的类型标注：包括参数类型、返回值类型和异常类型，提升代码可读性和IDE支持
+  - 类型安全：通过类型检查确保API调用的正确性
 - 日志与配置
   - 日志：基于标准logging模块，支持控制台与定时滚动文件输出，便于问题定位与审计
   - 配置：集中管理数据库地址、账号、端口、默认库名等，便于多环境切换
 - 测试用例集成
   - 在用例中直接调用执行器准备/清理数据，确保测试前置条件一致且可控
 
-章节来源
+**章节来源**
 - [common/conMysql.py:17-25](file://common/conMysql.py#L17-L25)
 - [common/conMysql.py:350-360](file://common/conMysql.py#L350-L360)
 - [common/Logs.py:8-47](file://common/Logs.py#L8-L47)
 - [common/Config.py:6-31](file://common/Config.py#L6-L31)
 
 ## 架构总览
-SQL脚本执行在本项目中以“执行器”为核心，围绕以下流程运转：
+SQL脚本执行在本项目中以"执行器"为核心，围绕以下流程运转：
 - 初始化阶段：读取配置，建立数据库连接，选择目标库
 - 参数阶段：根据测试需求准备参数（如uid、金额、物品id等）
 - 拼接阶段：将参数绑定到SQL模板，形成最终可执行SQL
@@ -137,7 +133,7 @@ Exec->>Exec : 事务提交/回滚
 Exec-->>Case : 返回结果/断言
 ```
 
-图表来源
+**图表来源**
 - [common/conMysql.py:27-204](file://common/conMysql.py#L27-L204)
 - [common/conPtMysql.py:146-225](file://common/conPtMysql.py#L146-L225)
 - [common/conStarifyMysql.py:27-51](file://common/conStarifyMysql.py#L27-L51)
@@ -152,6 +148,9 @@ Exec-->>Case : 返回结果/断言
 - 关键流程
   - 查询：执行SQL后fetchone/fetchall，处理None与空结果
   - 更新/删除/插入：执行后commit，异常时rollback
+- 类型注解改进
+  - 方法参数和返回值均添加了完整的类型标注
+  - 增强了IDE的代码补全和错误检查能力
 - 复杂度与性能
   - 时间复杂度：单条SQL执行O(1)~O(n)，取决于查询/更新的数据量
   - 性能建议：批量更新时尽量复用同一连接，避免频繁创建销毁
@@ -169,10 +168,10 @@ class ConMysql {
 }
 ```
 
-图表来源
+**图表来源**
 - [common/conMysql.py:8-530](file://common/conMysql.py#L8-L530)
 
-章节来源
+**章节来源**
 - [common/conMysql.py:8-530](file://common/conMysql.py#L8-L530)
 
 ### 组件B：PT业务库执行器（conPtMysql）
@@ -182,6 +181,9 @@ class ConMysql {
 - 关键流程
   - 房间属性更新：根据区域与房间属性调整房间配置
   - 礼物配置检查：批量启用或重置礼物配置项
+- 类型注解增强
+  - 所有方法均添加了参数类型和返回值类型标注
+  - 提升了代码的可维护性和开发效率
 
 ```mermaid
 flowchart TD
@@ -194,11 +196,11 @@ DoCommit --> End(["结束"])
 DoRollback --> End
 ```
 
-图表来源
+**图表来源**
 - [common/conPtMysql.py:146-225](file://common/conPtMysql.py#L146-L225)
 
-章节来源
-- [common/conPtMysql.py:121-252](file://common/conPtMysql.py#L121-L252)
+**章节来源**
+- [common/conPtMysql.py:1-222](file://common/conPtMysql.py#L1-L222)
 
 ### 组件C：Starify业务库执行器（conStarifyMysql）
 - 设计要点
@@ -207,6 +209,9 @@ DoRollback --> End
 - 关键流程
   - fetchone：执行SQL并返回单行结果，处理None与空字段
   - execute：执行SQL并统一commit，异常时rollback
+- 类型注解改进
+  - 方法签名完全类型化，包括参数验证和返回值处理
+  - 增强了错误处理的类型安全性
 
 ```mermaid
 sequenceDiagram
@@ -219,20 +224,26 @@ DB-->>Star : 返回结果
 Star-->>Test : 返回结果/断言
 ```
 
-图表来源
+**图表来源**
 - [common/conStarifyMysql.py:27-51](file://common/conStarifyMysql.py#L27-L51)
 
-章节来源
-- [common/conStarifyMysql.py:1-52](file://common/conStarifyMysql.py#L1-L52)
+**章节来源**
+- [common/conStarifyMysql.py:1-170](file://common/conStarifyMysql.py#L1-L170)
 
 ### 组件D：SQL脚本封装（sqlScript）
 - 设计要点
   - 提供基础的账户余额更新、查询、背包操作等常用SQL
   - 采用字符串格式化拼接SQL，便于快速扩展
+  - **新增**：完整的类型注解系统，包括参数类型、返回值类型和异常类型
 - 关键流程
   - 连接建立：静态方法创建连接与游标
   - 写操作：执行后commit，异常rollback
   - 读操作：fetchone/fetchall并处理None
+- 类型注解增强
+  - execute方法：`execute(sql: str, fetch_one: bool = False, fetch_all: bool = False) -> Any`
+  - execute_write方法：`execute_write(sql: str, error_msg: str = 'execute fail') -> None`
+  - execute_read方法：`execute_read(sql: str, default: Any = None) -> Any`
+  - 增强了IDE支持和代码可维护性
 
 ```mermaid
 flowchart TD
@@ -245,12 +256,12 @@ E --> G["返回结果"]
 F --> G
 ```
 
-图表来源
-- [common/sqlScript.py:18-27](file://common/sqlScript.py#L18-L27)
-- [common/sqlScript.py:30-42](file://common/sqlScript.py#L30-L42)
+**图表来源**
+- [common/sqlScript.py:68-123](file://common/sqlScript.py#L68-L123)
+- [common/sqlScript.py:130-258](file://common/sqlScript.py#L130-L258)
 
-章节来源
-- [common/sqlScript.py:1-145](file://common/sqlScript.py#L1-L145)
+**章节来源**
+- [common/sqlScript.py:1-258](file://common/sqlScript.py#L1-L258)
 
 ### 组件E：日志与配置（Logs/Config）
 - 日志
@@ -268,11 +279,11 @@ CFG["Config.config"] --> DB["数据库连接参数"]
 CFG --> APP["应用URL/用户配置"]
 ```
 
-图表来源
+**图表来源**
 - [common/Logs.py:8-47](file://common/Logs.py#L8-L47)
 - [common/Config.py:6-31](file://common/Config.py#L6-L31)
 
-章节来源
+**章节来源**
 - [common/Logs.py:1-48](file://common/Logs.py#L1-L48)
 - [common/Config.py:1-133](file://common/Config.py#L1-L133)
 
@@ -294,13 +305,13 @@ DB-->>CM : OK
 CM-->>T : 断言余额变化
 ```
 
-图表来源
+**图表来源**
 - [caseStarify/test_starify_contractPay.py:13-80](file://caseStarify/test_starify_contractPay.py#L13-L80)
 - [caseLuckyPlay/test_pt_greedy.py:35-63](file://caseLuckyPlay/test_pt_greedy.py#L35-L63)
 
-章节来源
+**章节来源**
 - [caseStarify/test_starify_contractPay.py:1-200](file://caseStarify/test_starify_contractPay.py#L1-L200)
-- [caseLuckyPlay/test_pt_greedy.py:35-63](file://caseLuckyPlay/test_pt_greedy.py#L35-L63)
+- [caseLuckyPlay/test_pt_greedy.py:1-106](file://caseLuckyPlay/test_pt_greedy.py#L1-L106)
 
 ## 依赖分析
 - 执行器依赖
@@ -328,16 +339,16 @@ LOG --> CP
 LOG --> CS
 ```
 
-图表来源
+**图表来源**
 - [common/conMysql.py:1-530](file://common/conMysql.py#L1-L530)
-- [common/conPtMysql.py:121-252](file://common/conPtMysql.py#L121-L252)
-- [common/conStarifyMysql.py:1-52](file://common/conStarifyMysql.py#L1-L52)
+- [common/conPtMysql.py:1-222](file://common/conPtMysql.py#L1-L222)
+- [common/conStarifyMysql.py:1-170](file://common/conStarifyMysql.py#L1-L170)
 - [common/Config.py:1-133](file://common/Config.py#L1-L133)
 - [common/Logs.py:1-48](file://common/Logs.py#L1-L48)
-- [requirements.txt:54](file://requirements.txt#L54)
+- [requirements.txt:22](file://requirements.txt#L22)
 
-章节来源
-- [requirements.txt:1-85](file://requirements.txt#L1-L85)
+**章节来源**
+- [requirements.txt:1-91](file://requirements.txt#L1-L91)
 
 ## 性能考虑
 - 连接复用
@@ -350,6 +361,8 @@ LOG --> CS
   - 在高并发场景下，建议引入连接池与超时控制，避免阻塞
 - 日志开销
   - 控制台输出与文件轮转可能带来IO开销，建议在生产环境适当降低日志级别
+- 类型注解优化
+  - 完整的类型标注减少了运行时类型检查的开销，提升了执行效率
 
 ## 故障排查指南
 - 常见问题
@@ -357,21 +370,24 @@ LOG --> CS
   - 权限不足：确认执行器使用的账号具备相应表的读写权限
   - 事务未提交：确认写操作方法中存在commit/rollback逻辑
   - SQL语法错误：核对拼接后的SQL，必要时打印原始SQL进行人工校验
+  - 类型错误：检查方法调用时的参数类型是否符合类型注解要求
 - 排查步骤
   - 启用详细日志，定位执行器调用链
   - 在异常处打印SQL与参数，辅助复现
   - 分离读写操作，缩小问题范围
+  - 利用IDE的类型检查功能发现潜在问题
 - 相关实现参考
   - 异常捕获与回滚：写操作统一在异常时rollback并commit收尾
   - 日志输出：统一使用get_log创建logger，输出到控制台与文件
+  - 类型注解：通过完整的类型标注提升代码质量和可维护性
 
-章节来源
+**章节来源**
 - [common/conMysql.py:350-360](file://common/conMysql.py#L350-L360)
 - [common/conMysql.py:206-272](file://common/conMysql.py#L206-L272)
 - [common/Logs.py:8-47](file://common/Logs.py#L8-L47)
 
 ## 结论
-本项目通过统一的执行器抽象，实现了SQL脚本的封装与执行，配合完善的日志与配置管理，满足了支付测试自动化对数据准备与清理的需求。建议在后续迭代中引入连接池、参数化SQL与缓存机制，进一步提升安全性与性能。
+本项目通过统一的执行器抽象，实现了SQL脚本的封装与执行，配合完善的日志与配置管理，满足了支付测试自动化对数据准备与清理的需求。**最新改进**包括完整的类型注解系统，显著提升了代码质量和开发体验。建议在后续迭代中引入连接池、参数化SQL与缓存机制，进一步提升安全性与性能。
 
 ## 附录
 
@@ -383,8 +399,11 @@ LOG --> CS
   - 在执行器中集中处理参数校验与绑定，避免在用例中散落SQL拼接逻辑
 - 动态SQL生成
   - 根据业务维度（账户、背包、房间、礼物等）生成不同SQL片段，再组合成完整SQL
+- 类型注解优势
+  - 提供编译时类型检查，减少运行时错误
+  - 增强IDE的智能提示和代码补全功能
 
-章节来源
+**章节来源**
 - [common/sqlScript.py:30-42](file://common/sqlScript.py#L30-L42)
 - [common/conMysql.py:27-204](file://common/conMysql.py#L27-L204)
 
@@ -395,7 +414,7 @@ LOG --> CS
 - 提交/回滚：写操作统一事务控制
 - 结束：关闭资源或复用连接
 
-章节来源
+**章节来源**
 - [common/conMysql.py:17-25](file://common/conMysql.py#L17-L25)
 - [common/conMysql.py:350-360](file://common/conMysql.py#L350-L360)
 
@@ -403,8 +422,9 @@ LOG --> CS
 - 语法错误检测：在执行前打印SQL，必要时加入SQL解析校验
 - 执行异常捕获：统一try/except/finally，异常时rollback并commit收尾
 - 错误信息反馈：通过日志输出异常堆栈与上下文
+- 类型错误处理：利用类型注解提前发现参数类型不匹配的问题
 
-章节来源
+**章节来源**
 - [common/conMysql.py:206-272](file://common/conMysql.py#L206-L272)
 - [common/Logs.py:8-47](file://common/Logs.py#L8-L47)
 
@@ -412,19 +432,22 @@ LOG --> CS
 - 执行时间统计：可在执行器方法入口/出口记录时间戳，计算耗时
 - 资源消耗监控：结合系统监控工具观察连接数、QPS与慢查询
 - 执行状态跟踪：通过日志记录SQL与参数，便于回溯
+- 类型注解性能：完整的类型标注在运行时几乎无额外开销
 
-章节来源
+**章节来源**
 - [common/Logs.py:8-47](file://common/Logs.py#L8-L47)
 
 ### 扩展新SQL脚本类型与执行器
 - 新增脚本类型
   - 在对应执行器中新增方法，遵循现有命名规范与事务控制
+  - **新增**：确保新方法具有完整的类型注解
 - 自定义执行器
   - 参考conStarifyMysql的简化模式，提供通用的fetchone/execute方法
+  - **新增**：为新执行器添加完整的类型标注
 - 脚本缓存机制
   - 对于高频查询，可在执行器中引入缓存（如LRU），注意缓存失效策略
 
-章节来源
+**章节来源**
 - [common/conStarifyMysql.py:27-51](file://common/conStarifyMysql.py#L27-L51)
 
 ### 安全执行、权限控制与审计日志
@@ -435,7 +458,26 @@ LOG --> CS
   - 限制执行器账号权限，最小化授权原则
 - 审计日志
   - 记录SQL、参数、执行时间与结果，便于审计与追踪
+- 类型安全
+  - 通过类型注解确保API调用的正确性，减少安全漏洞
 
-章节来源
+**章节来源**
 - [common/conMysql.py:350-360](file://common/conMysql.py#L350-L360)
 - [common/Logs.py:8-47](file://common/Logs.py#L8-L47)
+
+### 类型注解最佳实践
+- 参数类型标注
+  - 明确指定每个参数的期望类型
+  - 使用Union类型处理可选参数
+- 返回值类型标注
+  - 为所有公共方法添加返回值类型
+  - 使用Optional类型表示可能返回None的值
+- 异常类型标注
+  - 在文档字符串中明确列出可能抛出的异常
+  - 使用TypeHint标注异常处理逻辑
+
+**章节来源**
+- [common/sqlScript.py:68-123](file://common/sqlScript.py#L68-L123)
+- [common/conMysql.py:27-204](file://common/conMysql.py#L27-L204)
+- [common/conPtMysql.py:46-69](file://common/conPtMysql.py#L46-L69)
+- [common/conStarifyMysql.py:47-85](file://common/conStarifyMysql.py#L47-L85)

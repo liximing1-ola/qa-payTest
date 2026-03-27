@@ -175,7 +175,7 @@ Notify-->>Dev : Slack/微信等通知
   - 多实例日志记录：分别记录代码拉取、更新和错误信息
   - 增强错误处理：完整的异常捕获和日志记录机制
 - **核心功能**
-  - 应用配置映射：支持多应用（app_php、app_go、app、slp_php、slp_common_rpc）与对应路径、分支、机器人标识
+  - 应用配置映射：支持多应用（bb_php、bb_go、pt、slp_php、slp_common_rpc）与对应路径、分支、机器人标识
   - 分支一致性校验：拉取后读取当前分支并与期望分支对比，不一致直接返回失败
   - 提交时间戳比较：解析最近提交时间，与本地时间戳文件对比，判断是否需要触发测试
   - 通知策略：根据应用类型选择不同的通知通道与内容格式
@@ -216,7 +216,7 @@ NoOp --> End3(["返回False"])
 - **功能要点**
   - 统一管理应用域名、路径、分支、用户ID、房间ID、支付URL等
   - 通过appName与linux_node区分不同执行环境与应用
-  - 支持多环境配置（dev、app、slp等）
+  - 支持多环境配置（dev、pt、slp等）
   - 提供类型注解增强代码可维护性
 - **关键流程**
 
@@ -244,7 +244,7 @@ RoomConfigs --> End(["返回完整配置"])
 **新增** Session类提供了统一的会话管理功能，支持多种环境的用户登录和token管理。
 
 - **功能要点**
-  - 支持多种环境：dev、rush、APP、SLP等
+  - 支持多种环境：dev、rush、PT、SLP等
   - 统一的登录流程：通过Basic.yml配置文件管理登录参数
   - 备份方案：当默认方案失败时自动切换到备用方案
   - Token持久化：将获取的token保存到文件中
@@ -255,7 +255,7 @@ flowchart TD
 Start(["getSession(env)"]) --> EnvCheck{"检查环境类型"}
 EnvCheck --> |dev| DevLogin["执行dev环境登录"]
 EnvCheck --> |rush| RushLogin["执行rush环境登录"]
-EnvCheck --> |APP| PTLogin["执行APP环境登录"]
+EnvCheck --> |PT| PTLogin["执行PT环境登录"]
 EnvCheck --> |SLP| SLPLogin["执行SLP环境登录"]
 DevLogin --> TokenWrite["写入Token到文件"]
 RushLogin --> TokenWrite
@@ -312,7 +312,7 @@ end
 
 ### 定时任务调度（run_crontab_case）
 - **功能要点**
-  - 针对"派对"与"APP"两类应用，分别发现并执行特定用例或通配用例
+  - 针对"派对"与"伴伴"两类应用，分别发现并执行特定用例或通配用例
   - 执行完成后生成统计日志并推送markdown通知
 - **关键流程**
 
@@ -320,7 +320,7 @@ end
 flowchart TD
 Start(["定时触发"]) --> ChooseApp{"应用类型"}
 ChooseApp --> |派对| LoadPT["discover(caseLuckyPlay, pattern='test_*.py')"]
-ChooseApp --> |APP| LoadBB["discover(case, pattern='test_pay_punish.py')"]
+ChooseApp --> |伴伴| LoadBB["discover(case, pattern='test_pay_punish.py')"]
 LoadPT --> RunPT["TextTestRunner.run()"]
 LoadBB --> RunBB["TextTestRunner.run()"]
 RunPT --> StatPT["统计并写日志"]
@@ -386,7 +386,7 @@ Sleep --> Call
 
 ### 通知系统（Robot）
 - **功能要点**
-  - 支持多种模式：fail、success、markdown、icon、slack、slack_app
+  - 支持多种模式：fail、success、markdown、icon、slack、slack_pt
   - 根据to参数选择目标渠道（如to='slack'），并按bot类型选择URL
   - 统一封装HTTP请求与异常处理
 - **关键流程**
