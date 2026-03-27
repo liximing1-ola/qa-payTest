@@ -1,7 +1,11 @@
 # coding=utf-8
 """
-封装 request
+HTTP 请求封装模块
+
+提供统一的 HTTP POST 请求功能，支持 Token 管理、HTTPS 转换和响应解析。
 """
+import time
+from typing import Dict, Any, Optional
 import requests
 import urllib3
 from common.Session import Session
@@ -9,67 +13,97 @@ from common.Session import Session
 urllib3.disable_warnings()
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-
 # 默认请求头
-DEFAULT_HEADERS = {
+DEFAULT_HEADERS: Dict[str, str] = {
     "User-Agent": "Mozilla/5.0 (Linux; Android 11; HD1900 Build/RKQ1.201022.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/87.0.4280.141 Mobile Safari/537.36 / Xs android V1.1.0.0 / Js V1.0.0.0 / Login V1658980709",
     "Content-Type": "application/x-www-form-urlencoded",
     'Connection': 'close'
 }
 
+# 请求超时配置
+DEFAULT_TIMEOUT: float = 30.0
 
-def _build_headers(token_name='dev'):
-    """构建请求头"""
+
+def _build_headers(token_name: str = 'dev') -> Dict[str, str]:
+    """构建请求头
+    
+    Args:
+        token_name: Token 名称
+        
+    Returns:
+        请求头字典
+    """
     headers = DEFAULT_HEADERS.copy()
     headers["user-token"] = Session.checkUserToken(operate='read', app_name=token_name)
     return headers
 
 
-def _ensure_https(url):
-    """确保URL使用HTTPS"""
+def _ensure_https(url: str) -> str:
+    """确保 URL 使用 HTTPS
+    
+    Args:
+        url: 原始 URL
+        
+    Returns:
+        转换后的 HTTPS URL
+    """
     return url if url.startswith('https://') else f'https://{url}'
 
 
-def _parse_response(response):
-    """解析响应结果"""
-    print(response.json())
-    result = {
-        'code': response.status_code,
-        'time_consuming': response.elapsed.microseconds / 1000,
-        'time_total': response.elapsed.total_seconds()
-    }
-    try:
-        result['body'] = response.json()
-    except Exception as e:
-        print(e)
-        result['body'] = ''
-    return result
-
-
-def post_request_session(url, data, token_name='dev'):
-    """
-    POST请求
+def _parse_response(response: requests.Response) -> Dict[str, Any]:
+    """解析响应结果
     
     Args:
-        url: 请求URL
-        data: 请求数据
-        token_name: token名称，默认为'dev'
-    
+        response: requests 响应对象
+        
     Returns:
-        dict: 包含code、body、time_consuming、time_total的响应字典
+        解析后的结果字典
+    """
+    print(response.json())
+    return {
+        'code': response.status_code,
+        'time_consuming': response.elapsed.microseconds / 1000,
+        'time_total': response.elapsed.total_seconds(),
+        'body': response.json() if response.ok else ''
+    }
+
+
+def post_request_session(url: str, data: Optional[Any], 
+                         token_name: str = 'dev',
+                         timeout: float = DEFAULT_TIMEOUT) -> Dict[str, Any]:
+    """
+    POST 请求
+    
+    Args:
+        url: 请求 URL
+        data: 请求数据
+        token_name: Token 名称，默认为 'dev'
+        timeout: 请求超时时间，默认 30 秒
+        
+    Returns:
+        包含 code、body、time_consuming、time_total 的响应字典
     """
     headers = _build_headers(token_name)
     url = _ensure_https(url)
 
     try:
-        response = requests.post(url=url, data=data, headers=headers, verify=False)
+        response = requests.post(
+            url=url, 
+            data=data, 
+            headers=headers, 
+            verify=False,
+            timeout=timeout
+        )
         return _parse_response(response)
+    except requests.Timeout:
+        print(f"Request timeout: {url}")
+        return {'code': -1, 'body': '', 'error': 'timeout'}
     except requests.RequestException as e:
         print(f"Request error: {e}")
-        return {}
+        return {'code': -1, 'body': '', 'error': str(e)}
     except Exception as e:
         print(f"Unexpected error: {e}")
-        return {}
+        return {'code': -1, 'body': '', 'error': str(e)}
 
 
 if __name__ == '__main__':
