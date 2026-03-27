@@ -16,8 +16,8 @@ from typing import Dict, Any
 class AppConfig:
     """应用配置"""
     bb_dev: str = 'https://dev.iambanban.com/'
-    pt_ali_dev: str = 'https://pt-dev.iambanban.com/'
-    pt_ali_main: str = 'https://pt-dev.iambanban.com/_testcase/'
+    app_ali_dev: str = 'https://app-dev.iambanban.com/'
+    app_ali_main: str = 'https://app-dev.iambanban.com/_testcase/'
     starify: str = 'http://116.62.125.230/'
     slp: str = 'https://116.62.125.230/'
     rush: str = 'https://192.168.11.55/'
@@ -28,10 +28,10 @@ class CodeConfig:
     """代码路径配置"""
     bb_php_path: str = '/home/webroot/banban'
     bb_go_path: str = '/home/webroot/bb-consume'
-    pt_php_path: str = '/home/webroot/release_oversea/banban'
+    app_php_path: str = '/home/webroot/release_oversea/banban'
     bb_git_branch: str = 'release-for-vpc'
     bb_go_git_branch: str = 'master'
-    pt_git_branch: str = 'main'
+    app_git_branch: str = 'main'
     slp_php_path: str = "/var/www/slp/slp-php"
     slp_common_rpc_path: str = "/var/www/slp/slp-common-rpc"
     slp_git_branch: str = "dev"
@@ -90,8 +90,8 @@ class LiveRoleConfig:
 
 
 @dataclass
-class PTUserConfig:
-    """APP用户配置"""
+class AppUserConfig:
+    """APP 用户配置"""
     payUid: int = 800350557
     testUid: int = 800022872
     brokerUid: int = 800018895
@@ -99,7 +99,7 @@ class PTUserConfig:
 
 
 @dataclass
-class PTRoomConfig:
+class AppRoomConfig:
     """APP 房间配置"""
     business_joy: int = 105699329
     vip_rid: int = 105698376
