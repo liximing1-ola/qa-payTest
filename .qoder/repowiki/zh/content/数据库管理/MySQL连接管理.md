@@ -16,8 +16,9 @@
 ## 更新摘要
 **变更内容**
 - 对 conPtMysql.py 进行了重大代码优化，包括添加类型注解、改进方法文档、增强 SQL 查询格式化
-- 提升了代码质量和可维护性，增强了类型安全性和代码可读性
-- 保持了统一的连接管理架构，继续支持国内平台、PT海外平台、不夜星球平台和Starify平台
+- conSlpMysql.py 进行了重大架构重构，从 monolithic 设计重构为模块化、单例模式的连接管理
+- 新增 DatabaseConfig 和 MySQLConnection 类，增强了类型注解和 SQL 映射字典
+- 改善了代码结构和可维护性，提升了连接管理的模块化程度
 
 ## 目录
 1. [简介](#简介)
@@ -34,7 +35,7 @@
 
 本文档详细介绍了QA支付测试自动化项目中的MySQL连接管理功能。该项目实现了统一的MySQL连接管理架构，支持国内平台、PT海外平台、不夜星球平台和Starify平台的数据库连接管理。新架构通过统一的连接管理器提供自动重连和连接池管理功能，替代了原有的分散连接处理方式，确保测试环境的稳定性和可靠性。
 
-**更新** 最新版本对 PT 平台连接管理器进行了重大代码优化，显著提升了代码质量和可维护性。
+**更新** 最新版本对 PT 平台连接管理器进行了重大代码优化，显著提升了代码质量和可维护性。同时，SLP平台连接管理器也完成了重大架构重构，从 monolithic 设计转变为模块化、单例模式的连接管理。
 
 ## 项目结构
 
@@ -50,7 +51,7 @@ end
 subgraph "平台连接适配层"
 DOM[conMysql.py<br/>国内平台连接]
 PT[conPtMysql.py<br/>PT海外平台连接<br/>已优化]
-SLP[conSlpMysql.py<br/>不夜星球平台连接]
+SLP[conSlpMysql.py<br/>不夜星球平台连接<br/>模块化重构]
 ST[conStarifyMysql.py<br/>Starify平台连接]
 end
 subgraph "配置管理"
@@ -79,14 +80,14 @@ PT --> TEST2
 - [sqlScript.py:26-91](file://common/sqlScript.py#L26-L91)
 - [conMysql.py:8-530](file://common/conMysql.py#L8-L530)
 - [conPtMysql.py:22-367](file://common/conPtMysql.py#L22-L367)
-- [conSlpMysql.py:8-680](file://common/conSlpMysql.py#L8-L680)
+- [conSlpMysql.py:8-481](file://common/conSlpMysql.py#L8-L481)
 - [conStarifyMysql.py:22-170](file://common/conStarifyMysql.py#L22-L170)
 
 **章节来源**
 - [sqlScript.py:26-91](file://common/sqlScript.py#L26-L91)
 - [conMysql.py:8-530](file://common/conMysql.py#L8-L530)
 - [conPtMysql.py:22-367](file://common/conPtMysql.py#L22-L367)
-- [conSlpMysql.py:8-680](file://common/conSlpMysql.py#L8-L680)
+- [conSlpMysql.py:8-481](file://common/conSlpMysql.py#L8-L481)
 - [conStarifyMysql.py:22-170](file://common/conStarifyMysql.py#L22-L170)
 
 ## 核心组件
@@ -191,7 +192,7 @@ end
 subgraph "平台适配层"
 DOM[国内平台连接]
 PT[PT平台连接<br/>已优化]
-SLP[SLP平台连接]
+SLP[SLP平台连接<br/>模块化重构]
 STAR[Starify平台连接]
 end
 CLIENT --> MANAGER
@@ -305,6 +306,13 @@ PT_ENHANCED_DOCS[增强文档]
 PT_DICT_CURSOR[字典游标]
 PT_RECONNECT[自动重连]
 end
+subgraph "SLP平台连接管理器<br/>模块化重构"
+SLP_DATABASE_CONFIG[DatabaseConfig类]
+SLP_SINGLETON[单例模式]
+SLP_TYPE_ANNOTATIONS[完整类型注解]
+SLP_SQL_MAPPING[SQL映射字典]
+SLP_RECONNECT[自动重连]
+end
 subgraph "Starify平台连接管理器"
 STAR_CONFIG[DB_CONFIG: 127.0.0.1]
 STAR_SINGLE[单例模式]
@@ -314,28 +322,40 @@ DOM_CONFIG --> DOM_SINGLE
 PT_CONFIG --> PT_TYPED_ANNOTATIONS
 PT_CONFIG --> PT_ENHANCED_DOCS
 PT_CONFIG --> PT_DICT_CURSOR
+SLP_DATABASE_CONFIG --> SLP_SINGLETON
+SLP_DATABASE_CONFIG --> SLP_TYPE_ANNOTATIONS
+SLP_DATABASE_CONFIG --> SLP_SQL_MAPPING
 STAR_CONFIG --> STAR_SINGLE
 ```
 
 **图表来源**
 - [conPtMysql.py:11-44](file://common/conPtMysql.py#L11-L44)
-- [conStarifyMysql.py:11-44](file://common/conStarifyMysql.py#L11-L44)
+- [conSlpMysql.py:14-23](file://common/conSlpMysql.py#L14-L23)
+- [conStarifyMysql.py:11-19](file://common/conStarifyMysql.py#L11-L19)
 
 #### 连接池管理差异
 
 不同平台的连接池管理策略：
 
-| 平台 | 连接池类型 | 单例模式 | 自动重连 | 字典游标 | 类型注解 |
-|------|------------|----------|----------|----------|----------|
-| 国内平台 | 简单连接 | 否 | 是 | 否 | 否 |
-| PT平台 | 类变量缓存 | 否 | 是 | 是 | 是 |
-| Starify平台 | 单例模式 | 是 | 是 | 否 | 否 |
-| SLP平台 | 简单连接 | 否 | 是 | 否 | 否 |
+| 平台 | 连接池类型 | 单例模式 | 自动重连 | 字典游标 | 类型注解 | SQL映射字典 |
+|------|------------|----------|----------|----------|----------|-------------|
+| 国内平台 | 简单连接 | 否 | 是 | 否 | 否 | 否 |
+| PT平台 | 类变量缓存 | 否 | 是 | 是 | 是 | 是 |
+| SLP平台 | 单例模式 | 是 | 是 | 否 | 是 | 是 |
+| Starify平台 | 单例模式 | 是 | 是 | 否 | 否 | 否 |
 
-**更新** PT 平台连接管理器现已支持类型注解，显著提升了代码的类型安全性和可维护性。
+**更新** SLP平台连接管理器现已完成重大架构重构，具有以下特点：
+- 新增 DatabaseConfig 类专门负责配置管理
+- 使用单例模式的 MySQLConnection 类管理连接
+- 增强了完整的类型注解支持
+- 引入了 SQL 映射字典来提高代码可维护性
+- 改善了代码结构和可扩展性
+
+**更新** PT平台连接管理器现已支持类型注解，显著提升了代码的类型安全性和可维护性。
 
 **章节来源**
 - [conPtMysql.py:22-71](file://common/conPtMysql.py#L22-L71)
+- [conSlpMysql.py:26-61](file://common/conSlpMysql.py#L26-L61)
 - [conStarifyMysql.py:22-71](file://common/conStarifyMysql.py#L22-L71)
 
 ### 上下文管理器支持
@@ -426,6 +446,48 @@ PlatformSpecific --> DataOperations : 扩展
 - [conMysql.py:275-530](file://common/conMysql.py#L275-L530)
 - [conStarifyMysql.py:102-166](file://common/conStarifyMysql.py#L102-L166)
 
+### SLP平台连接管理器架构
+
+**更新** SLP平台连接管理器采用了全新的模块化架构：
+
+```mermaid
+classDiagram
+class DatabaseConfig {
++ALI dict
++__init__() void
+}
+class MySQLConnection {
++get_connection() Connection
++get_cursor() Cursor
++execute_query() any
++execute_write() bool
++_connection Connection
++_cursor Cursor
+}
+class conMysql {
++selectUserInfoSql() any
++deleteUserAccountSql() void
++updateUserRidInfoSql() void
++updateUserMoneyClearSql() void
++insertXsUserCommodity() void
++checkXsGiftConfig() void
++select_greedy_prize() tuple
++select_user_chatroom() int
++sqlXsUserpopularity() int
++sqlXsUserprofile_pay_room_money() int
++QUERY_SQL_MAP dict
++DELETE_SQL_MAP dict
+}
+DatabaseConfig --> MySQLConnection : 配置提供
+MySQLConnection --> conMysql : 连接管理
+```
+
+**图表来源**
+- [conSlpMysql.py:14-481](file://common/conSlpMysql.py#L14-L481)
+
+**章节来源**
+- [conSlpMysql.py:14-481](file://common/conSlpMysql.py#L14-L481)
+
 ## 依赖关系分析
 
 ### 统一架构依赖关系
@@ -440,7 +502,7 @@ end
 subgraph "平台适配层"
 CON_MYSQL[conMysql.py]
 CON_PT[conPtMysql.py<br/>已优化]
-CON_SLP[conSlpMysql.py]
+CON_SLP[conSlpMysql.py<br/>模块化重构]
 CON_STAR[conStarifyMysql.py]
 end
 subgraph "配置层"
@@ -547,6 +609,7 @@ ErrorHandling --> Better
 2. **自动重连策略**: 配置合适的重连间隔和重试次数
 3. **上下文管理**: 使用上下文管理器确保资源及时释放
 4. **连接监控**: 实现连接状态监控和健康检查
+5. **类型注解优化**: 利用类型注解提升代码执行效率
 
 ### 错误处理机制
 
@@ -695,7 +758,14 @@ class MySQLConfig:
 4. **可扩展性**: 更好的架构支持未来功能扩展
 5. **安全性**: 统一的配置管理增强了安全性
 
-**更新** PT 平台连接管理器经过重大代码优化后，显著提升了代码质量和可维护性，包括：
+**更新** SLP平台连接管理器经过重大架构重构后，显著提升了代码质量和可维护性，包括：
+- 新增了 DatabaseConfig 类，专门负责配置管理
+- 采用单例模式的 MySQLConnection 类，提供更好的连接管理
+- 增加了完整的类型注解，提高了代码的类型安全性和可读性
+- 引入了 SQL 映射字典，改善了代码结构和可维护性
+- 改善了整体架构设计，提升了模块化程度
+
+**更新** PT平台连接管理器经过重大代码优化后，显著提升了代码质量和可维护性，包括：
 - 添加了完整的类型注解，提高了类型安全性
 - 改进了方法文档，增强了代码可读性
 - 增强了 SQL 查询格式化，提升了代码质量

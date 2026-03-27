@@ -1,7 +1,13 @@
 # coding=utf-8
+"""
+自动化测试运行器
+
+支持多应用（伴伴/PT/不夜星球）的测试用例自动执行、结果汇总和通知。
+"""
 import platform
 from time import time, sleep
 import unittest
+from typing import Optional, Dict, Any, List, Tuple
 from Robot import robot
 from autoGitPull import updateTime, updateCode
 from common import Logs, method, Consts
@@ -10,7 +16,7 @@ from common.method import check_path
 
 
 # 应用配置映射
-APP_CONFIG = {
+APP_CONFIG: Dict[str, Dict[str, Any]] = {
     config.appName['1']: {
         'dir': '/case',
         'git_repos': ['bb_php', 'bb_go'],
@@ -39,11 +45,19 @@ APP_CONFIG = {
 }
 
 
-def load_cases(app_info):
-    """加载测试用例"""
+def load_cases(app_info: str) -> Optional[unittest.TestSuite]:
+    """加载测试用例
+    
+    Args:
+        app_info: 应用信息
+        
+    Returns:
+        测试套件，失败返回 None
+    """
     cfg = APP_CONFIG.get(app_info)
     if not cfg:
         return None
+    
     case_dir = config.BASE_PATH + cfg['dir']
     discover = unittest.defaultTestLoader.discover(case_dir, pattern="test_*.py", top_level_dir=None)
     testcase = unittest.TestSuite()
@@ -51,23 +65,52 @@ def load_cases(app_info):
     return testcase
 
 
-def run_tests(app_info):
-    """执行测试"""
+def run_tests(app_info: str) -> unittest.TextTestResult:
+    """执行测试
+    
+    Args:
+        app_info: 应用信息
+        
+    Returns:
+        测试结果对象
+    """
     return unittest.TextTestRunner(verbosity=3).run(load_cases(app_info))
 
 
-def log_result(test_result, lang='zh'):
-    """记录测试结果"""
+def log_result(test_result: unittest.TextTestResult, lang: str = 'zh') -> str:
+    """记录测试结果
+    
+    Args:
+        test_result: 测试结果对象
+        lang: 语言（zh/en）
+        
+    Returns:
+        结果描述字符串
+    """
     if lang == 'en':
-        des = f"Total: {test_result.testsRun}, failures: {len(test_result.failures)}, errors: {len(test_result.errors)}"
+        des = (f"Total: {test_result.testsRun}, "
+               f"failures: {len(test_result.failures)}, "
+               f"errors: {len(test_result.errors)}")
     else:
-        des = f"用例总数: {test_result.testsRun}, 失败用例数: {len(test_result.failures)}, 异常用例数: {len(test_result.errors)}"
+        des = (f"用例总数：{test_result.testsRun}, "
+               f"失败用例数：{len(test_result.failures)}, "
+               f"异常用例数：{len(test_result.errors)}")
+    
     Logs.get_logger('caseResult.log').info(des)
     return des
 
 
-def get_summary_data(test_result, branch_key):
-    """获取汇总数据"""
+def get_summary_data(test_result: unittest.TextTestResult, 
+                    branch_key: str) -> Tuple[str, str, str, str]:
+    """获取汇总数据
+    
+    Args:
+        test_result: 测试结果对象
+        branch_key: 分支键名
+        
+    Returns:
+        (case_list, case_list_2, use_time, branch) 元组
+    """
     case_list = method.dict_to_markdown(Consts.case_list)
     case_list_2 = method.dict_to_markdown(Consts.case_list_b)
     use_time = str(int(Consts.endTime - Consts.startTime)) + 's'
@@ -75,15 +118,24 @@ def get_summary_data(test_result, branch_key):
     return case_list, case_list_2, use_time, branch
 
 
-def notify_success(app_info, test_result):
-    """通知成功结果"""
+def notify_success(app_info: str, test_result: unittest.TextTestResult) -> None:
+    """通知成功结果
+    
+    Args:
+        app_info: 应用信息
+        test_result: 测试结果对象
+    """
     cfg = APP_CONFIG[app_info]
     case_list, case_list_2, use_time, branch = get_summary_data(test_result, cfg['branch_key'])
     
     if cfg['lang'] == 'en':
-        des_2 = f"{case_list_2}\nTotal: {test_result.testsRun}, Failures: 0, Times: {use_time}, Branch：{branch}"
+        des_2 = (f"{case_list_2}\n"
+                 f"Total: {test_result.testsRun}, Failures: 0, "
+                 f"Times: {use_time}, Branch: {branch}")
     else:
-        des_2 = f"{case_list_2}\n用例数: {test_result.testsRun}, 失败数: 0, 总耗时: {use_time}, 代码分支：{branch}"
+        des_2 = (f"{case_list_2}\n"
+                 f"用例数：{test_result.testsRun}, 失败数：0, "
+                 f"总耗时：{use_time}, 代码分支：{branch}")
     
     to = cfg.get('to', 'wx')
     robot(cfg['mode'], case_list, bot=cfg['bot'], to=to)
@@ -91,8 +143,15 @@ def notify_success(app_info, test_result):
     robot(cfg['mode'], des_2, bot=cfg['bot'], to=to)
 
 
-def notify_failures(app_info, test_result, des):
-    """通知失败结果"""
+def notify_failures(app_info: str, test_result: unittest.TextTestResult, 
+                   des: str) -> None:
+    """通知失败结果
+    
+    Args:
+        app_info: 应用信息
+        test_result: 测试结果对象
+        des: 结果描述
+    """
     cfg = APP_CONFIG[app_info]
     failures = test_result.failures
     errors = test_result.errors
@@ -102,17 +161,24 @@ def notify_failures(app_info, test_result, des):
         Logs.get_logger('failCase.log').error(f"failures: {failures}")
         robot(cfg['mode'], des, bot=cfg['bot'], color='danger', to=to)
         for case, _ in failures:
-            robot(cfg['mode'], Consts.fail_case_reason[0], title=case.id(), color='danger', bot=cfg['bot'], to=to)
+            robot(cfg['mode'], Consts.fail_case_reason[0], 
+                 title=case.id(), color='danger', bot=cfg['bot'], to=to)
             break
     elif errors:
         Logs.get_logger('failCase.log').error(f"error: {errors}")
         for case, reason in errors:
-            robot(cfg['mode'], reason, case.id(), color='danger', bot=cfg['bot'], to=to)
+            robot(cfg['mode'], reason, case.id(), 
+                 color='danger', bot=cfg['bot'], to=to)
             break
 
 
-def handle_result(app_info, test_result):
-    """处理测试结果"""
+def handle_result(app_info: str, test_result: unittest.TextTestResult) -> None:
+    """处理测试结果
+    
+    Args:
+        app_info: 应用信息
+        test_result: 测试结果对象
+    """
     cfg = APP_CONFIG[app_info]
     des = log_result(test_result, cfg['lang'])
     
@@ -122,20 +188,32 @@ def handle_result(app_info, test_result):
         notify_failures(app_info, test_result, des)
 
 
-def pull_code(app_info):
-    """拉取代码"""
+def pull_code(app_info: str) -> bool:
+    """拉取代码
+    
+    Args:
+        app_info: 应用信息
+        
+    Returns:
+        是否成功拉取
+    """
     cfg = APP_CONFIG[app_info]
     repos = cfg.get('git_repos')
     
     if repos:
-        results = [updateCode.autoGitPull(repo, bot=cfg.get('bot'), to=cfg.get('to')) for repo in repos]
+        results = [updateCode.autoGitPull(repo, bot=cfg.get('bot'), 
+                     to=cfg.get('to')) for repo in repos]
         return any(results)
     else:
         return updateCode.autoGitPull(app_info)
 
 
-def main(app_info):
-    """主入口"""
+def main(app_info: str) -> None:
+    """主入口
+    
+    Args:
+        app_info: 应用信息
+    """
     if app_info not in APP_CONFIG:
         Logs.get_logger('runCode.log').error(f'{app_info} 执行异常')
         return
