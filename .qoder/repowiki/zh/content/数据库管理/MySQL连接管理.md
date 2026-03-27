@@ -15,11 +15,9 @@
 
 ## 更新摘要
 **变更内容**
-- 新增统一MySQL连接管理架构，替代原有的分散连接处理方式
-- 引入MySQLClient和MySQLConfig类提供统一的数据库连接管理
-- 实现自动重连和连接池管理功能
-- 添加上下文管理器支持更好的资源管理
-- 优化错误处理和连接状态监控机制
+- 对 conPtMysql.py 进行了重大代码优化，包括添加类型注解、改进方法文档、增强 SQL 查询格式化
+- 提升了代码质量和可维护性，增强了类型安全性和代码可读性
+- 保持了统一的连接管理架构，继续支持国内平台、PT海外平台、不夜星球平台和Starify平台
 
 ## 目录
 1. [简介](#简介)
@@ -36,6 +34,8 @@
 
 本文档详细介绍了QA支付测试自动化项目中的MySQL连接管理功能。该项目实现了统一的MySQL连接管理架构，支持国内平台、PT海外平台、不夜星球平台和Starify平台的数据库连接管理。新架构通过统一的连接管理器提供自动重连和连接池管理功能，替代了原有的分散连接处理方式，确保测试环境的稳定性和可靠性。
 
+**更新** 最新版本对 PT 平台连接管理器进行了重大代码优化，显著提升了代码质量和可维护性。
+
 ## 项目结构
 
 项目采用统一模块化设计，将不同平台的数据库连接管理整合到统一的连接管理框架中：
@@ -49,7 +49,7 @@ CONTEXT[上下文管理器<br/>资源管理]
 end
 subgraph "平台连接适配层"
 DOM[conMysql.py<br/>国内平台连接]
-PT[conPtMysql.py<br/>PT海外平台连接]
+PT[conPtMysql.py<br/>PT海外平台连接<br/>已优化]
 SLP[conSlpMysql.py<br/>不夜星球平台连接]
 ST[conStarifyMysql.py<br/>Starify平台连接]
 end
@@ -78,14 +78,14 @@ PT --> TEST2
 **图表来源**
 - [sqlScript.py:26-91](file://common/sqlScript.py#L26-L91)
 - [conMysql.py:8-530](file://common/conMysql.py#L8-L530)
-- [conPtMysql.py:22-222](file://common/conPtMysql.py#L22-L222)
+- [conPtMysql.py:22-367](file://common/conPtMysql.py#L22-L367)
 - [conSlpMysql.py:8-680](file://common/conSlpMysql.py#L8-L680)
 - [conStarifyMysql.py:22-170](file://common/conStarifyMysql.py#L22-L170)
 
 **章节来源**
 - [sqlScript.py:26-91](file://common/sqlScript.py#L26-L91)
 - [conMysql.py:8-530](file://common/conMysql.py#L8-L530)
-- [conPtMysql.py:22-222](file://common/conPtMysql.py#L22-L222)
+- [conPtMysql.py:22-367](file://common/conPtMysql.py#L22-L367)
 - [conSlpMysql.py:8-680](file://common/conSlpMysql.py#L8-L680)
 - [conStarifyMysql.py:22-170](file://common/conStarifyMysql.py#L22-L170)
 
@@ -134,7 +134,7 @@ MySQLConnection <|-- BaseConnection
 **图表来源**
 - [sqlScript.py:26-91](file://common/sqlScript.py#L26-L91)
 - [conMysql.py:8-530](file://common/conMysql.py#L8-L530)
-- [conPtMysql.py:22-222](file://common/conPtMysql.py#L22-L222)
+- [conPtMysql.py:22-367](file://common/conPtMysql.py#L22-L367)
 - [conStarifyMysql.py:22-170](file://common/conStarifyMysql.py#L22-L170)
 
 ### 数据库连接初始化流程
@@ -162,12 +162,12 @@ Client->>Init : 返回连接客户端
 
 **图表来源**
 - [sqlScript.py:36-44](file://common/sqlScript.py#L36-L44)
-- [conPtMysql.py:29-35](file://common/conPtMysql.py#L29-L35)
+- [conPtMysql.py:29-43](file://common/conPtMysql.py#L29-L43)
 - [conStarifyMysql.py:30-36](file://common/conStarifyMysql.py#L30-L36)
 
 **章节来源**
 - [sqlScript.py:36-44](file://common/sqlScript.py#L36-L44)
-- [conPtMysql.py:29-35](file://common/conPtMysql.py#L29-L35)
+- [conPtMysql.py:29-43](file://common/conPtMysql.py#L29-L43)
 - [conStarifyMysql.py:30-36](file://common/conStarifyMysql.py#L30-L36)
 
 ## 架构概览
@@ -190,7 +190,7 @@ MONITOR[连接监控<br/>状态检测]
 end
 subgraph "平台适配层"
 DOM[国内平台连接]
-PT[PT平台连接]
+PT[PT平台连接<br/>已优化]
 SLP[SLP平台连接]
 STAR[Starify平台连接]
 end
@@ -298,8 +298,10 @@ DOM_CONFIG[DB_CONFIG: 192.168.11.46]
 DOM_SINGLE[单例模式]
 DOM_RECONNECT[自动重连]
 end
-subgraph "PT平台连接管理器"
+subgraph "PT平台连接管理器<br/>已优化"
 PT_CONFIG[DB_CONFIG: localhost]
+PT_TYPED_ANNOTATIONS[类型注解]
+PT_ENHANCED_DOCS[增强文档]
 PT_DICT_CURSOR[字典游标]
 PT_RECONNECT[自动重连]
 end
@@ -309,6 +311,8 @@ STAR_SINGLE[单例模式]
 STAR_RECONNECT[自动重连]
 end
 DOM_CONFIG --> DOM_SINGLE
+PT_CONFIG --> PT_TYPED_ANNOTATIONS
+PT_CONFIG --> PT_ENHANCED_DOCS
 PT_CONFIG --> PT_DICT_CURSOR
 STAR_CONFIG --> STAR_SINGLE
 ```
@@ -321,12 +325,14 @@ STAR_CONFIG --> STAR_SINGLE
 
 不同平台的连接池管理策略：
 
-| 平台 | 连接池类型 | 单例模式 | 自动重连 | 字典游标 |
-|------|------------|----------|----------|----------|
-| 国内平台 | 简单连接 | 否 | 是 | 否 |
-| PT平台 | 类变量缓存 | 否 | 是 | 是 |
-| Starify平台 | 单例模式 | 是 | 是 | 否 |
-| SLP平台 | 简单连接 | 否 | 是 | 否 |
+| 平台 | 连接池类型 | 单例模式 | 自动重连 | 字典游标 | 类型注解 |
+|------|------------|----------|----------|----------|----------|
+| 国内平台 | 简单连接 | 否 | 是 | 否 | 否 |
+| PT平台 | 类变量缓存 | 否 | 是 | 是 | 是 |
+| Starify平台 | 单例模式 | 是 | 是 | 否 | 否 |
+| SLP平台 | 简单连接 | 否 | 是 | 否 | 否 |
+
+**更新** PT 平台连接管理器现已支持类型注解，显著提升了代码的类型安全性和可维护性。
 
 **章节来源**
 - [conPtMysql.py:22-71](file://common/conPtMysql.py#L22-L71)
@@ -433,7 +439,7 @@ CONTEXT[上下文管理器]
 end
 subgraph "平台适配层"
 CON_MYSQL[conMysql.py]
-CON_PT[conPtMysql.py]
+CON_PT[conPtMysql.py<br/>已优化]
 CON_SLP[conSlpMysql.py]
 CON_STAR[conStarifyMysql.py]
 end
@@ -477,7 +483,7 @@ PYMYSQL[pymysql]
 TIME[time]
 AST[ast]
 CONTEXTLIB[contextlib]
-end
+END
 subgraph "统一内部依赖"
 SQLSCRIPT[sqlScript.py]
 CONFIG[Config.py]
@@ -620,7 +626,7 @@ FixReconnect --> CheckReconnect
 
 **章节来源**
 - [sqlScript.py:36-44](file://common/sqlScript.py#L36-L44)
-- [conPtMysql.py:29-35](file://common/conPtMysql.py#L29-L35)
+- [conPtMysql.py:29-43](file://common/conPtMysql.py#L29-L43)
 - [conStarifyMysql.py:30-36](file://common/conStarifyMysql.py#L30-L36)
 
 ### SSL连接支持
@@ -688,5 +694,11 @@ class MySQLConfig:
 3. **稳定性**: 自动重连和连接池提升了系统稳定性
 4. **可扩展性**: 更好的架构支持未来功能扩展
 5. **安全性**: 统一的配置管理增强了安全性
+
+**更新** PT 平台连接管理器经过重大代码优化后，显著提升了代码质量和可维护性，包括：
+- 添加了完整的类型注解，提高了类型安全性
+- 改进了方法文档，增强了代码可读性
+- 增强了 SQL 查询格式化，提升了代码质量
+- 优化了错误处理机制，提高了系统的健壮性
 
 该统一架构为后续的功能扩展和维护奠定了坚实的基础，能够更好地满足不同平台的测试需求，同时提供了更好的性能和可靠性保障。

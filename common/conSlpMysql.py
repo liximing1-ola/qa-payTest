@@ -1,679 +1,480 @@
 # coding=utf-8
+"""
+SLP MySQL 数据库操作模块
+
+提供 SLP 平台的数据库连接管理和常用业务操作方法。
+使用单例模式管理数据库连接，支持自动重连。
+"""
 import ast
 import time
-
+from typing import Optional, Tuple, Dict, Any, List, Union
 import pymysql
 
 
-class conMysql:
-    db_config = {
-        "ali_db": '127.0.0.1',
-        "ali_user": 'root',
-        "ali_pas": 'root'
+class DatabaseConfig:
+    """数据库配置"""
+    ALI: Dict[str, str] = {
+        'host': '127.0.0.1',
+        'port': '3306',
+        'user': 'root',
+        'password': 'root',
+        'database': 'xianshi',
+        'charset': 'utf8'
     }
-    _dbUrl = db_config['ali_db']
-    _user = db_config['ali_user']
-    _password = db_config['ali_pas']
-    _dbName = 'xianshi'
-    _dbPort = 3306
-    con = pymysql.connect(host=_dbUrl,
-                          port=_dbPort,
-                          user=_user,
-                          passwd=_password,
-                          charset='utf8',
-                          autocommit=True)
-    con.select_db(_dbName)
-    con.ping(reconnect=True)
-    cur = con.cursor()
 
-    # 查询用户账户信息
+
+class MySQLConnection:
+    """MySQL连接管理器（单例模式）"""
+    
+    _connection: Optional[pymysql.Connection] = None
+    _cursor: Optional[pymysql.Cursor] = None
+    
+    @classmethod
+    def get_connection(cls) -> pymysql.Connection:
+        """获取数据库连接
+        
+        Returns:
+            MySQL连接对象
+        """
+        if cls._connection is None or not cls._connection.open:
+            config = DatabaseConfig.ALI
+            cls._connection = pymysql.connect(
+                host=config['host'],
+                port=int(config['port']),
+                user=config['user'],
+                password=config['password'],
+                charset=config['charset'],
+                autocommit=True
+            )
+            cls._connection.select_db(config['database'])
+        cls._connection.ping(reconnect=True)
+        return cls._connection
+    
+    @classmethod
+    def get_cursor(cls):
+        """获取游标
+        
+        Returns:
+            MySQL 游标对象
+        """
+        con = cls.get_connection()
+        return cls._cursor if cls._cursor else con.cursor()
+
+
+class conMysql:
+    """MySQL 操作类"""
+    
+    # ============ 查询方法 ============
+    
     @staticmethod
-    def selectUserInfoSql(accountType, uid="200000126", money_type='money_cash_b', cid=263, payuid="200000128"):
-        if accountType == 'bean':  # 查询用户账户扩展表金豆余额
-            sql = "select money_coupon from xs_user_money_extend where uid={}".format(uid)
-            try:
-                conMysql.cur.execute(sql)
-                res = conMysql.cur.fetchone()
-                if res is None:
-                    return 0
-                else:
-                    return res[0]
-            except Exception as error:
-                print(error)
-        elif accountType == 'cash':  # 查询用户账户扩展表 现金余额
-            sql = "select cash from xs_user_money_extend where uid={}".format(uid)
-            try:
-                conMysql.cur.execute(sql)
-                res = conMysql.cur.fetchone()
-                if res is None:
-                    return 0
-                else:
-                    return res[0]
-            except Exception as error:
-                print(error)
-        elif accountType == 'sum_money':  # 查询用户所有账户数据之和
-            sql = "select money+money_b+money_cash_b+money_cash from xs_user_money where uid={}".format(uid)
-            try:
-                conMysql.cur.execute(sql)
-                res = conMysql.cur.fetchone()
-                if res is None:
-                    return 0
-                else:
-                    return res[0]
-            except Exception as error:
-                print(error)
-        elif accountType == 'single_money':  # 查询用户单个账户数据
-            sql = "select {} from xs_user_money where uid={}".format(money_type, uid)
-            try:
-                conMysql.cur.execute(sql)
-                res = conMysql.cur.fetchone()
-                if len(res) > 0:
-                    return res[0]
-                else:
-                    return None
-            except Exception as error:
-                print(error)
-        elif accountType == 'sum_commodity':  # 查询用户背包物品总数
-            sql = 'select sum(num) from xs_user_commodity where uid ={}'.format(uid)
-            try:
-                conMysql.cur.execute(sql)
-                res = conMysql.cur.fetchone()
-                return int(res[0])
-            except Exception as error:
-                print(error)
-        elif accountType == 'num_commodity':  # 查询用户背包物品数量
-            sql = "select num from xs_user_commodity where cid={} and uid={}".format(cid, uid)
-            try:
-                conMysql.cur.execute(sql)
-                res = conMysql.cur.fetchone()
-                if res is None:
-                    return 0
-                else:
-                    return res[0]
-            except Exception as error:
-                print(error)
-        elif accountType == 'pay_room_money':  # 用户vip等级经验
-            sql = "select pay_room_money from xs_user_profile where uid={}".format(uid)
-            try:
-                conMysql.cur.execute(sql)
-                res = conMysql.cur.fetchone()
-                if res is None:
-                    return 0
-                else:
-                    return res[0]
-            except Exception as error:
-                print(error)
-        elif accountType == 'popularity':  # 用户人气等级经验
-            sql = "select popularity from xs_user_popularity where uid={}".format(uid)
-            try:
-                conMysql.cur.execute(sql)
-                res = conMysql.cur.fetchone()
-                if res is None:
-                    return 0
-                else:
-                    return res[0]
-            except Exception as error:
-                print(error)
-        elif accountType == 'id_commodity':  # 查询用户背包物品ID
-            sql = "select id from xs_user_commodity where cid={} and uid={}".format(cid, uid)
-            try:
-                conMysql.cur.execute(sql)
-                res = conMysql.cur.fetchone()
-                if len(res) > 0:
-                    return res[0]
-            except Exception as error:
-                print(error)
-        elif accountType == 'level':  # 查询用户爵位等级
-            sql = "select level from xs_user_title_new where uid={}".format(uid)
-            try:
-                conMysql.cur.execute(sql)
-                res = conMysql.cur.fetchone()
-                if len(res) > 0:
-                    return res[0]
-            except Exception as error:
-                print(error)
-        elif accountType == 'growth':  # 查询用户成长值
-            sql = "select growth from xs_user_title_new where uid={}".format(uid)
-            try:
-                conMysql.cur.execute(sql)
-                res = conMysql.cur.fetchone()
-                if len(res) > 0:
-                    return res[0]
-            except Exception as error:
-                print(error)
-        elif accountType == 'user_index':  # 查询用户salt
-            sql = "select salt from xs_user_index where uid = {}".format(uid)
-            try:
-                conMysql.cur.execute(sql)
-                res = conMysql.cur.fetchone()
-                if len(res) > 0:
-                    return res[0]
-            except Exception as error:
-                print(error)
-        elif accountType == 'relation_id':  # 查询用户守护关系id
-            sql = "select id from xs_relation_defend where uid={} and defend_uid={} and relation_id={}". \
-                format(payuid, uid, cid)
-            try:
-                conMysql.cur.execute(sql)
-                res = conMysql.cur.fetchone()
-                if res is None:
-                    return 0
-                if len(res) > 0:
-                    return res[0]
-            except Exception as error:
-                print(error)
-        elif accountType == 'relation_config':  # 查询守护关系配置
-            sql = "select id, name, money_value, break_money, upgrade_money from xs_relation_config where id={}".format(
-                uid)
-            try:
-                conMysql.cur.execute(sql)
-                res = conMysql.cur.fetchall()
-                column = [index[0] for index in conMysql.cur.description]
-                data_dict = [dict(zip(column, row)) for row in res]
-                return data_dict[0]
-            except Exception as error:
-                print(error)
-        elif accountType == 'union':
-            sql = " select rid from xs_chatroom where property='{}' limit 1".format(accountType)
-            try:
-                conMysql.cur.execute(sql)
-                res = conMysql.cur.fetchone()
+    def selectUserInfoSql(accountType: str, uid: str = "200000126", 
+                         money_type: str = 'money_cash_b', 
+                         cid: int = 263, 
+                         payuid: str = "200000128") -> Optional[Union[int, float, Dict, List]]:
+        """查询用户信息
+        
+        Args:
+            accountType: 账户类型
+            uid: 用户 ID
+            money_type: 货币类型
+            cid: 物品 ID
+            payuid: 支付用户 ID
+            
+        Returns:
+            查询结果
+        """
+        cursor = MySQLConnection.get_cursor()
+        
+        try:
+            if accountType == 'bean':  # 查询用户账户扩展表金豆余额
+                sql = f"SELECT money_coupon FROM xs_user_money_extend WHERE uid={uid}"
+                cursor.execute(sql)
+                res = cursor.fetchone()
+                return res[0] if res else 0
+                
+            elif accountType == 'cash':  # 查询用户账户扩展表现金余额
+                sql = f"SELECT cash FROM xs_user_money_extend WHERE uid={uid}"
+                cursor.execute(sql)
+                res = cursor.fetchone()
+                return res[0] if res else 0
+                
+            elif accountType == 'sum_money':  # 查询用户所有账户数据之和
+                sql = f"SELECT money+money_b+money_cash_b+money_cash FROM xs_user_money WHERE uid={uid}"
+                cursor.execute(sql)
+                res = cursor.fetchone()
+                return res[0] if res else 0
+                
+            elif accountType == 'single_money':  # 查询用户单个账户数据
+                sql = f"SELECT {money_type} FROM xs_user_money WHERE uid={uid}"
+                cursor.execute(sql)
+                res = cursor.fetchone()
+                return res[0] if res and len(res) > 0 else None
+                
+            elif accountType == 'sum_commodity':  # 查询用户背包物品总数
+                sql = f"SELECT SUM(num) FROM xs_user_commodity WHERE uid={uid}"
+                cursor.execute(sql)
+                res = cursor.fetchone()
+                return int(res[0]) if res else 0
+                
+            elif accountType == 'num_commodity':  # 查询用户背包物品数量
+                sql = f"SELECT num FROM xs_user_commodity WHERE cid={cid} AND uid={uid}"
+                cursor.execute(sql)
+                res = cursor.fetchone()
+                return res[0] if res else 0
+                
+            elif accountType == 'pay_room_money':  # 用户 VIP 等级经验
+                sql = f"SELECT pay_room_money FROM xs_user_profile WHERE uid={uid}"
+                cursor.execute(sql)
+                res = cursor.fetchone()
+                return res[0] if res else 0
+                
+            elif accountType == 'popularity':  # 用户人气等级经验
+                sql = f"SELECT popularity FROM xs_user_popularity WHERE uid={uid}"
+                cursor.execute(sql)
+                res = cursor.fetchone()
+                return res[0] if res else 0
+                
+            elif accountType == 'id_commodity':  # 查询用户背包物品 ID
+                sql = f"SELECT id FROM xs_user_commodity WHERE cid={cid} AND uid={uid}"
+                cursor.execute(sql)
+                res = cursor.fetchone()
+                return res[0] if res and len(res) > 0 else None
+                
+            elif accountType == 'level':  # 查询用户爵位等级
+                sql = f"SELECT level FROM xs_user_title_new WHERE uid={uid}"
+                cursor.execute(sql)
+                res = cursor.fetchone()
+                return res[0] if res and len(res) > 0 else None
+                
+            elif accountType == 'growth':  # 查询用户成长值
+                sql = f"SELECT growth FROM xs_user_title_new WHERE uid={uid}"
+                cursor.execute(sql)
+                res = cursor.fetchone()
+                return res[0] if res and len(res) > 0 else None
+                
+            elif accountType == 'user_index':  # 查询用户 salt
+                sql = f"SELECT salt FROM xs_user_index WHERE uid={uid}"
+                cursor.execute(sql)
+                res = cursor.fetchone()
+                return res[0] if res and len(res) > 0 else None
+                
+            elif accountType == 'relation_id':  # 查询用户守护关系 id
+                sql = (f"SELECT id FROM xs_relation_defend "
+                       f"WHERE uid={payuid} AND defend_uid={uid} AND relation_id={cid}")
+                cursor.execute(sql)
+                res = cursor.fetchone()
+                return res[0] if res else 0
+                
+            elif accountType == 'relation_config':  # 查询守护关系配置
+                sql = ("SELECT id, name, money_value, break_money, upgrade_money "
+                       f"FROM xs_relation_config WHERE id={uid}")
+                cursor.execute(sql)
+                res = cursor.fetchall()
+                columns = [desc[0] for desc in cursor.description]
+                data_dict = [dict(zip(columns, row)) for row in res]
+                return data_dict[0] if data_dict else None
+                
+            elif accountType == 'union':  # 查询联盟房
+                sql = f"SELECT rid FROM xs_chatroom WHERE property='union' LIMIT 1"
+                cursor.execute(sql)
+                res = cursor.fetchone()
                 if res is None:
                     raise EnvironmentError('库表无联盟房')
-                else:
-                    return res[0]
-            except Exception as error:
-                print(error)
-        elif accountType == 'vip':
-            sql = " select rid from xs_chatroom where property='{}' limit 1".format(accountType)
-            try:
-                conMysql.cur.execute(sql)
-                res = conMysql.cur.fetchone()
+                return res[0]
+                
+            elif accountType == 'vip':  # 查询个人房
+                sql = f"SELECT rid FROM xs_chatroom WHERE property='vip' LIMIT 1"
+                cursor.execute(sql)
+                res = cursor.fetchone()
                 if res is None:
                     raise EnvironmentError('库表无个人房')
-                else:
-                    return res[0]
-            except Exception as error:
-                print(error)
-        # elif accountType == 'fleet':
-        #     sql = " select rid from xs_chatroom where property='{}' limit 1".format(accountType)
-        #     try:
-        #         conMysql.cur.execute(sql)
-        #         res = conMysql.cur.fetchone()
-        #         if res is None:
-        #             raise EnvironmentError('库表无家族房')
-        #         else:
-        #             if res[0] != config.bb_user['fleetRid']:
-        #                 return res[0]
-        #             return res[1]
-        #     except Exception as error:
-        #         print(error)
-        elif accountType == 'pay_change':  # 查询用户消费记录数据
-            sql = 'select reason from xs_pay_change where uid={} order by id desc LIMIT 1'.format(uid)
-            try:
-                conMysql.cur.execute(sql)
-                res = conMysql.cur.fetchone()
-                res_dict = ast.literal_eval(res[0])
-                reason_value = '{}'.format(money_type)
-                if reason_value in res_dict.keys():
-                    return res_dict[reason_value]
-                else:
-                    return 0
-            except Exception as error:
-                print(error)
-        else:
-            print('{} Error'.format(accountType))
-
-    # 删除用户账户数据
-    @staticmethod
-    def deleteUserAccountSql(tableName, uid):
-        if tableName == 'user_commodity':  # 清除用户背包数据
-            sql = "delete from xs_user_commodity where uid={}".format(uid)
-            try:
-                conMysql.cur.execute(sql)
-            except Exception as error:
-                conMysql.con.rollback()
-                print('delete fail', error)
-            finally:
-                conMysql.con.commit()
-        elif tableName == 'user_title':  # 清除用户爵位数据
-            sql = "delete from xs_user_title where uid = {} limit 5".format(uid)
-            try:
-                conMysql.cur.execute(sql)
-            except Exception as error:
-                conMysql.con.rollback()
-                print('delete fail', error)
-            finally:
-                conMysql.con.commit()
-        # elif tableName == 'user_profile':  # 修改用户profile爵位数据
-        #     sql = "update xs_user_profile set title=0 where uid={} limit 1".format(uid)
-        #     try:
-        #         conMysql.cur.execute(sql)
-        #     except Exception as error:
-        #         conMysql.con.rollback()
-        #         print('update fail', error)
-        #     finally:
-        #         conMysql.con.commit()
-        elif tableName == 'pay_room_money':  # VIP 修改用户pay_room_money爵位数据
-            sql = "update xs_user_profile set pay_room_money=0 where uid={} limit 1".format(uid)
-            try:
-                conMysql.cur.execute(sql)
-            except Exception as error:
-                conMysql.con.rollback()
-                print('update fail', error)
-            finally:
-                conMysql.con.commit()
-        elif tableName == 'broker_user':  # 删除用户工会记录
-            sql = "delete from xs_broker_user where uid ={} limit 1".format(uid)
-            try:
-                conMysql.cur.execute(sql)
-            except Exception as error:
-                conMysql.con.rollback()
-                print('delete fail', error)
-            finally:
-                conMysql.con.commit()
-        elif tableName == 'chatroom':  # 删除用户商业房
-            sql = "delete from xs_chatroom where uid ={} limit 1".format(uid)
-            try:
-                conMysql.cur.execute(sql)
-            except Exception as error:
-                conMysql.con.rollback()
-                print('delete fail', error)
-            finally:
-                conMysql.con.commit()
-        elif tableName == 'user_box':  # 清除xs_user_box用户数据
-            sql = "delete from xs_user_box where uid={} limit 1".format(uid)
-            try:
-                conMysql.cur.execute(sql)
-            except Exception as error:
-                conMysql.con.rollback()
-                print('delete fail', error)
-            finally:
-                conMysql.con.commit()
-        elif tableName == 'user_title_new':  # xs_user_title_new每次跑都清一下subscribe_time，防止数据溢出
-            sql = "update xs_user_title_new set subscribe_time=0 where uid={} limit 1".format(uid)
-            try:
-                conMysql.cur.execute(sql)
-            except Exception as error:
-                conMysql.con.rollback()
-                print('update fail', error)
-            finally:
-                conMysql.con.commit()
-        elif tableName == 'user_popularity':  # 人气值
-            sql = "update xs_user_popularity set popularity=0 where uid ={};".format(uid)
-            try:
-                conMysql.cur.execute(sql)
-            except Exception as error:
-                conMysql.con.rollback()
-                print('update fail', error)
-            finally:
-                conMysql.con.commit()
-        elif tableName == 'pay_change':  # 送礼流水
-            sql = f"delete from xs_pay_change WHERE uid = {uid};"
-            try:
-                conMysql.cur.execute(sql)
-            except Exception as error:
-                conMysql.con.rollback()
-                print('update fail', error)
-            finally:
-                conMysql.con.commit()
-        else:
-            print('{} Error'.format(tableName))
-
-    # 更新用户数据
-    @staticmethod
-    def updateUserInfoSql(tableName, uid, level=10):
-        # if tableName == 'broker_user':  # 修改用户为打包结算主播
-        #     sql = "update xs_broker_user set bid={}, uid={}, state=1, pack_cal=1 where id = 50 limit 1".format(bid, uid)
-        #     try:
-        #         conMysql.cur.execute(sql)
-        #     except Exception as error:
-        #         conMysql.con.rollback()
-        #         print('update fail', error)
-        #     finally:
-        #         conMysql.con.commit()
-        #
-        # elif tableName == 'user_index':  # 修改用户xs_user_index:salt
-        #     dateline = int(time.time())
-        #     sql = "update xs_user_index set salt='{}', dateline={} where uid={} limit 1".format(bid, dateline, uid)
-        #     try:
-        #         conMysql.cur.execute(sql)
-        #     except Exception as error:
-        #         conMysql.con.rollback()
-        #         print('update fail', error)
-        #     finally:
-        #         conMysql.con.commit()
-        #
-        # # elif tableName == 'chatroom':  # 修改用户为房间房主
-        # #     sql = "update xs_chatroom set app_id=1, uid={}, settlement_channel='live', " \
-        # #           "room_factory_type='business-soundchat' where rid={} limit 1".format(uid, bid)
-        # #     try:
-        # #         conMysql.cur.execute(sql)
-        # #     except Exception as error:
-        # #         conMysql.con.rollback()
-        # #         print('update fail', error)
-        # #     finally:
-        # #         conMysql.con.commit()
-        #
-        # # elif tableName == 'super_chatroom':
-        # #     sql = "update xs_chatroom set type='super-voice-fresh',property='business',version=737,room_factory_type='super-voice-fresh'," \
-        # #           "room_module_id=73,settlement_channel='super-voice' where rid={}".format(uid)
-        # #     try:
-        # #         conMysql.cur.execute(sql)
-        # #     except Exception as error:
-        # #         conMysql.con.rollback()
-        # #         print('update fail', error)
-        # #     finally:
-        # #         conMysql.con.commit()
-        # # elif tableName == 'user_title_new':  #dev开通1个月贵族
-        # #     sql = "update xs_user_title_new set subscribe_time={},growth=10,level=10 where uid={} limit 1".format(time.time()+30*60*60,uid)
-        # #     try:
-        # #         conMysql.cur.execute(sql)
-        # #     except Exception as error:
-        # #         conMysql.con.rollback()
-        # #         print('update fail', error)
-        # #     finally:
-        # #         conMysql.con.commit()
-        # # elif tableName == 'level':  # 查询用户爵位等级
-        # #     sql = "update xs_user_title_new set level={} where uid={}".format(level,uid)
-        # #     try:
-        # #         conMysql.cur.execute(sql)
-        # #     except Exception as error:
-        # #         conMysql.con.rollback()
-        # #         print('update fail', error)
-        # #     finally:
-        # #         conMysql.con.commit()
-        if tableName == 'user_title_new':  # 修改用户爵位等级
-            jw_config = {
-                "0": 0,
-                "10": 0,
-                "20": 20000,
-                "30": 80000,
-                "40": 250000,
-                "50": 1000000,
-                "60": 2500000,
-                "70": 6500000,
-                "80": 15000000,
-                "90": 50000000,
-            }
-            subscribe_time = int(time.time()) + 1 * 24 * 60 * 60
-            sql = f"""update xs_user_title_new set level={level},growth={jw_config[str(level)]},effective_value={jw_config[str(level)]},subscribe_time={subscribe_time} where uid ={uid};"""
-            try:
-                conMysql.cur.execute(sql)
-            except Exception as error:
-                conMysql.con.rollback()
-                print('update fail', error)
-            finally:
-                conMysql.con.commit()
-        else:
-            print('{} Error'.format(tableName))
-
-    # # 检查xs_gift配置
-    # @staticmethod
-    # def checkXsGiftConfig():
-    #     sql = "update xs_gift set deleted=0 where id in {}".format(tuple(i for i in config.giftId.values()))
-    #     try:
-    #         conMysql.cur.execute(sql)
-    #     except Exception as error:
-    #         conMysql.con.rollback()
-    #         print('update fail', error)
-    #     finally:
-    #         conMysql.con.commit()
-
-    # 清空用户账户
-    @staticmethod
-    def updateUserMoneyClearSql(*uids):
-        try:
-            for uid in uids:
-                sql = "update xs_user_money set money=0, money_b=0, money_cash=0, money_cash_b=0, gold_coin=0, " \
-                      "money_debts=0 where uid={}".format(uid)
-                conMysql.cur.execute(sql)
-        except Exception as error:
-            conMysql.con.rollback()
-            print('update fail', error)
-        finally:
-            conMysql.con.commit()
-
-    # 更新用户账户余额
-    @staticmethod
-    def updateMoneySql(uid, money=0, money_cash=0, money_cash_b=0, money_b=0, gold_coin=0, money_debts=0):
-        sql = "update xs_user_money set money={}, money_b={}, money_cash={}, money_cash_b={},gold_coin={}, money_debts={} " \
-              "where uid={} limit 1".format(money, money_b, money_cash, money_cash_b, gold_coin, money_debts, uid)
-        try:
-            conMysql.cur.execute(sql)
-        except Exception as error:
-            conMysql.con.rollback()
-            print('update fail', error)
-        finally:
-            conMysql.con.commit()
-
-    # # 删除用户金豆账户数据
-    # @staticmethod
-    # def deleteUserBeanSql(*uids):
-    #     try:
-    #         for uid in uids:
-    #             sql = "delete from xs_user_money_extend where uid = {} limit 1".format(uid)
-    #             time.sleep(0.01)
-    #             conMysql.cur.execute(sql)
-    #             conMysql.con.commit()
-    #     except Exception as error:
-    #         conMysql.con.rollback()
-    #         print('delete fail', error)
-
-    # # 插入用户金豆余额
-    # @staticmethod
-    # def insertBeanSql(uid, money_coupon, cash=0, cash_lock=0):
-    #     sql = "insert into xs_user_money_extend(uid, money_coupon, cash, cash_lock) values({},{},{},{})" \
-    #         .format(uid, money_coupon, cash, cash_lock)
-    #     try:
-    #         conMysql.cur.execute(sql)
-    #     except Exception as error:
-    #         conMysql.con.rollback()
-    #         print('insert fail', error)
-    #     finally:
-    #         time.sleep(0.01)
-    #         conMysql.con.commit()
-    #
-    # # 更新箱子刷新物品
-    # @staticmethod
-    # def insertXsUserBox(uid, gift_cid=9, box_type='copper'):
-    #     sql = "insert into xs_user_box (last_refresh_cid, last_refresh_sub_cid, uid, type) values ({},{},{},'{}')" \
-    #         .format(gift_cid, gift_cid, uid, box_type)
-    #     try:
-    #         conMysql.cur.execute(sql)
-    #     except Exception as error:
-    #         conMysql.con.rollback()
-    #         print('update fail', error)
-    #     finally:
-    #         conMysql.con.commit()
-
-    # 用户背包增加测试数据
-    @staticmethod
-    def insertXsUserCommodity(uid, cid, num, state=0):
-        conMysql.checkXsCommodity(cid)
-        sql = "insert into xs_user_commodity (uid, cid, num, state) values ({}, {}, {}, {})".format(uid, cid, num,
-                                                                                                    state)
-        try:
-            conMysql.cur.execute(sql)
-        except Exception as error:
-            conMysql.con.rollback()
-            print('insert fail', error)
-        finally:
-            conMysql.con.commit()
-
-    @staticmethod
-    def checkXsCommodity(cid, name='青铜体验券'):
-        sql = "select name from xs_commodity where cid={}".format(cid)
-        conMysql.cur.execute(sql)
-        res = conMysql.cur.fetchone()
-        if res is None:
-            raise Exception('xs_commodity {}不存在'.format(name))
-
-    # 查询工会是否存在
-    @staticmethod
-    def checkUserXsBroker(bid):
-        sql = 'select * from xs_broker where bid={}'.format(bid)
-        try:
-            conMysql.cur.execute(sql)
-            res = conMysql.cur.fetchone()
-            if res is None:
-                sql = "insert into xs_broker (bid,app_id,bname,creater,dateline,types) values({}, {}, '{}', {}, {}, '{}')" \
-                    .format(bid, 1, '10086', bid, 1571481302, 'live')
-                try:
-                    conMysql.cur.execute(sql)
-                except Exception as error:
-                    conMysql.con.rollback()
-                    print('insert fail', error)
-            else:
-                sql = 'update xs_broker set creater={} where bid={} limit 1'.format(bid, bid)
-                try:
-                    conMysql.cur.execute(sql)
-                except Exception as error:
-                    conMysql.con.rollback()
-                    print('update fail', error)
-        except Exception as error:
-            print(error)
-        finally:
-            conMysql.con.commit()
-
-    # 查询用户是否是师父.不是就把他变成一代宗师（level=4，一代宗师）
-    @staticmethod
-    def checkUserXsMentorLevel(uid, level=4):
-        sql = 'select * from xs_mentor_exp where uid={}'.format(uid)
-        try:
-            conMysql.cur.execute(sql)
-            res = conMysql.cur.fetchone()
-            if res is None:
-                sql = 'insert into xs_mentor_exp (uid, level) values({}, {})'.format(uid, level)
-                try:
-                    conMysql.cur.execute(sql)
-                except Exception as error:
-                    conMysql.con.rollback()
-                    print('insert fail', error)
-            else:
-                sql = "update xs_mentor_exp set level={} where uid={} limit 1".format(level, uid)
-                try:
-                    conMysql.cur.execute(sql)
-                except Exception as error:
-                    conMysql.con.rollback()
-                    print('update fail', error)
-        except Exception as error:
-            print(error)
-        finally:
-            conMysql.con.commit()
-
-    # # 查询工会用户
-    # @staticmethod
-    # def checkUserBroker(uid, bid=136594717):
-    #     sql = 'select id from xs_broker_user where uid={}'.format(uid)
-    #     try:
-    #         conMysql.cur.execute(sql)
-    #         res = conMysql.cur.fetchone()
-    #         if res is None:
-    #             sql = "insert into xs_broker_user(bid, uid, state) values ({}, {}, 1)".format(bid, uid)
-    #             try:
-    #                 conMysql.cur.execute(sql)
-    #             except Exception as error:
-    #                 conMysql.con.rollback()
-    #                 print('insert fail', error)
-    #         else:
-    #             sql = 'update xs_broker_user set uid={}, bid={} where id={}'.format(uid, bid, res[0])
-    #             try:
-    #                 conMysql.cur.execute(sql)
-    #             except Exception as error:
-    #                 conMysql.con.rollback()
-    #                 print('update fail', error)
-    #     except Exception as error:
-    #         print(error)
-    #     finally:
-    #         conMysql.con.commit()
-
-    # # 查询用户分成比
-    # @staticmethod
-    # def checkBrokerUserRate(uid, creater, rate=100):
-    #     sql = 'select * from config.bbc_broker_user_rate where uid={}'.format(uid)
-    #     try:
-    #         conMysql.cur.execute(sql)
-    #         res = conMysql.cur.fetchone()
-    #         if res is None:
-    #             sql = 'insert into config.bbc_broker_user_rate (uid, broker_creater, rate) values({}, {}, {})' \
-    #                 .format(uid, creater, rate)
-    #             try:
-    #                 conMysql.cur.execute(sql)
-    #             except Exception as error:
-    #                 conMysql.con.rollback()
-    #                 print('insert fail', error)
-    #         else:
-    #             sql = "update config.bbc_broker_user_rate set rate={}, broker_creater={} where uid={} limit 1" \
-    #                 .format(rate, creater, uid)
-    #             try:
-    #                 conMysql.cur.execute(sql)
-    #             except Exception as error:
-    #                 conMysql.con.rollback()
-    #                 print('update fail', error)
-    #     except Exception as error:
-    #         print(error)
-    #     finally:
-    #         conMysql.con.commit()
-
-    # 查询rid的房间类型
-    @staticmethod
-    def checkRidFactoryType(rid):
-        sql = 'select room_factory_type from xs_chatroom where rid={}'.format(rid)
-        try:
-            conMysql.cur.execute(sql)
-            res = conMysql.cur.fetchone()
-            if len(res) > 0:
                 return res[0]
-            else:
-                return None
-        except Exception as error:
-            print(error)
-
-    # 修改大神认证 1=同意,0=不同意
-    @staticmethod
-    def updateUserGodSql(uid, agreement_version):
-        try:
-            sql = f"update xs_user_settings set agreement_version={agreement_version} where uid={uid}"
-            conMysql.cur.execute(sql)
-        except Exception as error:
-            conMysql.con.rollback()
-            print('update fail', error)
-        finally:
-            conMysql.con.commit()
-
-    # 查询甄选礼盒打赏数据
-    @staticmethod
-    def selectZxPayData(uid):
-        sql = f"""
-        SELECT JSON_EXTRACT(reason, '$.to') AS to_uid,JSON_EXTRACT(reason, '$.gid') AS gid,SUM(JSON_EXTRACT(reason, '$.num')) AS total_num FROM xs_pay_change WHERE uid = {uid} AND JSON_UNQUOTE(JSON_EXTRACT(reason, '$.obr')) IS NOT NULL GROUP BY gid, to_uid ORDER BY to_uid;
-        """
-        try:
-            cur = conMysql.con.cursor(cursor=pymysql.cursors.DictCursor)
-            cur.execute(sql)
-            res = cur.fetchall()
-            if res is None:
+                
+            elif accountType == 'pay_change':  # 查询用户消费记录数据
+                sql = f"SELECT reason FROM xs_pay_change WHERE uid={uid} ORDER BY id DESC LIMIT 1"
+                cursor.execute(sql)
+                res = cursor.fetchone()
+                if res:
+                    res_dict = ast.literal_eval(res[0])
+                    reason_value = str(money_type)
+                    return res_dict.get(reason_value, 0)
                 return 0
+                
             else:
-                return res
+                print(f'{accountType} Error')
+                return None
+                
         except Exception as error:
-            print(error)
+            print(f'Select error: {error}')
+            return None
+
+    # ============ 删除方法 ============
+    
+    @staticmethod
+    def deleteUserAccountSql(tableName: str, uid: str) -> None:
+        """删除用户账户数据
+        
+        Args:
+            tableName: 表名
+            uid: 用户 ID
+        """
+        cursor = MySQLConnection.get_cursor()
+        con = MySQLConnection.get_connection()
+        
+        sql_map = {
+            'user_commodity': f"DELETE FROM xs_user_commodity WHERE uid={uid}",
+            'user_title': f"DELETE FROM xs_user_title WHERE uid={uid} LIMIT 5",
+            'broker_user': f"DELETE FROM xs_broker_user WHERE uid={uid} LIMIT 1",
+            'chatroom': f"DELETE FROM xs_chatroom WHERE uid={uid} LIMIT 1",
+            'user_box': f"DELETE FROM xs_user_box WHERE uid={uid} LIMIT 1",
+        }
+        
+        update_map = {
+            'pay_room_money': f"UPDATE xs_user_profile SET pay_room_money=0 WHERE uid={uid} LIMIT 1",
+            'user_title_new': f"UPDATE xs_user_title_new SET subscribe_time=0 WHERE uid={uid} LIMIT 1",
+        }
+        
+        if tableName in sql_map:
+            try:
+                cursor.execute(sql_map[tableName])
+            except Exception as error:
+                con.rollback()
+                print(f'Delete fail: {error}')
+            finally:
+                con.commit()
+                
+        elif tableName in update_map:
+            try:
+                cursor.execute(update_map[tableName])
+            except Exception as error:
+                con.rollback()
+                print(f'Update fail: {error}')
+            finally:
+                con.commit()
+        else:
+            print(f'{tableName} Error')
+
+    # ============ 更新方法 ============
+    
+    @staticmethod
+    def updateUserRidInfoSql(property_rid: str, rid: int, area: str = 'en') -> None:
+        """更新房间属性
+        
+        Args:
+            property_rid: 属性 RID
+            rid: 房间 ID
+            area: 区域
+        """
+        sql = f"UPDATE xs_chatroom SET property='{property_rid}', area='{area}' WHERE rid={rid}"
+        MySQLConnection.get_cursor().execute(sql)
+        MySQLConnection.get_connection().commit()
 
     @staticmethod
-    def checkUserBroker(uid):
-        """校验是否是公会成员"""
-        sql = f'select * from xs_broker_user where uid={uid} and deleted=0;'
-        try:
-            conMysql.cur.execute(sql)
-            res = conMysql.cur.fetchone()
-            if res:
-                return True
-            else:
-                return False
-        except Exception as error:
-            print(error)
+    def updateUserBigArea(*uids: str, bigarea_id: int = 2) -> None:
+        """更新用户大区
+        
+        Args:
+            *uids: 用户 ID 列表
+            bigarea_id: 大区 ID
+        """
+        cursor = MySQLConnection.get_cursor()
+        con = MySQLConnection.get_connection()
+        
+        for uid in uids:
+            sql = f"UPDATE xs_user_bigarea SET bigarea_id={bigarea_id} WHERE uid IN ({uid})"
+            try:
+                cursor.execute(sql)
+                con.commit()
+            except Exception as error:
+                con.rollback()
+                print(f'Update bigarea fail: {error}')
 
+    @staticmethod
+    def updateUserLanguage(*uids: str, language: str = 'zh_CN', area_code: str = 'CN') -> None:
+        """更新用户语言
+        
+        Args:
+            *uids: 用户 ID 列表
+            language: 语言
+            area_code: 区域代码
+        """
+        cursor = MySQLConnection.get_cursor()
+        con = MySQLConnection.get_connection()
+        
+        for uid in uids:
+            sql = f"UPDATE xs_user_settings SET language='{language}', area_code='{area_code}' WHERE uid IN ({uid})"
+            try:
+                cursor.execute(sql)
+                con.commit()
+            except Exception as error:
+                con.rollback()
+                print(f'Update language fail: {error}')
 
-if __name__ == '__main__':
-    mysql = conMysql()
-    mysql.updateUserInfoSql('user_title_new', '200000048', level=40)
+    @staticmethod
+    def updateUserMoneyClearSql(*uids: str) -> None:
+        """清空用户账户余额
+        
+        Args:
+            *uids: 用户 ID 列表
+        """
+        cursor = MySQLConnection.get_cursor()
+        con = MySQLConnection.get_connection()
+        
+        for uid in uids:
+            sql = ("UPDATE xs_user_money SET money=0, money_b=0, money_cash=0, "
+                   "money_cash_b=0, gold_coin=0, money_debts=0, money_order=0, "
+                   f"money_order_b=0 WHERE uid={uid}")
+            try:
+                cursor.execute(sql)
+                con.commit()
+            except Exception as error:
+                con.rollback()
+                print(f'Clear money fail: {error}')
+
+    @staticmethod
+    def updateMoneySql(uid: str, money: int = 0, money_cash: int = 0, 
+                       money_cash_b: int = 0, money_b: int = 0, 
+                       gold_coin: int = 0, money_debts: int = 0) -> None:
+        """更新用户账户余额
+        
+        Args:
+            uid: 用户 ID
+            money: 金豆
+            money_cash: 现金
+            money_cash_b: 现金 B
+            money_b: 金豆 B
+            gold_coin: 金币
+            money_debts: 债务
+        """
+        sql = (f"UPDATE xs_user_money SET money={money}, money_b={money_b}, "
+               f"money_cash={money_cash}, money_cash_b={money_cash_b}, "
+               f"gold_coin={gold_coin}, money_debts={money_debts} "
+               f"WHERE uid={uid} LIMIT 1")
+        MySQLConnection.get_cursor().execute(sql)
+        MySQLConnection.get_connection().commit()
+
+    @staticmethod
+    def updateXsUserpopularity(uid: str) -> None:
+        """更新用户人气数据
+        
+        Args:
+            uid: 用户 ID
+        """
+        sql = f"UPDATE xs_user_popularity SET popularity=0 WHERE uid={uid}"
+        MySQLConnection.get_cursor().execute(sql)
+        MySQLConnection.get_connection().commit()
+
+    @staticmethod
+    def updateXsUserprofile_pay_room_money(uid: str) -> None:
+        """更新用户 VIP 数据
+        
+        Args:
+            uid: 用户 ID
+        """
+        sql = f"UPDATE xs_user_profile SET pay_room_money=0 WHERE uid={uid}"
+        MySQLConnection.get_cursor().execute(sql)
+        MySQLConnection.get_connection().commit()
+
+    # ============ 插入方法 ============
+    
+    @staticmethod
+    def insertXsUserCommodity(uid: str, cid: int, num: int, state: int = 0) -> None:
+        """用户背包增加数据
+        
+        Args:
+            uid: 用户 ID
+            cid: 物品 ID
+            num: 数量
+            state: 状态
+        """
+        sql = f"INSERT INTO xs_user_commodity (uid, cid, num, state) VALUES ({uid}, {cid}, {num}, {state})"
+        MySQLConnection.get_cursor().execute(sql)
+        MySQLConnection.get_connection().commit()
+
+    @staticmethod
+    def insertXsUserBox(uid: str, gift_cid: int = 2505, box_type: str = 'copper') -> None:
+        """更新箱子刷新物品
+        
+        Args:
+            uid: 用户 ID
+            gift_cid: 礼物 ID
+            box_type: 箱子类型
+        """
+        sql = f"INSERT INTO xs_user_box (last_refresh_cid, last_refresh_sub_cid, uid, type) VALUES ({gift_cid}, {gift_cid}, {uid}, '{box_type}')"
+        MySQLConnection.get_cursor().execute(sql)
+        MySQLConnection.get_connection().commit()
+
+    # ============ 检查配置 ============
+    
+    @staticmethod
+    def checkXsGiftConfig(gift_ids: Tuple[int, ...]) -> None:
+        """检查礼物配置
+        
+        Args:
+            gift_ids: 礼物 ID 元组
+        """
+        sql = f"UPDATE xs_gift SET deleted=0 WHERE id IN {gift_ids}"
+        MySQLConnection.get_cursor().execute(sql)
+        MySQLConnection.get_connection().commit()
+
+    # ============ 专用查询方法 ============
+    
+    @staticmethod
+    def select_greedy_prize(uid: str, round_id: int) -> Tuple:
+        """查询摩天轮开奖数据
+        
+        Args:
+            uid: 用户 ID
+            round_id: 回合 ID
+            
+        Returns:
+            (counter, prize) 元组
+        """
+        sql = f"SELECT counter, prize FROM xs_greedy_round_player_v2 WHERE uid={uid} AND round_id={round_id}"
+        res = MySQLConnection.get_cursor().execute(sql)
+        return res if res else 0
+
+    @staticmethod
+    def select_user_chatroom(property: str, bigarea_id: int = 1) -> int:
+        """查询大区房间信息
+        
+        Args:
+            property: 属性
+            bigarea_id: 大区 ID
+            
+        Returns:
+            房间 RID
+        """
+        sql = (f"SELECT rid FROM xs_chatroom a "
+               f"LEFT JOIN xs_user_bigarea b ON a.uid=b.uid "
+               f"WHERE a.property='{property}' AND b.bigarea_id={bigarea_id} LIMIT 1")
+        res = MySQLConnection.get_cursor().execute(sql)
+        return res[0] if res else 0
+
+    @staticmethod
+    def sqlXsUserpopularity(uid: str) -> int:
+        """查询用户人气数据
+        
+        Args:
+            uid: 用户 ID
+            
+        Returns:
+            人气值
+        """
+        sql = f"SELECT popularity FROM xs_user_popularity WHERE uid={uid}"
+        res = MySQLConnection.get_cursor().execute(sql)
+        return res[0] if res else 0
+
+    @staticmethod
+    def sqlXsUserprofile_pay_room_money(uid: str) -> int:
+        """查询用户 VIP 数据
+        
+        Args:
+            uid: 用户 ID
+            
+        Returns:
+            VIP 经验值
+        """
+        sql = f"SELECT pay_room_money FROM xs_user_profile WHERE uid={uid}"
+        res = MySQLConnection.get_cursor().execute(sql)
+        return res[0] if res else 0
