@@ -6,9 +6,9 @@ from common.Config import config
 
 
 class YamlReader:
-    """YAML文件读取器"""
+    """YAML 文件读取器"""
 
-    # 使用SafeLoader的节点列表
+    # 使用 SafeLoader 的节点列表
     SAFE_LOADER_NODES = ['ali', 'ali-slp']
 
     @classmethod
@@ -18,10 +18,10 @@ class YamlReader:
 
     @classmethod
     def _get_loader(cls):
-        """根据环境获取YAML加载器"""
+        """根据环境获取 YAML 加载器"""
         import platform
         node = platform.node()
-        if any(node == config.linux_node.get(n) for n in cls.SAFE_LOADER_NODES):
+        if any(node == config.linux_node[n] for n in cls.SAFE_LOADER_NODES):
             return yaml.SafeLoader
         return None
 
@@ -47,10 +47,17 @@ class YamlReader:
         try:
             loader = cls._get_loader()
             with open(yaml_path, 'r', encoding='utf-8') as f:
-                yaml_data = yaml.load(f, Loader=loader) if loader else yaml.load(f)
+                if loader:
+                    yaml_data = yaml.load(f, Loader=loader)
+                else:
+                    yaml_data = yaml.load(f, Loader=yaml.FullLoader)
 
             return yaml_data.get(key) if yaml_data else None
 
         except Exception as e:
             print(f"Error reading YAML: {e}")
             return None
+
+
+# 向后兼容的别名
+Yaml = YamlReader
