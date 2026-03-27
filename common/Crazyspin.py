@@ -1,4 +1,11 @@
+# coding=utf-8
+"""
+疯狂转盘模块
+
+提供转盘抽奖相关的 URL 构建和 HTTP 请求功能。
+"""
 import urllib.parse
+from typing import Dict, Any
 import requests
 import urllib3
 from common.Config import config
@@ -9,7 +16,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 # 默认请求参数
-DEFAULT_PARAMS = {
+DEFAULT_PARAMS: Dict[str, str] = {
     'package': 'com.imbb.oversea.android',
     '_ipv': '0',
     '_platform': 'android',
@@ -19,7 +26,7 @@ DEFAULT_PARAMS = {
 }
 
 # 默认请求头
-DEFAULT_HEADERS = {
+DEFAULT_HEADERS: Dict[str, str] = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36",
     "Content-Type": "application/x-www-form-urlencoded",
     'Connection': 'close',
@@ -27,24 +34,46 @@ DEFAULT_HEADERS = {
 
 
 class CrazySpin:
-    """操作类"""
+    """疯狂转盘操作类"""
 
     @staticmethod
-    def _build_url(endpoint: str, params: dict) -> str:
-        """构建完整URL"""
-        base_url = config.pt_host + endpoint
+    def _build_url(endpoint: str, params: Dict[str, Any]) -> str:
+        """构建完整 URL
+        
+        Args:
+            endpoint: API 端点
+            params: 请求参数
+            
+        Returns:
+            完整的 URL
+        """
+        base_url = config.app_host + endpoint
         return f"{base_url}?{urllib.parse.urlencode(params)}"
 
     @staticmethod
-    def _build_headers(token_name: str = 'dev') -> dict:
-        """构建请求头"""
+    def _build_headers(token_name: str = 'dev') -> Dict[str, str]:
+        """构建请求头
+        
+        Args:
+            token_name: Token 名称
+            
+        Returns:
+            请求头字典
+        """
         headers = DEFAULT_HEADERS.copy()
         headers["user-token"] = Session.checkUserToken(operate='read', app_name=token_name)
         return headers
 
     @staticmethod
     def spin_buy_url(uid: int) -> str:
-        """获取购买URL"""
+        """获取购买 URL
+        
+        Args:
+            uid: 用户 ID
+            
+        Returns:
+            购买 URL
+        """
         params = {
             **DEFAULT_PARAMS,
             '_index': '218',
@@ -56,7 +85,14 @@ class CrazySpin:
 
     @staticmethod
     def spin_play_url(uid: int) -> str:
-        """获取抽奖URL"""
+        """获取抽奖 URL
+        
+        Args:
+            uid: 用户 ID
+            
+        Returns:
+            抽奖 URL
+        """
         params = {
             **DEFAULT_PARAMS,
             '_index': '878',
@@ -67,8 +103,17 @@ class CrazySpin:
         return CrazySpin._build_url('/go/party/turntable/draw', params)
 
     @staticmethod
-    def get_turntable_list(rid: int, uid: int, token_name: str = 'dev'):
-        """获取转盘列表"""
+    def get_turntable_list(rid: int, uid: int, token_name: str = 'dev') -> requests.Response:
+        """获取转盘列表
+        
+        Args:
+            rid: 房间 ID
+            uid: 用户 ID
+            token_name: Token 名称
+            
+        Returns:
+            HTTP 响应对象
+        """
         params = {
             **DEFAULT_PARAMS,
             'rid': rid,
@@ -77,13 +122,21 @@ class CrazySpin:
             '_sign': '12c5970528bf21e8aac9586534606432',
             '_blid': uid,
         }
-        url = config.pt_host + '/go/party/turntable/list'
+        url = config.app_host + '/go/party/turntable/list'
         headers = CrazySpin._build_headers(token_name)
         return requests.get(url, params=params, headers=headers)
 
     @staticmethod
-    def get_turntable_horn(uid: int, token_name: str = 'dev'):
-        """获取转盘喇叭"""
+    def get_turntable_horn(uid: int, token_name: str = 'dev') -> requests.Response:
+        """获取转盘喇叭
+        
+        Args:
+            uid: 用户 ID
+            token_name: Token 名称
+            
+        Returns:
+            HTTP 响应对象
+        """
         params = {
             **DEFAULT_PARAMS,
             'turntable_type': 1,
@@ -92,7 +145,7 @@ class CrazySpin:
             '_sign': '12c5970528bf21e8aac9586534606432',
             '_blid': uid,
         }
-        url = config.pt_host + '/go/party/turntable/horn'
+        url = config.app_host + '/go/party/turntable/horn'
         headers = CrazySpin._build_headers(token_name)
         headers['Connection'] = ''  # 特殊处理
         return requests.get(url, params=params, headers=headers)
