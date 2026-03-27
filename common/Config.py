@@ -100,7 +100,7 @@ class PTUserConfig:
 
 @dataclass
 class PTRoomConfig:
-    """APP房间配置"""
+    """APP 房间配置"""
     business_joy: int = 105699329
     vip_rid: int = 105698376
     th_union: int = 105708881
@@ -111,6 +111,10 @@ class PTRoomConfig:
     union_ar: int = 105713367
     business_joy_vi: int = 105726676
     union_vi: int = 105718889
+    
+    def __getitem__(self, key):
+        """支持下标访问"""
+        return getattr(self, key, None)
 
 
 @dataclass
