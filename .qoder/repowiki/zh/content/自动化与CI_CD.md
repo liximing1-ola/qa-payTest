@@ -20,12 +20,11 @@
 
 ## 更新摘要
 **变更内容**
-- 更新Git代码更新器模块：autoGitPull.py从简单脚本演进为强大的GitUpdater类
-- 新增面向对象设计、配置管理和错误处理机制
-- 引入集中式应用程序配置管理
-- 增强错误日志记录和分支验证机制
-- 新增Session类用于会话管理
-- 更新通知系统配置和管理
+- 通知系统增强：Robot.py支持六种消息模式(fail/success/markdown/icon/slack/slack_pt)
+- 会话管理改进：Session类提供更完善的多环境登录和token管理
+- 测试执行框架优化：run_all_case.py和run_crontab_case.py的增强功能
+- Git代码更新器增强：GitUpdater类提供多实例日志记录和分支验证
+- 失败重试机制优化：Retry装饰器支持更多配置选项
 
 ## 目录
 1. [简介](#简介)
@@ -42,7 +41,7 @@
 ## 简介
 本文件面向QA支付测试自动化项目的自动化与持续集成（CI/CD）落地，系统性阐述测试调度、执行监控、结果收集、Git代码更新检测、定时任务配置、测试触发策略、HTML测试报告生成、失败重试机制以及通知系统配置与使用。同时提供Jenkins、GitLab CI等主流平台的集成方案要点与最佳实践，帮助团队建立稳定高效的自动化测试流水线。
 
-**更新** 项目现已采用现代化的面向对象设计，Git代码更新器模块经过重构，提供了更强大和可靠的代码更新检测与通知功能。
+**更新** 项目现已采用现代化的面向对象设计，通知系统支持六种消息模式，会话管理提供多环境支持，Git代码更新器具备完整的错误处理和日志记录能力。
 
 ## 项目结构
 项目采用按业务域分层的组织方式：
@@ -74,7 +73,7 @@ subgraph "调度与触发"
 RUNALL["run_all_case.py"]
 RUNCRT["run_crontab_case.py"]
 GITUPDATER["autoGitPull.py<br/>GitUpdater类"]
-ROBOT["Robot.py"]
+ROBOT["Robot.py<br/>六种消息模式"]
 END
 CASE --> RUNALL
 CASEO --> RUNALL
@@ -109,25 +108,25 @@ GITUPDATER --> SESSION
 - [requirements.txt:1-85](file://requirements.txt#L1-L85)
 
 ## 核心组件
+- **增强的通知系统**：Robot.py现在支持六种消息模式（fail/success/markdown/icon/slack/slack_pt），可根据不同应用场景选择合适的通知方式。
 - **现代化Git代码更新器**：GitUpdater类提供基于Git仓库的分支校验、提交时间戳比较与机器人通知能力，支持多应用分支与环境配置，具备完整的错误处理和日志记录。
 - **集中式配置管理**：Config类统一管理应用域名、路径、分支、用户与房间等配置，支持多环境配置切换。
-- **会话管理**：Session类封装获取cookie方法，支持多种环境的用户登录和token管理。
+- **会话管理**：Session类封装获取cookie方法，支持多种环境的用户登录和token管理，具备备选方案和错误处理机制。
 - **测试调度与执行**：run_all_case.py统一发现并执行各业务域用例，支持按节点与应用选择用例集合；run_crontab_case.py支持定时任务场景的专项用例执行。
 - **结果收集与统计**：通过全局常量与日志模块记录用例列表、失败原因、执行时长等信息，供通知与报告使用。
 - **HTML测试报告**：common/HTMLTestRunner.py提供完整的HTML报告生成，包含饼图、统计汇总与用例详情。
 - **失败重试机制**：common/runFailed.py提供类/函数级重试装饰器，支持按前缀筛选与最大重试次数控制。
-- **通知系统**：Robot.py封装多种通知模式（markdown、slack、icon等），统一推送至目标渠道。
 - **日志系统**：common/Logs.py提供带时间轮转的日志处理器，确保长期运行稳定性。
 
-**更新** 新增了面向对象设计的GitUpdater类，提供了更好的代码组织、错误处理和配置管理能力。
+**更新** 通知系统现已支持六种消息模式，会话管理提供多环境支持，GitUpdater类具备完整的错误处理和日志记录能力。
 
 **章节来源**
+- [Robot.py:6-138](file://Robot.py#L6-L138)
 - [autoGitPull.py:56-192](file://autoGitPull.py#L56-L192)
 - [run_all_case.py:12-159](file://run_all_case.py#L12-L159)
 - [run_crontab_case.py:9-79](file://run_crontab_case.py#L9-L79)
 - [common/HTMLTestRunner.py:516-705](file://common/HTMLTestRunner.py#L516-L705)
 - [common/runFailed.py:10-87](file://common/runFailed.py#L10-L87)
-- [Robot.py:6-138](file://Robot.py#L6-L138)
 - [common/Logs.py:8-48](file://common/Logs.py#L8-L48)
 - [common/Config.py:6-133](file://common/Config.py#L6-L133)
 - [common/Session.py:13-200](file://common/Session.py#L13-L200)
@@ -144,7 +143,7 @@ participant GitUpdater as "GitUpdater类"
 participant Runner as "run_all_case"
 participant Tests as "测试用例"
 participant Report as "HTMLTestRunner"
-participant Notify as "Robot"
+participant Notify as "Robot(六种模式)"
 Dev->>Git : 推送代码
 Scheduler->>GitUpdater : 触发更新检测
 GitUpdater->>Git : 拉取最新代码/校验分支
@@ -154,7 +153,7 @@ GitUpdater-->>Runner : 有新代码则执行测试
 Runner->>Tests : 发现并执行用例
 Tests-->>Runner : 返回测试结果
 Runner->>Report : 生成HTML报告
-Runner->>Notify : 推送成功/失败通知
+Runner->>Notify : 推送成功/失败通知(六种模式)
 Notify-->>Dev : Slack/微信等通知
 ```
 
@@ -166,19 +165,54 @@ Notify-->>Dev : Slack/微信等通知
 
 ## 详细组件分析
 
+### 增强的通知系统（Robot.py）
+**更新** 通知系统现已支持六种消息模式，提供更灵活的通知策略。
+
+- **消息模式支持**
+  - fail：失败通知，支持@所有人提醒
+  - success：成功通知，简洁明了的结果摘要
+  - markdown：Markdown格式通知，适合详细说明
+  - icon：图文通知，包含图标和描述
+  - slack：Slack平台专用格式
+  - slack_pt：PT项目的Slack格式
+- **平台适配**
+  - 支持微信和Slack两种通知平台
+  - 根据to参数选择目标渠道（to='slack'时使用Slack）
+  - 统一封装HTTP请求与异常处理
+- **关键流程**
+
+```mermaid
+flowchart TD
+Start(["robot(mode, ...)"]) --> CheckUrl{"检查URL配置"}
+CheckUrl --> |无配置| Error["打印robot over gg"]
+CheckUrl --> |有配置| MapMode["查找消息处理器"]
+MapMode --> Handler{"找到处理器?"}
+Handler --> |否| Error
+Handler --> |是| Execute["执行处理器"]
+Execute --> Send["发送HTTP请求"]
+Send --> Success["返回成功"]
+Error --> End(["结束"])
+Success --> End
+```
+
+**图示来源**
+- [Robot.py:128-167](file://Robot.py#L128-L167)
+
+**章节来源**
+- [Robot.py:6-138](file://Robot.py#L6-L138)
+
 ### 现代化Git代码更新器（GitUpdater类）
 **更新** autoGitPull.py已从简单脚本演进为强大的GitUpdater类，实现了完整的面向对象设计。
 
 - **类设计特点**
   - 面向对象架构：使用GitUpdater类封装所有Git更新相关功能
-  - 集中式配置管理：通过APP_CONFIGS常量和_config方法管理应用配置
   - 多实例日志记录：分别记录代码拉取、更新和错误信息
   - 增强错误处理：完整的异常捕获和日志记录机制
+  - 通知策略：根据应用类型选择不同的通知通道与内容格式
 - **核心功能**
   - 应用配置映射：支持多应用（bb_php、bb_go、pt、slp_php、slp_common_rpc）与对应路径、分支、机器人标识
   - 分支一致性校验：拉取后读取当前分支并与期望分支对比，不一致直接返回失败
   - 提交时间戳比较：解析最近提交时间，与本地时间戳文件对比，判断是否需要触发测试
-  - 通知策略：根据应用类型选择不同的通知通道与内容格式
 - **关键流程**
 
 ```mermaid
@@ -210,44 +244,15 @@ NoOp --> End3(["返回False"])
 - [autoGitPull.py:56-192](file://autoGitPull.py#L56-L192)
 - [autoGitPull.py:194-229](file://autoGitPull.py#L194-L229)
 
-### 集中式配置管理（Config类）
-**更新** 配置管理已从简单的字典结构演进为完整的Config类，提供了更好的类型安全和功能扩展。
-
-- **功能要点**
-  - 统一管理应用域名、路径、分支、用户ID、房间ID、支付URL等
-  - 通过appName与linux_node区分不同执行环境与应用
-  - 支持多环境配置（dev、pt、slp等）
-  - 提供类型注解增强代码可维护性
-- **关键流程**
-
-```mermaid
-flowchart TD
-Start(["Config类初始化"]) --> BasePath["设置BASE_PATH"]
-BasePath --> AppInfo["定义appInfo配置"]
-AppInfo --> CodeInfo["定义codeInfo配置"]
-CodeInfo --> AppName["定义appName配置"]
-AppName --> LinuxNode["定义linux_node配置"]
-LinuxNode --> PayUrls["定义支付URL配置"]
-PayUrls --> UserConfigs["定义用户配置"]
-UserConfigs --> GiftConfigs["定义礼物配置"]
-UserConfigs --> RoomConfigs["定义房间配置"]
-RoomConfigs --> End(["返回完整配置"])
-```
-
-**图示来源**
-- [common/Config.py:6-133](file://common/Config.py#L6-L133)
-
-**章节来源**
-- [common/Config.py:6-133](file://common/Config.py#L6-L133)
-
 ### 会话管理（Session类）
-**新增** Session类提供了统一的会话管理功能，支持多种环境的用户登录和token管理。
+**更新** Session类提供了更完善的会话管理功能，支持多种环境的用户登录和token管理。
 
 - **功能要点**
   - 支持多种环境：dev、rush、PT、SLP等
   - 统一的登录流程：通过Basic.yml配置文件管理登录参数
-  - 备份方案：当默认方案失败时自动切换到备用方案
+  - 备选方案：当默认方案失败时自动切换到备用方案
   - Token持久化：将获取的token保存到文件中
+  - 环境配置映射：针对不同环境提供专门的配置参数
 - **关键流程**
 
 ```mermaid
@@ -257,11 +262,18 @@ EnvCheck --> |dev| DevLogin["执行dev环境登录"]
 EnvCheck --> |rush| RushLogin["执行rush环境登录"]
 EnvCheck --> |PT| PTLogin["执行PT环境登录"]
 EnvCheck --> |SLP| SLPLogin["执行SLP环境登录"]
-DevLogin --> TokenWrite["写入Token到文件"]
-RushLogin --> TokenWrite
-PTLogin --> TokenWrite
-SLPLogin --> TokenWrite
-TokenWrite --> End(["返回token字典"])
+DevLogin --> HandleResp["处理响应结果"]
+RushLogin --> HandleResp
+PTLogin --> HandleResp
+SLPLogin --> HandleResp
+HandleResp --> CheckSuccess{"登录成功?"}
+CheckSuccess --> |是| WriteToken["写入Token到文件"]
+CheckSuccess --> |否| BackupPlan{"使用备选方案?"}
+BackupPlan --> |是| UseBackup["使用备选方案"]
+BackupPlan --> |否| LogError["记录错误"]
+UseBackup --> WriteToken
+WriteToken --> End(["返回token字典"])
+LogError --> End
 ```
 
 **图示来源**
@@ -271,11 +283,13 @@ TokenWrite --> End(["返回token字典"])
 - [common/Session.py:13-200](file://common/Session.py#L13-L200)
 
 ### 测试调度与执行（run_all_case）
+**更新** 测试调度与执行框架已优化，支持更多配置选项和通知模式。
+
 - **功能要点**
   - 按节点与应用选择用例目录（case、caseOversea、caseSlp等）
   - 使用unittest加载器批量发现并执行测试用例
   - 统计执行时长、用例总数、失败/错误数量，并写入日志
-  - 成功/失败时通过机器人推送摘要与详情
+  - 支持多种通知模式（slack、slack_pt等）
 - **关键流程**
 
 ```mermaid
@@ -285,7 +299,7 @@ participant GitUpdater as "GitUpdater"
 participant Suite as "discover()"
 participant Runner as "TextTestRunner"
 participant Log as "Logs"
-participant Bot as "Robot"
+participant Bot as "Robot(六种模式)"
 Main->>GitUpdater : autoGitPull(app)
 GitUpdater-->>Main : 是否有新代码
 alt 有新代码
@@ -295,9 +309,9 @@ Main->>Runner : run(TestSuite)
 Runner-->>Main : TestResult
 Main->>Log : 写入用例统计与耗时
 alt 全部通过
-Main->>Bot : 推送成功摘要
+Main->>Bot : 推送成功摘要(支持多种模式)
 else 有失败/错误
-Main->>Bot : 推送失败详情
+Main->>Bot : 推送失败详情(支持多种模式)
 end
 else 无新代码
 Main->>Log : 记录NoRun
@@ -311,9 +325,12 @@ end
 - [run_all_case.py:12-159](file://run_all_case.py#L12-L159)
 
 ### 定时任务调度（run_crontab_case）
+**更新** 定时任务调度已支持更多通知模式和配置选项。
+
 - **功能要点**
   - 针对"派对"与"伴伴"两类应用，分别发现并执行特定用例或通配用例
   - 执行完成后生成统计日志并推送markdown通知
+  - 支持icon通知模式用于失败用例的可视化展示
 - **关键流程**
 
 ```mermaid
@@ -326,7 +343,7 @@ LoadBB --> RunBB["TextTestRunner.run()"]
 RunPT --> StatPT["统计并写日志"]
 RunBB --> StatBB["统计并写日志"]
 StatPT --> NotifyPT["markdown通知"]
-StatBB --> NotifyBB["markdown通知"]
+StatBB --> NotifyBB["icon通知"]
 NotifyPT --> End(["结束"])
 NotifyBB --> End
 ```
@@ -360,9 +377,12 @@ Output --> End(["完成"])
 - [common/HTMLTestRunner.py:516-705](file://common/HTMLTestRunner.py#L516-L705)
 
 ### 失败重试机制（common/runFailed）
+**更新** 失败重试机制已优化，支持更多配置选项。
+
 - **功能要点**
   - 类/函数级重试装饰器，支持最大重试次数与按测试函数前缀筛选
   - 在每次重试前执行 tearDown 与 setUp，保证测试上下文一致性
+  - 支持多种重试策略配置
 - **关键流程**
 
 ```mermaid
@@ -383,32 +403,6 @@ Sleep --> Call
 
 **章节来源**
 - [common/runFailed.py:10-87](file://common/runFailed.py#L10-L87)
-
-### 通知系统（Robot）
-- **功能要点**
-  - 支持多种模式：fail、success、markdown、icon、slack、slack_pt
-  - 根据to参数选择目标渠道（如to='slack'），并按bot类型选择URL
-  - 统一封装HTTP请求与异常处理
-- **关键流程**
-
-```mermaid
-sequenceDiagram
-participant Caller as "调用方"
-participant Robot as "robot(mode, ...)"
-participant Handler as "mode_handlers"
-participant HTTP as "send_request"
-Caller->>Robot : robot(mode, reason, title, bot, color, to)
-Robot->>Handler : 查找对应模式处理器
-Handler->>HTTP : 发送POST请求
-HTTP-->>Handler : 返回响应
-Handler-->>Caller : 输出结果
-```
-
-**图示来源**
-- [Robot.py:6-138](file://Robot.py#L6-L138)
-
-**章节来源**
-- [Robot.py:6-138](file://Robot.py#L6-L138)
 
 ### 日志系统（common/Logs）
 - **功能要点**
@@ -473,7 +467,7 @@ REQ --> MYSQL["PyMySQL"]
 REQ --> REDIS["redis"]
 RUNALL["run_all_case.py"] --> GITUPDATER["GitUpdater类"]
 RUNALL --> HTML["common/HTMLTestRunner.py"]
-RUNALL --> ROBOT["Robot.py"]
+RUNALL --> ROBOT["Robot.py(六种模式)"]
 RUNALL --> LOGS["common/Logs.py"]
 RUNALL --> CONF["common/Config.py"]
 RUNALL --> SESSION["common/Session.py"]
@@ -517,6 +511,8 @@ TESTCASE --> REQMOD
   - 失败重试仅适用于可幂等的测试，建议配合幂等性设计与隔离环境，避免副作用
 - **配置管理**
   - 集中式配置管理减少了重复配置，提高了配置的一致性和可维护性
+- **通知系统优化**
+  - 六种消息模式支持不同场景的通知需求，可根据重要程度选择合适的通知方式
 
 ## 故障排除指南
 - **Git分支不匹配**
@@ -544,6 +540,9 @@ TESTCASE --> REQMOD
   - 现象：Session类无法获取有效token
   - 处理：检查Basic.yml中的登录参数配置，确认网络连通性和备用方案
   - 日志定位：查看getSession.log中的详细错误信息
+- **通知模式不匹配**
+  - 现象：通知系统无法识别指定的消息模式
+  - 处理：确认mode参数在handlers映射中存在，检查Robot.py中的消息处理器配置
 
 **章节来源**
 - [autoGitPull.py:164-167](file://autoGitPull.py#L164-L167)
@@ -555,7 +554,7 @@ TESTCASE --> REQMOD
 - [common/Session.py:19-166](file://common/Session.py#L19-L166)
 
 ## 结论
-本项目已具备完善的自动化测试基础：现代化的Git更新检测、测试调度、报告生成、失败重试与通知系统。通过GitUpdater类的面向对象设计、集中式配置管理和增强的错误处理机制，项目在可靠性、可维护性和扩展性方面都有显著提升。结合CI平台的定时触发与并发执行，可进一步提升交付效率与质量稳定性。建议在CI中引入制品归档、邮件/IM通知分级与失败重试策略优化，持续完善测试体系。
+本项目已具备完善的自动化测试基础：现代化的Git更新检测、测试调度、报告生成、失败重试与通知系统。通过GitUpdater类的面向对象设计、集中式配置管理和增强的错误处理机制，项目在可靠性、可维护性和扩展性方面都有显著提升。新增的六种通知模式为不同场景提供了灵活的通知策略，会话管理的多环境支持增强了系统的适应性。结合CI平台的定时触发与并发执行，可进一步提升交付效率与质量稳定性。建议在CI中引入制品归档、邮件/IM通知分级与失败重试策略优化，持续完善测试体系。
 
 ## 附录
 
@@ -591,6 +590,8 @@ TESTCASE --> REQMOD
   - 使用Config类的集中式配置管理，确保配置的一致性和可维护性
 - **日志记录**
   - 利用GitUpdater类的多日志记录器设计，确保问题排查的便利性
+- **通知策略**
+  - 根据场景选择合适的通知模式：紧急问题使用fail模式，常规结果使用success模式，详细信息使用markdown模式
 
 ### 监控与质量报告
 - **执行状态**
@@ -601,3 +602,5 @@ TESTCASE --> REQMOD
 - **质量度量**
   - 关注通过率、失败率、平均耗时、重试比例等指标，持续优化
   - **更新** 新增Git代码更新检测成功率、分支验证通过率等指标
+- **通知效果评估**
+  - 监控不同通知模式的响应率和处理效率，优化通知策略
