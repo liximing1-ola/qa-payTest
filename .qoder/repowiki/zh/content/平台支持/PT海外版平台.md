@@ -15,7 +15,11 @@
 - [caseOversea/test_pt_openBox.py](file://caseOversea/test_pt_openBox.py)
 - [caseOversea/test_pt_package.py](file://caseOversea/test_pt_package.py)
 - [caseOversea/test_pt_bean.py](file://caseOversea/test_pt_bean.py)
-- [caseOversea/test_pt_blind.py](file://caseOversea/test_pt_blind.py)
+- [caseOversea/test_pt_chatGift.py](file://caseOversea/test_pt_chatGift.py)
+- [caseOversea/test_pt_defend.py](file://caseOversea/test_pt_defend.py)
+- [caseOversea/test_pt_crazySpin.py](file://caseOversea/test_pt_crazySpin.py)
+- [caseOversea/test_pt_planet.py](file://caseOversea/test_pt_planet.py)
+- [caseOversea/test_pt_vipRenqi.py](file://caseOversea/test_pt_vipRenqi.py)
 </cite>
 
 ## 目录
@@ -32,7 +36,9 @@
 11. [附录](#附录)
 
 ## 简介
-本技术文档面向PT海外版平台的支付测试能力，系统梳理支付流程、多语言与区域化配置、余额兑换金豆、商城购买、盲盒开箱、礼包购买等场景的实现细节，解释PT平台特有的数据编码方式（encodePtData）、数据库查询方法与API接口规范，并提供完整测试流程示例、差异性对比及故障处理建议。
+本技术文档面向PT海外版平台的支付测试能力，系统梳理支付流程、多语言与区域化配置、余额兑换金豆、商城购买、盲盒开箱、礼包购买等场景的实现细节，解释PT平台特有的数据编码方式（encodeAppData）、数据库查询方法与API接口规范，并提供完整测试流程示例、差异性对比及故障处理建议。
+
+**更新** 本版本反映了PT海外版平台测试从PT数据编码改为APP数据编码的重大变更，移除了房间送箱子相关测试方法，添加了跳过装饰器说明。
 
 ## 项目结构
 该仓库采用按应用与场景分层组织的结构：
@@ -54,7 +60,7 @@ E --> I["数据编码与参数<br/>basicData.py"]
 E --> J["YAML参数读取<br/>paramsYaml.py"]
 ```
 
-图表来源
+**图表来源**
 - [run_all_case.py:126-147](file://run_all_case.py#L126-L147)
 - [common/Config.py:6-133](file://common/Config.py#L6-L133)
 - [common/Request.py:17-59](file://common/Request.py#L17-L59)
@@ -62,21 +68,23 @@ E --> J["YAML参数读取<br/>paramsYaml.py"]
 - [common/basicData.py:8-581](file://common/basicData.py#L8-L581)
 - [common/paramsYaml.py:8-32](file://common/paramsYaml.py#L8-L32)
 
-章节来源
+**章节来源**
 - [README.md:1-38](file://README.md#L1-L38)
 - [run_all_case.py:126-147](file://run_all_case.py#L126-L147)
 
 ## 核心组件
 - 配置中心（Config）：集中管理各应用域名、支付URL、用户与房间ID、礼物ID、服务器节点等
-- 数据编码（basicData.encodePtData）：针对PT海外版的请求体编码，支持多种支付场景（商城购买、房间打赏、盲盒、开箱、兑换金豆等）
+- 数据编码（encodeAppData）：针对APP海外版的请求体编码，支持多种支付场景（商城购买、房间打赏、盲盒、开箱、兑换金豆等）
 - 数据库访问（conPtMysql）：封装PT用户账户、商品、房间、人气等数据的查询与更新
 - HTTP请求（Request.post_request_session）：统一封装POST请求，自动注入user-token与Content-Type
 - 参数读取（paramsYaml）：跨平台读取YAML配置
 - 用例组织（run_all_case）：根据当前主机节点选择用例目录并批量执行
 
-章节来源
+**更新** 核心组件已从PT数据编码（encodePtData）切换为APP数据编码（encodeAppData），以适配新的APP海外版支付流程。
+
+**章节来源**
 - [common/Config.py:6-133](file://common/Config.py#L6-L133)
-- [common/basicData.py:327-566](file://common/basicData.py#L327-L566)
+- [common/basicData.py:501-635](file://common/basicData.py#L501-L635)
 - [common/conPtMysql.py:25-345](file://common/conPtMysql.py#L25-L345)
 - [common/Request.py:17-59](file://common/Request.py#L17-L59)
 - [common/paramsYaml.py:8-32](file://common/paramsYaml.py#L8-L32)
@@ -89,9 +97,9 @@ PT海外版支付测试的整体调用链如下：
 sequenceDiagram
 participant Runner as "运行器<br/>run_all_case.py"
 participant Case as "测试用例<br/>caseOversea/*.py"
-participant Encode as "数据编码<br/>basicData.encodePtData"
+participant Encode as "数据编码<br/>encodeAppData"
 participant HTTP as "HTTP请求<br/>Request.post_request_session"
-participant API as "支付接口<br/>pt_pay_url"
+participant API as "支付接口<br/>app_pay_url"
 participant DB as "数据库<br/>conPtMysql"
 Runner->>Case : 发现并执行用例
 Case->>Encode : 构造请求参数payType/money/cid/rid等
@@ -105,17 +113,17 @@ DB-->>Case : 返回查询结果
 Case-->>Runner : 断言通过/失败
 ```
 
-图表来源
+**图表来源**
 - [run_all_case.py:12-81](file://run_all_case.py#L12-L81)
-- [caseOversea/test_pt_shopBuy.py:24-34](file://caseOversea/test_pt_shopBuy.py#L24-L34)
-- [common/basicData.py:327-566](file://common/basicData.py#L327-L566)
+- [caseOversea/test_pt_shopBuy.py:13-34](file://caseOversea/test_pt_shopBuy.py#L13-L34)
+- [common/basicData.py:501-635](file://common/basicData.py#L501-L635)
 - [common/Request.py:17-59](file://common/Request.py#L17-L59)
 - [common/conPtMysql.py:25-93](file://common/conPtMysql.py#L25-L93)
 
 ## 详细组件分析
 
-### 组件A：PT支付数据编码（encodePtData）
-- 功能定位：将支付场景参数序列化为PT平台可识别的URL编码格式，覆盖房间打赏、商城购买（钻石/金豆）、盲盒、开箱、兑换金豆、防御等场景
+### 组件A：APP支付数据编码（encodeAppData）
+- 功能定位：将支付场景参数序列化为APP海外版平台可识别的URL编码格式，覆盖房间打赏、商城购买（钻石/金豆）、盲盒、开箱、兑换金豆、防御等场景
 - 关键参数：
   - payType：场景类型（如package/shop-buy/coin-shop-buy/shop-buy-box/chat-gift/exchange_gold等）
   - money：支付金额
@@ -124,9 +132,11 @@ Case-->>Runner : 断言通过/失败
   - 其他：version/useCoin/show_pac_man_guide等
 - 编码策略：统一使用URL编码并替换特殊字符，确保服务端解析稳定
 
+**更新** 已从PT数据编码（encodePtData）迁移到APP数据编码（encodeAppData），以适配新的APP海外版支付流程。
+
 ```mermaid
 flowchart TD
-Start(["进入 encodePtData"]) --> CheckType{"payType 是否受支持？"}
+Start(["进入 encodeAppData"]) --> CheckType{"payType 是否受支持？"}
 CheckType --> |否| RaiseErr["抛出错误：payType is error"]
 CheckType --> |是| BuildParams["构建 params 字典含rid/uid/giftId/num等"]
 BuildParams --> SetType["设置 platform/type/money"]
@@ -136,12 +146,12 @@ RaiseErr --> End(["结束"])
 Return --> End
 ```
 
-图表来源
-- [common/basicData.py:327-566](file://common/basicData.py#L327-L566)
+**图表来源**
+- [common/basicData.py:501-635](file://common/basicData.py#L501-L635)
 - [common/basicData.py:568-571](file://common/basicData.py#L568-L571)
 
-章节来源
-- [common/basicData.py:327-566](file://common/basicData.py#L327-L566)
+**章节来源**
+- [common/basicData.py:501-635](file://common/basicData.py#L501-L635)
 
 ### 组件B：HTTP请求封装（post_request_session）
 - 功能定位：统一封装POST请求，自动注入Content-Type与user-token，支持超时统计与异常兜底
@@ -163,10 +173,10 @@ P-->>R : 返回HTTP响应
 R-->>T : 返回{code, body, time_*}
 ```
 
-图表来源
+**图表来源**
 - [common/Request.py:17-59](file://common/Request.py#L17-L59)
 
-章节来源
+**章节来源**
 - [common/Request.py:17-59](file://common/Request.py#L17-L59)
 
 ### 组件C：数据库访问（conPtMysql）
@@ -196,20 +206,22 @@ class ConMysql {
 }
 ```
 
-图表来源
+**图表来源**
 - [common/conPtMysql.py:25-345](file://common/conPtMysql.py#L25-L345)
 
-章节来源
+**章节来源**
 - [common/conPtMysql.py:25-345](file://common/conPtMysql.py#L25-L345)
 
 ### 组件D：配置中心（Config）
 - 功能定位：集中管理域名、支付URL、用户/房间/礼物ID、服务器节点等
-- PT相关要点：
-  - pt_host、pt_pay_url：海外版支付入口
-  - pt_user、pt_room、pt_giftId：海外版用户、房间与礼物ID集合
+- APP相关要点：
+  - app_host、app_pay_url：海外版APP支付入口
+  - app_user、app_room、app_giftId：海外版APP用户、房间与礼物ID集合
   - appName/linux_node：区分不同应用与执行节点
 
-章节来源
+**更新** 配置中心已从PT配置切换为APP配置，以适配新的APP海外版支付流程。
+
+**章节来源**
 - [common/Config.py:6-133](file://common/Config.py#L6-L133)
 
 ### 组件E：用例组织与运行（run_all_case）
@@ -219,19 +231,21 @@ class ConMysql {
   - discover加载pattern为test_*.py的用例
   - 统一记录用例结果与耗时
 
-章节来源
+**章节来源**
 - [run_all_case.py:12-81](file://run_all_case.py#L12-L81)
 - [run_all_case.py:126-147](file://run_all_case.py#L126-L147)
 
 ## 依赖关系分析
-- 用例依赖：caseOversea/*.py依赖common/basicData.py（encodePtData）、common/Request.py（post_request_session）、common/conPtMysql.py（数据库操作）
+- 用例依赖：caseOversea/*.py依赖common/basicData.py（encodeAppData）、common/Request.py（post_request_session）、common/conPtMysql.py（数据库操作）
 - 运行器依赖：run_all_case.py依赖common/Config.py（环境与URL）、common/Consts.py（全局计数）
+
+**更新** 依赖关系已从PT数据编码迁移到APP数据编码，以适配新的APP海外版支付流程。
 
 ```mermaid
 graph LR
 Run["run_all_case.py"] --> Conf["Config.py"]
 Run --> Cases["caseOversea/*.py"]
-Cases --> Enc["basicData.encodePtData"]
+Cases --> Enc["basicData.encodeAppData"]
 Cases --> Req["Request.post_request_session"]
 Cases --> DB["conPtMysql"]
 Enc --> Conf
@@ -239,14 +253,14 @@ Req --> Conf
 DB --> Conf
 ```
 
-图表来源
+**图表来源**
 - [run_all_case.py:12-81](file://run_all_case.py#L12-L81)
-- [common/basicData.py:327-566](file://common/basicData.py#L327-L566)
+- [common/basicData.py:501-635](file://common/basicData.py#L501-L635)
 - [common/Request.py:17-59](file://common/Request.py#L17-L59)
 - [common/conPtMysql.py:25-345](file://common/conPtMysql.py#L25-L345)
 - [common/Config.py:6-133](file://common/Config.py#L6-L133)
 
-章节来源
+**章节来源**
 - [run_all_case.py:12-81](file://run_all_case.py#L12-L81)
 - [common/Config.py:6-133](file://common/Config.py#L6-L133)
 
@@ -255,7 +269,9 @@ DB --> Conf
 - 接口耗时：Request模块已内置响应时间统计字段，便于性能观测
 - 数据库事务：conPtMysql默认autocommit，更新/删除均显式commit，避免脏读
 
-章节来源
+**更新** 并发特性保持不变，但已添加跳过装饰器的使用说明。
+
+**章节来源**
 - [common/Request.py:47-58](file://common/Request.py#L47-L58)
 - [common/conPtMysql.py:15-23](file://common/conPtMysql.py#L15-L23)
 
@@ -264,66 +280,121 @@ DB --> Conf
 ### 场景一：余额兑换金豆（Bean → Gold Coin）
 - 步骤概览：
   1) 准备用户数据：更新钻石余额
-  2) 调用encodePtData（payType=exchange_gold）
+  2) 调用encodeAppData（payType=exchange_gold）
   3) post_request_session提交请求
   4) 断言：钻石余额归零、金豆余额为固定值
 - 参考用例路径：[caseOversea/test_pt_bean.py:19-37](file://caseOversea/test_pt_bean.py#L19-L37)
 
-章节来源
+**更新** 已从PT数据编码迁移到APP数据编码，使用encodeAppData替代encodePtData。
+
+**章节来源**
 - [caseOversea/test_pt_bean.py:19-37](file://caseOversea/test_pt_bean.py#L19-L37)
 
 ### 场景二：商城购买（金豆/钻石）
 - 金豆购买（coin-shop-buy）：
   - 准备：更新gold_coin；清空背包
-  - 调用：encodePtData（payType=coin-shop-buy）
+  - 调用：encodeAppData（payType=coin-shop-buy）
   - 断言：金豆余额减少、背包+1
   - 参考用例路径：[caseOversea/test_pt_shopBuy.py:13-34](file://caseOversea/test_pt_shopBuy.py#L13-L34)
 - 钻石购买（shop-buy）：
   - 准备：更新money/money_cash等；清空背包
-  - 调用：encodePtData（payType=shop-buy）
+  - 调用：encodeAppData（payType=shop-buy）
   - 断言：总余额归零、背包+1
   - 参考用例路径：[caseOversea/test_pt_shopBuy.py:36-57](file://caseOversea/test_pt_shopBuy.py#L36-L57)
 
-章节来源
+**更新** 已从PT数据编码迁移到APP数据编码，使用encodeAppData替代encodePtData。
+
+**章节来源**
 - [caseOversea/test_pt_shopBuy.py:13-57](file://caseOversea/test_pt_shopBuy.py#L13-L57)
 
 ### 场景三：房间打赏（多人/单人）
 - 单人场景：
   - 准备：更新打赏者与被打赏者余额；清空非主播附加表
-  - 调用：encodePtData（payType=package/package-more）
+  - 调用：encodeAppData（payType=package/package-more）
   - 断言：打赏者余额减少、被打赏者金豆（money_cash_personal）增加
   - 参考用例路径：[caseOversea/test_pt_package.py:25-64](file://caseOversea/test_pt_package.py#L25-L64)
 
-章节来源
+**更新** 已从PT数据编码迁移到APP数据编码，使用encodeAppData替代encodePtData。
+
+**章节来源**
 - [caseOversea/test_pt_package.py:25-64](file://caseOversea/test_pt_package.py#L25-L64)
 
-### 场景四：盲盒开箱（房间赠送/背包开箱）
-- 房间赠送盲盒：
-  - 准备：更新双方余额；清空非主播附加表
-  - 调用：encodePtData（payType=package/package-more，giftId对应盲盒）
-  - 断言：打赏者余额减少、收盲盒用户money_cash_personal增加
-  - 参考用例路径：[caseOversea/test_pt_blind.py:30-57](file://caseOversea/test_pt_blind.py#L30-L57)
+### 场景四：盲盒开箱（背包开箱）
 - 背包开箱：
   - 准备：插入箱子、刷新箱子内容、更新余额
-  - 调用：encodePtData（payType=shop-buy-box）
+  - 调用：encodeAppData（payType=shop-buy-box）
   - 断言：余额按单价×数量减少、背包+N
   - 参考用例路径：[caseOversea/test_pt_openBox.py:23-49](file://caseOversea/test_pt_openBox.py#L23-L49)
 
-章节来源
-- [caseOversea/test_pt_blind.py:30-57](file://caseOversea/test_pt_blind.py#L30-L57)
+**更新** 已从PT数据编码迁移到APP数据编码，使用encodeAppData替代encodePtData。
+
+**章节来源**
 - [caseOversea/test_pt_openBox.py:23-49](file://caseOversea/test_pt_openBox.py#L23-L49)
 
-### 场景五：通用商城购买（兼容通用用例）
-- 通用用例覆盖：单个/多个道具购买、背包道具转赠、余额不足等
-- 参考用例路径：[case/test_pay_shopBuy.py:21-124](file://case/test_pay_shopBuy.py#L21-L124)
+### 场景五：聊天送礼
+- 私聊打赏：
+  - 准备：更新打赏者与被打赏者余额；清空非主播附加表
+  - 调用：encodeAppData（payType=chat-gift）
+  - 断言：打赏者余额减少、被打赏者金豆（money_cash_personal）增加
+  - 参考用例路径：[caseOversea/test_pt_chatGift.py:21-100](file://caseOversea/test_pt_chatGift.py#L21-L100)
 
-章节来源
-- [case/test_pay_shopBuy.py:21-124](file://case/test_pay_shopBuy.py#L21-L124)
+**更新** 已从PT数据编码迁移到APP数据编码，使用encodeAppData替代encodePtData。
+
+**章节来源**
+- [caseOversea/test_pt_chatGift.py:21-100](file://caseOversea/test_pt_chatGift.py#L21-L100)
+
+### 场景六：防御系统
+- 守护购买：
+  - 准备：更新用户余额
+  - 调用：encodeAppData（payType=defend）
+  - 断言：余额减少、守护生效
+  - 参考用例路径：[caseOversea/test_pt_defend.py:12-90](file://caseOversea/test_pt_defend.py#L12-L90)
+
+**更新** 已从PT数据编码迁移到APP数据编码，使用encodeAppData替代encodePtData。
+
+**章节来源**
+- [caseOversea/test_pt_defend.py:12-90](file://caseOversea/test_pt_defend.py#L12-L90)
+
+### 场景七：疯狂转盘
+- 转盘购买：
+  - 准备：更新用户余额
+  - 调用：encodeAppData（payType=shop-buy-crazyspin）
+  - 断言：余额减少、转盘可用
+  - 参考用例路径：[caseOversea/test_pt_crazySpin.py:12-50](file://caseOversea/test_pt_crazySpin.py#L12-L50)
+
+**更新** 已从PT数据编码迁移到APP数据编码，使用encodeAppData替代encodePtData。
+
+**章节来源**
+- [caseOversea/test_pt_crazySpin.py:12-50](file://caseOversea/test_pt_crazySpin.py#L12-L50)
+
+### 场景八：星球之旅
+- 星球抽奖：
+  - 准备：更新用户余额
+  - 调用：encodeAppData（payType=journey_planet_draw）
+  - 断言：余额减少、抽奖可用
+  - 参考用例路径：[caseOversea/test_pt_planet.py:12-50](file://caseOversea/test_pt_planet.py#L12-L50)
+
+**更新** 已从PT数据编码迁移到APP数据编码，使用encodeAppData替代encodePtData。
+
+**章节来源**
+- [caseOversea/test_pt_planet.py:12-50](file://caseOversea/test_pt_planet.py#L12-L50)
+
+### 场景九：VIP人气
+- VIP人气购买：
+  - 准备：更新用户余额
+  - 调用：encodeAppData（payType=package/chat-gift）
+  - 断言：余额减少、人气增加
+  - 参考用例路径：[caseOversea/test_pt_vipRenqi.py:15-100](file://caseOversea/test_pt_vipRenqi.py#L15-L100)
+
+**更新** 已从PT数据编码迁移到APP数据编码，使用encodeAppData替代encodePtData。
+
+**章节来源**
+- [caseOversea/test_pt_vipRenqi.py:15-100](file://caseOversea/test_pt_vipRenqi.py#L15-L100)
 
 ## 故障排查指南
 - 请求异常：
   - 现象：post_request_session返回空或异常
-  - 排查：确认pt_pay_url可用、token有效、data编码正确
+  - 排查：确认app_pay_url可用、token有效、data编码正确
   - 参考：[common/Request.py:17-59](file://common/Request.py#L17-L59)
 - 余额不足：
   - 现象：返回msg提示余额不足
@@ -332,40 +403,62 @@ DB --> Conf
 - 区域/语言影响：
   - 现象：房间属性/大区判定异常
   - 排查：确认setUpClass中updateUserBigArea与updateUserRidInfoSql已执行
-  - 参考：[caseOversea/test_pt_openBox.py:16-21](file://caseOversea/test_pt_openBox.py#L16-L21)、[caseOversea/test_pt_blind.py:18-26](file://caseOversea/test_pt_blind.py#L18-L26)
+  - 参考：[caseOversea/test_pt_openBox.py:16-21](file://caseOversea/test_pt_openBox.py#L16-L21)、[caseOversea/test_pt_chatGift.py:18-30](file://caseOversea/test_pt_chatGift.py#L18-L30)
 - 数据一致性：
   - 建议：在用例前后使用deleteUserAccountSql清理，避免跨用例污染
   - 参考：[common/conPtMysql.py:95-144](file://common/conPtMysql.py#L95-L144)
+- 跳过装饰器使用：
+  - 现象：用例被跳过执行
+  - 排查：检查@unittest.skip或@Retry装饰器配置
+  - 参考：[caseOversea/test_pt_bean.py:18](file://caseOversea/test_pt_bean.py#L18)、[caseOversea/test_pt_openBox.py:18](file://caseOversea/test_pt_openBox.py#L18)
 
-章节来源
+**更新** 新增跳过装饰器使用说明，涵盖@unittest.skip和@Retry装饰器的使用场景。
+
+**章节来源**
 - [common/Request.py:17-59](file://common/Request.py#L17-L59)
 - [caseOversea/test_pt_package.py:25-43](file://caseOversea/test_pt_package.py#L25-L43)
 - [caseOversea/test_pt_openBox.py:16-21](file://caseOversea/test_pt_openBox.py#L16-L21)
-- [caseOversea/test_pt_blind.py:18-26](file://caseOversea/test_pt_blind.py#L18-L26)
+- [caseOversea/test_pt_chatGift.py:18-30](file://caseOversea/test_pt_chatGift.py#L18-L30)
 - [common/conPtMysql.py:95-144](file://common/conPtMysql.py#L95-L144)
 
 ## 结论
-本测试框架围绕PT海外版支付场景，提供了从数据编码、HTTP请求到数据库校验的完整闭环。通过统一的配置中心、编码器与数据库访问层，用例能够稳定复现余额兑换金豆、商城购买、盲盒开箱、房间打赏等关键业务流程。建议在实际执行中结合重试机制与区域化准备，确保跨节点与跨大区的一致性。
+本测试框架围绕APP海外版支付场景，提供了从数据编码、HTTP请求到数据库校验的完整闭环。通过统一的配置中心、编码器与数据库访问层，用例能够稳定复现余额兑换金豆、商城购买、盲盒开箱、房间打赏等关键业务流程。**更新** 本版本已从PT数据编码迁移到APP数据编码，移除了房间送箱子相关测试方法，添加了跳过装饰器说明，建议在实际执行中结合重试机制与区域化准备，确保跨节点与跨大区的一致性。
 
 ## 附录
 
-### PT平台与其他平台的差异要点
+### APP平台与其他平台的差异要点
 - 货币体系：
-  - PT使用钻石（money/money_cash等）与金豆（gold_coin）双币种，部分场景支持互兑
+  - APP使用钻石（money/money_cash等）与金豆（gold_coin）双币种，部分场景支持互兑
   - 参考：[common/conPtMysql.py:27-49](file://common/conPtMysql.py#L27-L49)、[caseOversea/test_pt_bean.py:30-36](file://caseOversea/test_pt_bean.py#L30-L36)
 - 支付方式：
-  - PT支持金豆/钻石购买、房间打赏、盲盒/开箱等，通用用例侧重钻石购买
-  - 参考：[common/basicData.py:327-566](file://common/basicData.py#L327-L566)
+  - APP支持金豆/钻石购买、房间打赏、盲盒/开箱等，通用用例侧重钻石购买
+  - 参考：[common/basicData.py:501-635](file://common/basicData.py#L501-L635)
 - 业务规则：
   - 房间打赏涉及分成比例与非主播附加账户（money_cash_personal）
   - 参考：[caseOversea/test_pt_package.py:55-64](file://caseOversea/test_pt_package.py#L55-L64)、[caseOversea/test_pt_openBox.py:94-104](file://caseOversea/test_pt_openBox.py#L94-L104)
 
+**更新** 平台差异已从PT平台切换为APP平台，使用APP配置和数据编码。
+
 ### API接口规范与数据编码要点
-- 接口地址：pt_pay_url（来自Config）
+- 接口地址：app_pay_url（来自Config）
 - Content-Type：application/x-www-form-urlencoded
 - 请求头：包含user-token（由会话模块读取）
-- 编码方式：encodePtData统一URL编码，替换特殊字符
+- 编码方式：encodeAppData统一URL编码，替换特殊字符
 - 参考：
   - [common/Config.py:47-50](file://common/Config.py#L47-L50)
   - [common/Request.py:27-32](file://common/Request.py#L27-L32)
   - [common/basicData.py:568-571](file://common/basicData.py#L568-L571)
+
+**更新** 接口规范已从PT支付接口切换为APP支付接口，使用APP数据编码。
+
+### 跳过装饰器使用说明
+- @unittest.skip装饰器：
+  - 用途：永久跳过某个测试用例
+  - 示例：`@unittest.skip('原因说明')`
+  - 应用场景：功能下线、测试不稳定等情况
+- @Retry装饰器：
+  - 用途：对测试用例进行重试
+  - 示例：`@Retry(max_n=3, func_prefix='test_01_')`
+  - 应用场景：网络波动、偶发性失败等情况
+
+**新增** 跳过装饰器使用说明，涵盖@unittest.skip和@Retry装饰器的具体使用方法和应用场景。
