@@ -11,15 +11,27 @@
 - [common/Request.py](file://common/Request.py)
 - [common/paramsYaml.py](file://common/paramsYaml.py)
 - [case/test_pay_shopBuy.py](file://case/test_pay_shopBuy.py)
-- [caseOversea/test_pt_shopBuy.py](file://caseOversea/test_pt_shopBuy.py)
-- [caseOversea/test_pt_openBox.py](file://caseOversea/test_pt_openBox.py)
-- [caseOversea/test_pt_package.py](file://caseOversea/test_pt_package.py)
-- [caseOversea/test_pt_bean.py](file://caseOversea/test_pt_bean.py)
-- [caseOversea/test_pt_chatGift.py](file://caseOversea/test_pt_chatGift.py)
-- [caseOversea/test_pt_defend.py](file://caseOversea/test_pt_defend.py)
-- [caseOversea/test_pt_crazySpin.py](file://caseOversea/test_pt_crazySpin.py)
-- [caseOversea/test_pt_planet.py](file://caseOversea/test_pt_planet.py)
-- [caseOversea/test_pt_vipRenqi.py](file://caseOversea/test_pt_vipRenqi.py)
+- [caseOversea/test_app_bean.py](file://caseOversea/test_app_bean.py)
+- [caseOversea/test_app_shopBuy.py](file://caseOversea/test_app_shopBuy.py)
+- [caseOversea/test_app_openBox.py](file://caseOversea/test_app_openBox.py)
+- [caseOversea/test_app_package.py](file://caseOversea/test_app_package.py)
+- [caseOversea/test_app_chatGift.py](file://caseOversea/test_app_chatGift.py)
+- [caseOversea/test_app_defend.py](file://caseOversea/test_app_defend.py)
+- [caseOversea/test_app_crazySpin.py](file://caseOversea/test_app_crazySpin.py)
+- [caseOversea/test_app_planet.py](file://caseOversea/test_app_planet.py)
+- [caseOversea/test_app_vipRenqi.py](file://caseOversea/test_app_vipRenqi.py)
+- [caseOversea/test_app_arArea.py](file://caseOversea/test_app_arArea.py)
+- [caseOversea/test_app_enArea.py](file://caseOversea/test_app_enArea.py)
+- [caseOversea/test_app_en_NewArea.py](file://caseOversea/test_app_en_NewArea.py)
+- [caseOversea/test_app_ArnewArea.py](file://caseOversea/test_app_ArnewArea.py)
+- [caseOversea/test_app_idArea.py](file://caseOversea/test_app_idArea.py)
+- [caseOversea/test_app_thArea.py](file://caseOversea/test_app_thArea.py)
+- [caseOversea/test_app_msArea.py](file://caseOversea/test_app_msArea.py)
+- [caseOversea/test_app_viArea.py](file://caseOversea/test_app_viArea.py)
+- [caseOversea/test_app_jaArea.py](file://caseOversea/test_app_jaArea.py)
+- [caseOversea/test_app_cnArea.py](file://caseOversea/test_app_cnArea.py)
+- [caseOversea/test_app_imbuychatcard.py](file://caseOversea/test_app_imbuychatcard.py)
+- [caseOversea/test_app_koNewArea.py](file://caseOversea/test_app_koNewArea.py)
 </cite>
 
 ## 目录
@@ -38,7 +50,7 @@
 ## 简介
 本技术文档面向PT海外版平台的支付测试能力，系统梳理支付流程、多语言与区域化配置、余额兑换金豆、商城购买、盲盒开箱、礼包购买等场景的实现细节，解释PT平台特有的数据编码方式（encodeAppData）、数据库查询方法与API接口规范，并提供完整测试流程示例、差异性对比及故障处理建议。
 
-**更新** 本版本反映了PT海外版平台测试从PT数据编码改为APP数据编码的重大变更，移除了房间送箱子相关测试方法，添加了跳过装饰器说明。
+**更新** 本版本反映了PT海外版平台测试从PT数据编码改为APP数据编码的重大变更，移除了房间送箱子相关测试方法，添加了跳过装饰器说明。同时，测试文件命名已从test_pt_*更新为test_app_*，新增了阿拉伯语、英语、印尼语、泰语、越南语、日语、韩语、马来语、中文等多区域测试文件，以及新的Arabic new Area测试文件。
 
 ## 项目结构
 该仓库采用按应用与场景分层组织的结构：
@@ -115,7 +127,7 @@ Case-->>Runner : 断言通过/失败
 
 **图表来源**
 - [run_all_case.py:12-81](file://run_all_case.py#L12-L81)
-- [caseOversea/test_pt_shopBuy.py:13-34](file://caseOversea/test_pt_shopBuy.py#L13-L34)
+- [caseOversea/test_app_shopBuy.py:13-34](file://caseOversea/test_app_shopBuy.py#L13-L34)
 - [common/basicData.py:501-635](file://common/basicData.py#L501-L635)
 - [common/Request.py:17-59](file://common/Request.py#L17-L59)
 - [common/conPtMysql.py:25-93](file://common/conPtMysql.py#L25-L93)
@@ -283,113 +295,181 @@ DB --> Conf
   2) 调用encodeAppData（payType=exchange_gold）
   3) post_request_session提交请求
   4) 断言：钻石余额归零、金豆余额为固定值
-- 参考用例路径：[caseOversea/test_pt_bean.py:19-37](file://caseOversea/test_pt_bean.py#L19-L37)
+- 参考用例路径：[caseOversea/test_app_bean.py:19-37](file://caseOversea/test_app_bean.py#L19-L37)
 
 **更新** 已从PT数据编码迁移到APP数据编码，使用encodeAppData替代encodePtData。
 
 **章节来源**
-- [caseOversea/test_pt_bean.py:19-37](file://caseOversea/test_pt_bean.py#L19-L37)
+- [caseOversea/test_app_bean.py:19-37](file://caseOversea/test_app_bean.py#L19-L37)
 
 ### 场景二：商城购买（金豆/钻石）
 - 金豆购买（coin-shop-buy）：
   - 准备：更新gold_coin；清空背包
   - 调用：encodeAppData（payType=coin-shop-buy）
   - 断言：金豆余额减少、背包+1
-  - 参考用例路径：[caseOversea/test_pt_shopBuy.py:13-34](file://caseOversea/test_pt_shopBuy.py#L13-L34)
+  - 参考用例路径：[caseOversea/test_app_shopBuy.py:13-34](file://caseOversea/test_app_shopBuy.py#L13-L34)
 - 钻石购买（shop-buy）：
   - 准备：更新money/money_cash等；清空背包
   - 调用：encodeAppData（payType=shop-buy）
   - 断言：总余额归零、背包+1
-  - 参考用例路径：[caseOversea/test_pt_shopBuy.py:36-57](file://caseOversea/test_pt_shopBuy.py#L36-L57)
+  - 参考用例路径：[caseOversea/test_app_shopBuy.py:36-57](file://caseOversea/test_app_shopBuy.py#L36-L57)
 
 **更新** 已从PT数据编码迁移到APP数据编码，使用encodeAppData替代encodePtData。
 
 **章节来源**
-- [caseOversea/test_pt_shopBuy.py:13-57](file://caseOversea/test_pt_shopBuy.py#L13-L57)
+- [caseOversea/test_app_shopBuy.py:13-57](file://caseOversea/test_app_shopBuy.py#L13-L57)
 
 ### 场景三：房间打赏（多人/单人）
 - 单人场景：
   - 准备：更新打赏者与被打赏者余额；清空非主播附加表
   - 调用：encodeAppData（payType=package/package-more）
   - 断言：打赏者余额减少、被打赏者金豆（money_cash_personal）增加
-  - 参考用例路径：[caseOversea/test_pt_package.py:25-64](file://caseOversea/test_pt_package.py#L25-L64)
+  - 参考用例路径：[caseOversea/test_app_package.py:25-64](file://caseOversea/test_app_package.py#L25-L64)
 
 **更新** 已从PT数据编码迁移到APP数据编码，使用encodeAppData替代encodePtData。
 
 **章节来源**
-- [caseOversea/test_pt_package.py:25-64](file://caseOversea/test_pt_package.py#L25-L64)
+- [caseOversea/test_app_package.py:25-64](file://caseOversea/test_app_package.py#L25-L64)
 
 ### 场景四：盲盒开箱（背包开箱）
 - 背包开箱：
   - 准备：插入箱子、刷新箱子内容、更新余额
   - 调用：encodeAppData（payType=shop-buy-box）
   - 断言：余额按单价×数量减少、背包+N
-  - 参考用例路径：[caseOversea/test_pt_openBox.py:23-49](file://caseOversea/test_pt_openBox.py#L23-L49)
+  - 参考用例路径：[caseOversea/test_app_openBox.py:23-49](file://caseOversea/test_app_openBox.py#L23-L49)
 
 **更新** 已从PT数据编码迁移到APP数据编码，使用encodeAppData替代encodePtData。
 
 **章节来源**
-- [caseOversea/test_pt_openBox.py:23-49](file://caseOversea/test_pt_openBox.py#L23-L49)
+- [caseOversea/test_app_openBox.py:23-49](file://caseOversea/test_app_openBox.py#L23-L49)
 
 ### 场景五：聊天送礼
 - 私聊打赏：
   - 准备：更新打赏者与被打赏者余额；清空非主播附加表
   - 调用：encodeAppData（payType=chat-gift）
   - 断言：打赏者余额减少、被打赏者金豆（money_cash_personal）增加
-  - 参考用例路径：[caseOversea/test_pt_chatGift.py:21-100](file://caseOversea/test_pt_chatGift.py#L21-L100)
+  - 参考用例路径：[caseOversea/test_app_chatGift.py:21-100](file://caseOversea/test_app_chatGift.py#L21-L100)
 
 **更新** 已从PT数据编码迁移到APP数据编码，使用encodeAppData替代encodePtData。
 
 **章节来源**
-- [caseOversea/test_pt_chatGift.py:21-100](file://caseOversea/test_pt_chatGift.py#L21-L100)
+- [caseOversea/test_app_chatGift.py:21-100](file://caseOversea/test_app_chatGift.py#L21-L100)
 
 ### 场景六：防御系统
 - 守护购买：
   - 准备：更新用户余额
   - 调用：encodeAppData（payType=defend）
   - 断言：余额减少、守护生效
-  - 参考用例路径：[caseOversea/test_pt_defend.py:12-90](file://caseOversea/test_pt_defend.py#L12-L90)
+  - 参考用例路径：[caseOversea/test_app_defend.py:12-90](file://caseOversea/test_app_defend.py#L12-L90)
 
 **更新** 已从PT数据编码迁移到APP数据编码，使用encodeAppData替代encodePtData。
 
 **章节来源**
-- [caseOversea/test_pt_defend.py:12-90](file://caseOversea/test_pt_defend.py#L12-L90)
+- [caseOversea/test_app_defend.py:12-90](file://caseOversea/test_app_defend.py#L12-L90)
 
 ### 场景七：疯狂转盘
 - 转盘购买：
   - 准备：更新用户余额
   - 调用：encodeAppData（payType=shop-buy-crazyspin）
   - 断言：余额减少、转盘可用
-  - 参考用例路径：[caseOversea/test_pt_crazySpin.py:12-50](file://caseOversea/test_pt_crazySpin.py#L12-L50)
+  - 参考用例路径：[caseOversea/test_app_crazySpin.py:12-50](file://caseOversea/test_app_crazySpin.py#L12-L50)
 
 **更新** 已从PT数据编码迁移到APP数据编码，使用encodeAppData替代encodePtData。
 
 **章节来源**
-- [caseOversea/test_pt_crazySpin.py:12-50](file://caseOversea/test_pt_crazySpin.py#L12-L50)
+- [caseOversea/test_app_crazySpin.py:12-50](file://caseOversea/test_app_crazySpin.py#L12-L50)
 
 ### 场景八：星球之旅
 - 星球抽奖：
   - 准备：更新用户余额
   - 调用：encodeAppData（payType=journey_planet_draw）
   - 断言：余额减少、抽奖可用
-  - 参考用例路径：[caseOversea/test_pt_planet.py:12-50](file://caseOversea/test_pt_planet.py#L12-L50)
+  - 参考用例路径：[caseOversea/test_app_planet.py:12-50](file://caseOversea/test_app_planet.py#L12-L50)
 
 **更新** 已从PT数据编码迁移到APP数据编码，使用encodeAppData替代encodePtData。
 
 **章节来源**
-- [caseOversea/test_pt_planet.py:12-50](file://caseOversea/test_pt_planet.py#L12-L50)
+- [caseOversea/test_app_planet.py:12-50](file://caseOversea/test_app_planet.py#L12-L50)
 
 ### 场景九：VIP人气
 - VIP人气购买：
   - 准备：更新用户余额
   - 调用：encodeAppData（payType=package/chat-gift）
   - 断言：余额减少、人气增加
-  - 参考用例路径：[caseOversea/test_pt_vipRenqi.py:15-100](file://caseOversea/test_pt_vipRenqi.py#L15-L100)
+  - 参考用例路径：[caseOversea/test_app_vipRenqi.py:15-100](file://caseOversea/test_app_vipRenqi.py#L15-L100)
 
 **更新** 已从PT数据编码迁移到APP数据编码，使用encodeAppData替代encodePtData。
 
 **章节来源**
-- [caseOversea/test_pt_vipRenqi.py:15-100](file://caseOversea/test_pt_vipRenqi.py#L15-L100)
+- [caseOversea/test_app_vipRenqi.py:15-100](file://caseOversea/test_app_vipRenqi.py#L15-L100)
+
+### 场景十：区域化测试（多语言支持）
+- 阿拉伯语区域（Arabic new Area）：
+  - 测试场景：商业房礼物打赏、箱子打赏、私聊打赏等
+  - 分成比例：主播5:5，非主播7:3
+  - 参考用例路径：[caseOversea/test_app_ArnewArea.py:33-121](file://caseOversea/test_app_ArnewArea.py#L33-L121)
+- 英语区域（English Area）：
+  - 测试场景：私聊打赏、家族房打赏等
+  - 分成比例：主播5:5，非主播7:3
+  - 参考用例路径：[caseOversea/test_app_enArea.py:32-136](file://caseOversea/test_app_enArea.py#L32-L136)
+- 英语新区域（English New Area）：
+  - 测试场景：私聊打赏、家族房打赏等
+  - 分成比例：主播5:5，非主播7:3
+  - 参考用例路径：[caseOversea/test_app_en_NewArea.py:28-166](file://caseOversea/test_app_en_NewArea.py#L28-L166)
+- 印尼语区域（Indonesian Area）：
+  - 测试场景：家族房打赏非主播80%
+  - 分成比例：非主播8:2
+  - 参考用例路径：[caseOversea/test_app_idArea.py:36-111](file://caseOversea/test_app_idArea.py#L36-L111)
+- 泰语区域（Thai Area）：
+  - 测试场景：联盟房打赏非主播80%
+  - 分成比例：非主播8:2
+  - 参考用例路径：[caseOversea/test_app_thArea.py:38-116](file://caseOversea/test_app_thArea.py#L38-L116)
+- 越南语区域（Vietnamese Area）：
+  - 测试场景：商业房打赏非主播70%
+  - 分成比例：非主播7:3
+  - 参考用例路径：[caseOversea/test_app_viArea.py:33-108](file://caseOversea/test_app_viArea.py#L33-L108)
+- 日语文本区域（Japanese Area）：
+  - 测试场景：私聊打赏、房间打赏等
+  - 分成比例：非公会成员7:3，公会成员6:4
+  - 参考用例路径：[caseOversea/test_app_jaArea.py:28-124](file://caseOversea/test_app_jaArea.py#L28-L124)
+- 韩语文本区域（Korean New Area）：
+  - 测试场景：私聊打赏、家族房打赏等
+  - 分成比例：非公会成员7.5:2.5，公会成员7:3
+  - 参考用例路径：[caseOversea/test_app_koNewArea.py:28-121](file://caseOversea/test_app_koNewArea.py#L28-L121)
+- 马来语区域（Malaysian Area）：
+  - 测试场景：家族房/个人房打赏、私聊打赏等
+  - 分成比例：非公会成员8:2，公会成员7:3
+  - 参考用例路径：[caseOversea/test_app_msArea.py:32-121](file://caseOversea/test_app_msArea.py#L32-L121)
+- 中文区域（Chinese Area）：
+  - 测试场景：个人房打赏、私聊打赏、商业厅打赏等
+  - 分成比例：主播7:3，非主播8:2
+  - 参考用例路径：[caseOversea/test_app_cnArea.py:35-193](file://caseOversea/test_app_cnArea.py#L35-L193)
+
+**更新** 新增多语言区域测试文件，涵盖阿拉伯语、英语、印尼语、泰语、越南语、日语、韩语、马来语、中文等区域的差异化分成体系。
+
+**章节来源**
+- [caseOversea/test_app_ArnewArea.py:33-121](file://caseOversea/test_app_ArnewArea.py#L33-L121)
+- [caseOversea/test_app_enArea.py:32-136](file://caseOversea/test_app_enArea.py#L32-L136)
+- [caseOversea/test_app_en_NewArea.py:28-166](file://caseOversea/test_app_en_NewArea.py#L28-L166)
+- [caseOversea/test_app_idArea.py:36-111](file://caseOversea/test_app_idArea.py#L36-L111)
+- [caseOversea/test_app_thArea.py:38-116](file://caseOversea/test_app_thArea.py#L38-L116)
+- [caseOversea/test_app_viArea.py:33-108](file://caseOversea/test_app_viArea.py#L33-L108)
+- [caseOversea/test_app_jaArea.py:28-124](file://caseOversea/test_app_jaArea.py#L28-L124)
+- [caseOversea/test_app_koNewArea.py:28-121](file://caseOversea/test_app_koNewArea.py#L28-L121)
+- [caseOversea/test_app_msArea.py:32-121](file://caseOversea/test_app_msArea.py#L32-L121)
+- [caseOversea/test_app_cnArea.py:35-193](file://caseOversea/test_app_cnArea.py#L35-L193)
+
+### 场景十一：私聊卡购买
+- 私聊卡购买：
+  - 准备：更新钻石余额；清空背包和记录
+  - 调用：encodeAppData（payType=chat-pay-card）
+  - 断言：钻石余额按单价×数量减少、背包私聊卡+10
+  - 参考用例路径：[caseOversea/test_app_imbuychatcard.py:27-63](file://caseOversea/test_app_imbuychatcard.py#L27-L63)
+
+**更新** 新增私聊卡购买测试场景，验证余额购买私聊卡的流程。
+
+**章节来源**
+- [caseOversea/test_app_imbuychatcard.py:27-63](file://caseOversea/test_app_imbuychatcard.py#L27-L63)
 
 ## 故障排查指南
 - 请求异常：
@@ -399,43 +479,43 @@ DB --> Conf
 - 余额不足：
   - 现象：返回msg提示余额不足
   - 排查：核对updateMoneySql是否正确设置余额
-  - 参考：[caseOversea/test_pt_package.py:25-43](file://caseOversea/test_pt_package.py#L25-L43)
+  - 参考：[caseOversea/test_app_package.py:25-43](file://caseOversea/test_app_package.py#L25-L43)
 - 区域/语言影响：
   - 现象：房间属性/大区判定异常
   - 排查：确认setUpClass中updateUserBigArea与updateUserRidInfoSql已执行
-  - 参考：[caseOversea/test_pt_openBox.py:16-21](file://caseOversea/test_pt_openBox.py#L16-L21)、[caseOversea/test_pt_chatGift.py:18-30](file://caseOversea/test_pt_chatGift.py#L18-L30)
+  - 参考：[caseOversea/test_app_openBox.py:16-21](file://caseOversea/test_app_openBox.py#L16-L21)、[caseOversea/test_app_chatGift.py:18-30](file://caseOversea/test_app_chatGift.py#L18-L30)
 - 数据一致性：
   - 建议：在用例前后使用deleteUserAccountSql清理，避免跨用例污染
   - 参考：[common/conPtMysql.py:95-144](file://common/conPtMysql.py#L95-L144)
 - 跳过装饰器使用：
   - 现象：用例被跳过执行
   - 排查：检查@unittest.skip或@Retry装饰器配置
-  - 参考：[caseOversea/test_pt_bean.py:18](file://caseOversea/test_pt_bean.py#L18)、[caseOversea/test_pt_openBox.py:18](file://caseOversea/test_pt_openBox.py#L18)
+  - 参考：[caseOversea/test_app_bean.py:18](file://caseOversea/test_app_bean.py#L18)、[caseOversea/test_app_openBox.py:18](file://caseOversea/test_app_openBox.py#L18)
 
 **更新** 新增跳过装饰器使用说明，涵盖@unittest.skip和@Retry装饰器的使用场景。
 
 **章节来源**
 - [common/Request.py:17-59](file://common/Request.py#L17-L59)
-- [caseOversea/test_pt_package.py:25-43](file://caseOversea/test_pt_package.py#L25-L43)
-- [caseOversea/test_pt_openBox.py:16-21](file://caseOversea/test_pt_openBox.py#L16-L21)
-- [caseOversea/test_pt_chatGift.py:18-30](file://caseOversea/test_pt_chatGift.py#L18-L30)
+- [caseOversea/test_app_package.py:25-43](file://caseOversea/test_app_package.py#L25-L43)
+- [caseOversea/test_app_openBox.py:16-21](file://caseOversea/test_app_openBox.py#L16-L21)
+- [caseOversea/test_app_chatGift.py:18-30](file://caseOversea/test_app_chatGift.py#L18-L30)
 - [common/conPtMysql.py:95-144](file://common/conPtMysql.py#L95-L144)
 
 ## 结论
-本测试框架围绕APP海外版支付场景，提供了从数据编码、HTTP请求到数据库校验的完整闭环。通过统一的配置中心、编码器与数据库访问层，用例能够稳定复现余额兑换金豆、商城购买、盲盒开箱、房间打赏等关键业务流程。**更新** 本版本已从PT数据编码迁移到APP数据编码，移除了房间送箱子相关测试方法，添加了跳过装饰器说明，建议在实际执行中结合重试机制与区域化准备，确保跨节点与跨大区的一致性。
+本测试框架围绕APP海外版支付场景，提供了从数据编码、HTTP请求到数据库校验的完整闭环。通过统一的配置中心、编码器与数据库访问层，用例能够稳定复现余额兑换金豆、商城购买、盲盒开箱、房间打赏等关键业务流程。**更新** 本版本已从PT数据编码迁移到APP数据编码，移除了房间送箱子相关测试方法，添加了跳过装饰器说明，建议在实际执行中结合重试机制与区域化准备，确保跨节点与跨大区的一致性。同时，新增的多语言区域测试文件为PT海外版平台的国际化支付提供了全面的验证保障。
 
 ## 附录
 
 ### APP平台与其他平台的差异要点
 - 货币体系：
   - APP使用钻石（money/money_cash等）与金豆（gold_coin）双币种，部分场景支持互兑
-  - 参考：[common/conPtMysql.py:27-49](file://common/conPtMysql.py#L27-L49)、[caseOversea/test_pt_bean.py:30-36](file://caseOversea/test_pt_bean.py#L30-L36)
+  - 参考：[common/conPtMysql.py:27-49](file://common/conPtMysql.py#L27-L49)、[caseOversea/test_app_bean.py:30-36](file://caseOversea/test_app_bean.py#L30-L36)
 - 支付方式：
   - APP支持金豆/钻石购买、房间打赏、盲盒/开箱等，通用用例侧重钻石购买
   - 参考：[common/basicData.py:501-635](file://common/basicData.py#L501-L635)
 - 业务规则：
   - 房间打赏涉及分成比例与非主播附加账户（money_cash_personal）
-  - 参考：[caseOversea/test_pt_package.py:55-64](file://caseOversea/test_pt_package.py#L55-L64)、[caseOversea/test_pt_openBox.py:94-104](file://caseOversea/test_pt_openBox.py#L94-L104)
+  - 参考：[caseOversea/test_app_package.py:55-64](file://caseOversea/test_app_package.py#L55-L64)、[caseOversea/test_app_openBox.py:94-104](file://caseOversea/test_app_openBox.py#L94-L104)
 
 **更新** 平台差异已从PT平台切换为APP平台，使用APP配置和数据编码。
 
@@ -462,3 +542,17 @@ DB --> Conf
   - 应用场景：网络波动、偶发性失败等情况
 
 **新增** 跳过装饰器使用说明，涵盖@unittest.skip和@Retry装饰器的具体使用方法和应用场景。
+
+### 区域化测试覆盖范围
+- 阿拉伯语区域：商业房、私聊、家族房差异化分成
+- 英语区域：老版本样式，已标记跳过
+- 英语新区域：私聊、家族房、商业房差异化分成
+- 印尼语区域：家族房非主播80%分成
+- 泰语区域：联盟房非主播80%分成
+- 越南语区域：商业房非主播70%分成
+- 日语区域：私聊、房间差异化分成（7:3 vs 6:4）
+- 韩语新区域：私聊、家族房差异化分成（7.5:2.5 vs 7:3）
+- 马来语区域：已关闭，合并至印尼语
+- 中文区域：个人房、商业厅、私聊全方位差异化分成
+
+**新增** 多语言区域测试文件的完整覆盖范围，体现PT海外版平台的国际化支付能力。
