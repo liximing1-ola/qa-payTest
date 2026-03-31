@@ -127,14 +127,14 @@ class conMysql:
         
         Args:
             accountType: 账户类型
-            uid: 用户 ID，默认为 config.pt_payUid
+            uid: 用户 ID，默认为 config.oversea_payUid
             money_type: 货币类型
             
         Returns:
             查询结果，失败返回 0 或 None
         """
         if uid is None:
-            uid = config.pt_payUid
+            uid = config.oversea_payUid
             
         if accountType in conMysql.QUERY_SQL_MAP:
             sql = conMysql.QUERY_SQL_MAP[accountType].format(uid=uid)

@@ -20,6 +20,8 @@ class AppConfig:
     app_ali_main: str = 'https://app-dev.iambanban.com/_testcase/'
     starify: str = 'http://116.62.125.230/'
     slp: str = 'https://116.62.125.230/'
+    oversea: str = 'https://app-dev.iambanban.com/'
+    oversea_ali_main: str = 'https://app-dev.iambanban.com/_testcase/'
     rush: str = 'https://192.168.11.55/'
 
 
@@ -90,8 +92,8 @@ class LiveRoleConfig:
 
 
 @dataclass
-class AppUserConfig:
-    """APP 用户配置"""
+class OverseaUserConfig:
+    """海外版用户配置"""
     payUid: int = 800350557
     testUid: int = 800022872
     brokerUid: int = 800018895
@@ -99,8 +101,8 @@ class AppUserConfig:
 
 
 @dataclass
-class AppRoomConfig:
-    """APP 房间配置"""
+class OverseaRoomConfig:
+    """海外版房间配置"""
     business_joy: int = 105699329
     vip_rid: int = 105698376
     th_union: int = 105708881
@@ -136,8 +138,8 @@ class Config:
     # ============ 用户配置 ============
     bb_user: BBUserConfig = field(default_factory=BBUserConfig)
     live_role: LiveRoleConfig = field(default_factory=LiveRoleConfig)
-    pt_user: PTUserConfig = field(default_factory=PTUserConfig)
-    pt_room: PTRoomConfig = field(default_factory=PTRoomConfig)
+    oversea_user: OverseaUserConfig = field(default_factory=OverseaUserConfig)
+    oversea_room: OverseaRoomConfig = field(default_factory=OverseaRoomConfig)
 
     # ============ 礼物配置 ============
     giftId: Dict[str, int] = field(default_factory=lambda: {
@@ -151,7 +153,7 @@ class Config:
         "362": 362,  # 啵啵奶茶*1000（金豆）
     })
 
-    pt_giftId: Dict[str, int] = field(default_factory=lambda: {
+    oversea_giftId: Dict[str, int] = field(default_factory=lambda: {
         "10": 10,    # 么么哒*6币
         "46": 46,    # 幸运星*6币
         "47": 47,    # 五色星*21币
@@ -181,30 +183,30 @@ class Config:
         return self.bb_user.gsUid
 
     @property
-    def pt_payUid(self) -> int:
+    def oversea_payUid(self) -> int:
         """打赏者UID"""
-        return self.pt_user.payUid
+        return self.oversea_user.payUid
 
     @property
-    def pt_testUid(self) -> int:
+    def oversea_testUid(self) -> int:
         """测试UID"""
-        return self.pt_user.testUid
+        return self.oversea_user.testUid
 
     @property
-    def pt_brokerUid(self) -> int:
+    def oversea_brokerUid(self) -> int:
         """公会成员UID"""
-        return self.pt_user.brokerUid
+        return self.oversea_user.brokerUid
 
     @property
-    def pt_fleetUid(self) -> int:
+    def oversea_fleetUid(self) -> int:
         """家族UID"""
-        return self.pt_user.fleet_uid
+        return self.oversea_user.fleet_uid
 
     # ============ URL配置 ============
     @property
-    def pt_host(self) -> str:
-        """测试域名"""
-        return self.appInfo.pt_ali_main
+    def oversea_host(self) -> str:
+        """海外版测试域名"""
+        return self.appInfo.oversea_ali_main
 
     @property
     def pay_url(self) -> str:
@@ -222,9 +224,9 @@ class Config:
         return f"{self.appInfo.bb_dev}account/qqlogin"
 
     @property
-    def pt_mobile_login_url(self) -> str:
-        """手机号登录URL"""
-        return f"{self.pt_host}account/passwordLogin"
+    def oversea_mobile_login_url(self) -> str:
+        """海外版手机号登录URL"""
+        return f"{self.oversea_host}account/passwordLogin"
 
     @property
     def starify_mobile_login_url(self) -> str:

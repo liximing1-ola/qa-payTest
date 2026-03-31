@@ -326,8 +326,8 @@ PAY_TYPE_HANDLERS = {
     },
 }
 
-# PT 平台支付类型处理器
-PT_PAY_TYPE_HANDLERS = {
+# 海外版平台支付类型处理器
+OVERSEA_PAY_TYPE_HANDLERS = {
     'package': lambda **kw: {
         "platform": "available",
         "type": "package",
@@ -570,10 +570,10 @@ def encodeData(payType: str = 'package',
     return _encode_data_helper(data)
 
 
-def encodePtData(payType: str = 'package',
+def encodeOverseaData(payType: str = 'package',
                  money: int = 600,
-                 rid: str = config.pt_room['business_joy'],
-                 uid: str = config.pt_testUid,
+                 rid: str = config.oversea_room['business_joy'],
+                 uid: str = config.oversea_testUid,
                  giftId: int = 10,
                  giftType: str = 'normal',
                  cid: int = 5,
@@ -585,7 +585,7 @@ def encodePtData(payType: str = 'package',
                  star: int = 0,
                  uids: Optional[Tuple[str, ...]] = None) -> str:
     """
-    编码 PT（海外版）平台的消费数据
+    编码海外版平台的消费数据
     
     Args:
         payType: 支付类型
@@ -610,12 +610,12 @@ def encodePtData(payType: str = 'package',
         ValueError: payType 不存在时抛出
     """
     if uids is None:
-        uids = (str(config.pt_testUid), str(config.pt_brokerUid))
+        uids = (str(config.oversea_testUid), str(config.oversea_brokerUid))
     
-    if payType not in PT_PAY_TYPE_HANDLERS:
+    if payType not in OVERSEA_PAY_TYPE_HANDLERS:
         raise ValueError(f'payType "{payType}" is not supported')
     
-    handler = PT_PAY_TYPE_HANDLERS[payType]
+    handler = OVERSEA_PAY_TYPE_HANDLERS[payType]
     data = handler(
         money=money,
         rid=rid,
