@@ -10,7 +10,7 @@ from common.conPtMysql import conMysql
 from common.Request import post_request_session
 from common.Assert import assert_code, assert_equal, assert_body
 from common.method import format_reason
-from common.basicData import encodeAppData
+from common.basicData import encodeOverseaData
 from common.Consts import case_list, result
 
 
@@ -36,22 +36,22 @@ class TestPayCreate(unittest.TestCase):
             cid: 物品 ID，默认 694（小摩托）
         """
         # 1. 构造用户数据
-        conMysql.updateMoneySql(config.app_payUid, gold_coin=30000)
-        conMysql.deleteUserAccountSql('user_commodity', config.app_payUid)
+        conMysql.updateMoneySql(config.oversea_payUid, gold_coin=30000)
+        conMysql.deleteUserAccountSql('user_commodity', config.oversea_payUid)
         
         # 2. 商城购买
-        data = encodeAppData(payType='coin-shop-buy', money=21000, cid=cid)
-        res = post_request_session(config.app_pay_url, data, token_name='app')
+        data = encodeOverseaData(payType='coin-shop-buy', money=21000, cid=cid)
+        res = post_request_session(config.oversea_pay_url, data, token_name='app')
         
         # 3. 校验接口
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, format_reason(des, res))
         
         # 4. 检查金豆余额
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.app_payUid, money_type='gold_coin'), 9000)
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.oversea_payUid, money_type='gold_coin'), 9000)
         
         # 5. 检查背包物品
-        assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.app_payUid), 1)
+        assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.oversea_payUid), 1)
         
         case_list[des] = result
 
@@ -74,21 +74,21 @@ class TestPayCreate(unittest.TestCase):
             cid: 物品 ID，默认 42671（小铃铛入场特效）
         """
         # 1. 构造用户数据
-        conMysql.updateMoneySql(config.app_payUid, money=2000, money_cash=200, money_b=400, money_cash_b=400)
-        conMysql.deleteUserAccountSql('user_commodity', config.app_payUid)
+        conMysql.updateMoneySql(config.oversea_payUid, money=2000, money_cash=200, money_b=400, money_cash_b=400)
+        conMysql.deleteUserAccountSql('user_commodity', config.oversea_payUid)
         
         # 2. 商城购买
-        data = encodeAppData(payType='shop-buy', money=3000, cid=cid)
-        res = post_request_session(config.app_pay_url, data, token_name='app')
+        data = encodeOverseaData(payType='shop-buy', money=3000, cid=cid)
+        res = post_request_session(config.oversea_pay_url, data, token_name='app')
         
         # 3. 校验接口
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, format_reason(des, res))
         
         # 4. 检查钻石余额
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.app_payUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_payUid), 0)
         
         # 5. 检查背包物品
-        assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.app_payUid), 1)
+        assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.oversea_payUid), 1)
         
         case_list[des] = result

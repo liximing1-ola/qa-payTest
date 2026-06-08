@@ -10,7 +10,7 @@ from common.method import format_reason
 from common.conPtMysql import conMysql
 from common.Request import post_request_session
 from common.Assert import assert_code, assert_body, assert_equal
-from common.basicData import encodeAppData
+from common.basicData import encodeOverseaData
 from common.Consts import result, case_list
 
 
@@ -39,23 +39,23 @@ class TestPayCreate(unittest.TestCase):
             des: 测试描述
         """
         # 1. 构造数据
-        conMysql.deleteUserAccountSql('user_commodity', config.app_payUid)
-        conMysql.deleteUserAccountSql('user_journey_planet_record', config.app_payUid)
-        conMysql.deleteUserAccountSql('user_journey_planet_draw_record', config.app_payUid)
-        conMysql.updateMoneySql(config.app_payUid, money=2000)
+        conMysql.deleteUserAccountSql('user_commodity', config.oversea_payUid)
+        conMysql.deleteUserAccountSql('user_journey_planet_record', config.oversea_payUid)
+        conMysql.deleteUserAccountSql('user_journey_planet_draw_record', config.oversea_payUid)
+        conMysql.updateMoneySql(config.oversea_payUid, money=2000)
         
         # 2. 请求星球之旅
-        data = encodeAppData(payType='journey_planet_draw')
-        res = post_request_session(url=config.app_pay_url, data=data, token_name='app')
+        data = encodeOverseaData(payType='journey_planet_draw')
+        res = post_request_session(url=config.oversea_pay_url, data=data, token_name='app')
         
         # 3. 校验接口
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, format_reason(des, res))
         
         # 4. 检查账户余额
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.app_payUid), 500)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_payUid), 500)
         
         # 5. 检查背包物品
-        assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.app_payUid), 1)
+        assert_equal(conMysql.selectUserInfoSql('sum_commodity', config.oversea_payUid), 1)
         
         case_list[des] = result

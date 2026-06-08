@@ -85,17 +85,21 @@ def _build_shop_buy_params(money: int = 0, num: int = 1, cid: int = 0, price: in
     }
 
 
-# 支付类型处理器映射表
-PAY_TYPE_HANDLERS = {
-    # ==================== 普通场景 ====================
-    'package': lambda **kw: {
+# ============ 共享处理器工厂函数 ============
+
+def _handler_package(**kw):
+    """package 类型处理器"""
+    return {
         "platform": "available",
         "type": "package",
         "money": kw['money'],
         "params": _build_package_params(**kw)
-    },
-    
-    'package-more': lambda **kw: {
+    }
+
+
+def _handler_package_more(**kw):
+    """package-more 多人打赏处理器"""
+    return {
         "platform": "available",
         "type": "package",
         "money": kw['money'] * kw['num'] * len(kw['uids']),
@@ -113,9 +117,12 @@ PAY_TYPE_HANDLERS = {
             "ctype": "",
             "duction_money": 0,
         }
-    },
-    
-    'package-exchange': lambda **kw: {
+    }
+
+
+def _handler_package_exchange(**kw):
+    """package-exchange 兑换处理器"""
+    return {
         "platform": "available",
         "type": "package",
         "money": kw['money'],
@@ -126,7 +133,37 @@ PAY_TYPE_HANDLERS = {
             "duction_money": 0,
             "exchange": 1
         }
-    },
+    }
+
+
+def _handler_shop_buy(**kw):
+    """shop-buy 商城购买处理器"""
+    return {
+        "platform": 'available',
+        "type": 'shop-buy',
+        "money": kw['money'] * kw['num'],
+        "params": _build_shop_buy_params(**kw)
+    }
+
+
+def _handler_exchange_gold(**kw):
+    """exchange_gold 金豆兑换处理器"""
+    return {
+        "platform": 'available',
+        "type": 'exchange_gold',
+        "money": 600,
+        "params": {
+            "type": "exchange_gold"
+        }
+    }
+
+
+# 支付类型处理器映射表
+PAY_TYPE_HANDLERS = {
+    # ==================== 普通场景 ====================
+    'package': _handler_package,
+    'package-more': _handler_package_more,
+    'package-exchange': _handler_package_exchange,
     
     'package-knightDefend': lambda **kw: {
         "platform": "available",
@@ -199,12 +236,7 @@ PAY_TYPE_HANDLERS = {
         }
     },
     
-    'shop-buy': lambda **kw: {
-        "platform": 'available',
-        "type": 'shop-buy',
-        "money": kw['money'] * kw['num'],
-        "params": _build_shop_buy_params(**kw)
-    },
+    'shop-buy': _handler_shop_buy,
     
     'defend': lambda **kw: {
         "platform": 'available',
@@ -256,14 +288,7 @@ PAY_TYPE_HANDLERS = {
         }
     },
     
-    'exchange_gold': lambda **kw: {
-        "platform": 'available',
-        "type": 'exchange_gold',
-        "money": '600',
-        "params": {
-            "type": "exchange_gold"
-        }
-    },
+    'exchange_gold': _handler_exchange_gold,
     
     'unity-game-buy': lambda **kw: {
         "platform": 'available',
@@ -328,45 +353,9 @@ PAY_TYPE_HANDLERS = {
 
 # 海外版平台支付类型处理器
 OVERSEA_PAY_TYPE_HANDLERS = {
-    'package': lambda **kw: {
-        "platform": "available",
-        "type": "package",
-        "money": kw['money'],
-        "params": _build_package_params(**kw)
-    },
-    
-    'package-more': lambda **kw: {
-        "platform": "available",
-        "type": "package",
-        "money": kw['money'] * kw['num'] * len(kw['uids']),
-        "params": {
-            **_build_package_params(
-                rid=kw['rid'],
-                uid=','.join(kw['uids']),
-                money=kw['money'],
-                giftId=kw['giftId'],
-                num=kw['num'],
-                positions=','.join(str(i + 1) for i in range(len(kw['uids']))),
-                **kw
-            ),
-            "cid": 0,
-            "ctype": "",
-            "duction_money": 0,
-        }
-    },
-    
-    'package-exchange': lambda **kw: {
-        "platform": "available",
-        "type": "package",
-        "money": kw['money'],
-        "params": {
-            **_build_package_params(**kw),
-            "cid": 0,
-            "ctype": "",
-            "duction_money": 0,
-            "exchange": 1
-        }
-    },
+    'package': _handler_package,
+    'package-more': _handler_package_more,
+    'package-exchange': _handler_package_exchange,
     
     'chat-gift': lambda **kw: {
         "platform": "available",
@@ -389,12 +378,7 @@ OVERSEA_PAY_TYPE_HANDLERS = {
         }
     },
     
-    'shop-buy': lambda **kw: {
-        "platform": 'available',
-        "type": 'shop-buy',
-        "money": kw['money'] * kw['num'],
-        "params": _build_shop_buy_params(**kw)
-    },
+    'shop-buy': _handler_shop_buy,
     
     'shop-buy-box': lambda **kw: {
         "platform": 'available',
@@ -430,14 +414,7 @@ OVERSEA_PAY_TYPE_HANDLERS = {
         }
     },
     
-    'exchange_gold': lambda **kw: {
-        "platform": 'available',
-        "type": 'exchange_gold',
-        "money": 600,
-        "params": {
-            "type": "exchange_gold"
-        }
-    },
+    'exchange_gold': _handler_exchange_gold,
     
     'defend': lambda **kw: {
         "platform": 'available',

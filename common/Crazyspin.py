@@ -47,7 +47,7 @@ class CrazySpin:
         Returns:
             完整的 URL
         """
-        base_url = config.app_host + endpoint
+        base_url = config.oversea_host + endpoint
         return f"{base_url}?{urllib.parse.urlencode(params)}"
 
     @staticmethod
@@ -122,7 +122,7 @@ class CrazySpin:
             '_sign': '12c5970528bf21e8aac9586534606432',
             '_blid': uid,
         }
-        url = config.app_host + '/go/party/turntable/list'
+        url = config.oversea_host + '/go/party/turntable/list'
         headers = CrazySpin._build_headers(token_name)
         return requests.get(url, params=params, headers=headers)
 
@@ -145,7 +145,7 @@ class CrazySpin:
             '_sign': '12c5970528bf21e8aac9586534606432',
             '_blid': uid,
         }
-        url = config.app_host + '/go/party/turntable/horn'
+        url = config.oversea_host + '/go/party/turntable/horn'
         headers = CrazySpin._build_headers(token_name)
         headers['Connection'] = ''  # 特殊处理
         return requests.get(url, params=params, headers=headers)

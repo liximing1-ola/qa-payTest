@@ -10,7 +10,7 @@ from common.method import format_reason
 from common.conPtMysql import conMysql
 from common.Request import post_request_session
 from common.Assert import assert_code, assert_body, assert_equal
-from common.basicData import encodeAppData
+from common.basicData import encodeOverseaData
 from common.Consts import result, case_list
 from common.runFailed import Retry
 from common.Crazyspin import CrazySpin
@@ -41,13 +41,13 @@ class TestPayCreate(unittest.TestCase):
             des: 测试描述
         """
         # 1. 构造数据
-        conMysql.deleteUserAccountSql('user_commodity', config.app_payUid)
-        conMysql.updateMoneySql(config.app_payUid, money=2000)
+        conMysql.deleteUserAccountSql('user_commodity', config.oversea_payUid)
+        conMysql.updateMoneySql(config.oversea_payUid, money=2000)
         
         # 2. 购买欢乐券
-        data = encodeAppData(payType='shop-buy-crazyspin')
+        data = encodeOverseaData(payType='shop-buy-crazyspin')
         res = post_request_session(
-            url=CrazySpin.spin_buy_url(uid=config.app_payUid),
+            url=CrazySpin.spin_buy_url(uid=config.oversea_payUid),
             data=data,
             token_name='app'
         )
@@ -57,10 +57,10 @@ class TestPayCreate(unittest.TestCase):
         assert_body(res['body'], 'success', 1, format_reason(des, res))
         
         # 4. 检查账户余额
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.app_payUid), 1000)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_payUid), 1000)
         
         # 5. 检查背包物品
-        assert_equal(conMysql.selectUserInfoSql('sum_commodity_32', config.app_payUid), 10)
+        assert_equal(conMysql.selectUserInfoSql('sum_commodity_32', config.oversea_payUid), 10)
         
         case_list[des] = result
 
@@ -89,8 +89,8 @@ class TestPayCreate(unittest.TestCase):
             cid: 物品 ID，默认 32（欢乐券）
         """
         # 1. 构造数据
-        conMysql.deleteUserAccountSql('user_commodity', config.app_payUid)
-        conMysql.insertXsUserCommodity(config.app_payUid, cid=cid, num=100)  # 背包插入 100 个欢乐券
+        conMysql.deleteUserAccountSql('user_commodity', config.oversea_payUid)
+        conMysql.insertXsUserCommodity(config.oversea_payUid, cid=cid, num=100)  # 背包插入 100 个欢乐券
         
         # TODO: 待补充后续逻辑
         case_list[des] = result

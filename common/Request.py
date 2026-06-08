@@ -4,6 +4,7 @@ HTTP 请求封装模块
 
 提供统一的 HTTP POST 请求功能，支持 Token 管理、HTTPS 转换和响应解析。
 """
+import logging
 import time
 from typing import Dict, Any, Optional
 import requests
@@ -12,6 +13,9 @@ from common.Session import Session
 
 urllib3.disable_warnings()
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+# 日志配置
+logger = logging.getLogger(__name__)
 
 # 默认请求头
 DEFAULT_HEADERS: Dict[str, str] = {
@@ -51,15 +55,8 @@ def _ensure_https(url: str) -> str:
 
 
 def _parse_response(response: requests.Response) -> Dict[str, Any]:
-    """解析响应结果
-    
-    Args:
-        response: requests 响应对象
-        
-    Returns:
-        解析后的结果字典
-    """
-    print(response.json())
+    """解析响应结果"""
+    logger.debug('Response: %s', response.json())
     return {
         'code': response.status_code,
         'time_consuming': response.elapsed.microseconds / 1000,

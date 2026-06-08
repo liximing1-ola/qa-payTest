@@ -34,7 +34,7 @@ class Greedy:
         Returns:
             完整的 URL
         """
-        return f"{config.app_host}{endpoint}?uid={uid}"
+        return f"{config.oversea_host}{endpoint}?uid={uid}"
 
     @staticmethod
     def index(uid: int):
@@ -122,17 +122,17 @@ class Greedy:
         """
         try:
             # 等待可投注状态
-            round_id, counter_range = Greedy._wait_for_state(config.app_payUid)
+            round_id, counter_range = Greedy._wait_for_state(config.oversea_payUid)
             if not round_id:
                 return [0, 0]
 
             # 执行下注
             for _ in range(BET_COUNT):
                 vid = random.randint(*VID_RANGE)
-                Greedy.stake(config.app_payUid, vid, counter_range, round_id, money_type)
+                Greedy.stake(config.oversea_payUid, vid, counter_range, round_id, money_type)
 
             # 等待开奖结果
-            counter_all, prize = Greedy._wait_for_prize(config.app_payUid, round_id)
+            counter_all, prize = Greedy._wait_for_prize(config.oversea_payUid, round_id)
             return [counter_all, prize]
 
         except Exception as e:

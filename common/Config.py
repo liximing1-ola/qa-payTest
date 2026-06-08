@@ -26,6 +26,14 @@ class AppConfig:
 
 
 @dataclass
+class RedisConfig:
+    """Redis配置"""
+    host_46: str = '192.168.11.46'
+    host_ali: str = '127.0.0.1'
+    port: int = 6379
+
+
+@dataclass
 class CodeConfig:
     """代码路径配置"""
     bb_php_path: str = '/home/webroot/banban'
@@ -99,6 +107,15 @@ class OverseaUserConfig:
     brokerUid: int = 800018895
     fleet_uid: int = 800041062
 
+    def __getitem__(self, key):
+        """支持下标访问"""
+        return getattr(self, key, None)
+
+    def values(self):
+        """返回所有用户ID值"""
+        from dataclasses import fields
+        return [getattr(self, f.name) for f in fields(self)]
+
 
 @dataclass
 class OverseaRoomConfig:
@@ -131,6 +148,7 @@ class Config:
     codeInfo: CodeConfig = field(default_factory=CodeConfig)
     appName: AppNameConfig = field(default_factory=AppNameConfig)
     linux_node: LinuxNodeConfig = field(default_factory=LinuxNodeConfig)
+    redis: RedisConfig = field(default_factory=RedisConfig)
 
     # ============ 分成比例 ============
     rate: float = 0.62
@@ -224,9 +242,24 @@ class Config:
         return f"{self.appInfo.bb_dev}account/qqlogin"
 
     @property
+    def oversea_pay_url(self) -> str:
+        """海外版支付接口URL"""
+        return f"{self.oversea_host}pay/create?package=com.imbb.oversea.android"
+
+    @property
     def oversea_mobile_login_url(self) -> str:
         """海外版手机号登录URL"""
         return f"{self.oversea_host}account/passwordLogin"
+
+    @property
+    def redis_host_46(self) -> str:
+        """Redis 46主机"""
+        return self.redis.host_46
+
+    @property
+    def redis_host_ali(self) -> str:
+        """Redis 阿里主机"""
+        return self.redis.host_ali
 
     @property
     def starify_mobile_login_url(self) -> str:

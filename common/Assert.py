@@ -8,7 +8,7 @@ import json
 import platform
 import time
 from functools import wraps
-from typing import Any, Optional
+from typing import Any, Callable, Optional
 from common import Consts
 from common.Config import config
 
@@ -43,124 +43,72 @@ def _assert_wrapper(func):
     return wrapper
 
 
-@_assert_wrapper
-def assert_code(actual_code: int, expected_code: int = 200) -> bool:
-    """
-    验证HTTP状态码
-    
-    Args:
-        actual_code: 实际状态码
-        expected_code: 预期状态码，默认200
-        
-    Raises:
-        AssertionError: 状态码不匹配时抛出
-    """
-    _delay_for_rpc()
-    
-    if actual_code != expected_code:
-        reason = f'Actual Code: {actual_code}, Expected Code: {expected_code}, 验证结果不一致，估计服务器开小差啦!'
+def _assert(condition: bool, reason: str):
+    """核心断言函数"""
+    if not condition:
         _record_failure(reason)
         raise AssertionError(reason)
+
+
+@_assert_wrapper
+def assert_code(actual_code: int, expected_code: int = 200) -> bool:
+    """验证HTTP状态码"""
+    _delay_for_rpc()
+    _assert(
+        actual_code == expected_code,
+        f'Actual Code: {actual_code}, Expected Code: {expected_code}, 验证结果不一致，估计服务器开小差啦!'
+    )
     return True
 
 
 @_assert_wrapper
 def assert_len(actual_len: int, expect_len: int) -> bool:
-    """
-    验证长度/数量是否满足最小要求
-    
-    Args:
-        actual_len: 实际长度
-        expect_len: 预期最小长度
-        
-    Raises:
-        AssertionError: 实际长度小于预期时抛出
-    """
-    if actual_len < expect_len:
-        reason = f'实际结果: {actual_len}, 预期结果: {expect_len}, 验证结果不一致，用例执行失败，望严查!'
-        _record_failure(reason)
-        raise AssertionError(reason)
+    """验证长度/数量是否满足最小要求"""
+    _assert(
+        actual_len >= expect_len,
+        f'实际结果: {actual_len}, 预期结果: {expect_len}, 验证结果不一致，用例执行失败，望严查!'
+    )
     return True
 
 
 @_assert_wrapper
 def assert_equal(actual_result: Any, expect_result: Any) -> bool:
-    """
-    验证两个值是否相等
-    
-    Args:
-        actual_result: 实际结果
-        expect_result: 预期结果
-        
-    Raises:
-        AssertionError: 不相等时抛出
-    """
-    if actual_result != expect_result:
-        reason = f'实际结果: {actual_result}, 预期结果: {expect_result}, 验证结果不一致，用例执行失败，望严查!'
-        _record_failure(reason)
-        raise AssertionError(reason)
+    """验证两个值是否相等"""
+    _assert(
+        actual_result == expect_result,
+        f'实际结果: {actual_result}, 预期结果: {expect_result}, 验证结果不一致，用例执行失败，望严查!'
+    )
     return True
 
 
 @_assert_wrapper
 def assert_in_text(body: dict, expected_msg: str) -> bool:
-    """
-    验证JSON响应中是否包含指定文本
-    
-    Args:
-        body: 响应体（字典）
-        expected_msg: 预期包含的文本
-        
-    Raises:
-        AssertionError: 未包含时抛出
-    """
+    """验证JSON响应中是否包含指定文本"""
     text = json.dumps(body, ensure_ascii=False)
-    if expected_msg not in text:
-        _record_failure('fail')
-        raise AssertionError(f'响应中未找到预期文本: {expected_msg}')
+    _assert(
+        expected_msg in text,
+        f'响应中未找到预期文本: {expected_msg}'
+    )
     return True
 
 
 @_assert_wrapper
 def assert_body(body: dict, body_msg: str, expected_msg: Any, reason: str) -> bool:
-    """
-    验证响应体中指定字段的值
-    
-    Args:
-        body: 响应体字典
-        body_msg: 字段名
-        expected_msg: 预期值
-        reason: 失败时的错误描述
-        
-    Raises:
-        AssertionError: 值不匹配时抛出
-    """
+    """验证响应体中指定字段的值"""
     msg = body.get(body_msg)
-    if msg != expected_msg:
-        _record_failure(reason)
-        raise AssertionError(f'{body_msg} 字段值不匹配: 实际 {msg}, 预期 {expected_msg}')
+    _assert(
+        msg == expected_msg,
+        f'{body_msg} 字段值不匹配: 实际 {msg}, 预期 {expected_msg}'
+    )
     return True
 
 
 @_assert_wrapper
 def assert_between(actual_result: int, lower_limit: int, upper_limit: int) -> bool:
-    """
-    验证数值是否在指定范围内（包含边界）
-    
-    Args:
-        actual_result: 实际数值
-        lower_limit: 下限
-        upper_limit: 上限
-        
-    Raises:
-        AssertionError: 超出范围时抛出
-    """
-    actual = int(actual_result)
-    lower = int(lower_limit)
-    upper = int(upper_limit)
-    
-    if not (lower <= actual <= upper):
-        reason = f'实际结果: {actual}, 预期结果: {lower} 至 {upper}, 验证结果不一致，用例执行失败，望严查!'
-        _record_failure(reason)
-        raise AssertionError(reason)
+    """验证数值是否在指定范围内（包含边界）"""
+    actual, lower, upper = int(actual_result), int(lower_limit), int(upper_limit)
+    _assert(
+        lower <= actual <= upper,
+        f'实际结果: {actual}, 预期结果: {lower} 至 {upper}, 验证结果不一致，用例执行失败，望严查!'
+    )
     return True

@@ -24,7 +24,7 @@ APP_CONFIG: Dict[str, Dict[str, str]] = {
         'dir': '/caseLuckyPlay', 
         'pattern': 'test_*.py', 
         'bot': '1', 
-        'branch_key': 'pt_git_branch'
+        'branch_key': 'app_git_branch'
     },
 }
 

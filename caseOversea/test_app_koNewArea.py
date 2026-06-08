@@ -10,7 +10,7 @@ from common.method import format_reason
 from common.conPtMysql import conMysql
 from common.Request import post_request_session
 from common.Assert import assert_code, assert_body, assert_len, assert_equal
-from common.basicData import encodeAppData
+from common.basicData import encodeOverseaData
 from common.Consts import result, case_list
 from common.runFailed import Retry
 
@@ -22,12 +22,12 @@ class TestPayCreate(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         """测试前准备：设置用户大区为韩语区"""
-        conMysql.updateUserBigArea(tuple(i for i in config.app_user.values()), bigarea_id=4)
+        conMysql.updateUserBigArea(tuple(i for i in config.oversea_user.values()), bigarea_id=4)
 
     @classmethod
     def tearDownClass(cls) -> None:
         """测试后清理：恢复用户大区"""
-        conMysql.updateUserBigArea(tuple(i for i in config.app_user.values()))
+        conMysql.updateUserBigArea(tuple(i for i in config.oversea_user.values()))
 
     def test_01_koAreaNoBrokerMemberIMPay(self, des: str = '韩语私聊打赏非主播分成 75%'):
         """
@@ -47,22 +47,22 @@ class TestPayCreate(unittest.TestCase):
             des: 测试描述
         """
         # 1. 构造用户数据
-        conMysql.updateMoneySql(config.app_payUid, 700)
-        conMysql.updateMoneySql(config.app_testUid)  # 非主播账户余额清空
-        conMysql.updateUserextendMoneyClearSql(config.app_testUid)  # 非主播钱包附加表账户余额清空
+        conMysql.updateMoneySql(config.oversea_payUid, 700)
+        conMysql.updateMoneySql(config.oversea_testUid)  # 非主播账户余额清空
+        conMysql.updateUserextendMoneyClearSql(config.oversea_testUid)  # 非主播钱包附加表账户余额清空
         
         # 2. 私聊打赏
-        data = encodeAppData(payType='chat-gift')
-        res = post_request_session(config.app_pay_url, data, token_name='app')
+        data = encodeOverseaData(payType='chat-gift')
+        res = post_request_session(config.oversea_pay_url, data, token_name='app')
         
         # 3. 校验接口
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, format_reason(des, res))
         
         # 4. 检查余额
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.app_payUid), 100)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_payUid), 100)
         assert_equal(
-            conMysql.selectUserInfoSql('money_cash_personal', config.app_testUid, money_type='money_cash_personal'), 450)
+            conMysql.selectUserInfoSql('money_cash_personal', config.oversea_testUid, money_type='money_cash_personal'), 450)
         
         case_list[des] = result
 
@@ -84,21 +84,21 @@ class TestPayCreate(unittest.TestCase):
             des: 测试描述
         """
         # 1. 构造用户数据
-        conMysql.updateMoneySql(config.app_payUid, 700)
-        conMysql.updateMoneySql(config.app_brokerUid)  # 非主播账户余额清空
-        conMysql.updateUserextendMoneyClearSql(config.app_brokerUid)  # 非主播钱包附加表账户余额清空
+        conMysql.updateMoneySql(config.oversea_payUid, 700)
+        conMysql.updateMoneySql(config.oversea_brokerUid)  # 非主播账户余额清空
+        conMysql.updateUserextendMoneyClearSql(config.oversea_brokerUid)  # 非主播钱包附加表账户余额清空
         
         # 2. 私聊打赏（给公会主播）
-        data = encodeAppData(payType='chat-gift', uid=config.app_brokerUid)
-        res = post_request_session(config.app_pay_url, data, token_name='app')
+        data = encodeOverseaData(payType='chat-gift', uid=config.oversea_brokerUid)
+        res = post_request_session(config.oversea_pay_url, data, token_name='app')
         
         # 3. 校验接口
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, format_reason(des, res))
         
         # 4. 检查余额
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.app_payUid), 100)
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.app_brokerUid, money_type='money_cash_b'), 420)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_payUid), 100)
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.oversea_brokerUid, money_type='money_cash_b'), 420)
         
         case_list[des] = result
 
@@ -120,19 +120,19 @@ class TestPayCreate(unittest.TestCase):
             des: 测试描述
         """
         # 1. 构造用户数据
-        conMysql.updateMoneySql(config.app_payUid, 700)
-        conMysql.updateMoneySql(config.app_brokerUid)
+        conMysql.updateMoneySql(config.oversea_payUid, 700)
+        conMysql.updateMoneySql(config.oversea_brokerUid)
         
         # 2. 房间打赏（给主播）
-        data = encodeAppData(payType='package', rid=config.app_room['fleet_normal_ar'], uid=config.app_brokerUid)
-        res = post_request_session(config.app_pay_url, data, token_name='app')
+        data = encodeOverseaData(payType='package', rid=config.oversea_room['fleet_normal_ar'], uid=config.oversea_brokerUid)
+        res = post_request_session(config.oversea_pay_url, data, token_name='app')
         
         # 3. 校验接口
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, format_reason(des, res))
         
         # 4. 检查余额
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.app_payUid), 100)
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.app_brokerUid, money_type='money_cash_b'), 420)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_payUid), 100)
+        assert_equal(conMysql.selectUserInfoSql('single_money', config.oversea_brokerUid, money_type='money_cash_b'), 420)
         
         case_list[des] = result

@@ -10,7 +10,7 @@ from common.conPtMysql import conMysql
 from common.Request import post_request_session
 from common.Assert import assert_code, assert_equal, assert_body
 from common.method import format_reason
-from common.basicData import encodeAppData
+from common.basicData import encodeOverseaData
 from common.Consts import case_list, result
 from common.runFailed import Retry
 
@@ -42,22 +42,22 @@ class TestPayCreate(unittest.TestCase):
             des: 测试描述
         """
         # 1. 构造用户数据
-        conMysql.updateMoneySql(config.app_payUid, money=100, money_cash=60)
-        conMysql.deleteUserAccountSql('user_commodity', config.app_payUid)
-        conMysql.deleteUserAccountSql('chat_pay_card_record', config.app_payUid)
+        conMysql.updateMoneySql(config.oversea_payUid, money=100, money_cash=60)
+        conMysql.deleteUserAccountSql('user_commodity', config.oversea_payUid)
+        conMysql.deleteUserAccountSql('chat_pay_card_record', config.oversea_payUid)
         
         # 2. 钻石兑换私聊卡
-        data = encodeAppData(payType='chat-pay-card')
-        res = post_request_session(config.app_pay_url, data, token_name='app')
+        data = encodeOverseaData(payType='chat-pay-card')
+        res = post_request_session(config.oversea_pay_url, data, token_name='app')
         
         # 3. 校验接口
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, format_reason(des, res))
         
         # 4. 检查账户钻石余额
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.app_payUid), 0)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_payUid), 0)
         
         # 5. 检查背包私聊卡余额
-        assert_equal(conMysql.selectUserInfoSql('chat-pay-card', config.app_payUid), 10)
+        assert_equal(conMysql.selectUserInfoSql('chat-pay-card', config.oversea_payUid), 10)
         
         case_list[des] = result

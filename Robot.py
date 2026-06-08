@@ -130,10 +130,10 @@ def robot(mode: str, reason: str, title: str = '', bot: str = 'BB',
     """机器人入口
     
     Args:
-        mode: 消息模式（fail/success/markdown/icon/slack/slack_pt）
+        mode: 消息模式（fail/success/markdown/icon/slack/slack_oversea）
         reason: 消息内容
         title: 标题
-        bot: 机器人标识（BB/PT/slp）
+        bot: 机器人标识（BB/oversea/slp）
         color: 颜色标记
         to: 目标平台（wx/slack）
     """
@@ -156,7 +156,7 @@ def robot(mode: str, reason: str, title: str = '', bot: str = 'BB',
             method.get_image(mode=1)
         ),
         'slack': lambda: send_slack(url, title, reason, color),
-        'slack_pt': lambda: send_request(url, {"title": title, "value": reason}),
+        'slack_oversea': lambda: send_request(url, {"title": title, "value": reason}),
     }
 
     handler: Optional[Callable] = handlers.get(mode)

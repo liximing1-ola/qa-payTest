@@ -13,7 +13,7 @@ from common.conPtMysql import conMysql
 from common.Request import post_request_session
 from common.Assert import assert_code, assert_body, assert_len, assert_equal
 from common.method import format_reason
-from common.basicData import encodeAppData
+from common.basicData import encodeOverseaData
 from common.Consts import case_list, result
 from common.runFailed import Retry
 
@@ -47,25 +47,25 @@ class TestPayCreate(unittest.TestCase):
             des: 测试描述
         """
         # 1. 构造用户数据
-        conMysql.updateMoneySql(config.app_payUid, money=600)
-        conMysql.updateXsUserprofile_pay_room_money(config.app_payUid)
-        conMysql.updateXsUserpopularity(config.app_testUid)
+        conMysql.updateMoneySql(config.oversea_payUid, money=600)
+        conMysql.updateXsUserprofile_pay_room_money(config.oversea_payUid)
+        conMysql.updateXsUserpopularity(config.oversea_testUid)
         
         # 2. 房间内打赏
-        data = encodeAppData(payType='package')
-        res = post_request_session(config.app_pay_url, data, token_name='app')
+        data = encodeOverseaData(payType='package')
+        res = post_request_session(config.oversea_pay_url, data, token_name='app')
         
         # 3. 校验接口
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, format_reason(des, res))
         
         # 4. 检查 VIP 数据
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.app_payUid), 0)
-        assert_equal(conMysql.sqlXsUserprofile_pay_room_money(config.app_payUid), 600)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_payUid), 0)
+        assert_equal(conMysql.sqlXsUserprofile_pay_room_money(config.oversea_payUid), 600)
         
         # 5. 检查人气值
         time.sleep(2)  # 人气值需要 task 更新处理
-        assert_len(conMysql.sqlXsUserpopularity(config.app_testUid), 600)
+        assert_len(conMysql.sqlXsUserpopularity(config.oversea_testUid), 600)
         
         case_list[des] = result
 
@@ -89,24 +89,24 @@ class TestPayCreate(unittest.TestCase):
             des: 测试描述
         """
         # 1. 构造用户数据
-        conMysql.updateMoneySql(config.app_payUid, money=600)
-        conMysql.updateXsUserprofile_pay_room_money(config.app_payUid)
-        conMysql.updateXsUserpopularity(config.app_testUid)
+        conMysql.updateMoneySql(config.oversea_payUid, money=600)
+        conMysql.updateXsUserprofile_pay_room_money(config.oversea_payUid)
+        conMysql.updateXsUserpopularity(config.oversea_testUid)
         
         # 2. 私聊打赏
-        data = encodeAppData(payType='chat-gift')
-        res = post_request_session(config.app_pay_url, data, token_name='app')
+        data = encodeOverseaData(payType='chat-gift')
+        res = post_request_session(config.oversea_pay_url, data, token_name='app')
         
         # 3. 校验接口
         assert_code(res['code'])
         assert_body(res['body'], 'success', 1, format_reason(des, res))
         
         # 4. 检查 VIP 数据
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.app_payUid), 0)
-        assert_equal(conMysql.sqlXsUserprofile_pay_room_money(config.app_payUid), 600)
+        assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_payUid), 0)
+        assert_equal(conMysql.sqlXsUserprofile_pay_room_money(config.oversea_payUid), 600)
         
         # 5. 检查人气值
         time.sleep(2)  # 人气值需要 task 更新处理
-        assert_len(conMysql.sqlXsUserpopularity(config.app_testUid), 600)
+        assert_len(conMysql.sqlXsUserpopularity(config.oversea_testUid), 600)
         
         case_list[des] = result

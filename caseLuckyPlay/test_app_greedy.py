@@ -21,10 +21,10 @@ class TestPayGreedy(unittest.TestCase):
     @classmethod
     def tearDownClass(cls) -> None:
         """测试后清理：恢复用户大区，清理 Redis 缓存"""
-        conMysql.updateUserBigArea(tuple(i for i in config.app_user.values()))
+        conMysql.updateUserBigArea(tuple(i for i in config.oversea_user.values()))
         time.sleep(1)
-        conRedis.delKey('User.Big.Area.Id', config.app_user.values())
-        conRedis.delKey('User.Big.Area', config.app_user.values())
+        conRedis.delKey('User.Big.Area.Id', config.oversea_user.values())
+        conRedis.delKey('User.Big.Area', config.oversea_user.values())
 
     def _prepare_test_data(self, setup_steps):
         """
@@ -74,9 +74,9 @@ class TestPayGreedy(unittest.TestCase):
 
         # 准备测试数据
         self._prepare_test_data([
-            {'action': 'update_user_big_area', 'params': {'uids': tuple(i for i in config.app_user.values())}},
-            {'action': 'update_user_language', 'params': {'uids': tuple(i for i in config.app_user.values())}},
-            {'action': 'update_money', 'params': {'uid': config.app_payUid, 'gold_coin': 10000}}
+            {'action': 'update_user_big_area', 'params': {'uids': tuple(i for i in config.oversea_user.values())}},
+            {'action': 'update_user_language', 'params': {'uids': tuple(i for i in config.oversea_user.values())}},
+            {'action': 'update_money', 'params': {'uid': config.oversea_payUid, 'gold_coin': 10000}}
         ])
 
         # 执行下注
@@ -85,7 +85,7 @@ class TestPayGreedy(unittest.TestCase):
         # 验证数据库
         self._validate_calculation({
             'field': 'single_money',
-            'uid': config.app_payUid,
+            'uid': config.oversea_payUid,
             'money_type': 'gold_coin',
             'expected_calc': 10000 - bet_data[0] + bet_data[1]
         })
@@ -110,9 +110,9 @@ class TestPayGreedy(unittest.TestCase):
 
         # 准备测试数据
         self._prepare_test_data([
-            {'action': 'update_user_big_area', 'params': {'uids': tuple(i for i in config.app_user.values()), 'bigArea_id': 3}},
-            {'action': 'update_user_language', 'params': {'uids': tuple(i for i in config.app_user.values()), 'language': 'ar', 'area_code': 'AR'}},
-            {'action': 'update_money', 'params': {'uid': config.app_payUid, 'money': 100000}}
+            {'action': 'update_user_big_area', 'params': {'uids': tuple(i for i in config.oversea_user.values()), 'bigArea_id': 3}},
+            {'action': 'update_user_language', 'params': {'uids': tuple(i for i in config.oversea_user.values()), 'language': 'ar', 'area_code': 'AR'}},
+            {'action': 'update_money', 'params': {'uid': config.oversea_payUid, 'money': 100000}}
         ])
 
         # 执行下注
@@ -121,7 +121,7 @@ class TestPayGreedy(unittest.TestCase):
         # 验证数据库
         self._validate_calculation({
             'field': 'sum_money',
-            'uid': config.app_payUid,
+            'uid': config.oversea_payUid,
             'expected_calc': 100000 - bet_data[0] + bet_data[1]
         })
 

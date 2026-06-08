@@ -27,7 +27,7 @@ class MySQLConnection:
     """MySQL 连接管理器（单例模式）"""
 
     _connection: Optional[pymysql.Connection] = None
-    _cursor: Optional[pymysql.Cursor] = None
+    _cursor: Optional[pymysql.cursors.Cursor] = None
 
     @classmethod
     def get_connection(cls) -> pymysql.Connection:
@@ -301,7 +301,7 @@ class conMysql:
     @staticmethod
     def checkXsGiftConfig() -> None:
         """检查礼物配置"""
-        gift_ids = tuple(i for i in config.app_giftId.values())
+        gift_ids = tuple(i for i in config.oversea_giftId.values())
         sql = f"UPDATE xs_gift SET deleted=0 WHERE id IN {gift_ids}"
         MySQLConnection.execute_write(sql)
 

@@ -38,11 +38,11 @@ class Session:
             "use_backup": False,
         },
         config.appName['1']: {
-            "headers_key": 'header_pt',
-            "params_key": 'data_pt_mobile_params',
-            "body_key": 'data_slp_mobile',
+            "headers_key": 'header_oversea',
+            "params_key": 'data_oversea_mobile_params',
+            "body_key": 'data_oversea_mobile',
             "package": None,
-            "login_url": config.app_mobile_login_url,
+            "login_url": config.oversea_mobile_login_url,
             "use_backup": False,
         },
         config.appName['不夜星球']: {

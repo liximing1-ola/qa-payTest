@@ -2,7 +2,7 @@
 """
 自动化测试运行器
 
-支持多应用（伴伴/PT/不夜星球）的测试用例自动执行、结果汇总和通知。
+支持多应用（伴伴/海外版/不夜星球）的测试用例自动执行、结果汇总和通知。
 """
 import platform
 from time import time, sleep
@@ -28,9 +28,9 @@ APP_CONFIG: Dict[str, Dict[str, Any]] = {
     config.appName['2']: {
         'dir': '/caseOversea',
         'git_repos': None,  # 使用 appInfo
-        'bot': 'PT',
-        'mode': 'slack_pt',
-        'branch_key': 'pt_git_branch',
+        'bot': 'oversea',
+        'mode': 'slack_oversea',
+        'branch_key': 'app_git_branch',
         'lang': 'en'
     },
     config.appName['不夜星球']: {
@@ -219,7 +219,7 @@ def main(app_info: str) -> None:
         return
     
     if app_info == config.appName['2']:
-        check_path(config.codeInfo['pt_php_path'])
+        check_path(config.codeInfo['app_php_path'])
     
     if pull_code(app_info):
         updateTime('write', now=str(int(time())))

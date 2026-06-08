@@ -26,13 +26,13 @@ class GitUpdater:
     APP_CONFIGS = {
         'bb_php': {'path_key': 'bb_php_path', 'branch_key': 'bb_git_branch', 'env': 'dev', 'bot': 'BB'},
         'bb_go': {'path_key': 'bb_go_path', 'branch_key': 'bb_go_git_branch', 'env': 'dev', 'bot': 'BB'},
-        'pt': {'path_key': 'pt_php_path', 'branch_key': 'pt_git_branch', 'env': 'pt', 'bot': 'PT'},
+        'app': {'path_key': 'app_php_path', 'branch_key': 'app_git_branch', 'env': '1', 'bot': 'oversea'},
         'slp_php': {'path_key': 'slp_php_path', 'branch_key': 'slp_git_branch', 'env': 'slp', 'bot': 'slp'},
         'slp_common_rpc': {'path_key': 'slp_common_rpc_path', 'branch_key': 'slp_git_branch', 'env': 'slp', 'bot': 'slp'}
     }
 
     NOTIFICATION_MODES = {
-        'pt': 'slack_pt',
+        'app': 'slack_oversea',
         'slp_php': 'slack',
         'slp_common_rpc': 'slack'
     }
