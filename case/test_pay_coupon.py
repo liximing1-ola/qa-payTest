@@ -15,14 +15,6 @@ class TestPayCoupon(unittest.TestCase):
     """优惠券支付测试类"""
     businessRid = config.live_role['auto_rid']
 
-    def setUp(self):
-        """测试前置清理"""
-        pass
-
-    def tearDown(self):
-        """测试后置清理"""
-        pass
-
     def _prepare_test_data(self, setup_steps):
         """准备测试数据"""
         for step in setup_steps:

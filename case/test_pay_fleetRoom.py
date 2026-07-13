@@ -17,14 +17,6 @@ class TestPayFleetRoom(unittest.TestCase):
     fleet_rid = config.bb_user.fleetRid  # 本家族房
     pack_cal_uid = config.bb_user.pack_cal_uid  # 直播公会gs
 
-    def setUp(self):
-        """测试前置清理"""
-        pass
-
-    def tearDown(self):
-        """测试后置清理"""
-        pass
-
     def _prepare_test_data(self, setup_steps):
         """准备测试数据"""
         for step in setup_steps:

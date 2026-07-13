@@ -16,14 +16,6 @@ class TestPayBusiness(unittest.TestCase):
     business_uid = 105002103  # 商业房auto_rid房主（一代宗师）
     ceo_uid = config.live_role['pack_ceo']  # 直播公会公会长
 
-    def setUp(self):
-        """测试前置清理"""
-        pass
-
-    def tearDown(self):
-        """测试后置清理"""
-        pass
-
     def _prepare_test_data(self, setup_steps):
         """准备测试数据"""
         for step in setup_steps:

@@ -17,14 +17,6 @@ class TestPayCustomRate(unittest.TestCase):
     pack_cal_uid = config.bb_user.pack_cal_uid  # 打包结算签约主播
     ceoUid = config.live_role['pack_ceo']  # 公会长
 
-    def setUp(self):
-        """测试前置清理"""
-        pass
-
-    def tearDown(self):
-        """测试后置清理"""
-        pass
-
     @classmethod
     def tearDownClass(cls) -> None:
         mysql.checkBrokerUserRate(cls.pack_cal_uid, cls.ceoUid, rate=100)
