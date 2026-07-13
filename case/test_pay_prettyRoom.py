@@ -12,7 +12,7 @@ from common.method import format_reason
 
 @Retry(max_n=3)
 class TestPayPrettyRoom(unittest.TestCase):
-    prettyRid = config.bb_user['prettyRid']
+    prettyRid = config.bb_user.prettyRid
 
     def _prepare_test_data(self, setup_steps):
         """准备测试数据"""

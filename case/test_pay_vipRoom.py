@@ -14,7 +14,7 @@ from common.method import format_reason
 class TestPayVipRoom(unittest.TestCase):
 
     # select rid from xs_chatroom where uid=103273407 and property='vip'  个人房，vip＞5级不回收
-    vipRoomRid = config.bb_user['vipRoomRid']
+    vipRoomRid = config.bb_user.vipRoomRid
 
     def _prepare_test_data(self, setup_steps):
         """准备测试数据"""

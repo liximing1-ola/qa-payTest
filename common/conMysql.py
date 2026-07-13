@@ -47,6 +47,93 @@ class conMysql:
         'user_index': "SELECT salt FROM xs_user_index WHERE uid=%s",
     }
 
+    # ============ 复杂查询 handler ============
+
+    @staticmethod
+    def _select_single_money(uid, money_type):
+        """单账户余额查询（money_type 为列名，无法参数化；uid 参数化）"""
+        sql = "SELECT {} FROM xs_user_money WHERE uid=%s".format(money_type)
+        return MySQLConnection.execute_query_first(sql, params=(uid,), default=None)
+
+    @staticmethod
+    def _select_relation_id(uid, cid):
+        """守护关系 ID"""
+        sql = "SELECT id FROM xs_relation_defend WHERE uid=%s AND defend_uid=%s AND relation_id=%s"
+        return MySQLConnection.execute_query_first(sql, params=(config.payUid, uid, cid), default=0)
+
+    @staticmethod
+    def _select_relation_config(uid):
+        """守护关系配置，返回字典"""
+        sql = "SELECT id, name, money_value, break_money, upgrade_money FROM xs_relation_config WHERE id=%s"
+        cursor = MySQLConnection.get_cursor()
+        try:
+            cursor.execute(sql, (uid,))
+            res = cursor.fetchall()
+            column = [index[0] for index in cursor.description]
+            data_dict = [dict(zip(column, row)) for row in res]
+            return data_dict[0] if data_dict else None
+        except Exception as error:
+            logger.error('relation_config query error: %s', error)
+            return None
+
+    @staticmethod
+    def _select_union():
+        """联盟房"""
+        sql = "SELECT rid FROM xs_chatroom WHERE property='union' LIMIT 1"
+        try:
+            res = MySQLConnection.execute_query(sql)
+            if res is None:
+                raise EnvironmentError('库表无联盟房')
+            return res[0]
+        except EnvironmentError:
+            raise
+        except Exception as error:
+            logger.error('union query error: %s', error)
+            return None
+
+    @staticmethod
+    def _select_fleet():
+        """家族房"""
+        sql = "SELECT rid FROM xs_chatroom WHERE property='fleet' LIMIT 2"
+        cursor = MySQLConnection.get_cursor()
+        try:
+            cursor.execute(sql)
+            rows = cursor.fetchall()
+            if not rows:
+                raise EnvironmentError('库表无家族房')
+            for row in rows:
+                if row[0] != config.bb_user.fleetRid:
+                    return row[0]
+            return rows[0][0]
+        except EnvironmentError:
+            raise
+        except Exception as error:
+            logger.error('fleet query error: %s', error)
+            return None
+
+    @staticmethod
+    def _select_pay_change(uid, money_type):
+        """消费记录"""
+        sql = 'SELECT reason FROM xs_pay_change WHERE uid=%s ORDER BY id DESC LIMIT 1'
+        cursor = MySQLConnection.get_cursor()
+        try:
+            cursor.execute(sql, (uid,))
+            res = cursor.fetchone()
+            res_dict = ast.literal_eval(res[0])
+            return res_dict.get(money_type, 0)
+        except Exception as error:
+            logger.error('pay_change query error: %s', error)
+            return None
+
+    SELECT_COMPLEX_HANDLERS = {
+        'single_money':  lambda uid, money_type, cid: conMysql._select_single_money(uid, money_type),
+        'relation_id':   lambda uid, money_type, cid: conMysql._select_relation_id(uid, cid),
+        'relation_config': lambda uid, money_type, cid: conMysql._select_relation_config(uid),
+        'union':         lambda uid, money_type, cid: conMysql._select_union(),
+        'fleet':         lambda uid, money_type, cid: conMysql._select_fleet(),
+        'pay_change':    lambda uid, money_type, cid: conMysql._select_pay_change(uid, money_type),
+    }
+
     # deleteUserAccountSql SQL 映射
     DELETE_SQL_MAP = {
         'user_commodity': "DELETE FROM xs_user_commodity WHERE uid=%s",
@@ -91,75 +178,13 @@ class conMysql:
             sql = conMysql.SELECT_RETURN_NONE_MAP[accountType]
             return MySQLConnection.execute_query_first(sql, params=(uid,), default=None)
 
-        # 单账户余额查询（money_type 为列名，无法参数化；uid 参数化）
-        if accountType == 'single_money':
-            sql = "SELECT {} FROM xs_user_money WHERE uid=%s".format(money_type)
-            return MySQLConnection.execute_query_first(sql, params=(uid,), default=None)
+        # 复杂查询分发
+        handler = conMysql.SELECT_COMPLEX_HANDLERS.get(accountType)
+        if handler:
+            return handler(uid, money_type, cid)
 
-        # 守护关系 ID
-        elif accountType == 'relation_id':
-            sql = "SELECT id FROM xs_relation_defend WHERE uid=%s AND defend_uid=%s AND relation_id=%s"
-            return MySQLConnection.execute_query_first(sql, params=(config.payUid, uid, cid), default=0)
-
-        # 守护关系配置
-        elif accountType == 'relation_config':
-            sql = "SELECT id, name, money_value, break_money, upgrade_money FROM xs_relation_config WHERE id=%s"
-            cursor = MySQLConnection.get_cursor()
-            try:
-                cursor.execute(sql, (uid,))
-                res = cursor.fetchall()
-                column = [index[0] for index in cursor.description]
-                data_dict = [dict(zip(column, row)) for row in res]
-                return data_dict[0]
-            except Exception as error:
-                logger.error('relation_config query error: %s', error)
-
-        # 联盟房
-        elif accountType == 'union':
-            sql = "SELECT rid FROM xs_chatroom WHERE property='union' LIMIT 1"
-            try:
-                res = MySQLConnection.execute_query(sql)
-                if res is None:
-                    raise EnvironmentError('库表无联盟房')
-                return res[0]
-            except EnvironmentError:
-                raise
-            except Exception as error:
-                logger.error('union query error: %s', error)
-
-        # 家族房
-        elif accountType == 'fleet':
-            sql = "SELECT rid FROM xs_chatroom WHERE property='fleet' LIMIT 2"
-            cursor = MySQLConnection.get_cursor()
-            try:
-                cursor.execute(sql)
-                rows = cursor.fetchall()
-                if not rows:
-                    raise EnvironmentError('库表无家族房')
-                for row in rows:
-                    if row[0] != config.bb_user['fleetRid']:
-                        return row[0]
-                return rows[0][0]  # 所有结果都是 fleetRid，返回第一个
-            except EnvironmentError:
-                raise
-            except Exception as error:
-                logger.error('fleet query error: %s', error)
-
-        # 消费记录
-        elif accountType == 'pay_change':
-            sql = 'SELECT reason FROM xs_pay_change WHERE uid=%s ORDER BY id DESC LIMIT 1'
-            cursor = MySQLConnection.get_cursor()
-            try:
-                cursor.execute(sql, (uid,))
-                res = cursor.fetchone()
-                res_dict = ast.literal_eval(res[0])
-                reason_value = '{}'.format(money_type)
-                return res_dict.get(reason_value, 0)
-            except Exception as error:
-                logger.error('pay_change query error: %s', error)
-
-        else:
-            logger.warning('Unknown accountType: %s', accountType)
+        logger.warning('Unknown accountType: %s', accountType)
+        return None
 
     # ============ 删除方法 ============
 

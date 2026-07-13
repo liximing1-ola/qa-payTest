@@ -14,8 +14,8 @@ from common.method import format_reason
 class TestPayFleetRoom(unittest.TestCase):
     """家族房支付测试类"""
     other_fleet_rid = mysql.selectUserInfoSql('fleet')  # 非本家族房
-    fleet_rid = config.bb_user['fleetRid']  # 本家族房
-    pack_cal_uid = config.bb_user['pack_cal_uid']  # 直播公会gs
+    fleet_rid = config.bb_user.fleetRid  # 本家族房
+    pack_cal_uid = config.bb_user.pack_cal_uid  # 直播公会gs
 
     def setUp(self):
         """测试前置清理"""

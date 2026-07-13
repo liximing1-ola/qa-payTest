@@ -15,7 +15,7 @@ from common.method import format_reason
 class TestPayUnionRoom(unittest.TestCase):
 
     singer_rid = mysql.selectUserInfoSql('union')
-    pack_cal_uid = config.bb_user['pack_cal_uid']
+    pack_cal_uid = config.bb_user.pack_cal_uid
     pack_ceo_uid = config.live_role['pack_ceo']
 
     def _prepare_test_data(self, setup_steps):

@@ -14,7 +14,7 @@ from common.method import format_reason
 class TestPayCustomRate(unittest.TestCase):
     """自定义分成测试类"""
     customUid = 100500205
-    pack_cal_uid = config.bb_user['pack_cal_uid']  # 打包结算签约主播
+    pack_cal_uid = config.bb_user.pack_cal_uid  # 打包结算签约主播
     ceoUid = config.live_role['pack_ceo']  # 公会长
 
     def setUp(self):
