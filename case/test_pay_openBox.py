@@ -2,11 +2,12 @@ from common.Config import config
 from common.conMysql import conMysql as mysql
 import unittest
 from common.Request import post_request_session
-from common.method import reason
 from common.Assert import assert_code, assert_body, assert_len, assert_equal
 from common.basicData import encodeData
 from common.Consts import result, case_list
 from common.runFailed import Retry
+from common.sqlScript import UserMoneyOperations, UserCommodityOperations
+from common.method import format_reason
 
 
 @Retry(max_n=3)

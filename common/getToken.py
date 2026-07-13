@@ -3,12 +3,14 @@ Token生成器模块
 
 用于生成用户认证Token
 """
+import logging
 import time
 import random
 import hashlib
 import base64
 from urllib.parse import quote, urlencode
 
+logger = logging.getLogger(__name__)
 
 # 配置常量
 KEY = "^&(tre)%29^*"
@@ -109,5 +111,5 @@ class TokenGenerator:
 if __name__ == "__main__":
     token1 = TokenGenerator(100287189, TokenGenerator.generate_salt())
     token2 = TokenGenerator(100797678, TokenGenerator.generate_salt())
-    print(token1.generate())
-    print(token2.generate())
+    logger.info(token1.generate())
+    logger.info(token2.generate())

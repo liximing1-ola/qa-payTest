@@ -1,14 +1,15 @@
 # coding=utf-8
 """
 机器人通知模块
-
 提供多种消息通知方式（微信/Slack），支持文本、Markdown、图文等格式。
 """
+import logging
 from time import time, strftime, localtime
 from typing import Optional, Dict, Any, Callable
 import requests
 from common import method
 
+logger = logging.getLogger(__name__)
 
 # 机器人配置
 ROBOT_URLS: Dict[str, Dict[str, str]] = {
@@ -25,7 +26,6 @@ def send_request(url: str, data: Dict[str, Any],
         url: 请求 URL
         data: 请求数据
         headers: 请求头
-        
     Returns:
         响应对象，失败返回 None
     """
@@ -35,18 +35,16 @@ def send_request(url: str, data: Dict[str, Any],
         res.raise_for_status()
         return res
     except requests.exceptions.RequestException as e:
-        print(f"Request failed: {e}")
+        logger.error("Request failed: %s", e)
         return None
 
 
 def send_text(url: str, content: str, at_all: bool = False) -> Optional[requests.Response]:
     """发送文本消息
-    
     Args:
         url: 机器人 URL
         content: 消息内容
         at_all: 是否@所有人
-        
     Returns:
         响应对象
     """
@@ -59,11 +57,9 @@ def send_text(url: str, content: str, at_all: bool = False) -> Optional[requests
 
 def send_markdown(url: str, content: str) -> Optional[requests.Response]:
     """发送 Markdown 消息
-    
     Args:
         url: 机器人 URL
-        content: Markdown 内容
-        
+        content: Markdown 内容  
     Returns:
         响应对象
     """
@@ -73,14 +69,12 @@ def send_markdown(url: str, content: str) -> Optional[requests.Response]:
 def send_news(url: str, title: str, description: str, picurl: str, 
              link: str = "https://www.12306.cn/index/") -> Optional[requests.Response]:
     """发送图文消息
-    
     Args:
         url: 机器人 URL
         title: 标题
         description: 描述
         picurl: 图片 URL
         link: 链接地址
-        
     Returns:
         响应对象
     """
@@ -104,7 +98,6 @@ def send_news(url: str, title: str, description: str, picurl: str,
 def send_slack(url: str, title: str, reason: str, 
               color: str = 'danger') -> Optional[requests.Response]:
     """发送 Slack 消息
-    
     Args:
         url: Slack Webhook URL
         title: 标题
@@ -128,7 +121,6 @@ def send_slack(url: str, title: str, reason: str,
 def robot(mode: str, reason: str, title: str = '', bot: str = 'BB', 
          color: str = "good", to: str = 'wx') -> None:
     """机器人入口
-    
     Args:
         mode: 消息模式（fail/success/markdown/icon/slack/slack_oversea）
         reason: 消息内容
@@ -139,7 +131,7 @@ def robot(mode: str, reason: str, title: str = '', bot: str = 'BB',
     """
     url = ROBOT_URLS['slack' if to == 'slack' else 'wechat'].get(bot)
     if not url:
-        print('robot over gg')
+        logger.warning('robot over gg')
         return
 
     # 消息处理器映射
@@ -163,7 +155,7 @@ def robot(mode: str, reason: str, title: str = '', bot: str = 'BB',
     if handler:
         handler()
     else:
-        print('robot over gg')
+        logger.warning('robot over gg')
 
 
 if __name__ == '__main__':

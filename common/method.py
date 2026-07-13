@@ -9,8 +9,8 @@
 - 结果处理
 - VIP 经验计算
 """
+import logging
 import os
-import random
 import time
 from typing import Dict, List, Any, Optional, Union
 import requests
@@ -18,6 +18,8 @@ import Robot
 from common import Consts
 from common.conMysql import conMysql as mysql
 from common.Config import config
+
+logger = logging.getLogger(__name__)
 
 
 # ============ 字典转换 ============
@@ -80,7 +82,7 @@ def get_image(mode: int = 2) -> Optional[str]:
         elif mode == 2:
             return data[0]
     except Exception as e:
-        print(f'get_image error: {e}')
+        logger.error('get_image error: %s', e)
     
     return None
 
@@ -98,7 +100,7 @@ def is_extend(data: Union[dict, list], tag: str) -> bool:
         字段是否存在
     """
     if not isinstance(data, dict):
-        print('please input a json!')
+        logger.warning('is_extend: input is not a dict')
         return False
     return tag in _get_all_keys(data)
 
@@ -138,48 +140,34 @@ def get_value(res: Dict[str, Any]) -> None:
     current_time = time.time()
 
     if 'body' not in res:
-        print(f'结果：缺少body字段，时间：{current_time}')
+        logger.warning('缺少 body 字段，时间：%s', current_time)
         Consts.fail_num += 1
         return
 
     body = res['body']
     if body.get('success'):
-        print(f'结果：{body["success"]}, 时间：{current_time}')
+        logger.info('结果：%s, 时间：%s', body['success'], current_time)
         Consts.success_num += 1
     else:
-        print(f'结果：{body}，时间：{current_time}')
+        logger.info('结果：%s，时间：%s', body, current_time)
         Consts.fail_num += 1
 
 
-def format_reason(des: str, res: Dict[str, Any]) -> str:
+def format_reason(des: str, res: Dict[str, Any], slp: bool = False) -> str:
     """格式化失败原因
     
     Args:
         des: 描述信息
         res: 响应结果
+        slp: 是否为 SLP 模式（success 为 True 时判定）
         
     Returns:
         格式化的错误信息
     """
     body = res.get('body', {})
-    if body.get('success') == 0 and not is_extend(body, 'msg'):
-        print(body)
-    return f'Depiction: {des}, failReason: {body}'
-
-
-def format_reason_slp(des: str, res: Dict[str, Any]) -> str:
-    """格式化 SLP 失败原因
-    
-    Args:
-        des: 描述信息
-        res: 响应结果
-        
-    Returns:
-        格式化的错误信息
-    """
-    body = res.get('body', {})
-    if body.get('success') is True and not is_extend(body, 'msg'):
-        print(body)
+    success_val = True if slp else 0
+    if body.get('success') == success_val and not is_extend(body, 'msg'):
+        logger.debug('format_reason body: %s', body)
     return f'Depiction: {des}, failReason: {body}'
 
 

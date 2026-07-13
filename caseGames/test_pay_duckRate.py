@@ -5,9 +5,9 @@ from common.Config import config
 from common.Consts import case_list_b, result
 from common.Request import post_request_session
 from common.conMysql import conMysql
-from common.method import reason
 from common.runFailed import Retry
 from common.Session import Session
+from common.method import format_reason
 
 
 @Retry

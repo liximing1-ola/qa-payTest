@@ -8,7 +8,7 @@ import json
 import platform
 import time
 from functools import wraps
-from typing import Any, Callable, Optional
+from typing import Any
 from common import Consts
 from common.Config import config
 

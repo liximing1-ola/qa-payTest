@@ -1,4 +1,5 @@
 # coding=utf-8
+import logging
 import gevent
 from gevent import monkey
 
@@ -10,6 +11,9 @@ import random
 import pymysql
 import requests
 import urllib3
+from common.Config import config
+
+logger = logging.getLogger(__name__)
 
 urllib3.disable_warnings()
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -21,15 +25,6 @@ HEADERS_TEMPLATE = {
     'Content-Type': "application/x-www-form-urlencoded",
     'cache-control': "no-cache",
     'Postman-Token': "f7d705b2-cf29-4a4a-81ba-2c8c8d0f5ed5"
-}
-
-DB_CONFIG = {
-    "host": '192.168.11.46',
-    "port": 3306,
-    "user": 'root',
-    "password": '123456',
-    "database": 'xianshi',
-    "charset": 'utf8'
 }
 
 # 礼物配置
@@ -50,7 +45,7 @@ EGG_LEVEL_MONEY = {1: 200, 2: 600, 3: 1200}
 # ============ 数据库操作 ============
 def get_db_connection():
     """获取数据库连接"""
-    return pymysql.connect(**DB_CONFIG)
+    return pymysql.connect(**config.database.dev_config)
 
 
 def update_bean(uid, money):
@@ -63,7 +58,7 @@ def update_bean(uid, money):
         con.commit()
     except Exception as e:
         con.rollback()
-        print('update fail', e)
+        logger.error('update fail: %s', e)
     finally:
         time.sleep(0.3)
         con.close()
@@ -79,7 +74,7 @@ def send_request(url, data, headers, verify=False):
 
 def check_response(res):
     """检查响应结果"""
-    print(res)
+    logger.info(res)
     if res.get('success') != 1:
         raise EnvironmentError(res)
 
@@ -119,7 +114,7 @@ def post_pay_create():
         }
     }
     
-    res = send_request("https://192.168.11.46/pay/create?package=com.imbb.banban.android", data, headers, verify=True)
+    res = send_request(config.pay_url + "com.imbb.banban.android", data, headers, verify=True)
     check_response(res)
 
 

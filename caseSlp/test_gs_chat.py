@@ -5,14 +5,15 @@ __desc__ = "公会主播-私聊"
 
 import unittest
 
-from caseSlp.config import *
+from caseSlp.config import default_money, default_num, giftId, gsUid, payUid, pay_url, rates
 from common.Assert import assert_code, assert_equal, assert_body
 from common.Consts import case_list, result
 from common.Request import post_request_session
 from common.basicSlpData import encodeData
 from common.conSlpMysql import conMysql as mysql
-from common.method import reason
 from common.runFailed import Retry
+from common.sqlScript import UserMoneyOperations
+from common.method import format_reason
 
 
 @Retry(max_n=3)
@@ -35,8 +36,6 @@ class TestPayCreate(unittest.TestCase):
 		mysql.updateUserMoneyClearSql(uid)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
 		mysql.updateUserGodSql(uid, 1)
-		# mysql.deleteUserAccountSql('broker_user', normal_uid)
-		# mysql.deleteUserAccountSql('chatroom', normal_uid)
 		data = encodeData(payType='chat-gift',
 		                  num=default_num,
 		                  uid=uid,

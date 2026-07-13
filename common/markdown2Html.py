@@ -1,5 +1,8 @@
+import logging
 import os
 from common.Config import config
+
+logger = logging.getLogger(__name__)
 
 try:
     from markdown import markdown
@@ -112,7 +115,7 @@ class MarkdownToHtml:
             self._write_html(html_path, html_text)
             return True
         except Exception as e:
-            print(f"<Error> {e}")
+            logger.error("<Error> %s", e)
             return False
 
 
@@ -122,4 +125,4 @@ if __name__ == '__main__':
     html_file = os.path.join(path, "result.html")
 
     if MarkdownToHtml(md_file).convert(html_file):
-        print('done')
+        logger.info('done')

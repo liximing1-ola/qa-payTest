@@ -4,7 +4,7 @@
 
 定时发送下午茶通知，支持节假日自动跳过和随机祝福语。
 """
-from typing import Optional, Dict
+from typing import Dict
 import datetime
 import time
 import random
@@ -31,14 +31,8 @@ PIC_URL: str = 'http://m.qpic.cn/psc?/V52hTYBe40XQKg3ty77Y0YPE4S2QKHbM/45NBuzDIW
 
 
 def is_holiday_today() -> bool:
-    """检查今天是否是节假日
-    
-    Returns:
-        是否为节假日
-    """
+    """检查今天是否是节假日"""
     today = datetime.date.today()
-    print(today)
-    print(is_holiday(today))
     return is_holiday(today)
 
 

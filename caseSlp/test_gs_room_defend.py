@@ -5,14 +5,15 @@ __desc__ = "公会主播-房间守护"
 
 import unittest
 
-from caseSlp.config import *
+from caseSlp.config import default_money, gsUid, gs_A_ceo_uid, gs_soundchat_rid, payUid, pay_url, rates, room_defend
 from common.Assert import assert_code, assert_equal, assert_body
 from common.Consts import case_list, result
 from common.Request import post_request_session
 from common.basicSlpData import encodeData
 from common.conSlpMysql import conMysql as mysql
-from common.method import reason
 from common.runFailed import Retry
+from common.sqlScript import UserMoneyOperations
+from common.method import format_reason
 
 
 @Retry(max_n=3)

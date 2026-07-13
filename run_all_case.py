@@ -7,7 +7,7 @@
 import platform
 from time import time, sleep
 import unittest
-from typing import Optional, Dict, Any, List, Tuple
+from typing import Optional, Dict, Any, Tuple
 from Robot import robot
 from autoGitPull import updateTime, updateCode
 from common import Logs, method, Consts
@@ -190,10 +190,8 @@ def handle_result(app_info: str, test_result: unittest.TextTestResult) -> None:
 
 def pull_code(app_info: str) -> bool:
     """拉取代码
-    
     Args:
         app_info: 应用信息
-        
     Returns:
         是否成功拉取
     """
@@ -210,7 +208,6 @@ def pull_code(app_info: str) -> bool:
 
 def main(app_info: str) -> None:
     """主入口
-    
     Args:
         app_info: 应用信息
     """

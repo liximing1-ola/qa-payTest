@@ -2,12 +2,15 @@
 Auto Git Pull Module
 Automatically pull code updates and notify via robot
 """
+import logging
 import os
 import json
 import git
 from datetime import datetime
 from time import time
 from git.repo import Repo
+
+logger = logging.getLogger(__name__)
 from Robot import robot
 from common import Logs, Consts
 from common.Config import config
@@ -90,7 +93,6 @@ class GitUpdater:
     def autoGitPull(self, app_info, env='dev', bot='BB', to='slack'):
         """
         Automatically pull git code and send notifications
-        
         Returns:
             bool: True if update successful, False otherwise
         """
@@ -156,7 +158,7 @@ def update_time(operate, now=''):
                 f.write(DEFAULT_TIMESTAMP)
                 
     except IOError as e:
-        print(f"Error handling time file: {e}")
+        logger.error("Error handling time file: %s", e)
         return DEFAULT_TIMESTAMP if operate == 'read' else None
 
 

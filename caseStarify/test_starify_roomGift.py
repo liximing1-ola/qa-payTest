@@ -1,14 +1,13 @@
 import unittest
 
 from caseStarify.deal_data import deal_pay_data
-from caseStarify.need_data import *
-from caseStarify.tools import hash_key
+from caseStarify.need_data import commodity_config, starify_payUid, starify_rewardUid01, starify_rewardUid02, wealth_lv
+from common.tools import hash_key
 from common.Assert import assert_code, assert_body, assert_equal, assert_between
-from common.Config import config
 from common.Consts import case_list, result
-from common.Request import post_request_session_starify
+from common.Request import post_starify
 from common.conStarifyMysql import conMysql
-from common.method import reason_starify
+from common.method import format_reason
 from common.runFailed import Retry
 
 
@@ -28,9 +27,9 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid01 修改魅力值=0
         conMysql.updateCharmSql(starify_rewardUid01, 0)
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'success', True, reason_starify(des, res))
+        assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=0
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
         #  sql:被打赏者starify_rewardUid01 查询余额=19999*15% ～ 19999*20%
@@ -56,9 +55,9 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid01 修改魅力值=0
         conMysql.updateCharmSql(starify_rewardUid01, 0)
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'msg', "支付或打赏失败", reason_starify(des, res))
+        assert_body(res['body'], 'msg', "支付或打赏失败", format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=0
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
         #  sql:被打赏者starify_rewardUid01 查询余额=0
@@ -82,9 +81,9 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid01 修改魅力值=0
         conMysql.updateCharmSql(starify_rewardUid01, 0)
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'msg', "支付或打赏失败", reason_starify(des, res))
+        assert_body(res['body'], 'msg', "支付或打赏失败", format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=19998
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 19998)
         #  sql:被打赏者starify_rewardUid01 查询余额=0
@@ -112,9 +111,9 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid02 修改魅力值=0
         conMysql.updateCharmSql(starify_rewardUid02, 0)
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02], )
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'success', True, reason_starify(des, res))
+        assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=0
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
         #  sql:被打赏者starify_rewardUid01 查询余额=5200*5% ～ 5200*10%
@@ -150,9 +149,9 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid02 修改魅力值=0
         conMysql.updateCharmSql(starify_rewardUid02, 0)
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02], )
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'msg', "支付或打赏失败", reason_starify(des, res))
+        assert_body(res['body'], 'msg', "支付或打赏失败", format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=0
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
         #  sql:被打赏者starify_rewardUid01 查询余额=0
@@ -184,9 +183,9 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid02 修改魅力值=0
         conMysql.updateCharmSql(starify_rewardUid02, 0)
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02], )
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'msg', "支付或打赏失败", reason_starify(des, res))
+        assert_body(res['body'], 'msg', "支付或打赏失败", format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=10399
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 10399)
         #  sql:被打赏者starify_rewardUid01 查询余额=0
@@ -220,9 +219,9 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid02 修改魅力值=0
         conMysql.updateCharmSql(starify_rewardUid02, 0)
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02], )
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'success', True, reason_starify(des, res))
+        assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=0
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
         #  sql:打赏者starify_payUid 背包礼物=空,摩登派對-1
@@ -262,9 +261,9 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid02 修改魅力值=0
         conMysql.updateCharmSql(starify_rewardUid02, 0)
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02], )
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'msg', "支付或打赏失败", reason_starify(des, res))
+        assert_body(res['body'], 'msg', "支付或打赏失败", format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=0
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
         #  sql:打赏者starify_payUid 背包礼物=摩登派對*1
@@ -300,9 +299,9 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid02 修改魅力值=0
         conMysql.updateCharmSql(starify_rewardUid02, 0)
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02], )
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'msg', "支付或打赏失败", reason_starify(des, res))
+        assert_body(res['body'], 'msg', "支付或打赏失败", format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=5199
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 5199)
         #  sql:打赏者starify_payUid 背包礼物=聲霸天下*1
@@ -334,9 +333,9 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid01 修改魅力值=0
         conMysql.updateCharmSql(starify_rewardUid01, 0)
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'success', True, reason_starify(des, res))
+        assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=0
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
         #  sql:打赏者starify_payUid 背包礼物=空,聲霸天下-1
@@ -364,9 +363,9 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid01 修改魅力值=0
         conMysql.updateCharmSql(starify_rewardUid01, 0)
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'msg', "支付或打赏失败", reason_starify(des, res))
+        assert_body(res['body'], 'msg', "支付或打赏失败", format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=0
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
         #  sql:打赏者starify_payUid 背包礼物=空
@@ -398,9 +397,9 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid02 修改魅力值=0
         conMysql.updateCharmSql(starify_rewardUid02, 0)
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02], )
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'success', True, reason_starify(des, res))
+        assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=0
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
         #  sql:打赏者starify_payUid 背包礼物=聲霸天下-2
@@ -438,9 +437,9 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid02 修改魅力值=0
         conMysql.updateCharmSql(starify_rewardUid02, 0)
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02], )
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'msg', "支付或打赏失败", reason_starify(des, res))
+        assert_body(res['body'], 'msg', "支付或打赏失败", format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=0
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
         #  sql:打赏者starify_payUid 背包礼物=空
@@ -474,9 +473,9 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid02 修改魅力值=0
         conMysql.updateCharmSql(starify_rewardUid02, 0)
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02], )
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'msg', "支付或打赏失败", reason_starify(des, res))
+        assert_body(res['body'], 'msg', "支付或打赏失败", format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=0
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
         #  sql:打赏者starify_payUid 背包礼物=摩登派對*1
@@ -509,9 +508,9 @@ class TestPayCreate(unittest.TestCase):
         # 1 连击*1
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], hit_offset=1,
                              combo_key=combo_key)
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'success', True, reason_starify(des, res))
+        assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=19999*2
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 19999 * 2)
         #  sql:打赏者starify_payUid 背包礼物=空
@@ -523,9 +522,9 @@ class TestPayCreate(unittest.TestCase):
         # 2 连击*2
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], hit_offset=2,
                              combo_key=combo_key)
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'success', True, reason_starify(des, res))
+        assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=0
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
         #  sql:打赏者starify_payUid 背包礼物=空
@@ -558,9 +557,9 @@ class TestPayCreate(unittest.TestCase):
         # 1 连击
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], hit_offset=1,
                              combo_key=combo_key)
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'success', True, reason_starify(des, res))
+        assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=19999*2
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 19999 * 2)
         #  sql:打赏者starify_payUid 背包礼物=空,摩登派對-1
@@ -572,9 +571,9 @@ class TestPayCreate(unittest.TestCase):
         # 2 连击
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], hit_offset=2,
                              combo_key=combo_key)
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'success', True, reason_starify(des, res))
+        assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=0
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
         #  sql:打赏者starify_payUid 背包礼物=空,摩登派對-1
@@ -607,9 +606,9 @@ class TestPayCreate(unittest.TestCase):
         # 1 连击
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], hit_offset=1,
                              combo_key=combo_key)
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'success', True, reason_starify(des, res))
+        assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=0
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
         #  sql:打赏者starify_payUid 背包礼物=空,摩登派對-1
@@ -621,9 +620,9 @@ class TestPayCreate(unittest.TestCase):
         # 2 连击
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], hit_offset=2,
                              combo_key=combo_key)
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'success', True, reason_starify(des, res))
+        assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=0
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
         #  sql:打赏者starify_payUid 背包礼物=空,摩登派對-3
@@ -658,9 +657,9 @@ class TestPayCreate(unittest.TestCase):
         # 1 连击
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02],
                              hit_offset=1, combo_key=combo_key)
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'success', True, reason_starify(des, res))
+        assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=19999*2*2
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 19999 * (3 - 1) * 2)
         #  sql:打赏者starify_payUid 背包礼物=空
@@ -676,9 +675,9 @@ class TestPayCreate(unittest.TestCase):
         # 2 连击
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02],
                              hit_offset=2, combo_key=combo_key)
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'success', True, reason_starify(des, res))
+        assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=0
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
         #  sql:打赏者starify_payUid 背包礼物=空
@@ -721,9 +720,9 @@ class TestPayCreate(unittest.TestCase):
         # 1 连击
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02],
                              hit_offset=1, combo_key=combo_key)
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'success', True, reason_starify(des, res))
+        assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=19999*(5-1)
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 19999 * (5 - 1))
         #  sql:打赏者starify_payUid 背包礼物=1-1
@@ -739,9 +738,9 @@ class TestPayCreate(unittest.TestCase):
         # 2 连击
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02],
                              hit_offset=2, combo_key=combo_key)
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'success', True, reason_starify(des, res))
+        assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=0
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
         #  sql:打赏者starify_payUid 背包礼物=空
@@ -784,9 +783,9 @@ class TestPayCreate(unittest.TestCase):
         # 1 连击
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02],
                              hit_offset=1, combo_key=combo_key)
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'success', True, reason_starify(des, res))
+        assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=19999 * 4
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 19999 * (4 - 0))
         #  sql:打赏者starify_payUid 背包礼物=2-2
@@ -802,9 +801,9 @@ class TestPayCreate(unittest.TestCase):
         # 2 连击
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02],
                              hit_offset=2, combo_key=combo_key)
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'success', True, reason_starify(des, res))
+        assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=0
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
         #  sql:打赏者starify_payUid 背包礼物=空
@@ -847,9 +846,9 @@ class TestPayCreate(unittest.TestCase):
         # 1 连击
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02],
                              hit_offset=1, combo_key=combo_key)
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'success', True, reason_starify(des, res))
+        assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=19999 * 3
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 19999 * 3)
         #  sql:打赏者starify_payUid 背包礼物=3-2
@@ -865,9 +864,9 @@ class TestPayCreate(unittest.TestCase):
         # 2 连击
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02],
                              hit_offset=2, combo_key=combo_key)
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'success', True, reason_starify(des, res))
+        assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=0
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
         #  sql:打赏者starify_payUid 背包礼物=空
@@ -910,9 +909,9 @@ class TestPayCreate(unittest.TestCase):
         # 1 连击
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02],
                              hit_offset=1, combo_key=combo_key)
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'success', True, reason_starify(des, res))
+        assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=0
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
         #  sql:打赏者starify_payUid 背包礼物=6-2
@@ -928,9 +927,9 @@ class TestPayCreate(unittest.TestCase):
         # 2 连击
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01, starify_rewardUid02],
                              hit_offset=2, combo_key=combo_key)
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'success', True, reason_starify(des, res))
+        assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=0
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
         #  sql:打赏者starify_payUid 背包礼物=空
@@ -969,9 +968,9 @@ class TestPayCreate(unittest.TestCase):
         for i in range(3, 9):
             commodity = commodity_config[str(i)]
             data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
-            res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+            res = post_starify(data)
             assert_code(res['code'])
-            assert_body(res['body'], 'success', True, reason_starify(des, res))
+            assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
             #  sql:打赏者starify_payUid 查询余额=100000-gift['price']
             money -= commodity['price']
             wealth += commodity['wealth']
@@ -1002,9 +1001,9 @@ class TestPayCreate(unittest.TestCase):
                 #  sql:被打赏者starify_rewardUid01 修改魅力值=0
                 conMysql.updateCharmSql(starify_rewardUid01, 0)
                 data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
-                res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+                res = post_starify(data)
                 assert_code(res['code'])
-                assert_body(res['body'], 'msg', "当前特权级别无法使用此礼物", reason_starify(des, res))
+                assert_body(res['body'], 'msg', "当前特权级别无法使用此礼物", format_reason(des, res, slp=True))
 
                 #  sql:打赏者starify_payUid 查询余额=0
                 assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 50000)
@@ -1031,9 +1030,9 @@ class TestPayCreate(unittest.TestCase):
                 #  sql:被打赏者starify_rewardUid01 修改魅力值=0
                 conMysql.updateCharmSql(starify_rewardUid01, 0)
                 data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
-                res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+                res = post_starify(data)
                 assert_code(res['code'])
-                assert_body(res['body'], 'success', True, reason_starify(des, res))
+                assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
 
                 #  sql:打赏者starify_payUid 查询余额=0
                 assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 50000 - commodity['price'])
@@ -1066,9 +1065,9 @@ class TestPayCreate(unittest.TestCase):
         #  sql:被打赏者starify_rewardUid01 修改魅力值=0
         conMysql.updateCharmSql(starify_rewardUid01, 0)
         data = deal_pay_data("room", commodity, to_uids=[starify_rewardUid01], )
-        res = post_request_session_starify(config.starify_pay_url, data, token_name='starify')
+        res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'success', True, reason_starify(des, res))
+        assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
         #  sql:打赏者starify_payUid 查询余额=0
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 0)
         #  sql:被打赏者starify_rewardUid01 查询余额=0

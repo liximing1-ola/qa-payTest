@@ -1,5 +1,11 @@
+import logging
 import urllib.parse
-from caseSlp.config import *
+from caseSlp.config import (
+    business_room_rid, default_num, giftId, gsUid, normal_uid, rewardUid,
+    room_defend, zx_box,
+)
+
+logger = logging.getLogger(__name__)
 
 
 def _encode_data(data):
@@ -219,4 +225,4 @@ if __name__ == '__main__':
         price=zx_box['6']['price'],
         uids=('{}'.format(normal_uid), '{}'.format(gsUid))
     )
-    print(data)
+    logger.info(data)

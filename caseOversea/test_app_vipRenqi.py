@@ -6,7 +6,6 @@ APP 海外版支付测试 - VIP 人气值验证
 """
 import time
 import unittest
-from typing import Dict, Any
 
 from common.Config import config
 from common.conPtMysql import conMysql

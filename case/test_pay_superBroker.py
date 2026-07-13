@@ -1,6 +1,7 @@
 from common.conMysql import conMysql as mysql
 import unittest
 import pytest
+from common.sqlScript import UserMoneyOperations
 
 
 @unittest.skip('网赚分成逻辑 ')

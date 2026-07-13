@@ -2,11 +2,12 @@ from common.Config import config
 from common.conMysql import conMysql as mysql
 import unittest
 from common.Request import post_request_session
-from common.method import reason, calculate_vip_exp
+from common.method import calculate_vip_exp
 from common.Assert import assert_code, assert_equal, assert_body
 from common.basicData import encodeData
 from common.Consts import result, case_list
 from common.runFailed import Retry
+from common.sqlScript import UserMoneyOperations
 
 
 @Retry(max_n=3)

@@ -3,7 +3,7 @@ from gevent import monkey
 
 monkey.patch_all()
 from common.Config import config
-from common.sqlScript import mysql
+from common.sqlScript import UserMoneyOperations, UserCommodityOperations
 from common import Consts, Logs, method
 from common.basicData import encodeData
 from common.method import get_value
@@ -12,6 +12,9 @@ from Robot import robot
 from common.Request import post_request_session
 from common.Assert import assert_equal, assert_code
 from time import sleep
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class TestPayConcurrent:
@@ -30,7 +33,7 @@ class TestPayConcurrent:
     def _print(self, des, is_start=True):
         """打印测试信息"""
         sep = '-' * 40
-        print(f"{sep}{des}{sep}" if is_start else sep * 3)
+        logger.info(f"{sep}{des}{sep}" if is_start else sep * 3)
 
     def _exec(self, url, data, check_code=200):
         """执行请求并校验"""

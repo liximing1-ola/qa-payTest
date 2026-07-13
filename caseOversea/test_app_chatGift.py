@@ -8,7 +8,7 @@ import unittest
 from common.Config import config
 from common.conPtMysql import conMysql
 from common.Request import post_request_session
-from common.Assert import assert_code, assert_equal, assert_body, assert_len
+from common.Assert import assert_code, assert_equal, assert_body
 from common.method import format_reason
 from common.basicData import encodeOverseaData
 from common.Consts import case_list, result

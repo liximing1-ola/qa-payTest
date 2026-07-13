@@ -5,11 +5,11 @@ HTTP 请求封装模块
 提供统一的 HTTP POST 请求功能，支持 Token 管理、HTTPS 转换和响应解析。
 """
 import logging
-import time
 from typing import Dict, Any, Optional
 import requests
 import urllib3
 from common.Session import Session
+from common.Config import config
 
 urllib3.disable_warnings()
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -93,14 +93,55 @@ def post_request_session(url: str, data: Optional[Any],
         )
         return _parse_response(response)
     except requests.Timeout:
-        print(f"Request timeout: {url}")
+        logger.warning('Request timeout: %s', url)
         return {'code': -1, 'body': '', 'error': 'timeout'}
     except requests.RequestException as e:
-        print(f"Request error: {e}")
+        logger.error('Request error: %s', e)
         return {'code': -1, 'body': '', 'error': str(e)}
     except Exception as e:
-        print(f"Unexpected error: {e}")
+        logger.error('Unexpected error: %s', e)
         return {'code': -1, 'body': '', 'error': str(e)}
+
+
+def post_request_session_starify(url: str, data: Optional[Any],
+                                token_name: str = 'starify',
+                                uid: Optional[int] = None,
+                                timeout: float = DEFAULT_TIMEOUT) -> Dict[str, Any]:
+    """
+    Starify POST 请求（post_request_session 的 starify 封装）
+    
+    Args:
+        url: 请求 URL
+        data: 请求数据
+        token_name: Token 名称，默认为 'starify'
+        uid: 用户 UID（可选，用于刷新指定用户的 token）
+        timeout: 请求超时时间
+        
+    Returns:
+        包含 code、body、time_consuming、time_total 的响应字典
+    """
+    if uid is not None:
+        Session.checkUserToken(operate='read', app_name=token_name, uid=uid)
+    return post_request_session(url, data, token_name=token_name, timeout=timeout)
+
+
+def post_starify(data: Optional[Any], uid: Optional[int] = None,
+                 timeout: float = DEFAULT_TIMEOUT) -> Dict[str, Any]:
+    """
+    Starify 支付接口 POST 请求快捷封装
+    
+    自动使用 config.starify_pay_url 和 'starify' token，简化 caseStarify 用例调用。
+    
+    Args:
+        data: 请求数据
+        uid: 用户 UID（可选，用于刷新指定用户的 token）
+        timeout: 请求超时时间
+        
+    Returns:
+        包含 code、body、time_consuming、time_total 的响应字典
+    """
+    return post_request_session_starify(config.starify_pay_url, data,
+                                        token_name='starify', uid=uid, timeout=timeout)
 
 
 if __name__ == '__main__':
@@ -113,4 +154,4 @@ if __name__ == '__main__':
     }
     test_url = 'https://116.62.125.230/pay/create?package=com.yhl.sleepless.android'
     test_data = 'platform=available&type=chat-gift&money=1000&params=%7B%22notify_group_id%22%3A0%2C%22to%22%3A%22105002312%22%2C%22giftId%22%3A5%2C%22giftNum%22%3A10%2C%22cid%22%3A0%2C%22ctype%22%3A%22%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A10%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22show_pac_man_guide%22%3A1%2C%22all_mic%22%3A0%2C%22useCoin%22%3A-1%7D'
-    print(requests.post(url=test_url, data=test_data, headers=test_headers, verify=False).json())
+    logger.info(requests.post(url=test_url, data=test_data, headers=test_headers, verify=False).json())

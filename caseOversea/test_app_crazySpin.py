@@ -92,5 +92,5 @@ class TestPayCreate(unittest.TestCase):
         conMysql.deleteUserAccountSql('user_commodity', config.oversea_payUid)
         conMysql.insertXsUserCommodity(config.oversea_payUid, cid=cid, num=100)  # 背包插入 100 个欢乐券
         
-        # TODO: 待补充后续逻辑
+        # 抽奖逻辑待业务接口就绪后补充，当前仅保留跳过占位
         case_list[des] = result

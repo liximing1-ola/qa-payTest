@@ -4,10 +4,10 @@ from common.Request import post_request_session
 from common.method import calculate_vip_exp
 import unittest
 from common.Assert import assert_code, assert_equal, assert_body, assert_len
-from common.method import reason
 from common.basicData import encodeData
 from common.Consts import case_list, result
 from common.runFailed import Retry
+from common.sqlScript import UserMoneyOperations
 
 
 @Retry(max_n=3)

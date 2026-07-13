@@ -5,14 +5,15 @@ __desc__ = "打赏多人多礼物"
 
 import unittest
 
-from caseSlp.config import *
+from caseSlp.config import giftId, gs_A_uid, gs_B_ceo_rid, gs_B_uid, normal_uid, payUid, pay_url, rates
 from common.Assert import assert_code, assert_equal, assert_body
 from common.Consts import case_list, result
 from common.Request import post_request_session
 from common.basicSlpData import encodeData
 from common.conSlpMysql import conMysql as mysql
-from common.method import reason
 from common.runFailed import Retry
+from common.sqlScript import UserMoneyOperations
+from common.method import format_reason
 
 
 @Retry(max_n=3)

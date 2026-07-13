@@ -12,7 +12,6 @@ from common.Request import post_request_session
 from common.Assert import assert_code, assert_body, assert_len, assert_equal
 from common.basicData import encodeOverseaData
 from common.Consts import result, case_list
-from common.runFailed import Retry
 
 
 @unittest.skip('老版本样式的阿语分成体系，已替换新分成')

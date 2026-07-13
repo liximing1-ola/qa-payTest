@@ -5,7 +5,7 @@
 支持多应用的定时测试任务执行、结果汇总和通知。
 """
 import unittest
-from typing import Optional, Dict, Any
+from typing import Optional, Dict
 import platform
 from common import Logs, method, Consts
 from Robot import robot
@@ -31,10 +31,8 @@ APP_CONFIG: Dict[str, Dict[str, str]] = {
 
 def load_cases(app_info: str) -> Optional[unittest.TestSuite]:
     """加载测试用例
-    
     Args:
         app_info: 应用信息
-        
     Returns:
         测试套件，失败返回 None
     """
@@ -53,10 +51,8 @@ def load_cases(app_info: str) -> Optional[unittest.TestSuite]:
 
 def run_tests(app_info: str) -> Optional[unittest.TextTestResult]:
     """执行测试并返回结果
-    
     Args:
         app_info: 应用信息
-        
     Returns:
         测试结果对象，失败返回 None
     """
@@ -68,10 +64,8 @@ def run_tests(app_info: str) -> Optional[unittest.TextTestResult]:
 
 def log_result(test_result: unittest.TextTestResult) -> str:
     """记录测试结果
-    
     Args:
         test_result: 测试结果对象
-        
     Returns:
         结果描述字符串
     """
@@ -85,7 +79,6 @@ def log_result(test_result: unittest.TextTestResult) -> str:
 def notify_success(app_info: str, test_result: unittest.TextTestResult, 
                   case_list: str) -> None:
     """通知成功结果
-    
     Args:
         app_info: 应用信息
         test_result: 测试结果对象
@@ -101,7 +94,6 @@ def notify_success(app_info: str, test_result: unittest.TextTestResult,
 def notify_failures(app_info: str, failures: list, 
                    log_type: str = 'failures') -> None:
     """通知失败结果
-    
     Args:
         app_info: 应用信息
         failures: 失败用例列表
@@ -114,8 +106,7 @@ def notify_failures(app_info: str, failures: list,
 
 
 def handle_result(app_info: str, test_result: unittest.TextTestResult) -> None:
-    """处理测试结果
-    
+    """处理测试结果  
     Args:
         app_info: 应用信息
         test_result: 测试结果对象
@@ -136,7 +127,6 @@ def handle_result(app_info: str, test_result: unittest.TextTestResult) -> None:
 
 def main(app_info: str) -> None:
     """主入口
-    
     Args:
         app_info: 应用信息
     """

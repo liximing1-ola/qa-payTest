@@ -5,6 +5,7 @@
 
 提供摩天轮的下注和查询功能
 """
+import logging
 import time
 import random
 from typing import Tuple, List, Optional
@@ -12,6 +13,7 @@ from common.Config import config
 from common.Request import post_request_session
 from common.conPtMysql import conMysql
 
+logger = logging.getLogger(__name__)
 
 # 配置常量
 MAX_RETRY_COUNT: int = 10
@@ -136,5 +138,5 @@ class Greedy:
             return [counter_all, prize]
 
         except Exception as e:
-            print(f"Bet error: {e}")
+            logger.error("Bet error: %s", e)
             return [0, 0]

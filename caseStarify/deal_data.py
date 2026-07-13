@@ -1,7 +1,7 @@
 import json
 
-from caseStarify.need_data import *
-from caseStarify.tools import hash_key
+from caseStarify.need_data import c_uid, starify_payUid, starify_rid, starify_work_state
+from common.tools import hash_key
 
 
 def deal_pay_data(op_type, commodity, work_state="todo", to_uids=None, is_use_bag=False, hit_offset=1, combo_key=None,sale_level=1):

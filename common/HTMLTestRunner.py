@@ -5,11 +5,13 @@ HTML测试报告生成器
 基于unittest的HTML测试报告生成工具，支持图表展示
 """
 import datetime
+import logging
 import sys
 import io
 import unittest
 from xml.sax import saxutils
 
+logger = logging.getLogger(__name__)
 
 # 状态码映射
 STATUS_MAP = {0: '通过', 1: '失败', 2: '错误'}
@@ -368,7 +370,7 @@ class HTMLTestRunner(TemplateMixin):
         test(result)
         self.stopTime = datetime.datetime.now()
         self.generateReport(test, result)
-        print(f'\nTime Elapsed: {self.stopTime - self.startTime}', file=sys.stderr)
+        logger.info('Time Elapsed: %s', self.stopTime - self.startTime)
         return result
 
     def sortResult(self, result_list):

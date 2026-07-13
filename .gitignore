@@ -7,3 +7,7 @@ __pycache__/
 caseStarify/__pycache__/
 common/__pycache__/
 /caseStarify/del/
+/.qoder/
+/.vscode/
+*.pyc
+*.log

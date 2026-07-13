@@ -1,6 +1,5 @@
 from common.Config import config
 from common.conMysql import conMysql as mysql
-from common.method import reason
 import unittest
 import pytest
 from common.Request import post_request_session
@@ -8,6 +7,8 @@ from common.Assert import assert_code, assert_body, assert_equal
 from common.Consts import case_list, result
 from common.basicData import encodeData
 from common.runFailed import Retry
+from common.sqlScript import UserMoneyOperations
+from common.method import format_reason
 
 
 @Retry(max_n=3)

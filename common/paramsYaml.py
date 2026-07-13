@@ -1,8 +1,11 @@
 # coding=utf-8
-import yaml
+import logging
 import os
 import platform
+import yaml
 from common.Config import config
+
+logger = logging.getLogger(__name__)
 
 
 class YamlReader:
@@ -19,7 +22,6 @@ class YamlReader:
     @classmethod
     def _get_loader(cls):
         """根据环境获取 YAML 加载器"""
-        import platform
         node = platform.node()
         if any(node == config.linux_node[n] for n in cls.SAFE_LOADER_NODES):
             return yaml.SafeLoader
@@ -38,10 +40,9 @@ class YamlReader:
             键对应的值，不存在则返回None
         """
         yaml_path = cls._get_yaml_path(filename)
-        print(yaml_path)
 
         if not os.path.exists(yaml_path):
-            print(f"File not found: {yaml_path}")
+            logger.warning("File not found: %s", yaml_path)
             return None
 
         try:
@@ -55,7 +56,7 @@ class YamlReader:
             return yaml_data.get(key) if yaml_data else None
 
         except Exception as e:
-            print(f"Error reading YAML: {e}")
+            logger.error("Error reading YAML: %s", e)
             return None
 
 

@@ -7,9 +7,12 @@
     url = config.pay_url
     uid = config.payUid
 """
+import logging
 import os
 from dataclasses import dataclass, field
 from typing import Dict, Any
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -31,6 +34,47 @@ class RedisConfig:
     host_46: str = '192.168.11.46'
     host_ali: str = '127.0.0.1'
     port: int = 6379
+
+
+@dataclass
+class DatabaseConfig:
+    """数据库配置（集中管理，避免分散在各模块）"""
+    # DEV 环境（46机器）
+    dev_host: str = '192.168.11.46'
+    dev_port: int = 3306
+    dev_user: str = 'root'
+    dev_password: str = '123456'
+    # ALI 环境
+    ali_host: str = '127.0.0.1'
+    ali_port: int = 3306
+    ali_user: str = 'root'
+    ali_password: str = 'root'
+    # RDS 阿里云
+    rds_host: str = 'rm-bp1nfl3dp096d5o39.mysql.rds.aliyuncs.com'
+    rds_port: int = 3306
+    rds_user: str = 'super'
+    rds_password: str = 'dev123456'
+    # 通用
+    database: str = 'xianshi'
+    charset: str = 'utf8'
+
+    @property
+    def dev_config(self) -> Dict[str, Any]:
+        """DEV 环境连接配置"""
+        return {'host': self.dev_host, 'port': self.dev_port, 'user': self.dev_user,
+                'password': self.dev_password, 'database': self.database, 'charset': self.charset}
+
+    @property
+    def ali_config(self) -> Dict[str, Any]:
+        """ALI 环境连接配置"""
+        return {'host': self.ali_host, 'port': self.ali_port, 'user': self.ali_user,
+                'password': self.ali_password, 'database': self.database, 'charset': self.charset}
+
+    @property
+    def rds_config(self) -> Dict[str, Any]:
+        """RDS 阿里云连接配置"""
+        return {'host': self.rds_host, 'port': self.rds_port, 'user': self.rds_user,
+                'password': self.rds_password, 'database': self.database, 'charset': self.charset}
 
 
 @dataclass
@@ -149,6 +193,7 @@ class Config:
     appName: AppNameConfig = field(default_factory=AppNameConfig)
     linux_node: LinuxNodeConfig = field(default_factory=LinuxNodeConfig)
     redis: RedisConfig = field(default_factory=RedisConfig)
+    database: DatabaseConfig = field(default_factory=DatabaseConfig)
 
     # ============ 分成比例 ============
     rate: float = 0.62
@@ -262,6 +307,16 @@ class Config:
         return self.redis.host_ali
 
     @property
+    def rush_pay_url(self) -> str:
+        """Rush支付接口URL"""
+        return f"{self.appInfo.rush}pay/create?package=com.imbb.banban.android"
+
+    @property
+    def starify_pay_url(self) -> str:
+        """Starify支付接口URL"""
+        return f"{self.appInfo.starify}pay/create?package=com.imbb.starify.android"
+
+    @property
     def starify_mobile_login_url(self) -> str:
         """Starify手机号登录URL"""
         return f"{self.appInfo.starify}go/starify/login/mobileLogin"
@@ -276,6 +331,6 @@ class Config:
 config = Config()
 
 if __name__ == '__main__':
-    print(config.pay_url)
-    print(f"payUid: {config.payUid}")
-    print(f"giftId['5']: {config.giftId['5']}")
+    logger.info(config.pay_url)
+    logger.info("payUid: %s", config.payUid)
+    logger.info("giftId['5']: %s", config.giftId['5'])

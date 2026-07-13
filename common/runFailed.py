@@ -17,6 +17,9 @@ import functools
 import traceback
 import inspect
 import time
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class Retry:
@@ -49,7 +52,7 @@ class Retry:
                     return func(*args, **kwargs)
                 except Exception as e:
                     if attempt <= self._max_n:
-                        print(self._format_traceback(), e)
+                        logger.warning("%s %s", self._format_traceback(), e)
                         if args and hasattr(args[0], 'tearDown') and hasattr(args[0], 'setUp'):
                             args[0].tearDown()
                             args[0].setUp()

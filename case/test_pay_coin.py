@@ -1,5 +1,4 @@
 from common.Config import config
-from common.method import reason
 from common.conMysql import conMysql as mysql
 from common.Request import post_request_session
 from common.method import calculate_vip_exp
@@ -8,6 +7,7 @@ from common.Assert import assert_body, assert_code, assert_equal
 from common.basicData import encodeData
 from common.Consts import case_list, result
 from common.runFailed import Retry
+from common.sqlScript import UserMoneyOperations
 
 
 @Retry(max_n=3, func_prefix='test_02_roomChangePayCoin')

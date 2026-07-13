@@ -5,9 +5,12 @@
 提供不同消费场景的数据编码功能，支持多种支付类型和平台。
 使用字典映射替代大量 if-elif 分支，提升代码可维护性。
 """
+import logging
 import urllib.parse
 from typing import Dict, Any, Tuple, Optional
 from common.Config import config
+
+logger = logging.getLogger(__name__)
 
 # 默认常量
 DEFAULT_VERSION = 2
@@ -620,4 +623,4 @@ if __name__ == '__main__':
                       money=2100,
                       giftId=config.giftId['47'],
                       uids=(str(config.rewardUid), str(config.gsUid)))
-    print(data)
+    logger.info(data)

@@ -4,6 +4,7 @@
 
 封装用户登录和 Token 管理功能，支持多环境配置和备选方案。
 """
+import logging
 import os
 from typing import Optional, Dict, Any
 import requests
@@ -11,6 +12,8 @@ import urllib3
 from common import Logs
 from common.Config import config
 from common.paramsYaml import Yaml
+
+logger = logging.getLogger(__name__)
 
 urllib3.disable_warnings()
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -33,7 +36,7 @@ class Session:
             "headers_key": 'header_dev',
             "params_key": 'params_teammate_qq',
             "body_key": 'data_teammate_qq',
-            "package": 'com.im.duck.android',
+            "package": 'x.x.x.x',
             "login_url": config.bb_qqLogin_url,
             "use_backup": False,
         },
@@ -41,7 +44,7 @@ class Session:
             "headers_key": 'header_oversea',
             "params_key": 'data_oversea_mobile_params',
             "body_key": 'data_oversea_mobile',
-            "package": None,
+            "package": 'x.x.x.x',
             "login_url": config.oversea_mobile_login_url,
             "use_backup": False,
         },
@@ -91,12 +94,12 @@ class Session:
             Token 和 UID 字典，失败返回 None
         """
         if not res.get('success') or 'token' not in res.get('data', {}):
-            print(f'failReason: {res.get("msg", "")}')
+            logger.warning('Login failed: %s', res.get('msg', ''))
             return None
 
         token = res['data'].get('token')
         uid = res['data'].get('uid')
-        print(f'{env}: token:{token}')
+        logger.info('%s: token acquired', env)
 
         Session.checkUserToken('write', app_name=env, token=token)
         return {'token': token, 'uid': uid}
@@ -119,7 +122,7 @@ class Session:
         user_index = conMysql.selectUserInfoSql('user_index', config.payUid)
         token = TokenGenerator(config.payUid, user_index).generate()
         Session.checkUserToken('write', app_name=env, token=token)
-        print(f'默认方案失败，启用备选方案：token:{token}')
+        logger.info('主方案失败，已启用备选方案获取 token')
         return {'token': token}
 
     @staticmethod
@@ -137,7 +140,7 @@ class Session:
 
         env_config = Session.ENV_CONFIGS.get(env)
         if not env_config:
-            print("env input error")
+            logger.warning('Unknown env: %s', env)
             return None
 
         try:
@@ -174,7 +177,8 @@ class Session:
         txt_path = os.path.join(base_path, filename)
 
         if not os.path.exists(txt_path):
-            open(txt_path, 'w').close()
+            with open(txt_path, 'w') as f:
+                pass  # 创建空文件
 
         if operate == 'write':
             with open(txt_path, 'w') as f:
