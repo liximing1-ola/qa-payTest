@@ -14,7 +14,7 @@ from common.method import format_reason
 class TestPayLivePackage(unittest.TestCase):
     """直播打包结算支付测试类"""
     
-    live_role = config.live_role.copy()
+    live_role = config.live_role
     # 商业房房主 or (（工会会长 or 工会成员）&& 同意大神协议 )
     # (insert into xs_user_settings (uid, agreement_version) values(100500205, 1))
 

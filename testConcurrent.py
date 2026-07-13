@@ -19,9 +19,9 @@ logger = logging.getLogger(__name__)
 
 class TestPayConcurrent:
     URLS = {
-        'pay': config.appInfo['bb_dev'] + 'pay/create?package=',
-        'present': config.appInfo['bb_dev'] + 'commodity/present?package=',
-        'use': config.appInfo['bb_dev'] + 'commodity/use?package=',
+        'pay': config.appInfo.bb_dev + 'pay/create?package=',
+        'present': config.appInfo.bb_dev + 'commodity/present?package=',
+        'use': config.appInfo.bb_dev + 'commodity/use?package=',
     }
     CID = {'gift': 340, 'frame': 264}
     Session().getSession('dev')

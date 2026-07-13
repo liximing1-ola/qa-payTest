@@ -90,6 +90,10 @@ class CodeConfig:
     slp_common_rpc_path: str = "/var/www/slp/slp-common-rpc"
     slp_git_branch: str = "dev"
 
+    def __getitem__(self, key):
+        """支持下标访问"""
+        return getattr(self, key, None)
+
 
 @dataclass
 class AppNameConfig:
