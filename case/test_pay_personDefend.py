@@ -1,18 +1,18 @@
 from common.Config import config
-import unittest
 import pytest
 from common.Request import post_request_session
-from common.Assert import assert_code, assert_body, assert_equal
+from common.Assert import assert_code, assert_body
 from common.basicData import encodeData
 from common.Consts import case_list, result
 from common.runFailed import Retry
 from common.conMysql import conMysql as mysql
 from common.sqlScript import UserMoneyOperations
 from common.method import format_reason
+from case.base import PayTestBase
 
 
 @Retry(max_n=3)
-class TestPayPersonDefend(unittest.TestCase):
+class TestPayPersonDefend(PayTestBase):
 
     # {'id': 2, 'name': '小宝贝', 'money_value': 52000, 'break_money': 28800, 'upgrade_money': 99900}
     # {'id': 1, 'name': 'CP', 'money_value': 520000, 'break_money': 99900, 'upgrade_money': 520000}
@@ -25,15 +25,6 @@ class TestPayPersonDefend(unittest.TestCase):
         """准备测试数据"""
         for step in setup_steps:
             UserMoneyOperations.update(**step)
-
-    def _validate_db_state(self, checks):
-        """验证数据库状态"""
-        for check in checks:
-            field = check['field']
-            uid = check.get('uid', config.payUid)
-            expected = check['expected']
-            kwargs = check.get('kwargs', {})
-            assert_equal(mysql.selectUserInfoSql(field, uid, **kwargs), expected)
 
     @pytest.mark.run(order=1)
     def test_01_defendPayChangMoney(self):

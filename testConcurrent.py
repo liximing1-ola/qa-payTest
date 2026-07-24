@@ -173,10 +173,10 @@ class TestPayConcurrent:
 
     def main(self, num):
         self.test_01_payPackGift(num)
-        # self.test_02_commodityUse(num)
-        # self.test_03_commodityPresent(num)
-        # self.test_04_payGift(num)
-        # self.test_05_payShop(num)
+        self.test_02_commodityUse(num)
+        self.test_03_commodityPresent(num)
+        self.test_04_payGift(num)
+        self.test_05_payShop(num)
         case_list = method.dict_to_markdown(Consts.case_list_c)
         Logs.get_logger('concurrentCaseResult.log').info(f"{case_list}\n")
         robot('markdown', str(case_list))

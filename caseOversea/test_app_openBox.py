@@ -4,7 +4,6 @@ APP 海外版支付测试 - 背包开箱验证
 
 验证背包内开箱子得到物品的流程。
 """
-import unittest
 from common.Config import config
 from common.method import format_reason
 from common.conPtMysql import conMysql
@@ -13,21 +12,14 @@ from common.Assert import assert_code, assert_body, assert_len, assert_equal
 from common.basicData import encodeOverseaData
 from common.Consts import result, case_list
 from common.runFailed import Retry
+from caseOversea.base import OverseaAreaTestBase
 
 
 @Retry
-class TestPayCreate(unittest.TestCase):
+class TestPayCreate(OverseaAreaTestBase):
     """APP 背包开箱测试类"""
 
-    @classmethod
-    def setUpClass(cls) -> None:
-        """测试前准备：设置用户大区"""
-        conMysql.updateUserBigArea(tuple(i for i in config.oversea_user.values()), bigarea_id=2)
-
-    @classmethod
-    def tearDownClass(cls) -> None:
-        """测试后清理：恢复用户大区"""
-        conMysql.updateUserBigArea(tuple(i for i in config.oversea_user.values()))
+    bigarea_id = 2
 
     def test_01_openBoxPayChange(self, des: str = '背包开铜箱子场景', cid: int = 2):
         """

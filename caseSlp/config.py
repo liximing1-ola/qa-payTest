@@ -151,18 +151,10 @@ rates = {
 	# 主播,mc
 	'gs': {
 		"default": 0.6,  # 默认
-		# "other_room": 0,  # 跨档
-		# "room": 0,  # 房间
-		# "chat": 0,  # 私聊
-		# "defend": 0,  # 个人守护
-		# "room_defend": 0,  # 直播房间守护
 	},
 	# 普通用户,mcb
 	'normal': {
 		"default": 0.6,  # 默认
-		# "room": 0,  # 房间
-		# "chat": 0,  # 私聊
-		# "defend": 0,  # 个人守护
 	},
 }
 # 爵位
@@ -250,13 +242,3 @@ zx_box = {
 		},
 	}
 }
-# # # 角色配置 todo
-# live_role = {
-# 	'pack_ceo': 105002314,  # 直播公会公会长
-# 	'pack_master_NoPack': 105002319,  # 非公会一代宗师主播
-# 	'pack_cal_uid': 105002313,  # 公会签约主播（打包结算），宗师等级可设置为一代和非一代
-# 	'live_rid': 193185577,  # 直播间(types=live)，房主:105002313
-# 	'auto_rid': 193185484,  # business | types: auto | room_factory_type: business-content | settlement_channel: cp-women
-# }
-# # 被打赏者（一代宗师） todo
-# masterUid = 100500338

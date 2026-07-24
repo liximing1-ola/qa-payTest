@@ -1,7 +1,6 @@
 """
 Redis数据库操作模块
 """
-import redis
 from common.Config import config
 
 
@@ -20,6 +19,7 @@ class RedisConnection:
     @classmethod
     def get_pool(cls, host):
         """获取连接池（单例）"""
+        import redis
         if host not in cls._pools:
             cls._pools[host] = redis.ConnectionPool(
                 host=host,
@@ -31,6 +31,7 @@ class RedisConnection:
     @classmethod
     def get_connection(cls, host):
         """获取Redis连接"""
+        import redis
         return redis.Redis(connection_pool=cls.get_pool(host))
 
 

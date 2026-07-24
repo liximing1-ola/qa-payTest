@@ -1,3 +1,4 @@
+from case.base import PayTestBase
 from common.Config import config
 from common.conMysql import conMysql as mysql
 import unittest
@@ -6,34 +7,16 @@ from common.Assert import assert_body, assert_code, assert_equal, assert_len
 from common.basicData import encodeData
 from common.runFailed import Retry
 from common.Consts import case_list_b, result
-from common.sqlScript import UserMoneyOperations
 from common.method import format_reason
 
 
 @Retry(max_n=3)
-class TestPayFleetRoom(unittest.TestCase):
+class TestPayFleetRoom(PayTestBase):
     """家族房支付测试类"""
     other_fleet_rid = mysql.selectUserInfoSql('fleet')  # 非本家族房
     fleet_rid = config.bb_user.fleetRid  # 本家族房
     pack_cal_uid = config.bb_user.pack_cal_uid  # 直播公会gs
 
-    def _prepare_test_data(self, setup_steps):
-        """准备测试数据"""
-        for step in setup_steps:
-            if step['action'] == 'update_money':
-                UserMoneyOperations.update(**step['params'])
-
-    def _validate_db_state(self, checks):
-        """验证数据库状态"""
-        for check in checks:
-            field = check['field']
-            uid = check['uid']
-            expected = check['expected']
-            kwargs = check.get('kwargs', {})
-            if 'assert_func' in check:
-                check['assert_func'](mysql.selectUserInfoSql(field, uid, **kwargs), expected)
-            else:
-                assert_equal(mysql.selectUserInfoSql(field, uid, **kwargs), expected)
 
     def test_01_sameFleetRoomLiveGsRate(self):
         """

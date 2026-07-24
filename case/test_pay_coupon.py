@@ -1,3 +1,4 @@
+from case.base import PayTestBase
 from common.Config import config
 from common.conMysql import conMysql as mysql
 from common.Request import post_request_session
@@ -6,35 +7,13 @@ from common.Assert import assert_code, assert_body, assert_equal
 from common.basicData import encodeData
 from common.Consts import case_list, result
 from common.runFailed import Retry
-from common.sqlScript import UserMoneyOperations, UserCommodityOperations
 from common.method import format_reason
 
 
 @Retry(max_n=3)
-class TestPayCoupon(unittest.TestCase):
+class TestPayCoupon(PayTestBase):
     """优惠券支付测试类"""
     businessRid = config.live_role['auto_rid']
-
-    def _prepare_test_data(self, setup_steps):
-        """准备测试数据"""
-        for step in setup_steps:
-            if step['action'] == 'clear_user_money':
-                mysql.updateUserMoneyClearSql(*step['uids'])
-            elif step['action'] == 'delete_commodity':
-                mysql.deleteUserAccountSql('user_commodity', step['uid'])
-            elif step['action'] == 'insert_commodity':
-                UserCommodityOperations.insert(**step['params'])
-            elif step['action'] == 'update_money':
-                UserMoneyOperations.update(**step['params'])
-
-    def _validate_db_state(self, checks):
-        """验证数据库状态"""
-        for check in checks:
-            field = check['field']
-            uid = check['uid']
-            expected = check['expected']
-            kwargs = check.get('kwargs', {})
-            assert_equal(mysql.selectUserInfoSql(field, uid, **kwargs), expected)
 
     def test_01_RoomPayNoMoney(self):
         """

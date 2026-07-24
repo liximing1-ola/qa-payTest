@@ -1,3 +1,4 @@
+from case.base import PayTestBase
 from common.Config import config
 from common.conMysql import conMysql as mysql
 from common.Request import post_request_session
@@ -7,34 +8,11 @@ from common.Assert import assert_code, assert_equal, assert_body, assert_len
 from common.basicData import encodeData
 from common.Consts import case_list, result
 from common.runFailed import Retry
-from common.sqlScript import UserMoneyOperations
 
 
 @Retry(max_n=3)
-class TestPayChatRate(unittest.TestCase):
+class TestPayChatRate(PayTestBase):
     """私聊打赏分成测试类"""
-
-    def _prepare_test_data(self, setup_steps):
-        """准备测试数据"""
-        for step in setup_steps:
-            if step['action'] == 'update_money':
-                UserMoneyOperations.update(**step['params'])
-            elif step['action'] == 'clear_user_data':
-                mysql.updateUserMoneyClearSql(config.payUid, config.rewardUid)
-            elif step['action'] == 'delete_account':
-                mysql.deleteUserAccountSql(step['table'], step['uid'])
-
-    def _validate_db_state(self, checks):
-        """验证数据库状态"""
-        for check in checks:
-            field = check['field']
-            uid = check['uid']
-            expected = check['expected']
-            kwargs = check.get('kwargs', {})
-            if 'assert_func' in check:
-                check['assert_func'](mysql.selectUserInfoSql(field, uid, **kwargs), expected)
-            else:
-                assert_equal(mysql.selectUserInfoSql(field, uid, **kwargs), expected)
 
     def test_01_chatPayNoMoney(self):
         """

@@ -149,6 +149,29 @@ class conMysql:
         'user_title_new':  "UPDATE xs_user_title_new SET subscribe_time=0 WHERE uid=%s LIMIT 1",
     }
 
+    # updateUserInfoSql SQL 与参数映射（params_builder 接收 (uid, bid) 返回参数元组）
+    UPDATE_USER_INFO_MAP = {
+        'broker_user': (
+            "UPDATE xs_broker_user SET bid=%s, uid=%s, state=1, pack_cal=1 WHERE id=50 LIMIT 1",
+            lambda uid, bid: (bid, uid),
+        ),
+        'user_index': (
+            "UPDATE xs_user_index SET salt=%s, dateline=%s WHERE uid=%s LIMIT 1",
+            lambda uid, bid: (bid, int(time.time()), uid),
+        ),
+        'chatroom': (
+            "UPDATE xs_chatroom SET app_id=1, uid=%s, settlement_channel='live', "
+            "room_factory_type='business-soundchat' WHERE rid=%s LIMIT 1",
+            lambda uid, bid: (uid, config.live_role['live_rid']),
+        ),
+        'super_chatroom': (
+            "UPDATE xs_chatroom SET type='super-voice-fresh', property='business', version=737, "
+            "room_factory_type='super-voice-fresh', room_module_id=73, "
+            "settlement_channel='super-voice' WHERE rid=%s",
+            lambda uid, bid: (uid,),
+        ),
+    }
+
     # ============ 内部工具方法 ============
 
     # ============ 查询方法 ============
@@ -220,26 +243,12 @@ class conMysql:
             uid: 用户 ID
             bid: 主播 ID
         """
-        if tableName == 'broker_user':
-            sql = "UPDATE xs_broker_user SET bid=%s, uid=%s, state=1, pack_cal=1 WHERE id=50 LIMIT 1"
-            params = (bid, uid)
-        elif tableName == 'user_index':
-            sql = "UPDATE xs_user_index SET salt=%s, dateline=%s WHERE uid=%s LIMIT 1"
-            params = (bid, int(time.time()), uid)
-        elif tableName == 'chatroom':
-            sql = ("UPDATE xs_chatroom SET app_id=1, uid=%s, settlement_channel='live', "
-                   "room_factory_type='business-soundchat' WHERE rid=%s LIMIT 1")
-            params = (uid, config.live_role['live_rid'])
-        elif tableName == 'super_chatroom':
-            sql = ("UPDATE xs_chatroom SET type='super-voice-fresh', property='business', version=737, "
-                   "room_factory_type='super-voice-fresh', room_module_id=73, "
-                   "settlement_channel='super-voice' WHERE rid=%s")
-            params = (uid,)
-        else:
+        entry = conMysql.UPDATE_USER_INFO_MAP.get(tableName)
+        if entry is None:
             logger.warning('updateUserInfoSql: unknown tableName: %s', tableName)
             return
-
-        MySQLConnection.execute_write(sql, params=params)
+        sql, params_builder = entry
+        MySQLConnection.execute_write(sql, params=params_builder(uid, bid))
 
     # ============ 数据管理方法 ============
 

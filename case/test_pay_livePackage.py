@@ -1,17 +1,17 @@
 from common.Config import config
 from common.conMysql import conMysql as mysql
-import unittest
 from common.Request import post_request_session
-from common.Assert import assert_body, assert_code, assert_equal, assert_len
+from common.Assert import assert_body, assert_code, assert_len
 from common.basicData import encodeData
 from common.Consts import case_list_b, result
 from common.runFailed import Retry
 from common.sqlScript import UserMoneyOperations
 from common.method import format_reason
+from case.base import PayTestBase
 
 
 @Retry(max_n=3)
-class TestPayLivePackage(unittest.TestCase):
+class TestPayLivePackage(PayTestBase):
     """直播打包结算支付测试类"""
     
     live_role = config.live_role
@@ -28,14 +28,6 @@ class TestPayLivePackage(unittest.TestCase):
         if extra_steps:
             for step in extra_steps:
                 step()
-
-    def _validate_db_state(self, checks):
-        """验证数据库状态"""
-        for check in checks:
-            field, uid, expected = check['field'], check['uid'], check['expected']
-            kwargs = check.get('kwargs', {})
-            assert_func = check.get('assert_func', assert_equal)
-            assert_func(mysql.selectUserInfoSql(field, uid, **kwargs), expected)
 
     def test_01_liveRoomPayGift_602119(self):
         """

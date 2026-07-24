@@ -4,7 +4,6 @@ APP 海外版支付测试 - 私聊打赏验证
 
 验证私聊场景下的打赏功能，包括余额不足、正常打赏和箱子打赏。
 """
-import unittest
 from common.Config import config
 from common.conPtMysql import conMysql
 from common.Request import post_request_session
@@ -13,21 +12,14 @@ from common.method import format_reason
 from common.basicData import encodeOverseaData
 from common.Consts import case_list, result
 from common.runFailed import Retry
+from caseOversea.base import OverseaAreaTestBase
 
 
 @Retry(max_n=2)
-class TestPayCreate(unittest.TestCase):
+class TestPayCreate(OverseaAreaTestBase):
     """APP 私聊打赏测试类"""
 
-    @classmethod
-    def setUpClass(cls) -> None:
-        """测试前准备：设置用户大区"""
-        conMysql.updateUserBigArea(tuple(i for i in config.oversea_user.values()), bigarea_id=2)
-
-    @classmethod
-    def tearDownClass(cls) -> None:
-        """测试后清理：恢复用户大区"""
-        conMysql.updateUserBigArea(tuple(i for i in config.oversea_user.values()))
+    bigarea_id = 2
 
     def test_01_IMPayNoMoney(self, des: str = '私聊打赏余额不足场景'):
         """

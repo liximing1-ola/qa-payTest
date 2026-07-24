@@ -4,7 +4,6 @@ APP 海外版支付测试 - 守护开通验证
 
 验证个人守护开通的收益分成场景。
 """
-import unittest
 from common.Config import config
 from common.conPtMysql import conMysql
 from common.Request import post_request_session
@@ -13,21 +12,14 @@ from common.method import format_reason
 from common.basicData import encodeOverseaData
 from common.Consts import case_list, result
 from common.runFailed import Retry
+from caseOversea.base import OverseaAreaTestBase
 
 
 @Retry
-class TestPayCreate(unittest.TestCase):
+class TestPayCreate(OverseaAreaTestBase):
     """APP 守护支付测试类"""
 
-    @classmethod
-    def setUpClass(cls) -> None:
-        """测试前准备：设置用户大区"""
-        conMysql.updateUserBigArea(tuple(i for i in config.oversea_user.values()), bigarea_id=2)
-
-    @classmethod
-    def tearDownClass(cls) -> None:
-        """测试后清理：恢复用户大区"""
-        conMysql.updateUserBigArea(tuple(i for i in config.oversea_user.values()))
+    bigarea_id = 2
 
     def test_01_defendPayChangMoney(self, des: str = '给非主播开通个人守护场景 80%'):
         """

@@ -1,46 +1,21 @@
 from common.Config import config
 from common.conMysql import conMysql as mysql
-import unittest
 import pytest
 from common.Request import post_request_session
-from common.Assert import assert_code, assert_body, assert_equal
+from common.Assert import assert_code, assert_body
 from common.Consts import case_list, result
 from common.basicData import encodeData
 from common.runFailed import Retry
-from common.sqlScript import UserMoneyOperations
 from common.method import format_reason
+from case.base import PayTestBase
 
 
 @Retry(max_n=3)
-class TestPayShopBuy(unittest.TestCase):
+class TestPayShopBuy(PayTestBase):
     gift_cid = {
         'gift_329': 329,  # 礼物四叶草
         'gift_340': 340,  # 礼物小天使
     }
-
-    def _prepare_test_data(self, setup_steps):
-        """准备测试数据"""
-        for step in setup_steps:
-            action = step['action']
-            params = step.get('params', {})
-            if action == 'update_money':
-                UserMoneyOperations.update(**params)
-            elif action == 'delete_user_account':
-                mysql.deleteUserAccountSql(params['table'], params['uid'])
-            elif action == 'clear_user_money':
-                mysql.updateUserMoneyClearSql(params['uid1'], params.get('uid2'))
-
-    def _validate_db_state(self, checks):
-        """验证数据库状态"""
-        for check in checks:
-            field = check['field']
-            uid = check.get('uid', config.payUid)
-            expected = check['expected']
-            cid = check.get('cid')
-            if cid:
-                assert_equal(mysql.selectUserInfoSql(field, uid, cid=cid), expected)
-            else:
-                assert_equal(mysql.selectUserInfoSql(field, uid), expected)
 
     @pytest.mark.run(order=1)
     def test_01_shopPayChangeMoney(self):

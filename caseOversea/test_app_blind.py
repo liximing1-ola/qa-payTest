@@ -4,8 +4,6 @@ APP 海外版支付测试 - 盲盒打赏验证
 
 验证房间内送盲盒的逻辑。
 """
-import unittest
-from time import sleep
 from common.Config import config
 from common.method import format_reason
 from common.conPtMysql import conMysql
@@ -14,26 +12,18 @@ from common.Assert import assert_code, assert_body, assert_len, assert_equal
 from common.basicData import encodeOverseaData
 from common.Consts import result, case_list
 from common.runFailed import Retry
-from common.conRedis import conRedis
+from caseOversea.base import OverseaAreaTestBase
 
 
 @Retry
-class TestPayCreate(unittest.TestCase):
+class TestPayCreate(OverseaAreaTestBase):
     """房间盲盒打赏测试类"""
 
-    @classmethod
-    def setUpClass(cls) -> None:
-        """测试前准备：设置用户大区为泰国区"""
-        conMysql.updateUserBigArea(tuple(i for i in config.oversea_user.values()), bigarea_id=6)
-        conMysql.updateUserRidInfoSql('union', config.oversea_room['th_union'], area='th')
-
-    @classmethod
-    def tearDownClass(cls) -> None:
-        """测试后清理：恢复用户大区，清理 Redis 缓存"""
-        conMysql.updateUserBigArea(tuple(i for i in config.oversea_user.values()))
-        sleep(0.3)
-        conRedis.delKey('User.Big.Area.Id', config.oversea_user.values())
-        conRedis.delKey('User.Big.Area', config.oversea_user.values())
+    bigarea_id = 6
+    room_type = 'union'
+    room_rid = config.oversea_room['th_union']
+    room_area = 'th'
+    clear_redis_on_teardown = True
 
     def test_01_giveBlindPayChange(self, des: str = '房间送盲盒场景'):
         """

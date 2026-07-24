@@ -1,44 +1,21 @@
 from common.Config import config
 from common.conMysql import conMysql as mysql
-import unittest
 import pytest
 from common.Request import post_request_session
-from common.Assert import assert_body, assert_code, assert_equal, assert_len
+from common.Assert import assert_body, assert_code
 from common.basicData import encodeData
 from common.runFailed import Retry
 from common.Consts import case_list_b, result
-from common.sqlScript import UserMoneyOperations
 from common.method import format_reason
+from case.base import PayTestBase
 
 
 @Retry(max_n=3)
-class TestPayUnionRoom(unittest.TestCase):
+class TestPayUnionRoom(PayTestBase):
 
     singer_rid = mysql.selectUserInfoSql('union')
     pack_cal_uid = config.bb_user.pack_cal_uid
     pack_ceo_uid = config.live_role['pack_ceo']
-
-    def _prepare_test_data(self, setup_steps):
-        """准备测试数据"""
-        for step in setup_steps:
-            action = step['action']
-            params = step.get('params', {})
-            if action == 'update_money':
-                UserMoneyOperations.update(**params)
-            elif action == 'clear_user_money':
-                mysql.updateUserMoneyClearSql(params['uid1'], params.get('uid2'))
-
-    def _validate_db_state(self, checks):
-        """验证数据库状态"""
-        for check in checks:
-            field = check['field']
-            uid = check.get('uid', config.payUid)
-            expected = check['expected']
-            money_type = check.get('money_type')
-            if 'min_value' in check:
-                assert_len(mysql.selectUserInfoSql(field, uid, money_type=money_type), check['min_value'])
-            else:
-                assert_equal(mysql.selectUserInfoSql(field, uid, money_type=money_type), expected)
 
     @pytest.mark.run(order=1)
     def test_01_singerRoomLiveBrokerRate_60(self):

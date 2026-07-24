@@ -4,7 +4,6 @@ APP 海外版支付测试 - 日本区域验证
 
 验证日语区消费差异化分成体系。
 """
-import unittest
 from common.Config import config
 from common.method import format_reason
 from common.conPtMysql import conMysql
@@ -13,21 +12,14 @@ from common.Assert import assert_code, assert_body, assert_len, assert_equal
 from common.basicData import encodeOverseaData
 from common.Consts import result, case_list
 from common.runFailed import Retry
+from caseOversea.base import OverseaAreaTestBase
 
 
 @Retry
-class TestPayCreate(unittest.TestCase):
+class TestPayCreate(OverseaAreaTestBase):
     """日语区消费差异化验证"""
 
-    @classmethod
-    def setUpClass(cls) -> None:
-        """测试前准备：设置用户大区为日语区"""
-        conMysql.updateUserBigArea(tuple(i for i in config.oversea_user.values()), bigarea_id=10)
-
-    @classmethod
-    def tearDownClass(cls) -> None:
-        """测试后清理：恢复用户大区"""
-        conMysql.updateUserBigArea(tuple(i for i in config.oversea_user.values()))
+    bigarea_id = 10
 
     def test_01_jaAreaNoBrokerMemberIMPay(self, des: str = '日语区私聊打赏非公会私聊分成 70%'):
         """

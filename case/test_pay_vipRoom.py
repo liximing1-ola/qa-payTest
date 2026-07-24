@@ -1,3 +1,4 @@
+from case.base import PayTestBase
 from common.Config import config
 from common.conMysql import conMysql as mysql
 import unittest
@@ -6,34 +7,15 @@ from common.Assert import assert_body, assert_code, assert_equal, assert_len
 from common.basicData import encodeData
 from common.Consts import case_list_b, result
 from common.runFailed import Retry
-from common.sqlScript import UserMoneyOperations
 from common.method import format_reason
 
 
 @Retry(max_n=3)
-class TestPayVipRoom(unittest.TestCase):
+class TestPayVipRoom(PayTestBase):
 
     # select rid from xs_chatroom where uid=103273407 and property='vip'  个人房，vip＞5级不回收
     vipRoomRid = config.bb_user.vipRoomRid
 
-    def _prepare_test_data(self, setup_steps):
-        """准备测试数据"""
-        for step in setup_steps:
-            action = step['action']
-            params = step.get('params', {})
-            if action == 'update_money':
-                UserMoneyOperations.update(**params)
-
-    def _validate_db_state(self, checks):
-        """验证数据库状态"""
-        for check in checks:
-            field = check['field']
-            uid = check.get('uid', config.payUid)
-            expected = check['expected']
-            if 'min_value' in check:
-                assert_len(mysql.selectUserInfoSql(field, uid), check['min_value'])
-            else:
-                assert_equal(mysql.selectUserInfoSql(field, uid), expected)
 
     def test_01_personRoomPayGift(self):
         """

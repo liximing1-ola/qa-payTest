@@ -2,16 +2,16 @@ from common.Config import config
 from common.conMysql import conMysql as mysql
 import unittest
 from common.Request import post_request_session
-from common.method import calculate_vip_exp
+from common.method import calculate_vip_exp, format_reason
 from common.Assert import assert_code, assert_equal, assert_body
 from common.basicData import encodeData
 from common.Consts import result, case_list
 from common.runFailed import Retry
-from common.sqlScript import UserMoneyOperations
+from case.base import PayTestBase
 
 
 @Retry(max_n=3)
-class TestPayBean(unittest.TestCase):
+class TestPayBean(PayTestBase):
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -26,23 +26,15 @@ class TestPayBean(unittest.TestCase):
         mysql.deleteUserBeanSql(config.payUid, config.rewardUid)
 
     def _prepare_test_data(self, setup_steps):
-        """准备测试数据"""
+        """准备测试数据（金豆场景扩展，其余动作委托基类）"""
         for step in setup_steps:
-            if step['action'] == 'delete_beans':
+            action = step['action']
+            if action == 'delete_beans':
                 mysql.deleteUserBeanSql(config.payUid, config.rewardUid)
-            elif step['action'] == 'update_money':
-                UserMoneyOperations.update(**step['params'])
-            elif step['action'] == 'insert_beans':
+            elif action == 'insert_beans':
                 mysql.insertBeanSql(**step['params'])
-
-    def _validate_db_state(self, checks):
-        """验证数据库状态"""
-        for check in checks:
-            field = check['field']
-            uid = check['uid']
-            expected = check['expected']
-            kwargs = check.get('kwargs', {})
-            assert_equal(mysql.selectUserInfoSql(field, uid, **kwargs), expected)
+            else:
+                super()._prepare_test_data([step])
 
     def test_01_NoBeanPayBeanGift(self):
         """

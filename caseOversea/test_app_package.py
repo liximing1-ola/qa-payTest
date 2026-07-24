@@ -4,7 +4,6 @@ APP 海外版支付测试 - 房间打赏验证
 
 验证房间场景下的打赏功能，包括余额不足和正常打赏。
 """
-import unittest
 from common.Config import config
 from common.method import format_reason
 from common.conPtMysql import conMysql
@@ -13,22 +12,17 @@ from common.Assert import assert_code, assert_body, assert_equal
 from common.basicData import encodeOverseaData
 from common.Consts import case_list, result
 from common.runFailed import Retry
+from caseOversea.base import OverseaAreaTestBase
 
 
 @Retry
-class TestPayCreate(unittest.TestCase):
+class TestPayCreate(OverseaAreaTestBase):
     """APP 房间打赏测试类"""
 
-    @classmethod
-    def setUpClass(cls) -> None:
-        """测试前准备：设置用户大区和房间属性"""
-        conMysql.updateUserBigArea(tuple(i for i in config.oversea_user.values()), bigarea_id=2)
-        conMysql.updateUserRidInfoSql('vip', config.oversea_room['vip_rid'], area='cn')
-
-    @classmethod
-    def tearDownClass(cls) -> None:
-        """测试后清理：恢复用户大区"""
-        conMysql.updateUserBigArea(tuple(i for i in config.oversea_user.values()))
+    bigarea_id = 2
+    room_type = 'vip'
+    room_rid = config.oversea_room['vip_rid']
+    room_area = 'cn'
 
     def test_01_RoomPayNoMoney(self, des: str = '房间打赏但余额不足的场景'):
         """

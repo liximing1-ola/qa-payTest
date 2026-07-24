@@ -1,3 +1,4 @@
+from case.base import PayTestBase
 from common.Config import config
 from common.conMysql import conMysql as mysql
 import unittest
@@ -7,29 +8,11 @@ from common.Request import post_request_session
 from common.basicData import encodeData
 from common.Consts import case_list_c, result
 from common.runFailed import Retry
-from common.sqlScript import UserMoneyOperations
 from common.method import format_reason
 
 
 @Retry(max_n=3)
-class TestPayPunish(unittest.TestCase):
-
-    def _prepare_test_data(self, setup_steps):
-        """准备测试数据"""
-        for step in setup_steps:
-            action = step['action']
-            params = step.get('params', {})
-            if action == 'update_money':
-                UserMoneyOperations.update(**params)
-
-    def _validate_db_state(self, checks):
-        """验证数据库状态"""
-        for check in checks:
-            field = check['field']
-            uid = check.get('uid', config.payUid)
-            money_type = check.get('money_type')
-            expected = check['expected']
-            assert_equal(mysql.selectUserInfoSql(field, uid, money_type), expected)
+class TestPayPunish(PayTestBase):
 
     def test_01_PayChangeTriggerPunish(self):
         """

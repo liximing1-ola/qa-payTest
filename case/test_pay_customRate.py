@@ -1,17 +1,16 @@
 from common.Config import config
 from common.conMysql import conMysql as mysql
-import unittest
 from common.Request import post_request_session
-from common.Assert import assert_body, assert_code, assert_equal
+from common.Assert import assert_body, assert_code
 from common.basicData import encodeData
 from common.Consts import case_list_b, result
 from common.runFailed import Retry
-from common.sqlScript import UserMoneyOperations
 from common.method import format_reason
+from case.base import PayTestBase
 
 
 @Retry(max_n=3)
-class TestPayCustomRate(unittest.TestCase):
+class TestPayCustomRate(PayTestBase):
     """自定义分成测试类"""
     customUid = 100500205
     pack_cal_uid = config.bb_user.pack_cal_uid  # 打包结算签约主播
@@ -20,27 +19,6 @@ class TestPayCustomRate(unittest.TestCase):
     @classmethod
     def tearDownClass(cls) -> None:
         mysql.checkBrokerUserRate(cls.pack_cal_uid, cls.ceoUid, rate=100)
-
-    def _prepare_test_data(self, setup_steps):
-        """准备测试数据"""
-        for step in setup_steps:
-            if step['action'] == 'update_money':
-                UserMoneyOperations.update(**step['params'])
-            elif step['action'] == 'clear_user_money':
-                mysql.updateUserMoneyClearSql(*step['uids'])
-            elif step['action'] == 'check_user_broker':
-                mysql.checkUserBroker(**step['params'])
-            elif step['action'] == 'check_broker_rate':
-                mysql.checkBrokerUserRate(**step['params'])
-
-    def _validate_db_state(self, checks):
-        """验证数据库状态"""
-        for check in checks:
-            field = check['field']
-            uid = check['uid']
-            expected = check['expected']
-            kwargs = check.get('kwargs', {})
-            assert_equal(mysql.selectUserInfoSql(field, uid, **kwargs), expected)
 
     def test_01_roomPayCustomRate_50(self):
         """

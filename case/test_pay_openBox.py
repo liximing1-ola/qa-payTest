@@ -1,17 +1,17 @@
 from common.Config import config
 from common.conMysql import conMysql as mysql
-import unittest
 from common.Request import post_request_session
-from common.Assert import assert_code, assert_body, assert_len, assert_equal
+from common.Assert import assert_code, assert_body
 from common.basicData import encodeData
 from common.Consts import result, case_list
 from common.runFailed import Retry
 from common.sqlScript import UserMoneyOperations, UserCommodityOperations
 from common.method import format_reason
+from case.base import PayTestBase
 
 
 @Retry(max_n=3)
-class TestPayOpenBox(unittest.TestCase):
+class TestPayOpenBox(PayTestBase):
 
     def _prepare_test_data(self, setup_steps):
         """准备测试数据"""
@@ -26,17 +26,6 @@ class TestPayOpenBox(unittest.TestCase):
                 mysql.insertXsUserBox(config.payUid, **params)
             elif action == 'update_money':
                 UserMoneyOperations.update(**params)
-
-    def _validate_db_state(self, checks):
-        """验证数据库状态"""
-        for check in checks:
-            field = check['field']
-            uid = check.get('uid', config.payUid)
-            expected = check['expected']
-            if 'min_value' in check:
-                assert_len(mysql.selectUserInfoSql(field, uid), check['min_value'])
-            else:
-                assert_equal(mysql.selectUserInfoSql(field, uid), expected)
 
     def test_01_openBoxPayChange(self):
         """

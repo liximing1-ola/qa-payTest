@@ -1,3 +1,4 @@
+from case.base import PayTestBase
 from common.Config import config
 from common.conMysql import conMysql as mysql
 from common.Request import post_request_session
@@ -7,32 +8,14 @@ from common.Assert import assert_code, assert_equal, assert_body, assert_len
 from common.basicData import encodeData
 from common.Consts import case_list, result
 from common.runFailed import Retry
-from common.sqlScript import UserMoneyOperations
 
 
 @Retry(max_n=3)
-class TestPayBusiness(unittest.TestCase):
+class TestPayBusiness(PayTestBase):
     """商业房支付测试类"""
     business_uid = 105002103  # 商业房auto_rid房主（一代宗师）
     ceo_uid = config.live_role['pack_ceo']  # 直播公会公会长
 
-    def _prepare_test_data(self, setup_steps):
-        """准备测试数据"""
-        for step in setup_steps:
-            if step['action'] == 'update_money':
-                UserMoneyOperations.update(**step['params'])
-
-    def _validate_db_state(self, checks):
-        """验证数据库状态"""
-        for check in checks:
-            field = check['field']
-            uid = check['uid']
-            expected = check['expected']
-            kwargs = check.get('kwargs', {})
-            if 'assert_func' in check:
-                check['assert_func'](mysql.selectUserInfoSql(field, uid, **kwargs), expected)
-            else:
-                assert_equal(mysql.selectUserInfoSql(field, uid, **kwargs), expected)
 
     def test_01_businessPayGiftNormalUser(self):
         """

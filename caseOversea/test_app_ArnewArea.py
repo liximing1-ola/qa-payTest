@@ -4,7 +4,6 @@ APP 海外版支付测试 - 阿拉伯新区域验证
 
 验证阿语区新消费差异化分成体系。
 """
-import unittest
 from common.Config import config
 from common.method import format_reason
 from common.conPtMysql import conMysql
@@ -13,22 +12,17 @@ from common.Assert import assert_code, assert_body, assert_len, assert_equal
 from common.basicData import encodeOverseaData
 from common.Consts import result, case_list
 from common.runFailed import Retry
+from caseOversea.base import OverseaAreaTestBase
 
 
 @Retry
-class TestPayCreate(unittest.TestCase):
+class TestPayCreate(OverseaAreaTestBase):
     """阿语区消费差异化验证"""
 
-    @classmethod
-    def setUpClass(cls) -> None:
-        """测试前准备：设置用户大区为阿拉伯区"""
-        conMysql.updateUserBigArea(tuple(i for i in config.oversea_user.values()), bigarea_id=3)
-        conMysql.updateUserRidInfoSql('business', config.oversea_room['business_joy_ar'], area='ar')
-
-    @classmethod
-    def tearDownClass(cls) -> None:
-        """测试后清理：恢复用户大区"""
-        conMysql.updateUserBigArea(tuple(i for i in config.oversea_user.values()))
+    bigarea_id = 3
+    room_type = 'business'
+    room_rid = config.oversea_room['business_joy_ar']
+    room_area = 'ar'
 
     def test_01_arNewAreaVipRoomPay(self, des: str = '阿语大区商业房礼物打赏主播分成 55 场景'):
         """

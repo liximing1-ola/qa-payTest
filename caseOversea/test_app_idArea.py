@@ -4,7 +4,6 @@ APP 海外版支付测试 - 印度尼西亚区域验证
 
 验证印尼区消费差异化分成体系。
 """
-import unittest
 from common.Config import config
 from common.method import format_reason
 from common.conPtMysql import conMysql
@@ -13,25 +12,18 @@ from common.Assert import assert_code, assert_body, assert_len, assert_equal
 from common.basicData import encodeOverseaData
 from common.Consts import result, case_list
 from common.runFailed import Retry
-from common.conRedis import conRedis
+from caseOversea.base import OverseaAreaTestBase
 
 
 @Retry
-class TestPayCreate(unittest.TestCase):
+class TestPayCreate(OverseaAreaTestBase):
     """印尼区消费差异化验证"""
 
-    @classmethod
-    def setUpClass(cls) -> None:
-        """测试前准备：设置用户大区为印尼区，清理 Redis 缓存"""
-        conMysql.updateUserBigArea(tuple(i for i in config.oversea_user.values()), bigarea_id=5)
-        conMysql.updateUserRidInfoSql('fleet', config.oversea_room['id_fleet'], area='id')
-        conRedis.delKey('User.Big.Area.Id', config.oversea_user.values())
-        conRedis.delKey('User.Big.Area', config.oversea_user.values())
-
-    @classmethod
-    def tearDownClass(cls) -> None:
-        """测试后清理：恢复用户大区"""
-        conMysql.updateUserBigArea(tuple(i for i in config.oversea_user.values()))
+    bigarea_id = 5
+    room_type = 'fleet'
+    room_rid = config.oversea_room['id_fleet']
+    room_area = 'id'
+    clear_redis_on_setup = True
 
     def test_01_idAreaFleetRoomPay(self, des: str = '印尼区家族房礼物非主播打赏 80% 分成'):
         """
