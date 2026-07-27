@@ -9,7 +9,7 @@ from time import time, sleep
 import unittest
 from typing import Optional, Dict, Any, Tuple
 from Robot import robot
-from autoGitPull import updateTime, updateCode
+from autoGitPull import update_time, updateCode
 from common import Logs, method, Consts
 from common.Config import config
 from common.method import check_path
@@ -219,7 +219,7 @@ def main(app_info: str) -> None:
         check_path(config.codeInfo['app_php_path'])
     
     if pull_code(app_info):
-        updateTime('write', now=str(int(time())))
+        update_time('write', now=str(int(time())))
         test_result = run_tests(app_info)
         Consts.endTime = time()
         handle_result(app_info, test_result)

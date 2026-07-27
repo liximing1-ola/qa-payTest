@@ -5,10 +5,8 @@ Automatically pull code updates and notify via robot
 import logging
 import os
 import json
-import git
 from datetime import datetime
 from time import time
-from git.repo import Repo
 
 logger = logging.getLogger(__name__)
 from Robot import robot
@@ -75,6 +73,7 @@ class GitUpdater:
 
     def _pull_code(self, path, app_info):
         """Pull code if needed"""
+        import git
         if not app_info.startswith('slp'):
             git.cmd.Git(path).pull()
             self.logger_pull.info(f"Pulled code for {app_info}")
@@ -100,6 +99,7 @@ class GitUpdater:
         if not cfg:
             return False
 
+        from git.repo import Repo
         try:
             # Pull code
             self._pull_code(cfg['path'], app_info)
