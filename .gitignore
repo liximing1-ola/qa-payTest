@@ -3,6 +3,7 @@
 /time.txt
 /.idea/workspace.xml
 /common/starifyUserToken.txt
+/common/devUserToken.txt
 __pycache__/
 caseStarify/__pycache__/
 common/__pycache__/

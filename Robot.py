@@ -131,7 +131,7 @@ def robot(mode: str, reason: str, title: str = '', bot: str = 'BB',
     """
     url = ROBOT_URLS['slack' if to == 'slack' else 'wechat'].get(bot)
     if not url:
-        logger.warning('robot over gg')
+        logger.warning('未配置机器人 URL，跳过通知：platform=%s, bot=%s', to, bot)
         return
 
     # 消息处理器映射
@@ -143,7 +143,7 @@ def robot(mode: str, reason: str, title: str = '', bot: str = 'BB',
         'markdown': lambda: send_markdown(url, reason),
         'icon': lambda: send_news(
             url, 
-            f"{strftime('%m-%d %H:%M', localtime(time()))}, Execution is abnormal.Please check the status!", 
+            f"{strftime('%m-%d %H:%M', localtime(time()))}, Execution is abnormal. Please check the status!", 
             reason, 
             method.get_image(mode=1)
         ),
@@ -155,7 +155,7 @@ def robot(mode: str, reason: str, title: str = '', bot: str = 'BB',
     if handler:
         handler()
     else:
-        logger.warning('robot over gg')
+        logger.warning('不支持的消息模式，跳过通知：mode=%s', mode)
 
 
 if __name__ == '__main__':

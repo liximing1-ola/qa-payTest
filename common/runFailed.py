@@ -3,14 +3,17 @@
 失败用例重跑装饰器
 
 Usage:
-    @Retry              # 默认重试1次
+    @Retry              # 默认重试1次，间隔1秒
     def test_001(self): pass
 
-    @Retry(max_n=3)     # 重试3次
+    @Retry(max_n=3, interval=2)     # 重试3次，每次间隔2秒
     def test_002(self): pass
 
     @Retry(max_n=2, func_prefix="test_1")  # 只重试test_1开头的方法
     class TestClass(unittest.TestCase): pass
+
+    @Retry(interval=0)  # 关闭重试间隔，失败后立即重试
+    def test_003(self): pass
 """
 import sys
 import functools
@@ -25,18 +28,17 @@ logger = logging.getLogger(__name__)
 class Retry:
     """失败重试装饰器，支持函数和方法级别重试"""
 
-    def __new__(cls, func_or_cls=None, max_n=1, func_prefix="test"):
+    def __new__(cls, func_or_cls=None, max_n=1, func_prefix="test", interval=1):
         instance = object.__new__(cls)
         if func_or_cls:
-            instance.__init__(func_or_cls, max_n, func_prefix)
-            time.sleep(1)
+            instance.__init__(func_or_cls, max_n, func_prefix, interval)
             return instance(func_or_cls)
-        time.sleep(1)
         return instance
 
-    def __init__(self, func_or_cls=None, max_n=1, func_prefix="test"):
+    def __init__(self, func_or_cls=None, max_n=1, func_prefix="test", interval=1):
         self._prefix = func_prefix
         self._max_n = max_n
+        self._interval = interval
 
     def _format_traceback(self):
         """格式化异常堆栈"""
@@ -53,6 +55,8 @@ class Retry:
                 except Exception as e:
                     if attempt <= self._max_n:
                         logger.warning("%s %s", self._format_traceback(), e)
+                        if self._interval > 0:
+                            time.sleep(self._interval)
                         if args and hasattr(args[0], 'tearDown') and hasattr(args[0], 'setUp'):
                             args[0].tearDown()
                             args[0].setUp()

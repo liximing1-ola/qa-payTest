@@ -115,7 +115,7 @@ class Session:
         Returns:
             Token 字典
         """
-        Logs.get_logger('getSession.log').error(f'session 获取异常，原因：{error_msg}')
+        Logs.get_logger('getSession.log').warning(f'session 主方案获取失败，转备选方案，原因：{error_msg}')
         from common.conMysql import conMysql
         from common.getToken import TokenGenerator
 
@@ -151,7 +151,7 @@ class Session:
         except Exception as error:
             if env_config.get('use_backup'):
                 return Session._use_backup_plan(env, str(error))
-            Logs.get_logger('getSession.log').error(f'session 获取异常，原因：{error}')
+            Logs.get_logger('getSession.log').error(f'session 获取失败，无备选方案，env={env}，原因：{error}')
 
         return None
 

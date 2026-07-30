@@ -212,7 +212,7 @@ def main(app_info: str) -> None:
         app_info: 应用信息
     """
     if app_info not in APP_CONFIG:
-        Logs.get_logger('runCode.log').error(f'{app_info} 执行异常')
+        Logs.get_logger('runCode.log').error(f'未配置的应用，无法执行：{app_info}')
         return
     
     if app_info == config.appName['2']:
