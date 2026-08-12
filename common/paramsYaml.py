@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 class YamlReader:
-    """YAML 文件读取器"""
+    """YAML文件读取器"""
 
     # 使用 SafeLoader 的节点列表
     SAFE_LOADER_NODES = ['ali', 'ali-slp']
@@ -31,11 +31,9 @@ class YamlReader:
     def read(cls, filename, key):
         """
         读取YAML文件中的指定键值
-
         Args:
             filename: YAML文件名
             key: 要读取的键名
-
         Returns:
             键对应的值，不存在则返回None
         """
