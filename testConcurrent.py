@@ -1,18 +1,20 @@
+import logging
+from time import sleep
+
 import gevent
 from gevent import monkey
 
 monkey.patch_all()
-from common.Config import config
-from common.sqlScript import UserMoneyOperations, UserCommodityOperations
+
 from common import Consts, Logs, method
-from common.basicData import encodeData
-from common.method import get_value
-from common.Session import Session
-from Robot import robot
-from common.Request import post_request_session
 from common.Assert import assert_equal, assert_code
-from time import sleep
-import logging
+from common.basicData import encodeData
+from common.Config import config
+from common.method import get_value
+from common.Request import post_request_session
+from common.Session import Session
+from common.sqlScript import UserCommodityOperations, UserMoneyOperations
+from Robot import robot
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +26,7 @@ class TestPayConcurrent:
         'use': config.appInfo.bb_dev + 'commodity/use?package=',
     }
     CID = {'gift': 340, 'frame': 264}
-    Session().getSession('dev')
+    Session.getSession('dev')
 
     def _run_concurrent(self, func, times):
         """执行并发测试"""
@@ -33,7 +35,17 @@ class TestPayConcurrent:
     def _print(self, des, is_start=True):
         """打印测试信息"""
         sep = '-' * 40
-        logger.info(f"{sep}{des}{sep}" if is_start else sep * 3)
+        if is_start:
+            logger.info(f"{sep}{des}{sep}")
+        else:
+            logger.info(sep * 3)
+
+    def _finalize(self, des):
+        """记录结果、重置计数器、打印结束分隔线"""
+        Consts.case_list_c[des] = Consts.result
+        Consts.success_num = 0
+        Consts.fail_num = 0
+        self._print(des, False)
 
     def _exec(self, url, data, check_code=200):
         """执行请求并校验"""
@@ -66,9 +78,7 @@ class TestPayConcurrent:
         sleep(1)
         assert_equal(UserCommodityOperations.check(config.payUid, self.CID['gift']), 0)
         assert_equal(Consts.success_num, 1)
-        Consts.fail_num = 0
-        Consts.case_list_c[des] = Consts.result
-        self._print(des, False)
+        self._finalize(des)
 
     # ========== Test 2: 使用背包物品 ==========
     def test_02_commodityUse(self, times, des='使用背包内物料的并发场景'):
@@ -89,9 +99,7 @@ class TestPayConcurrent:
 
         # End
         assert_equal(Consts.fail_num, times - 1)
-        Consts.success_num = 0
-        Consts.case_list_c[des] = Consts.result
-        self._print(des, False)
+        self._finalize(des)
 
     # ========== Test 3: 赠送物品 ==========
     def test_03_commodityPresent(self, times, des='赠送物品时的并发场景'):
@@ -117,8 +125,7 @@ class TestPayConcurrent:
         assert_equal(UserCommodityOperations.check(config.payUid, self.CID['frame']), 0)
         assert_equal(UserCommodityOperations.check(config.rewardUid, self.CID['frame']), 2)
         assert_equal(Consts.success_num, 2)
-        Consts.case_list_c[des] = Consts.result
-        self._print(des, False)
+        self._finalize(des)
 
     # ========== Test 4: 打赏面板礼物 ==========
     def test_04_payGift(self, times, des='打赏面板礼物时的并发场景'):
@@ -126,7 +133,6 @@ class TestPayConcurrent:
         self._print(des)
 
         # Ready
-        Consts.success_num = 0
         UserMoneyOperations.update(config.payUid, 400)
         UserMoneyOperations.update(config.masterUid)
 
@@ -141,9 +147,7 @@ class TestPayConcurrent:
         sleep(1)
         assert_equal(UserMoneyOperations.select_all(config.masterUid), 280)
         assert_equal(Consts.success_num, 4)
-        Consts.fail_num = 0
-        Consts.case_list_c[des] = Consts.result
-        self._print(des, False)
+        self._finalize(des)
 
     # ========== Test 5: 购买商城礼物 ==========
     def test_05_payShop(self, times, des='购买商城礼物时的并发场景'):
@@ -151,7 +155,6 @@ class TestPayConcurrent:
         self._print(des)
 
         # Ready
-        Consts.success_num = 0
         UserMoneyOperations.update(config.payUid, 40000)
         UserCommodityOperations.delete_all(config.payUid)
 
@@ -167,9 +170,7 @@ class TestPayConcurrent:
         assert_equal(UserCommodityOperations.check_all(config.payUid), 4)
         sleep(1)
         assert_equal(Consts.success_num, 4)
-        Consts.fail_num = 0
-        Consts.case_list_c[des] = Consts.result
-        self._print(des, False)
+        self._finalize(des)
 
     def main(self, num):
         self.test_01_payPackGift(num)
@@ -179,7 +180,7 @@ class TestPayConcurrent:
         self.test_05_payShop(num)
         case_list = method.dict_to_markdown(Consts.case_list_c)
         Logs.get_logger('concurrentCaseResult.log').info(f"{case_list}\n")
-        robot('markdown', str(case_list))
+        robot('markdown', case_list)
 
 
 if __name__ == '__main__':

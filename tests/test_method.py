@@ -12,7 +12,7 @@ from common.method import (
     dict_to_slack_fields,
     dict_to_markdown,
     is_extend,
-    _get_all_keys,
+    _contains_key,
     get_value,
     format_reason,
     get_user_title,
@@ -45,9 +45,17 @@ class TestDictConversion(unittest.TestCase):
 class TestJsonUtils(unittest.TestCase):
     """JSON key 检查"""
 
-    def test_get_all_keys_nested(self):
-        keys = _get_all_keys({'a': {'b': 1}, 'c': [{'d': 2}]})
-        self.assertEqual(set(keys), {'a', 'b', 'c', 'd'})
+    def test_contains_key_found_nested(self):
+        self.assertTrue(_contains_key({'a': {'b': 1}}, 'b'))
+
+    def test_contains_key_not_found(self):
+        self.assertFalse(_contains_key({'a': 1}, 'x'))
+
+    def test_contains_key_in_list(self):
+        self.assertTrue(_contains_key([{'a': 1}, {'b': 2}], 'b'))
+
+    def test_contains_key_scalar_returns_false(self):
+        self.assertFalse(_contains_key('string', 's'))
 
     def test_is_extend_found_nested(self):
         self.assertTrue(is_extend({'a': {'b': 1}}, 'b'))
@@ -102,8 +110,9 @@ class TestTitleLevel(unittest.TestCase):
     """爵位系数"""
 
     def test_known_levels(self):
-        self.assertEqual(get_user_title(10), 1.0)
-        self.assertEqual(get_user_title(90), 2.0)
+        self.assertEqual(get_user_title(10), 1.0)    # 骑士
+        self.assertEqual(get_user_title(40), 1.05)   # 伯爵
+        self.assertEqual(get_user_title(90), 1.3)    # 皇帝
 
     def test_unknown_level_returns_none(self):
         self.assertIsNone(get_user_title(999))

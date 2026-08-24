@@ -207,9 +207,7 @@ class conMysql:
     @staticmethod
     def checkXsGiftConfig(gift_ids: Tuple[int, ...]) -> None:
         """检查礼物配置"""
-        placeholders = ','.join(['%s'] * len(gift_ids))
-        sql = f"UPDATE xs_gift SET deleted=0 WHERE id IN ({placeholders})"
-        MySQLConnection.execute_write(sql, params=gift_ids)
+        MySQLConnection._update_xs_gift_status(gift_ids)
 
     # ============ 专用查询方法 ============
 

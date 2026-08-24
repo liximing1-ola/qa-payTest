@@ -160,11 +160,10 @@ def notify_failures(app_info: str, test_result: unittest.TextTestResult,
     if failures:
         Logs.get_logger('failCase.log').error(f"failures: {failures}")
         robot(cfg['mode'], des, bot=cfg['bot'], color='danger', to=to)
-        for case, _ in failures:
+        if Consts.fail_case_reason:
             robot(cfg['mode'], Consts.fail_case_reason[0], 
-                 title=case.id(), color='danger', bot=cfg['bot'], to=to)
-            break
-    elif errors:
+                 title=failures[0][0].id(), color='danger', bot=cfg['bot'], to=to)
+    if errors:
         Logs.get_logger('failCase.log').error(f"error: {errors}")
         for case, reason in errors:
             robot(cfg['mode'], reason, case.id(), 
@@ -199,8 +198,7 @@ def pull_code(app_info: str) -> bool:
     repos = cfg.get('git_repos')
     
     if repos:
-        results = [updateCode.autoGitPull(repo, bot=cfg.get('bot'), 
-                     to=cfg.get('to')) for repo in repos]
+        results = [updateCode.autoGitPull(repo) for repo in repos]
         return any(results)
     else:
         return updateCode.autoGitPull(app_info)

@@ -208,3 +208,10 @@ class MySQLConnection:
         """查询摩天轮开奖数据"""
         sql = "SELECT counter, prize FROM xs_greedy_round_player_v2 WHERE uid=%s AND round_id=%s"
         return cls.execute_query(sql, params=(uid, round_id))
+
+    @staticmethod
+    def _update_xs_gift_status(gift_ids: tuple) -> None:
+        """统一执行 xs_gift 配置更新（供各子类 checkXsGiftConfig 调用）"""
+        placeholders = ','.join(['%s'] * len(gift_ids))
+        sql = f"UPDATE xs_gift SET deleted=0 WHERE id IN ({placeholders})"
+        MySQLConnection.execute_write(sql, params=gift_ids)

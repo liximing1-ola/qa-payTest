@@ -80,36 +80,24 @@ class conMysql:
     def _select_union():
         """联盟房"""
         sql = "SELECT rid FROM xs_chatroom WHERE property='union' LIMIT 1"
-        try:
-            res = MySQLConnection.execute_query(sql)
-            if res is None:
-                raise EnvironmentError('库表无联盟房')
-            return res[0]
-        except EnvironmentError:
-            raise
-        except Exception as error:
-            logger.error('union query error: %s', error)
-            return None
+        res = MySQLConnection.execute_query(sql)
+        if res is None:
+            raise EnvironmentError('库表无联盟房')
+        return res[0]
 
     @staticmethod
     def _select_fleet():
         """家族房"""
         sql = "SELECT rid FROM xs_chatroom WHERE property='fleet' LIMIT 2"
         cursor = MySQLConnection.get_cursor()
-        try:
-            cursor.execute(sql)
-            rows = cursor.fetchall()
-            if not rows:
-                raise EnvironmentError('库表无家族房')
-            for row in rows:
-                if row[0] != config.bb_user.fleetRid:
-                    return row[0]
-            return rows[0][0]
-        except EnvironmentError:
-            raise
-        except Exception as error:
-            logger.error('fleet query error: %s', error)
-            return None
+        cursor.execute(sql)
+        rows = cursor.fetchall()
+        if not rows:
+            raise EnvironmentError('库表无家族房')
+        for row in rows:
+            if row[0] != config.bb_user.fleetRid:
+                return row[0]
+        return rows[0][0]
 
     @staticmethod
     def _select_pay_change(uid, money_type):
@@ -171,8 +159,6 @@ class conMysql:
             lambda uid, bid: (uid,),
         ),
     }
-
-    # ============ 内部工具方法 ============
 
     # ============ 查询方法 ============
 
@@ -256,9 +242,7 @@ class conMysql:
     def checkXsGiftConfig():
         """检查 xs_gift 配置"""
         gift_ids = tuple(i for i in config.giftId.values())
-        placeholders = ','.join(['%s'] * len(gift_ids))
-        sql = f"UPDATE xs_gift SET deleted=0 WHERE id IN ({placeholders})"
-        MySQLConnection.execute_write(sql, params=gift_ids)
+        MySQLConnection._update_xs_gift_status(gift_ids)
 
     @staticmethod
     def updateUserMoneyClearSql(*uids):

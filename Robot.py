@@ -5,7 +5,7 @@
 """
 import logging
 from time import time, strftime, localtime
-from typing import Optional, Dict, Any, Callable
+from typing import Optional, Dict, Any
 import requests
 from common import method
 
@@ -39,6 +39,12 @@ def send_request(url: str, data: Dict[str, Any],
         return None
 
 
+def _send_at_all(url: str, res: Optional[requests.Response]) -> None:
+    """检查响应成功后发送 @所有人 消息"""
+    if res and 'ok' in res.text:
+        send_request(url, {"msgtype": "text", "text": {"mentioned_mobile_list": ["all"]}})
+
+
 def send_text(url: str, content: str, at_all: bool = False) -> Optional[requests.Response]:
     """发送文本消息
     Args:
@@ -50,8 +56,8 @@ def send_text(url: str, content: str, at_all: bool = False) -> Optional[requests
     """
     data = {"msgtype": "text", "text": {"content": content}}
     res = send_request(url, data)
-    if at_all and res and 'ok' in res.text:
-        send_request(url, {"msgtype": "text", "text": {"mentioned_mobile_list": ["all"]}})
+    if at_all:
+        _send_at_all(url, res)
     return res
 
 
@@ -90,8 +96,7 @@ def send_news(url: str, title: str, description: str, picurl: str,
         }
     }
     res = send_request(url, data)
-    if res and 'ok' in res.text:
-        send_request(url, {"msgtype": "text", "text": {"mentioned_mobile_list": ["@all"]}})
+    _send_at_all(url, res)
     return res
 
 
@@ -100,7 +105,7 @@ def send_slack(url: str, title: str, reason: str,
     """发送 Slack 消息
     Args:
         url: Slack Webhook URL
-        title: 标题
+        title: title
         reason: 原因
         color: 颜色标记
         
@@ -109,8 +114,6 @@ def send_slack(url: str, title: str, reason: str,
     """
     data = {
         "attachments": [{
-            "fallback": "",
-            "pretext": "",
             "color": color,
             "fields": [{"title": title, "value": reason, "short": 0}]
         }]
@@ -134,26 +137,19 @@ def robot(mode: str, reason: str, title: str = '', bot: str = 'BB',
         logger.warning('未配置机器人 URL，跳过通知：platform=%s, bot=%s', to, bot)
         return
 
-    # 消息处理器映射
-    handlers: Dict[str, Callable] = {
-        'fail': lambda: send_text(
-            url, f"警告！失败用例：{title}, 失败原因：{reason}", at_all=True
-        ),
-        'success': lambda: send_text(url, reason),
-        'markdown': lambda: send_markdown(url, reason),
-        'icon': lambda: send_news(
-            url, 
-            f"{strftime('%m-%d %H:%M', localtime(time()))}, Execution is abnormal. Please check the status!", 
-            reason, 
-            method.get_image(mode=1)
-        ),
-        'slack': lambda: send_slack(url, title, reason, color),
-        'slack_oversea': lambda: send_request(url, {"title": title, "value": reason}),
-    }
-
-    handler: Optional[Callable] = handlers.get(mode)
-    if handler:
-        handler()
+    if mode == 'fail':
+        send_text(url, f"警告！！！失败用例：{title}, 失败原因：{reason}", at_all=True)
+    elif mode == 'success':
+        send_text(url, reason)
+    elif mode == 'markdown':
+        send_markdown(url, reason)
+    elif mode == 'icon':
+        send_news(url, f"{strftime('%m-%d %H:%M', localtime(time()))}, Execution is abnormal. Please check the status!",
+                  reason, method.get_image(mode=1))
+    elif mode == 'slack':
+        send_slack(url, title, reason, color)
+    elif mode == 'slack_oversea':
+        send_request(url, {"title": title, "value": reason})
     else:
         logger.warning('不支持的消息模式，跳过通知：mode=%s', mode)
 

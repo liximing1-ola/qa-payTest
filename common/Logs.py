@@ -1,7 +1,6 @@
 # coding=utf-8
 """
 日志管理模块
-
 使用方式:
     from common.Logs import get_logger
     logger = get_logger('app.log')
@@ -27,7 +26,8 @@ def _ensure_log_dir() -> str:
     return log_path
 
 
-def _create_handlers(log_file_path: str, level: int, formatter: logging.Formatter):
+def _create_handlers(log_file_path: str, level: int, formatter: logging.Formatter,
+                     when: str = DEFAULT_WHEN, back_count: int = DEFAULT_BACK_COUNT):
     """创建日志处理器"""
     # 控制台处理器
     console_handler = logging.StreamHandler()
@@ -37,8 +37,8 @@ def _create_handlers(log_file_path: str, level: int, formatter: logging.Formatte
     # 文件处理器（按时间轮转）
     file_handler = TimedRotatingFileHandler(
         filename=log_file_path,
-        when=DEFAULT_WHEN,
-        backupCount=DEFAULT_BACK_COUNT,
+        when=when,
+        backupCount=back_count,
         encoding='UTF-8'
     )
     file_handler.setLevel(level)
@@ -55,13 +55,11 @@ def get_logger(
 ) -> logging.Logger:
     """
     获取日志记录器
-
     Args:
         name: 日志文件名
         level: 日志级别，默认为DEBUG
         when: 轮转时间单位，默认为'midnight'
         back_count: 备份文件数量，默认为0（不删除）
-
     Returns:
         logging.Logger: 配置好的日志记录器
     """
@@ -76,7 +74,7 @@ def get_logger(
     log_file_path = os.path.join(log_path, name)
     formatter = logging.Formatter(DEFAULT_FORMAT)
 
-    console_handler, file_handler = _create_handlers(log_file_path, level, formatter)
+    console_handler, file_handler = _create_handlers(log_file_path, level, formatter, when, back_count)
     logger.addHandler(console_handler)
     logger.addHandler(file_handler)
 

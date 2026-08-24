@@ -2,7 +2,7 @@ from case.base import PayTestBase
 from common.Config import config
 from common.conMysql import conMysql as mysql
 from common.Request import post_request_session
-from common.method import calculate_vip_exp
+from common.method import calculate_vip_exp, format_reason
 import unittest
 from common.Assert import assert_body, assert_code, assert_equal
 from common.basicData import encodeData

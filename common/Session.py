@@ -16,7 +16,6 @@ from common.paramsYaml import Yaml
 logger = logging.getLogger(__name__)
 
 urllib3.disable_warnings()
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 class Session:
@@ -159,16 +158,13 @@ class Session:
     def checkUserToken(operate: str, app_name: str = 'dev', 
                       token: str = '', uid: Optional[int] = None) -> Optional[str]:
         """检查/写入用户 token
-        
         Args:
             operate: 操作类型（'read'/'write'）
             app_name: 应用名称
             token: Token 字符串（write 时需要）
-            uid: 用户 ID，可选
-            
+            uid: 用户 ID，可选 
         Returns:
-            读取操作返回 token，写入操作返回 None
-            
+            读取操作返回 token，写入操作返回 None   
         Raises:
             Exception: 读取时文件为空抛出异常
         """

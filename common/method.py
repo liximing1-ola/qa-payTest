@@ -73,7 +73,7 @@ def get_image(mode: int = 2) -> Optional[str]:
         return None
 
     try:
-        res = requests.get(url)
+        res = requests.get(url, timeout=10)
         res.raise_for_status()
         data = res.json()
 
@@ -102,31 +102,26 @@ def is_extend(data: Union[dict, list], tag: str) -> bool:
     if not isinstance(data, dict):
         logger.warning('is_extend: input is not a dict')
         return False
-    return tag in _get_all_keys(data)
+    return _contains_key(data, tag)
 
 
-def _get_all_keys(data: Union[dict, list]) -> List[str]:
-    """递归获取 JSON 中所有 key
+def _contains_key(data: Union[dict, list], tag: str) -> bool:
+    """递归检查 JSON 中是否包含指定 key（短路查找）
     
     Args:
         data: JSON 数据
+        tag: 要检查的字段名
         
     Returns:
-        所有 key 的列表
+        是否存在
     """
-    keys = []
-
-    def _extract(obj: Any) -> None:
-        if isinstance(obj, dict):
-            for k, v in obj.items():
-                keys.append(k)
-                _extract(v)
-        elif isinstance(obj, list):
-            for item in obj:
-                _extract(item)
-
-    _extract(data)
-    return keys
+    if isinstance(data, dict):
+        if tag in data:
+            return True
+        return any(_contains_key(v, tag) for v in data.values())
+    if isinstance(data, list):
+        return any(_contains_key(item, tag) for item in data)
+    return False
 
 
 # ============ 结果处理 ============
@@ -155,19 +150,14 @@ def get_value(res: Dict[str, Any]) -> None:
 
 def format_reason(des: str, res: Dict[str, Any], slp: bool = False) -> str:
     """格式化失败原因
-    
     Args:
         des: 描述信息
         res: 响应结果
         slp: 是否为 SLP 模式（success 为 True 时判定）
-        
     Returns:
         格式化的错误信息
     """
     body = res.get('body', {})
-    success_val = True if slp else 0
-    if body.get('success') == success_val and not is_extend(body, 'msg'):
-        logger.debug('format_reason body: %s', body)
     return f'Depiction: {des}, failReason: {body}'
 
 
@@ -175,10 +165,8 @@ def format_reason(des: str, res: Dict[str, Any], slp: bool = False) -> str:
 
 def check_path(path: str) -> None:
     """检查路径是否存在
-    
     Args:
         path: 文件路径
-        
     Raises:
         EnvironmentError: 路径不存在时抛出
     """
@@ -191,23 +179,22 @@ def check_path(path: str) -> None:
 
 TITLE_LEVEL_MAP: Dict[int, float] = {
     10: 1.0,   # 骑士
-    20: 1.1,   # 男爵
-    30: 1.2,   # 子爵
-    40: 1.3,   # 伯爵
-    50: 1.4,   # 侯爵
-    60: 1.5,   # 公爵
-    70: 1.6,   # 亲王
-    80: 1.8,   # 国王
-    90: 2.0,   # 皇帝
+    20: 1.0,   # 男爵
+    30: 1.0,   # 子爵
+    40: 1.05,   # 伯爵
+    50: 1.1,   # 侯爵
+    60: 1.15,   # 公爵
+    70: 1.2,   # 亲王
+    80: 1.25,   # 国王
+    90: 1.3,   # 皇帝
+    100: 1.4,  # 天神
 }
 
 
 def get_user_title(level: int) -> Optional[float]:
     """根据等级获取爵位系数
-    
     Args:
         level: 用户等级
-        
     Returns:
         爵位系数，不存在返回 None
     """
@@ -216,15 +203,12 @@ def get_user_title(level: int) -> Optional[float]:
 
 def calculate_vip_exp(money_type: str = 'money', uid: int = None, pay_off: int = 100) -> int:
     """计算 VIP 经验值
-    
     Args:
         money_type: 货币类型（money/coin/bean）
         uid: 用户 ID，默认为 config.payUid
-        pay_off: 支付金额
-        
+        pay_off: 支付金额   
     Returns:
-        VIP 经验值
-        
+        VIP 经验值     
     Raises:
         ValueError: 不支持的货币类型
     """

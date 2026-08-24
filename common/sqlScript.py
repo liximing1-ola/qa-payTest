@@ -21,7 +21,6 @@ class MySQLClient:
     @classmethod
     def set_config(cls, config_name: str = 'dev') -> None:
         """切换配置
-        
         Args:
             config_name: 配置名称（dev/ali/rds）
         """
@@ -62,16 +61,13 @@ class MySQLClient:
     def execute(cls, sql: str, params: Optional[tuple] = None,
                 fetch_one: bool = False, fetch_all: bool = False):
         """执行 SQL 语句
-
         Args:
             sql: SQL 语句，支持 %s 占位符
             params: SQL 参数元组
             fetch_one: 是否返回单条结果
             fetch_all: 是否返回所有结果
-
         Returns:
             查询结果或 None
-
         Raises:
             Exception: 执行失败时抛出异常
         """
@@ -83,15 +79,14 @@ class MySQLClient:
                 if fetch_all:
                     return cur.fetchall()
                 con.commit()
-            except Exception as e:
+            except Exception:
                 con.rollback()
-                raise e
+                raise
 
     @classmethod
     def execute_write(cls, sql: str, params: Optional[tuple] = None,
                       error_msg: str = 'execute fail') -> None:
         """执行写操作
-
         Args:
             sql: SQL 语句，支持 %s 占位符
             params: SQL 参数元组
@@ -106,12 +101,10 @@ class MySQLClient:
     def execute_read(cls, sql: str, params: Optional[tuple] = None,
                      default: Any = None) -> Any:
         """执行读操作
-
         Args:
             sql: SQL 语句，支持 %s 占位符
             params: SQL 参数元组
             default: 默认返回值
-
         Returns:
             查询结果的第一列值，或默认值
         """
@@ -134,9 +127,8 @@ class UserMoneyOperations:
     def update(uid: int, money: int = 0, money_cash: int = 0,
                money_cash_b: int = 0, money_b: int = 0, gold_coin: int = 0) -> None:
         """更新用户账户余额
-
         Args:
-            uid: 用户 ID
+            uid: 用户ID
             money: 金豆
             money_cash: 现金
             money_cash_b: 现金 B
@@ -152,10 +144,8 @@ class UserMoneyOperations:
     @staticmethod
     def select_all(uid: int) -> Optional[int]:
         """查询用户所有账户余额之和
-
         Args:
-            uid: 用户 ID
-
+            uid: 用户ID
         Returns:
             余额总和
         """
@@ -165,13 +155,11 @@ class UserMoneyOperations:
 
 class UserCommodityOperations:
     """用户背包相关操作"""
-
     @staticmethod
     def delete_all(uid: int) -> None:
         """清空用户背包
-
         Args:
-            uid: 用户 ID
+            uid: 用户ID
         """
         sql = "DELETE FROM xs_user_commodity WHERE uid=%s"
         mysql.execute_write(sql, params=(uid,), error_msg='delete fail')
@@ -179,11 +167,9 @@ class UserCommodityOperations:
     @staticmethod
     def check(uid: int, cid: int) -> int:
         """检查指定物品数量
-
         Args:
-            uid: 用户 ID
-            cid: 物品 ID
-
+            uid: 用户ID
+            cid: 物品ID
         Returns:
             物品数量
         """
@@ -193,10 +179,8 @@ class UserCommodityOperations:
     @staticmethod
     def check_all(uid: int) -> int:
         """检查所有物品数量
-
         Args:
             uid: 用户 ID
-
         Returns:
             物品总数
         """
@@ -207,11 +191,9 @@ class UserCommodityOperations:
     @staticmethod
     def get_id(uid: int, cid: int) -> Optional[int]:
         """获取物品表 ID
-
         Args:
             uid: 用户 ID
             cid: 物品 ID
-
         Returns:
             记录 ID
         """
@@ -223,8 +205,8 @@ class UserCommodityOperations:
         """插入物品
 
         Args:
-            uid: 用户 ID
-            cid: 物品 ID
+            uid: 用户ID
+            cid: 物品ID
             num: 数量
             state: 状态
         """
@@ -237,17 +219,15 @@ class UserProfileOperations:
 
     @staticmethod
     def get_uids(limit_num: int, min_uid: int = 131542080, app_id: int = 1) -> Tuple[str, ...]:
-        """生成一批 UID
-
+        """生成一批 用户ID
         Args:
-            limit_num: 限制数量
-            min_uid: 最小 UID
-            app_id: 应用 ID
-
+            limit_num: 限制数量级
+            min_uid: 最小用户UID
+            app_id: 应用 ID，slp=66
         Returns:
             UID 元组
         """
-        # LIMIT 值不能参数化，但 uid/app_id 来自内部调用
+        # LIMIT值不能参数化
         sql = "SELECT uid FROM xs_user_profile WHERE uid>%s AND app_id=%s LIMIT %s"
         try:
             results = mysql.execute(sql, params=(min_uid, app_id, limit_num), fetch_all=True)

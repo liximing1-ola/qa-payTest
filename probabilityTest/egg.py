@@ -15,7 +15,6 @@ from common.Config import config
 
 logger = logging.getLogger(__name__)
 
-urllib3.disable_warnings()
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
@@ -53,8 +52,10 @@ def update_bean(uid, money):
     con = get_db_connection()
     try:
         with con.cursor() as cur:
-            sql = f"update xs_user_money set money={money}, money_cash_b=0 where uid={uid} limit 1"
-            cur.execute(sql)
+            cur.execute(
+                "UPDATE xs_user_money SET money=%s, money_cash_b=0 WHERE uid=%s LIMIT 1",
+                (money, uid)
+            )
         con.commit()
     except Exception as e:
         con.rollback()

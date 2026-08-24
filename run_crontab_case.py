@@ -42,7 +42,7 @@ def load_cases(app_info: str) -> Optional[unittest.TestSuite]:
     
     case_dir = config.BASE_PATH + cfg['dir']
     discover = unittest.defaultTestLoader.discover(
-        case_dir, pattern=cfg['pattern'], top_level_dir=None
+        case_dir, pattern=cfg['pattern']
     )
     testcase = unittest.TestSuite()
     testcase.addTests(discover)
@@ -100,9 +100,9 @@ def notify_failures(app_info: str, failures: list,
         log_type: 日志类型（failures/errors）
     """
     Logs.get_logger('failCase.log').error(f"{log_type}: {failures}")
-    cfg = APP_CONFIG[app_info]
+    bot = APP_CONFIG[app_info]['bot']
     for case, _ in failures:
-        robot('icon', case.id().split('.')[2], bot=cfg['bot'])
+        robot('icon', case.id().split('.')[2], bot=bot)
 
 
 def handle_result(app_info: str, test_result: unittest.TextTestResult) -> None:
@@ -114,15 +114,13 @@ def handle_result(app_info: str, test_result: unittest.TextTestResult) -> None:
     log_result(test_result)
     case_list = method.dict_to_markdown(Consts.case_list_c)
     
-    failures_count = len(test_result.failures)
-    errors_count = len(test_result.errors)
-    
-    if failures_count == 0 and errors_count == 0:
+    if not test_result.failures and not test_result.errors:
         notify_success(app_info, test_result, case_list)
-    elif failures_count >= 1:
-        notify_failures(app_info, test_result.failures, 'failures')
-    elif errors_count >= 1:
-        notify_failures(app_info, test_result.errors, 'errors')
+    else:
+        if test_result.failures:
+            notify_failures(app_info, test_result.failures, 'failures')
+        if test_result.errors:
+            notify_failures(app_info, test_result.errors, 'errors')
 
 
 def main(app_info: str) -> None:

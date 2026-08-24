@@ -7,12 +7,8 @@
 import urllib.parse
 from typing import Dict, Any
 import requests
-import urllib3
 from common.Config import config
 from common.Session import Session
-
-urllib3.disable_warnings()
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 # 默认请求参数

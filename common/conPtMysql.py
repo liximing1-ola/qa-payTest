@@ -152,9 +152,7 @@ class conMysql:
     def checkXsGiftConfig() -> None:
         """检查礼物配置"""
         gift_ids = tuple(i for i in config.oversea_giftId.values())
-        placeholders = ','.join(['%s'] * len(gift_ids))
-        sql = f"UPDATE xs_gift SET deleted=0 WHERE id IN ({placeholders})"
-        MySQLConnection.execute_write(sql, params=gift_ids)
+        MySQLConnection._update_xs_gift_status(gift_ids)
 
     # ============ 查询方法 ============
 

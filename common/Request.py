@@ -7,12 +7,8 @@ HTTP 请求封装模块
 import logging
 from typing import Dict, Any, Optional
 import requests
-import urllib3
 from common.Session import Session
 from common.Config import config
-
-urllib3.disable_warnings()
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # 日志配置
 logger = logging.getLogger(__name__)
@@ -29,13 +25,11 @@ DEFAULT_TIMEOUT: float = 30.0
 
 
 def _build_headers(token_name: str = 'dev') -> Dict[str, str]:
-    """构建请求头
-    
+    """构建header
     Args:
         token_name: Token 名称
-        
     Returns:
-        请求头字典
+        请求头
     """
     headers = DEFAULT_HEADERS.copy()
     headers["user-token"] = Session.checkUserToken(operate='read', app_name=token_name)
@@ -44,10 +38,8 @@ def _build_headers(token_name: str = 'dev') -> Dict[str, str]:
 
 def _ensure_https(url: str) -> str:
     """确保 URL 使用 HTTPS
-    
     Args:
         url: 原始 URL
-        
     Returns:
         转换后的 HTTPS URL
     """
@@ -56,12 +48,13 @@ def _ensure_https(url: str) -> str:
 
 def _parse_response(response: requests.Response) -> Dict[str, Any]:
     """解析响应结果"""
-    logger.debug('Response: %s', response.json())
+    body = response.json() if response.ok else ''
+    logger.debug('Response: %s', body)
     return {
         'code': response.status_code,
-        'time_consuming': response.elapsed.microseconds / 1000,
+        'time_consuming': response.elapsed.total_seconds() * 1000,
         'time_total': response.elapsed.total_seconds(),
-        'body': response.json() if response.ok else ''
+        'body': body
     }
 
 
@@ -92,11 +85,9 @@ def post_request_session(url: str, data: Optional[Any],
             timeout=timeout
         )
         return _parse_response(response)
-    except requests.Timeout:
-        logger.warning('Request timeout: %s', url)
-        return {'code': -1, 'body': '', 'error': 'timeout'}
     except requests.RequestException as e:
-        logger.error('Request error: %s', e)
+        log = logger.warning if isinstance(e, requests.Timeout) else logger.error
+        log('Request error: %s', e)
         return {'code': -1, 'body': '', 'error': str(e)}
     except Exception as e:
         logger.error('Unexpected error: %s', e)
@@ -109,14 +100,12 @@ def post_request_session_starify(url: str, data: Optional[Any],
                                 timeout: float = DEFAULT_TIMEOUT) -> Dict[str, Any]:
     """
     Starify POST 请求（post_request_session 的 starify 封装）
-    
     Args:
         url: 请求 URL
         data: 请求数据
         token_name: Token 名称，默认为 'starify'
         uid: 用户 UID（可选，用于刷新指定用户的 token）
         timeout: 请求超时时间
-        
     Returns:
         包含 code、body、time_consuming、time_total 的响应字典
     """
@@ -131,12 +120,10 @@ def post_starify(data: Optional[Any], uid: Optional[int] = None,
     Starify 支付接口 POST 请求快捷封装
     
     自动使用 config.starify_pay_url 和 'starify' token，简化 caseStarify 用例调用。
-    
     Args:
         data: 请求数据
         uid: 用户 UID（可选，用于刷新指定用户的 token）
-        timeout: 请求超时时间
-        
+        timeout: 请求超时时间 
     Returns:
         包含 code、body、time_consuming、time_total 的响应字典
     """

@@ -1,19 +1,27 @@
 import logging
 import os
+import sys
+import subprocess
 from common.Config import config
 
 logger = logging.getLogger(__name__)
 
+_MARKDOWN_DEPS = ['markdown', 'python-markdown-math', 'markdown_checklist', 'pymdown-extensions']
+
 try:
     from markdown import markdown
-except ModuleNotFoundError as e:
-    os.system("pip3 install markdown")
-    os.system("pip3 install python-markdown-math")
-    os.system("pip3 install markdown_checklist")
-    from markdown import markdown
-
-# pip3 install xx -i http://mirrors.aliyun.com/pypi/simple --trusted-host mirrors.aliyun.com
-# 如果不行换个源
+except ImportError:
+    logger.info('markdown 未安装，正在自动安装依赖...')
+    try:
+        subprocess.check_call(
+            [sys.executable, '-m', 'pip', 'install'] + _MARKDOWN_DEPS,
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+        )
+        from markdown import markdown
+    except subprocess.CalledProcessError:
+        raise ImportError(
+            f'markdown 依赖安装失败，请手动执行: pip install {" ".join(_MARKDOWN_DEPS)}'
+        )
 
 # HTML模板
 HTML_TEMPLATE = '''<!DOCTYPE html>
@@ -102,10 +110,8 @@ class MarkdownToHtml:
     def convert(self, html_path: str) -> bool:
         """
         转换Markdown文件为HTML
-
         Args:
             html_path: 输出HTML文件路径
-
         Returns:
             bool: 转换是否成功
         """
