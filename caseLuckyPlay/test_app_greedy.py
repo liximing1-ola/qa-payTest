@@ -21,7 +21,7 @@ class TestPayGreedy(unittest.TestCase):
     @classmethod
     def tearDownClass(cls) -> None:
         """测试后清理：恢复用户大区，清理 Redis 缓存"""
-        conMysql.updateUserBigArea(tuple(i for i in config.oversea_user.values()))
+        conMysql.updateUserBigArea(*config.oversea_user.values())
         time.sleep(1)
         conRedis.delKey('User.Big.Area.Id', config.oversea_user.values())
         conRedis.delKey('User.Big.Area', config.oversea_user.values())
@@ -37,9 +37,9 @@ class TestPayGreedy(unittest.TestCase):
             action = step['action']
             params = step.get('params', {})
             if action == 'update_user_big_area':
-                conMysql.updateUserBigArea(params['uids'], **{k: v for k, v in params.items() if k != 'uids'})
+                conMysql.updateUserBigArea(*params['uids'], **{k: v for k, v in params.items() if k != 'uids'})
             elif action == 'update_user_language':
-                conMysql.updateUserLanguage(params['uids'], **{k: v for k, v in params.items() if k != 'uids'})
+                conMysql.updateUserLanguage(*params['uids'], **{k: v for k, v in params.items() if k != 'uids'})
             elif action == 'update_money':
                 conMysql.updateMoneySql(**params)
 
@@ -74,8 +74,8 @@ class TestPayGreedy(unittest.TestCase):
 
         # 准备测试数据
         self._prepare_test_data([
-            {'action': 'update_user_big_area', 'params': {'uids': tuple(i for i in config.oversea_user.values())}},
-            {'action': 'update_user_language', 'params': {'uids': tuple(i for i in config.oversea_user.values())}},
+            {'action': 'update_user_big_area', 'params': {'uids': list(config.oversea_user.values())}},
+            {'action': 'update_user_language', 'params': {'uids': list(config.oversea_user.values())}},
             {'action': 'update_money', 'params': {'uid': config.oversea_payUid, 'gold_coin': 10000}}
         ])
 
@@ -110,8 +110,8 @@ class TestPayGreedy(unittest.TestCase):
 
         # 准备测试数据
         self._prepare_test_data([
-            {'action': 'update_user_big_area', 'params': {'uids': tuple(i for i in config.oversea_user.values()), 'bigArea_id': 3}},
-            {'action': 'update_user_language', 'params': {'uids': tuple(i for i in config.oversea_user.values()), 'language': 'ar', 'area_code': 'AR'}},
+            {'action': 'update_user_big_area', 'params': {'uids': list(config.oversea_user.values()), 'bigArea_id': 3}},
+            {'action': 'update_user_language', 'params': {'uids': list(config.oversea_user.values()), 'language': 'ar', 'area_code': 'AR'}},
             {'action': 'update_money', 'params': {'uid': config.oversea_payUid, 'money': 100000}}
         ])
 

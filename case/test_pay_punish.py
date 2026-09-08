@@ -8,7 +8,6 @@ from common.Request import post_request_session
 from common.basicData import encodeData
 from common.Consts import case_list_c, result
 from common.runFailed import Retry
-from common.method import format_reason
 
 
 @Retry(max_n=3)
@@ -41,7 +40,7 @@ class TestPayPunish(PayTestBase):
 
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
 
         # 延迟处理NSQ消息
         sleep(2)

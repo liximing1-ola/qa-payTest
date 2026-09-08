@@ -14,7 +14,6 @@ from common.basicSlpData import encodeData
 from common.conSlpMysql import conMysql as mysql
 from common.runFailed import Retry
 from common.sqlScript import UserMoneyOperations
-from common.method import format_reason
 
 
 @Retry(max_n=3)
@@ -54,7 +53,7 @@ class TestPayCreate(unittest.TestCase):
 		)
 		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1, format_reason(des, res))
+		assert_body(res['body'], 'success', 1)
 		time.sleep(0.5)
 		assert_equal(mysql.selectUserInfoSql('pay_room_money', payUid),
 		             old_vip + level_info['update'] * giftId['69']['price'] / 100)

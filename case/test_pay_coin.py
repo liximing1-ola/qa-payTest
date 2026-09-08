@@ -2,7 +2,7 @@ from case.base import PayTestBase
 from common.Config import config
 from common.conMysql import conMysql as mysql
 from common.Request import post_request_session
-from common.method import calculate_vip_exp, format_reason
+from common.method import calculate_vip_exp
 import unittest
 from common.Assert import assert_body, assert_code, assert_equal
 from common.basicData import encodeData
@@ -38,7 +38,7 @@ class TestPayCoin(PayTestBase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 验证数据库
         self._validate_db_state([
@@ -81,7 +81,7 @@ class TestPayCoin(PayTestBase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 验证数据库
         self._validate_db_state([

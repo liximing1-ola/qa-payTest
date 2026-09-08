@@ -6,7 +6,6 @@ from common.Assert import assert_body, assert_code, assert_equal
 from common.Consts import case_list, result
 from common.Request import post_starify
 from common.conStarifyMysql import conMysql
-from common.method import format_reason
 from common.runFailed import Retry
 
 
@@ -39,9 +38,9 @@ class TestPayCreate(unittest.TestCase):
         assert_code(res['code'])
 
         if success:
-            assert_body(res['body'], 'success', True, format_reason(desc, res, slp=True))
+            assert_body(res['body'], 'success', True)
         else:
-            assert_body(res['body'], 'msg', expected_msg, format_reason(desc, res, slp=True))
+            assert_body(res['body'], 'msg', expected_msg)
 
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), expected_star)
         expected_w = commodity['wealth'] if expected_wealth is None else expected_wealth

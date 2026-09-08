@@ -18,6 +18,8 @@ logger = logging.getLogger(__name__)
 class MySQLConnection(MySQLConnectionBase):
     """SLP MySQL 连接管理器（ali 配置）"""
     _config_name = 'ali'
+    _connection = None
+    _cursor = None
 
 
 class conMysql:
@@ -43,6 +45,11 @@ class conMysql:
         'id_commodity': "SELECT id FROM xs_user_commodity WHERE cid=%s AND uid=%s",
         'level': "SELECT level FROM xs_user_title_new WHERE uid=%s",
     }
+
+    _MONEY_COLUMNS = frozenset({
+        'money', 'money_b', 'money_cash', 'money_cash_b',
+        'gold_coin', 'money_debts', 'money_order', 'money_order_b'
+    })
 
     SELECT_COMPLEX_SQL = (
         "SELECT id, name, money_value, break_money, upgrade_money "
@@ -81,6 +88,8 @@ class conMysql:
         if accountType in conMysql.SELECT_WITH_PARAM_MAP:
             template = conMysql.SELECT_WITH_PARAM_MAP[accountType]
             if accountType == 'single_money':
+                if money_type not in conMysql._MONEY_COLUMNS:
+                    raise ValueError(f'Invalid money_type column: {money_type}')
                 sql = template.format(money_type=money_type)
                 params = (uid,)
             elif accountType in ('num_commodity', 'id_commodity'):

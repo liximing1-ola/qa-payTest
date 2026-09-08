@@ -6,7 +6,6 @@ from common.basicData import encodeData
 from common.Consts import case_list_b, result
 from common.runFailed import Retry
 from common.sqlScript import UserMoneyOperations
-from common.method import format_reason
 from case.base import PayTestBase
 
 
@@ -51,7 +50,7 @@ class TestPayLivePackage(PayTestBase):
         res = post_request_session(config.pay_url, data)
         
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         self._validate_db_state([
             {'field': 'single_money', 'uid': test_uid, 'expected': 600, 'kwargs': {'money_type': 'money_cash'}},
             {'field': 'single_money', 'uid': ceo_uid, 'expected': 210, 'kwargs': {'money_type': 'money_cash'}},
@@ -82,7 +81,7 @@ class TestPayLivePackage(PayTestBase):
         res = post_request_session(config.pay_url, data)
         
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         self._validate_db_state([
             {'field': 'single_money', 'uid': test_uid, 'expected': 300 * 0.6, 'kwargs': {'money_type': 'money_cash'}, 'assert_func': assert_len},
             {'field': 'single_money', 'uid': ceo_uid, 'expected': 300 * 0.21, 'kwargs': {'money_type': 'money_cash'}, 'assert_func': assert_len},
@@ -112,7 +111,7 @@ class TestPayLivePackage(PayTestBase):
         res = post_request_session(config.pay_url, data)
         
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         self._validate_db_state([
             {'field': 'sum_money', 'uid': config.payUid, 'expected': 100},
             {'field': 'single_money', 'uid': test_uid, 'expected': 59940, 'kwargs': {'money_type': 'money_cash'}},
@@ -141,7 +140,7 @@ class TestPayLivePackage(PayTestBase):
         res = post_request_session(config.pay_url, data)
         
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         self._validate_db_state([
             {'field': 'single_money', 'uid': test_uid, 'expected': 600, 'kwargs': {'money_type': 'money_cash'}},
             {'field': 'single_money', 'uid': ceo_uid, 'expected': 200, 'kwargs': {'money_type': 'money_cash'}},
@@ -171,7 +170,7 @@ class TestPayLivePackage(PayTestBase):
         res = post_request_session(config.pay_url, data)
         
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         self._validate_db_state([
             {'field': 'single_money', 'uid': test_uid, 'expected': 300 * 0.6, 'kwargs': {'money_type': 'money_cash'}, 'assert_func': assert_len},
             {'field': 'single_money', 'uid': ceo_uid, 'expected': 300 * 0.20, 'kwargs': {'money_type': 'money_cash'}, 'assert_func': assert_len},
@@ -201,7 +200,7 @@ class TestPayLivePackage(PayTestBase):
         res = post_request_session(config.pay_url, data)
         
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         self._validate_db_state([
             {'field': 'single_money', 'uid': test_uid, 'expected': 600, 'kwargs': {'money_type': 'money_cash'}},
             {'field': 'single_money', 'uid': ceo_uid, 'expected': 210, 'kwargs': {'money_type': 'money_cash'}},
@@ -229,7 +228,7 @@ class TestPayLivePackage(PayTestBase):
         res = post_request_session(config.pay_url, data)
         
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         self._validate_db_state([
             {'field': 'single_money', 'uid': config.rewardUid, 'expected': 62, 'kwargs': {'money_type': 'money_cash_b'}},
             {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
@@ -257,7 +256,7 @@ class TestPayLivePackage(PayTestBase):
         res = post_request_session(config.pay_url, data)
         
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         self._validate_db_state([
             {'field': 'single_money', 'uid': test_uid, 'expected': 700},
             {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}

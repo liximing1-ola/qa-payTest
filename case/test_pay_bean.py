@@ -2,7 +2,7 @@ from common.Config import config
 from common.conMysql import conMysql as mysql
 import unittest
 from common.Request import post_request_session
-from common.method import calculate_vip_exp, format_reason
+from common.method import calculate_vip_exp
 from common.Assert import assert_code, assert_equal, assert_body
 from common.basicData import encodeData
 from common.Consts import result, case_list
@@ -26,7 +26,7 @@ class TestPayBean(PayTestBase):
         mysql.deleteUserBeanSql(config.payUid, config.rewardUid)
 
     def _prepare_test_data(self, setup_steps):
-        """准备测试数据（金豆场景扩展，其余动作委托基类）"""
+        """准备测试数据"""
         for step in setup_steps:
             action = step['action']
             if action == 'delete_beans':
@@ -42,7 +42,7 @@ class TestPayBean(PayTestBase):
         验证账户内金豆不足时打赏金豆礼物的场景
         脚本步骤：
         1.构造打赏者和被打赏者数据
-        2.房间内打赏金豆礼物流程(道具：啵啵奶茶，数量：1)
+        2.房间内打赏金豆礼物流程(金豆道具，数量：1)
         3.校验接口状态和返回值数据
         4.检查Toast，预期提示'金豆不足'
         5.检查被打赏者金豆余额,预期：0
@@ -61,14 +61,15 @@ class TestPayBean(PayTestBase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 0, format_reason(des, res))
-        assert_body(res['body'], 'msg', '金豆不足', format_reason(des, res))
+        assert_body(res['body'], 'success', 0)
+        assert_body(res['body'], 'msg', '金豆不足')
         
         # 验证数据库
         self._validate_db_state([
             {'field': 'bean', 'uid': config.rewardUid, 'expected': 0}
         ])
-        
+
+        # 记录测试结果
         case_list[des] = result
 
     def test_02_beanPayChangeGoldGift(self):
@@ -77,7 +78,7 @@ class TestPayBean(PayTestBase):
         验证金豆足够时打赏金豆礼物的场景
         脚本步骤：
         1.构造打赏者和被打赏者数据
-        2.房间内打赏金豆礼物的流程（金豆足够）
+        2.房间内打赏金豆礼物的流程
         3.校验接口状态和返回值数据
         4.检查打赏者金豆余额，预期为：0
         5.检查被打赏者金豆余额，预期为：6000 * 0.5 = 3000
@@ -101,7 +102,7 @@ class TestPayBean(PayTestBase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 验证数据库
         self._validate_db_state([
@@ -145,7 +146,7 @@ class TestPayBean(PayTestBase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 验证数据库
         self._validate_db_state([
@@ -189,7 +190,7 @@ class TestPayBean(PayTestBase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 验证数据库
         self._validate_db_state([
@@ -227,7 +228,7 @@ class TestPayBean(PayTestBase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 验证数据库
         self._validate_db_state([
@@ -237,32 +238,3 @@ class TestPayBean(PayTestBase):
         ])
         
         case_list[des] = result
-
-    @unittest.skip('2022/5/12 金豆不再抵扣手续费')
-    def test_06_MoneyConvertGoldPayGift(self):
-        """
-        用例描述：
-        验证房间内打赏钻石礼物时金豆抵扣平台手续费的场景
-        脚本步骤：
-        1.构造打赏者和被打赏者数据
-        2.房间内打赏金豆礼物的流程
-        3.校验接口状态和返回值数据
-        4.检查预期：支付失败（钻石小于当前礼物价格时，打赏失败），提示Toast：'余额不足，无法支付'
-        5.检查打赏者钻石余额,预期：700
-        6.检查打赏者金豆余额,预期：400
-        """
-        pass
-
-    @unittest.skip('玩法已下线')
-    def test_07_BeanPayChangeCombo(self):
-        """
-        用例描述：
-        验证卡座内购买套餐的场景（钻补）
-        脚本步骤：
-        1.构造打赏者和被打赏者数据
-        2.卡座内购买酒桌套餐的流程
-        3.校验接口状态和返回值数据
-        4.检查购买者金豆余额，预期为：400
-        5.检查购买者钻石余额，预期为：80000 - 79900 = 100
-        """
-        pass

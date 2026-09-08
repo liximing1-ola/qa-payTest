@@ -7,7 +7,6 @@ from common.basicData import encodeData
 from common.Consts import case_list_b, result
 from common.runFailed import Retry
 from common.sqlScript import UserMoneyOperations
-from common.method import format_reason
 
 
 @Retry(max_n=3)
@@ -60,7 +59,7 @@ class TestPayPrettyRoom(unittest.TestCase):
 
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
 
         # 验证数据库
         self._validate_db_state([
@@ -96,7 +95,7 @@ class TestPayPrettyRoom(unittest.TestCase):
 
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
 
         # 验证数据库
         self._validate_db_state([
@@ -131,7 +130,7 @@ class TestPayPrettyRoom(unittest.TestCase):
 
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
 
         # 验证数据库
         self._validate_db_state([

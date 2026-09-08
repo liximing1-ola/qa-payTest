@@ -7,7 +7,6 @@ from common.Assert import assert_body, assert_code, assert_equal
 from common.Consts import case_list, result
 from common.Request import post_starify
 from common.conStarifyMysql import conMysql
-from common.method import format_reason
 from common.runFailed import Retry
 
 user_money = 200000
@@ -32,7 +31,7 @@ class TestPayCreate(unittest.TestCase):
         data = deal_pay_data("shop_buy", commodity, sale_level=sale_level)
         res = post_starify(data)
         assert_code(res['code'])
-        assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
+        assert_body(res['body'], 'success', True)
         cost = deal_num(
             commodity[f'level_{sale_level}']['day']
             * commodity[f'level_{sale_level}']['rate']

@@ -7,7 +7,6 @@ from common.Request import post_request_session
 from common.conMysql import conMysql
 from common.runFailed import Retry
 from common.Session import Session
-from common.method import format_reason
 
 
 @Retry
@@ -74,7 +73,7 @@ class TestPayDuckRate(unittest.TestCase):
 
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
 
         # 验证数据库
         self._validate_db_state([
@@ -114,7 +113,7 @@ class TestPayDuckRate(unittest.TestCase):
 
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
 
         # 验证数据库
         self._validate_db_state([
@@ -154,7 +153,7 @@ class TestPayDuckRate(unittest.TestCase):
 
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
 
         # 验证数据库
         self._validate_db_state([

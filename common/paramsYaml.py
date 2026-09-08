@@ -5,6 +5,7 @@ import yaml
 from common.Config import config
 
 logger = logging.getLogger(__name__)
+_yaml_cache = {}
 
 
 class YamlReader:
@@ -27,6 +28,10 @@ class YamlReader:
         """
         yaml_path = cls._get_yaml_path(filename)
 
+        if yaml_path in _yaml_cache:
+            yaml_data = _yaml_cache[yaml_path]
+            return yaml_data.get(key) if yaml_data else None
+
         if not os.path.exists(yaml_path):
             logger.warning("File not found: %s", yaml_path)
             return None
@@ -34,6 +39,7 @@ class YamlReader:
         try:
             with open(yaml_path, 'r', encoding='utf-8') as f:
                 yaml_data = yaml.safe_load(f)
+            _yaml_cache[yaml_path] = yaml_data
             return yaml_data.get(key) if yaml_data else None
 
         except Exception as e:

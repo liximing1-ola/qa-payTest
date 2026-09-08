@@ -6,30 +6,20 @@ APP 海外版支付测试 - 马来西亚区域验证
 """
 import unittest
 from common.Config import config
-from common.method import format_reason
 from common.conPtMysql import conMysql
 from common.Request import post_request_session
 from common.Assert import assert_code, assert_body, assert_len, assert_equal
 from common.basicData import encodeOverseaData
 from common.Consts import result, case_list
-from common.conRedis import conRedis
+from caseOversea.base import OverseaAreaTestBase
 
 
 @unittest.skip('马来大区已关闭合并到印尼')
-class TestPayCreate(unittest.TestCase):
+class TestPayCreate(OverseaAreaTestBase):
     """马来区消费差异化验证"""
 
-    @classmethod
-    def setUpClass(cls) -> None:
-        """测试前准备：设置用户大区为马来区，清理 Redis 缓存"""
-        conMysql.updateUserBigArea(tuple(i for i in config.oversea_user.values()), bigarea_id=9)
-        conRedis.delKey('User.Big.Area.Id', config.oversea_user.values())
-        conRedis.delKey('User.Big.Area', config.oversea_user.values())
-
-    @classmethod
-    def tearDownClass(cls) -> None:
-        """测试后清理：恢复用户大区"""
-        conMysql.updateUserBigArea(tuple(i for i in config.oversea_user.values()))
+    bigarea_id = 9
+    clear_redis_on_setup = True
 
     def test_01_msAreaFleetRoomPay(self, des: str = '马来区家族房/个人房礼物非主播打赏 80% 分成'):
         """
@@ -57,7 +47,7 @@ class TestPayCreate(unittest.TestCase):
         
         # 3. 校验接口
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 4. 检查余额
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_payUid), 100)
@@ -95,7 +85,7 @@ class TestPayCreate(unittest.TestCase):
         
         # 3. 校验接口
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 4. 检查余额
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_payUid), 100)
@@ -133,7 +123,7 @@ class TestPayCreate(unittest.TestCase):
         
         # 3. 校验接口
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 4. 检查余额
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_payUid), 100)

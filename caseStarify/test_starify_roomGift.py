@@ -7,7 +7,6 @@ from common.Assert import assert_code, assert_body, assert_equal, assert_between
 from common.Consts import case_list, result
 from common.Request import post_starify
 from common.conStarifyMysql import conMysql
-from common.method import format_reason
 from common.runFailed import Retry
 
 
@@ -40,9 +39,9 @@ class TestPayCreate(unittest.TestCase):
         """断言接口响应"""
         assert_code(res['code'])
         if success:
-            assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
+            assert_body(res['body'], 'success', True)
         else:
-            assert_body(res['body'], 'msg', msg, format_reason(des, res, slp=True))
+            assert_body(res['body'], 'msg', msg)
 
     def _assert_single_step(self, commodity, to_uids, pay_balance, bag_num, total_hit,
                             success=True, reward=True):
@@ -167,7 +166,7 @@ class TestPayCreate(unittest.TestCase):
                 commodity = commodity_config[str(gift_id)]
                 res = self._send_room_gift(commodity, [starify_rewardUid01])
                 assert_code(res['code'])
-                assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
+                assert_body(res['body'], 'success', True)
                 money -= commodity['price']
                 wealth += commodity['wealth']
                 charm += commodity['charm']
@@ -190,7 +189,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateCharmSql(starify_rewardUid01, 0)
         res = self._send_room_gift(commodity, [starify_rewardUid01])
         assert_code(res['code'])
-        assert_body(res['body'], 'msg', "当前特权级别无法使用此礼物", format_reason(des, res, slp=True))
+        assert_body(res['body'], 'msg', "当前特权级别无法使用此礼物")
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 50000)
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01), 0)
         assert_equal(conMysql.selectUserInfoSql('wealth', starify_payUid), wealth_lv[f'lv{lv}']['min'])
@@ -213,7 +212,7 @@ class TestPayCreate(unittest.TestCase):
         conMysql.updateCharmSql(starify_rewardUid01, 0)
         res = self._send_room_gift(commodity, [starify_rewardUid01])
         assert_code(res['code'])
-        assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
+        assert_body(res['body'], 'success', True)
         assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), 50000 - commodity['price'])
         if gift_lv in (5, 6):
             assert_between(conMysql.selectUserInfoSql('star_coin', starify_rewardUid01),

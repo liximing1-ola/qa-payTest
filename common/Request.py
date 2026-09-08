@@ -43,7 +43,11 @@ def _ensure_https(url: str) -> str:
     Returns:
         转换后的 HTTPS URL
     """
-    return url if url.startswith('https://') else f'https://{url}'
+    if url.startswith('https://'):
+        return url
+    if url.startswith('http://'):
+        return url.replace('http://', 'https://', 1)
+    return f'https://{url}'
 
 
 def _parse_response(response: requests.Response) -> Dict[str, Any]:

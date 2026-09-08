@@ -5,7 +5,6 @@ APP 海外版支付测试 - 背包开箱验证
 验证背包内开箱子得到物品的流程。
 """
 from common.Config import config
-from common.method import format_reason
 from common.conPtMysql import conMysql
 from common.Request import post_request_session
 from common.Assert import assert_code, assert_body, assert_len, assert_equal
@@ -56,7 +55,7 @@ class TestPayCreate(OverseaAreaTestBase):
         
         # 3. 校验接口
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 4. 检查账户余额
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_payUid), 100)
@@ -95,13 +94,13 @@ class TestPayCreate(OverseaAreaTestBase):
         conMysql.insertXsUserBox(config.oversea_payUid)
         conMysql.updateMoneySql(config.oversea_payUid, money=700, money_cash=2000, money_cash_b=2000, money_b=2000)
         
-        # 2. 多开箱子
-        data = encodeOverseaData(payType='shop-buy-box-more')
+        # 2. 多开箱子（num=6 表示一次开启背包内 6 个箱子）
+        data = encodeOverseaData(payType='shop-buy-box', num=6)
         res = post_request_session(config.oversea_pay_url, data, token_name='app')
         
         # 3. 校验接口
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 4. 检查账户余额
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_payUid), 700)

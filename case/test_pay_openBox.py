@@ -6,7 +6,6 @@ from common.basicData import encodeData
 from common.Consts import result, case_list
 from common.runFailed import Retry
 from common.sqlScript import UserMoneyOperations, UserCommodityOperations
-from common.method import format_reason
 from case.base import PayTestBase
 
 
@@ -59,7 +58,7 @@ class TestPayOpenBox(PayTestBase):
 
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
 
         # 验证数据库
         self._validate_db_state([
@@ -101,7 +100,7 @@ class TestPayOpenBox(PayTestBase):
 
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
 
         # 验证数据库
         self._validate_db_state([
@@ -136,7 +135,7 @@ class TestPayOpenBox(PayTestBase):
 
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
 
         # 验证数据库
         self._validate_db_state([
@@ -171,7 +170,7 @@ class TestPayOpenBox(PayTestBase):
 
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
 
         # 验证数据库
         self._validate_db_state([

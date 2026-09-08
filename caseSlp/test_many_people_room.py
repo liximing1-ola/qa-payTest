@@ -13,7 +13,6 @@ from common.basicSlpData import encodeData
 from common.conSlpMysql import conMysql as mysql
 from common.runFailed import Retry
 from common.sqlScript import UserMoneyOperations
-from common.method import format_reason
 
 
 @Retry(max_n=3)
@@ -32,9 +31,9 @@ class TestPayCreate(unittest.TestCase):
 		"""
 		rid = gs_B_ceo_rid
 		uids = tuple([str(i) for i in [gs_A_uid, gs_B_uid, normal_uid]])
-		assert_equal(mysql.checkUserBroker(gs_A_uid), True)  # 确认 uid是工会成员
-		assert_equal(mysql.checkUserBroker(gs_B_uid), True)  # 确认 uid是工会成员
-		assert_equal(mysql.checkUserBroker(normal_uid), False)  # 确认 uid不是工会成员
+		assert_equal(mysql.checkUserBroker(gs_A_uid), True)  # 确认 uidA是工会成员
+		assert_equal(mysql.checkUserBroker(gs_B_uid), True)  # 确认 uidB是工会成员
+		assert_equal(mysql.checkUserBroker(normal_uid), False)  # 确认 uidC不是工会成员
 
 		num = 5
 		mysql.updateUserGodSql(gs_A_uid, 0)
@@ -49,7 +48,7 @@ class TestPayCreate(unittest.TestCase):
 		)
 		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'], 200)
-		assert_body(res['body'], 'success', 1, format_reason(des, res))
+		assert_body(res['body'], 'success', 1)
 		assert_equal(mysql.selectUserInfoSql('single_money', gs_A_uid), giftId['69']['price'] * rates['gs']['default'] * num)
 		assert_equal(mysql.selectUserInfoSql('single_money', gs_B_uid, money_type='money_cash'), giftId['69']['price'] * rates['gs']['default'] * num)
 		assert_equal(mysql.selectUserInfoSql('single_money', normal_uid), giftId['69']['price'] * rates['normal']['default'] * num)

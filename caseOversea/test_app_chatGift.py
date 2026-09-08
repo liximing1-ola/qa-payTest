@@ -8,7 +8,6 @@ from common.Config import config
 from common.conPtMysql import conMysql
 from common.Request import post_request_session
 from common.Assert import assert_code, assert_equal, assert_body
-from common.method import format_reason
 from common.basicData import encodeOverseaData
 from common.Consts import case_list, result
 from common.runFailed import Retry
@@ -47,8 +46,8 @@ class TestPayCreate(OverseaAreaTestBase):
         
         # 3. 校验接口
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 0, format_reason(des, res))
-        assert_body(res['body'], 'msg', '餘額不足，無法支付', format_reason(des, res))
+        assert_body(res['body'], 'success', 0)
+        assert_body(res['body'], 'msg', '餘額不足，無法支付')
         
         # 4. 检查余额
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_testUid), 0)
@@ -83,7 +82,7 @@ class TestPayCreate(OverseaAreaTestBase):
         
         # 3. 校验接口
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 4. 检查账户余额
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_payUid), 0)
@@ -119,7 +118,7 @@ class TestPayCreate(OverseaAreaTestBase):
         
         # 3. 校验接口
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 4. 检查账户余额
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_payUid), 0)

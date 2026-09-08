@@ -2,7 +2,7 @@ from case.base import PayTestBase
 from common.Config import config
 from common.conMysql import conMysql as mysql
 from common.Request import post_request_session
-from common.method import calculate_vip_exp, format_reason
+from common.method import calculate_vip_exp
 import unittest
 from common.Assert import assert_code, assert_equal, assert_body, assert_len
 from common.basicData import encodeData
@@ -48,7 +48,7 @@ class TestPayBusiness(PayTestBase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 验证数据库
         self._validate_db_state([
@@ -89,7 +89,7 @@ class TestPayBusiness(PayTestBase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 验证数据库
         income = mysql.selectUserInfoSql('pay_change', uid=config.masterUid, money_type='_in_c_b')
@@ -125,7 +125,7 @@ class TestPayBusiness(PayTestBase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 验证数据库
         expected_amount = 100 * config.rate
@@ -169,7 +169,7 @@ class TestPayBusiness(PayTestBase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 验证数据库
         self._validate_db_state([
@@ -219,7 +219,7 @@ class TestPayBusiness(PayTestBase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 验证数据库
         self._validate_db_state([
@@ -254,7 +254,7 @@ class TestPayBusiness(PayTestBase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 验证数据库
         self._validate_db_state([

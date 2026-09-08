@@ -6,6 +6,7 @@
 """
 from typing import Dict
 import datetime
+import os
 import time
 import random
 import requests
@@ -13,7 +14,8 @@ from chinese_calendar import is_holiday
 
 
 # 配置
-WEBHOOK_URL: str = 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e317861a-d1ec-4ac4-af96-9d4b8f12d9d6'
+WEBHOOK_KEY: str = os.environ.get('WECHAT_WEBHOOK_KEY', '')
+WEBHOOK_URL: str = f'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key={WEBHOOK_KEY}'
 HEADERS: Dict[str, str] = {'Content-Type': 'application/json'}
 
 REASON_LIST: list = [

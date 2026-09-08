@@ -7,7 +7,6 @@ from common.Assert import assert_body, assert_code, assert_equal
 from common.Consts import case_list, result
 from common.Request import post_starify
 from common.conStarifyMysql import conMysql
-from common.method import format_reason
 from common.runFailed import Retry
 
 
@@ -37,7 +36,7 @@ class TestPayCreate(unittest.TestCase):
         data = deal_pay_contract_data("audition_contract", uid, cost, 1, singer_uid=singer_uid)
         res = post_starify(data, uid=uid)
         assert_code(res['code'])
-        assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
+        assert_body(res['body'], 'success', True)
 
     def _bid(self, uid, cost, des):
         """竞价并断言成功"""
@@ -45,7 +44,7 @@ class TestPayCreate(unittest.TestCase):
         data = deal_pay_contract_data("audition_contract", uid, cost, 0)
         res = post_starify(data, uid=uid)
         assert_code(res['code'])
-        assert_body(res['body'], 'success', True, format_reason(des, res, slp=True))
+        assert_body(res['body'], 'success', True)
 
     def _bid_fail(self, uid, cost, msg, des, sign_type=1, singer_uid=c_uid, sleep=True):
         """竞拍并断言失败"""
@@ -54,7 +53,7 @@ class TestPayCreate(unittest.TestCase):
         data = deal_pay_contract_data("audition_contract", uid, cost, sign_type, singer_uid=singer_uid)
         res = post_starify(data, uid=uid)
         assert_code(res['code'])
-        assert_body(res['body'], 'msg', msg, format_reason(des, res, slp=True))
+        assert_body(res['body'], 'msg', msg)
 
     # ---- 断言 helpers ----
 

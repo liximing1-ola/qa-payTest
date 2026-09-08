@@ -53,8 +53,11 @@ def dict_to_markdown(result_dict: Dict[str, Any]) -> str:
 
 # ============ 图片获取 ============
 
+_IMG_APP_ID: str = os.environ.get('IMG_API_APP_ID', '')
+_IMG_APP_SECRET: str = os.environ.get('IMG_API_APP_SECRET', '')
+
 IMAGE_APIS: Dict[int, str] = {
-    1: 'https://www.mxnzp.com/api/image/girl/list/random?app_id=kilmc0p2ytsnawyp&app_secret=bnNoWElSVDBYbEhsc1EvYVM2WnVnZz09',
+    1: f'https://www.mxnzp.com/api/image/girl/list/random?app_id={_IMG_APP_ID}&app_secret={_IMG_APP_SECRET}',
     2: 'https://shibe.online/api/shibes?count=1'
 }
 
@@ -148,12 +151,11 @@ def get_value(res: Dict[str, Any]) -> None:
         Consts.fail_num += 1
 
 
-def format_reason(des: str, res: Dict[str, Any], slp: bool = False) -> str:
+def format_reason(des: str, res: Dict[str, Any]) -> str:
     """格式化失败原因
     Args:
         des: 描述信息
         res: 响应结果
-        slp: 是否为 SLP 模式（success 为 True 时判定）
     Returns:
         格式化的错误信息
     """

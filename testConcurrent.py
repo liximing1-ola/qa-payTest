@@ -54,130 +54,127 @@ class TestPayConcurrent:
         get_value(res)
         return res
 
+    def _run_test(self, des, times, setup, concurrent_fn, end, sleep_end=0):
+        """并发测试通用模板：setup → concurrent → end → finalize
+
+        使用 try-finally 确保 _finalize 始终执行（即使断言失败也重置计数器）。
+        """
+        self._print(des)
+        try:
+            setup()
+            self._run_concurrent(concurrent_fn, times)
+            if sleep_end:
+                sleep(sleep_end)
+            end()
+        finally:
+            self._finalize(des)
+
     # ========== Test 1: 打赏背包礼物 ==========
     def test_01_payPackGift(self, times, des='打赏背包礼物的并发场景'):
         """验证商城购买的道具在房间内赠送给其他人"""
-        self._print(des)
+        def setup():
+            UserMoneyOperations.update(config.payUid, 10000)
+            UserCommodityOperations.delete_all(config.payUid)
+            self._exec(self.URLS['pay'], encodeData(payType='shop-buy', cid=self.CID['gift'], money=9900, num=1))
+            assert_equal(UserMoneyOperations.select_all(config.payUid), 100)
+            assert_equal(UserCommodityOperations.check_all(config.payUid), 1)
 
-        # Ready
-        UserMoneyOperations.update(config.payUid, 10000)
-        UserCommodityOperations.delete_all(config.payUid)
-        self._exec(self.URLS['pay'], encodeData(payType='shop-buy', cid=self.CID['gift'], money=9900, num=1))
-        assert_equal(UserMoneyOperations.select_all(config.payUid), 100)
-        assert_equal(UserCommodityOperations.check_all(config.payUid), 1)
-
-        # Concurrent
         def concurrent():
             cid = int(UserCommodityOperations.get_id(self.CID['gift'], config.payUid))
             payload = encodeData(payType='package', rid=193185484, uid=config.rewardUid, giftId=54, money=9900, package_cid=cid, ctype='gift', num=1)
             self._exec(self.URLS['pay'], payload)
 
-        self._run_concurrent(concurrent, times)
+        def end():
+            assert_equal(UserCommodityOperations.check(config.payUid, self.CID['gift']), 0)
+            assert_equal(Consts.success_num, 1)
 
-        # End
-        sleep(1)
-        assert_equal(UserCommodityOperations.check(config.payUid, self.CID['gift']), 0)
-        assert_equal(Consts.success_num, 1)
-        self._finalize(des)
+        self._run_test(des, times, setup, concurrent, end, sleep_end=1)
 
     # ========== Test 2: 使用背包物品 ==========
     def test_02_commodityUse(self, times, des='使用背包内物料的并发场景'):
         """验证使用商城购买的道具"""
-        self._print(des)
+        def setup():
+            UserCommodityOperations.insert(config.payUid, self.CID['frame'], 1)
+            assert_equal(UserCommodityOperations.check(config.payUid, self.CID['frame']), 1)
 
-        # Ready
-        UserCommodityOperations.insert(config.payUid, self.CID['frame'], 1)
-        assert_equal(UserCommodityOperations.check(config.payUid, self.CID['frame']), 1)
-
-        # Concurrent
         def concurrent():
             cid = int(UserCommodityOperations.get_id(self.CID['frame'], config.payUid))
             self._exec(self.URLS['use'], f'id={cid}&num=1')
             assert_equal(UserCommodityOperations.check(config.payUid, self.CID['frame']), 0)
 
-        self._run_concurrent(concurrent, times)
+        def end():
+            assert_equal(Consts.fail_num, times - 1)
 
-        # End
-        assert_equal(Consts.fail_num, times - 1)
-        self._finalize(des)
+        self._run_test(des, times, setup, concurrent, end)
 
     # ========== Test 3: 赠送物品 ==========
     def test_03_commodityPresent(self, times, des='赠送物品时的并发场景'):
         """验证赠送商城购买的道具"""
-        self._print(des)
+        def setup():
+            UserMoneyOperations.update(config.payUid)
+            UserMoneyOperations.update(config.rewardUid)
+            UserCommodityOperations.delete_all(config.payUid)
+            UserCommodityOperations.delete_all(config.rewardUid)
+            UserCommodityOperations.insert(config.payUid, self.CID['frame'], 2)
+            assert_equal(UserCommodityOperations.check(config.payUid, self.CID['frame']), 2)
 
-        # Ready
-        UserMoneyOperations.update(config.payUid)
-        UserMoneyOperations.update(config.rewardUid)
-        UserCommodityOperations.delete_all(config.payUid)
-        UserCommodityOperations.delete_all(config.rewardUid)
-        UserCommodityOperations.insert(config.payUid, self.CID['frame'], 2)
-        assert_equal(UserCommodityOperations.check(config.payUid, self.CID['frame']), 2)
-
-        # Concurrent
         def concurrent():
             cid = int(UserCommodityOperations.get_id(self.CID['frame'], config.payUid))
             self._exec(self.URLS['present'], f'id={cid}&num=1&targetId={config.rewardUid}')
 
-        self._run_concurrent(concurrent, times)
+        def end():
+            assert_equal(UserCommodityOperations.check(config.payUid, self.CID['frame']), 0)
+            assert_equal(UserCommodityOperations.check(config.rewardUid, self.CID['frame']), 2)
+            assert_equal(Consts.success_num, 2)
 
-        # End
-        assert_equal(UserCommodityOperations.check(config.payUid, self.CID['frame']), 0)
-        assert_equal(UserCommodityOperations.check(config.rewardUid, self.CID['frame']), 2)
-        assert_equal(Consts.success_num, 2)
-        self._finalize(des)
+        self._run_test(des, times, setup, concurrent, end)
 
     # ========== Test 4: 打赏面板礼物 ==========
     def test_04_payGift(self, times, des='打赏面板礼物时的并发场景'):
         """验证房间内打赏礼物给其他人"""
-        self._print(des)
+        def setup():
+            UserMoneyOperations.update(config.payUid, 400)
+            UserMoneyOperations.update(config.masterUid)
 
-        # Ready
-        UserMoneyOperations.update(config.payUid, 400)
-        UserMoneyOperations.update(config.masterUid)
-
-        # Concurrent
         def concurrent():
             payload = encodeData(payType='package', money=100, uid=config.masterUid, giftId=config.giftId['5'])
             self._exec(self.URLS['pay'], payload)
 
-        self._run_concurrent(concurrent, times)
+        def end():
+            assert_equal(UserMoneyOperations.select_all(config.masterUid), 280)
+            assert_equal(Consts.success_num, 4)
 
-        # End
-        sleep(1)
-        assert_equal(UserMoneyOperations.select_all(config.masterUid), 280)
-        assert_equal(Consts.success_num, 4)
-        self._finalize(des)
+        self._run_test(des, times, setup, concurrent, end, sleep_end=1)
 
     # ========== Test 5: 购买商城礼物 ==========
     def test_05_payShop(self, times, des='购买商城礼物时的并发场景'):
         """验证商城购买道具"""
-        self._print(des)
+        def setup():
+            UserMoneyOperations.update(config.payUid, 40000)
+            UserCommodityOperations.delete_all(config.payUid)
 
-        # Ready
-        UserMoneyOperations.update(config.payUid, 40000)
-        UserCommodityOperations.delete_all(config.payUid)
-
-        # Concurrent
         def concurrent():
             data = encodeData(payType='shop-buy', cid=self.CID['gift'], money=9900, num=1)
             self._exec(self.URLS['pay'], data)
 
-        self._run_concurrent(concurrent, times)
+        def end():
+            assert_equal(UserMoneyOperations.select_all(config.payUid), 400)
+            assert_equal(UserCommodityOperations.check_all(config.payUid), 4)
+            sleep(1)
+            assert_equal(Consts.success_num, 4)
 
-        # End
-        assert_equal(UserMoneyOperations.select_all(config.payUid), 400)
-        assert_equal(UserCommodityOperations.check_all(config.payUid), 4)
-        sleep(1)
-        assert_equal(Consts.success_num, 4)
-        self._finalize(des)
+        self._run_test(des, times, setup, concurrent, end)
 
     def main(self, num):
-        self.test_01_payPackGift(num)
-        self.test_02_commodityUse(num)
-        self.test_03_commodityPresent(num)
-        self.test_04_payGift(num)
-        self.test_05_payShop(num)
+        tests = [
+            self.test_01_payPackGift,
+            self.test_02_commodityUse,
+            self.test_03_commodityPresent,
+            self.test_04_payGift,
+            self.test_05_payShop,
+        ]
+        for test in tests:
+            test(num)
         case_list = method.dict_to_markdown(Consts.case_list_c)
         Logs.get_logger('concurrentCaseResult.log').info(f"{case_list}\n")
         robot('markdown', case_list)

@@ -14,7 +14,7 @@ from common.Config import config
 
 
 # RPC接口延迟配置（秒）
-RPC_DELAY = 0.6
+RPC_DELAY = 0.5
 
 
 def _delay_for_rpc():
@@ -93,7 +93,7 @@ def assert_in_text(body: dict, expected_msg: str) -> bool:
 
 
 @_assert_wrapper
-def assert_body(body: dict, body_msg: str, expected_msg: Any, reason: str) -> bool:
+def assert_body(body: dict, body_msg: str, expected_msg: Any) -> bool:
     """验证响应体中指定字段的值"""
     msg = body.get(body_msg)
     _assert(

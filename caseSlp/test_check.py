@@ -13,7 +13,6 @@ from common.basicSlpData import encodeData
 from common.conSlpMysql import conMysql as mysql
 from common.runFailed import Retry
 from common.sqlScript import UserMoneyOperations
-from common.method import format_reason
 
 
 @Retry(max_n=3)
@@ -39,9 +38,9 @@ class TestPayCreate(unittest.TestCase):
 		data = encodeData(payType=pay_type, num=default_num, giftId=giftId['69']['gid'])
 		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', expected_success, format_reason(des, res))
+		assert_body(res['body'], 'success', expected_success)
 		if check_insufficient:
-			assert_body(res['body'], 'msg', '余额不足，无法支付', format_reason(des, res))
+			assert_body(res['body'], 'msg', '余额不足，无法支付')
 			assert_equal(mysql.selectUserInfoSql('sum_money', normal_uid), 0)
 		else:
 			assert_equal(mysql.selectUserInfoSql('sum_money', payUid), 0)
@@ -64,7 +63,7 @@ class TestPayCreate(unittest.TestCase):
 		data = encodeData(payType='package', num=default_num, giftId=giftId['69']['gid'])
 		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'],'success', 1, format_reason(des, res))
+		assert_body(res['body'],'success', 1)
 		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money'), 0)
 		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money_cash_b'), giftId['69']['price'])
 		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money_cash'), giftId['69']['price'])
@@ -81,7 +80,7 @@ class TestPayCreate(unittest.TestCase):
 		data = encodeData(payType='package', num=default_num, giftId=giftId['69']['gid'])
 		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1, format_reason(des, res))
+		assert_body(res['body'], 'success', 1)
 		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money'), 0)
 		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money_cash_b'), 0)
 		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money_cash'), giftId['69']['price'])
@@ -104,7 +103,7 @@ class TestPayCreate(unittest.TestCase):
 		)
 		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1, format_reason(des, res))
+		assert_body(res['body'], 'success', 1)
 		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money'), 0)
 		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money_cash_b'), 0)
 		assert_equal(mysql.selectUserInfoSql('single_money', payUid, money_type='money_cash'), 0)
@@ -121,7 +120,7 @@ class TestPayCreate(unittest.TestCase):
 		                  giftId=giftId['69']['gid'])
 		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
-		assert_body(res['body'], 'success', 0, format_reason(des, res))
-		assert_body(res['body'], 'msg', '不能给自己打赏', format_reason(des, res))
+		assert_body(res['body'], 'success', 0)
+		assert_body(res['body'], 'msg', '不能给自己打赏')
 		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money)
 		case_list[des] = result

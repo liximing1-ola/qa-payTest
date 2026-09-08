@@ -17,6 +17,8 @@ logger = logging.getLogger(__name__)
 class MySQLConnection(MySQLConnectionBase):
     """APP MySQL 连接管理器（dev 配置）"""
     _config_name = 'dev'
+    _connection = None
+    _cursor = None
 
 
 class conMysql:
@@ -31,6 +33,11 @@ class conMysql:
         'chat-pay-card': "SELECT num FROM xs_user_commodity WHERE uid=%s AND cid=42598",
         'pay_change': "SELECT money FROM xs_pay_change_new WHERE uid=%s ORDER BY id DESC LIMIT 1",
     }
+
+    _MONEY_COLUMNS = frozenset({
+        'money', 'money_b', 'money_cash', 'money_cash_b',
+        'gold_coin', 'money_debts', 'money_order', 'money_order_b'
+    })
 
     DELETE_SQL_MAP: Dict[str, str] = {
         'user_commodity': "DELETE FROM xs_user_commodity WHERE uid=%s",
@@ -63,6 +70,8 @@ class conMysql:
             return int(res[0]) if res and res[0] else 0
 
         if accountType == 'single_money':
+            if money_type not in conMysql._MONEY_COLUMNS:
+                raise ValueError(f'Invalid money_type column: {money_type}')
             sql = f"SELECT {money_type} FROM xs_user_money WHERE uid=%s"
             res = MySQLConnection.execute_query(sql, params=(uid,))
             return res[0] if res else None
@@ -151,7 +160,7 @@ class conMysql:
     @staticmethod
     def checkXsGiftConfig() -> None:
         """检查礼物配置"""
-        gift_ids = tuple(i for i in config.oversea_giftId.values())
+        gift_ids = tuple(config.oversea_giftId.values())
         MySQLConnection._update_xs_gift_status(gift_ids)
 
     # ============ 查询方法 ============
@@ -159,7 +168,7 @@ class conMysql:
     @staticmethod
     def select_greedy_prize(uid: int, round_id: int) -> Tuple:
         """查询摩天轮开奖数据"""
-        return MySQLConnection.query_greedy_prize(uid, round_id) or 0
+        return MySQLConnection.query_greedy_prize(uid, round_id) or (0, 0)
 
     @staticmethod
     def select_user_chatroom(property: str, bigarea_id: int = 1) -> int:

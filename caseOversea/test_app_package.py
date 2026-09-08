@@ -5,7 +5,6 @@ APP 海外版支付测试 - 房间打赏验证
 验证房间场景下的打赏功能，包括余额不足和正常打赏。
 """
 from common.Config import config
-from common.method import format_reason
 from common.conPtMysql import conMysql
 from common.Request import post_request_session
 from common.Assert import assert_code, assert_body, assert_equal
@@ -50,8 +49,8 @@ class TestPayCreate(OverseaAreaTestBase):
         
         # 3. 校验接口
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 0, format_reason(des, res))
-        assert_body(res['body'], 'msg', '餘額不足，無法支付', format_reason(des, res))
+        assert_body(res['body'], 'success', 0)
+        assert_body(res['body'], 'msg', '餘額不足，無法支付')
         
         # 4. 检查余额
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_testUid), 0)
@@ -86,7 +85,7 @@ class TestPayCreate(OverseaAreaTestBase):
         
         # 3. 校验接口
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 4. 检查被打赏者收益
         assert_equal(conMysql.selectUserInfoSql('money_cash_personal', config.oversea_testUid, money_type='money_cash_personal'), 420)

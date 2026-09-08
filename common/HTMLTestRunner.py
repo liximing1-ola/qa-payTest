@@ -51,8 +51,8 @@ class TemplateMixin:
     <title>%(title)s</title>
     <meta name="generator" content="%(generator)s"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.bootcss.com/echarts/3.8.5/echarts.common.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     %(stylesheet)s
 </head>
 <body>
@@ -296,7 +296,7 @@ class TestResult(unittest.TestResult):
 
     def addError(self, test, err):
         self.error_count += 1
-        super().addError(self, test, err)
+        super().addError(test, err)
         _, _exc_str = self.errors[-1]
         output = self.complete_output()
         self.result.append((2, test, output, _exc_str))
@@ -304,7 +304,7 @@ class TestResult(unittest.TestResult):
 
     def addFailure(self, test, err):
         self.failure_count += 1
-        super().addFailure(self, test, err)
+        super().addFailure(test, err)
         _, _exc_str = self.failures[-1]
         output = self.complete_output()
         self.result.append((1, test, output, _exc_str))

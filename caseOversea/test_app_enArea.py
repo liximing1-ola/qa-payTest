@@ -6,7 +6,6 @@ APP 海外版支付测试 - 英语区域验证
 """
 import unittest
 from common.Config import config
-from common.method import format_reason
 from common.conPtMysql import conMysql
 from common.Request import post_request_session
 from common.Assert import assert_code, assert_body, assert_equal
@@ -48,7 +47,7 @@ class TestPayCreate(OverseaAreaTestBase):
         
         # 3. 校验接口
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 4. 检查余额
         assert_equal(conMysql.selectUserInfoSql('single_money', config.oversea_testUid, money_type='money_cash'), 300)
@@ -82,7 +81,7 @@ class TestPayCreate(OverseaAreaTestBase):
         
         # 3. 校验接口
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 4. 检查余额
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_payUid), 0)
@@ -119,7 +118,7 @@ class TestPayCreate(OverseaAreaTestBase):
         
         # 3. 校验接口
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 4. 检查余额
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_payUid), 100)

@@ -26,6 +26,28 @@ HEADERS_TEMPLATE = {
     'Postman-Token': "f7d705b2-cf29-4a4a-81ba-2c8c8d0f5ed5"
 }
 
+# 用户 Token（过期时在此统一更新）
+USER_TOKENS = {
+    'create':  '0976FcAmUaHnJvJAKi804Ijs2Cm3__2BuamYTrhAVV9baYv2cOWvvuwII2kdNeSKeB8MGHOnQJq878fOl3VKNltq4__2BP7pfIksSLlQs1Y4s50wqo__2Fm3qksqrXTqC',
+    'pay600':  '8a2ekYGSBGzQGaeDDD__2FtXwt7q1ZaWC2r7eZViTdlGPPzJ__2FOCEtkXnkzbWnjgkZD8LlEwDsk9ZeanifS5wli8XrqnxZE35cfMCaZw1T10sTWSQgK__2FoDrIAd5H',
+    'ktv':     '8082HvzDK1S2DSLztpkriEyegONNJKs01X9PrgDahsEEc5KbEk__2BusZxFOtR__2BalUhDtVjvcC9LgTYtbSdCy9LFlcABHj__2B2nc2NxmSBxHu7__2B7odOfpVyoR4xGq',
+    'live':    'd3ccnXDBWkTkXLbr8PuGJegJdEPc6x9Sc__2BW32yxxuOWuNEfsEaHU1o4oKXtPNH9tylxUBv4Tt855126jdSUuZQ0eLMp__2BVLyltuTqHGSas20dOBF6__2FxPn7hc6',
+}
+
+# 房间 / 用户 ID
+RID_EGG    = 200057467
+RID_PAY600  = 200000945
+RID_KTV     = 193188260
+RID_LIVE    = 200000934
+UID_EGG     = 105000355
+UID_PAY600  = 105002315
+UID_KTV     = 100287189
+UID_LIVE_MULTI = '100287189,100010150,100010151,100010152,100010153'
+UID_BEAN_RESET = 105002093
+
+GIFT_ID_EGG   = 2602
+GIFT_ID_BEAN  = 488
+
 # 礼物配置
 GIFT_CONFIG = {
     35: 52000, 38: 131400, 63: 20, 100: 9900, 226: 600, 286: 5200, 310: 30, 
@@ -66,6 +88,11 @@ def update_bean(uid, money):
 
 
 # ============ HTTP请求 ============
+def _build_headers(token_key):
+    """构建请求头（统一管理 user-token）"""
+    return {**HEADERS_TEMPLATE, "user-token": USER_TOKENS[token_key]}
+
+
 def send_request(url, data, headers, verify=False):
     """发送POST请求"""
     encoded = urllib.parse.urlencode(data).replace('+', '').replace('%27', '%22')
@@ -86,18 +113,18 @@ def post_pay_create():
     level = random.randint(1, 3)
     money = EGG_LEVEL_MONEY.get(level)
     
-    headers = {**HEADERS_TEMPLATE, "user-token": '0976FcAmUaHnJvJAKi804Ijs2Cm3__2BuamYTrhAVV9baYv2cOWvvuwII2kdNeSKeB8MGHOnQJq878fOl3VKNltq4__2BP7pfIksSLlQs1Y4s50wqo__2Fm3qksqrXTqC'}
+    headers = _build_headers('create')
     
     data = {
         "platform": "available",
         "type": "package",
         "money": money,
         "params": {
-            "rid": 200057467,
-            "uids": "105000355",
+            "rid": RID_EGG,
+            "uids": UID_EGG,
             "positions": "1",
             "position": -1,
-            "giftId": 2602,
+            "giftId": GIFT_ID_EGG,
             "giftNum": 1,
             "price": money,
             "cid": 0,
@@ -121,18 +148,18 @@ def post_pay_create():
 
 def post_pay_600(gift_num):
     """600金豆支付"""
-    headers = {**HEADERS_TEMPLATE, "user-token": '8a2ekYGSBGzQGaeDDD__2FtXwt7q1ZaWC2r7eZViTdlGPPzJ__2FOCEtkXnkzbWnjgkZD8LlEwDsk9ZeanifS5wli8XrqnxZE35cfMCaZw1T10sTWSQgK__2FoDrIAd5H'}
+    headers = _build_headers('pay600')
     
     data = {
         "platform": "available",
         "type": "package",
         "money": 600 * gift_num,
         "params": {
-            "rid": 200000945,
-            "uids": "105002315",
+            "rid": RID_PAY600,
+            "uids": UID_PAY600,
             "positions": "1",
             "position": -1,
-            "giftId": 488,
+            "giftId": GIFT_ID_BEAN,
             "giftNum": gift_num,
             "price": 600,
             "cid": 0,
@@ -155,7 +182,7 @@ def post_pay_600(gift_num):
 
 def post_pay_ktv():
     """KTV场景支付"""
-    headers = {**HEADERS_TEMPLATE, "user-token": '8082HvzDK1S2DSLztpkriEyegONNJKs01X9PrgDahsEEc5KbEk__2BusZxFOtR__2BalUhDtVjvcC9LgTYtbSdCy9LFlcABHj__2B2nc2NxmSBxHu7__2B7odOfpVyoR4xGq'}
+    headers = _build_headers('ktv')
     
     for gift_id, price in GIFT_CONFIG.items():
         data = {
@@ -163,8 +190,8 @@ def post_pay_ktv():
             "type": "package",
             "money": price,
             "params": {
-                "rid": 193188260,
-                "uids": 100287189,
+                "rid": RID_KTV,
+                "uids": UID_KTV,
                 "positions": "1",
                 "position": -1,
                 "giftId": gift_id,
@@ -191,7 +218,7 @@ def post_pay_ktv():
 
 def post_pay_live():
     """直播场景支付"""
-    headers = {**HEADERS_TEMPLATE, "user-token": 'd3ccnXDBWkTkXLbr8PuGJegJdEPc6x9Sc__2BW32yxxuOWuNEfsEaHU1o4oKXtPNH9tylxUBv4Tt855126jdSUuZQ0eLMp__2BVLyltuTqHGSas20dOBF6__2FxPn7hc6'}
+    headers = _build_headers('live')
     
     for gift_id, price in VAP_CONFIG.items():
         data = {
@@ -199,8 +226,8 @@ def post_pay_live():
             "type": "package",
             "money": price * 5,
             "params": {
-                "rid": 200000934,
-                "uids": "100287189,100010150,100010151,100010152,100010153",
+                "rid": RID_LIVE,
+                "uids": UID_LIVE_MULTI,
                 "positions": "0,1,2,3,4",
                 "position": -1,
                 "giftId": gift_id,
@@ -233,8 +260,8 @@ def run_concurrent(func, num):
 
 def main_pay():
     """主入口"""
-    update_bean(105002093, 1000000000)
-    update_bean(105000355, 0)
+    update_bean(UID_BEAN_RESET, 1000000000)
+    update_bean(UID_EGG, 0)
     
     for _ in range(100000):
         run_concurrent(post_pay_create, 20)

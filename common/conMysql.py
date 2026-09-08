@@ -18,6 +18,8 @@ logger = logging.getLogger(__name__)
 class MySQLConnection(MySQLConnectionBase):
     """ MySQL 连接管理器（dev 配置）"""
     _config_name = 'dev'
+    _connection = None
+    _cursor = None
 
 
 class conMysql:
@@ -47,11 +49,18 @@ class conMysql:
         'user_index': "SELECT salt FROM xs_user_index WHERE uid=%s",
     }
 
+    _MONEY_COLUMNS = frozenset({
+        'money', 'money_b', 'money_cash', 'money_cash_b',
+        'gold_coin', 'money_debts', 'money_order', 'money_order_b'
+    })
+
     # ============ 复杂查询 handler ============
 
     @staticmethod
     def _select_single_money(uid, money_type):
         """单账户余额查询（money_type 为列名，无法参数化；uid 参数化）"""
+        if money_type not in conMysql._MONEY_COLUMNS:
+            raise ValueError(f'Invalid money_type column: {money_type}')
         sql = "SELECT {} FROM xs_user_money WHERE uid=%s".format(money_type)
         return MySQLConnection.execute_query_first(sql, params=(uid,), default=None)
 
@@ -107,6 +116,8 @@ class conMysql:
         try:
             cursor.execute(sql, (uid,))
             res = cursor.fetchone()
+            if res is None:
+                return 0
             res_dict = ast.literal_eval(res[0])
             return res_dict.get(money_type, 0)
         except Exception as error:
@@ -241,7 +252,7 @@ class conMysql:
     @staticmethod
     def checkXsGiftConfig():
         """检查 xs_gift 配置"""
-        gift_ids = tuple(i for i in config.giftId.values())
+        gift_ids = tuple(config.giftId.values())
         MySQLConnection._update_xs_gift_status(gift_ids)
 
     @staticmethod
@@ -261,14 +272,12 @@ class conMysql:
         """删除用户金豆账户数据"""
         sql = "DELETE FROM xs_user_money_extend WHERE uid=%s LIMIT 1"
         for uid in uids:
-            time.sleep(0.01)
             MySQLConnection.execute_write(sql, params=(uid,))
 
     @staticmethod
     def insertBeanSql(uid, money_coupon, cash=0, cash_lock=0):
         """插入用户金豆余额"""
         sql = "INSERT INTO xs_user_money_extend(uid, money_coupon, cash, cash_lock) VALUES(%s,%s,%s,%s)"
-        time.sleep(0.01)
         MySQLConnection.execute_write(sql, params=(uid, money_coupon, cash, cash_lock))
 
     @staticmethod
@@ -291,6 +300,11 @@ class conMysql:
             raise Exception('xs_commodity {}不存在'.format(name))
 
     # ============ 公会/守护关系方法 ============
+
+    @staticmethod
+    def check_uid_white(uid):
+        """白名单检查（暂未实现）"""
+        logger.warning('check_uid_white called but not implemented for uid=%s', uid)
 
     @staticmethod
     def _transactional_write(write_fn):

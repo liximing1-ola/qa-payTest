@@ -98,7 +98,7 @@ class TestFormatReason(unittest.TestCase):
         self.assertIn('failReason', reason)
 
     def test_slp_mode_returns_reason_string(self):
-        reason = format_reason('slp场景', {'body': {'success': True}}, slp=True)
+        reason = format_reason('slp场景', {'body': {'success': True}})
         self.assertIn('Depiction: slp场景', reason)
 
     def test_missing_body_defaults_to_empty(self):

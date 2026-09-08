@@ -7,7 +7,6 @@ from common.Consts import case_list, result
 from common.runFailed import Retry
 from common.conMysql import conMysql as mysql
 from common.sqlScript import UserMoneyOperations
-from common.method import format_reason
 from case.base import PayTestBase
 
 
@@ -56,7 +55,7 @@ class TestPayPersonDefend(PayTestBase):
 
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
 
         # 验证数据库
         self._validate_db_state([
@@ -96,7 +95,7 @@ class TestPayPersonDefend(PayTestBase):
 
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
 
         # 验证数据库
         self._validate_db_state([
@@ -134,7 +133,7 @@ class TestPayPersonDefend(PayTestBase):
 
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
 
         # 验证数据库
         self._validate_db_state([
@@ -174,7 +173,7 @@ class TestPayPersonDefend(PayTestBase):
 
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
 
         # 验证数据库
         self._validate_db_state([
@@ -214,7 +213,7 @@ class TestPayPersonDefend(PayTestBase):
 
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
 
         # 验证数据库
         self._validate_db_state([
@@ -252,7 +251,7 @@ class TestPayPersonDefend(PayTestBase):
 
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
 
         # 验证数据库
         self._validate_db_state([

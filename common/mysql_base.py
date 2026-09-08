@@ -40,7 +40,6 @@ class MySQLConnection:
         if cls._connection is None or not cls._connection.open:
             db = cls._get_db_config()
             cls._connection = pymysql.connect(**db, autocommit=False)
-            cls._connection.select_db(db['database'])
         cls._connection.ping(reconnect=True)
         return cls._connection
 

@@ -241,13 +241,13 @@ class TestAssertBody(unittest.TestCase):
     def test_passes_on_match(self):
         """字段值匹配应通过"""
         body = {'status': 'ok', 'code': 200}
-        self.assertTrue(assert_body(body, 'status', 'ok', ''))
+        self.assertTrue(assert_body(body, 'status', 'ok'))
 
     def test_fails_on_mismatch(self):
         """字段值不匹配应失败"""
         body = {'status': 'error'}
         with self.assertRaises(AssertionError):
-            assert_body(body, 'status', 'ok', '')
+            assert_body(body, 'status', 'ok')
 
 
 class TestAssertBetween(unittest.TestCase):

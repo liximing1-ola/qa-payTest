@@ -7,7 +7,6 @@ from common.Assert import assert_body, assert_code, assert_equal, assert_len
 from common.basicData import encodeData
 from common.runFailed import Retry
 from common.Consts import case_list_b, result
-from common.method import format_reason
 
 
 @Retry(max_n=3)
@@ -43,7 +42,7 @@ class TestPayFleetRoom(PayTestBase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 验证数据库
         self._validate_db_state([
@@ -79,7 +78,7 @@ class TestPayFleetRoom(PayTestBase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 验证数据库
         self._validate_db_state([
@@ -115,7 +114,7 @@ class TestPayFleetRoom(PayTestBase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 验证数据库
         self._validate_db_state([
@@ -157,7 +156,7 @@ class TestPayFleetRoom(PayTestBase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 验证数据库
         self._validate_db_state([
@@ -198,7 +197,7 @@ class TestPayFleetRoom(PayTestBase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 验证数据库
         self._validate_db_state([
@@ -233,7 +232,7 @@ class TestPayFleetRoom(PayTestBase):
         
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 验证数据库
         self._validate_db_state([

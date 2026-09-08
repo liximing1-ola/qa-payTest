@@ -106,7 +106,7 @@ class Greedy:
         """
         for _ in range(MAX_RETRY_COUNT):
             result = conMysql.select_greedy_prize(uid, round_id)
-            if result != 0:
+            if result != (0, 0):
                 return result[0], result[1]
             time.sleep(RETRY_INTERVAL)
         return 0, 0

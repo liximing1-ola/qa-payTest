@@ -6,7 +6,6 @@ from common.Assert import assert_code, assert_body
 from common.Consts import case_list, result
 from common.basicData import encodeData
 from common.runFailed import Retry
-from common.method import format_reason
 from case.base import PayTestBase
 
 
@@ -43,7 +42,7 @@ class TestPayShopBuy(PayTestBase):
 
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
 
         # 验证数据库
         self._validate_db_state([
@@ -78,7 +77,7 @@ class TestPayShopBuy(PayTestBase):
 
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
 
         # 验证数据库
         self._validate_db_state([
@@ -116,7 +115,7 @@ class TestPayShopBuy(PayTestBase):
 
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
 
         # 验证数据库
         self._validate_db_state([
@@ -154,8 +153,8 @@ class TestPayShopBuy(PayTestBase):
 
         # 验证响应
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 0, format_reason(des, res))
-        assert_body(res['body'], 'msg', '余额不足，无法支付', format_reason(des, res))
+        assert_body(res['body'], 'success', 0)
+        assert_body(res['body'], 'msg', '余额不足，无法支付')
 
         # 验证数据库
         self._validate_db_state([

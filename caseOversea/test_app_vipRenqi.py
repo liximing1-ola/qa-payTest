@@ -11,7 +11,6 @@ from common.Config import config
 from common.conPtMysql import conMysql
 from common.Request import post_request_session
 from common.Assert import assert_code, assert_body, assert_len, assert_equal
-from common.method import format_reason
 from common.basicData import encodeOverseaData
 from common.Consts import case_list, result
 from common.runFailed import Retry
@@ -56,7 +55,7 @@ class TestPayCreate(unittest.TestCase):
         
         # 3. 校验接口
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 4. 检查 VIP 数据
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_payUid), 0)
@@ -98,7 +97,7 @@ class TestPayCreate(unittest.TestCase):
         
         # 3. 校验接口
         assert_code(res['code'])
-        assert_body(res['body'], 'success', 1, format_reason(des, res))
+        assert_body(res['body'], 'success', 1)
         
         # 4. 检查 VIP 数据
         assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_payUid), 0)
