@@ -53,9 +53,15 @@ class conRedis:
             r.sadd(key, value)
 
     @staticmethod
-    def delKey(key, *values):
-        """删除哈希key中的字段"""
-        r = conRedis.getConn(config.redis_host_ali)
+    def delKey(key, *values, host=None):
+        """删除哈希key中的字段
+        
+        Args:
+            key: 哈希key
+            values: 要删除的字段（可迭代对象）
+            host: Redis主机，默认使用 config.redis_host_46
+        """
+        r = conRedis.getConn(host)
         for value in values:
             for k in value:
                 r.hdel(key, k)

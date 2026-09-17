@@ -143,5 +143,4 @@ class CrazySpin:
         }
         url = config.oversea_host + '/go/party/turntable/horn'
         headers = CrazySpin._build_headers(token_name)
-        headers['Connection'] = 'close'  # 特殊处理
         return requests.get(url, params=params, headers=headers)

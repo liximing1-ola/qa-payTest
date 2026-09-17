@@ -35,7 +35,6 @@ qa-payTest/
 | `conRedis.py` | Redis连接与操作 |
 | `Assert.py` | 断言验证工具 |
 | `Consts.py` | 全局数据记录 |
-| `HTMLTestRunner.py` | HTML测试报告生成 |
 | `runFailed.py` | 失败重试机制 |
 | `basicData.py` | 数据编码处理 |
 

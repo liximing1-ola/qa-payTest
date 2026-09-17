@@ -29,6 +29,12 @@ class MySQLConnection:
     _connection: Optional[pymysql.Connection] = None
     _cursor: Optional[pymysql.cursors.Cursor] = None
 
+    # 允许通过 single_money 查询的列名白名单（防 SQL 列名注入）
+    _MONEY_COLUMNS = frozenset({
+        'money', 'money_b', 'money_cash', 'money_cash_b',
+        'gold_coin', 'money_debts', 'money_order', 'money_order_b'
+    })
+
     @classmethod
     def _get_db_config(cls) -> dict:
         """获取当前配置对应的数据库连接参数"""
@@ -208,9 +214,9 @@ class MySQLConnection:
         sql = "SELECT counter, prize FROM xs_greedy_round_player_v2 WHERE uid=%s AND round_id=%s"
         return cls.execute_query(sql, params=(uid, round_id))
 
-    @staticmethod
-    def _update_xs_gift_status(gift_ids: tuple) -> None:
+    @classmethod
+    def _update_xs_gift_status(cls, gift_ids: tuple) -> None:
         """统一执行 xs_gift 配置更新（供各子类 checkXsGiftConfig 调用）"""
         placeholders = ','.join(['%s'] * len(gift_ids))
         sql = f"UPDATE xs_gift SET deleted=0 WHERE id IN ({placeholders})"
-        MySQLConnection.execute_write(sql, params=gift_ids)
+        cls.execute_write(sql, params=gift_ids)

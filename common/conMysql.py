@@ -25,8 +25,6 @@ class MySQLConnection(MySQLConnectionBase):
 class conMysql:
     """MySQL 操作类"""
 
-    # ============ SQL 映射字典 ============
-
     # selectUserInfoSql 简单查询映射（返回单值，默认返回 0）
     SELECT_SIMPLE_MAP = {
         'bean':          "SELECT money_coupon FROM xs_user_money_extend WHERE uid=%s",
@@ -49,10 +47,7 @@ class conMysql:
         'user_index': "SELECT salt FROM xs_user_index WHERE uid=%s",
     }
 
-    _MONEY_COLUMNS = frozenset({
-        'money', 'money_b', 'money_cash', 'money_cash_b',
-        'gold_coin', 'money_debts', 'money_order', 'money_order_b'
-    })
+    _MONEY_COLUMNS = MySQLConnection._MONEY_COLUMNS
 
     # ============ 复杂查询 handler ============
 
@@ -300,11 +295,6 @@ class conMysql:
             raise Exception('xs_commodity {}不存在'.format(name))
 
     # ============ 公会/守护关系方法 ============
-
-    @staticmethod
-    def check_uid_white(uid):
-        """白名单检查（暂未实现）"""
-        logger.warning('check_uid_white called but not implemented for uid=%s', uid)
 
     @staticmethod
     def _transactional_write(write_fn):

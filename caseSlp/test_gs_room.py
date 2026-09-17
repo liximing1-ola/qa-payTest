@@ -56,11 +56,11 @@ class TestPayCreate(unittest.TestCase):
 			cid = int(mysql.selectUserInfoSql('id_commodity', payUid, cid=giftId['69']['cid']))
 			data = encodeData(
 				rid=rid, payType='package', uid=uid,
-				giftId=giftId['69']['gid'], package_cid=cid, ctype='gift'
+				gift_id=giftId['69']['gid'], package_cid=cid, ctype='gift'
 			)
 		else:
 			data = encodeData(
-				rid=rid, payType='package', uid=uid, giftId=giftId['69']['gid']
+				rid=rid, payType='package', uid=uid, gift_id=giftId['69']['gid']
 			)
 		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])

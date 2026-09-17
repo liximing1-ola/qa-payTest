@@ -35,7 +35,7 @@ class TestPayCreate(unittest.TestCase):
 		if balance > 0:
 			UserMoneyOperations.update(payUid, balance)
 		mysql.deleteUserAccountSql('user_commodity', payUid)
-		data = encodeData(payType=pay_type, num=default_num, giftId=giftId['69']['gid'])
+		data = encodeData(payType=pay_type, num=default_num, gift_id=giftId['69']['gid'])
 		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', expected_success)
@@ -60,7 +60,7 @@ class TestPayCreate(unittest.TestCase):
 		                     money_cash_b=giftId['69']['price'],
 		                     money_cash=giftId['69']['price'])
 		mysql.deleteUserAccountSql('user_commodity', payUid)
-		data = encodeData(payType='package', num=default_num, giftId=giftId['69']['gid'])
+		data = encodeData(payType='package', num=default_num, gift_id=giftId['69']['gid'])
 		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
 		assert_body(res['body'],'success', 1)
@@ -77,7 +77,7 @@ class TestPayCreate(unittest.TestCase):
 		                     money_cash_b=giftId['69']['price'],
 		                     money_cash=giftId['69']['price'])
 		mysql.deleteUserAccountSql('user_commodity', payUid)
-		data = encodeData(payType='package', num=default_num, giftId=giftId['69']['gid'])
+		data = encodeData(payType='package', num=default_num, gift_id=giftId['69']['gid'])
 		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 1)
@@ -99,7 +99,7 @@ class TestPayCreate(unittest.TestCase):
 			money=giftId['69']['price'] * num,
 			payType='package',
 			num=num,
-			giftId=giftId['69']['gid']
+			gift_id=giftId['69']['gid']
 		)
 		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
@@ -117,7 +117,7 @@ class TestPayCreate(unittest.TestCase):
 		data = encodeData(payType='chat-gift',
 		                  num=default_num,
 		                  uid=payUid,
-		                  giftId=giftId['69']['gid'])
+		                  gift_id=giftId['69']['gid'])
 		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 0)

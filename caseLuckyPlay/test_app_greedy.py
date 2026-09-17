@@ -23,8 +23,8 @@ class TestPayGreedy(unittest.TestCase):
         """测试后清理：恢复用户大区，清理 Redis 缓存"""
         conMysql.updateUserBigArea(*config.oversea_user.values())
         time.sleep(1)
-        conRedis.delKey('User.Big.Area.Id', config.oversea_user.values())
-        conRedis.delKey('User.Big.Area', config.oversea_user.values())
+        conRedis.delKey('User.Big.Area.Id', config.oversea_user.values(), host=config.redis_host_ali)
+        conRedis.delKey('User.Big.Area', config.oversea_user.values(), host=config.redis_host_ali)
 
     def _prepare_test_data(self, setup_steps):
         """

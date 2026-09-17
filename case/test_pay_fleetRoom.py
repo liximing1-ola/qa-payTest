@@ -12,9 +12,13 @@ from common.Consts import case_list_b, result
 @Retry(max_n=3)
 class TestPayFleetRoom(PayTestBase):
     """家族房支付测试类"""
-    other_fleet_rid = mysql.selectUserInfoSql('fleet')  # 非本家族房
     fleet_rid = config.bb_user.fleetRid  # 本家族房
     pack_cal_uid = config.bb_user.pack_cal_uid  # 直播公会gs
+
+    @classmethod
+    def setUpClass(cls):
+        """查询非本家族房 rid（延迟到运行期，避免 import 阶段依赖数据库）"""
+        cls.other_fleet_rid = mysql.selectUserInfoSql('fleet')
 
 
     def test_01_sameFleetRoomLiveGsRate(self):

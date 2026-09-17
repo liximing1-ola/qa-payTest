@@ -13,12 +13,15 @@ from case.base import PayTestBase
 @Retry(max_n=3)
 class TestPayPersonDefend(PayTestBase):
 
-    # {'id': 2, 'name': '小宝贝', 'money_value': 52000, 'break_money': 28800, 'upgrade_money': 99900}
-    # {'id': 1, 'name': 'CP', 'money_value': 520000, 'break_money': 99900, 'upgrade_money': 520000}
-    defend_520_config = mysql.selectUserInfoSql('relation_config', uid=2)
-    defend_cp_config = mysql.selectUserInfoSql('relation_config', uid=1)
-    defend_520_id = mysql.selectUserInfoSql('relation_id', cid=2)
-    defend_cp_id = mysql.selectUserInfoSql('relation_id', uid=config.gsUid, cid=1)
+    @classmethod
+    def setUpClass(cls):
+        """查询守护关系配置与关系 ID（延迟到运行期，避免 import 阶段依赖数据库）"""
+        # {'id': 2, 'name': '小宝贝', 'money_value': 52000, 'break_money': 28800, 'upgrade_money': 99900}
+        # {'id': 1, 'name': 'CP', 'money_value': 520000, 'break_money': 99900, 'upgrade_money': 520000}
+        cls.defend_520_config = mysql.selectUserInfoSql('relation_config', uid=2)
+        cls.defend_cp_config = mysql.selectUserInfoSql('relation_config', uid=1)
+        cls.defend_520_id = mysql.selectUserInfoSql('relation_id', cid=2)
+        cls.defend_cp_id = mysql.selectUserInfoSql('relation_id', uid=config.gsUid, cid=1)
 
     def _prepare_test_data(self, setup_steps):
         """准备测试数据"""

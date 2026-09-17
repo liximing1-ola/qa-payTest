@@ -9,9 +9,10 @@ import urllib.parse
 from typing import Optional, Tuple
 
 from caseSlp.config import (
-    business_room_rid, default_num, giftId, gsUid, normal_uid, rewardUid,
+    business_room_rid, default_num, gsUid, normal_uid, rewardUid,
     room_defend, zx_box,
 )
+from caseSlp import config as slp_config
 
 logger = logging.getLogger(__name__)
 
@@ -219,10 +220,10 @@ PAY_TYPE_HANDLERS = {
 
 def encodeData(
         payType='package',
-        money=giftId['69']['price'] * default_num,
+        money=slp_config.giftId['69']['price'] * default_num,
         rid=business_room_rid,
         uid=rewardUid,
-        giftId=giftId['69']['gid'],
+        gift_id=slp_config.giftId['69']['gid'],
         giftType='normal',
         cid=5,
         boxType='copper',
@@ -235,7 +236,7 @@ def encodeData(
         uids=('{}'.format(rewardUid), '{}'.format(gsUid)),
         knight_level=room_defend['zhenai']['month']['knight_level'],
         duration_level=room_defend['zhenai']['month']['duration_level'],
-        price=giftId['69']['price']
+        price=slp_config.giftId['69']['price']
 ):
     """国内Slp消费场景数据编码
 
@@ -244,7 +245,7 @@ def encodeData(
         money: 金额
         rid: 房间 ID
         uid: 用户 ID
-        giftId: 礼物 ID
+        gift_id: 礼物 ID
         giftType: 礼物类型
         cid: 优惠券 ID
         boxType: 盒子类型
@@ -270,7 +271,7 @@ def encodeData(
         raise ValueError(f'payType "{payType}" is not supported')
 
     data = handler(
-        money=money, rid=rid, uid=uid, giftId=giftId,
+        money=money, rid=rid, uid=uid, giftId=gift_id,
         giftType=giftType, cid=cid, boxType=boxType, num=num,
         package_cid=package_cid, ctype=ctype, duction_money=duction_money,
         star=star, defend_id=defend_id, uids=uids,
@@ -284,7 +285,7 @@ if __name__ == '__main__':
     data = encodeData(
         payType='zx_box',
         num=2,
-        giftId=zx_box['6']['gid'],
+        gift_id=zx_box['6']['gid'],
         price=zx_box['6']['price'],
         uids=('{}'.format(normal_uid), '{}'.format(gsUid))
     )

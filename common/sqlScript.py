@@ -19,14 +19,6 @@ class MySQLClient:
     _config_name: str = 'dev'
 
     @classmethod
-    def set_config(cls, config_name: str = 'dev') -> None:
-        """切换配置
-        Args:
-            config_name: 配置名称（dev/ali/rds）
-        """
-        cls._config_name = config_name
-
-    @classmethod
     def _get_config(cls) -> Dict[str, Any]:
         """获取当前数据库配置"""
         configs = {

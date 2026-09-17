@@ -102,7 +102,9 @@ def notify_failures(app_info: str, failures: list,
     Logs.get_logger('failCase.log').error(f"{log_type}: {failures}")
     bot = APP_CONFIG[app_info]['bot']
     for case, _ in failures:
-        robot('icon', case.id().split('.')[2], bot=bot)
+        parts = case.id().split('.')
+        case_name = parts[2] if len(parts) > 2 else case.id()
+        robot('icon', case_name, bot=bot)
 
 
 def handle_result(app_info: str, test_result: unittest.TextTestResult) -> None:

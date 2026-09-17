@@ -34,10 +34,7 @@ class conMysql:
         'pay_change': "SELECT money FROM xs_pay_change_new WHERE uid=%s ORDER BY id DESC LIMIT 1",
     }
 
-    _MONEY_COLUMNS = frozenset({
-        'money', 'money_b', 'money_cash', 'money_cash_b',
-        'gold_coin', 'money_debts', 'money_order', 'money_order_b'
-    })
+    _MONEY_COLUMNS = MySQLConnection._MONEY_COLUMNS
 
     DELETE_SQL_MAP: Dict[str, str] = {
         'user_commodity': "DELETE FROM xs_user_commodity WHERE uid=%s",

@@ -46,10 +46,7 @@ class conMysql:
         'level': "SELECT level FROM xs_user_title_new WHERE uid=%s",
     }
 
-    _MONEY_COLUMNS = frozenset({
-        'money', 'money_b', 'money_cash', 'money_cash_b',
-        'gold_coin', 'money_debts', 'money_order', 'money_order_b'
-    })
+    _MONEY_COLUMNS = MySQLConnection._MONEY_COLUMNS
 
     SELECT_COMPLEX_SQL = (
         "SELECT id, name, money_value, break_money, upgrade_money "
@@ -64,6 +61,17 @@ class conMysql:
     SELECT_PAY_CHANGE_SQL = (
         "SELECT reason FROM xs_pay_change WHERE uid=%s ORDER BY id DESC LIMIT 1"
     )
+
+    # deleteUserAccountSql SQL 映射
+    DELETE_SQL_MAP: Dict[str, str] = {
+        'user_commodity': "DELETE FROM xs_user_commodity WHERE uid=%s",
+        'user_title': "DELETE FROM xs_user_title WHERE uid=%s LIMIT 5",
+        'broker_user': "DELETE FROM xs_broker_user WHERE uid=%s LIMIT 1",
+        'chatroom': "DELETE FROM xs_chatroom WHERE uid=%s LIMIT 1",
+        'user_box': "DELETE FROM xs_user_box WHERE uid=%s LIMIT 1",
+        'pay_room_money': "UPDATE xs_user_profile SET pay_room_money=0 WHERE uid=%s LIMIT 1",
+        'user_title_new': "UPDATE xs_user_title_new SET subscribe_time=0 WHERE uid=%s LIMIT 1",
+    }
 
     # ============ 查询方法 ============
     
@@ -142,19 +150,9 @@ class conMysql:
     @staticmethod
     def deleteUserAccountSql(tableName: str, uid: str) -> None:
         """删除用户账户数据"""
-        sql_map = {
-            'user_commodity': ("DELETE FROM xs_user_commodity WHERE uid=%s", (uid,)),
-            'user_title': ("DELETE FROM xs_user_title WHERE uid=%s LIMIT 5", (uid,)),
-            'broker_user': ("DELETE FROM xs_broker_user WHERE uid=%s LIMIT 1", (uid,)),
-            'chatroom': ("DELETE FROM xs_chatroom WHERE uid=%s LIMIT 1", (uid,)),
-            'user_box': ("DELETE FROM xs_user_box WHERE uid=%s LIMIT 1", (uid,)),
-            'pay_room_money': ("UPDATE xs_user_profile SET pay_room_money=0 WHERE uid=%s LIMIT 1", (uid,)),
-            'user_title_new': ("UPDATE xs_user_title_new SET subscribe_time=0 WHERE uid=%s LIMIT 1", (uid,)),
-        }
-        item = sql_map.get(tableName)
-        if item:
-            sql, params = item
-            MySQLConnection.execute_write(sql, params=params)
+        sql = conMysql.DELETE_SQL_MAP.get(tableName)
+        if sql:
+            MySQLConnection.execute_write(sql, params=(uid,))
         else:
             logger.warning('Unknown tableName: %s', tableName)
 

@@ -4,14 +4,40 @@ APP 海外版支付测试 - 英语新区域验证
 
 验证英语区新消费差异化分成体系。
 """
-from common.Config import config
-from common.conPtMysql import conMysql
-from common.Request import post_request_session
-from common.Assert import assert_code, assert_body, assert_len, assert_equal
-from common.basicData import encodeOverseaData
-from common.Consts import result, case_list
+from caseOversea.base import OverseaAreaTestBase, PayScene, RECEIVER_BROKER
 from common.runFailed import Retry
-from caseOversea.base import OverseaAreaTestBase
+
+
+SCENES = [
+    PayScene(
+        des='英语大区私聊礼物打赏主播 55 分成场景',
+        receiver=RECEIVER_BROKER,
+        pay_type='chat-gift',
+        income_account='single_money',
+        income_money_type='money_cash',
+        income_expect=300,
+    ),
+    PayScene(
+        des='英语大区私聊礼物打赏非主播 73 分成场景',
+        pay_type='chat-gift',
+        clear_extend=True,
+        income_money_type='money_cash_personal',
+        income_expect=420,
+    ),
+    PayScene(
+        des='英语区私聊打赏非主播箱子 73 分成场景',
+        pay_type='chat-gift',
+        is_box=True,
+        payer_money=300,
+        payer_box_extra=True,
+        clear_extend=True,
+        payer_expect=0,
+        income_money_type='money_cash_personal',
+        income_expect=210,
+        income_min=True,
+        check_pay_change=True,
+    ),
+]
 
 
 @Retry
@@ -20,111 +46,14 @@ class TestPayCreate(OverseaAreaTestBase):
 
     bigarea_id = 1
 
-    def test_01_enNewAreaChatPay(self, des: str = '英语大区私聊礼物打赏主播 55 分成场景'):
-        """
-        私聊主播礼物打赏验证
-        
-        用例描述：
-        验证余额足够时，英语大区私聊打赏主播普通钻石礼物，打赏分成满足师徒收益 (一代宗师) 的基础上为 5:5
-        
-        脚本步骤：
-        1. 构造打赏者和被打赏者数据
-        2. 私聊内一对一打赏普通礼物（打赏 600 分）
-        3. 校验接口状态和返回值数据，到账 money_cash 字段
-        4. 检查被打赏者余额，预期为：600 * 0.5 = 300
-        5. 检查打赏者余额，预期为：700 - 600 = 100
-        
-        Args:
-            des: 测试描述
-        """
-        # 1. 构造用户数据
-        conMysql.updateMoneySql(config.oversea_payUid, 700)
-        conMysql.updateMoneySql(config.oversea_brokerUid)  # 账户余额清空
-        
-        # 2. 私聊打赏（给主播）
-        data = encodeOverseaData(payType='chat-gift', uid=config.oversea_brokerUid)
-        res = post_request_session(config.oversea_pay_url, data, token_name='app')
-        
-        # 3. 校验接口
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        
-        # 4. 检查余额
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_payUid), 100)
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.oversea_brokerUid, money_type='money_cash'), 300)
-        
-        case_list[des] = result
+    def test_01_enNewAreaChatPay(self):
+        """英语大区私聊礼物打赏主播 55 分成场景"""
+        self.run_scene(SCENES[0])
 
-    def test_02_enNewAreaChatPay(self, des: str = '英语大区私聊礼物打赏非主播 73 分成场景'):
-        """
-        私聊非主播礼物打赏验证
-        
-        用例描述：
-        验证余额足够时，英语大区私聊打赏主播普通钻石礼物，打赏分成满足师徒收益 (一代宗师) 的基础上为 7:3
-        
-        脚本步骤：
-        1. 构造打赏者和被打赏者数据
-        2. 私聊内一对一打赏普通礼物（打赏 600 分）
-        3. 校验接口状态和返回值数据，到账 money_cash_personal
-        4. 检查被打赏者余额，预期为：600 * 0.7 = 420
-        5. 检查打赏者余额，预期为：700 - 600 = 100
-        
-        Args:
-            des: 测试描述
-        """
-        # 1. 构造用户数据
-        conMysql.updateMoneySql(config.oversea_payUid, 700)
-        conMysql.updateMoneySql(config.oversea_testUid)  # 非主播账户余额清空
-        conMysql.updateUserextendMoneyClearSql(config.oversea_testUid)  # 非主播钱包附加表账户余额清空
-        
-        # 2. 私聊打赏（给非主播）
-        data = encodeOverseaData(payType='chat-gift')
-        res = post_request_session(config.oversea_pay_url, data, token_name='app')
-        
-        # 3. 校验接口
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        
-        # 4. 检查余额
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_payUid), 100)
-        assert_equal(conMysql.selectUserInfoSql('money_cash_personal', config.oversea_testUid, money_type='money_cash_personal'), 420)
-        
-        case_list[des] = result
+    def test_02_enNewAreaChatPay(self):
+        """英语大区私聊礼物打赏非主播 73 分成场景"""
+        self.run_scene(SCENES[1])
 
-    def test_03_enNewAreaIMPayGiveBox(self, des: str = '英语区私聊打赏非主播箱子 73 分成场景'):
-        """
-        私聊非主播箱子打赏验证
-        
-        用例描述：
-        检查账户余额充足时，英语区私聊打赏箱子分成为 70%
-        
-        脚本步骤：
-        1. 构造打赏者和被打赏者数据
-        2. 私聊一对一打赏流程
-        3. 校验接口和返回值数据，到账 money_cash_personal
-        4. 检查打赏者数据，预期：600 - 600 = 0
-        5. 检查被打赏者余额，预期为：不小于 300*70%=210
-        
-        Args:
-            des: 测试描述
-        """
-        # 1. 构造用户数据
-        conMysql.updateMoneySql(config.oversea_payUid, money=300, money_cash=100, money_b=100, money_cash_b=100)
-        conMysql.updateMoneySql(config.oversea_testUid)
-        conMysql.updateUserextendMoneyClearSql(config.oversea_testUid)
-        
-        # 2. 私聊打赏箱子
-        data = encodeOverseaData(payType='chat-gift', giftId=config.giftId['46'])
-        res = post_request_session(config.oversea_pay_url, data, token_name='app')
-        
-        # 3. 校验接口
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        
-        # 4. 检查余额
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_payUid), 0)
-        assert_len(conMysql.selectUserInfoSql('money_cash_personal', config.oversea_testUid, money_type='money_cash_personal'), 210)
-        assert_equal(conMysql.selectUserInfoSql('money_cash_personal', config.oversea_testUid, money_type='money_cash_personal'),
-                     conMysql.selectUserInfoSql(accountType='pay_change', uid=config.oversea_testUid))
-        
-        case_list[des] = result
+    def test_03_enNewAreaIMPayGiveBox(self):
+        """英语区私聊打赏非主播箱子 73 分成场景"""
+        self.run_scene(SCENES[2])

@@ -15,7 +15,7 @@ from common.Config import config
 # 默认日志配置
 DEFAULT_LOG_LEVEL = logging.DEBUG
 DEFAULT_WHEN = 'midnight'
-DEFAULT_BACK_COUNT = 0
+DEFAULT_BACK_COUNT = 30  # 保留 30 天历史日志，防止磁盘写满
 DEFAULT_FORMAT = '%(asctime)s - %(pathname)s[line:%(lineno)d] - %(levelname)s: %(message)s'
 
 

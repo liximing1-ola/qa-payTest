@@ -38,22 +38,28 @@ class RedisConfig:
 
 @dataclass
 class DatabaseConfig:
-    """数据库配置（集中管理，避免分散在各模块）"""
+    """数据库配置（集中管理，密码支持环境变量覆盖）
+
+    环境变量:
+        DB_DEV_PASSWORD  - DEV 环境密码（默认 123456）
+        DB_ALI_PASSWORD  - ALI 环境密码（默认 root）
+        DB_RDS_PASSWORD  - RDS 阿里云密码（默认 dev123456）
+    """
     # DEV 环境（46机器）
     dev_host: str = '192.168.11.46'
     dev_port: int = 3306
     dev_user: str = 'root'
-    dev_password: str = '123456'
+    dev_password: str = field(default_factory=lambda: os.environ.get('DB_DEV_PASSWORD', '123456'))
     # ALI 环境
     ali_host: str = '127.0.0.1'
     ali_port: int = 3306
     ali_user: str = 'root'
-    ali_password: str = 'root'
+    ali_password: str = field(default_factory=lambda: os.environ.get('DB_ALI_PASSWORD', 'root'))
     # RDS 阿里云
     rds_host: str = 'rm-bp1nfl3dp096d5o39.mysql.rds.aliyuncs.com'
     rds_port: int = 3306
     rds_user: str = 'super'
-    rds_password: str = 'dev123456'
+    rds_password: str = field(default_factory=lambda: os.environ.get('DB_RDS_PASSWORD', 'dev123456'))
     # 通用
     database: str = 'xianshi'
     charset: str = 'utf8'

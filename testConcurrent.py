@@ -26,7 +26,9 @@ class TestPayConcurrent:
         'use': config.appInfo.bb_dev + 'commodity/use?package=',
     }
     CID = {'gift': 340, 'frame': 264}
-    Session.getSession('dev')
+
+    def __init__(self):
+        Session.getSession('dev')
 
     def _run_concurrent(self, func, times):
         """执行并发测试"""

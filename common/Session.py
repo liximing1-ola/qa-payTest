@@ -17,6 +17,9 @@ logger = logging.getLogger(__name__)
 
 urllib3.disable_warnings()
 
+# HTTPS 证书验证（与 Request 模块共享同一环境变量开关）
+VERIFY_SSL: bool = os.environ.get('VERIFY_SSL', '0') == '1'
+
 
 class Session:
     """会话管理类"""
@@ -77,7 +80,7 @@ class Session:
             login_url += f"&package={env_config['package']}"
 
         session = requests.session()
-        res = session.post(login_url, data=body, headers=headers, verify=False)
+        res = session.post(login_url, data=body, headers=headers, verify=VERIFY_SSL)
         res.raise_for_status()
         return res.json()
 

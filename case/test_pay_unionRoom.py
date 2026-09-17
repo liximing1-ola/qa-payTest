@@ -12,9 +12,13 @@ from case.base import PayTestBase
 @Retry(max_n=3)
 class TestPayUnionRoom(PayTestBase):
 
-    singer_rid = mysql.selectUserInfoSql('union')
     pack_cal_uid = config.bb_user.pack_cal_uid
     pack_ceo_uid = config.live_role['pack_ceo']
+
+    @classmethod
+    def setUpClass(cls):
+        """查询歌友房 rid（延迟到运行期，避免 import 阶段依赖数据库）"""
+        cls.singer_rid = mysql.selectUserInfoSql('union')
 
     @pytest.mark.run(order=1)
     def test_01_singerRoomLiveBrokerRate_60(self):

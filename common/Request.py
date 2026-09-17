@@ -5,6 +5,7 @@ HTTP 请求封装模块
 提供统一的 HTTP POST 请求功能，支持 Token 管理、HTTPS 转换和响应解析。
 """
 import logging
+import os
 from typing import Dict, Any, Optional
 import requests
 from common.Session import Session
@@ -12,6 +13,9 @@ from common.Config import config
 
 # 日志配置
 logger = logging.getLogger(__name__)
+
+# HTTPS 证书验证（测试环境默认关闭，可通过 VERIFY_SSL=1 环境变量启用）
+VERIFY_SSL: bool = os.environ.get('VERIFY_SSL', '0') == '1'
 
 # 默认请求头
 DEFAULT_HEADERS: Dict[str, str] = {
@@ -24,15 +28,16 @@ DEFAULT_HEADERS: Dict[str, str] = {
 DEFAULT_TIMEOUT: float = 30.0
 
 
-def _build_headers(token_name: str = 'dev') -> Dict[str, str]:
+def _build_headers(token_name: str = 'dev', uid: Optional[int] = None) -> Dict[str, str]:
     """构建header
     Args:
         token_name: Token 名称
+        uid: 用户 UID（可选，读取指定用户的 token 文件）
     Returns:
         请求头
     """
     headers = DEFAULT_HEADERS.copy()
-    headers["user-token"] = Session.checkUserToken(operate='read', app_name=token_name)
+    headers["user-token"] = Session.checkUserToken(operate='read', app_name=token_name, uid=uid)
     return headers
 
 
@@ -52,7 +57,13 @@ def _ensure_https(url: str) -> str:
 
 def _parse_response(response: requests.Response) -> Dict[str, Any]:
     """解析响应结果"""
-    body = response.json() if response.ok else ''
+    body = ''
+    if response.ok:
+        try:
+            body = response.json()
+        except ValueError:
+            # 200 但返回非 JSON（如网关错误页），记录片段便于排障
+            logger.warning('Response is not JSON: %s', response.text[:200])
     logger.debug('Response: %s', body)
     return {
         'code': response.status_code,
@@ -62,22 +73,24 @@ def _parse_response(response: requests.Response) -> Dict[str, Any]:
     }
 
 
-def post_request_session(url: str, data: Optional[Any], 
+def post_request_session(url: str, data: Optional[Any],
                          token_name: str = 'dev',
+                         uid: Optional[int] = None,
                          timeout: float = DEFAULT_TIMEOUT) -> Dict[str, Any]:
     """
     POST 请求
-    
+
     Args:
         url: 请求 URL
         data: 请求数据
         token_name: Token 名称，默认为 'dev'
+        uid: 用户 UID（可选，读取指定用户的 token 文件）
         timeout: 请求超时时间，默认 30 秒
-        
+
     Returns:
         包含 code、body、time_consuming、time_total 的响应字典
     """
-    headers = _build_headers(token_name)
+    headers = _build_headers(token_name, uid)
     url = _ensure_https(url)
 
     try:
@@ -85,7 +98,7 @@ def post_request_session(url: str, data: Optional[Any],
             url=url, 
             data=data, 
             headers=headers, 
-            verify=False,
+            verify=VERIFY_SSL,
             timeout=timeout
         )
         return _parse_response(response)
@@ -114,8 +127,9 @@ def post_request_session_starify(url: str, data: Optional[Any],
         包含 code、body、time_consuming、time_total 的响应字典
     """
     if uid is not None:
+        # 确保指定用户的 token 文件存在（不存在则触发空文件异常提示）
         Session.checkUserToken(operate='read', app_name=token_name, uid=uid)
-    return post_request_session(url, data, token_name=token_name, timeout=timeout)
+    return post_request_session(url, data, token_name=token_name, uid=uid, timeout=timeout)
 
 
 def post_starify(data: Optional[Any], uid: Optional[int] = None,
@@ -136,13 +150,13 @@ def post_starify(data: Optional[Any], uid: Optional[int] = None,
 
 
 if __name__ == '__main__':
-    # 测试代码
+    # 测试代码：从 token 文件读取，避免硬编码凭证
     test_headers = {
         'user-agent': 'Mozilla/5.0 (Linux; Android 11; CPH1969 Build/RP1A.200720.011; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/115.0.5790.138 Mobile Safari/537.36 / Xs android V5.0.31.0 / Js V1.0.0.0 / Login V1691131402',
         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
         'Connection': 'close',
-        'user-token': 'a4d3klcO2pbZg0__2BvGlU7jGTRCAPyfVdQ7nySzDPs0PZEi7rbX8VC__2BZ0QoEz2auiTnhYEWu1kYG7s7F7G__2BinZ7ZIT9QxfQ2MFc0LrVe12GOBdiICefxz82aloSw'
+        'user-token': Session.checkUserToken(operate='read', app_name='slp'),
     }
     test_url = 'https://116.62.125.230/pay/create?package=com.yhl.sleepless.android'
     test_data = 'platform=available&type=chat-gift&money=1000&params=%7B%22notify_group_id%22%3A0%2C%22to%22%3A%22105002312%22%2C%22giftId%22%3A5%2C%22giftNum%22%3A10%2C%22cid%22%3A0%2C%22ctype%22%3A%22%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A10%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22show_pac_man_guide%22%3A1%2C%22all_mic%22%3A0%2C%22useCoin%22%3A-1%7D'
-    logger.info(requests.post(url=test_url, data=test_data, headers=test_headers, verify=False).json())
+    logger.info(requests.post(url=test_url, data=test_data, headers=test_headers, verify=VERIFY_SSL).json())

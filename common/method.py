@@ -14,7 +14,6 @@ import os
 import time
 from typing import Dict, List, Any, Optional, Union
 import requests
-import Robot
 from common import Consts
 from common.conMysql import conMysql as mysql
 from common.Config import config
@@ -139,16 +138,16 @@ def get_value(res: Dict[str, Any]) -> None:
 
     if 'body' not in res:
         logger.warning('缺少 body 字段，时间：%s', current_time)
-        Consts.fail_num += 1
+        Consts.increment_fail()
         return
 
     body = res['body']
-    if body.get('success'):
+    if isinstance(body, dict) and body.get('success'):
         logger.info('结果：%s, 时间：%s', body['success'], current_time)
-        Consts.success_num += 1
+        Consts.increment_success()
     else:
         logger.info('结果：%s，时间：%s', body, current_time)
-        Consts.fail_num += 1
+        Consts.increment_fail()
 
 
 def format_reason(des: str, res: Dict[str, Any]) -> str:
@@ -173,7 +172,8 @@ def check_path(path: str) -> None:
         EnvironmentError: 路径不存在时抛出
     """
     if not os.path.exists(path):
-        Robot.robot('icon', f'php代码路径异常: {path}', bot='APP')
+        from Robot import robot
+        robot('icon', f'php代码路径异常: {path}', bot='APP')
         raise EnvironmentError('代码路径异常')
 
 

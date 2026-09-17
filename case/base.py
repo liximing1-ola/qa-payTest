@@ -31,7 +31,6 @@ class PayTestBase(unittest.TestCase):
             insert_commodity     → UserCommodityOperations.insert(**params)
             insert_user_box      → mysql.insertXsUserBox(uid, **params)
             check_user_broker    → mysql.checkUserBroker(uid, bid)
-            check_uid_white      → mysql.check_uid_white(uid)
         """
         for step in setup_steps:
             action = step['action']
@@ -61,8 +60,6 @@ class PayTestBase(unittest.TestCase):
                 mysql.insertXsUserBox(uid, **params)
             elif action == 'check_user_broker':
                 mysql.checkUserBroker(**params) if params else mysql.checkUserBroker(step['uid'], bid=step['bid'])
-            elif action == 'check_uid_white':
-                mysql.check_uid_white(params['uid'])
             elif action == 'check_broker_rate':
                 mysql.checkBrokerUserRate(**params)
 

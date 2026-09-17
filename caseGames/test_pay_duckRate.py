@@ -29,8 +29,6 @@ class TestPayDuckRate(unittest.TestCase):
                 conMysql.updateUserMoneyClearSql(params['uid1'], params.get('uid2'))
             elif action == 'check_user_broker':
                 conMysql.checkUserBroker(params['uid'], bid=params['bid'])
-            elif action == 'check_uid_white':
-                conMysql.check_uid_white(params['uid'])
 
     def _validate_db_state(self, checks):
         """验证数据库状态"""
@@ -63,8 +61,7 @@ class TestPayDuckRate(unittest.TestCase):
         self._prepare_test_data([
             {'action': 'clear_user_money', 'params': {'uid1': testUid, 'uid2': payUid}},
             {'action': 'update_money', 'params': {'uid': payUid, 'money': 100}},
-            {'action': 'check_user_broker', 'params': {'uid': testUid, 'bid': self.rate_role["bid"]}},
-            {'action': 'check_uid_white', 'params': {'uid': testUid}}
+            {'action': 'check_user_broker', 'params': {'uid': testUid, 'bid': self.rate_role["bid"]}}
         ])
 
         # 发送请求
@@ -103,8 +100,7 @@ class TestPayDuckRate(unittest.TestCase):
         self._prepare_test_data([
             {'action': 'clear_user_money', 'params': {'uid1': testUid, 'uid2': payUid}},
             {'action': 'update_money', 'params': {'uid': payUid, 'money': 1000}},
-            {'action': 'check_user_broker', 'params': {'uid': testUid, 'bid': self.rate_role["bid"]}},
-            {'action': 'check_uid_white', 'params': {'uid': testUid}}
+            {'action': 'check_user_broker', 'params': {'uid': testUid, 'bid': self.rate_role["bid"]}}
         ])
 
         # 发送请求
@@ -143,8 +139,7 @@ class TestPayDuckRate(unittest.TestCase):
         self._prepare_test_data([
             {'action': 'clear_user_money', 'params': {'uid1': testUid, 'uid2': payUid}},
             {'action': 'update_money', 'params': {'uid': payUid, 'money': 52000}},
-            {'action': 'check_user_broker', 'params': {'uid': testUid, 'bid': self.rate_role["bid"]}},
-            {'action': 'check_uid_white', 'params': {'uid': testUid}}
+            {'action': 'check_user_broker', 'params': {'uid': testUid, 'bid': self.rate_role["bid"]}}
         ])
 
         # 发送请求

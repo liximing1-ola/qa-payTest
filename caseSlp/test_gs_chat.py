@@ -38,7 +38,7 @@ class TestPayCreate(unittest.TestCase):
 		data = encodeData(payType='chat-gift',
 		                  num=default_num,
 		                  uid=uid,
-		                  giftId=giftId['69']['gid'])
+		                  gift_id=giftId['69']['gid'])
 		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 1)

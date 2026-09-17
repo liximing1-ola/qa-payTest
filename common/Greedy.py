@@ -106,7 +106,8 @@ class Greedy:
         """
         for _ in range(MAX_RETRY_COUNT):
             result = conMysql.select_greedy_prize(uid, round_id)
-            if result != (0, 0):
+            # select_greedy_prize 无数据时返回 (0, 0)，有数据时返回实际元组
+            if result is not None and result != (0, 0):
                 return result[0], result[1]
             time.sleep(RETRY_INTERVAL)
         return 0, 0
