@@ -1,233 +1,119 @@
-from case.base import PayTestBase
+# coding=utf-8
+"""
+优惠券支付测试
+
+场景差异通过模块级 SCENES 表声明，由 PayTestBase.run_case 统一执行。
+"""
+from case.base import PayCase, PayTestBase
 from common.Config import config
 from common.conMysql import conMysql as mysql
-from common.Request import post_request_session
-import unittest
-from common.Assert import assert_code, assert_body, assert_equal
-from common.basicData import encodeData
-from common.Consts import case_list, result
 from common.runFailed import Retry
+
+# 老司机券 / 电台青铜体验券
+GIFT_CID_COUPON = 54
+GIFT_CID_RADIO = 21980
+
+SCENES = [
+    PayCase(
+        des='房间打赏但余额不足的场景',
+        setup=[
+            {'action': 'clear_user_money', 'uids': (config.payUid, config.rewardUid)}
+        ],
+        data={'money': 100, 'giftId': config.giftId['5']},
+        checks=[
+            {'field': 'sum_money', 'uid': config.rewardUid, 'expected': 0}
+        ],
+        success=0,
+        msg='余额不足，无法支付'),
+    PayCase(
+        des='打赏礼物使用未激活券的场景',
+        setup=[
+            {'action': 'delete_commodity', 'uid': config.payUid},
+            {'action': 'insert_commodity', 'params': {'uid': config.payUid, 'cid': GIFT_CID_COUPON, 'num': 1}},
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 3000}},
+            {'action': 'update_money', 'params': {'uid': config.rewardUid}}
+        ],
+        queries=[('cid', lambda: mysql.selectUserInfoSql('id_commodity', config.payUid, cid=GIFT_CID_COUPON))],
+        data={'giftId': config.giftId['11'], 'money': 3000,
+              'package_cid': lambda ctx: ctx['cid'],
+              'ctype': 'coupon', 'duction_money': 500},
+        checks=[
+            {'field': 'sum_money', 'uid': config.rewardUid, 'expected': 0},
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 3000}
+        ],
+        success=0,
+        msg='余额不足，无法支付'),
+    PayCase(
+        des='打赏礼物时有激活券的场景',
+        setup=[
+            {'action': 'delete_commodity', 'uid': config.payUid},
+            {'action': 'insert_commodity', 'params': {'uid': config.payUid, 'cid': GIFT_CID_COUPON, 'num': 1, 'state': 1}},
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 3000}},
+            {'action': 'update_money', 'params': {'uid': config.rewardUid}}
+        ],
+        queries=[('cid', lambda: mysql.selectUserInfoSql('id_commodity', config.payUid, cid=GIFT_CID_COUPON))],
+        data={'giftId': config.giftId['11'], 'money': 3000,
+              'package_cid': lambda ctx: ctx['cid'],
+              'ctype': 'coupon', 'duction_money': 500},
+        checks=[
+            {'field': 'sum_money', 'uid': config.rewardUid, 'expected': 1860},
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 500}
+        ]),
+    PayCase(
+        des='房间内打赏多人场景',
+        setup=[
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 5000, 'money_cash': 5000,
+                                                  'money_cash_b': 5000, 'money_b': 5000}},
+            {'action': 'clear_user_money', 'uids': (config.masterUid, config.rewardUid, config.gsUid)}
+        ],
+        data={'payType': 'package-more', 'num': 6,
+              'uids': (str(config.gsUid), str(config.rewardUid), str(config.masterUid))},
+        checks=[
+            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 3720},
+            {'field': 'single_money', 'uid': config.masterUid, 'expected': 4200},
+            {'field': 'single_money', 'uid': config.gsUid, 'expected': 6000 * config.rate,
+             'kwargs': {'money_type': 'money_cash'}},
+            {'field': 'single_money', 'uid': config.payUid, 'expected': 2000,
+             'kwargs': {'money_type': 'money_cash'}}
+        ]),
+    PayCase(
+        des='电台使用青铜体验券',
+        setup=[
+            {'action': 'delete_commodity', 'uid': config.payUid},
+            {'action': 'insert_commodity', 'params': {'uid': config.payUid, 'cid': GIFT_CID_RADIO, 'num': 1}},
+            {'action': 'clear_user_money', 'uids': (config.payUid, config.rewardUid)}
+        ],
+        queries=[('cid', lambda: mysql.selectUserInfoSql('id_commodity', config.payUid, cid=GIFT_CID_RADIO))],
+        data={'payType': 'package-radioDefend', 'rid': 200022566, 'money': 520,
+              'package_cid': lambda ctx: ctx['cid']},
+        checks=[
+            {'field': 'sum_money', 'uid': config.rewardUid, 'expected': 0},
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0},
+            {'field': 'num_commodity', 'uid': config.payUid, 'expected': 0, 'kwargs': {'cid': GIFT_CID_RADIO}}
+        ]),
+]
 
 
 @Retry(max_n=3)
 class TestPayCoupon(PayTestBase):
     """优惠券支付测试类"""
-    businessRid = config.live_role['auto_rid']
 
     def test_01_RoomPayNoMoney(self):
-        """
-        用例描述：
-        验证余额不足时，房间一对一打赏
-        脚本步骤：
-        1.构造打赏者和被打赏者数据
-        2.房间内一对一打赏流程
-        3.校验接口状态和返回值数据
-        4.检查预期返回msg，预期：支付失败
-        5.检查被打赏者余额,预期：0
-        """
-        des = '房间打赏但余额不足的场景'
-        
-        # 准备测试数据
-        self._prepare_test_data([
-            {'action': 'clear_user_money', 'uids': (config.payUid, config.rewardUid)}
-        ])
-        
-        # 发送请求
-        data = encodeData(money=100, giftId=config.giftId['5'])
-        res = post_request_session(config.pay_url, data)
-        
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 0)
-        assert_body(res['body'], 'msg', '余额不足，无法支付')
-        
-        # 验证数据库
-        self._validate_db_state([
-            {'field': 'sum_money', 'uid': config.rewardUid, 'expected': 0}
-        ])
-        
-        case_list[des] = result
+        """余额不足时房间一对一打赏，支付失败"""
+        self.run_case(SCENES[0])
 
     def test_02_couponNoStatePayChange(self):
-        """
-        用例描述：
-        有未激活券(state=0)的情况下，验证打赏
-        脚本步骤：
-        1.构造打赏者和被打赏者数据(gift_cid=54 老司机券)
-        2.房间内打赏（券可抵扣500分）
-        3.校验接口状态和返回值数据
-        4.预期结果： "msg": "余额不足，无法支付"
-        5.检查被打赏者余额和账户，预期为：0
-        6.检查打赏者余额,预期为：3000
-        """
-        des = '打赏礼物使用未激活券的场景'
-        gift_cid = 54
-        
-        # 准备测试数据
-        self._prepare_test_data([
-            {'action': 'delete_commodity', 'uid': config.payUid},
-            {'action': 'insert_commodity', 'params': {'uid': config.payUid, 'cid': gift_cid, 'num': 1}},
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 3000}},
-            {'action': 'update_money', 'params': {'uid': config.rewardUid}}
-        ])
-        
-        # 获取商品ID
-        cid = mysql.selectUserInfoSql('id_commodity', config.payUid, cid=gift_cid)
-        
-        # 发送请求
-        data = encodeData(
-            giftId=config.giftId['11'],
-            money=3000,
-            package_cid=cid,
-            ctype='coupon',
-            duction_money=500
-        )
-        res = post_request_session(config.pay_url, data)
-        
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 0)
-        assert_body(res['body'], 'msg', '余额不足，无法支付')
-        
-        # 验证数据库
-        self._validate_db_state([
-            {'field': 'sum_money', 'uid': config.rewardUid, 'expected': 0},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 3000}
-        ])
-        
-        case_list[des] = result
+        """打赏礼物使用未激活券(state=0)，支付失败"""
+        self.run_case(SCENES[1])
 
     def test_03_couponStatePayChange(self):
-        """
-        用例描述：
-        有激活券(state=1)的情况下，验证打赏流程
-        脚本步骤：
-        1.构造打赏者和被打赏者数据
-        2.房间内打赏（券可抵扣500分）
-        3.校验接口状态和返回值数据
-        4.检查被打赏者余额和账户，预期为：3000 * 0.62 = 1860
-        5.检查打赏者余额,预期为：3000 -2500 = 500
-        """
-        des = '打赏礼物时有激活券的场景'
-        gift_cid = 54
-        
-        # 准备测试数据
-        self._prepare_test_data([
-            {'action': 'delete_commodity', 'uid': config.payUid},
-            {'action': 'insert_commodity', 'params': {'uid': config.payUid, 'cid': gift_cid, 'num': 1, 'state': 1}},
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 3000}},
-            {'action': 'update_money', 'params': {'uid': config.rewardUid}}
-        ])
-        
-        # 获取商品ID
-        cid = mysql.selectUserInfoSql('id_commodity', config.payUid, cid=gift_cid)
-        
-        # 发送请求
-        data = encodeData(
-            giftId=config.giftId['11'],
-            money=3000,
-            package_cid=cid,
-            ctype='coupon',
-            duction_money=500
-        )
-        res = post_request_session(config.pay_url, data)
-        
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        
-        # 验证数据库
-        self._validate_db_state([
-            {'field': 'sum_money', 'uid': config.rewardUid, 'expected': 1860},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 500}
-        ])
-        
-        case_list[des] = result
+        """打赏礼物使用激活券(state=1)，券抵扣 500 后正常结算"""
+        self.run_case(SCENES[2])
 
     def test_04_RoomToMorePayChange(self):
-        """
-        用例描述：
-        验证非直播类型房间内一对多打赏场景
-        脚本步骤：
-        1.构造打赏者和被打赏者数据
-        2.房间内一对多打赏流程
-        3.校验接口状态和返回值数据
-        4.检查打赏者余额,预期为：20000-1000*6*3 = 2000
-        5.检查被打赏者余额，预期为：1000*6*0.62 = 3720(非一代宗师) 1000*6*0.7=4200(一代宗师) 1000*6*0.62=3720（公会）
-        """
-        des = '房间内打赏多人场景'
-        
-        # 准备测试数据
-        self._prepare_test_data([
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 5000, 'money_cash': 5000, 'money_cash_b': 5000, 'money_b': 5000}},
-            {'action': 'clear_user_money', 'uids': (config.masterUid, config.rewardUid, config.gsUid)}
-        ])
-        
-        # 发送请求
-        data = encodeData(
-            payType='package-more',
-            num=6,
-            uids=('{}'.format(config.gsUid), '{}'.format(config.rewardUid), '{}'.format(config.masterUid))
-        )
-        res = post_request_session(config.pay_url, data)
-        
-        # 验证响应
-        assert_code(res['code'], 200)
-        assert_body(res['body'], 'success', 1)
-        
-        # 验证数据库
-        self._validate_db_state([
-            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 3720},
-            {'field': 'single_money', 'uid': config.masterUid, 'expected': 4200},
-            {'field': 'single_money', 'uid': config.gsUid, 'expected': 6000 * config.rate, 'kwargs': {'money_type': 'money_cash'}},
-            {'field': 'single_money', 'uid': config.payUid, 'expected': 2000, 'kwargs': {'money_type': 'money_cash'}}
-        ])
-        
-        case_list[des] = result
+        """房间内一对多打赏 6 人，各自按分成比例到账"""
+        self.run_case(SCENES[3])
 
     def test_05_couponNoStatePayChange(self):
-        """
-        用例描述：
-        在电台房使用24小时体验青铜坑位券，不分成
-        脚本步骤：
-        1.构造打赏者和被打赏者数据(commodity_cid=21981 青铜物品)
-        2.房间内开通坑位
-        3.校验接口状态和返回值数据
-        4.预期结果：开通青铜坑位成功
-        5.检查被打赏者余额和账户，预期为：0
-        6.检查打赏者余额,预期为：0
-        """
-        des = '电台使用青铜体验券'
-        gift_cid = 21980
-        
-        # 准备测试数据
-        self._prepare_test_data([
-            {'action': 'delete_commodity', 'uid': config.payUid},
-            {'action': 'insert_commodity', 'params': {'uid': config.payUid, 'cid': gift_cid, 'num': 1}},
-            {'action': 'clear_user_money', 'uids': (config.payUid, config.rewardUid)}
-        ])
-        
-        # 获取商品ID
-        cid = mysql.selectUserInfoSql('id_commodity', config.payUid, cid=gift_cid)
-        
-        # 发送请求
-        data = encodeData(
-            payType='package-radioDefend',
-            rid=200022566,
-            money=520,
-            package_cid=cid
-        )
-        res = post_request_session(config.pay_url, data)
-        
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        
-        # 验证数据库
-        self._validate_db_state([
-            {'field': 'sum_money', 'uid': config.rewardUid, 'expected': 0},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0},
-            {'field': 'num_commodity', 'uid': config.payUid, 'expected': 0, 'kwargs': {'cid': gift_cid}}
-        ])
-        
-        case_list[des] = result
+        """电台房使用青铜体验券开通坑位，不分成"""
+        self.run_case(SCENES[4])

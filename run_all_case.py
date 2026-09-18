@@ -14,6 +14,9 @@ from common import Logs, method, Consts
 from common.Config import config
 from common.method import check_path
 
+# 连续两条机器人通知之间的间隔（秒），避免触发频率限制
+NOTIFY_INTERVAL = 0.1
+
 
 # 应用配置映射
 APP_CONFIG: Dict[str, Dict[str, Any]] = {
@@ -139,7 +142,7 @@ def notify_success(app_info: str, test_result: unittest.TextTestResult) -> None:
     
     to = cfg.get('to', 'wx')
     robot(cfg['mode'], case_list, bot=cfg['bot'], to=to)
-    sleep(0.1)
+    sleep(NOTIFY_INTERVAL)
     robot(cfg['mode'], des_2, bot=cfg['bot'], to=to)
 
 

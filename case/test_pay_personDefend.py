@@ -1,17 +1,99 @@
-from common.Config import config
+# coding=utf-8
+"""
+个人守护支付测试
+
+场景差异通过模块级 SCENES 表声明，由 PayTestBase.run_case 统一执行。
+"""
 import pytest
-from common.Request import post_request_session
-from common.Assert import assert_code, assert_body
-from common.basicData import encodeData
-from common.Consts import case_list, result
-from common.runFailed import Retry
+
+from case.base import PayCase, PayTestBase
+from common.Config import config
 from common.conMysql import conMysql as mysql
-from common.sqlScript import UserMoneyOperations
-from case.base import PayTestBase
+from common.runFailed import Retry
+
+SCENES = [
+    PayCase(
+        des='开通个人守护场景',
+        setup=[
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 52000}},
+            {'action': 'update_money', 'params': {'uid': config.rewardUid}}
+        ],
+        data={'payType': 'defend',
+              'defend_id': lambda ctx: ctx['cls'].defend_520_config['id'],
+              'money': lambda ctx: ctx['cls'].defend_520_config['money_value']},
+        checks=[
+            {'field': 'sum_money', 'expected': 0},
+            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 32240}
+        ]),
+    PayCase(
+        des='守护进阶场景',
+        setup=[
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 100000}},
+            {'action': 'update_money', 'params': {'uid': config.rewardUid}}
+        ],
+        data={'payType': 'defend-upgrade',
+              'money': lambda ctx: ctx['cls'].defend_520_config['upgrade_money'],
+              'defend_id': lambda ctx: ctx['cls'].defend_520_id},
+        checks=[
+            {'field': 'sum_money', 'expected': 100},
+            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 61938}
+        ]),
+    PayCase(
+        des='守护解除场景',
+        setup=[
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 40000}}
+        ],
+        data={'payType': 'defend-break',
+              'money': lambda ctx: ctx['cls'].defend_520_config['break_money'],
+              'defend_id': lambda ctx: ctx['cls'].defend_520_id},
+        checks=[
+            {'field': 'sum_money', 'expected': 11200}
+        ]),
+    PayCase(
+        des='守护消费GS收62%（mc）',
+        setup=[
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 520000}},
+            {'action': 'update_money', 'params': {'uid': config.gsUid}}
+        ],
+        data={'payType': 'defend', 'uid': config.gsUid,
+              'defend_id': lambda ctx: ctx['cls'].defend_cp_config['id'],
+              'money': lambda ctx: ctx['cls'].defend_cp_config['money_value']},
+        checks=[
+            {'field': 'sum_money', 'expected': 0},
+            {'field': 'single_money', 'uid': config.gsUid, 'expected': 520000 * config.rate,
+             'kwargs': {'money_type': 'money_cash'}}
+        ]),
+    PayCase(
+        des='守护进阶消费GS收62%（mc）',
+        setup=[
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000000}},
+            {'action': 'update_money', 'params': {'uid': config.gsUid}}
+        ],
+        data={'payType': 'defend-upgrade',
+              'money': lambda ctx: ctx['cls'].defend_cp_config['upgrade_money'],
+              'defend_id': lambda ctx: ctx['cls'].defend_cp_id},
+        checks=[
+            {'field': 'sum_money', 'expected': 480000},
+            {'field': 'single_money', 'uid': config.gsUid, 'expected': 520000 * config.rate,
+             'kwargs': {'money_type': 'money_cash'}}
+        ]),
+    PayCase(
+        des='守护解除场景',
+        setup=[
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 100000}}
+        ],
+        data={'payType': 'defend-break',
+              'money': lambda ctx: ctx['cls'].defend_cp_config['break_money'],
+              'defend_id': lambda ctx: ctx['cls'].defend_cp_id},
+        checks=[
+            {'field': 'sum_money', 'expected': 100}
+        ]),
+]
 
 
 @Retry(max_n=3)
 class TestPayPersonDefend(PayTestBase):
+    """个人守护支付测试类"""
 
     @classmethod
     def setUpClass(cls):
@@ -23,242 +105,32 @@ class TestPayPersonDefend(PayTestBase):
         cls.defend_520_id = mysql.selectUserInfoSql('relation_id', cid=2)
         cls.defend_cp_id = mysql.selectUserInfoSql('relation_id', uid=config.gsUid, cid=1)
 
-    def _prepare_test_data(self, setup_steps):
-        """准备测试数据"""
-        for step in setup_steps:
-            UserMoneyOperations.update(**step)
-
     @pytest.mark.run(order=1)
     def test_01_defendPayChangMoney(self):
-        """
-        用例描述：
-        开通个人守护，收益分成在师父收益(非一代宗师)的基础上为 62:38
-        脚本步骤：
-        1.构造开通者和被守护者数据
-        2.开通价值52000钻小宝贝守护（xs_relation_config id=2）
-        3.校验接口状态和返回值数据
-        4.检查打赏者余额
-        5.检查被打赏者余额,预期：52000 * 0.62 = 32240
-        """
-        des = '开通个人守护场景'
-
-        # 准备测试数据
-        self._prepare_test_data([
-            {'uid': config.payUid, 'money': 52000},
-            {'uid': config.rewardUid}
-        ])
-
-        # 发送请求
-        data = encodeData(
-            payType='defend',
-            defend_id=self.defend_520_config['id'],
-            money=self.defend_520_config['money_value']
-        )
-        res = post_request_session(config.pay_url, data)
-
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-
-        # 验证数据库
-        self._validate_db_state([
-            {'field': 'sum_money', 'expected': 0},
-            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 32240}
-        ])
-
-        case_list[des] = result
+        """开通个人守护，收益分成在师父收益(非一代宗师)的基础上为 62:38"""
+        self.run_case(SCENES[0])
 
     @pytest.mark.run(order=2)
     def test_02_defendUpgradePayChangeMoney(self):
-        """
-         用例描述：
-         个人守护关系开通后，购买进阶版特权，收益分成在师父收益（非一代宗师）的基础上为：62:38
-         脚本步骤：
-         1.接test_01
-         2.购买进阶版（99900钻），黄金小宝贝对应进阶价格
-         3.校验接口状态和返回值数据
-         4.检查打赏者余额，预期：100000 - 99900 = 100
-         5.检查被打赏者余额,预期： 99900 * 0.62 = 61938
-         """
-        des = '守护进阶场景'
-
-        # 准备测试数据
-        self._prepare_test_data([
-            {'uid': config.payUid, 'money': 100000},
-            {'uid': config.rewardUid}
-        ])
-
-        # 发送请求
-        data = encodeData(
-            payType='defend-upgrade',
-            money=self.defend_520_config['upgrade_money'],
-            defend_id=self.defend_520_id
-        )
-        res = post_request_session(config.pay_url, data)
-
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-
-        # 验证数据库
-        self._validate_db_state([
-            {'field': 'sum_money', 'expected': 100},
-            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 61938}
-        ])
-
-        case_list[des] = result
+        """个人守护开通后购买进阶版特权（99900钻），收益分成 62:38"""
+        self.run_case(SCENES[1])
 
     @pytest.mark.run(order=3)
     def test_03_defendBreakPayChangeMoney(self):
-        """
-         用例描述：
-         个人守护关系开通后，购买进阶版特权后，强行解除关系，收益归官方
-         脚本步骤：
-         1.接test_01，test_02
-         2.强制解除关系
-         3.校验接口状态和返回值数据
-         4.检查打赏者余额，预期：40000 - 36000 = 4000
-         """
-        des = '守护解除场景'
-
-        # 准备测试数据
-        self._prepare_test_data([
-            {'uid': config.payUid, 'money': 40000}
-        ])
-
-        # 发送请求
-        data = encodeData(
-            payType='defend-break',
-            money=self.defend_520_config['break_money'],
-            defend_id=self.defend_520_id
-        )
-        res = post_request_session(config.pay_url, data)
-
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-
-        # 验证数据库
-        self._validate_db_state([
-            {'field': 'sum_money', 'expected': 11200}
-        ])
-
-        case_list[des] = result
+        """个人守护购买进阶版后强行解除关系，收益归官方"""
+        self.run_case(SCENES[2])
 
     @pytest.mark.run(order=4)
     def test_04_defendPayToGs(self):
-        """
-        用例描述：
-        给公会用户开通个人守护
-        脚本步骤：
-        1.构造开通者和被守护者数据
-        2.开通价值520000钻CP守护（xs_relation_config id=1）
-        3.校验接口状态和返回值数据
-        4.检查打赏者余额
-        5.检查被打赏者余额,预期：520000 * 0.62 = 322400
-        """
-        des = '守护消费GS收62%（mc）'
-
-        # 准备测试数据
-        self._prepare_test_data([
-            {'uid': config.payUid, 'money': 520000},
-            {'uid': config.gsUid}
-        ])
-
-        # 发送请求
-        data = encodeData(
-            payType='defend',
-            uid=config.gsUid,
-            defend_id=self.defend_cp_config['id'],
-            money=self.defend_cp_config['money_value']
-        )
-        res = post_request_session(config.pay_url, data)
-
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-
-        # 验证数据库
-        self._validate_db_state([
-            {'field': 'sum_money', 'expected': 0},
-            {'field': 'single_money', 'uid': config.gsUid, 'expected': 520000 * config.rate, 'kwargs': {'money_type': 'money_cash'}}
-        ])
-
-        case_list[des] = result
+        """给公会用户开通 520000 钻 CP 守护"""
+        self.run_case(SCENES[3])
 
     @pytest.mark.run(order=5)
     def test_05_defendUpgradeToGs(self):
-        """
-         用例描述：
-         个人守护关系开通后，购买进阶版特权，收益分成给公会用户分成为62%
-         脚本步骤：
-         1.接test_04
-         2.购买进阶版（520000钻），黄金CP对应进阶价格
-         3.校验接口状态和返回值数据
-         4.检查打赏者余额，预期：1000000 - 520000 = 480000
-         5.检查被打赏者余额,预期： 520000 * 0.62 = 322400
-         """
-        des = '守护进阶消费GS收62%（mc）'
-
-        # 准备测试数据
-        self._prepare_test_data([
-            {'uid': config.payUid, 'money': 1000000},
-            {'uid': config.gsUid}
-        ])
-
-        # 发送请求
-        data = encodeData(
-            payType='defend-upgrade',
-            money=self.defend_cp_config['upgrade_money'],
-            defend_id=self.defend_cp_id
-        )
-        res = post_request_session(config.pay_url, data)
-
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-
-        # 验证数据库
-        self._validate_db_state([
-            {'field': 'sum_money', 'expected': 480000},
-            {'field': 'single_money', 'uid': config.gsUid, 'expected': 520000 * config.rate, 'kwargs': {'money_type': 'money_cash'}}
-        ])
-
-        case_list[des] = result
+        """公会用户守护购买进阶版（520000钻），分成 62%"""
+        self.run_case(SCENES[4])
 
     @pytest.mark.run(order=6)
     def test_06_defendBreakPayMoney(self):
-        """
-         用例描述：
-         个人守护关系开通后，购买进阶版特权后，强行解除关系，收益归官方
-         脚本步骤：
-         1.接test_04，test_05
-         2.强制解除关系
-         3.校验接口状态和返回值数据
-         4.检查打赏者余额，预期：100000 - 99900 = 100
-         """
-        des = '守护解除场景'
-
-        # 准备测试数据
-        self._prepare_test_data([
-            {'uid': config.payUid, 'money': 100000}
-        ])
-
-        # 发送请求
-        data = encodeData(
-            payType='defend-break',
-            money=self.defend_cp_config['break_money'],
-            defend_id=self.defend_cp_id
-        )
-        res = post_request_session(config.pay_url, data)
-
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-
-        # 验证数据库
-        self._validate_db_state([
-            {'field': 'sum_money', 'expected': 100}
-        ])
-
-        case_list[des] = result
+        """公会用户守护购买进阶版后强行解除关系，收益归官方"""
+        self.run_case(SCENES[5])

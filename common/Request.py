@@ -56,14 +56,25 @@ def _ensure_https(url: str) -> str:
 
 
 def _parse_response(response: requests.Response) -> Dict[str, Any]:
-    """解析响应结果"""
-    body = ''
+    """解析响应结果
+
+    成功（2xx）且为 JSON 时返回解析后的 body；
+    成功但非 JSON（如网关错误页）时 body 为 None 并附 error 说明，便于下游判空。
+    """
+    body = None
     if response.ok:
         try:
             body = response.json()
         except ValueError:
             # 200 但返回非 JSON（如网关错误页），记录片段便于排障
             logger.warning('Response is not JSON: %s', response.text[:200])
+            return {
+                'code': response.status_code,
+                'time_consuming': response.elapsed.total_seconds() * 1000,
+                'time_total': response.elapsed.total_seconds(),
+                'body': None,
+                'error': 'non-json response',
+            }
     logger.debug('Response: %s', body)
     return {
         'code': response.status_code,

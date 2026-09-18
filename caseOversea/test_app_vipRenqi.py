@@ -15,6 +15,9 @@ from common.basicData import encodeOverseaData
 from common.Consts import case_list, result
 from common.runFailed import Retry
 
+# 人气值由定时 task 异步更新，校验前需等待的时长（秒）
+POPULARITY_TASK_WAIT = 2
+
 
 @Retry(max_n=3, func_prefix='test_01_payRoomgiftVip')
 class TestPayCreate(unittest.TestCase):
@@ -62,7 +65,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.sqlXsUserprofile_pay_room_money(config.oversea_payUid), 600)
         
         # 5. 检查人气值
-        time.sleep(2)  # 人气值需要 task 更新处理
+        time.sleep(POPULARITY_TASK_WAIT)  # 人气值需要 task 更新处理
         assert_len(conMysql.sqlXsUserpopularity(config.oversea_testUid), 600)
         
         case_list[des] = result
@@ -104,7 +107,7 @@ class TestPayCreate(unittest.TestCase):
         assert_equal(conMysql.sqlXsUserprofile_pay_room_money(config.oversea_payUid), 600)
         
         # 5. 检查人气值
-        time.sleep(2)  # 人气值需要 task 更新处理
+        time.sleep(POPULARITY_TASK_WAIT)  # 人气值需要 task 更新处理
         assert_len(conMysql.sqlXsUserpopularity(config.oversea_testUid), 600)
         
         case_list[des] = result

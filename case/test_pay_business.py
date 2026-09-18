@@ -1,185 +1,137 @@
-from case.base import PayTestBase
+# coding=utf-8
+"""
+商业房支付测试
+
+场景差异通过模块级 SCENES 表声明，由 PayTestBase.run_case 统一执行。
+"""
+import unittest
+
+from case.base import PayCase, PayTestBase
+from common.Assert import assert_len
 from common.Config import config
 from common.conMysql import conMysql as mysql
-from common.Request import post_request_session
 from common.method import calculate_vip_exp
-import unittest
-from common.Assert import assert_code, assert_equal, assert_body, assert_len
-from common.basicData import encodeData
-from common.Consts import case_list, result
 from common.runFailed import Retry
+
+BUSINESS_UID = 105002103  # 商业房 auto_rid 房主（一代宗师）
+CEO_UID = config.live_role['pack_ceo']  # 直播公会公会长
+
+SCENES = [
+    PayCase(
+        des='商业房礼物打赏普通用户到账62%(mcb)',
+        setup=[
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 30, 'money_cash': 30,
+                                                  'money_cash_b': 30, 'money_b': 10}},
+            {'action': 'update_money', 'params': {'uid': config.rewardUid}},
+            {'action': 'update_money', 'params': {'uid': config.gsUid}}
+        ],
+        queries=[('vip_level', lambda: int(mysql.selectUserInfoSql('pay_room_money', config.payUid)))],
+        data={'money': 100, 'giftId': config.giftId['5']},
+        checks=[
+            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 62},
+            {'field': 'single_money', 'uid': config.gsUid, 'expected': 5},
+            {'field': 'sum_money', 'uid': config.gsUid, 'expected': 5},
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0},
+            {'field': 'pay_room_money', 'uid': config.payUid,
+             'expected': lambda ctx: ctx['vip_level'] + calculate_vip_exp()}
+        ]),
+    PayCase(
+        des='商业房打赏box一代用户到账70%(mcb)',
+        setup=[
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 400, 'money_cash': 100,
+                                                  'money_cash_b': 100, 'money_b': 100}},
+            {'action': 'update_money', 'params': {'uid': config.masterUid}}
+        ],
+        queries=[('vip_level', lambda: int(mysql.selectUserInfoSql('pay_room_money', config.payUid)))],
+        data={'money': 600, 'uid': config.masterUid, 'giftId': config.giftId['46'], 'star': 4},
+        checks=[
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 100},
+            {'field': 'single_money', 'uid': config.masterUid,
+             'expected': lambda ctx: mysql.selectUserInfoSql('pay_change', uid=config.masterUid,
+                                                             money_type='_in_c_b')},
+            {'field': 'pay_room_money', 'uid': config.payUid,
+             'expected': lambda ctx: ctx['vip_level'] + calculate_vip_exp(pay_off=600)}
+        ]),
+    PayCase(
+        des='商业房礼物打赏GS到账62%(mc)',
+        setup=[
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 30, 'money_cash': 30,
+                                                  'money_cash_b': 30, 'money_b': 10}},
+            {'action': 'update_money', 'params': {'uid': config.gsUid}}
+        ],
+        data={'money': 100, 'uid': config.gsUid, 'giftId': config.giftId['5']},
+        checks=[
+            {'field': 'single_money', 'uid': config.gsUid, 'expected': 100 * config.rate,
+             'kwargs': {'money_type': 'money_cash'}},
+            {'field': 'sum_money', 'uid': config.gsUid, 'expected': 100 * config.rate},
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
+        ]),
+    PayCase(
+        des='商业房打赏box给GS到账62%（mc）',
+        setup=[
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 10000}},
+            {'action': 'update_money', 'params': {'uid': config.rewardUid}}
+        ],
+        data={'payType': 'package-more', 'num': 2, 'star': 2, 'money': 2100,
+              'giftId': config.giftId['47'], 'uids': (str(config.rewardUid), str(config.gsUid))},
+        checks=[
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 1600},
+            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 620, 'assert_func': assert_len},
+            {'field': 'single_money', 'uid': config.gsUid, 'expected': 2000 * config.rate,
+             'kwargs': {'money_type': 'money_cash'}, 'assert_func': assert_len},
+            {'field': 'sum_money', 'uid': config.gsUid, 'expected': 2000 * config.rate,
+             'assert_func': assert_len}
+        ]),
+    PayCase(
+        des='礼物打赏商业房房主到账70%(mc)',
+        setup=[
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 30, 'money_cash': 30,
+                                                  'money_cash_b': 30, 'money_b': 10}},
+            {'action': 'update_money', 'params': {'uid': BUSINESS_UID}}
+        ],
+        data={'money': 100, 'uid': BUSINESS_UID, 'giftId': config.giftId['5']},
+        checks=[
+            {'field': 'single_money', 'uid': BUSINESS_UID, 'expected': 70,
+             'kwargs': {'money_type': 'money_cash'}},
+            {'field': 'sum_money', 'uid': BUSINESS_UID, 'expected': 70},
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
+        ]),
+    PayCase(
+        des='礼物打赏公会会长到账70%(mc)',
+        setup=[
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 30, 'money_cash': 30,
+                                                  'money_cash_b': 30, 'money_b': 10}},
+            {'action': 'update_money', 'params': {'uid': CEO_UID}}
+        ],
+        data={'money': 100, 'uid': CEO_UID, 'giftId': config.giftId['5']},
+        checks=[
+            {'field': 'single_money', 'uid': CEO_UID, 'expected': 70,
+             'kwargs': {'money_type': 'money_cash'}},
+            {'field': 'sum_money', 'uid': CEO_UID, 'expected': 70},
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
+        ]),
+]
 
 
 @Retry(max_n=3)
 class TestPayBusiness(PayTestBase):
     """商业房支付测试类"""
-    business_uid = 105002103  # 商业房auto_rid房主（一代宗师）
-    ceo_uid = config.live_role['pack_ceo']  # 直播公会公会长
-
 
     def test_01_businessPayGiftNormalUser(self):
-        """
-        用例描述：
-        验证余额足够时，商业房打赏礼物给普通用户分成满足师徒收益(非一代宗师)的基础上为：62:38，且收入在个人魅力值
-        师父为公会成员，收到的师徒分成进个人魅力值
-        脚本步骤：
-        1.构造打赏者和被打赏者数据
-        2.房间打赏礼物（打赏100分）
-        3.校验接口状态和返回值数据
-        4.检查被打赏者余额，预期为：100 * 0.62 =62 (money_cash_b)
-        5.检查被打赏者师徒账户，预期为：100 * 0.05 = 5（money_cash_b）
-        6.检查打赏者VIP经验值变动
-        """
-        des = '商业房礼物打赏普通用户到账62%(mcb)'
-        
-        # 准备测试数据
-        self._prepare_test_data([
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 30, 'money_cash': 30, 'money_cash_b': 30, 'money_b': 10}},
-            {'action': 'update_money', 'params': {'uid': config.rewardUid}},
-            {'action': 'update_money', 'params': {'uid': config.gsUid}}
-        ])
-        
-        # 记录初始VIP等级
-        vip_level = int(mysql.selectUserInfoSql('pay_room_money', config.payUid))
-        
-        # 发送请求
-        data = encodeData(money=100, giftId=config.giftId['5'])
-        res = post_request_session(config.pay_url, data)
-        
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        
-        # 验证数据库
-        self._validate_db_state([
-            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 62},
-            {'field': 'single_money', 'uid': config.gsUid, 'expected': 5},
-            {'field': 'sum_money', 'uid': config.gsUid, 'expected': 5},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0},
-            {'field': 'pay_room_money', 'uid': config.payUid, 'expected': vip_level + calculate_vip_exp()}
-        ])
-        
-        case_list[des] = result
+        """商业房礼物打赏普通用户，师徒基础上到账 62%（mcb）"""
+        self.run_case(SCENES[0])
 
     def test_02_businessPayBoxNormalUser(self):
-        """
-        用例描述：
-        验证余额足够时，商业房打赏分成满足师徒收益(一代宗师)的基础上为：70:30，且收入在个人魅力值
-        脚本步骤：
-        1.构造打赏者和被打赏者数据
-        2.房间打赏礼盒（打赏box）
-        3.校验接口状态和返回值数据
-        4.检查打赏者账户余额，预期值为：700 - 600 = 100
-        5.检查收礼用户账户余额，预期值为不小于：210
-        """
-        des = '商业房打赏box一代用户到账70%(mcb)'
-        
-        # 准备测试数据
-        self._prepare_test_data([
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 400, 'money_cash': 100, 'money_cash_b': 100, 'money_b': 100}},
-            {'action': 'update_money', 'params': {'uid': config.masterUid}}
-        ])
-        
-        # 记录初始VIP等级
-        vip_level = int(mysql.selectUserInfoSql('pay_room_money', config.payUid))
-        
-        # 发送请求
-        data = encodeData(money=600, uid=config.masterUid, giftId=config.giftId['46'], star=4)
-        res = post_request_session(config.pay_url, data)
-        
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        
-        # 验证数据库
-        income = mysql.selectUserInfoSql('pay_change', uid=config.masterUid, money_type='_in_c_b')
-        self._validate_db_state([
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 100},
-            {'field': 'single_money', 'uid': config.masterUid, 'expected': income},
-            {'field': 'pay_room_money', 'uid': config.payUid, 'expected': vip_level + calculate_vip_exp(pay_off=600)}
-        ])
-        
-        case_list[des] = result
+        """商业房打赏 box 给一代宗师用户，到账 70%（mcb）"""
+        self.run_case(SCENES[1])
 
     def test_03_businessPayGiftToGs(self):
-        """
-        用例描述：
-        验证余额足够时，商业房打赏礼物给GS分成为：62:38，且收入在公会魅力值
-        脚本步骤：
-        1.构造打赏者和被打赏者数据
-        2.房间打赏礼物（打赏100分）
-        3.校验接口状态和返回值数据
-        4.检查被打赏者余额，预期为：100 * 0.62 =62 (money_cash)
-        """
-        des = '商业房礼物打赏GS到账62%(mc)'
-        
-        # 准备测试数据
-        self._prepare_test_data([
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 30, 'money_cash': 30, 'money_cash_b': 30, 'money_b': 10}},
-            {'action': 'update_money', 'params': {'uid': config.gsUid}}
-        ])
-        
-        # 发送请求
-        data = encodeData(money=100, uid=config.gsUid, giftId=config.giftId['5'])
-        res = post_request_session(config.pay_url, data)
-        
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        
-        # 验证数据库
-        expected_amount = 100 * config.rate
-        self._validate_db_state([
-            {'field': 'single_money', 'uid': config.gsUid, 'expected': expected_amount, 'kwargs': {'money_type': 'money_cash'}},
-            {'field': 'sum_money', 'uid': config.gsUid, 'expected': expected_amount},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
-        ])
-        
-        case_list[des] = result
+        """商业房礼物打赏 GS，到账 62%（mc）"""
+        self.run_case(SCENES[2])
 
     def test_04_businessPayBoxToGs(self):
-        """
-        用例描述：
-        验证商业房内送box给多个人时逻辑正常且GS分成为：62:38，且收入在公会魅力值
-        脚本步骤：
-        1.构造数据（更新xs_user_money，xs_user_commodity，xs_user_box）
-        2.giveBox
-        3.校验接口状态和返回值数据
-        4.检查账户余额，预期值为：10000 - 2100*2*2 = 1600
-        5.检查收箱用户账户余额，预期值为不小于：2000 * 0.62 = 1240（money_cash）
-        """
-        des = '商业房打赏box给GS到账62%（mc）'
-        
-        # 准备测试数据
-        self._prepare_test_data([
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 10000}},
-            {'action': 'update_money', 'params': {'uid': config.rewardUid}}
-        ])
-        
-        # 发送请求
-        data = encodeData(
-            payType='package-more',
-            num=2,
-            star=2,
-            money=2100,
-            giftId=config.giftId['47'],
-            uids=('{}'.format(config.rewardUid), '{}'.format(config.gsUid))
-        )
-        res = post_request_session(config.pay_url, data)
-        
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        
-        # 验证数据库
-        self._validate_db_state([
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 1600},
-            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 620, 'assert_func': assert_len},
-            {'field': 'single_money', 'uid': config.gsUid, 'expected': 2000 * config.rate, 'kwargs': {'money_type': 'money_cash'}, 'assert_func': assert_len},
-            {'field': 'sum_money', 'uid': config.gsUid, 'expected': 2000 * config.rate, 'assert_func': assert_len}
-        ])
-        
-        case_list[des] = result
+        """商业房内送 box 给多人，GS 分成 62%（mc）"""
+        self.run_case(SCENES[3])
 
     @unittest.skip('')
     def test_05_musicOrderPayGiftToGs(self):
@@ -187,80 +139,13 @@ class TestPayBusiness(PayTestBase):
         用例描述：
         验证余额足够时，business-music内点歌给GS分成为：62:38，且收入在公会魅力值
         限制：房型限定为business-music
-        脚本步骤：
-        1.构造打赏者和被打赏者数据
-        2.房间选中GS点歌（打赏100分）
-        3.校验接口状态和返回值数据
-        4.检查被打赏者余额，预期为：3000 * 0.62 = 1860 (money_cash)
         """
         pass
 
     def test_06_businessPayGiftToBusinessCreator(self):
-        """
-        用例描述：
-        验证余额足够时，打赏礼物给商业房房主分成为：70:30，且收入在公会魅力值
-        脚本步骤：
-        1.构造打赏者和被打赏者数据
-        2.房间打赏礼物（打赏100分）
-        3.校验接口状态和返回值数据
-        4.检查被打赏者余额，预期为：100 * 0.7 =70 (money_cash)
-        """
-        des = '礼物打赏商业房房主到账70%(mc)'
-        
-        # 准备测试数据
-        self._prepare_test_data([
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 30, 'money_cash': 30, 'money_cash_b': 30, 'money_b': 10}},
-            {'action': 'update_money', 'params': {'uid': self.business_uid}}
-        ])
-        
-        # 发送请求
-        data = encodeData(money=100, uid=self.business_uid, giftId=config.giftId['5'])
-        res = post_request_session(config.pay_url, data)
-        
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        
-        # 验证数据库
-        self._validate_db_state([
-            {'field': 'single_money', 'uid': self.business_uid, 'expected': 70, 'kwargs': {'money_type': 'money_cash'}},
-            {'field': 'sum_money', 'uid': self.business_uid, 'expected': 70},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
-        ])
-        
-        case_list[des] = result
+        """礼物打赏商业房房主，到账 70%（mc）"""
+        self.run_case(SCENES[4])
 
     def test_07_businessPayGiftToBrokerCreator(self):
-        """
-        用例描述：
-        验证余额足够时，打赏礼物给公会会长分成为：70:30，且收入在公会魅力值
-        脚本步骤：
-        1.构造打赏者和被打赏者数据
-        2.房间打赏礼物（打赏100分）
-        3.校验接口状态和返回值数据
-        4.检查被打赏者余额，预期为：100 * 0.7 =70 (money_cash)
-        """
-        des = '礼物打赏公会会长到账70%(mc)'
-        
-        # 准备测试数据
-        self._prepare_test_data([
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 30, 'money_cash': 30, 'money_cash_b': 30, 'money_b': 10}},
-            {'action': 'update_money', 'params': {'uid': self.ceo_uid}}
-        ])
-        
-        # 发送请求
-        data = encodeData(money=100, uid=self.ceo_uid, giftId=config.giftId['5'])
-        res = post_request_session(config.pay_url, data)
-        
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        
-        # 验证数据库
-        self._validate_db_state([
-            {'field': 'single_money', 'uid': self.ceo_uid, 'expected': 70, 'kwargs': {'money_type': 'money_cash'}},
-            {'field': 'sum_money', 'uid': self.ceo_uid, 'expected': 70},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
-        ])
-        
-        case_list[des] = result
+        """礼物打赏公会会长，到账 70%（mc）"""
+        self.run_case(SCENES[5])

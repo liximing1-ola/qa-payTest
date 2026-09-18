@@ -1,21 +1,131 @@
+# coding=utf-8
+"""
+直播打包结算支付测试
+
+场景差异通过模块级 SCENES 表声明，由 PayTestBase.run_case 统一执行；
+公会打包结算数据由类方法 _prepare_broker_data 组合准备。
+"""
+from case.base import PayCase, PayTestBase
+from common.Assert import assert_len
 from common.Config import config
 from common.conMysql import conMysql as mysql
-from common.Request import post_request_session
-from common.Assert import assert_body, assert_code, assert_len
-from common.basicData import encodeData
-from common.Consts import case_list_b, result
 from common.runFailed import Retry
 from common.sqlScript import UserMoneyOperations
-from case.base import PayTestBase
+
+# 打包结算主播 / 公会长 / 直播频道
+TEST_UID = config.live_role['pack_cal_uid']
+CEO_UID = config.live_role['pack_ceo']
+LIVE_RID = config.live_role['live_rid']
+
+SCENES = [
+    PayCase(
+        des='直播间内礼物打赏主播-公会长分成60:21',
+        prepare=lambda t: t._prepare_broker_data(TEST_UID, CEO_UID, pay_money=1000),
+        data={'rid': LIVE_RID, 'uid': TEST_UID},
+        checks=[
+            {'field': 'single_money', 'uid': TEST_UID, 'expected': 600,
+             'kwargs': {'money_type': 'money_cash'}},
+            {'field': 'single_money', 'uid': CEO_UID, 'expected': 210,
+             'kwargs': {'money_type': 'money_cash'}},
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
+        ],
+        report='case_list_b'),
+    PayCase(
+        des='直播间内箱子打赏主播-公会长分成60:21',
+        prepare=lambda t: t._prepare_broker_data(TEST_UID, CEO_UID, pay_money=700),
+        data={'money': 600, 'rid': LIVE_RID, 'giftId': config.giftId['46'],
+              'uid': TEST_UID, 'star': 1},
+        checks=[
+            {'field': 'single_money', 'uid': TEST_UID, 'expected': 300 * 0.6,
+             'kwargs': {'money_type': 'money_cash'}, 'assert_func': assert_len},
+            {'field': 'single_money', 'uid': CEO_UID, 'expected': 300 * 0.21,
+             'kwargs': {'money_type': 'money_cash'}, 'assert_func': assert_len},
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 100}
+        ],
+        report='case_list_b'),
+    PayCase(
+        des='开通房间守护团给GS收60%（公会）',
+        prepare=lambda t: t._prepare_broker_data(TEST_UID, CEO_UID, pay_money=100000),
+        data={'payType': 'package-knightDefend', 'money': 99900,
+              'uid': TEST_UID, 'rid': LIVE_RID},
+        checks=[
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 100},
+            {'field': 'single_money', 'uid': TEST_UID, 'expected': 59940,
+             'kwargs': {'money_type': 'money_cash'}},
+            {'field': 'single_money', 'uid': CEO_UID, 'expected': 20979,
+             'kwargs': {'money_type': 'money_cash'}}
+        ],
+        report='case_list_b'),
+    PayCase(
+        des='私聊打赏主播-公会长分成60:20',
+        prepare=lambda t: t._prepare_broker_data(TEST_UID, CEO_UID, pay_money=1000),
+        data={'payType': 'chat-gift', 'uid': TEST_UID},
+        checks=[
+            {'field': 'single_money', 'uid': TEST_UID, 'expected': 600,
+             'kwargs': {'money_type': 'money_cash'}},
+            {'field': 'single_money', 'uid': CEO_UID, 'expected': 200,
+             'kwargs': {'money_type': 'money_cash'}},
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
+        ],
+        report='case_list_b'),
+    PayCase(
+        des='私聊打赏箱子主播-公会长分成60:20',
+        prepare=lambda t: t._prepare_broker_data(TEST_UID, CEO_UID, pay_money=1000),
+        data={'payType': 'chat-gift', 'money': 600, 'uid': TEST_UID,
+              'giftId': config.giftId['46'], 'star': 1},
+        checks=[
+            {'field': 'single_money', 'uid': TEST_UID, 'expected': 300 * 0.6,
+             'kwargs': {'money_type': 'money_cash'}, 'assert_func': assert_len},
+            {'field': 'single_money', 'uid': CEO_UID, 'expected': 300 * 0.20,
+             'kwargs': {'money_type': 'money_cash'}, 'assert_func': assert_len},
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 400}
+        ],
+        report='case_list_b'),
+    PayCase(
+        des='直播公会主播(非宗师)-公会长打赏分成60:21',
+        prepare=lambda t: t._prepare_broker_data(
+            TEST_UID, CEO_UID, pay_money=1000,
+            extra_steps=[lambda: mysql.checkUserXsMentorLevel(TEST_UID, level=1)]),
+        data={'rid': LIVE_RID, 'uid': TEST_UID},
+        checks=[
+            {'field': 'single_money', 'uid': TEST_UID, 'expected': 600,
+             'kwargs': {'money_type': 'money_cash'}},
+            {'field': 'single_money', 'uid': CEO_UID, 'expected': 210,
+             'kwargs': {'money_type': 'money_cash'}},
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
+        ],
+        report='case_list_b'),
+    PayCase(
+        des='直播间打赏麦下用户分成62:38',
+        setup=[
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 100}},
+            {'action': 'update_money', 'params': {'uid': config.rewardUid}}
+        ],
+        data={'giftId': config.giftId['5'], 'rid': LIVE_RID, 'money': 100},
+        checks=[
+            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 62,
+             'kwargs': {'money_type': 'money_cash_b'}},
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
+        ],
+        report='case_list_b'),
+    PayCase(
+        des='主播在非直播间被打赏70%进个人魅力',
+        setup=[
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
+            {'action': 'update_money', 'params': {'uid': TEST_UID}}
+        ],
+        data={'uid': TEST_UID},
+        checks=[
+            {'field': 'single_money', 'uid': TEST_UID, 'expected': 700},
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
+        ],
+        report='case_list_b'),
+]
 
 
 @Retry(max_n=3)
 class TestPayLivePackage(PayTestBase):
     """直播打包结算支付测试类"""
-    
-    live_role = config.live_role
-    # 商业房房主 or (（工会会长 or 工会成员）&& 同意大神协议 )
-    # (insert into xs_user_settings (uid, agreement_version) values(100500205, 1))
 
     def _prepare_broker_data(self, test_uid, ceo_uid, pay_money, extra_steps=None):
         """准备公会打包结算测试数据"""
@@ -29,236 +139,33 @@ class TestPayLivePackage(PayTestBase):
                 step()
 
     def test_01_liveRoomPayGift_602119(self):
-        """
-        用例描述：
-        tdr:直播间内工会一代宗师主播-公会长-平台分成比为：60:21:19（打包结算频道是直播）
-        验证直播间打赏一代宗师主播（打包结算主播pack_cal=1），打赏分成满足：60:21:19，且收入在money_cash账户
-        脚本步骤：
-        1.构造打赏者和主播数据
-        2.房间内一对一打赏（打赏1000分）
-        3.校验接口状态和返回值数据
-        4.检查被打赏者余额和账户，预期为：1000 * 0.6 = 600(money_cash)
-        5.检查公会长余额，预期为：1000 * 0.21 = 210
-        6.检查打赏者余额.预期为：1000 - 1000 = 0
-        """
-        des = '直播间内礼物打赏主播-公会长分成60:21'
-        test_uid, ceo_uid = self.live_role['pack_cal_uid'], self.live_role['pack_ceo']
-        
-        self._prepare_broker_data(test_uid, ceo_uid, pay_money=1000)
-        
-        data = encodeData(rid=self.live_role['live_rid'], uid=test_uid)
-        res = post_request_session(config.pay_url, data)
-        
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        self._validate_db_state([
-            {'field': 'single_money', 'uid': test_uid, 'expected': 600, 'kwargs': {'money_type': 'money_cash'}},
-            {'field': 'single_money', 'uid': ceo_uid, 'expected': 210, 'kwargs': {'money_type': 'money_cash'}},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
-        ])
-        case_list_b[des] = result
+        """直播间内礼物打赏一代宗师主播，主播-公会长分成 60:21"""
+        self.run_case(SCENES[0])
 
     def test_02_liveRoomPayBox_602119(self):
-        """
-        用例描述：
-        tdr:直播间内工会一代宗师主播-公会长-平台分成比为：60:21:19（打包结算频道是直播）
-        验证直播间打赏一代宗师主播（打包结算主播pack_cal=1），打赏分成满足：60:21:19，且收入在money_cash账户
-        脚本步骤：
-        1.构造打赏者和主播数据
-        2.房间内一对一打赏（打赏1000分）
-        3.校验接口状态和返回值数据
-        4.检查被打赏者余额和账户，预期为不小于：300 * 0.6 = 180(money_cash)
-        5.检查公会长余额，预期为不小于： 300 * 0.21 = 62
-        6.检查打赏者余额.预期为：700 - 600 = 100
-        """
-        des = '直播间内箱子打赏主播-公会长分成60:21'
-        test_uid, ceo_uid = self.live_role['pack_cal_uid'], self.live_role['pack_ceo']
-        
-        self._prepare_broker_data(test_uid, ceo_uid, pay_money=700)
-        
-        data = encodeData(money=600, rid=self.live_role['live_rid'], 
-                          giftId=config.giftId['46'], uid=test_uid, star=1)
-        res = post_request_session(config.pay_url, data)
-        
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        self._validate_db_state([
-            {'field': 'single_money', 'uid': test_uid, 'expected': 300 * 0.6, 'kwargs': {'money_type': 'money_cash'}, 'assert_func': assert_len},
-            {'field': 'single_money', 'uid': ceo_uid, 'expected': 300 * 0.21, 'kwargs': {'money_type': 'money_cash'}, 'assert_func': assert_len},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 100}
-        ])
-        case_list_b[des] = result
+        """直播间内箱子打赏，分成不小于 60:21"""
+        self.run_case(SCENES[1])
 
     def test_03_knightDefendPayChangeMoney(self):
-        """
-         用例描述：
-         开通直播间守护团，收益分成主播-公会长-平台分成比为：60:21:19（打包结算频道是直播）
-         脚本步骤：
-         1.构造开通者和被守护者数据
-         2.开通真爱守护
-         3.校验接口状态和返回值数据
-         4.检查打赏者余额，预期：100000 - 99900 = 100
-         5.检查公会长余额，预期为： 99900 * 0.21 = 20979
-         6.检查被打赏者余额.预期为：99900 * 0.6 = 59940
-         """
-        des = '开通房间守护团给GS收60%（公会）'
-        test_uid, ceo_uid = self.live_role['pack_cal_uid'], self.live_role['pack_ceo']
-        
-        self._prepare_broker_data(test_uid, ceo_uid, pay_money=100000)
-        
-        data = encodeData(payType='package-knightDefend', money=99900,
-                          uid=test_uid, rid=self.live_role['live_rid'])
-        res = post_request_session(config.pay_url, data)
-        
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        self._validate_db_state([
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 100},
-            {'field': 'single_money', 'uid': test_uid, 'expected': 59940, 'kwargs': {'money_type': 'money_cash'}},
-            {'field': 'single_money', 'uid': ceo_uid, 'expected': 20979, 'kwargs': {'money_type': 'money_cash'}}
-        ])
-        case_list_b[des] = result
+        """开通房间守护团，GS 收 60%（公会）"""
+        self.run_case(SCENES[2])
 
     def test_04_chatPayGift_602020(self):
-        """
-        用例描述：
-        tdr:私聊打赏公会一代宗师主播-公会长-官方抽成：60:20:20
-        脚本步骤：
-        1.构造打赏者和主播数据
-        2.私聊打赏（打赏1000分）
-        3.校验接口状态和返回值数据
-        4.检查被打赏者余额和账户，预期为：1000 * 0.6 = 600(money_cash)
-        5.检查公会长余额，预期为：1000 * 0.2 = 200
-        6.检查打赏者余额.预期为：1000 - 1000 = 0
-        """
-        des = '私聊打赏主播-公会长分成60:20'
-        test_uid, ceo_uid = self.live_role['pack_cal_uid'], self.live_role['pack_ceo']
-        
-        self._prepare_broker_data(test_uid, ceo_uid, pay_money=1000)
-        
-        data = encodeData(payType='chat-gift', uid=test_uid)
-        res = post_request_session(config.pay_url, data)
-        
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        self._validate_db_state([
-            {'field': 'single_money', 'uid': test_uid, 'expected': 600, 'kwargs': {'money_type': 'money_cash'}},
-            {'field': 'single_money', 'uid': ceo_uid, 'expected': 200, 'kwargs': {'money_type': 'money_cash'}},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
-        ])
-        case_list_b[des] = result
+        """私聊打赏主播，主播-公会长分成 60:20"""
+        self.run_case(SCENES[3])
 
     def test_05_chatPayBox_602020(self):
-        """
-        用例描述：
-        tdr:私聊打赏箱子公会主播-公会长-官方抽成：60:20:20
-        脚本步骤：
-        1.构造打赏者和主播数据
-        2.私聊打赏铜箱子（打赏600分）
-        3.校验接口状态和返回值数据
-        4.检查被打赏者余额和账户，预期为不小于：300 * 0.6 = 180(money_cash)
-        5.检查公会长余额，预期为不小于：300 * 0.2 = 60
-        6.检查打赏者余额.预期为不小于：1000 - 600 = 400
-        """
-        des = '私聊打赏箱子主播-公会长分成60:20'
-        test_uid, ceo_uid = self.live_role['pack_cal_uid'], self.live_role['pack_ceo']
-        
-        self._prepare_broker_data(test_uid, ceo_uid, pay_money=1000)
-        
-        data = encodeData(payType='chat-gift', money=600, uid=test_uid,
-                          giftId=config.giftId['46'], star=1)
-        res = post_request_session(config.pay_url, data)
-        
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        self._validate_db_state([
-            {'field': 'single_money', 'uid': test_uid, 'expected': 300 * 0.6, 'kwargs': {'money_type': 'money_cash'}, 'assert_func': assert_len},
-            {'field': 'single_money', 'uid': ceo_uid, 'expected': 300 * 0.20, 'kwargs': {'money_type': 'money_cash'}, 'assert_func': assert_len},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 400}
-        ])
-        case_list_b[des] = result
+        """私聊打赏箱子，分成不小于 60:20"""
+        self.run_case(SCENES[4])
 
     def test_06_liveRoomPayGift_602119(self):
-        """
-        用例描述：
-        tdr:直播间内工会非一代宗师主播-公会长-官方：60:21:19
-        脚本步骤：
-        1.构造打赏者和主播数据
-        2.房间内一对一打赏（打赏1000分）
-        3.校验接口状态和返回值数据
-        4.检查被打赏者余额和账户，预期为：1000 * 0.6 = 600（money_cash）
-        5.检查公会长余额，预期为：1000 * 0.21 = 210
-        6.检查打赏者余额.预期为：1000 - 1000 = 0
-        """
-        des = '直播公会主播(非宗师)-公会长打赏分成60:21'
-        test_uid, ceo_uid = self.live_role['pack_cal_uid'], self.live_role['pack_ceo']
-        
-        self._prepare_broker_data(test_uid, ceo_uid, pay_money=1000, 
-                                  extra_steps=[lambda: mysql.checkUserXsMentorLevel(test_uid, level=1)])
-        
-        data = encodeData(rid=self.live_role['live_rid'], uid=test_uid)
-        res = post_request_session(config.pay_url, data)
-        
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        self._validate_db_state([
-            {'field': 'single_money', 'uid': test_uid, 'expected': 600, 'kwargs': {'money_type': 'money_cash'}},
-            {'field': 'single_money', 'uid': ceo_uid, 'expected': 210, 'kwargs': {'money_type': 'money_cash'}},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
-        ])
-        case_list_b[des] = result
+        """直播公会非一代宗师主播，公会长打赏分成 60:21"""
+        self.run_case(SCENES[5])
 
     def test_07_liveRoomUnderRolePay_6238(self):
-        """
-        用例描述：
-        验证直播间内打赏麦下用户，在师徒收益基础上，分成比例应为62:38
-        脚本步骤：
-        1.构造打赏者和被打赏者数据
-        2.房间内一对一打赏（打赏100分）
-        3.校验接口状态和返回值数据
-        4.检查被打赏者余额和账户，预期为：100 * 0.62 = 62
-        5.检查打赏者余额,预期为：100 - 100 = 0
-        """
-        des = '直播间打赏麦下用户分成62:38'
-        
-        UserMoneyOperations.update(config.payUid, money=100)
-        UserMoneyOperations.update(config.rewardUid)
-        
-        data = encodeData(giftId=config.giftId['5'], rid=self.live_role['live_rid'], money=100)
-        res = post_request_session(config.pay_url, data)
-        
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        self._validate_db_state([
-            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 62, 'kwargs': {'money_type': 'money_cash_b'}},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
-        ])
-        case_list_b[des] = result
+        """直播间打赏麦下用户，师徒收益基础上分成 62:38"""
+        self.run_case(SCENES[6])
 
     def test_08_NotLiveRoomPayAnchor(self):
-        """
-        用例描述：
-        tdr:非直播频道主播被打赏金额70进个人魅力值（money_cash_b）
-        脚本步骤：
-        1.构造打赏者和主播数据
-        2.非直播房间内一对一打赏（打赏1000分）
-        3.校验接口状态和返回值数值
-        4.检查被打赏者余额和账户，预期为：1000 * 0.7 = 700(money_cash_b)
-        6.检查打赏者余额.预期为：1000 - 1000 = 0
-        """
-        des = '主播在非直播间被打赏70%进个人魅力'
-        test_uid = self.live_role['pack_cal_uid']
-        
-        UserMoneyOperations.update(config.payUid, money=1000)
-        UserMoneyOperations.update(test_uid)
-        
-        data = encodeData(uid=test_uid)
-        res = post_request_session(config.pay_url, data)
-        
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        self._validate_db_state([
-            {'field': 'single_money', 'uid': test_uid, 'expected': 700},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
-        ])
-        case_list_b[des] = result
+        """主播在非直播间被打赏，70% 进个人魅力值"""
+        self.run_case(SCENES[7])

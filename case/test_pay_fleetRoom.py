@@ -1,247 +1,129 @@
-from case.base import PayTestBase
+# coding=utf-8
+"""
+家族房支付测试
+
+场景差异通过模块级 SCENES 表声明，由 PayTestBase.run_case 统一执行。
+"""
+from case.base import PayCase, PayTestBase
 from common.Config import config
+from common.Assert import assert_len
 from common.conMysql import conMysql as mysql
-import unittest
-from common.Request import post_request_session
-from common.Assert import assert_body, assert_code, assert_equal, assert_len
-from common.basicData import encodeData
 from common.runFailed import Retry
-from common.Consts import case_list_b, result
+
+# 本家族房 rid / 直播公会gs
+FLEET_RID = config.bb_user.fleetRid
+PACK_CAL_UID = config.bb_user.pack_cal_uid
+
+SCENES = [
+    PayCase(
+        des='家族房打赏直播公会gs场景',
+        setup=[
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
+            {'action': 'update_money', 'params': {'uid': PACK_CAL_UID}}
+        ],
+        data={'rid': FLEET_RID, 'uid': PACK_CAL_UID},
+        checks=[
+            {'field': 'single_money', 'uid': PACK_CAL_UID, 'expected': 800},
+            {'field': 'sum_money', 'uid': PACK_CAL_UID, 'expected': 800},
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
+        ],
+        report='case_list_b'),
+    PayCase(
+        des='非本家族房打赏直播公会GS场景',
+        setup=[
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
+            {'action': 'update_money', 'params': {'uid': PACK_CAL_UID}}
+        ],
+        data={'rid': lambda ctx: ctx['cls'].other_fleet_rid, 'uid': PACK_CAL_UID},
+        checks=[
+            {'field': 'single_money', 'uid': PACK_CAL_UID, 'expected': 700},
+            {'field': 'sum_money', 'uid': PACK_CAL_UID, 'expected': 700},
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
+        ],
+        report='case_list_b'),
+    PayCase(
+        des='fleetRoom打赏普通公会gs场景',
+        setup=[
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
+            {'action': 'update_money', 'params': {'uid': config.gsUid}}
+        ],
+        data={'rid': FLEET_RID, 'uid': config.gsUid},
+        checks=[
+            {'field': 'single_money', 'uid': config.gsUid, 'expected': 800},
+            {'field': 'sum_money', 'uid': config.gsUid, 'expected': 800},
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
+        ],
+        report='case_list_b'),
+    PayCase(
+        des='非本家族房打赏公会GS场景',
+        setup=[
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 600}},
+            {'action': 'update_money', 'params': {'uid': config.gsUid}}
+        ],
+        data={'money': 600, 'rid': lambda ctx: ctx['cls'].other_fleet_rid,
+              'giftId': config.giftId['46'], 'uid': config.gsUid, 'star': 1},
+        checks=[
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0},
+            {'field': 'single_money', 'uid': config.gsUid, 'expected': 210, 'assert_func': assert_len}
+        ],
+        report='case_list_b'),
+    PayCase(
+        des='fleetRoom打赏一代用户场景',
+        setup=[
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 600}},
+            {'action': 'update_money', 'params': {'uid': config.masterUid}}
+        ],
+        data={'money': 600, 'rid': FLEET_RID, 'giftId': config.giftId['46'],
+              'uid': config.masterUid, 'star': 1},
+        checks=[
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0},
+            {'field': 'single_money', 'uid': config.masterUid, 'expected': 300 * 0.8, 'assert_func': assert_len}
+        ],
+        report='case_list_b'),
+    PayCase(
+        des='非本fleet房打赏场景',
+        setup=[
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
+            {'action': 'update_money', 'params': {'uid': config.rewardUid}}
+        ],
+        data={'rid': lambda ctx: ctx['cls'].other_fleet_rid},
+        checks=[
+            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 620},
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
+        ],
+        report='case_list_b'),
+]
 
 
 @Retry(max_n=3)
 class TestPayFleetRoom(PayTestBase):
     """家族房支付测试类"""
-    fleet_rid = config.bb_user.fleetRid  # 本家族房
-    pack_cal_uid = config.bb_user.pack_cal_uid  # 直播公会gs
 
     @classmethod
     def setUpClass(cls):
         """查询非本家族房 rid（延迟到运行期，避免 import 阶段依赖数据库）"""
         cls.other_fleet_rid = mysql.selectUserInfoSql('fleet')
 
-
     def test_01_sameFleetRoomLiveGsRate(self):
-        """
-        用例描述：
-        tdr：同家族房内直播公会成员礼物打赏到账80%个人魅力值
-        脚本步骤：
-        1.构造打赏者和被打赏者数据
-        2.房间打赏（打赏1000分）
-        3.校验接口状态和返回值数据
-        4.检查被打赏者余额，预期为：1000 * 0.8 = 800(money_cash_b)
-        5.检查打赏者余额，预期为：1000 - 1000 = 0
-        """
-        des = '家族房打赏直播公会gs场景'
-        
-        # 准备测试数据
-        self._prepare_test_data([
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
-            {'action': 'update_money', 'params': {'uid': self.pack_cal_uid}}
-        ])
-        
-        # 发送请求
-        data = encodeData(rid=self.fleet_rid, uid=self.pack_cal_uid)
-        res = post_request_session(config.pay_url, data)
-        
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        
-        # 验证数据库
-        self._validate_db_state([
-            {'field': 'single_money', 'uid': self.pack_cal_uid, 'expected': 800},
-            {'field': 'sum_money', 'uid': self.pack_cal_uid, 'expected': 800},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
-        ])
-        
-        case_list_b[des] = result
+        """同家族房内直播公会成员礼物打赏到账80%个人魅力值"""
+        self.run_case(SCENES[0])
 
     def test_02_otherFleetRoomLiveGsRate(self):
-        """
-        用例描述：
-        tdr：other家族房内直播公会成员礼物打赏到账70%个人魅力值
-        脚本步骤：
-        1.构造打赏者和被打赏者数据
-        2.房间打赏（打赏1000分）
-        3.校验接口状态和返回值数据
-        4.检查被打赏者余额，预期为：1000 * 0.7 = 700(money_cash_b)
-        5.检查打赏者余额，预期为：1000 - 1000 = 0
-        """
-        des = '非本家族房打赏直播公会GS场景'
-        
-        # 准备测试数据
-        self._prepare_test_data([
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
-            {'action': 'update_money', 'params': {'uid': self.pack_cal_uid}}
-        ])
-        
-        # 发送请求
-        data = encodeData(rid=self.other_fleet_rid, uid=self.pack_cal_uid)
-        res = post_request_session(config.pay_url, data)
-        
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        
-        # 验证数据库
-        self._validate_db_state([
-            {'field': 'single_money', 'uid': self.pack_cal_uid, 'expected': 700},
-            {'field': 'sum_money', 'uid': self.pack_cal_uid, 'expected': 700},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
-        ])
-        
-        case_list_b[des] = result
+        """非家族房内直播公会成员礼物打赏到账70%个人魅力值"""
+        self.run_case(SCENES[1])
 
     def test_03_sameFleetRoomNormalGsRate(self):
-        """
-        用例描述：
-        tdr：家族房内普通公会成员礼物打赏到账80%个人魅力值
-         脚本步骤：
-        1.构造打赏者和被打赏者数据
-        2.房间打赏（打赏1000分）
-        3.校验接口状态和返回值数据
-        4.检查被打赏者余额，预期为：1000 * 0.8 = 800(money_cash_b)
-        5.检查打赏者余额，预期为：1000 - 1000 = 0
-        """
-        des = 'fleetRoom打赏普通公会gs场景'
-        
-        # 准备测试数据
-        self._prepare_test_data([
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
-            {'action': 'update_money', 'params': {'uid': config.gsUid}}
-        ])
-        
-        # 发送请求
-        data = encodeData(rid=self.fleet_rid, uid=config.gsUid)
-        res = post_request_session(config.pay_url, data)
-        
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        
-        # 验证数据库
-        self._validate_db_state([
-            {'field': 'single_money', 'uid': config.gsUid, 'expected': 800},
-            {'field': 'sum_money', 'uid': config.gsUid, 'expected': 800},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
-        ])
-        
-        case_list_b[des] = result
+        """家族房内普通公会成员礼物打赏到账80%个人魅力值"""
+        self.run_case(SCENES[2])
 
     def test_04_otherFleetRoomNormalGsRate(self):
-        """
-        用例描述：
-        tdr：非家族房内GS收到箱子打赏拿70%个人魅力值
-       脚本步骤：
-        1.构造打赏者和被打赏者数据
-        2.房间打赏（打赏铜箱子）
-        3.校验接口状态和返回值数据
-        4.检查被打赏者余额，预期为不小于：300 * 0.7 = 210(money_cash_b)
-        5.检查打赏者余额，预期为：600 - 600 = 0
-        """
-        des = '非本家族房打赏公会GS场景'
-        
-        # 准备测试数据
-        self._prepare_test_data([
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 600}},
-            {'action': 'update_money', 'params': {'uid': config.gsUid}}
-        ])
-        
-        # 发送请求
-        data = encodeData(
-            money=600,
-            rid=self.other_fleet_rid,
-            giftId=config.giftId['46'],
-            uid=config.gsUid,
-            star=1
-        )
-        res = post_request_session(config.pay_url, data)
-        
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        
-        # 验证数据库
-        self._validate_db_state([
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0},
-            {'field': 'single_money', 'uid': config.gsUid, 'expected': 210, 'assert_func': assert_len}
-        ])
-        
-        case_list_b[des] = result
+        """非家族房内GS收到箱子打赏拿70%个人魅力值"""
+        self.run_case(SCENES[3])
 
     def test_05_sameFleetRoomPayNormalUser(self):
-        """
-        用例描述：
-        tdr：家族房内一代宗师普通用户箱子打赏到账80%个人魅力值
-        脚本步骤：
-        1.构造打赏者和被打赏者数据
-        2.房间打赏（打赏铜箱子）
-        3.校验接口状态和返回值数据
-        4.检查被打赏者余额，预期为不小于：300 * 0.8 = 240(money_cash_b)
-        5.检查打赏者余额，预期为：600 - 600 = 0
-        """
-        des = 'fleetRoom打赏一代用户场景'
-        
-        # 准备测试数据
-        self._prepare_test_data([
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 600}},
-            {'action': 'update_money', 'params': {'uid': config.masterUid}}
-        ])
-        
-        # 发送请求
-        data = encodeData(
-            money=600,
-            rid=self.fleet_rid,
-            giftId=config.giftId['46'],
-            uid=config.masterUid,
-            star=1
-        )
-        res = post_request_session(config.pay_url, data)
-        
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        
-        # 验证数据库
-        self._validate_db_state([
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0},
-            {'field': 'single_money', 'uid': config.masterUid, 'expected': 300 * 0.8, 'assert_func': assert_len}
-        ])
-        
-        case_list_b[des] = result
+        """家族房内一代宗师普通用户箱子打赏到账80%个人魅力值"""
+        self.run_case(SCENES[4])
 
     def test_06_otherFleetRoomNormalGsRate(self):
-        """
-       用例描述：
-        tdr：other家族房内普通用户礼物打赏到账62%个人魅力值
-        脚本步骤：
-        1.构造打赏者和被打赏者数据
-        2.房间打赏（打赏1000分）
-        3.校验接口状态和返回值数据
-        4.检查被打赏者余额，预期为：1000 * 0.62 = 620(money_cash_b)
-        5.检查打赏者余额，预期为：1000 - 1000 = 0
-        """
-        des = '非本fleet房打赏场景'
-        
-        # 准备测试数据
-        self._prepare_test_data([
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
-            {'action': 'update_money', 'params': {'uid': config.rewardUid}}
-        ])
-        
-        # 发送请求
-        data = encodeData(rid=self.other_fleet_rid)
-        res = post_request_session(config.pay_url, data)
-        
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        
-        # 验证数据库
-        self._validate_db_state([
-            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 620},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
-        ])
-        
-        case_list_b[des] = result
+        """other家族房内普通用户礼物打赏到账62%个人魅力值"""
+        self.run_case(SCENES[5])

@@ -8,6 +8,7 @@ import urllib.parse
 from typing import Dict, Any
 import requests
 from common.Config import config
+from common.Request import DEFAULT_TIMEOUT
 from common.Session import Session
 
 
@@ -120,7 +121,7 @@ class CrazySpin:
         }
         url = config.oversea_host + '/go/party/turntable/list'
         headers = CrazySpin._build_headers(token_name)
-        return requests.get(url, params=params, headers=headers)
+        return requests.get(url, params=params, headers=headers, timeout=DEFAULT_TIMEOUT)
 
     @staticmethod
     def get_turntable_horn(uid: int, token_name: str = 'dev') -> requests.Response:
@@ -143,4 +144,4 @@ class CrazySpin:
         }
         url = config.oversea_host + '/go/party/turntable/horn'
         headers = CrazySpin._build_headers(token_name)
-        return requests.get(url, params=params, headers=headers)
+        return requests.get(url, params=params, headers=headers, timeout=DEFAULT_TIMEOUT)

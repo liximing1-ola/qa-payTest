@@ -14,6 +14,11 @@ from common.runFailed import Retry
 class TestPayCreate(unittest.TestCase):
     DEFAULT_MONEY = 100000
 
+    # 竞拍操作前的间隔（秒），避免连续请求触发风控/时序问题
+    BID_INTERVAL = 0.5
+    # 等待竞拍结算完成的时长（秒）
+    SETTLE_WAIT = 40
+
     def _contract_setUp(self, clear_b=False):
         """竞拍类用例的公共数据准备"""
         conMysql.updateMoneySql(a_uid, self.DEFAULT_MONEY)
@@ -32,7 +37,7 @@ class TestPayCreate(unittest.TestCase):
     def _direct_sign(self, uid, cost, des, singer_uid=c_uid, sleep=True):
         """直接签约并断言成功"""
         if sleep:
-            time.sleep(0.5)
+            time.sleep(self.BID_INTERVAL)
         data = deal_pay_contract_data("audition_contract", uid, cost, 1, singer_uid=singer_uid)
         res = post_starify(data, uid=uid)
         assert_code(res['code'])
@@ -40,7 +45,7 @@ class TestPayCreate(unittest.TestCase):
 
     def _bid(self, uid, cost, des):
         """竞价并断言成功"""
-        time.sleep(0.5)
+        time.sleep(self.BID_INTERVAL)
         data = deal_pay_contract_data("audition_contract", uid, cost, 0)
         res = post_starify(data, uid=uid)
         assert_code(res['code'])
@@ -49,7 +54,7 @@ class TestPayCreate(unittest.TestCase):
     def _bid_fail(self, uid, cost, msg, des, sign_type=1, singer_uid=c_uid, sleep=True):
         """竞拍并断言失败"""
         if sleep:
-            time.sleep(0.5)
+            time.sleep(self.BID_INTERVAL)
         data = deal_pay_contract_data("audition_contract", uid, cost, sign_type, singer_uid=singer_uid)
         res = post_starify(data, uid=uid)
         assert_code(res['code'])
@@ -67,7 +72,7 @@ class TestPayCreate(unittest.TestCase):
 
     def _settle(self):
         """等待结算"""
-        time.sleep(40)
+        time.sleep(self.SETTLE_WAIT)
 
     # ---- 测试用例 ----
 

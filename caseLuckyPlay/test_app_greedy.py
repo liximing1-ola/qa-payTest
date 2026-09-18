@@ -14,6 +14,9 @@ from common.Consts import case_list_c, result
 import time
 from common.conRedis import conRedis
 
+# 等待 DB 写入传播后再清 Redis 缓存（秒）
+REDIS_CLEAR_WAIT = 1
+
 
 class TestPayGreedy(unittest.TestCase):
     """APP 摩天轮测试类"""
@@ -22,7 +25,7 @@ class TestPayGreedy(unittest.TestCase):
     def tearDownClass(cls) -> None:
         """测试后清理：恢复用户大区，清理 Redis 缓存"""
         conMysql.updateUserBigArea(*config.oversea_user.values())
-        time.sleep(1)
+        time.sleep(REDIS_CLEAR_WAIT)
         conRedis.delKey('User.Big.Area.Id', config.oversea_user.values(), host=config.redis_host_ali)
         conRedis.delKey('User.Big.Area', config.oversea_user.values(), host=config.redis_host_ali)
 

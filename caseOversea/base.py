@@ -26,6 +26,9 @@ AREA_RID = object()
 RECEIVER_NORMAL = 'normal'
 RECEIVER_BROKER = 'broker'
 
+# 等待 DB 写入传播后再清 Redis 缓存（秒）
+REDIS_CLEAR_WAIT = 0.3
+
 
 @dataclass(frozen=True)
 class PayScene:
@@ -104,7 +107,7 @@ class OverseaAreaTestBase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        """测试前准备：设置用户大区（及可选的房间大区 / Redis 清理）"""
+        """测试前准备：设置用户大区（及可选的房间大区/Redis 清理）"""
         conMysql.updateUserBigArea(*config.oversea_user.values(), bigarea_id=cls.bigarea_id)
         if cls.room_rid is not None:
             conMysql.updateUserRidInfoSql(cls.room_type, cls.room_rid, area=cls.room_area)
@@ -116,7 +119,7 @@ class OverseaAreaTestBase(unittest.TestCase):
         """测试后清理：恢复用户大区（及可选的 Redis 清理）"""
         conMysql.updateUserBigArea(*config.oversea_user.values())
         if cls.clear_redis_on_teardown:
-            time.sleep(0.3)
+            time.sleep(REDIS_CLEAR_WAIT)
             cls._clear_area_redis()
 
     def run_scene(self, scene: PayScene) -> None:

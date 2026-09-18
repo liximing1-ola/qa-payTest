@@ -15,6 +15,9 @@ from common.conSlpMysql import conMysql as mysql
 from common.runFailed import Retry
 from common.sqlScript import UserMoneyOperations
 
+# 礼盒打赏后等待结算数据落库的时长（秒）
+BOX_SETTLE_WAIT = 5
+
 
 @Retry(max_n=3)
 class TestPayCreate(unittest.TestCase):
@@ -56,7 +59,7 @@ class TestPayCreate(unittest.TestCase):
 		res = post_request_session(pay_url, data, token_name='slp')
 		assert_code(res['code'])
 		assert_body(res['body'], 'success', 1)
-		time.sleep(5)
+		time.sleep(BOX_SETTLE_WAIT)
 		# 查询 打赏人/收礼人数据,用于计算
 		send_gift_data= mysql.selectZxPayData(payUid)
 		# 校验收礼人气值

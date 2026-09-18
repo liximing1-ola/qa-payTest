@@ -1,17 +1,87 @@
+# coding=utf-8
+"""
+金豆支付测试
+
+场景差异通过模块级 SCENES 表声明，由 PayTestBase.run_case 统一执行；
+金豆账户（xs_user_money_extend）读写由自定义 _prepare_test_data 扩展。
+"""
+from case.base import PayCase, PayTestBase
 from common.Config import config
 from common.conMysql import conMysql as mysql
-import unittest
-from common.Request import post_request_session
 from common.method import calculate_vip_exp
-from common.Assert import assert_code, assert_equal, assert_body
-from common.basicData import encodeData
-from common.Consts import result, case_list
 from common.runFailed import Retry
-from case.base import PayTestBase
+
+SCENES = [
+    PayCase(
+        des='打赏金豆礼物但金豆不足的场景',
+        setup=[
+            {'action': 'delete_beans'},
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 10000}}
+        ],
+        data={'giftId': config.giftId['362'], 'giftType': 'bean'},
+        checks=[
+            {'field': 'bean', 'uid': config.rewardUid, 'expected': 0}
+        ],
+        success=0,
+        msg='金豆不足'),
+    PayCase(
+        des='打赏金豆礼物的场景',
+        setup=[
+            {'action': 'insert_beans', 'params': {'uid': config.payUid, 'money_coupon': 6000}}
+        ],
+        data={'payType': 'package-more', 'giftId': config.giftId['362'], 'giftType': 'bean',
+              'num': 6, 'uids': (str(config.rewardUid),)},
+        checks=[
+            {'field': 'bean', 'uid': config.payUid, 'expected': 0},
+            {'field': 'bean', 'uid': config.rewardUid, 'expected': 3000}
+        ]),
+    PayCase(
+        des='打赏金豆礼物不足用钻转换的场景',
+        setup=[
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 10000}},
+            {'action': 'update_money', 'params': {'uid': config.rewardUid}},
+            {'action': 'insert_beans', 'params': {'uid': config.payUid, 'money_coupon': 500}}
+        ],
+        queries=[('vip_level', lambda: int(mysql.selectUserInfoSql('pay_room_money', config.payUid)))],
+        data={'payType': 'package-exchange', 'giftId': config.giftId['362'], 'giftType': 'bean'},
+        checks=[
+            {'field': 'bean', 'uid': config.payUid, 'expected': 500},
+            {'field': 'bean', 'uid': config.rewardUid, 'expected': 500},
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 9000},
+            {'field': 'pay_room_money', 'uid': config.payUid,
+             'expected': lambda ctx: ctx['vip_level'] + calculate_vip_exp(money_type='bean', pay_off=1000)}
+        ]),
+    PayCase(
+        des='私聊打赏钻石礼物时金豆不再抵扣平台手续费',
+        setup=[
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
+            {'action': 'update_money', 'params': {'uid': config.rewardUid}},
+            {'action': 'insert_beans', 'params': {'uid': config.payUid, 'money_coupon': 200}}
+        ],
+        data={'payType': 'chat-gift'},
+        checks=[
+            {'field': 'bean', 'uid': config.payUid, 'expected': 200},
+            {'field': 'single_money', 'uid': config.payUid, 'expected': 0, 'kwargs': {'money_type': 'money'}},
+            {'field': 'sum_money', 'uid': config.rewardUid, 'expected': 720}
+        ]),
+    PayCase(
+        des='房间打赏钻石礼物时金豆不再抵扣平台手续费',
+        setup=[
+            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
+            {'action': 'update_money', 'params': {'uid': config.rewardUid}},
+            {'action': 'insert_beans', 'params': {'uid': config.payUid, 'money_coupon': 400}}
+        ],
+        checks=[
+            {'field': 'bean', 'uid': config.payUid, 'expected': 400},
+            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 620},
+            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
+        ]),
+]
 
 
 @Retry(max_n=3)
 class TestPayBean(PayTestBase):
+    """金豆支付测试类"""
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -26,7 +96,7 @@ class TestPayBean(PayTestBase):
         mysql.deleteUserBeanSql(config.payUid, config.rewardUid)
 
     def _prepare_test_data(self, setup_steps):
-        """准备测试数据"""
+        """金豆账户准备步骤（delete_beans / insert_beans），其余步骤转发基类"""
         for step in setup_steps:
             action = step['action']
             if action == 'delete_beans':
@@ -37,204 +107,21 @@ class TestPayBean(PayTestBase):
                 super()._prepare_test_data([step])
 
     def test_01_NoBeanPayBeanGift(self):
-        """
-        用例描述：
-        验证账户内金豆不足时打赏金豆礼物的场景
-        脚本步骤：
-        1.构造打赏者和被打赏者数据
-        2.房间内打赏金豆礼物流程(金豆道具，数量：1)
-        3.校验接口状态和返回值数据
-        4.检查Toast，预期提示'金豆不足'
-        5.检查被打赏者金豆余额,预期：0
-        """
-        des = '打赏金豆礼物但金豆不足的场景'
-        
-        # 准备测试数据
-        self._prepare_test_data([
-            {'action': 'delete_beans'},
-            {'action': 'update_money', 'params': {'money': 10000}}
-        ])
-        
-        # 发送请求
-        data = encodeData(giftId=config.giftId['362'], giftType='bean')
-        res = post_request_session(config.pay_url, data)
-        
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 0)
-        assert_body(res['body'], 'msg', '金豆不足')
-        
-        # 验证数据库
-        self._validate_db_state([
-            {'field': 'bean', 'uid': config.rewardUid, 'expected': 0}
-        ])
-
-        # 记录测试结果
-        case_list[des] = result
+        """金豆不足时打赏金豆礼物，提示金豆不足"""
+        self.run_case(SCENES[0])
 
     def test_02_beanPayChangeGoldGift(self):
-        """
-        用例描述：
-        验证金豆足够时打赏金豆礼物的场景
-        脚本步骤：
-        1.构造打赏者和被打赏者数据
-        2.房间内打赏金豆礼物的流程
-        3.校验接口状态和返回值数据
-        4.检查打赏者金豆余额，预期为：0
-        5.检查被打赏者金豆余额，预期为：6000 * 0.5 = 3000
-        """
-        des = '打赏金豆礼物的场景'
-        
-        # 准备测试数据
-        self._prepare_test_data([
-            {'action': 'insert_beans', 'params': {'money_coupon': 6000}}
-        ])
-        
-        # 发送请求
-        data = encodeData(
-            payType='package-more',
-            giftId=config.giftId['362'],
-            giftType='bean',
-            num=6,
-            uids=(str(config.rewardUid),)
-        )
-        res = post_request_session(config.pay_url, data)
-        
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        
-        # 验证数据库
-        self._validate_db_state([
-            {'field': 'bean', 'uid': config.payUid, 'expected': 0},
-            {'field': 'bean', 'uid': config.rewardUid, 'expected': 3000}
-        ])
-        
-        case_list[des] = result
+        """金豆足够时打赏金豆礼物，按 50% 到账"""
+        self.run_case(SCENES[1])
 
     def test_03_MoneyConvertGoldPayGift(self):
-        """
-        用例描述：
-        验证打赏金豆礼物时金豆不足用钻转换的场景
-        脚本步骤：
-        1.构造打赏者和被打赏者数据
-        2.房间内打赏金豆礼物流程
-        3.校验接口状态和返回值数据
-        4.检查打赏者金豆余额，预期为：500（不足抵扣）
-        5.检查打赏者钻石余额，预期为：10000 - 1000（转换） = 9000
-        6.检查被打赏者金豆余额，预期为：1000 * 0.5 = 500
-        """
-        des = '打赏金豆礼物不足用钻转换的场景'
-        
-        # 准备测试数据
-        self._prepare_test_data([
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 10000}},
-            {'action': 'update_money', 'params': {'uid': config.rewardUid}},
-            {'action': 'insert_beans', 'params': {'uid': config.payUid, 'money_coupon': 500}}
-        ])
-        
-        # 记录初始VIP等级
-        vip_level = int(mysql.selectUserInfoSql('pay_room_money', config.payUid))
-        
-        # 发送请求
-        data = encodeData(
-            payType='package-exchange',
-            giftId=config.giftId['362'],
-            giftType='bean'
-        )
-        res = post_request_session(config.pay_url, data)
-        
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        
-        # 验证数据库
-        self._validate_db_state([
-            {'field': 'bean', 'uid': config.payUid, 'expected': 500},
-            {'field': 'bean', 'uid': config.rewardUid, 'expected': 500},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 9000}
-        ])
-        
-        # 验证VIP经验值增长
-        assert_equal(
-            mysql.selectUserInfoSql('pay_room_money', config.payUid),
-            vip_level + calculate_vip_exp(money_type='bean', pay_off=1000)
-        )
-        
-        case_list[des] = result
+        """金豆不足用钻转换，同时校验 VIP 经验增长"""
+        self.run_case(SCENES[2])
 
     def test_04_ImMoneyPayChangeBeanDeduct(self):
-        """
-        用例描述：
-        验证私聊场景打赏钻石礼物时金豆抵扣平台手续费的场景
-        脚本步骤：
-        1.构造打赏者和被打赏者数据
-        2.私聊页打赏钻石礼物的流程
-        3.校验接口状态和返回值数据
-        4.检查打赏者金豆余额，预期为：200 - 0 = 200（2022.2.24 金豆不再抵扣20%）
-        5.检查打赏者钻石余额，预期为：1000 - 1000 = 0
-        6.检查被打赏者钻石余额，预期为：1000 * 0.72 = 720
-        """
-        des = '私聊打赏钻石礼物时金豆不再抵扣平台手续费'
-        
-        # 准备测试数据
-        self._prepare_test_data([
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
-            {'action': 'update_money', 'params': {'uid': config.rewardUid}},
-            {'action': 'insert_beans', 'params': {'uid': config.payUid, 'money_coupon': 200}}
-        ])
-        
-        # 发送请求
-        data = encodeData(payType='chat-gift')
-        res = post_request_session(config.pay_url, data=data)
-        
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        
-        # 验证数据库
-        self._validate_db_state([
-            {'field': 'bean', 'uid': config.payUid, 'expected': 200},
-            {'field': 'single_money', 'uid': config.payUid, 'expected': 0, 'kwargs': {'money_type': 'money'}},
-            {'field': 'sum_money', 'uid': config.rewardUid, 'expected': 720}
-        ])
-        
-        case_list[des] = result
+        """私聊打赏钻石礼物，金豆不再抵扣平台手续费"""
+        self.run_case(SCENES[3])
 
     def test_05_RoomMoneyConvertGoldPayGift(self):
-        """
-        用例描述：
-        验证房间内打赏钻石礼物时金豆抵扣平台手续费的场景
-        脚本步骤：
-        1.构造打赏者和被打赏者数据
-        2.房间内打赏金豆礼物的流程
-        3.校验接口状态和返回值数据
-        4.检查打赏者金豆余额，预期为：400 - 0 = 400
-        5.检查打赏者钻石余额，预期为：1000 - 1000 = 0
-        6.检查被打赏者账户余额，预期为：1000 * 0.62 = 620
-        """
-        des = '房间打赏钻石礼物时金豆不再抵扣平台手续费'
-        
-        # 准备测试数据
-        self._prepare_test_data([
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
-            {'action': 'update_money', 'params': {'uid': config.rewardUid}},
-            {'action': 'insert_beans', 'params': {'uid': config.payUid, 'money_coupon': 400}}
-        ])
-        
-        # 发送请求
-        data = encodeData()
-        res = post_request_session(config.pay_url, data)
-        
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        
-        # 验证数据库
-        self._validate_db_state([
-            {'field': 'bean', 'uid': config.payUid, 'expected': 400},
-            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 620},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
-        ])
-        
-        case_list[des] = result
+        """房间打赏钻石礼物，金豆不再抵扣平台手续费"""
+        self.run_case(SCENES[4])

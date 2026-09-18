@@ -117,7 +117,8 @@ class UserMoneyOperations:
 
     @staticmethod
     def update(uid: int, money: int = 0, money_cash: int = 0,
-               money_cash_b: int = 0, money_b: int = 0, gold_coin: int = 0) -> None:
+               money_cash_b: int = 0, money_b: int = 0, gold_coin: int = 0,
+               money_debts: int = 0) -> None:
         """更新用户账户余额
         Args:
             uid: 用户ID
@@ -126,11 +127,13 @@ class UserMoneyOperations:
             money_cash_b: 现金 B
             money_b: 金豆 B
             gold_coin: 金币
+            money_debts: 欠款
         """
         sql = ("UPDATE xs_user_money SET money=%s, money_b=%s, "
                "money_cash=%s, money_cash_b=%s, "
-               "gold_coin=%s WHERE uid=%s LIMIT 1")
-        mysql.execute_write(sql, params=(money, money_b, money_cash, money_cash_b, gold_coin, uid),
+               "gold_coin=%s, money_debts=%s WHERE uid=%s LIMIT 1")
+        mysql.execute_write(sql, params=(money, money_b, money_cash, money_cash_b,
+                                         gold_coin, money_debts, uid),
                             error_msg='update fail')
 
     @staticmethod

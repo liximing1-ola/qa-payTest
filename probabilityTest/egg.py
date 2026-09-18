@@ -1,5 +1,6 @@
 # coding=utf-8
 import logging
+import os
 import gevent
 from gevent import monkey
 
@@ -26,12 +27,11 @@ HEADERS_TEMPLATE = {
     'Postman-Token': "f7d705b2-cf29-4a4a-81ba-2c8c8d0f5ed5"
 }
 
-# 用户 Token（过期时在此统一更新）
+# 用户 Token（从环境变量读取，避免真实凭证入库；过期时在运行环境统一更新）
+# 对应环境变量：EGG_TOKEN_CREATE / EGG_TOKEN_PAY600 / EGG_TOKEN_KTV / EGG_TOKEN_LIVE
 USER_TOKENS = {
-    'create':  '0976FcAmUaHnJvJAKi804Ijs2Cm3__2BuamYTrhAVV9baYv2cOWvvuwII2kdNeSKeB8MGHOnQJq878fOl3VKNltq4__2BP7pfIksSLlQs1Y4s50wqo__2Fm3qksqrXTqC',
-    'pay600':  '8a2ekYGSBGzQGaeDDD__2FtXwt7q1ZaWC2r7eZViTdlGPPzJ__2FOCEtkXnkzbWnjgkZD8LlEwDsk9ZeanifS5wli8XrqnxZE35cfMCaZw1T10sTWSQgK__2FoDrIAd5H',
-    'ktv':     '8082HvzDK1S2DSLztpkriEyegONNJKs01X9PrgDahsEEc5KbEk__2BusZxFOtR__2BalUhDtVjvcC9LgTYtbSdCy9LFlcABHj__2B2nc2NxmSBxHu7__2B7odOfpVyoR4xGq',
-    'live':    'd3ccnXDBWkTkXLbr8PuGJegJdEPc6x9Sc__2BW32yxxuOWuNEfsEaHU1o4oKXtPNH9tylxUBv4Tt855126jdSUuZQ0eLMp__2BVLyltuTqHGSas20dOBF6__2FxPn7hc6',
+    key: os.environ.get(f'EGG_TOKEN_{key.upper()}', '')
+    for key in ('create', 'pay600', 'ktv', 'live')
 }
 
 # 房间 / 用户 ID
@@ -62,6 +62,10 @@ VAP_CONFIG = {
 
 EGG_LEVEL_MONEY = {1: 200, 2: 600, 3: 1200}
 
+# 等待间隔（秒）：DB 写入后的短暂等待、批量送礼的间隔
+DB_SETTLE_DELAY: float = 0.3
+GIFT_INTERVAL: float = 2.0
+
 
 # ============ 数据库操作 ============
 def get_db_connection():
@@ -83,14 +87,18 @@ def update_bean(uid, money):
         con.rollback()
         logger.error('update fail: %s', e)
     finally:
-        time.sleep(0.3)
+        time.sleep(DB_SETTLE_DELAY)
         con.close()
 
 
 # ============ HTTP请求 ============
 def _build_headers(token_key):
     """构建请求头（统一管理 user-token）"""
-    return {**HEADERS_TEMPLATE, "user-token": USER_TOKENS[token_key]}
+    token = USER_TOKENS.get(token_key)
+    if not token:
+        raise EnvironmentError(
+            f"缺少 '{token_key}' 的 token，请设置环境变量 EGG_TOKEN_{token_key.upper()}")
+    return {**HEADERS_TEMPLATE, "user-token": token}
 
 
 def send_request(url, data, headers, verify=False):
@@ -212,7 +220,7 @@ def post_pay_ktv():
         }
         
         res = send_request(BASE_URL, data, headers)
-        time.sleep(2)
+        time.sleep(GIFT_INTERVAL)
         check_response(res)
 
 
@@ -248,7 +256,7 @@ def post_pay_live():
         }
         
         res = send_request(BASE_URL, data, headers)
-        time.sleep(2)
+        time.sleep(GIFT_INTERVAL)
         check_response(res)
 
 

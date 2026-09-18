@@ -1,181 +1,85 @@
+# coding=utf-8
+"""
+开箱子支付测试
+
+场景差异通过模块级 SCENES 表声明，由 PayTestBase.run_case 统一执行。
+"""
+from case.base import PayCase, PayTestBase
 from common.Config import config
-from common.conMysql import conMysql as mysql
-from common.Request import post_request_session
-from common.Assert import assert_code, assert_body
-from common.basicData import encodeData
-from common.Consts import result, case_list
 from common.runFailed import Retry
-from common.sqlScript import UserMoneyOperations, UserCommodityOperations
-from case.base import PayTestBase
 
-
-@Retry(max_n=3)
-class TestPayOpenBox(PayTestBase):
-
-    def _prepare_test_data(self, setup_steps):
-        """准备测试数据"""
-        for step in setup_steps:
-            action = step['action']
-            params = step.get('params', {})
-            if action == 'delete_user_account':
-                mysql.deleteUserAccountSql(params['table'], config.payUid)
-            elif action == 'insert_commodity':
-                UserCommodityOperations.insert(config.payUid, **params)
-            elif action == 'insert_user_box':
-                mysql.insertXsUserBox(config.payUid, **params)
-            elif action == 'update_money':
-                UserMoneyOperations.update(**params)
-
-    def test_01_openBoxPayChange(self):
-        """
-        用例描述：
-        验证背包内openBox得到物品
-        脚本步骤：
-        1.构造数据（更新xs_user_money，xs_user_commodity，xs_user_box）
-         * 清空用户背包内所有物品
-         * 用户背包内插入箱子(cid=2)
-         * 修改用户指定box礼物刷新
-         * 修改用户钱包余额
-        2.openBox
-        3.校验接口状态和返回值数据
-        4.检查账户余额，预期值为：700 - 600 = 100
-        5.检查背包内openBox开出物品，预期值应为：2（赠送头像框*1 + openBox开出礼物个数*1）
-        """
-        des = '背包开箱子场景'
-
-        # 准备测试数据
-        self._prepare_test_data([
+SCENES = [
+    PayCase(
+        des='背包开箱子场景',
+        setup=[
             {'action': 'delete_user_account', 'params': {'table': 'user_box'}},
             {'action': 'delete_user_account', 'params': {'table': 'user_commodity'}},
             {'action': 'insert_commodity', 'params': {'cid': 2, 'num': 1}},
             {'action': 'insert_user_box', 'params': {}},
-            {'action': 'update_money', 'params': {'money': 400, 'money_cash': 100, 'money_cash_b': 100, 'money_b': 100}}
-        ])
-
-        # 发送请求
-        data = encodeData(payType='shop-buy-box', money=600, boxType='copper')
-        res = post_request_session(config.pay_url, data)
-
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-
-        # 验证数据库
-        self._validate_db_state([
+            {'action': 'update_money', 'params': {'money': 400, 'money_cash': 100,
+                                                   'money_cash_b': 100, 'money_b': 100}}
+        ],
+        data={'payType': 'shop-buy-box', 'money': 600, 'boxType': 'copper'},
+        checks=[
             {'field': 'sum_money', 'expected': 100},
             {'field': 'sum_commodity', 'expected': 2}
-        ])
-
-        case_list[des] = result
-
-    def test_02_openMoreBoxPayChange(self):
-        """
-        用例描述：
-        验证背包内开箱子得到物品
-        脚本步骤：
-        1.构造数据（更新xs_user_money，xs_user_commodity，xs_user_box）
-            * 清空用户背包内所有物品
-            * 用户背包内插入多个box*6 2100*6=12600
-            * 修改用户指定box礼物刷新
-            * 修改用户钱包余额
-        2.openBox
-        3.校验接口状态和返回值数据
-        4.检查账户余额，预期值为：12600 - 2100*6 = 0
-        5.检查背包内开出物品，预期值应为12（赠送头像框*6，开出礼物个数等于*6）
-        """
-        des = '背包box开场景'
-
-        # 准备测试数据
-        self._prepare_test_data([
+        ]),
+    PayCase(
+        des='背包box开场景',
+        setup=[
             {'action': 'delete_user_account', 'params': {'table': 'user_box'}},
             {'action': 'delete_user_account', 'params': {'table': 'user_commodity'}},
             {'action': 'insert_commodity', 'params': {'cid': 3, 'num': 6}},
             {'action': 'insert_user_box', 'params': {'box_type': 'silver'}},
             {'action': 'update_money', 'params': {'money': 12600}}
-        ])
-
-        # 发送请求
-        data = encodeData(payType='shop-buy-box', money=2100, num=6, cid=6, boxType='silver')
-        res = post_request_session(config.pay_url, data)
-
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-
-        # 验证数据库
-        self._validate_db_state([
+        ],
+        data={'payType': 'shop-buy-box', 'money': 2100, 'num': 6, 'cid': 6, 'boxType': 'silver'},
+        checks=[
             {'field': 'sum_money', 'expected': 0},
             {'field': 'sum_commodity', 'expected': 12}
-        ])
-
-        case_list[des] = result
-
-    def test_03_giveBoxPayChange(self):
-        """
-        用例描述：
-        验证房间内sendBox逻辑正常
-        脚本步骤：
-        1.构造数据（更新xs_user_money，xs_user_commodity，xs_user_box）
-        2.giveBox
-        3.校验接口状态和返回值数据
-        4.检查打赏者账户余额，预期值为：700 - 600 = 100
-        5.检查收箱用户账户余额，预期值为：大于186
-        """
-        des = '房间sendBox场景'
-
-        # 准备测试数据
-        self._prepare_test_data([
-            {'action': 'update_money', 'params': {'money': 400, 'money_cash': 100, 'money_cash_b': 100, 'money_b': 100}},
+        ]),
+    PayCase(
+        des='房间sendBox场景',
+        setup=[
+            {'action': 'update_money', 'params': {'money': 400, 'money_cash': 100,
+                                                   'money_cash_b': 100, 'money_b': 100}},
             {'action': 'update_money', 'params': {'uid': config.rewardUid}}
-        ])
-
-        # 发送请求
-        data = encodeData(money=600, giftId=config.giftId['46'], star=1)
-        res = post_request_session(config.pay_url, data)
-
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-
-        # 验证数据库
-        self._validate_db_state([
+        ],
+        data={'money': 600, 'giftId': config.giftId['46'], 'star': 1},
+        checks=[
             {'field': 'sum_money', 'expected': 100},
             {'field': 'sum_money', 'uid': config.rewardUid, 'min_value': 300 * 0.62}
-        ])
-
-        case_list[des] = result
-
-    def test_04_giveBoxMorePeople(self):
-        """
-        用例描述：
-        验证房间内sendBox给多个人时逻辑正常
-        脚本步骤：
-        1.构造数据（更新xs_user_money，xs_user_commodity，xs_user_box）
-        2.giveBox
-        3.校验接口状态和返回值数据
-        4.检查账户余额，预期值为：10000 - 2100*2*2 = 1600
-        5.检查收箱用户账户余额，预期值为：大于1000
-        """
-        des = '房间送多人多个box场景'
-
-        # 准备测试数据
-        self._prepare_test_data([
+        ]),
+    PayCase(
+        des='房间送多人多个box场景',
+        setup=[
             {'action': 'update_money', 'params': {'money': 10000}},
             {'action': 'update_money', 'params': {'uid': config.rewardUid}}
-        ])
-
-        # 发送请求
-        data = encodeData(payType='package-more', num=2, star=2, money=2100, giftId=config.giftId['47'])
-        res = post_request_session(config.pay_url, data)
-
-        # 验证响应
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-
-        # 验证数据库
-        self._validate_db_state([
+        ],
+        data={'payType': 'package-more', 'num': 2, 'star': 2, 'money': 2100, 'giftId': config.giftId['47']},
+        checks=[
             {'field': 'sum_money', 'expected': 1600},
             {'field': 'sum_money', 'uid': config.rewardUid, 'min_value': 1000}
-        ])
+        ]),
+]
 
-        case_list[des] = result
+
+@Retry(max_n=3)
+class TestPayOpenBox(PayTestBase):
+    """开箱子支付测试类"""
+
+    def test_01_openBoxPayChange(self):
+        """验证背包内openBox得到物品"""
+        self.run_case(SCENES[0])
+
+    def test_02_openMoreBoxPayChange(self):
+        """验证背包内开多个箱子得到物品"""
+        self.run_case(SCENES[1])
+
+    def test_03_giveBoxPayChange(self):
+        """验证房间内sendBox逻辑正常"""
+        self.run_case(SCENES[2])
+
+    def test_04_giveBoxMorePeople(self):
+        """验证房间内sendBox给多个人时逻辑正常"""
+        self.run_case(SCENES[3])

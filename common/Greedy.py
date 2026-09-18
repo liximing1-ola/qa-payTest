@@ -6,6 +6,7 @@
 提供摩天轮的下注和查询功能
 """
 import logging
+import os
 import time
 import random
 from typing import Tuple, List, Optional
@@ -15,9 +16,9 @@ from common.conPtMysql import conMysql
 
 logger = logging.getLogger(__name__)
 
-# 配置常量
-MAX_RETRY_COUNT: int = 10
-RETRY_INTERVAL: int = 5
+# 配置常量（可用环境变量覆盖：GREEDY_MAX_RETRY / GREEDY_RETRY_INTERVAL，单位秒）
+MAX_RETRY_COUNT: int = int(os.environ.get('GREEDY_MAX_RETRY', '10'))
+RETRY_INTERVAL: int = int(os.environ.get('GREEDY_RETRY_INTERVAL', '5'))
 BET_COUNT: int = 6
 VID_RANGE: Tuple[int, int] = (1, 8)
 

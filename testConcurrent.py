@@ -18,6 +18,9 @@ from Robot import robot
 
 logger = logging.getLogger(__name__)
 
+# 并发请求后等待数据落库的时长（秒），用于最终断言 success_num 前
+CONCURRENT_SETTLE_WAIT = 1
+
 
 class TestPayConcurrent:
     URLS = {
@@ -162,7 +165,7 @@ class TestPayConcurrent:
         def end():
             assert_equal(UserMoneyOperations.select_all(config.payUid), 400)
             assert_equal(UserCommodityOperations.check_all(config.payUid), 4)
-            sleep(1)
+            sleep(CONCURRENT_SETTLE_WAIT)
             assert_equal(Consts.success_num, 4)
 
         self._run_test(des, times, setup, concurrent, end)
