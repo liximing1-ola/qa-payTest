@@ -1,3 +1,12 @@
+"""
+SLP 域测试数据夹具
+
+为 caseSlp/ 用例提供不夜星球（SLP）环境的共享数据：支付入口复用
+common.Config 的 slp_pay_url，用户 / 工会 / 房间 / 麦位等实体在本模块
+集中声明。SLP 用户体系独立于主站（BB）与海外版，数据独立维护，
+不合并进 common/Config.py。
+"""
+
 # 打赏人
 from common.Config import config as old_config
 

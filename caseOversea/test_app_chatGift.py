@@ -4,126 +4,65 @@ APP 海外版支付测试 - 私聊打赏验证
 
 验证私聊场景下的打赏功能，包括余额不足、正常打赏和箱子打赏。
 """
+from caseOversea.base import OverseaBizCase, OverseaBizTestBase
 from common.Config import config
-from common.conPtMysql import conMysql
-from common.Request import post_request_session
-from common.Assert import assert_code, assert_equal, assert_body
-from common.basicData import encodeOverseaData
-from common.Consts import case_list, result
 from common.runFailed import Retry
-from caseOversea.base import OverseaAreaTestBase
+
+# 场景表：私聊打赏（余额不足/正常打赏/箱子打赏）
+CHAT_GIFT_SCENES = [
+    OverseaBizCase(
+        des='私聊打赏余额不足场景',
+        setup=[
+            {'action': 'clear_money', 'params': {'uids': [config.oversea_payUid, config.oversea_testUid]}},
+        ],
+        data={'payType': 'chat-gift'},
+        success=0,
+        msg='餘額不足，無法支付',
+        checks=[{'field': 'sum_money', 'uid': config.oversea_testUid, 'expected': 0}],
+    ),
+    OverseaBizCase(
+        des='私聊打赏礼物场景',
+        setup=[
+            {'action': 'update_money', 'params': {'uid': config.oversea_payUid, 'money': 600}},
+            {'action': 'update_money', 'params': {'uid': config.oversea_testUid}},
+            {'action': 'clear_extend_money', 'params': {'uid': config.oversea_testUid}},
+        ],
+        data={'payType': 'chat-gift'},
+        checks=[
+            {'field': 'sum_money', 'expected': 0},
+            {'field': 'money_cash_personal', 'uid': config.oversea_testUid, 'expected': 480},
+        ],
+    ),
+    OverseaBizCase(
+        des='私聊打赏箱子场景',
+        setup=[
+            {'action': 'update_money', 'params': {'uid': config.oversea_payUid, 'money': 600}},
+            {'action': 'update_money', 'params': {'uid': config.oversea_testUid}},
+            {'action': 'clear_extend_money', 'params': {'uid': config.oversea_testUid}},
+        ],
+        data={'payType': 'chat-gift', 'giftId': config.oversea_giftId['46']},
+        checks=[
+            {'field': 'sum_money', 'expected': 0},
+            {'field': 'money_cash_personal', 'uid': config.oversea_testUid, 'min': 240},
+        ],
+    ),
+]
 
 
 @Retry(max_n=2)
-class TestPayCreate(OverseaAreaTestBase):
+class TestPayCreate(OverseaBizTestBase):
     """APP 私聊打赏测试类"""
 
     bigarea_id = 2
 
     def test_01_IMPayNoMoney(self, des: str = '私聊打赏余额不足场景'):
-        """
-        私聊打赏余额不足验证
-        
-        用例描述：
-        检查账户余额不足时，私聊一对一打赏
-        
-        脚本步骤：
-        1. 构造打赏者和被打赏者数据
-        2. 私聊一对一打赏流程
-        3. 校验接口和返回值数据
-        4. 检查预期返回 msg，预期：支付失败，提示 Toast
-        5. 检查被打赏者余额，预期：0
-        
-        Args:
-            des: 测试描述
-        """
-        # 1. 清空用户余额
-        conMysql.updateUserMoneyClearSql(config.oversea_payUid, config.oversea_testUid)
-        
-        # 2. 尝试私聊打赏
-        data = encodeOverseaData(payType='chat-gift')
-        res = post_request_session(config.oversea_pay_url, data, token_name='app')
-        
-        # 3. 校验接口
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 0)
-        assert_body(res['body'], 'msg', '餘額不足，無法支付')
-        
-        # 4. 检查余额
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_testUid), 0)
-        
-        case_list[des] = result
+        """私聊打赏余额不足：success=0 + 提示文案，收礼人余额为 0"""
+        self.run_case(CHAT_GIFT_SCENES[0])
 
     def test_02_IMPayChangeMoney(self, des: str = '私聊打赏礼物场景'):
-        """
-        私聊打赏正常场景验证
-        
-        用例描述：
-        检查账户余额充足时，私聊一对一打赏礼物
-        
-        脚本步骤：
-        1. 构造打赏者和被打赏者数据
-        2. 私聊一对一打赏流程
-        3. 校验接口和返回值数据
-        4. 检查打赏者数据，预期：600 - 600 = 0
-        5. 检查被打赏者余额，预期：600 * 0.8 = 480
-        
-        Args:
-            des: 测试描述
-        """
-        # 1. 构造用户数据
-        conMysql.updateMoneySql(config.oversea_payUid, money=600)
-        conMysql.updateMoneySql(config.oversea_testUid)
-        conMysql.updateUserextendMoneyClearSql(config.oversea_testUid)  # 非主播钱包附加表账户余额清空
-        
-        # 2. 私聊打赏
-        data = encodeOverseaData(payType='chat-gift')
-        res = post_request_session(config.oversea_pay_url, data, token_name='app')
-        
-        # 3. 校验接口
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        
-        # 4. 检查账户余额
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_payUid), 0)
-        assert_equal(conMysql.selectUserInfoSql('money_cash_personal', config.oversea_testUid, money_type='money_cash_personal'), 480)
-        
-        case_list[des] = result
+        """私聊打赏礼物：打赏者 600-600=0，收礼人到账 600*0.8=480"""
+        self.run_case(CHAT_GIFT_SCENES[1])
 
     def test_03_IMPayGiveBox(self, des: str = '私聊打赏箱子场景'):
-        """
-        私聊打赏箱子验证
-        
-        用例描述：
-        检查账户余额充足时，私聊一对一打赏箱子
-        
-        脚本步骤：
-        1. 构造打赏者和被打赏者数据
-        2. 私聊一对一打赏流程
-        3. 校验接口和返回值数据
-        4. 检查打赏者数据，预期：600 - 600 = 0
-        5. 检查被打赏者余额，预期：不小于 240
-        
-        Args:
-            des: 测试描述
-        """
-        # 1. 构造用户数据
-        conMysql.updateMoneySql(config.oversea_payUid, money=600)
-        conMysql.updateMoneySql(config.oversea_testUid)
-        conMysql.updateUserextendMoneyClearSql(config.oversea_testUid)  # 非主播钱包附加表账户余额清空
-        
-        # 2. 私聊打赏箱子
-        data = encodeOverseaData(payType='chat-gift', giftId=config.oversea_giftId['46'])
-        res = post_request_session(config.oversea_pay_url, data, token_name='app')
-        
-        # 3. 校验接口
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        
-        # 4. 检查账户余额
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_payUid), 0)
-        # 5. 检查被打赏者收益（不小于 240）
-        personal_money = conMysql.selectUserInfoSql('money_cash_personal', config.oversea_testUid, money_type='money_cash_personal')
-        assert personal_money >= 240, f"预期不小于 240，实际：{personal_money}"
-        
-        case_list[des] = result
+        """私聊打赏箱子：打赏者 600-600=0，收礼人到账不小于 240"""
+        self.run_case(CHAT_GIFT_SCENES[2])

@@ -1,3 +1,11 @@
+"""
+Starify 域测试数据夹具
+
+为 caseStarify/ 用例提供共享测试数据：房间、用户、作品状态、礼物等实体
+在本模块集中声明。Starify 用户体系独立于主站（BB）、SLP 与海外版，
+数据独立维护，不合并进 common/Config.py。
+"""
+
 # 房间号
 starify_rid = 10002496
 # 打赏人

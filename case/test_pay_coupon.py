@@ -10,8 +10,8 @@ from common.conMysql import conMysql as mysql
 from common.runFailed import Retry
 
 # 老司机券 / 电台青铜体验券
-GIFT_CID_COUPON = 54
-GIFT_CID_RADIO = 21980
+GIFT_CID_COUPON = config.commodity.coupon_cid
+GIFT_CID_RADIO = config.commodity.radio_cid
 
 SCENES = [
     PayCase(

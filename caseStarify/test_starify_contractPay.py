@@ -1,6 +1,6 @@
 import time
-import unittest
 
+from caseStarify.base import StarifyTestBase
 from caseStarify.deal_data import deal_pay_contract_data
 from caseStarify.need_data import a_uid, b_uid, c_uid, contract_ratio
 from common.Assert import assert_body, assert_code, assert_equal
@@ -11,7 +11,7 @@ from common.runFailed import Retry
 
 
 @Retry(max_n=1)
-class TestPayCreate(unittest.TestCase):
+class TestPayCreate(StarifyTestBase):
     DEFAULT_MONEY = 100000
 
     # 竞拍操作前的间隔（秒），避免连续请求触发风控/时序问题
@@ -21,16 +21,19 @@ class TestPayCreate(unittest.TestCase):
 
     def _contract_setUp(self, clear_b=False):
         """竞拍类用例的公共数据准备"""
-        conMysql.updateMoneySql(a_uid, self.DEFAULT_MONEY)
-        conMysql.updateMoneySql(b_uid, self.DEFAULT_MONEY)
-        conMysql.updateMoneySql(c_uid, 0)
-        conMysql.updateWealthSql(a_uid, 0)
-        conMysql.updateWealthSql(b_uid, 0)
-        conMysql.deleteProducerSinger(c_uid)
-        conMysql.updateSingerWorth(c_uid, 100)
+        steps = [
+            {'action': 'update_money', 'params': {'uid': a_uid, 'money': self.DEFAULT_MONEY}},
+            {'action': 'update_money', 'params': {'uid': b_uid, 'money': self.DEFAULT_MONEY}},
+            {'action': 'update_money', 'params': {'uid': c_uid, 'money': 0}},
+            {'action': 'update_wealth', 'params': {'uid': a_uid, 'wealth': 0}},
+            {'action': 'update_wealth', 'params': {'uid': b_uid, 'wealth': 0}},
+            {'action': 'delete_producer_singer', 'params': {'singer_uid': c_uid}},
+            {'action': 'update_singer_worth', 'params': {'singer_uid': c_uid, 'worth': 100}},
+        ]
         if clear_b:
-            conMysql.deleteProducerSinger(b_uid)
-            conMysql.updateSingerWorth(b_uid, 100)
+            steps.append({'action': 'delete_producer_singer', 'params': {'singer_uid': b_uid}})
+            steps.append({'action': 'update_singer_worth', 'params': {'singer_uid': b_uid, 'worth': 100}})
+        self._prepare_test_data(steps)
 
     # ---- 竞拍操作 helpers ----
 

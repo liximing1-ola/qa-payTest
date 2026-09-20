@@ -137,6 +137,9 @@ class BBUserConfig:
     gsUid: int = 105002325
     prettyRid: int = 200089942
     fleetRid: int = 200091067
+    masterUid: int = 100500338        # 一代宗师（被打赏者）
+    businessUid: int = 105002103      # 商业房 auto_rid 房主（一代宗师）
+    custom_rate_uid: int = 100500205  # 自定义分成主播
 
 
 @dataclass
@@ -191,6 +194,13 @@ class OverseaRoomConfig:
 
 
 @dataclass
+class CommodityConfig:
+    """商城商品/优惠券配置"""
+    coupon_cid: int = 54     # 老司机券
+    radio_cid: int = 21980   # 电台青铜体验券
+
+
+@dataclass
 class Config:
     """全局配置类"""
 
@@ -234,6 +244,9 @@ class Config:
         "774": 774,  # 飞马盲盒
     })
 
+    # ============ 商品/优惠券配置 ============
+    commodity: CommodityConfig = field(default_factory=CommodityConfig)
+
     # ============ 便捷访问属性 ============
     @property
     def payUid(self) -> int:
@@ -248,7 +261,12 @@ class Config:
     @property
     def masterUid(self) -> int:
         """被打赏者UID（一代宗师）"""
-        return 100500338
+        return self.bb_user.masterUid
+
+    @property
+    def businessUid(self) -> int:
+        """商业房房主UID（一代宗师）"""
+        return self.bb_user.businessUid
 
     @property
     def gsUid(self) -> int:

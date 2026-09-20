@@ -3,20 +3,35 @@ __author__ = "Wu.Zhenxing"
 __title__ = ""
 __desc__ = "公会主播-私聊"
 
-import unittest
-
-from caseSlp.config import default_money, default_num, giftId, gsUid, payUid, pay_url, rates
-from common.Assert import assert_code, assert_equal, assert_body
-from common.Consts import case_list, result
-from common.Request import post_request_session
-from common.basicSlpData import encodeData
-from common.conSlpMysql import conMysql as mysql
+from caseSlp.base import SlpCase, SlpTestBase
+from caseSlp.config import default_money, default_num, giftId, gsUid, payUid, rates
 from common.runFailed import Retry
-from common.sqlScript import UserMoneyOperations
+
+# 场景表：公会主播-私聊打赏
+SCENES = [
+	SlpCase(
+		des='主播GS-私聊打赏分成60%(mc)',
+		setup=[
+			{'action': 'check_user_broker', 'uid': gsUid, 'expected': True},
+			{'action': 'update_money', 'params': {'uid': payUid, 'money': default_money}},
+			{'action': 'clear_user_money', 'uids': [gsUid]},
+			{'action': 'delete_commodity', 'uid': payUid},
+			{'action': 'update_user_god', 'params': {'uid': gsUid, 'god': 1}},
+		],
+		data={'payType': 'chat-gift', 'num': default_num, 'uid': gsUid,
+		      'gift_id': giftId['69']['gid']},
+		checks=[
+			{'field': 'single_money', 'uid': gsUid, 'money_type': 'money_cash',
+			 'expected': giftId['69']['price'] * default_num * rates['gs']['default']},
+			{'field': 'sum_money', 'uid': payUid,
+			 'expected': default_money - giftId['69']['price'] * default_num},
+		],
+	),
+]
 
 
 @Retry(max_n=3)
-class TestPayCreate(unittest.TestCase):
+class TestPayCreate(SlpTestBase):
 
 	def test_001(self, des='主播GS-私聊打赏分成60%(mc)'):
 		"""
@@ -29,21 +44,4 @@ class TestPayCreate(unittest.TestCase):
         4.检查被打赏者余额和账户，预期为：50 * 0.6 = 30(mc)
         5.检查打赏者余额.预期为：1000 - 50 = 950
 		"""
-		uid = gsUid
-		assert_equal(mysql.checkUserBroker(uid), True)  # 确认 uid是工会成员
-		UserMoneyOperations.update(payUid, money=default_money)
-		mysql.updateUserMoneyClearSql(uid)
-		mysql.deleteUserAccountSql('user_commodity', payUid)
-		mysql.updateUserGodSql(uid, 1)
-		data = encodeData(payType='chat-gift',
-		                  num=default_num,
-		                  uid=uid,
-		                  gift_id=giftId['69']['gid'])
-		res = post_request_session(pay_url, data, token_name='slp')
-		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1)
-		assert_equal(mysql.selectUserInfoSql('single_money', uid, 'money_cash'),
-		             giftId['69']['price'] * default_num * rates['gs']['default'])
-		assert_equal(mysql.selectUserInfoSql('sum_money', payUid),
-		             default_money - giftId['69']['price'] * default_num)
-		case_list[des] = result
+		self.run_case(SCENES[0])

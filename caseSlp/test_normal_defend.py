@@ -3,22 +3,75 @@ __author__ = "Wu.Zhenxing"
 __title__ = ""
 __desc__ = "普通用户-个人守护"
 
-import unittest
-
 import pytest
 
-from caseSlp.config import default_money, defend, normal_uid, payUid, pay_url, rates
-from common.Assert import assert_code, assert_equal, assert_body
-from common.Consts import case_list, result
-from common.Request import post_request_session
-from common.basicSlpData import encodeData
+from caseSlp.base import SlpCase, SlpTestBase
+from caseSlp.config import default_money, defend, normal_uid, payUid, rates
 from common.conSlpMysql import conMysql as mysql
 from common.runFailed import Retry
-from common.sqlScript import UserMoneyOperations
+
+# 场景表：普通用户-个人守护（开通 -> 进阶 -> 解除，按 test 顺序执行）
+SCENES = [
+	SlpCase(
+		des='给普通用户开通个人守护场景60%(mcb)',
+		setup=[
+			{'action': 'update_money', 'params': {'uid': payUid, 'money': default_money}},
+			{'action': 'update_money', 'params': {'uid': normal_uid}},
+		],
+		data={'uid': normal_uid, 'payType': 'defend',
+		      'defend_id': defend['小宝贝']['id'], 'money': defend['小宝贝']['price']},
+		checks=[
+			{'field': 'sum_money', 'uid': payUid,
+			 'expected': default_money - defend['小宝贝']['price']},
+			{'field': 'single_money', 'uid': normal_uid,
+			 'expected': defend['小宝贝']['price'] * rates['normal']['default']},
+		],
+	),
+	SlpCase(
+		des='给普通用户开通个人守护进阶场景60%(mcb)',
+		setup=[
+			{'action': 'update_money', 'params': {'uid': payUid, 'money': default_money}},
+			{'action': 'update_money', 'params': {'uid': normal_uid}},
+		],
+		queries=[('defend_id', lambda: mysql.selectUserInfoSql(
+			'relation_id', payuid=payUid, uid=normal_uid, cid=defend['小宝贝']['id']))],
+		data={'uid': normal_uid, 'payType': 'defend-upgrade',
+		      'money': defend['小宝贝']['upgrade_price'],
+		      'defend_id': lambda ctx: ctx['defend_id']},
+		checks=[
+			{'field': 'sum_money', 'uid': payUid,
+			 'expected': default_money - defend['小宝贝']['upgrade_price']},
+			{'field': 'single_money', 'uid': normal_uid,
+			 'expected': defend['小宝贝']['upgrade_price'] * rates['normal']['default']},
+		],
+	),
+	SlpCase(
+		des='普通用户个人守护解除场景,不分成',
+		setup=[
+			{'action': 'update_money', 'params': {'uid': payUid, 'money': default_money}},
+			{'action': 'update_money', 'params': {'uid': normal_uid}},
+		],
+		queries=[
+			# 原用例的探询查询（结果不使用），保留执行以保持行为一致
+			('_relation_id_probe', lambda: mysql.selectUserInfoSql(
+				'relation_id', uid=normal_uid, cid=defend['小宝贝']['id'])),
+			('defend_id', lambda: mysql.selectUserInfoSql(
+				'relation_id', payuid=payUid, uid=normal_uid, cid=defend['小宝贝']['id'])),
+		],
+		data={'uid': normal_uid, 'payType': 'defend-break',
+		      'money': defend['小宝贝']['break_price'],
+		      'defend_id': lambda ctx: ctx['defend_id']},
+		checks=[
+			{'field': 'sum_money', 'uid': payUid,
+			 'expected': default_money - defend['小宝贝']['break_price']},
+			{'field': 'sum_money', 'uid': normal_uid, 'expected': 0},
+		],
+	),
+]
 
 
 @Retry(max_n=3)
-class TestPayCreate(unittest.TestCase):
+class TestPayCreate(SlpTestBase):
 	@pytest.mark.run(order=1)
 	def test_001(self, des='给普通用户开通个人守护场景60%(mcb)'):
 		"""
@@ -31,21 +84,7 @@ class TestPayCreate(unittest.TestCase):
 		4.检查打赏者余额
 		5.检查被打赏者余额,预期：52000 * 0.62 = 32240
 		"""
-		UserMoneyOperations.update(payUid, money=default_money)
-		UserMoneyOperations.update(normal_uid)
-		data = encodeData(
-			uid=normal_uid,
-			payType='defend',
-			defend_id=defend['小宝贝']['id'],
-			money=defend['小宝贝']['price']
-		)
-		res = post_request_session(pay_url, data, token_name='slp')
-		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1)
-		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - defend['小宝贝']['price'])
-		assert_equal(mysql.selectUserInfoSql('single_money', normal_uid),
-		             defend['小宝贝']['price'] * rates['normal']['default'])
-		case_list[des] = result
+		self.run_case(SCENES[0])
 
 	@pytest.mark.run(order=2)
 	def test_002(self, des='给普通用户开通个人守护进阶场景60%(mcb)'):
@@ -59,21 +98,7 @@ class TestPayCreate(unittest.TestCase):
 		 4.检查打赏者余额，预期：100000 - 99900 = 100
 		 5.检查被打赏者余额,预期： 99900 * 0.62 = 61938
 		 """
-		UserMoneyOperations.update(payUid, money=default_money)
-		UserMoneyOperations.update(normal_uid)
-		defend_id = mysql.selectUserInfoSql('relation_id', payuid=payUid, uid=normal_uid, cid=defend['小宝贝']['id'])
-		data = encodeData(
-			uid=normal_uid,
-			payType='defend-upgrade',
-			money=defend['小宝贝']['upgrade_price'],
-			defend_id=defend_id
-		)
-		res = post_request_session(pay_url, data, token_name='slp')
-		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1)
-		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - defend['小宝贝']['upgrade_price'])
-		assert_equal(mysql.selectUserInfoSql('single_money', normal_uid), defend['小宝贝']['upgrade_price'] * rates['normal']['default'])
-		case_list[des] = result
+		self.run_case(SCENES[1])
 
 	@pytest.mark.run(order=3)
 	def test_003(self, des='普通用户个人守护解除场景,不分成'):
@@ -86,19 +111,4 @@ class TestPayCreate(unittest.TestCase):
 		 3.校验接口状态和返回值数据
 		 4.检查打赏者余额，预期：40000 - 36000 = 4000
 		 """
-		UserMoneyOperations.update(payUid, money=default_money)
-		UserMoneyOperations.update(normal_uid)
-		mysql.selectUserInfoSql('relation_id', uid=normal_uid, cid=defend['小宝贝']['id'])
-		defend_id = mysql.selectUserInfoSql('relation_id', payuid=payUid, uid=normal_uid, cid=defend['小宝贝']['id'])
-		data = encodeData(
-			uid=normal_uid,
-			payType='defend-break',
-			money=defend['小宝贝']['break_price'],
-			defend_id=defend_id
-		)
-		res = post_request_session(pay_url, data, token_name='slp')
-		assert_code(res['code'])
-		assert_body(res['body'], 'success', 1)
-		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), default_money - defend['小宝贝']['break_price'])
-		assert_equal(mysql.selectUserInfoSql('sum_money', normal_uid), 0)
-		case_list[des] = result
+		self.run_case(SCENES[2])

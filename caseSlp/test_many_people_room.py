@@ -3,20 +3,49 @@ __author__ = "Wu.Zhenxing"
 __title__ = ""
 __desc__ = "打赏多人多礼物"
 
-import unittest
-
-from caseSlp.config import giftId, gs_A_uid, gs_B_ceo_rid, gs_B_uid, normal_uid, payUid, pay_url, rates
-from common.Assert import assert_code, assert_equal, assert_body
-from common.Consts import case_list, result
-from common.Request import post_request_session
-from common.basicSlpData import encodeData
-from common.conSlpMysql import conMysql as mysql
+from caseSlp.base import SlpCase, SlpTestBase
+from caseSlp.config import giftId, gs_A_uid, gs_B_ceo_rid, gs_B_uid, normal_uid, payUid, rates
 from common.runFailed import Retry
-from common.sqlScript import UserMoneyOperations
+
+# 打赏人数与礼物个数
+_uids = tuple(str(i) for i in [gs_A_uid, gs_B_uid, normal_uid])
+_num = 5
+
+# 场景表：打赏多人多礼物
+SCENES = [
+	SlpCase(
+		des='房间内打赏多人(gs+normal)多礼物场景',
+		setup=[
+			{'action': 'check_user_broker', 'uid': gs_A_uid, 'expected': True},
+			{'action': 'check_user_broker', 'uid': gs_B_uid, 'expected': True},
+			{'action': 'check_user_broker', 'uid': normal_uid, 'expected': False},
+			{'action': 'update_user_god', 'params': {'uid': gs_A_uid, 'god': 0}},
+			{'action': 'update_user_god', 'params': {'uid': gs_B_uid, 'god': 1}},
+			{'action': 'update_money',
+			 'params': {'uid': payUid, 'money': giftId['69']['price'] * _num * len(_uids)}},
+			{'action': 'clear_user_money', 'uids': [gs_A_uid, gs_B_uid, normal_uid]},
+		],
+		data={
+			'rid': gs_B_ceo_rid,
+			'payType': 'package-more',
+			'num': _num,
+			'uids': _uids,
+		},
+		checks=[
+			{'field': 'single_money', 'uid': gs_A_uid,
+			 'expected': giftId['69']['price'] * rates['gs']['default'] * _num},
+			{'field': 'single_money', 'uid': gs_B_uid, 'money_type': 'money_cash',
+			 'expected': giftId['69']['price'] * rates['gs']['default'] * _num},
+			{'field': 'single_money', 'uid': normal_uid,
+			 'expected': giftId['69']['price'] * rates['normal']['default'] * _num},
+			{'field': 'sum_money', 'uid': payUid, 'expected': 0},
+		],
+	),
+]
 
 
 @Retry(max_n=3)
-class TestPayCreate(unittest.TestCase):
+class TestPayCreate(SlpTestBase):
 
 	def test_001(self, des='房间内打赏多人(gs+normal)多礼物场景'):
 		"""
@@ -29,28 +58,4 @@ class TestPayCreate(unittest.TestCase):
 		4.检查打赏者余额,预期为：20000-1000*6*3 = 2000
 		5.检查被打赏者余额，预期为：1000*6*0.62 = 3720(非一代宗师) 1000*6*0.7=4200(一代宗师) 1000*6*0.62=3720（公会）
 		"""
-		rid = gs_B_ceo_rid
-		uids = tuple([str(i) for i in [gs_A_uid, gs_B_uid, normal_uid]])
-		assert_equal(mysql.checkUserBroker(gs_A_uid), True)  # 确认 uidA是工会成员
-		assert_equal(mysql.checkUserBroker(gs_B_uid), True)  # 确认 uidB是工会成员
-		assert_equal(mysql.checkUserBroker(normal_uid), False)  # 确认 uidC不是工会成员
-
-		num = 5
-		mysql.updateUserGodSql(gs_A_uid, 0)
-		mysql.updateUserGodSql(gs_B_uid, 1)
-		UserMoneyOperations.update(payUid, giftId['69']['price'] * num * len(uids))
-		mysql.updateUserMoneyClearSql(gs_A_uid, gs_B_uid, normal_uid)
-		data = encodeData(
-			rid=rid,
-			payType='package-more',
-			num=num,
-			uids=uids
-		)
-		res = post_request_session(pay_url, data, token_name='slp')
-		assert_code(res['code'], 200)
-		assert_body(res['body'], 'success', 1)
-		assert_equal(mysql.selectUserInfoSql('single_money', gs_A_uid), giftId['69']['price'] * rates['gs']['default'] * num)
-		assert_equal(mysql.selectUserInfoSql('single_money', gs_B_uid, money_type='money_cash'), giftId['69']['price'] * rates['gs']['default'] * num)
-		assert_equal(mysql.selectUserInfoSql('single_money', normal_uid), giftId['69']['price'] * rates['normal']['default'] * num)
-		assert_equal(mysql.selectUserInfoSql('sum_money', payUid), 0)
-		case_list[des] = result
+		self.run_case(SCENES[0])

@@ -4,89 +4,51 @@ APP 海外版支付测试 - 守护开通验证
 
 验证个人守护开通的收益分成场景。
 """
+from caseOversea.base import OverseaBizCase, OverseaBizTestBase
 from common.Config import config
-from common.conPtMysql import conMysql
-from common.Request import post_request_session
-from common.Assert import assert_code, assert_equal, assert_body
-from common.basicData import encodeOverseaData
-from common.Consts import case_list, result
 from common.runFailed import Retry
-from caseOversea.base import OverseaAreaTestBase
+
+# 场景表：个人守护开通收益分成（非主播 80% / 主播 70%）
+DEFEND_SCENES = [
+    OverseaBizCase(
+        des='给非主播开通个人守护场景 80%',
+        setup=[
+            {'action': 'update_money', 'params': {'uid': config.oversea_payUid, 'money': 66600}},
+            {'action': 'update_money', 'params': {'uid': config.oversea_testUid}},
+            {'action': 'clear_extend_money', 'params': {'uid': config.oversea_testUid}},
+        ],
+        data={'payType': 'defend', 'money': 66600},
+        checks=[
+            {'field': 'sum_money', 'expected': 0},
+            {'field': 'money_cash_personal', 'uid': config.oversea_testUid, 'expected': 53280},
+        ],
+    ),
+    OverseaBizCase(
+        des='给主播开通个人守护场景 70%',
+        setup=[
+            {'action': 'update_money', 'params': {'uid': config.oversea_payUid, 'money': 66600}},
+            {'action': 'update_money', 'params': {'uid': config.oversea_brokerUid}},
+        ],
+        data={'payType': 'defend', 'money': 66600, 'uid': config.oversea_brokerUid},
+        checks=[
+            {'field': 'sum_money', 'expected': 0},
+            {'field': 'single_money', 'uid': config.oversea_brokerUid, 'money_type': 'money_cash_b',
+             'expected': 46620},
+        ],
+    ),
+]
 
 
 @Retry
-class TestPayCreate(OverseaAreaTestBase):
+class TestPayCreate(OverseaBizTestBase):
     """APP 守护支付测试类"""
 
     bigarea_id = 2
 
     def test_01_defendPayChangMoney(self, des: str = '给非主播开通个人守护场景 80%'):
-        """
-        非主播守护开通验证
-        
-        用例描述：
-        开通个人守护，收益分成在给非主播的基础上为 80%
-        
-        脚本步骤：
-        1. 构造开通者和被守护者数据
-        2. 开通价值 66600 钻守护
-        3. 校验接口状态和返回值数据
-        4. 检查打赏者余额
-        5. 检查被打赏者余额，预期：66600 * 0.8 = 53280
-        
-        Args:
-            des: 测试描述
-        """
-        # 1. 构造用户数据
-        conMysql.updateMoneySql(config.oversea_payUid, money=66600)
-        conMysql.updateMoneySql(config.oversea_testUid)
-        conMysql.updateUserextendMoneyClearSql(config.oversea_testUid)  # 非主播钱包附加表账户余额清空
-        
-        # 2. 开通守护
-        data = encodeOverseaData(payType='defend', money=66600)
-        res = post_request_session(config.oversea_pay_url, data, token_name='app')
-        
-        # 3. 校验接口
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        
-        # 4. 检查余额
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_payUid), 0)
-        assert_equal(conMysql.selectUserInfoSql('money_cash_personal', config.oversea_testUid, money_type='money_cash_personal'), 53280)
-        
-        case_list[des] = result
+        """非主播守护开通验证：66600 钻守护，收益 66600*0.8=53280"""
+        self.run_case(DEFEND_SCENES[0])
 
     def test_02_defendPayChangMoney(self, des: str = '给主播开通个人守护场景 70%'):
-        """
-        主播守护开通验证
-        
-        用例描述：
-        开通个人守护，收益分成在给主播的基础上为 70%
-        
-        脚本步骤：
-        1. 构造开通者和被守护者数据
-        2. 开通价值 66600 钻守护
-        3. 校验接口状态和返回值数据
-        4. 检查打赏者余额
-        5. 检查被打赏者余额，预期：66600 * 0.7 = 46620
-        
-        Args:
-            des: 测试描述
-        """
-        # 1. 构造用户数据
-        conMysql.updateMoneySql(config.oversea_payUid, money=66600)
-        conMysql.updateMoneySql(config.oversea_brokerUid)
-        
-        # 2. 开通守护（给主播）
-        data = encodeOverseaData(payType='defend', money=66600, uid=config.oversea_brokerUid)
-        res = post_request_session(config.oversea_pay_url, data, token_name='app')
-        
-        # 3. 校验接口
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        
-        # 4. 检查余额
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_payUid), 0)
-        assert_equal(conMysql.selectUserInfoSql('single_money', config.oversea_brokerUid, money_type='money_cash_b'), 46620)
-        
-        case_list[des] = result
+        """主播守护开通验证：66600 钻守护，收益 66600*0.7=46620"""
+        self.run_case(DEFEND_SCENES[1])

@@ -4,110 +4,50 @@ APP 海外版支付测试 - VIP 人气值验证
 
 验证房间打赏和私聊打赏赠送礼物时的人气值和 VIP 等级变化。
 """
-import time
-import unittest
-
+from caseOversea.base import OverseaBizCase, OverseaBizTestBase
 from common.Config import config
-from common.conPtMysql import conMysql
-from common.Request import post_request_session
-from common.Assert import assert_code, assert_body, assert_len, assert_equal
-from common.basicData import encodeOverseaData
-from common.Consts import case_list, result
 from common.runFailed import Retry
 
 # 人气值由定时 task 异步更新，校验前需等待的时长（秒）
 POPULARITY_TASK_WAIT = 2
 
 
+def _make_vip_renqi_case(des, pay_type):
+    """构造单条人气值&VIP 等级验证场景"""
+    return OverseaBizCase(
+        des=des,
+        setup=[
+            {'action': 'update_money', 'params': {'uid': config.oversea_payUid, 'money': 600}},
+            {'action': 'clear_pay_room_money', 'params': {'uid': config.oversea_payUid}},
+            {'action': 'clear_popularity', 'params': {'uid': config.oversea_testUid}},
+        ],
+        data={'payType': pay_type},
+        post_wait=POPULARITY_TASK_WAIT,
+        checks=[
+            {'field': 'sum_money', 'expected': 0},
+            {'field': 'pay_room_money', 'expected': 600},
+            {'field': 'popularity', 'uid': config.oversea_testUid, 'min': 600},
+        ],
+    )
+
+
+# 场景表：打赏 600 分=60 钻的人气值&VIP 等级校验（房间/私聊）
+VIP_RENQI_SCENES = [
+    _make_vip_renqi_case('房间打赏礼物校验人气值&自身的 vip 等级', 'package'),
+    _make_vip_renqi_case('私聊打赏礼物校验人气值&自身的 vip 等级', 'chat-gift'),
+]
+
+
 @Retry(max_n=3, func_prefix='test_01_payRoomgiftVip')
-class TestPayCreate(unittest.TestCase):
+class TestPayCreate(OverseaBizTestBase):
     """APP 支付创建测试类"""
 
-    @classmethod
-    def setUpClass(cls) -> None:
-        """测试前准备：检查礼物配置"""
-        conMysql.checkXsGiftConfig()
+    check_gift_config = True
 
     def test_01_payRoomgiftVip(self, des: str = '房间打赏礼物校验人气值&自身的 vip 等级'):
-        """
-        房间打赏礼物验证
-        
-        用例描述：
-        验证房间打赏赠送 600 分=60 钻
-        
-        脚本步骤：
-        1. 构造用户数据
-        2. 房间内 A 打赏 B 礼物，礼物价值 60 钻石
-        3. 校验接口状态和返回值数据
-        4. 检查 A 账户 VIP 等级数据：pay_room_money 数据需要新增 600 有显示逻辑，显示取 1%
-        5. 检查 B 账户数据库人气增加值：人气值需要增加最少数值：600，涉及加速体系
-        
-        备注：A、B 需要无贵族爵位关系等加速升级逻辑，vip 值 xs_user_profile，人气值 xs_user_popularity
-        
-        Args:
-            des: 测试描述
-        """
-        # 1. 构造用户数据
-        conMysql.updateMoneySql(config.oversea_payUid, money=600)
-        conMysql.updateXsUserprofile_pay_room_money(config.oversea_payUid)
-        conMysql.updateXsUserpopularity(config.oversea_testUid)
-        
-        # 2. 房间内打赏
-        data = encodeOverseaData(payType='package')
-        res = post_request_session(config.oversea_pay_url, data, token_name='app')
-        
-        # 3. 校验接口
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        
-        # 4. 检查 VIP 数据
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_payUid), 0)
-        assert_equal(conMysql.sqlXsUserprofile_pay_room_money(config.oversea_payUid), 600)
-        
-        # 5. 检查人气值
-        time.sleep(POPULARITY_TASK_WAIT)  # 人气值需要 task 更新处理
-        assert_len(conMysql.sqlXsUserpopularity(config.oversea_testUid), 600)
-        
-        case_list[des] = result
+        """房间打赏礼物验证：pay_room_money 新增 600，人气值增加不小于 600"""
+        self.run_case(VIP_RENQI_SCENES[0])
 
     def test_02_payChatgiftVip(self, des: str = '私聊打赏礼物校验人气值&自身的 vip 等级'):
-        """
-        私聊打赏礼物验证
-        
-        用例描述：
-        验证私聊打赏赠送 600 分=60 钻
-        
-        脚本步骤：
-        1. 构造用户数据
-        2. 私聊界面内 A 打赏 B 礼物，礼物价值 60 钻石
-        3. 校验接口状态和返回值数据
-        4. 检查 B 账户数据库人气增加值：人气值需要最少增加数值：600，涉及加速体系
-        5. 检查 A 账户 VIP 等级数据：pay_room_money 数据需要新增 600 有显示逻辑，显示取 1%
-        
-        备注：A、B 需要无贵族爵位关系等加速升级逻辑，vip 值 xs_user_profile，人气值 xs_user_popularity
-        
-        Args:
-            des: 测试描述
-        """
-        # 1. 构造用户数据
-        conMysql.updateMoneySql(config.oversea_payUid, money=600)
-        conMysql.updateXsUserprofile_pay_room_money(config.oversea_payUid)
-        conMysql.updateXsUserpopularity(config.oversea_testUid)
-        
-        # 2. 私聊打赏
-        data = encodeOverseaData(payType='chat-gift')
-        res = post_request_session(config.oversea_pay_url, data, token_name='app')
-        
-        # 3. 校验接口
-        assert_code(res['code'])
-        assert_body(res['body'], 'success', 1)
-        
-        # 4. 检查 VIP 数据
-        assert_equal(conMysql.selectUserInfoSql('sum_money', config.oversea_payUid), 0)
-        assert_equal(conMysql.sqlXsUserprofile_pay_room_money(config.oversea_payUid), 600)
-        
-        # 5. 检查人气值
-        time.sleep(POPULARITY_TASK_WAIT)  # 人气值需要 task 更新处理
-        assert_len(conMysql.sqlXsUserpopularity(config.oversea_testUid), 600)
-        
-        case_list[des] = result
+        """私聊打赏礼物验证：pay_room_money 新增 600，人气值增加不小于 600"""
+        self.run_case(VIP_RENQI_SCENES[1])

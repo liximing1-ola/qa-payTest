@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-check:
+    name: 离线检查（单测 / 编译 / 收集基线）
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 安装 Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # 与本地开发环境对齐的最小依赖集（用例收集链所需）：
+      # pytest / requests / urllib3 / PyMySQL / gevent / PyYAML
+      # PyYAML 6.0.1 为 py3.11 下可正常构建的最低修复版本；redis 为懒加载依赖，预留安装
+      - name: 安装离线检查依赖
+        run: python -m pip install pytest==7.2.1 requests==2.28.1 urllib3==1.26.13 PyMySQL==1.0.2 gevent==22.10.2 PyYAML==6.0.1 redis
+
+      - name: 单元测试（离线，无后端）
+        run: python -m pytest tests/ -q
+
+      - name: 语法编译检查
+        run: python -m compileall -q common case caseOversea caseSlp caseStarify caseGames caseLuckyPlay tests probabilityTest others Robot.py run_all_case.py run_crontab_case.py autoGitPull.py testConcurrent.py check_collect.py
+
+      - name: 用例收集基线校验
+        run: python check_collect.py

@@ -10,7 +10,7 @@ from common.conMysql import conMysql as mysql
 from common.runFailed import Retry
 
 # 自定义分成主播 / 打包结算签约主播 / 公会长
-CUSTOM_UID = 100500205
+CUSTOM_UID = config.bb_user.custom_rate_uid
 PACK_CAL_UID = config.bb_user.pack_cal_uid
 CEO_UID = config.live_role['pack_ceo']
 

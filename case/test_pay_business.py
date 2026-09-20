@@ -13,7 +13,7 @@ from common.conMysql import conMysql as mysql
 from common.method import calculate_vip_exp
 from common.runFailed import Retry
 
-BUSINESS_UID = 105002103  # 商业房 auto_rid 房主（一代宗师）
+BUSINESS_UID = config.businessUid  # 商业房 auto_rid 房主（一代宗师）
 CEO_UID = config.live_role['pack_ceo']  # 直播公会公会长
 
 SCENES = [

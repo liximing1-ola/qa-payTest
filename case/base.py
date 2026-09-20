@@ -3,11 +3,15 @@
 支付测试公共基类
 
 提取 case/ 目录下各测试文件中重复的 _prepare_test_data / _validate_db_state
-辅助方法，并通过 PayCase + run_case 提供数据驱动的支付场景执行模板
-（准备数据 -> 发起请求 -> 响应断言 -> DB 校验 -> 记录结果）。
+辅助方法，并通过 PayCase + run_case 提供数据驱动的支付场景执行模板。
+七段式执行骨架（准备 -> 查询 -> 请求 -> 断言 -> 等待 -> 校验 -> 记录）由
+common/scene_base.py 的 SceneFlowBase 编排，本模块为其支付域适配层。
+
+兼容别名（供现有用例与测试引用）：
+- 模块级 _resolve、PayTestBase._resolve_check
+- REPORT_TABLES 保留本模块定义，报告路由与测试 patch 目标不变
 """
 import time
-import unittest
 from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, Optional
 
@@ -17,6 +21,7 @@ from common.Request import post_request_session
 from common.basicData import encodeData
 from common.Consts import case_list, case_list_b, case_list_c, result
 from common.conMysql import conMysql as mysql
+from common.scene_base import SceneFlowBase, resolve, resolve_check
 from common.sqlScript import UserMoneyOperations, UserCommodityOperations
 
 # 场景结果记录表（与各测试文件的报告表一一对应）
@@ -25,6 +30,9 @@ REPORT_TABLES = {
     'case_list_b': case_list_b,
     'case_list_c': case_list_c,
 }
+
+# 兼容别名：原模块级延迟求值辅助（现由 common.scene_base 提供）
+_resolve = resolve
 
 
 @dataclass(frozen=True)
@@ -57,17 +65,16 @@ class PayCase:
     report: str = 'case_list'
 
 
-def _resolve(value: Any, ctx: Dict[str, Any]) -> Any:
-    """解析场景值：callable 在运行期求值，其余原样返回"""
-    return value(ctx) if callable(value) else value
-
-
-class PayTestBase(unittest.TestCase):
+class PayTestBase(SceneFlowBase):
     """支付测试通用基类
 
     提供通用的数据准备和数据库验证方法，以及数据驱动的场景执行模板，
     子类只需在模块级 SCENES 表中声明各场景的差异点。
+    场景执行由 SceneFlowBase.run_flow 编排，本类实现各阶段钩子。
     """
+
+    # 兼容别名：原 PayTestBase._resolve_check
+    _resolve_check = staticmethod(resolve_check)
 
     def run_case(self, case: PayCase) -> None:
         """执行单个支付场景
@@ -75,45 +82,47 @@ class PayTestBase(unittest.TestCase):
         Args:
             case: 场景参数（模块级 SCENES 表中声明）
         """
-        ctx: Dict[str, Any] = {'cls': type(self), 'self': self}
+        self.run_flow(case)
 
-        # 1. 准备测试数据（自定义组合准备 + 标准步骤）
+    # ============ 场景骨架钩子实现 ============
+    def flow_prepare(self, case: PayCase, ctx: Dict[str, Any]) -> None:
+        """1. 准备测试数据（自定义组合准备 + 标准步骤）"""
         if case.prepare is not None:
             case.prepare(self)
         if case.setup:
             self._prepare_test_data(case.setup)
 
-        # 2. 请求前查询（供动态 data/checks 引用）
+    def flow_queries(self, case: PayCase, ctx: Dict[str, Any]) -> None:
+        """2. 请求前查询（供动态 data/checks 引用）"""
         for key, query in case.queries:
             ctx[key] = query()
 
-        # 3. 发起请求
-        data = encodeData(**{key: _resolve(value, ctx) for key, value in case.data.items()})
-        res = post_request_session(config.pay_url, data)
+    def flow_request(self, case: PayCase, ctx: Dict[str, Any]) -> None:
+        """3. 发起请求（响应存入 ctx['_res'] 供断言阶段使用）"""
+        data = encodeData(**{key: resolve(value, ctx) for key, value in case.data.items()})
+        ctx['_res'] = post_request_session(config.pay_url, data)
 
-        # 4. 响应断言
+    def flow_assert(self, case: PayCase, ctx: Dict[str, Any]) -> None:
+        """4. 响应断言"""
+        res = ctx['_res']
         assert_code(res['code'])
         assert_body(res['body'], 'success', case.success)
         if case.msg is not None:
             assert_body(res['body'], 'msg', case.msg)
 
-        # 5. 等待异步消息处理（NSQ 等）
+    def flow_wait(self, case: PayCase, ctx: Dict[str, Any]) -> None:
+        """5. 等待异步消息处理（NSQ 等）"""
         if case.post_wait:
             time.sleep(case.post_wait)
 
-        # 6. DB 校验
+    def flow_validate(self, case: PayCase, ctx: Dict[str, Any]) -> None:
+        """6. DB 校验"""
         if case.checks:
             self._validate_db_state([self._resolve_check(check, ctx) for check in case.checks])
 
-        # 7. 记录结果
+    def flow_record(self, case: PayCase, ctx: Dict[str, Any]) -> None:
+        """7. 记录结果"""
         REPORT_TABLES[case.report][case.des] = result
-
-    @staticmethod
-    def _resolve_check(check: dict, ctx: Dict[str, Any]) -> dict:
-        """解析校验项中延迟求值的 expected"""
-        if callable(check.get('expected')):
-            return {**check, 'expected': check['expected'](ctx)}
-        return check
 
     def _prepare_test_data(self, setup_steps):
         """准备测试数据（通用步骤分发器）
