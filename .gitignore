@@ -4,6 +4,7 @@
 /.idea/workspace.xml
 /common/starifyUserToken.txt
 /common/devUserToken.txt
+/daily_report/
 __pycache__/
 caseStarify/__pycache__/
 common/__pycache__/
