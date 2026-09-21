@@ -1,0 +1,42 @@
+# App Store 日报云端定时推送（GitHub Actions，机器关机不影响）
+# 北京时间 10:30 = UTC 02:30；secrets 未配置时报错跳过而非推送垃圾消息
+name: ASC Daily Report
+
+on:
+  schedule:
+    - cron: '30 2 * * *'
+  workflow_dispatch: {}  # 支持手动触发，配置 secrets 后可立即验证
+
+jobs:
+  report:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install deps
+        run: pip install -r daily_report/requirements-asc.txt
+
+      - name: Write secrets to local files
+        env:
+          ASC_ENV: ${{ secrets.ASC_ENV_FILE }}
+          ASC_P8: ${{ secrets.ASC_P8_KEY }}
+        run: |
+          if (-not $env:ASC_ENV -or -not $env:ASC_P8) {
+            Write-Error "::error::ASC_ENV_FILE / ASC_P8_KEY secrets 未配置，请到 Settings > Secrets and variables > Actions 添加"
+            exit 1
+          }
+          # UTF-8 无 BOM 写入（.env 含中文 App 名，避免编码乱码）
+          [IO.File]::WriteAllText("$PWD/daily_report/.env", $env:ASC_ENV)
+          # p8 文件名从 .env 的 PRIVATE_KEY_PATH 解析，换密钥无需改 workflow
+          $p8name = [regex]::Match($env:ASC_ENV, 'PRIVATE_KEY_PATH=(\S+)').Groups[1].Value
+          [IO.File]::WriteAllText("$PWD/daily_report/$p8name", $env:ASC_P8)
+
+      - name: Run daily report
+        env:
+          PYTHONUTF8: '1'
+        run: python daily_report/fetch_asc_daily.py
