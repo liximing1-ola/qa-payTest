@@ -28,9 +28,8 @@ BLIND_SCENES = [
             {'action': 'update_money', 'params': {'uid': config.oversea_testUid}},
             {'action': 'clear_extend_money', 'params': {'uid': config.oversea_testUid}},
         ],
-        # 沿用原用例的礼物引用：'773' 在 config.giftId 中未定义，行为与原实现一致
         data={'payType': 'package', 'money': 300,
-              'rid': config.oversea_room['th_union'], 'giftId': lambda ctx: config.giftId['773']},
+              'rid': config.oversea_room['th_union'], 'giftId': config.oversea_giftId['773']},
         checks=[
             {'field': 'sum_money', 'expected': 100},
             {'field': 'money_cash_personal', 'uid': config.oversea_testUid, 'min': 30},
@@ -44,9 +43,8 @@ BLIND_SCENES = [
             {'action': 'update_money', 'params': {'uid': config.oversea_testUid}},
             {'action': 'clear_extend_money', 'params': {'uid': config.oversea_testUid}},
         ],
-        # 沿用原用例的礼物引用：'774' 在 config.giftId 中未定义，行为与原实现一致
         data={'payType': 'package-more', 'num': 2, 'money': 1200,
-              'rid': config.oversea_room['th_union'], 'giftId': lambda ctx: config.giftId['774']},
+              'rid': config.oversea_room['th_union'], 'giftId': config.oversea_giftId['774']},
         checks=[
             {'field': 'sum_money', 'expected': 5200},
             {'field': 'money_cash_personal', 'uid': config.oversea_testUid, 'min': 60},
