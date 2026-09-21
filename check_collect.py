@@ -23,7 +23,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent
 # 全仓用例收集基线（调整用例数量时需同步更新此值）
-EXPECTED_COLLECT_COUNT = 407
+EXPECTED_COLLECT_COUNT = 511
 
 
 def _configure_stdio():

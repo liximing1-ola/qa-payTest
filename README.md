@@ -16,8 +16,11 @@ qa-payTest/
 ├── caseLuckyPlay/     # 玩法测试用例
 ├── common/            # 公共模块与核心类（请求/配置/日志/数据库/Session）
 ├── tests/             # 公共模块离线单元测试（无需后端）
+├── docs/              # 文档与设计资料（tdr 表设计图等）
+├── others/            # 独立辅助脚本（点餐 bot、环境配置参考），不进 CI 主链
+├── probabilityTest/   # 概率类独立验证脚本，不进 pytest 收集基线
 ├── .github/workflows/ # CI 流水线（离线检查）
-└── requirements.txt   # 依赖配置
+└── requirements.txt   # 依赖配置（核心 7 包钉 CI 同款版本 + 可选段）
 ```
 
 ## 核心模块说明
@@ -55,8 +58,21 @@ qa-payTest/
 ### 数据驱动用例（SCENES 表）
 
 - `case/`、`caseOversea/`、`caseSlp/`、`caseStarify/` 等目录的用例已数据驱动化：每个测试文件在模块级声明 `SCENES` 表，一个场景只声明与基准场景的差异点
-- 场景字段：`des`（描述兼报告键）、`setup`、`data`、`checks`、`success`、`msg`、`post_wait`、`queries`、`prepare`、`report`
 - `data` 与 `checks.expected` 支持 `callable(ctx)` 延迟求值（`ctx` 含 `queries` 查询结果与测试类引用）
+
+以主站 `PayCase` 为例，各字段语义（其余域的 Case 字段以对应 `base.py` 为准）：
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `des` | str | 场景描述，兼作结果报告表的键 |
+| `setup` | list | 数据准备步骤（`_prepare_test_data` 分发格式） |
+| `queries` | list | 请求前查询 `(ctx 键, 无参可调用)`，结果存入 `ctx` |
+| `data` | dict | `encodeData` 入参；值可为 `callable(ctx)` 运行期求值 |
+| `success` / `msg` | int / str | 响应断言（`success` 默认 1；`msg=None` 时跳过断言） |
+| `post_wait` | float | 请求后等待秒数（等 NSQ 等异步消息处理） |
+| `checks` | list | DB 校验项；`expected` 可为 `callable(ctx)` 延迟求值 |
+| `prepare` | callable | 自定义组合准备 `callable(testcase)`，先于 `setup` 执行 |
+| `report` | str | 结果记录表：`case_list` / `case_list_b` / `case_list_c` |
 
 ### 场景执行骨架（common/scene_base.py）
 
@@ -81,17 +97,27 @@ qa-payTest/
 - 新增场景实体优先在对应域夹具模块声明；跨域通用实体（如 `giftId`）才收敛到 `common/Config.py`
 - `tests/test_config.py` 锁定主站/海外夹具的关键取值与结构（含 `giftId` 键集合），任何静默改数据都会使测试失败
 
+### 新增用例指引
+
+以主站为例（其余域替换对应基类与夹具模块）：
+
+1. 在域夹具模块（主站为 `common/Config.py`）声明新实体（用户/房间/礼物/商品 ID），禁止在用例中硬编码数字
+2. 在对应测试文件的模块级 `SCENES` 表追加场景，只写与基准场景的差异字段，无需新增测试方法
+3. 若涉及新支付类型：在 `common/basicData.py` 的 `PAY_TYPE_HANDLERS`（或 `basicSlpData.py` 等域编码模块）注册 handler，并同步补 `tests/` 下对应单测
+4. 用例数量变化后同步 `check_collect.py` 的 `EXPECTED_COLLECT_COUNT` 基线，防止覆盖静默下降
+
 ## 快速开始
 
 ### 环境安装
 
 ```bash
-# 安装依赖
+# Python 3.11（与 CI 同款解释器版本）
 pip install -r requirements.txt
-
-# 或单独安装GitPython
-pip install gitpython
 ```
+
+依赖分两段：核心 7 包（pytest/requests/urllib3/PyMySQL/gevent/PyYAML/redis）钉定 CI 同款版本，保证本地与 CI 行为一致、可离线复现；可选段（chinesecalendar、GitPython）仅被独立脚本使用，缺失不影响 pytest 主链。
+
+内网数据库/Redis 地址已支持环境变量覆盖（如 `DB_DEV_HOST`、`DB_ALI_HOST`、`DB_RDS_HOST`、`REDIS_46_HOST`、`BB_STARIFY_HOST`、`BB_SLP_HOST`、`BB_RUSH_HOST`），默认值不变，切换环境无需改代码。
 
 ### 运行测试
 

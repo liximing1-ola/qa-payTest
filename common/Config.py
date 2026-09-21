@@ -17,46 +17,51 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class AppConfig:
-    """应用配置"""
+    """应用配置（域名支持环境变量覆盖）"""
     bb_dev: str = 'https://dev.iambanban.com/'
     app_ali_dev: str = 'https://app-dev.iambanban.com/'
     app_ali_main: str = 'https://app-dev.iambanban.com/_testcase/'
-    starify: str = 'http://116.62.125.230/'
-    slp: str = 'https://116.62.125.230/'
+    # 各环境支付入口（可用环境变量重定向：BB_STARIFY_HOST / BB_SLP_HOST / BB_RUSH_HOST）
+    starify: str = field(default_factory=lambda: os.environ.get('BB_STARIFY_HOST', 'http://116.62.125.230/'))
+    slp: str = field(default_factory=lambda: os.environ.get('BB_SLP_HOST', 'https://116.62.125.230/'))
     oversea: str = 'https://app-dev.iambanban.com/'
     oversea_ali_main: str = 'https://app-dev.iambanban.com/_testcase/'
-    rush: str = 'https://192.168.11.55/'
+    rush: str = field(default_factory=lambda: os.environ.get('BB_RUSH_HOST', 'https://192.168.11.55/'))
 
 
 @dataclass
 class RedisConfig:
-    """Redis配置"""
-    host_46: str = '192.168.11.46'
+    """Redis配置（主机支持环境变量覆盖：REDIS_46_HOST）"""
+    host_46: str = field(default_factory=lambda: os.environ.get('REDIS_46_HOST', '192.168.11.46'))
     host_ali: str = '127.0.0.1'
     port: int = 6379
 
 
 @dataclass
 class DatabaseConfig:
-    """数据库配置（集中管理，密码支持环境变量覆盖）
+    """数据库配置（集中管理，密码与主机支持环境变量覆盖）
 
     环境变量:
         DB_DEV_PASSWORD  - DEV 环境密码（默认 123456）
         DB_ALI_PASSWORD  - ALI 环境密码（默认 root）
         DB_RDS_PASSWORD  - RDS 阿里云密码（默认 dev123456）
+        DB_DEV_HOST      - DEV 环境主机（默认 192.168.11.46）
+        DB_ALI_HOST      - ALI 环境主机（默认 127.0.0.1）
+        DB_RDS_HOST      - RDS 阿里云主机（默认见 rds_host）
     """
     # DEV 环境（46机器）
-    dev_host: str = '192.168.11.46'
+    dev_host: str = field(default_factory=lambda: os.environ.get('DB_DEV_HOST', '192.168.11.46'))
     dev_port: int = 3306
     dev_user: str = 'root'
     dev_password: str = field(default_factory=lambda: os.environ.get('DB_DEV_PASSWORD', '123456'))
     # ALI 环境
-    ali_host: str = '127.0.0.1'
+    ali_host: str = field(default_factory=lambda: os.environ.get('DB_ALI_HOST', '127.0.0.1'))
     ali_port: int = 3306
     ali_user: str = 'root'
     ali_password: str = field(default_factory=lambda: os.environ.get('DB_ALI_PASSWORD', 'root'))
     # RDS 阿里云
-    rds_host: str = 'rm-bp1nfl3dp096d5o39.mysql.rds.aliyuncs.com'
+    rds_host: str = field(default_factory=lambda: os.environ.get(
+        'DB_RDS_HOST', 'rm-bp1nfl3dp096d5o39.mysql.rds.aliyuncs.com'))
     rds_port: int = 3306
     rds_user: str = 'super'
     rds_password: str = field(default_factory=lambda: os.environ.get('DB_RDS_PASSWORD', 'dev123456'))

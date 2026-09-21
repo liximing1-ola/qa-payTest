@@ -24,7 +24,6 @@ BASE_URL = "https://dev.iambanban.com/pay/create?package=com.imbb.banban.android
 HEADERS_TEMPLATE = {
     'Content-Type': "application/x-www-form-urlencoded",
     'cache-control': "no-cache",
-    'Postman-Token': "f7d705b2-cf29-4a4a-81ba-2c8c8d0f5ed5"
 }
 
 # 用户 Token（从环境变量读取，避免真实凭证入库；过期时在运行环境统一更新）

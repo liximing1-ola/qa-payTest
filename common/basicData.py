@@ -102,20 +102,17 @@ def _handler_package(**kw):
 
 def _handler_package_more(**kw):
     """package-more 多人打赏处理器"""
+    num_more = len(kw['uids'])
     return {
         "platform": "available",
         "type": "package",
-        "money": kw['money'] * kw['num'] * len(kw['uids']),
+        "money": kw['money'] * kw['num'] * num_more,
         "params": {
-            **_build_package_params(
-                rid=kw['rid'],
-                uid=','.join(kw['uids']),
-                money=kw['money'],
-                giftId=kw['giftId'],
-                num=kw['num'],
-                positions=','.join(str(i + 1) for i in range(len(kw['uids']))),
-                **kw
-            ),
+            **_build_package_params(**{
+                **kw,
+                'uid': ','.join(kw['uids']),
+                'positions': ','.join(str(i + 1) for i in range(num_more)),
+            }),
             "cid": 0,
             "ctype": "",
             "duction_money": 0,
