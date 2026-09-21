@@ -34,3 +34,8 @@ jobs:
 
       - name: 用例收集基线校验
         run: python check_collect.py
+
+      # 收集步骤失败时重跑收集并回显尾部输出，便于在网页日志直接定位
+      - name: 收集诊断（仅失败时）
+        if: failure()
+        run: python -m pytest --collect-only -q 2>&1 | Select-Object -Last 40
