@@ -1,14 +1,61 @@
 # App Store 日报云端定时推送（GitHub Actions，机器关机不影响）
-# 北京时间 10:30 = UTC 02:30；secrets 未配置时报错跳过而非推送垃圾消息
+# GitHub schedule 为尽力而为（可能延迟甚至丢弃），故设置多个触发点自愈：
+# 北京时间 10:30 起每 30 分钟触发至 13:30；check job 发现当天已有成功/进行中
+# 的运行则自动跳过，确保一天只推一次。手动触发可选 force 强制重推。
 name: ASC Daily Report
 
 on:
   schedule:
-    - cron: '30 2 * * *'
-  workflow_dispatch: {}  # 支持手动触发，配置 secrets 后可立即验证
+    - cron: '30 2 * * *'      # 北京 10:30
+    - cron: '0,30 3-5 * * *'  # 北京 11:00 - 13:30 每 30 分钟重试
+  workflow_dispatch:
+    inputs:
+      force:
+        description: '强制运行（忽略"当天已运行"检查，用于手动重推）'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: asc-daily
+  cancel-in-progress: false
 
 jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      skip: ${{ steps.check.outputs.skip }}
+    steps:
+      - name: Check if already ran today
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.force }}" = "true" ]; then
+            echo "手动强制运行，跳过检查"
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          cutoff=$(TZ=Asia/Shanghai date -d "today 00:00" -u +%Y-%m-%dT%H:%M:%SZ)
+          echo "北京时间今天 0 点对应 UTC: $cutoff"
+          runs=$(curl -sf -H "Authorization: Bearer $GH_TOKEN" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/workflows/asc_daily.yml/runs?per_page=50")
+          count=$(echo "$runs" | jq --arg c "$cutoff" --arg me "${{ github.run_id }}" \
+            '[.workflow_runs[] | select(.id != ($me | tonumber)) | select(.created_at >= $c) | select(.conclusion == "success" or .status == "queued" or .status == "in_progress")] | length' 2>/dev/null || echo -1)
+          if [ "$count" -gt 0 ]; then
+            echo "今天已有 $count 条成功/进行中的运行，跳过本次"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "今天尚无成功运行，本次执行"
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
   report:
+    needs: check
+    if: needs.check.outputs.skip != 'true'
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
