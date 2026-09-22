@@ -1,3 +1,4 @@
+import sys
 import time
 
 import jwt
@@ -7,7 +8,7 @@ import io
 import json
 import base64
 import hashlib
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta, timezone
 import os
 from dotenv import load_dotenv
 import pandas as pd
@@ -86,6 +87,67 @@ def get_recent_reports(days: int = 7):
     if not reports:
         raise Exception(f"最近 {days} 天均无销售报告（Apple 数据延迟）")
     return reports
+
+# ========= App Analytics 实时接口（analytics.apple.com，与后台"过去24小时"页同源）=========
+ANALYTICS_BASE = "https://analytics.apple.com"
+# 产品销量（Product Sales）= 首次下载口径，与后台"产品销量"列一致
+ANALYTICS_METRIC = "prodSales"
+
+
+def get_analytics_session_token(asc_token: str) -> str:
+    """ASC JWT 换取 analytics 站点会话 token（后台页面同款 /auth/auth/v2）"""
+    resp = requests.post(
+        f"{ANALYTICS_BASE}/auth/auth/v2",
+        headers={"Authorization": f"Bearer {asc_token}"},
+        timeout=30,
+    )
+    resp.raise_for_status()
+    data = resp.json()
+    for key in ("token", "accessToken", "sessionToken"):
+        if data.get(key):
+            return data[key]
+    raise Exception(f"analytics 会话响应未识别：{list(data.keys())}")
+
+
+def get_recent_24h_downloads(asc_token: str = None, verbose: bool = False):
+    """最近 24 小时（UTC）监控清单内各 App 产品销量合计。
+    返回 (统计窗口描述, {app_id 字符串: 下载数})"""
+    if asc_token is None:
+        asc_token = get_asc_token()
+    session = get_analytics_session_token(asc_token)
+    now = datetime.now(timezone.utc)
+    start = now - timedelta(hours=24)
+    body = {
+        "startTime": start.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "endTime": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "group": "hour",
+        "metric": ANALYTICS_METRIC,
+        "adamIds": [int(a["app_id"]) for a in APP_LIST],
+    }
+    headers = {"Authorization": f"Bearer {session}"}
+    url = f"{ANALYTICS_BASE}/api/v2/data/timeseries"
+    resp = None
+    for attempt in range(2):
+        resp = requests.post(url, headers=headers, json=body, timeout=30)
+        if resp.status_code in (401, 403) and attempt == 0:
+            # 会话 token 短时过期则换新重试一次
+            session = get_analytics_session_token(asc_token)
+            headers["Authorization"] = f"Bearer {session}"
+            continue
+        break
+    if resp.status_code != 200:
+        raise Exception(f"analytics 接口失败 code:{resp.status_code} msg:{resp.text[:300]}")
+    data = resp.json()
+    if verbose:
+        print("[analytics] timeseries 响应样例：", json.dumps(data, ensure_ascii=False)[:2000])
+    per_app = {}
+    for item in data.get("results", []):
+        aid = str(item.get("adamId") or item.get("adamID") or "")
+        total = sum(int(float(b.get("value") or 0)) for b in item.get("data", []))
+        if aid:
+            per_app[aid] = per_app.get(aid, 0) + total
+    window = f"{start:%m-%d %H:%M} ~ {now:%m-%d %H:%M}（UTC）"
+    return window, per_app
 
 # 常见结算币种对 CNY 的近似折算率（仅用于日报展示，精确对账以 ASC 财务报告为准）
 CNY_RATES = {
@@ -195,8 +257,8 @@ def _draw_table(draw, x, y, headers, rows, font, bold_font, aligns):
                    outline=_C_GRID, width=1)
     return y
 
-def render_report_image(days_sorted, per_day, day_sales, app_list, warning=None) -> bytes:
-    """渲染近 7 日日报表格图片：每个 App 逐日下载量 + 全账号当日销售额汇总"""
+def render_report_image(days_sorted, per_day, day_sales, app_list, warning=None, h24=None) -> bytes:
+    """渲染近 7 日日报表格图片：24小时实时下载 + 每个 App 逐日下载量 + 全账号当日销售额汇总"""
     f_title = _load_font(26, bold=True)
     f_block = _load_font(21, bold=True)
     f_cell = _load_font(19)
@@ -215,6 +277,28 @@ def render_report_image(days_sorted, per_day, day_sales, app_list, warning=None)
     if warning:
         draw.text((X, y), f"注：{warning}", font=f_note, fill=_C_WARN)
         y += 26
+
+    # 最近 24 小时下载（App Analytics 实时口径，与后台"过去24小时"页一致）
+    draw.text((X, y), "■ 最近24小时下载（产品销量口径）", font=f_block, fill=_C_TITLE)
+    y += 34
+    if h24:
+        window24, data24 = h24
+        draw.text((X, y), f"统计窗口：{window24}", font=f_note, fill=_C_TEXT)
+        y += 24
+        rows24, total24 = [], 0
+        for app in app_list:
+            aid = str(app['app_id'])
+            v = int(data24.get(aid, 0))
+            total24 += v
+            rows24.append(((app['name'], f"{v:,}"), False))
+        rows24.append((("合计", f"{total24:,}"), True))
+        y = _draw_table(draw, X, y, ("App", "24小时下载"),
+                        rows24, f_cell, f_cell_b, ('left', 'right'))
+    else:
+        draw.text((X, y), "（24小时数据获取失败，下方日粒度报表不受影响）",
+                  font=f_note, fill=_C_WARN)
+        y += 24
+    y += 22
 
     no_stat = {'new': 0, 'redownload': 0}
     for app in app_list:
@@ -277,6 +361,12 @@ def send_wecom_msg(content: str):
 
 if __name__ == "__main__":
     yesterday = date.today() - timedelta(days=1)
+    # 探测模式：只打印 analytics 24h 接口响应样例，不推送（云端调试验证接口格式用）
+    if os.getenv("ASC_PROBE", "").lower() == "true":
+        window24, data24 = get_recent_24h_downloads(verbose=True)
+        print("[probe] 24h 统计窗口：", window24)
+        print("[probe] 24h 各 App 下载：", data24)
+        sys.exit(0)
     try:
         # 拉取窗口放宽到 10 天，取最近 7 个有数据的日期（昨日缺报时往前补齐）
         reports = get_recent_reports(10)
@@ -287,11 +377,19 @@ if __name__ == "__main__":
         per_day = {d: stats[d][0] for d in days_sorted}
         day_sales = {d: stats[d][1] for d in days_sorted}
 
+        # 最近 24 小时下载（analytics 实时口径），失败不阻塞主报表
+        h24 = None
+        try:
+            h24 = get_recent_24h_downloads()
+            print("最近24小时下载：", h24[1])
+        except Exception as e24:
+            print("24小时数据获取失败（不阻塞主报表）：", e24)
+
         warning = None
         if yesterday not in reports:
             # Apple 销售日报延迟 1~3 天，10:30 时昨日报告常未生成
             warning = f"昨日({yesterday:%m-%d})报告尚未生成，以下为近7日已可得数据"
-        png = render_report_image(days_sorted, per_day, day_sales, APP_LIST, warning)
+        png = render_report_image(days_sorted, per_day, day_sales, APP_LIST, warning, h24)
         # 本地留档一份（排查渲染问题用）
         with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                'asc_daily_report.png'), 'wb') as f:
