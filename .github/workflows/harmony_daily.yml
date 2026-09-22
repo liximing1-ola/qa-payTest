@@ -4,7 +4,8 @@
 # 的运行则自动跳过，确保一天只推一次。手动触发可选 force 强制重推 / probe 探测模式。
 # Secrets 需要两条：
 #   HARMONY_ENV_FILE — .env.harmony 全文（HARMONY_CLIENT_ID / CLIENT_SECRET / APP_ID /
-#                      IAP_KEY_ID / IAP_ISSUER_ID / IAP_KEY_PATH + WECOM_WEBHOOK）
+#                      IAP_KEY_ID / IAP_ISSUER_ID / IAP_KEY_PATH + WECOM_WEBHOOK；若缺
+#                      WECOM_WEBHOOK 行，自动从 ASC_ENV_FILE 提取复用=与苹果日报同群）
 #   HARMONY_P8_KEY   — IAP 服务端私钥文件全文（p8 内容，BEGIN/END PRIVATE KEY）
 name: HarmonyOS Daily Report
 
@@ -80,6 +81,7 @@ jobs:
         env:
           HARMONY_ENV: ${{ secrets.HARMONY_ENV_FILE }}
           HARMONY_P8: ${{ secrets.HARMONY_P8_KEY }}
+          ASC_ENV: ${{ secrets.ASC_ENV_FILE }}
         run: |
           if (-not $env:HARMONY_ENV) {
             Write-Error "::error::HARMONY_ENV_FILE secret 未配置，请到 Settings > Secrets and variables > Actions 添加"
@@ -95,6 +97,16 @@ jobs:
               exit 1
             }
             [IO.File]::WriteAllText("$PWD/daily_report/$p8name", $env:HARMONY_P8)
+          }
+          # .env.harmony 缺 WECOM_WEBHOOK 时，从 ASC_ENV_FILE（苹果日报同群）提取注入运行环境
+          if ($env:HARMONY_ENV -notmatch 'WECOM_WEBHOOK=') {
+            $wh = [regex]::Match($env:ASC_ENV, 'WECOM_WEBHOOK=(\S+)').Groups[1].Value
+            if ($wh) {
+              [IO.File]::AppendAllText($env:GITHUB_ENV, "WECOM_WEBHOOK=$wh`n")
+              Write-Host "已复用 ASC_ENV_FILE 中的 WECOM_WEBHOOK"
+            } else {
+              Write-Host "::warning::ASC_ENV_FILE 中也无 WECOM_WEBHOOK，企微推送将不可用"
+            }
           }
 
       - name: Run harmony daily report
