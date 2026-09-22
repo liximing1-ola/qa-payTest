@@ -1,4 +1,4 @@
-# daily_report/fetch_asc_daily.py 云端运行依赖（GitHub Actions / 本机通用）
+# daily_report 云端运行依赖（fetch_asc_daily.py / fetch_harmony_daily.py 通用）
 # 版本为本机实测可用版本
 PyJWT==2.14.0
 cryptography==48.0.0

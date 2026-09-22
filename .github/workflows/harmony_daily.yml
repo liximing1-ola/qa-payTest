@@ -1,28 +1,69 @@
-# HarmonyOS（鸿蒙）数据日报：AGC 下载安装报表 + IAP 订单查询
-# 当前阶段：手动触发探测（probe）验证接口连通性；数据验证通过后再加定时任务与企微推送。
+# HarmonyOS（鸿蒙）日报：AGC 下载安装报表 + IAP 订单查询 → 渲染图片推企微
+# GitHub schedule 为尽力而为（可能延迟甚至丢弃），故设置多个触发点自愈：
+# 北京时间 10:30 起每 30 分钟触发至 13:30；check job 发现当天已有成功/进行中
+# 的运行则自动跳过，确保一天只推一次。手动触发可选 force 强制重推 / probe 探测模式。
 # Secrets 需要两条：
 #   HARMONY_ENV_FILE — .env.harmony 全文（HARMONY_CLIENT_ID / CLIENT_SECRET / APP_ID /
-#                      IAP_KEY_ID / IAP_ISSUER_ID / IAP_KEY_PATH）
+#                      IAP_KEY_ID / IAP_ISSUER_ID / IAP_KEY_PATH + WECOM_WEBHOOK）
 #   HARMONY_P8_KEY   — IAP 服务端私钥文件全文（p8 内容，BEGIN/END PRIVATE KEY）
 name: HarmonyOS Daily Report
 
 on:
+  schedule:
+    - cron: '30 2 * * *'      # 北京 10:30
+    - cron: '0,30 3-5 * * *'  # 北京 11:00 - 13:30 每 30 分钟重试
   workflow_dispatch:
     inputs:
-      probe:
-        description: '探测模式：拉取下载报表 + IAP 订单并打印样例（不推送）'
+      force:
+        description: '强制运行（忽略"当天已运行"检查，用于手动重推）'
         type: boolean
-        default: true
+        default: false
+      probe:
+        description: '探测模式：拉取数据打印样例（不推送企微）'
+        type: boolean
+        default: false
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   group: harmony-daily
   cancel-in-progress: false
 
 jobs:
-  probe:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      skip: ${{ steps.check.outputs.skip }}
+    steps:
+      - name: Check if already ran today
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && { [ "${{ inputs.force }}" = "true" ] || [ "${{ inputs.probe }}" = "true" ]; }; then
+            echo "手动触发（force/probe），跳过检查"
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          cutoff=$(TZ=Asia/Shanghai date -d "today 00:00" -u +%Y-%m-%dT%H:%M:%SZ)
+          echo "北京时间今天 0 点对应 UTC: $cutoff"
+          runs=$(curl -sf -H "Authorization: Bearer $GH_TOKEN" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/workflows/harmony_daily.yml/runs?per_page=50")
+          count=$(echo "$runs" | jq --arg c "$cutoff" --arg me "${{ github.run_id }}" \
+            '[.workflow_runs[] | select(.id != ($me | tonumber)) | select(.created_at >= $c) | select(.conclusion == "success" or .status == "queued" or .status == "in_progress")] | length' 2>/dev/null || echo -1)
+          if [ "$count" -gt 0 ]; then
+            echo "今天已有 $count 条成功/进行中的运行，跳过本次"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "今天尚无成功运行，本次执行"
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  report:
+    needs: check
+    if: needs.check.outputs.skip != 'true'
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -56,7 +97,7 @@ jobs:
             [IO.File]::WriteAllText("$PWD/daily_report/$p8name", $env:HARMONY_P8)
           }
 
-      - name: Run harmony probe
+      - name: Run harmony daily report
         env:
           PYTHONUTF8: '1'
           HARMONY_PROBE: ${{ inputs.probe }}
