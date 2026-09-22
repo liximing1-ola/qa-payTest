@@ -52,8 +52,8 @@ if not WECOM_WEBHOOK:
 # 北京时间（AGC 后台页面口径：销售分析按北京日聚合）
 CST = timezone(timedelta(hours=8))
 
-# 人民币→美元近似折算率（日报展示统一 USD，与苹果日报一致；精确对账以华为结算单为准）
-USD_CNY_RATE = 7.20
+# 日元对人民币近似折算率（1 日元 = 0.048 元，即 1 元 ≈ 20.83 日元；与苹果日报折算表一致）
+JPY_CNY_RATE = 0.048
 
 
 # ========= AGC 授权（API客户端方式）=========
@@ -339,23 +339,23 @@ def render_report_image(days_sorted, per_day, iap_by_day) -> bytes:
                     rows, f_cell, f_cell_b, ('left', 'right', 'right', 'right'))
     y += 22
 
-    # 内购（逐日：订单数 / 金额 / 退款；金额统一折算 USD 展示）
+    # 内购（逐日：订单数 / 金额 / 退款；金额统一折算 JPY 展示）
     no_iap = {"count": 0, "amount": 0.0, "refund_count": 0, "refund_amount": 0.0}
-    draw.text((X, y), "■ 内购（IAP 服务端，USD）", font=f_block, fill=_C_TITLE)
+    draw.text((X, y), "■ 内购（IAP 服务端，JPY）", font=f_block, fill=_C_TITLE)
     y += 34
     rows, t_cnt, t_amt, t_rc, t_ra = [], 0, 0.0, 0, 0.0
     for d in days_sorted:
         stat = iap_by_day.get(f"{d:%Y%m%d}", no_iap)
-        amt_usd = round(stat["amount"] / USD_CNY_RATE, 2)
-        refund_usd = round(stat["refund_amount"] / USD_CNY_RATE, 2)
+        amt_jpy = int(round(stat["amount"] / JPY_CNY_RATE))
+        refund_jpy = int(round(stat["refund_amount"] / JPY_CNY_RATE))
         t_cnt += stat["count"]
-        t_amt += amt_usd
+        t_amt += amt_jpy
         t_rc += stat["refund_count"]
-        t_ra += refund_usd
-        rows.append(((f"{d:%m-%d}", f"{stat['count']:,}", f"{amt_usd:,.2f}",
-                      f"{stat['refund_count']:,}", f"{refund_usd:,.2f}"), False))
-    rows.append((("7日合计", f"{t_cnt:,}", f"{t_amt:,.2f}", f"{t_rc:,}", f"{t_ra:,.2f}"), True))
-    y = _draw_table(draw, X, y, ("日期", "订单数", "金额($)", "退款笔数", "退款金额($)"),
+        t_ra += refund_jpy
+        rows.append(((f"{d:%m-%d}", f"{stat['count']:,}", f"{amt_jpy:,.0f}",
+                      f"{stat['refund_count']:,}", f"{refund_jpy:,.0f}"), False))
+    rows.append((("7日合计", f"{t_cnt:,}", f"{t_amt:,.0f}", f"{t_rc:,}", f"{t_ra:,.0f}"), True))
+    y = _draw_table(draw, X, y, ("日期", "订单数", "金额(JPY)", "退款笔数", "退款金额(JPY)"),
                     rows, f_cell, f_cell_b, ('left', 'right', 'right', 'right', 'right'))
     y += 10
 

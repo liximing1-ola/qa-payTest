@@ -87,21 +87,21 @@ def get_recent_reports(days: int = 7):
         raise Exception(f"最近 {days} 天均无销售报告（Apple 数据延迟）")
     return reports
 
-# 常见结算币种对 CNY 的近似折算率（日报统一折算为 USD 展示，精确对账以 ASC 财务报告为准）
+# 常见结算币种对 CNY 的近似折算率（日报统一折算为 JPY 展示，精确对账以 ASC 财务报告为准）
 CNY_RATES = {
     'CNY': 1.0, 'EUR': 7.80, 'USD': 7.20, 'JPY': 0.048, 'HKD': 0.92,
     'SGD': 5.40, 'TWD': 0.23, 'AUD': 4.80, 'MYR': 1.55, 'IDR': 0.00045,
 }
 
-def _total_usd(proceeds_by_currency: dict) -> float:
-    """多币种销售额折算为美元总额（未知币种按 1.0 计）"""
+def _total_jpy(proceeds_by_currency: dict) -> int:
+    """多币种销售额折算为日元总额（整数展示；未知币种按 1.0 计）"""
     cny = sum(CNY_RATES.get(code, 1.0) * amount
               for code, amount in proceeds_by_currency.items())
-    return round(cny / CNY_RATES['USD'], 2)
+    return int(round(cny / CNY_RATES['JPY']))
 
 def summarize_day(df, aids):
     """单日统计：监控清单内各 App 的新下载（type1）与历史安装（type3），
-    与全账号折算 USD 销售总额（不分 App，当日一个总数）"""
+    与全账号折算 JPY 销售总额（不分 App，当日一个总数）"""
     per_app = {}
     for aid in aids:
         app_df = df[df['Apple Identifier'] == aid]
@@ -113,7 +113,7 @@ def summarize_day(df, aids):
         per_app[aid] = {'new': units('1'), 'redownload': units('3')}
     proceeds = (df.assign(_p=df['Developer Proceeds'].astype(float))
                   .groupby('Currency of Proceeds')['_p'].sum().to_dict())
-    return per_app, _total_usd(proceeds)
+    return per_app, _total_jpy(proceeds)
 
 # ========= 表格图片渲染（企微 text/markdown 均不渲染表格，走 image 消息）=========
 _FONT_DIR = r'C:\Windows\Fonts'
@@ -197,7 +197,7 @@ def _draw_table(draw, x, y, headers, rows, font, bold_font, aligns):
     return y
 
 def render_report_image(days_sorted, per_day, day_sales, app_list, warning=None) -> bytes:
-    """渲染近 7 日日报表格图片：每个 App 逐日下载量 + 全账号当日销售额（USD）汇总"""
+    """渲染近 7 日日报表格图片：每个 App 逐日下载量 + 全账号当日销售额（JPY）汇总"""
     f_title = _load_font(26, bold=True)
     f_block = _load_font(21, bold=True)
     f_cell = _load_font(19)
@@ -237,15 +237,15 @@ def render_report_image(days_sorted, per_day, day_sales, app_list, warning=None)
         y += 22
 
     # 销售额汇总（全账号当日总数，不分 App）
-    draw.text((X, y), "■ 销售额汇总（全账号，USD）", font=f_block, fill=_C_TITLE)
+    draw.text((X, y), "■ 销售额汇总（全账号，JPY）", font=f_block, fill=_C_TITLE)
     y += 34
-    rows, total_sales = [], 0.0
+    rows, total_sales = [], 0
     for d in days_sorted:
         v = day_sales[d]
         total_sales += v
-        rows.append(((f"{d:%m-%d}", f"{v:,.2f}"), False))
-    rows.append((("7日小计", f"{total_sales:,.2f}"), True))
-    y = _draw_table(draw, X, y, ("日期", "销售额($)"),
+        rows.append(((f"{d:%m-%d}", f"{v:,.0f}"), False))
+    rows.append((("7日小计", f"{total_sales:,.0f}"), True))
+    y = _draw_table(draw, X, y, ("日期", "销售额(JPY)"),
                     rows, f_cell, f_cell_b, ('left', 'right'))
     y += 22
 
