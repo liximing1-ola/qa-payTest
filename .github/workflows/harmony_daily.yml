@@ -1,0 +1,63 @@
+# HarmonyOS（鸿蒙）数据日报：AGC 下载安装报表 + IAP 订单查询
+# 当前阶段：手动触发探测（probe）验证接口连通性；数据验证通过后再加定时任务与企微推送。
+# Secrets 需要两条：
+#   HARMONY_ENV_FILE — .env.harmony 全文（HARMONY_CLIENT_ID / CLIENT_SECRET / APP_ID /
+#                      IAP_KEY_ID / IAP_ISSUER_ID / IAP_KEY_PATH）
+#   HARMONY_P8_KEY   — IAP 服务端私钥文件全文（p8 内容，BEGIN/END PRIVATE KEY）
+name: HarmonyOS Daily Report
+
+on:
+  workflow_dispatch:
+    inputs:
+      probe:
+        description: '探测模式：拉取下载报表 + IAP 订单并打印样例（不推送）'
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: harmony-daily
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install deps
+        run: pip install -r daily_report/requirements-asc.txt
+
+      - name: Write secrets to local files
+        env:
+          HARMONY_ENV: ${{ secrets.HARMONY_ENV_FILE }}
+          HARMONY_P8: ${{ secrets.HARMONY_P8_KEY }}
+        run: |
+          if (-not $env:HARMONY_ENV) {
+            Write-Error "::error::HARMONY_ENV_FILE secret 未配置，请到 Settings > Secrets and variables > Actions 添加"
+            exit 1
+          }
+          # UTF-8 无 BOM 写入（含中文，避免编码乱码）
+          [IO.File]::WriteAllText("$PWD/daily_report/.env.harmony", $env:HARMONY_ENV)
+          # IAP 私钥文件名从 .env.harmony 的 HARMONY_IAP_KEY_PATH 解析，换密钥无需改 workflow
+          $p8name = [regex]::Match($env:HARMONY_ENV, 'HARMONY_IAP_KEY_PATH=(\S+)').Groups[1].Value
+          if ($p8name) {
+            if (-not $env:HARMONY_P8) {
+              Write-Error "::error::HARMONY_P8_KEY secret 未配置（IAP 订单查询需要私钥）"
+              exit 1
+            }
+            [IO.File]::WriteAllText("$PWD/daily_report/$p8name", $env:HARMONY_P8)
+          }
+
+      - name: Run harmony probe
+        env:
+          PYTHONUTF8: '1'
+          HARMONY_PROBE: ${{ inputs.probe }}
+        run: python daily_report/fetch_harmony_daily.py

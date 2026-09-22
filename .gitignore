@@ -6,7 +6,8 @@
 /common/devUserToken.txt
 # daily_report：只封锁敏感配置与运行产物，脚本本身可入库
 /daily_report/.env
-/daily_report/AuthKey_*.p8
+/daily_report/.env.harmony
+/daily_report/*.p8
 /daily_report/asc_daily_report.png
 __pycache__/
 caseStarify/__pycache__/
