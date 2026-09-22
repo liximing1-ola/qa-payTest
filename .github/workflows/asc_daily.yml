@@ -14,10 +14,6 @@ on:
         description: '强制运行（忽略"当天已运行"检查，用于手动重推）'
         type: boolean
         default: false
-      probe:
-        description: '仅探测 analytics 24小时接口并打印响应样例（不推送企微，不计入今日已运行）'
-        type: boolean
-        default: false
 
 permissions:
   contents: read
@@ -40,12 +36,6 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.force }}" = "true" ]; then
             echo "手动强制运行，跳过检查"
-            echo "skip=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          # 探测模式同样跳过"今日已运行"检查，否则当天正常跑过后无法再探测
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.probe }}" = "true" ]; then
-            echo "探测模式，跳过检查"
             echo "skip=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
@@ -96,5 +86,4 @@ jobs:
       - name: Run daily report
         env:
           PYTHONUTF8: '1'
-          ASC_PROBE: ${{ inputs.probe }}
         run: python daily_report/fetch_asc_daily.py
