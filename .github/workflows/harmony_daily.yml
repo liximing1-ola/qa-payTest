@@ -1,7 +1,8 @@
 # HarmonyOS（鸿蒙）日报：AGC 下载安装报表 + IAP 订单查询 → 渲染图片推企微
-# GitHub schedule 为尽力而为（可能延迟甚至丢弃），故设置多个触发点自愈：
-# 北京时间 10:30 起每 30 分钟触发至 13:30；check job 发现当天已有成功/进行中
-# 的运行则自动跳过，确保一天只推一次。手动触发可选 force 强制重推 / probe 探测模式。
+# GitHub schedule 为尽力而为（可能延迟甚至丢弃，:00/:30 整点分钟最易被延迟）：
+# 触发点全部避开整点分钟，北京时间 10:37 起每 30 分钟重试至 15:07（可容忍
+# 数小时延迟）；check job 发现当天已有成功/进行中的运行则自动跳过，确保一天
+# 只推一次。手动触发可选 force 强制重推 / probe 探测模式。
 # Secrets 需要两条：
 #   HARMONY_ENV_FILE — .env.harmony 全文（HARMONY_CLIENT_ID / CLIENT_SECRET / APP_ID /
 #                      IAP_KEY_ID / IAP_ISSUER_ID / IAP_KEY_PATH + WECOM_WEBHOOK；若缺
@@ -11,8 +12,9 @@ name: HarmonyOS Daily Report
 
 on:
   schedule:
-    - cron: '30 2 * * *'      # 北京 10:30
-    - cron: '0,30 3-5 * * *'  # 北京 11:00 - 13:30 每 30 分钟重试
+    - cron: '37 2 * * *'      # 北京 10:37
+    - cron: '7,37 3-6 * * *'  # 北京 11:07 - 14:37 每 30 分钟重试
+    - cron: '7 7 * * *'       # 北京 15:07 兜底
   workflow_dispatch:
     inputs:
       force:
