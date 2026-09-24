@@ -1,8 +1,9 @@
 # HarmonyOS（鸿蒙）日报：AGC 下载安装报表 + IAP 订单查询 → 渲染图片推企微
-# GitHub schedule 为尽力而为（可能延迟甚至丢弃，:00/:30 整点分钟最易被延迟）：
-# 触发点全部避开整点分钟，北京时间 10:37 起每 30 分钟重试至 15:07（可容忍
-# 数小时延迟）；check job 发现当天已有成功/进行中的运行则自动跳过，确保一天
-# 只推一次。手动触发可选 force 强制重推 / probe 探测模式。
+# 触发时间后移：AGC 报表列级陆续刷出（曝光/卸载先出、"新下载"居中、
+# "新安装"最慢，实测上午 11 点仍未就绪），故与 iOS 日报分开发送，北京
+# 12:07 起每 30 分钟重试至 15:07；脚本另有就绪检测：昨日"新安装"仍为 0
+# 则放弃本次（exit 1），15 点后强制发送保底。check job 幂等确保一天只推一次。
+# 手动触发可选 force 强制重推 / probe 探测模式。
 # Secrets 需要两条：
 #   HARMONY_ENV_FILE — .env.harmony 全文（HARMONY_CLIENT_ID / CLIENT_SECRET / APP_ID /
 #                      IAP_KEY_ID / IAP_ISSUER_ID / IAP_KEY_PATH + WECOM_WEBHOOK；若缺
@@ -12,9 +13,9 @@ name: HarmonyOS Daily Report
 
 on:
   schedule:
-    - cron: '37 2 * * *'      # 北京 10:37
-    - cron: '7,37 3-6 * * *'  # 北京 11:07 - 14:37 每 30 分钟重试
-    - cron: '7 7 * * *'       # 北京 15:07 兜底
+    - cron: '7 4 * * *'       # 北京 12:07（等 AGC 昨日数据就绪，鸿蒙延后发送）
+    - cron: '7,37 5-6 * * *'  # 北京 13:07 - 14:37 每 30 分钟重试
+    - cron: '7 7 * * *'       # 北京 15:07 兜底（脚本在 15 点后强制发送）
   workflow_dispatch:
     inputs:
       force:
@@ -115,4 +116,5 @@ jobs:
         env:
           PYTHONUTF8: '1'
           HARMONY_PROBE: ${{ inputs.probe }}
+          HARMONY_FORCE: ${{ inputs.force }}   # 强推时绕过 AGC 就绪检测
         run: python daily_report/fetch_harmony_daily.py

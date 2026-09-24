@@ -42,6 +42,8 @@ IAP_BASE = "https://iap.cloud.huawei.com"           # IAP 服务端（中国站�
 PROBE = os.getenv("HARMONY_PROBE", "").lower() == "true"
 # 本地预览不推送：HARMONY_NO_PUSH=true（只渲染留档，不发企微）
 NO_PUSH = os.getenv("HARMONY_NO_PUSH", "").lower() == "true"
+# 手动强推（workflow force 输入）：绕过就绪检测，无条件发送
+FORCE = os.getenv("HARMONY_FORCE", "").lower() == "true"
 
 # 企微 webhook：优先 .env.harmony；缺省回退同目录 .env（与苹果日报同群可复用，无需重复配置）
 WECOM_WEBHOOK = os.getenv("WECOM_WEBHOOK")
@@ -122,6 +124,14 @@ def summarize_downloads(csv_text: str) -> dict:
         agg["new_install"] += num("新安装成功次数")
         agg["uninstall"] += num("卸载次数")
     return by_day
+
+
+def agc_not_ready(per_day: dict, end_d: date) -> bool:
+    """AGC 昨日下载报表未就绪判定：整行缺失，或"新下载>0 且 新安装=0"。
+    报表各列独立管道分批刷出（曝光/卸载先出，"新下载"居中，"新安装"最慢），
+    "新安装"是最后一个出的列；若昨日新下载本身为 0 则视为就绪（不等了）。"""
+    last = per_day.get(f"{end_d:%Y%m%d}")
+    return last is None or (last["new_download"] > 0 and last["new_install"] == 0)
 
 
 # ========= IAP 服务端（JWT 鉴权 + 订单查询）=========
@@ -430,6 +440,17 @@ if __name__ == "__main__":
         token = get_agc_token()
         csv_text = get_download_report(start_d, end_d, token)
         per_day = summarize_downloads(csv_text)
+
+        # ---------- AGC 就绪检测 ----------
+        # 北京 15 点前未就绪则放弃本次（exit 1 → run failure，check 幂等不锁定，
+        # 等下一触发点重试）；15 点后强制发送保底（当天必达优先于数据完美）。
+        # NO_PUSH 预览跳过检测（预览的目的就是看当前真实状态）；FORCE 手动强推绕过。
+        if not NO_PUSH and not FORCE and agc_not_ready(per_day, end_d) \
+                and datetime.now(CST).hour < 15:
+            last_stat = per_day.get(f"{end_d:%Y%m%d}") or {"new_download": 0}
+            print(f"AGC 昨日({end_d})报表未就绪（新下载 {last_stat['new_download']}，"
+                  f"新安装仍为 0），本次不发送，等待后续触发点重试")
+            sys.exit(1)
 
         # 内购窗口：北京时间 7 个完整日 [start_d 00:00, end_d+1 00:00)，与后台"每日销售额"对齐
         start_ms = int(datetime(start_d.year, start_d.month, start_d.day,
