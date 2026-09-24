@@ -112,15 +112,15 @@ CNY_RATES = {
     'ZAR': 0.40, 'EGP': 0.148,
 }
 
-def _total_usd(proceeds_by_currency: dict) -> float:
-    """多币种销售额折算为美元总额（两位小数展示；未知币种按 1.0 计）"""
+def _total_usd(amount_by_currency: dict) -> float:
+    """多币种商品销售额折算为美元总额（两位小数展示；未知币种按 1.0 计）"""
     cny = sum(CNY_RATES.get(code, 1.0) * amount
-              for code, amount in proceeds_by_currency.items())
+              for code, amount in amount_by_currency.items())
     return round(cny / CNY_RATES['USD'], 2)
 
 def summarize_day(df, aids):
     """单日统计：监控清单内各 App 的新下载（type1）与历史安装（type3），
-    与全账号折算 USD 销售总额（不分 App，当日一个总数）"""
+    与全账号当日商品销售额（顾客支付口径 = 单价×数量，不分 App，折算 USD）"""
     per_app = {}
     for aid in aids:
         app_df = df[df['Apple Identifier'] == aid]
@@ -130,9 +130,10 @@ def summarize_day(df, aids):
                        ['Units'].astype(int).sum())
 
         per_app[aid] = {'new': units('1'), 'redownload': units('3')}
-    proceeds = (df.assign(_p=df['Developer Proceeds'].astype(float))
-                  .groupby('Currency of Proceeds')['_p'].sum().to_dict())
-    return per_app, _total_usd(proceeds)
+    gross = (df.assign(_g=pd.to_numeric(df['Customer Price'], errors='coerce').fillna(0.0)
+                       * pd.to_numeric(df['Units'], errors='coerce').fillna(0))
+               .groupby('Customer Currency')['_g'].sum().to_dict())
+    return per_app, _total_usd(gross)
 
 # ========= 表格图片渲染（企微 text/markdown 均不渲染表格，走 image 消息）=========
 _FONT_DIR = r'C:\Windows\Fonts'
@@ -216,12 +217,13 @@ def _draw_table(draw, x, y, headers, rows, font, bold_font, aligns):
     return y
 
 def render_report_image(days_sorted, per_day, day_sales, app_list, m_start, warning=None) -> bytes:
-    """渲染近 7 日日报表格图片：每个 App 逐日下载量 + 全账号当日销售额（USD）；
-    表格底部合计行为自然月累计（m_start ~ 最新数据日，缺报日按 0）"""
+    """渲染近 7 日日报表格图片：每个 App 逐日下载量（底部自然月累计）+ 全账号
+    自然月商品销售额（顾客支付口径 = 单价×数量，USD，与后台"销售和趋势"一致）"""
     f_title = _load_font(26, bold=True)
     f_block = _load_font(21, bold=True)
     f_cell = _load_font(19)
     f_cell_b = _load_font(19, bold=True)
+    f_sales = _load_font(30, bold=True)
     f_note = _load_font(15)
 
     W, X, TOP = 640, 30, 26
@@ -258,17 +260,13 @@ def render_report_image(days_sorted, per_day, day_sales, app_list, m_start, warn
                         rows, f_cell, f_cell_b, ('left', 'right', 'right'))
         y += 22
 
-    # 销售额汇总（全账号当日总数，不分 App，USD）
-    draw.text((X, y), "■ 销售额汇总（全账号，USD）", font=f_block, fill=_C_TITLE)
-    y += 34
-    rows = []
-    for d in days_sorted:
-        rows.append(((f"{d:%m-%d}", f"{day_sales.get(d, 0):,.2f}"), False))
+    # 商品销售额（顾客支付口径，全账号自然月累计，与后台"销售和趋势"一致）
     m_sales = sum(day_sales.get(d, 0) for d in m_days)
-    rows.append(((f"{m_start.month}月累计", f"{m_sales:,.2f}"), True))
-    y = _draw_table(draw, X, y, ("日期", "销售额(USD)"),
-                    rows, f_cell, f_cell_b, ('left', 'right'))
-    y += 22
+    draw.text((X, y), f"■ {m_start.month}月商品销售额（自然月，全账号，USD）",
+              font=f_block, fill=_C_TITLE)
+    y += 40
+    draw.text((X + 12, y), f"{m_sales:,.2f}", font=f_sales, fill=_C_TEXT)
+    y += 50
 
     buf = io.BytesIO()
     canvas.crop((0, 0, W, int(y))).save(buf, format='PNG')
