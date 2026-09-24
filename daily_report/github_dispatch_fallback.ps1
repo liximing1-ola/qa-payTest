@@ -6,9 +6,10 @@
 #          it only fires a dispatch when no run succeeded yet "today" (Beijing).
 # Task:    DailyReport_FallbackDispatch -- daily at 10:50, 11:10, 11:40, 12:10,
 #          12:40, 13:10, 13:40, 14:10, 14:40, 15:10, 15:40 (machine local time).
-#          Register from PowerShell (non-admin):
-#            $a = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument `
-#                 '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "D:\qa-payTest\daily_report\github_dispatch_fallback.ps1"'
+#          Register from PowerShell (non-admin). Launched via wscript.exe +
+#          run_fallback.vbs (window style 0) so the PowerShell console window
+#          never flashes on screen at trigger points:
+#            $a = New-ScheduledTaskAction -Execute 'wscript.exe' -Argument '"D:\qa-payTest\daily_report\run_fallback.vbs"'
 #            $t = '10:50','11:10','11:40','12:10','12:40','13:10','13:40','14:10','14:40','15:10','15:40' |
 #                 ForEach-Object { New-ScheduledTaskTrigger -Daily -At $_ }
 #            Register-ScheduledTask -TaskName 'DailyReport_FallbackDispatch' -Action $a -Trigger $t -Force
