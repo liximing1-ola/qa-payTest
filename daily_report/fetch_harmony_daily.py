@@ -312,8 +312,9 @@ def _draw_table(draw, x, y, headers, rows, font, bold_font, aligns):
     return y
 
 
-def render_report_image(days_sorted, per_day, iap_by_day) -> bytes:
-    """渲染近 7 日日报：逐日 新下载/新安装/卸载 + 逐日内购（订单数/金额/退款）"""
+def render_report_image(days_sorted, per_day, iap_by_day, m_start) -> bytes:
+    """渲染近 7 日日报：逐日 新下载/新安装/卸载 + 逐日内购（订单数/金额/退款）；
+    表格底部合计行为自然月累计（m_start ~ 最新数据日）"""
     f_title = _load_font(26, bold=True)
     f_block = _load_font(21, bold=True)
     f_cell = _load_font(19)
@@ -336,15 +337,20 @@ def render_report_image(days_sorted, per_day, iap_by_day) -> bytes:
     no_dl = {"new_download": 0, "new_install": 0, "uninstall": 0}
     draw.text((X, y), "■ 下载安装（AGC 报表）", font=f_block, fill=_C_TITLE)
     y += 34
-    rows, s_dl, s_in, s_un = [], 0, 0, 0
+    rows = []
     for d in days_sorted:
+        stat = per_day.get(f"{d:%Y%m%d}", no_dl)
+        rows.append(((f"{d:%m-%d}", f"{stat['new_download']:,}",
+                      f"{stat['new_install']:,}", f"{stat['uninstall']:,}"), False))
+    # 合计行为自然月累计（1 号 ~ 最新数据日；月初 1 号当天即上月整月）
+    m_days = [m_start + timedelta(days=i) for i in range((end - m_start).days + 1)]
+    s_dl = s_in = s_un = 0
+    for d in m_days:
         stat = per_day.get(f"{d:%Y%m%d}", no_dl)
         s_dl += stat["new_download"]
         s_in += stat["new_install"]
         s_un += stat["uninstall"]
-        rows.append(((f"{d:%m-%d}", f"{stat['new_download']:,}",
-                      f"{stat['new_install']:,}", f"{stat['uninstall']:,}"), False))
-    rows.append((("7日小计", f"{s_dl:,}", f"{s_in:,}", f"{s_un:,}"), True))
+    rows.append(((f"{m_start.month}月累计", f"{s_dl:,}", f"{s_in:,}", f"{s_un:,}"), True))
     y = _draw_table(draw, X, y, ("日期", "新下载成功次数", "新安装成功次数", "卸载次数"),
                     rows, f_cell, f_cell_b, ('left', 'right', 'right', 'right'))
     y += 22
@@ -353,18 +359,24 @@ def render_report_image(days_sorted, per_day, iap_by_day) -> bytes:
     no_iap = {"count": 0, "amount": 0.0, "refund_count": 0, "refund_amount": 0.0}
     draw.text((X, y), "■ 内购（IAP 服务端，JPY）", font=f_block, fill=_C_TITLE)
     y += 34
-    rows, t_cnt, t_amt, t_rc, t_ra = [], 0, 0.0, 0, 0.0
+    rows = []
     for d in days_sorted:
         stat = iap_by_day.get(f"{d:%Y%m%d}", no_iap)
         amt_jpy = int(round(stat["amount"] / JPY_CNY_RATE))
         refund_jpy = int(round(stat["refund_amount"] / JPY_CNY_RATE))
-        t_cnt += stat["count"]
-        t_amt += amt_jpy
-        t_rc += stat["refund_count"]
-        t_ra += refund_jpy
         rows.append(((f"{d:%m-%d}", f"{stat['count']:,}", f"{amt_jpy:,.0f}",
                       f"{stat['refund_count']:,}", f"{refund_jpy:,.0f}"), False))
-    rows.append((("7日合计", f"{t_cnt:,}", f"{t_amt:,.0f}", f"{t_rc:,}", f"{t_ra:,.0f}"), True))
+    # 合计行为自然月累计（金额先整月合并再折算 JPY，避免逐日四舍五入累积误差）
+    t_cnt, t_amt_cny, t_rc, t_ra_cny = 0, 0.0, 0, 0.0
+    for d in m_days:
+        stat = iap_by_day.get(f"{d:%Y%m%d}", no_iap)
+        t_cnt += stat["count"]
+        t_amt_cny += stat["amount"]
+        t_rc += stat["refund_count"]
+        t_ra_cny += stat["refund_amount"]
+    t_amt = int(round(t_amt_cny / JPY_CNY_RATE))
+    t_ra = int(round(t_ra_cny / JPY_CNY_RATE))
+    rows.append(((f"{m_start.month}月累计", f"{t_cnt:,}", f"{t_amt:,.0f}", f"{t_rc:,}", f"{t_ra:,.0f}"), True))
     y = _draw_table(draw, X, y, ("日期", "订单数", "金额(JPY)", "退款笔数", "退款金额(JPY)"),
                     rows, f_cell, f_cell_b, ('left', 'right', 'right', 'right', 'right'))
     y += 10
@@ -436,9 +448,13 @@ if __name__ == "__main__":
         end_d = datetime.now(CST).date() - timedelta(days=1)
         start_d = end_d - timedelta(days=6)
         days_sorted = [start_d + timedelta(days=i) for i in range(7)]
+        # 自然月累计窗口：end_d 所在月 1 号 ~ end_d（月初 1 号时即上月整月）
+        m_start = end_d.replace(day=1)
+        # 报表请求区间取两者更早日，保证 7 日明细与月累计来自同一批数据
+        fetch_start = min(start_d, m_start)
 
         token = get_agc_token()
-        csv_text = get_download_report(start_d, end_d, token)
+        csv_text = get_download_report(fetch_start, end_d, token)
         per_day = summarize_downloads(csv_text)
 
         # ---------- AGC 就绪检测 ----------
@@ -452,15 +468,15 @@ if __name__ == "__main__":
                   f"新安装仍为 0），本次不发送，等待后续触发点重试")
             sys.exit(1)
 
-        # 内购窗口：北京时间 7 个完整日 [start_d 00:00, end_d+1 00:00)，与后台"每日销售额"对齐
-        start_ms = int(datetime(start_d.year, start_d.month, start_d.day,
+        # 内购窗口：北京时间 [fetch_start 00:00, end_d+1 00:00)，与后台"每日销售额"对齐
+        start_ms = int(datetime(fetch_start.year, fetch_start.month, fetch_start.day,
                                 tzinfo=CST).timestamp() * 1000)
         end_ms = int(datetime(end_d.year, end_d.month, end_d.day,
                               tzinfo=CST).timestamp() * 1000) + 24 * 3600 * 1000
         orders = query_iap_orders_range(start_ms, end_ms)
         iap_by_day = summarize_orders_by_day(orders)
 
-        png = render_report_image(days_sorted, per_day, iap_by_day)
+        png = render_report_image(days_sorted, per_day, iap_by_day, m_start)
         # 本地留档一份（排查渲染问题用）
         with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                'harmony_daily_report.png'), 'wb') as f:
