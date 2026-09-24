@@ -87,6 +87,20 @@ def get_recent_reports(days: int = 7):
         raise Exception(f"最近 {days} 天均无销售报告（Apple 数据延迟）")
     return reports
 
+# 补齐 [start_d, end_d] 区间内缺失日期的报表（404 = 该日无数据，跳过；其余错误照常抛）
+def backfill_reports(reports: dict, start_d: date, end_d: date):
+    token = get_asc_token()
+    d = start_d
+    while d <= end_d:
+        if d not in reports:
+            try:
+                reports[d] = get_asc_daily_report(d, token)
+            except Exception as e:
+                if 'code:404' not in str(e):
+                    raise
+        d += timedelta(days=1)
+    return reports
+
 # 常见结算币种对 CNY 的近似折算率（日报统一折算为 JPY 展示，精确对账以 ASC 财务报告为准）
 CNY_RATES = {
     'CNY': 1.0, 'EUR': 7.80, 'USD': 7.20, 'JPY': 0.048, 'HKD': 0.92,
@@ -196,8 +210,9 @@ def _draw_table(draw, x, y, headers, rows, font, bold_font, aligns):
                    outline=_C_GRID, width=1)
     return y
 
-def render_report_image(days_sorted, per_day, day_sales, app_list, warning=None) -> bytes:
-    """渲染近 7 日日报表格图片：每个 App 逐日下载量 + 全账号当日销售额（JPY）汇总"""
+def render_report_image(days_sorted, per_day, day_sales, app_list, m_start, warning=None) -> bytes:
+    """渲染近 7 日日报表格图片：每个 App 逐日下载量 + 全账号当日销售额（JPY）；
+    表格底部合计行为自然月累计（m_start ~ 最新数据日，缺报日按 0）"""
     f_title = _load_font(26, bold=True)
     f_block = _load_font(21, bold=True)
     f_cell = _load_font(19)
@@ -208,6 +223,8 @@ def render_report_image(days_sorted, per_day, day_sales, app_list, warning=None)
     canvas = Image.new('RGB', (W, 1600), 'white')
     draw = ImageDraw.Draw(canvas)
     start, end = days_sorted[0], days_sorted[-1]
+    # 自然月累计覆盖的日历日（月初 1 号当天即上月整月）
+    m_days = [m_start + timedelta(days=i) for i in range((end - m_start).days + 1)]
 
     y = TOP
     draw.text((X, y), f"App Store 近7日日报  {start:%m-%d} ~ {end:%m-%d}（{end:%Y}年）",
@@ -222,16 +239,16 @@ def render_report_image(days_sorted, per_day, day_sales, app_list, warning=None)
         aid = str(app['app_id'])
         draw.text((X, y), f"■ {app['name']}", font=f_block, fill=_C_TITLE)
         y += 34
-        rows, app_new, app_re = [], 0, 0
+        rows = []
         for d in days_sorted:
-            stat = per_day[d].get(aid, no_stat)
-            app_new += stat['new']
-            app_re += stat['redownload']
+            stat = per_day.get(d, {}).get(aid, no_stat)
             day_total = stat['new'] + stat['redownload']
             rows.append(((f"{d:%m-%d}", f"{stat['new']:,}",
                           f"{stat['redownload']:,}"), False,
                          day_total > ALERT_DOWNLOAD_THRESHOLD))
-        rows.append((("7日小计", f"{app_new:,}", f"{app_re:,}"), True))
+        m_new = sum(per_day.get(d, {}).get(aid, no_stat)['new'] for d in m_days)
+        m_re = sum(per_day.get(d, {}).get(aid, no_stat)['redownload'] for d in m_days)
+        rows.append(((f"{m_start.month}月累计", f"{m_new:,}", f"{m_re:,}"), True))
         y = _draw_table(draw, X, y, ("日期", "新下载", "历史安装"),
                         rows, f_cell, f_cell_b, ('left', 'right', 'right'))
         y += 22
@@ -239,12 +256,11 @@ def render_report_image(days_sorted, per_day, day_sales, app_list, warning=None)
     # 销售额汇总（全账号当日总数，不分 App）
     draw.text((X, y), "■ 销售额汇总（全账号，JPY）", font=f_block, fill=_C_TITLE)
     y += 34
-    rows, total_sales = [], 0
+    rows = []
     for d in days_sorted:
-        v = day_sales[d]
-        total_sales += v
-        rows.append(((f"{d:%m-%d}", f"{v:,.0f}"), False))
-    rows.append((("7日小计", f"{total_sales:,.0f}"), True))
+        rows.append(((f"{d:%m-%d}", f"{day_sales.get(d, 0):,.0f}"), False))
+    m_sales = sum(day_sales.get(d, 0) for d in m_days)
+    rows.append(((f"{m_start.month}月累计", f"{m_sales:,.0f}"), True))
     y = _draw_table(draw, X, y, ("日期", "销售额(JPY)"),
                     rows, f_cell, f_cell_b, ('left', 'right'))
     y += 22
@@ -282,17 +298,23 @@ if __name__ == "__main__":
         # 拉取窗口放宽到 10 天，取最近 7 个有数据的日期（昨日缺报时往前补齐）
         reports = get_recent_reports(10)
         days_sorted = sorted(reports)[-7:]
-        # 逐日统计：监控 App 各自下载量 + 全账号当日销售总额
+        # 自然月累计窗口：最新数据日所在月 1 号 ~ 最新数据日（月初 1 号当天即上月整月）
+        m_start = days_sorted[-1].replace(day=1)
+        # 以两个窗口的更早日为起点补拉缺失日期（Apple 数据延迟 1~3 天，月初时月首日可能在近 10 天外）
+        span_start = min(days_sorted[0], m_start)
+        backfill_reports(reports, span_start, days_sorted[-1])
+        # 逐日统计：监控 App 各自下载量 + 全账号当日销售总额（覆盖近7日与月累计两个窗口）
         aids = [str(app['app_id']) for app in APP_LIST]
-        stats = {d: summarize_day(reports[d], aids) for d in days_sorted}
-        per_day = {d: stats[d][0] for d in days_sorted}
-        day_sales = {d: stats[d][1] for d in days_sorted}
+        span_days = [d for d in reports if span_start <= d <= days_sorted[-1]]
+        stats = {d: summarize_day(reports[d], aids) for d in span_days}
+        per_day = {d: stats[d][0] for d in span_days}
+        day_sales = {d: stats[d][1] for d in span_days}
 
         warning = None
         if yesterday not in reports:
             # Apple 销售日报延迟 1~3 天，10:30 时昨日报告常未生成
             warning = f"昨日({yesterday:%m-%d})报告尚未生成，以下为近7日已可得数据"
-        png = render_report_image(days_sorted, per_day, day_sales, APP_LIST, warning)
+        png = render_report_image(days_sorted, per_day, day_sales, APP_LIST, m_start, warning)
         # 本地留档一份（排查渲染问题用）
         with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                'asc_daily_report.png'), 'wb') as f:
