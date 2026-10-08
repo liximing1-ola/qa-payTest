@@ -1,3 +1,4 @@
+import sys
 import time
 
 import jwt
@@ -328,3 +329,5 @@ if __name__ == "__main__":
         err_msg = f"【App Store日报任务异常】\n日期:{yesterday}\n错误信息:{str(e)}"
         send_wecom_msg(err_msg)
         print(err_msg)
+        # 非零退出：workflow 记为失败，check 幂等不锁定当天，后续触发点可重试补发
+        sys.exit(1)
