@@ -54,10 +54,6 @@ if not WECOM_WEBHOOK:
 # 北京时间（AGC 后台页面口径：销售分析按北京日聚合）
 CST = timezone(timedelta(hours=8))
 
-# 日元对人民币近似折算率（1 日元 = 0.048 元，即 1 元 ≈ 20.83 日元；与苹果日报折算表一致）
-JPY_CNY_RATE = 0.048
-
-
 # ========= AGC 授权（API客户端方式）=========
 def get_agc_token() -> str:
     """获取 access_token（client_credentials，有效期 48 小时）"""
@@ -355,29 +351,25 @@ def render_report_image(days_sorted, per_day, iap_by_day, m_start) -> bytes:
                     rows, f_cell, f_cell_b, ('left', 'right', 'right', 'right'))
     y += 22
 
-    # 内购（逐日：订单数 / 金额 / 退款；金额统一折算 JPY 展示）
+    # 内购（逐日：订单数 / 金额 / 退款；金额为人民币元，IAP 服务端原值）
     no_iap = {"count": 0, "amount": 0.0, "refund_count": 0, "refund_amount": 0.0}
-    draw.text((X, y), "■ 内购（IAP 服务端，JPY）", font=f_block, fill=_C_TITLE)
+    draw.text((X, y), "■ 内购（IAP 服务端，人民币）", font=f_block, fill=_C_TITLE)
     y += 34
     rows = []
     for d in days_sorted:
         stat = iap_by_day.get(f"{d:%Y%m%d}", no_iap)
-        amt_jpy = int(round(stat["amount"] / JPY_CNY_RATE))
-        refund_jpy = int(round(stat["refund_amount"] / JPY_CNY_RATE))
-        rows.append(((f"{d:%m-%d}", f"{stat['count']:,}", f"{amt_jpy:,.0f}",
-                      f"{stat['refund_count']:,}", f"{refund_jpy:,.0f}"), False))
-    # 合计行为自然月累计（金额先整月合并再折算 JPY，避免逐日四舍五入累积误差）
-    t_cnt, t_amt_cny, t_rc, t_ra_cny = 0, 0.0, 0, 0.0
+        rows.append(((f"{d:%m-%d}", f"{stat['count']:,}", f"{stat['amount']:,.2f}",
+                      f"{stat['refund_count']:,}", f"{stat['refund_amount']:,.2f}"), False))
+    # 合计行为自然月累计（金额先整月合并，避免逐日四舍五入累积误差）
+    t_cnt, t_amt, t_rc, t_ra = 0, 0.0, 0, 0.0
     for d in m_days:
         stat = iap_by_day.get(f"{d:%Y%m%d}", no_iap)
         t_cnt += stat["count"]
-        t_amt_cny += stat["amount"]
+        t_amt += stat["amount"]
         t_rc += stat["refund_count"]
-        t_ra_cny += stat["refund_amount"]
-    t_amt = int(round(t_amt_cny / JPY_CNY_RATE))
-    t_ra = int(round(t_ra_cny / JPY_CNY_RATE))
-    rows.append(((f"{m_start.month}月累计", f"{t_cnt:,}", f"{t_amt:,.0f}", f"{t_rc:,}", f"{t_ra:,.0f}"), True))
-    y = _draw_table(draw, X, y, ("日期", "订单数", "金额(JPY)", "退款笔数", "退款金额(JPY)"),
+        t_ra += stat["refund_amount"]
+    rows.append(((f"{m_start.month}月累计", f"{t_cnt:,}", f"{t_amt:,.2f}", f"{t_rc:,}", f"{t_ra:,.2f}"), True))
+    y = _draw_table(draw, X, y, ("日期", "订单数", "金额(元)", "退款笔数", "退款金额(元)"),
                     rows, f_cell, f_cell_b, ('left', 'right', 'right', 'right', 'right'))
     y += 10
 
