@@ -102,7 +102,7 @@ def backfill_reports(reports: dict, start_d: date, end_d: date):
         d += timedelta(days=1)
     return reports
 
-# 常见结算币种对 CNY 的近似折算率（日报统一折算为 USD 展示，精确对账以 ASC 财务报告为准；
+# 常见结算币种对 CNY 的近似折算率（日报统一以人民币（元）展示，精确对账以 ASC 财务报告为准；
 # 表外币种按 1.0 计，新币种出现时需及时补表）
 CNY_RATES = {
     'CNY': 1.0, 'EUR': 7.80, 'USD': 7.20, 'JPY': 0.048, 'HKD': 0.92,
@@ -113,15 +113,15 @@ CNY_RATES = {
     'ZAR': 0.40, 'EGP': 0.148,
 }
 
-def _total_usd(amount_by_currency: dict) -> float:
-    """多币种商品销售额折算为美元总额（两位小数展示；未知币种按 1.0 计）"""
+def _total_cny(amount_by_currency: dict) -> float:
+    """多币种商品销售额折算为人民币总额（两位小数展示；未知币种按 1.0 计）"""
     cny = sum(CNY_RATES.get(code, 1.0) * amount
               for code, amount in amount_by_currency.items())
-    return round(cny / CNY_RATES['USD'], 2)
+    return round(cny, 2)
 
 def summarize_day(df, aids):
     """单日统计：监控清单内各 App 的新下载（type1）与历史安装（type3），
-    与全账号当日商品销售额（顾客支付口径 = 单价×数量，不分 App，折算 USD）"""
+    与全账号当日商品销售额（顾客支付口径 = 单价×数量，不分 App，折算人民币）"""
     per_app = {}
     for aid in aids:
         app_df = df[df['Apple Identifier'] == aid]
@@ -134,7 +134,7 @@ def summarize_day(df, aids):
     gross = (df.assign(_g=pd.to_numeric(df['Customer Price'], errors='coerce').fillna(0.0)
                        * pd.to_numeric(df['Units'], errors='coerce').fillna(0))
                .groupby('Customer Currency')['_g'].sum().to_dict())
-    return per_app, _total_usd(gross)
+    return per_app, _total_cny(gross)
 
 # ========= 表格图片渲染（企微 text/markdown 均不渲染表格，走 image 消息）=========
 _FONT_DIR = r'C:\Windows\Fonts'
@@ -219,7 +219,7 @@ def _draw_table(draw, x, y, headers, rows, font, bold_font, aligns):
 
 def render_report_image(days_sorted, per_day, day_sales, app_list, m_start, warning=None) -> bytes:
     """渲染近 7 日日报表格图片：每个 App 逐日下载量（底部自然月累计）+ 全账号
-    自然月商品销售额（顾客支付口径 = 单价×数量，USD，与后台"销售和趋势"一致）"""
+    自然月商品销售额（顾客支付口径 = 单价×数量，人民币展示）"""
     f_title = _load_font(26, bold=True)
     f_block = _load_font(21, bold=True)
     f_cell = _load_font(19)
@@ -263,7 +263,7 @@ def render_report_image(days_sorted, per_day, day_sales, app_list, m_start, warn
 
     # 商品销售额（顾客支付口径，全账号自然月累计，与后台"销售和趋势"一致）
     m_sales = sum(day_sales.get(d, 0) for d in m_days)
-    draw.text((X, y), f"■ {m_start.month}月商品销售额（自然月，全账号，USD）",
+    draw.text((X, y), f"■ {m_start.month}月商品销售额（自然月，全账号，人民币）",
               font=f_block, fill=_C_TITLE)
     y += 40
     draw.text((X + 12, y), f"{m_sales:,.2f}", font=f_sales, fill=_C_TEXT)
