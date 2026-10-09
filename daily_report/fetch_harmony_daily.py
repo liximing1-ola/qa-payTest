@@ -353,7 +353,7 @@ def render_report_image(days_sorted, per_day, iap_by_day, m_start) -> bytes:
 
     # 内购（逐日：订单数 / 金额 / 退款；金额为人民币元，IAP 服务端原值）
     no_iap = {"count": 0, "amount": 0.0, "refund_count": 0, "refund_amount": 0.0}
-    draw.text((X, y), "■ 内购（IAP 服务端，人民币）", font=f_block, fill=_C_TITLE)
+    draw.text((X, y), "■ 内购", font=f_block, fill=_C_TITLE)
     y += 34
     rows = []
     for d in days_sorted:
