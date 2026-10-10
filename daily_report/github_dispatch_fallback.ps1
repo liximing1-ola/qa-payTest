@@ -63,9 +63,9 @@ try {
     $cut = $bjNow.Date.AddHours(-8)
     # Earliest local minute-of-day to dispatch each workflow (12:05 = 725):
     # HarmonyOS AGC report columns are not ready in the morning.
-    $earliest = @{ 'asc_daily.yml' = 0; 'harmony_daily.yml' = 725 }
+    $earliest = @{ 'asc_daily.yml' = 0; 'harmony_daily.yml' = 725; 'periodic_report.yml' = 0 }
 
-    foreach ($wf in @('asc_daily.yml', 'harmony_daily.yml')) {
+    foreach ($wf in @('asc_daily.yml', 'harmony_daily.yml', 'periodic_report.yml')) {
         if (($bjNow.Hour * 60 + $bjNow.Minute) -lt $earliest[$wf]) {
             Write-Log ('HOLD     {0}: before 12:05, waiting for AGC data readiness' -f $wf)
             continue

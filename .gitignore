@@ -10,6 +10,7 @@
 /daily_report/*.p8
 /daily_report/asc_daily_report.png
 /daily_report/harmony_daily_report.png
+/daily_report/periodic_report.png
 __pycache__/
 caseStarify/__pycache__/
 common/__pycache__/

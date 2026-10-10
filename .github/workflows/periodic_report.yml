@@ -1,0 +1,116 @@
+# 周期汇总报表（周报/月报）：北京每日 10:20 检查一次——周一发周报（上周一~周日）、
+# 每月 1 号发月报（上月整月），其余日期 check 直接跳过（不耗 runner）；环比前一周期。
+# 数据通路复用 asc/harmony 两条日报；Secrets 复用四条：ASC_ENV_FILE / ASC_P8_KEY /
+# HARMONY_ENV_FILE / HARMONY_P8_KEY。手动触发可用 force 补发 + period 指定 week/month。
+name: Periodic Report (周报/月报)
+
+on:
+  schedule:
+    - cron: '20 2 * * *'       # 北京 10:20（每日检查；仅周一/每月 1 号真正执行）
+  workflow_dispatch:
+    inputs:
+      force:
+        description: '强制运行（忽略"当天已运行"检查，用于手动补发）'
+        type: boolean
+        default: false
+      period:
+        description: '手动指定周期（force 时生效）：week 或 month'
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: periodic-report
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      skip: ${{ steps.check.outputs.skip }}
+    steps:
+      - name: Check period day and already ran today
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.force }}" = "true" ]; then
+            echo "手动触发（force），跳过检查"
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # 仅周一（date +%u = 1）或每月 1 号执行
+          dow=$(TZ=Asia/Shanghai date +%u)
+          dom=$(TZ=Asia/Shanghai date +%d)
+          if [ "$dow" != "1" ] && [ "$dom" != "01" ]; then
+            echo "今天非周一且非 1 号，非报表日"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          cutoff=$(TZ=Asia/Shanghai date -d "today 00:00" -u +%Y-%m-%dT%H:%M:%SZ)
+          runs=$(curl -sf -H "Authorization: Bearer $GH_TOKEN" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/workflows/periodic_report.yml/runs?per_page=50")
+          count=$(echo "$runs" | jq --arg c "$cutoff" --arg me "${{ github.run_id }}" \
+            '[.workflow_runs[] | select(.id != ($me | tonumber)) | select(.created_at >= $c) | select(.conclusion == "success" or .status == "queued" or .status == "in_progress")] | length' 2>/dev/null || echo -1)
+          if [ "$count" -gt 0 ]; then
+            echo "今天已有 $count 条成功/进行中的运行，跳过本次"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "今天尚无成功运行，本次执行"
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  report:
+    needs: check
+    if: needs.check.outputs.skip != 'true'
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install deps
+        run: pip install -r daily_report/requirements-asc.txt
+
+      - name: Write secrets to local files
+        env:
+          ASC_ENV: ${{ secrets.ASC_ENV_FILE }}
+          ASC_P8: ${{ secrets.ASC_P8_KEY }}
+          HARMONY_ENV: ${{ secrets.HARMONY_ENV_FILE }}
+          HARMONY_P8: ${{ secrets.HARMONY_P8_KEY }}
+        run: |
+          if (-not $env:ASC_ENV) {
+            Write-Error "::error::ASC_ENV_FILE secret 未配置，请到 Settings > Secrets and variables > Actions 添加"
+            exit 1
+          }
+          if (-not $env:HARMONY_ENV) {
+            Write-Error "::error::HARMONY_ENV_FILE secret 未配置，请到 Settings > Secrets and variables > Actions 添加"
+            exit 1
+          }
+          # UTF-8 无 BOM 写入（含中文，避免编码乱码）
+          [IO.File]::WriteAllText("$PWD/daily_report/.env", $env:ASC_ENV)
+          [IO.File]::WriteAllText("$PWD/daily_report/.env.harmony", $env:HARMONY_ENV)
+          # ASC p8 文件名从 .env 的 PRIVATE_KEY_PATH 解析
+          $ascP8 = [regex]::Match($env:ASC_ENV, 'PRIVATE_KEY_PATH=(\S+)').Groups[1].Value
+          if ($ascP8) {
+            if (-not $env:ASC_P8) { Write-Error "::error::ASC_P8_KEY secret 未配置"; exit 1 }
+            [IO.File]::WriteAllText("$PWD/daily_report/$ascP8", $env:ASC_P8)
+          }
+          # 鸿蒙 IAP p8 文件名从 .env.harmony 的 HARMONY_IAP_KEY_PATH 解析
+          $hmP8 = [regex]::Match($env:HARMONY_ENV, 'HARMONY_IAP_KEY_PATH=(\S+)').Groups[1].Value
+          if ($hmP8) {
+            if (-not $env:HARMONY_P8) { Write-Error "::error::HARMONY_P8_KEY secret 未配置"; exit 1 }
+            [IO.File]::WriteAllText("$PWD/daily_report/$hmP8", $env:HARMONY_P8)
+          }
+
+      - name: Run periodic report
+        env:
+          PYTHONUTF8: '1'
+          PERIODIC_FORCE: ${{ inputs.period }}
+        run: python daily_report/fetch_periodic_report.py
