@@ -121,7 +121,8 @@ def _total_cny(amount_by_currency: dict) -> float:
 
 def summarize_day(df, aids):
     """单日统计：监控清单内各 App 的新下载（type1）与历史安装（type3），
-    与全账号当日商品销售额（顾客支付口径 = 单价×数量，不分 App，折算人民币）"""
+    与全账号当日商品销售额（顾客支付口径 = 单价×数量，不分 App，折算人民币）；
+    退款即报表中 Units 为负的冲抵行（ASC 无独立退款字段），返回退款金额（负值）与件数"""
     per_app = {}
     for aid in aids:
         app_df = df[df['Apple Identifier'] == aid]
@@ -131,10 +132,16 @@ def summarize_day(df, aids):
                        ['Units'].astype(int).sum())
 
         per_app[aid] = {'new': units('1'), 'redownload': units('3')}
-    gross = (df.assign(_g=pd.to_numeric(df['Customer Price'], errors='coerce').fillna(0.0)
-                       * pd.to_numeric(df['Units'], errors='coerce').fillna(0))
+    price = pd.to_numeric(df['Customer Price'], errors='coerce').fillna(0.0)
+    units_num = pd.to_numeric(df['Units'], errors='coerce').fillna(0)
+    gross = (df.assign(_g=price * units_num)
                .groupby('Customer Currency')['_g'].sum().to_dict())
-    return per_app, _total_cny(gross)
+    neg = df[units_num < 0]
+    refund_cnt = int(-units_num[units_num < 0].sum())
+    neg_gross = (neg.assign(_g=pd.to_numeric(neg['Customer Price'], errors='coerce').fillna(0.0)
+                            * pd.to_numeric(neg['Units'], errors='coerce').fillna(0))
+                   .groupby('Customer Currency')['_g'].sum().to_dict())
+    return per_app, _total_cny(gross), _total_cny(neg_gross), refund_cnt
 
 # ========= 表格图片渲染（企微 text/markdown 均不渲染表格，走 image 消息）=========
 _FONT_DIR = r'C:\Windows\Fonts'
@@ -217,9 +224,10 @@ def _draw_table(draw, x, y, headers, rows, font, bold_font, aligns):
                    outline=_C_GRID, width=1)
     return y
 
-def render_report_image(days_sorted, per_day, day_sales, app_list, m_start, warning=None) -> bytes:
+def render_report_image(days_sorted, per_day, day_sales, day_refund_amt, day_refund_cnt,
+                        app_list, m_start, warning=None) -> bytes:
     """渲染近 7 日日报表格图片：每个 App 逐日下载量（底部自然月累计）+ 全账号
-    自然月商品销售额（顾客支付口径 = 单价×数量，人民币展示）"""
+    自然月商品销售额（顾客支付口径 = 单价×数量，人民币展示）及月退款（负 Units 冲抵行）"""
     f_title = _load_font(26, bold=True)
     f_block = _load_font(21, bold=True)
     f_cell = _load_font(19)
@@ -261,13 +269,18 @@ def render_report_image(days_sorted, per_day, day_sales, app_list, m_start, warn
                         rows, f_cell, f_cell_b, ('left', 'right', 'right'))
         y += 22
 
-    # 商品销售额（顾客支付口径，全账号自然月累计，与后台"销售和趋势"一致）
+    # 商品销售额（顾客支付口径，全账号自然月累计；下方附月退款，均为负 Units 冲抵行）
     m_sales = sum(day_sales.get(d, 0) for d in m_days)
+    m_refund_amt = sum(day_refund_amt.get(d, 0) for d in m_days)
+    m_refund_cnt = sum(day_refund_cnt.get(d, 0) for d in m_days)
     draw.text((X, y), f"■ {m_start.month}月商品销售额（自然月，全账号，人民币）",
               font=f_block, fill=_C_TITLE)
     y += 40
     draw.text((X + 12, y), f"{m_sales:,.2f}", font=f_sales, fill=_C_TEXT)
     y += 50
+    draw.text((X + 12, y), f"其中退款：{m_refund_cnt:,} 件 / {abs(m_refund_amt):,.2f} 元",
+              font=f_note, fill=_C_TEXT)
+    y += 26
 
     buf = io.BytesIO()
     canvas.crop((0, 0, W, int(y))).save(buf, format='PNG')
@@ -313,12 +326,14 @@ if __name__ == "__main__":
         stats = {d: summarize_day(reports[d], aids) for d in span_days}
         per_day = {d: stats[d][0] for d in span_days}
         day_sales = {d: stats[d][1] for d in span_days}
+        day_refund_amt = {d: stats[d][2] for d in span_days}
+        day_refund_cnt = {d: stats[d][3] for d in span_days}
 
         warning = None
         if yesterday not in reports:
             # Apple 销售日报延迟 1~3 天，10:30 时昨日报告常未生成
             warning = f"昨日({yesterday:%m-%d})报告尚未生成，以下为近7日已可得数据"
-        png = render_report_image(days_sorted, per_day, day_sales, APP_LIST, m_start, warning)
+        png = render_report_image(days_sorted, per_day, day_sales, day_refund_amt, day_refund_cnt, APP_LIST, m_start, warning)
         # 本地留档一份（排查渲染问题用）
         with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                'asc_daily_report.png'), 'wb') as f:
