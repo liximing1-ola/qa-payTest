@@ -269,18 +269,20 @@ def render_report_image(days_sorted, per_day, day_sales, day_refund_amt, day_ref
                         rows, f_cell, f_cell_b, ('left', 'right', 'right'))
         y += 22
 
-    # 商品销售额（顾客支付口径，全账号自然月累计；下方附月退款，均为负 Units 冲抵行）
+    # 商品销售额（顾客支付口径，全账号自然月累计；退款并入金额行同显，均为负 Units 冲抵行）
     m_sales = sum(day_sales.get(d, 0) for d in m_days)
     m_refund_amt = sum(day_refund_amt.get(d, 0) for d in m_days)
     m_refund_cnt = sum(day_refund_cnt.get(d, 0) for d in m_days)
     draw.text((X, y), f"■ {m_start.month}月商品销售额（自然月，全账号，人民币）",
               font=f_block, fill=_C_TITLE)
     y += 40
-    draw.text((X + 12, y), f"{m_sales:,.2f}", font=f_sales, fill=_C_TEXT)
-    y += 50
-    draw.text((X + 12, y), f"其中退款：{m_refund_cnt:,} 件 / {abs(m_refund_amt):,.2f} 元",
+    amt_txt = f"{m_sales:,.2f}"
+    draw.text((X + 12, y), amt_txt, font=f_sales, fill=_C_TEXT)
+    amt_w = draw.textlength(amt_txt, font=f_sales)
+    draw.text((X + 12 + amt_w + 12, y + 12),
+              f"(退款 {m_refund_cnt:,} 件 / {abs(m_refund_amt):,.2f} 元)",
               font=f_note, fill=_C_TEXT)
-    y += 26
+    y += 50
 
     buf = io.BytesIO()
     canvas.crop((0, 0, W, int(y))).save(buf, format='PNG')
