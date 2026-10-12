@@ -4,6 +4,9 @@
 - 每周一：汇总上周（周一~周日）iOS（App Store）与鸿蒙（AGC+IAP）核心数据
 - 每月 1 号：汇总上月整月数据；其余日期静默退出（check job 已提前拦截）
 - 环比 = 与前一同期（上上周 / 上上月）对比
+- 发送时刻在 12 点后（workflow cron 北京 12:23）：周报末日的鸿蒙 AGC 下载
+  报表上午未就绪（列级分批刷出），早发会缺末日下载量；脚本另有就绪检测：
+  末日未就绪 15 点前 exit 1 等下一触发点重试，15 点后强制发送保底。
 
 手动测试/补发：PERIODIC_FORCE=week|month 指定周期；PERIODIC_NO_PUSH=true 只渲染不推送。
 """
@@ -206,6 +209,19 @@ if __name__ == "__main__":
             sys.exit(0)
         (start, end), (p_start, p_end), kind, label = period
         print(f"周期：{label} {start} ~ {end}（环比 {p_start} ~ {p_end}）")
+
+        # ---------- AGC 就绪检测（鸿蒙，同日报策略）----------
+        # 周期末日的下载报表未就绪时：15 点前放弃本次（exit 1 → run failure，
+        # check 幂等不锁定，等下一触发点重试）；15 点后强制发送保底。
+        # NO_PUSH 预览跳过（预览看的就是当前真实状态）；FORCE 手动补发绕过。
+        if not NO_PUSH and not FORCE:
+            end_dl = hm.summarize_downloads(hm.get_download_report(end, end))
+            if hm.agc_not_ready(end_dl, end) and datetime.now(CST).hour < 15:
+                st = end_dl.get(f"{end:%Y%m%d}") or {"new_download": 0}
+                print(f"AGC 周期末日({end})报表未就绪（新下载 {st['new_download']}，"
+                      f"新安装仍为 0），本次不发送，等待后续触发点重试")
+                sys.exit(1)
+
         ios = asc_period(start, end)
         ios_p = asc_period(p_start, p_end)
         hmc = hm_period(start, end)

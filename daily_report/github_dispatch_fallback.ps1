@@ -17,11 +17,13 @@
 #          (never printed, never written to disk).
 # Log:     daily_report/fallback_dispatch.log
 # Alerts:  on hard failure sends ONE WeCom alert per day (webhook from .env).
-# Harmony: NOT dispatched before 12:05 local time -- AGC refreshes yesterday's
+# Harmony/periodic: NOT dispatched before 12:05 local time -- AGC refreshes yesterday's
 #          download-report columns late in the morning (columns appear one by
-#          one), so the HarmonyOS report is held until data is ready. The iOS
-#          (ASC) report keeps the early schedule. The workflow itself also
-#          checks readiness and force-sends after 15:00 as last resort.
+#          one), so the HarmonyOS report and the periodic report (its period
+#          end-day is the same not-yet-ready AGC data) are held until data is
+#          ready. The iOS (ASC) report keeps the early schedule. The workflows
+#          themselves also check readiness and force-send after 15:00 as a
+#          last resort.
 # NOTE: keep this file ASCII-only: PowerShell 5.1 in task context would
 #       misread non-ASCII source text (no UTF-8 BOM guaranteed).
 
@@ -62,8 +64,10 @@ try {
     $bjNow = [DateTime]::UtcNow.AddHours(8)
     $cut = $bjNow.Date.AddHours(-8)
     # Earliest local minute-of-day to dispatch each workflow (12:05 = 725):
-    # HarmonyOS AGC report columns are not ready in the morning.
-    $earliest = @{ 'asc_daily.yml' = 0; 'harmony_daily.yml' = 725; 'periodic_report.yml' = 0 }
+    # HarmonyOS AGC report columns are not ready in the morning; the periodic
+    # report (weekly/monthly) is held too because its period end-day is the
+    # same not-yet-ready AGC data.
+    $earliest = @{ 'asc_daily.yml' = 0; 'harmony_daily.yml' = 725; 'periodic_report.yml' = 725 }
 
     foreach ($wf in @('asc_daily.yml', 'harmony_daily.yml', 'periodic_report.yml')) {
         if (($bjNow.Hour * 60 + $bjNow.Minute) -lt $earliest[$wf]) {

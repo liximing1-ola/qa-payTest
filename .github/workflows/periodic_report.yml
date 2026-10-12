@@ -1,12 +1,14 @@
-# 周期汇总报表（周报/月报）：北京每日 10:20 检查一次——周一发周报（上周一~周日）、
+# 周期汇总报表（周报/月报）：北京每日 12:23 检查一次——周一发周报（上周一~周日）、
 # 每月 1 号发月报（上月整月），其余日期 check 直接跳过（不耗 runner）；环比前一周期。
+# 检查时刻在 12 点后：周报末日的鸿蒙 AGC 下载报表上午未就绪，早发会缺末日下载量；
+# 脚本另有就绪检测（末日未就绪 15 点前 exit 1 等重试，15 点后强制发送）。
 # 数据通路复用 asc/harmony 两条日报；Secrets 复用四条：ASC_ENV_FILE / ASC_P8_KEY /
 # HARMONY_ENV_FILE / HARMONY_P8_KEY。手动触发可用 force 补发 + period 指定 week/month。
 name: Periodic Report (周报/月报)
 
 on:
   schedule:
-    - cron: '20 2 * * *'       # 北京 10:20（每日检查；仅周一/每月 1 号真正执行）
+    - cron: '23 4 * * *'       # 北京 12:23（每日检查；仅周一/每月 1 号真正执行，等 AGC 末日数据就绪）
   workflow_dispatch:
     inputs:
       force:
