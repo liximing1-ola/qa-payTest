@@ -47,8 +47,11 @@ def resolve_period(today: date):
 
 
 def asc_period(start: date, end: date) -> dict:
-    """iOS 周期汇总：逐日拉销售报表聚合（404 视为当日无销售跳过）"""
+    """iOS 周期汇总：逐日拉销售报表聚合（404 视为当日无销售跳过），
+    含全账号合计与分 App（销售/退款/新下载）两级维度"""
     aids = [str(a['app_id']) for a in asc.APP_LIST]
+    apps = {aid: {'new': 0, 'sales': 0.0, 'refund_amt': 0.0, 'refund_cnt': 0}
+            for aid in aids}
     new = redownload = refund_cnt = 0
     sales = refund_amt = 0.0
     days = 0
@@ -62,7 +65,11 @@ def asc_period(start: date, end: date) -> dict:
             d += timedelta(days=1)
             continue
         per_app, s, ra, rc = asc.summarize_day(df, aids)
-        for st in per_app.values():
+        for aid, st in per_app.items():
+            apps[aid]['new'] += st['new']
+            apps[aid]['sales'] += st['sales']
+            apps[aid]['refund_amt'] += st['refund_amt']
+            apps[aid]['refund_cnt'] += st['refund_cnt']
             new += st['new']
             redownload += st['redownload']
         sales += s
@@ -70,9 +77,20 @@ def asc_period(start: date, end: date) -> dict:
         refund_cnt += rc
         days += 1
         d += timedelta(days=1)
+    for a in apps.values():
+        a['sales'] = round(a['sales'], 2)
+        a['refund_amt'] = round(abs(a['refund_amt']), 2)
+    # 账号下其余 App（不在监控清单）的差额：全账号 - 监控 App 之和，保证分项自洽
+    apps['_other'] = {
+        'new': 0,
+        'sales': round(sales - sum(a['sales'] for a in apps.values()), 2),
+        'refund_amt': round(round(abs(refund_amt), 2)
+                            - sum(a['refund_amt'] for a in apps.values()), 2),
+        'refund_cnt': refund_cnt - sum(a['refund_cnt'] for a in apps.values()),
+    }
     return {"new": new, "redownload": redownload,
             "sales": round(sales, 2), "refund_amt": round(abs(refund_amt), 2),
-            "refund_cnt": refund_cnt, "days": days}
+            "refund_cnt": refund_cnt, "days": days, "apps": apps}
 
 
 def hm_period(start: date, end: date) -> dict:
@@ -172,7 +190,8 @@ def render_period_image(label, start, end, p_start, p_end,
               font=f_title, fill=asc._C_TITLE)
     y += 40
     draw.text((X, y), f"注：环比前一周期 {p_start:%m-%d} ~ {p_end:%m-%d}；"
-                      f"iOS 销售额为全账号商品销售额（人民币）", font=f_note, fill=asc._C_WARN)
+                      f"iOS 销售额按 App 分列（顾客支付口径，人民币，含账号下其他应用）",
+              font=f_note, fill=asc._C_WARN)
     y += 30
 
     def block(title, rows):
@@ -185,13 +204,26 @@ def render_period_image(label, start, end, p_start, p_end,
 
     num = lambda v: f"{v:,}"
     money = lambda v: f"{v:,.2f}"
-    block("■ iOS（App Store）", [
-        (("新下载", num(ios["new"]), _trend(ios["new"], ios_p["new"])), False),
-        (("历史安装", num(ios["redownload"]), _trend(ios["redownload"], ios_p["redownload"])), False),
-        (("商品销售额", money(ios["sales"]), _trend(ios["sales"], ios_p["sales"])), False),
-        (("退款件数", num(ios["refund_cnt"]), _trend(ios["refund_cnt"], ios_p["refund_cnt"])), False),
-        (("退款金额", money(ios["refund_amt"]), _trend(ios["refund_amt"], ios_p["refund_amt"])), False),
-    ])
+    ios_rows = []
+    for app in asc.APP_LIST:
+        aid = str(app['app_id'])
+        cur, prev = ios["apps"][aid], ios_p["apps"][aid]
+        name = app['name']
+        ios_rows += [
+            ((f"{name}·新下载", num(cur['new']), _trend(cur['new'], prev['new'])), False),
+            ((f"{name}·商品销售额", money(cur['sales']), _trend(cur['sales'], prev['sales'])), False),
+            ((f"{name}·退款件数", num(cur['refund_cnt']), _trend(cur['refund_cnt'], prev['refund_cnt'])), False),
+            ((f"{name}·退款金额", money(cur['refund_amt']), _trend(cur['refund_amt'], prev['refund_amt'])), False),
+        ]
+    ios_rows += [
+        (("其他应用·商品销售额", money(ios["apps"]["_other"]['sales']),
+          _trend(ios["apps"]["_other"]['sales'], ios_p["apps"]["_other"]['sales'])), False),
+        (("其他应用·退款件数", num(ios["apps"]["_other"]['refund_cnt']),
+          _trend(ios["apps"]["_other"]['refund_cnt'], ios_p["apps"]["_other"]['refund_cnt'])), False),
+        (("其他应用·退款金额", money(ios["apps"]["_other"]['refund_amt']),
+          _trend(ios["apps"]["_other"]['refund_amt'], ios_p["apps"]["_other"]['refund_amt'])), False),
+    ]
+    block("■ iOS（App Store）", ios_rows)
     block("■ 鸿蒙", [
         (("新下载成功", num(hmc["new_download"]), _trend(hmc["new_download"], hm_p["new_download"])), False),
         (("新安装成功", num(hmc["new_install"]), _trend(hmc["new_install"], hm_p["new_install"])), False),

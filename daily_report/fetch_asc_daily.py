@@ -120,28 +120,31 @@ def _total_cny(amount_by_currency: dict) -> float:
     return round(cny, 2)
 
 def summarize_day(df, aids):
-    """单日统计：监控清单内各 App 的新下载（type1）与历史安装（type3），
-    与全账号当日商品销售额（顾客支付口径 = 单价×数量，不分 App，折算人民币）；
-    退款即报表中 Units 为负的冲抵行（ASC 无独立退款字段），返回退款金额（负值）与件数"""
+    """单日统计：监控清单内各 App 的新下载（type1）与历史安装（type3）、
+    商品销售额与退款（顾客支付口径 = 单价×数量，按 App 分列，折算人民币）；
+    退款即报表中 Units 为负的冲抵行（ASC 无独立退款字段），金额为负值、件数为正数。
+    返回 (per_app, 全账号销售额, 全账号退款金额(负值), 全账号退款件数)"""
+    price = pd.to_numeric(df['Customer Price'], errors='coerce').fillna(0.0)
+    units_num = pd.to_numeric(df['Units'], errors='coerce').fillna(0)
+    df = df.assign(_g=price * units_num, _u=units_num)
+
+    def _agg(sub):
+        gross = sub.groupby('Customer Currency')['_g'].sum().to_dict()
+        neg = sub[sub['_u'] < 0]
+        neg_gross = neg.groupby('Customer Currency')['_g'].sum().to_dict()
+        return _total_cny(gross), _total_cny(neg_gross), int(-neg['_u'].sum())
+
     per_app = {}
     for aid in aids:
         app_df = df[df['Apple Identifier'] == aid]
-
-        def units(t):
-            return int(app_df[app_df['Product Type Identifier'] == t]
-                       ['Units'].astype(int).sum())
-
-        per_app[aid] = {'new': units('1'), 'redownload': units('3')}
-    price = pd.to_numeric(df['Customer Price'], errors='coerce').fillna(0.0)
-    units_num = pd.to_numeric(df['Units'], errors='coerce').fillna(0)
-    gross = (df.assign(_g=price * units_num)
-               .groupby('Customer Currency')['_g'].sum().to_dict())
-    neg = df[units_num < 0]
-    refund_cnt = int(-units_num[units_num < 0].sum())
-    neg_gross = (neg.assign(_g=pd.to_numeric(neg['Customer Price'], errors='coerce').fillna(0.0)
-                            * pd.to_numeric(neg['Units'], errors='coerce').fillna(0))
-                   .groupby('Customer Currency')['_g'].sum().to_dict())
-    return per_app, _total_cny(gross), _total_cny(neg_gross), refund_cnt
+        sales, refund_amt, refund_cnt = _agg(app_df)
+        per_app[aid] = {
+            'new': int(app_df.loc[app_df['Product Type Identifier'] == '1', '_u'].sum()),
+            'redownload': int(app_df.loc[app_df['Product Type Identifier'] == '3', '_u'].sum()),
+            'sales': sales, 'refund_amt': refund_amt, 'refund_cnt': refund_cnt,
+        }
+    total_sales, total_refund_amt, total_refund_cnt = _agg(df)
+    return per_app, total_sales, total_refund_amt, total_refund_cnt
 
 # ========= 表格图片渲染（企微 text/markdown 均不渲染表格，走 image 消息）=========
 _FONT_DIR = r'C:\Windows\Fonts'
@@ -232,7 +235,7 @@ def render_report_image(days_sorted, per_day, day_sales, day_refund_amt, day_ref
     f_block = _load_font(21, bold=True)
     f_cell = _load_font(19)
     f_cell_b = _load_font(19, bold=True)
-    f_sales = _load_font(30, bold=True)
+    f_sales = _load_font(24, bold=True)
     f_note = _load_font(15)
 
     W, X, TOP = 640, 30, 26
@@ -269,20 +272,40 @@ def render_report_image(days_sorted, per_day, day_sales, day_refund_amt, day_ref
                         rows, f_cell, f_cell_b, ('left', 'right', 'right'))
         y += 22
 
-    # 商品销售额（顾客支付口径，全账号自然月累计；退款并入金额行同显，均为负 Units 冲抵行）
+    # 商品销售额（顾客支付口径，自然月累计，人民币；分 App 列示，退款并入金额行同显，均为负 Units 冲抵行）
     m_sales = sum(day_sales.get(d, 0) for d in m_days)
     m_refund_amt = sum(day_refund_amt.get(d, 0) for d in m_days)
     m_refund_cnt = sum(day_refund_cnt.get(d, 0) for d in m_days)
-    draw.text((X, y), f"■ {m_start.month}月商品销售额（自然月，全账号，人民币）",
+    draw.text((X, y), f"■ {m_start.month}月商品销售额（自然月，人民币）",
               font=f_block, fill=_C_TITLE)
     y += 40
-    amt_txt = f"{m_sales:,.2f}"
-    draw.text((X + 12, y), amt_txt, font=f_sales, fill=_C_TEXT)
-    amt_w = draw.textlength(amt_txt, font=f_sales)
-    draw.text((X + 12 + amt_w + 12, y + 12),
-              f"(退款 {m_refund_cnt:,} 件 / {abs(m_refund_amt):,.2f} 元)",
-              font=f_note, fill=_C_TEXT)
-    y += 50
+
+    def _sales_row(name, amt, r_cnt, r_amt):
+        nonlocal y
+        draw.text((X + 12, y + 5), name, font=f_cell_b, fill=_C_TEXT)
+        amt_txt = f"{amt:,.2f}"
+        draw.text((X + 150, y), amt_txt, font=f_sales, fill=_C_TEXT)
+        amt_w = draw.textlength(amt_txt, font=f_sales)
+        draw.text((X + 150 + amt_w + 12, y + 9),
+                  f"(退款 {r_cnt:,} 件 / {abs(r_amt):,.2f} 元)",
+                  font=f_note, fill=_C_TEXT)
+        y += 44
+
+    app_sales_total = app_ramt_total = app_rcnt_total = 0
+    for app in app_list:
+        aid = str(app['app_id'])
+        a_sales = sum(per_day.get(d, {}).get(aid, {}).get('sales', 0) for d in m_days)
+        a_ramt = sum(per_day.get(d, {}).get(aid, {}).get('refund_amt', 0) for d in m_days)
+        a_rcnt = sum(per_day.get(d, {}).get(aid, {}).get('refund_cnt', 0) for d in m_days)
+        app_sales_total += a_sales
+        app_ramt_total += a_ramt
+        app_rcnt_total += a_rcnt
+        _sales_row(app['name'], a_sales, a_rcnt, a_ramt)
+    # 账号下其余 App（不在监控清单）的差额行，保证分项之和与合计自洽
+    _sales_row("其他应用", m_sales - app_sales_total,
+               m_refund_cnt - app_rcnt_total, m_refund_amt - app_ramt_total)
+    _sales_row("合计", m_sales, m_refund_cnt, m_refund_amt)
+    y += 6
 
     buf = io.BytesIO()
     canvas.crop((0, 0, W, int(y))).save(buf, format='PNG')
