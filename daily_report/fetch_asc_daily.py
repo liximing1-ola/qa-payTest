@@ -127,6 +127,9 @@ def summarize_day(df, aids):
     """单日统计：监控清单内各 App 的新下载（type1）与历史安装（type3）、
     商品销售额与退款（顾客支付口径 = 单价×数量，按 App 分列，折算人民币）；
     退款即报表中 Units 为负的冲抵行（ASC 无独立退款字段），金额为负值、件数为正数。
+    主 App（aids[0] = 不夜星球）吸收账号下其余历史包（家族马甲）的销售额与退款
+    ——账号实际在营仅两个 App，马甲包收入退款业务上均归属不夜星球；
+    下载类仍按 aid 严格分列（马甲零下载）。
     返回 (per_app, 全账号销售额, 全账号退款金额(负值), 全账号退款件数)"""
     price = pd.to_numeric(df['Customer Price'], errors='coerce').fillna(0.0)
     units_num = pd.to_numeric(df['Units'], errors='coerce').fillna(0)
@@ -148,6 +151,11 @@ def summarize_day(df, aids):
             'sales': sales, 'refund_amt': refund_amt, 'refund_cnt': refund_cnt,
         }
     total_sales, total_refund_amt, total_refund_cnt = _agg(df)
+    # 账号下其余历史包（不在监控清单的马甲家族）的销售额与退款并入主 App，
+    # 使分项之和与全账号合计自洽（业务口径：马甲归不夜星球）
+    per_app[aids[0]]['sales'] += total_sales - sum(p['sales'] for p in per_app.values())
+    per_app[aids[0]]['refund_amt'] += total_refund_amt - sum(p['refund_amt'] for p in per_app.values())
+    per_app[aids[0]]['refund_cnt'] += total_refund_cnt - sum(p['refund_cnt'] for p in per_app.values())
     return per_app, total_sales, total_refund_amt, total_refund_cnt
 
 def render_report_image(days_sorted, per_day, day_sales, day_refund_amt, day_refund_cnt,
@@ -214,19 +222,14 @@ def render_report_image(days_sorted, per_day, day_sales, day_refund_amt, day_ref
                   font=f_note, fill=C_TEXT)
         y += 44
 
-    app_sales_total = app_ramt_total = app_rcnt_total = 0
     for app in app_list:
         aid = str(app['app_id'])
         a_sales = sum(per_day.get(d, {}).get(aid, {}).get('sales', 0) for d in m_days)
         a_ramt = sum(per_day.get(d, {}).get(aid, {}).get('refund_amt', 0) for d in m_days)
         a_rcnt = sum(per_day.get(d, {}).get(aid, {}).get('refund_cnt', 0) for d in m_days)
-        app_sales_total += a_sales
-        app_ramt_total += a_ramt
-        app_rcnt_total += a_rcnt
         _sales_row(app['name'], a_sales, a_rcnt, a_ramt)
-    # 账号下其余 App（不在监控清单）的差额行，保证分项之和与合计自洽
-    _sales_row("其他应用", m_sales - app_sales_total,
-               m_refund_cnt - app_rcnt_total, m_refund_amt - app_ramt_total)
+    # 马甲家族的销售额/退款已在统计层（summarize_day）并入不夜星球，
+    # 分项之和与合计天然自洽，无需“其他应用”差额行
     _sales_row("合计", m_sales, m_refund_cnt, m_refund_amt)
     y += 6
 
