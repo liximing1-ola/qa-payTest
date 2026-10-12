@@ -1,0 +1,36 @@
+# 临时诊断 workflow：云端跑 _diag_refund_tmp.py 拉 iOS 近 14 天退款明细，用完即删
+name: Diag Refund (tmp)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install deps
+        run: pip install -r daily_report/requirements-asc.txt
+
+      - name: Write secrets to local files
+        env:
+          ASC_ENV: ${{ secrets.ASC_ENV_FILE }}
+          ASC_P8: ${{ secrets.ASC_P8_KEY }}
+        run: |
+          printf '%s' "$ASC_ENV" > daily_report/.env
+          p8=$(grep -oP 'PRIVATE_KEY_PATH=\S+' daily_report/.env | cut -d= -f2)
+          printf '%s' "$ASC_P8" > "daily_report/$p8"
+
+      - name: Run diag
+        env:
+          PYTHONUTF8: '1'
+        run: python daily_report/_diag_refund_tmp.py
