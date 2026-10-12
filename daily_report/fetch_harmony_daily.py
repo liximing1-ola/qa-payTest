@@ -10,6 +10,7 @@ import time
 import csv
 import io
 import json
+import hashlib
 import os
 from datetime import date, datetime, timedelta, timezone
 
