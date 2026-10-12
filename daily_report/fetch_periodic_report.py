@@ -97,13 +97,62 @@ def hm_period(start: date, end: date) -> dict:
             "refund_count": summary["refund_count"], "refund_amount": summary["refund_amount"]}
 
 
-def _trend(cur, prev) -> str:
-    """环比格式化：↑涨 ↓降；基数为 0 时 0→'—'、有值→'新增'"""
+def _trend(cur, prev):
+    """环比格式化：↑涨 ↓降；波动超过 ±50% 标红加粗；基数为 0 时 0→'—'、有值→'新增'
+    返回 str（默认样式）或 (text, fill, bold) 富样式元组"""
     if prev == 0:
         return "—" if cur == 0 else "新增"
     pct = (cur - prev) / prev * 100
     arrow = "↑" if pct > 0 else ("↓" if pct < 0 else "→")
-    return f"{arrow}{abs(pct):.1f}%"
+    txt = f"{arrow}{abs(pct):.1f}%"
+    return (txt, asc._C_ALERT_TEXT, True) if abs(pct) > 50 else txt
+
+
+def _draw_table_styled(draw, x, y, headers, rows, font, bold_font, aligns):
+    """同 asc._draw_table 布局，但单元格可为 (text, fill) 或 (text, fill, bold) 富样式元组。
+    rows: [(单元格元组, 是否合计行)]，富样式单元格按自身字体测宽（加粗不溢列）"""
+    def cell_info(cell):
+        if isinstance(cell, tuple):
+            return cell[0], cell[1], bold_font if (len(cell) > 2 and cell[2]) else font
+        return cell, asc._C_TEXT, font
+
+    widths = []
+    for i, h in enumerate(headers):
+        w = draw.textlength(h, font=bold_font)
+        for row in rows:
+            txt, _, cell_font = cell_info(row[0][i])
+            w = max(w, draw.textlength(txt, font=cell_font))
+        widths.append(int(w) + 24)
+    row_h = font.size + 18
+    total_w = sum(widths)
+
+    draw.rectangle([x, y, x + total_w, y + row_h], fill=asc._C_HEADER_BG)
+    cy = y + (row_h - font.size) / 2
+    cx = x
+    for i, h in enumerate(headers):
+        draw.text((asc._cell_x(draw, h, bold_font, cx, widths[i], 'left'), cy),
+                  h, font=bold_font, fill=asc._C_TEXT)
+        cx += widths[i]
+    y += row_h
+
+    for row in rows:
+        cy = y + (row_h - font.size) / 2
+        cx = x
+        for i, cell in enumerate(row[0]):
+            txt, fill, cell_font = cell_info(cell)
+            draw.text((asc._cell_x(draw, txt, cell_font, cx, widths[i], aligns[i]), cy),
+                      txt, font=cell_font, fill=fill)
+            cx += widths[i]
+        draw.line([x, y, x + total_w, y], fill=asc._C_GRID, width=1)
+        y += row_h
+    cx = 0
+    for w in widths:
+        draw.line([x + cx, y - row_h * (len(rows) + 1), x + cx, y], fill=asc._C_GRID, width=1)
+        cx += w
+    draw.line([x, y, x + total_w, y], fill=asc._C_GRID, width=1)
+    draw.rectangle([x, y - row_h * (len(rows) + 1), x + total_w, y],
+                   outline=asc._C_GRID, width=1)
+    return y
 
 
 def render_period_image(label, start, end, p_start, p_end,
@@ -130,8 +179,8 @@ def render_period_image(label, start, end, p_start, p_end,
         nonlocal y
         draw.text((X, y), title, font=f_block, fill=asc._C_TITLE)
         y += 34
-        y = asc._draw_table(draw, X, y, ("指标", "本期", "环比"),
-                            rows, f_cell, f_cell_b, ('left', 'right', 'right'))
+        y = _draw_table_styled(draw, X, y, ("指标", "本期", "环比"),
+                               rows, f_cell, f_cell_b, ('left', 'right', 'right'))
         y += 22
 
     num = lambda v: f"{v:,}"
