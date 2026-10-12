@@ -9,8 +9,8 @@ from datetime import date, datetime, timedelta
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import fetch_harmony_daily as hm
 
-end_d = date.today() - timedelta(days=1)
-start_d = end_d - timedelta(days=6)
+end_d = date(2026, 10, 11)   # 与 AGC 后台截图区间对齐
+start_d = date(2026, 10, 1)
 start_ms = int(datetime(start_d.year, start_d.month, start_d.day,
                         tzinfo=hm.CST).timestamp() * 1000)
 end_ms = int(datetime(end_d.year, end_d.month, end_d.day,

@@ -35,11 +35,6 @@ jobs:
           hp8=$(grep -oP 'HARMONY_IAP_KEY_PATH=\S+' daily_report/.env.harmony | cut -d= -f2)
           printf '%s' "$HARMONY_P8" > "daily_report/$hp8"
 
-      - name: Run iOS aid diag
-        env:
-          PYTHONUTF8: '1'
-        run: python daily_report/_diag_apps_tmp.py
-
       - name: Run Harmony IAP diag
         env:
           PYTHONUTF8: '1'
