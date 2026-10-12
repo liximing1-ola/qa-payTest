@@ -34,7 +34,7 @@ print("\n--- 退款行关键字段（含原交易周期）---")
 show_cols = ['Apple Identifier', 'SKU', 'Title', 'Product Type Identifier', '_u',
              'Customer Price', 'Customer Currency', 'Country Code',
              'Begin Date', 'End Date', 'Parent Identifier', 'Subscription', 'Period',
-             'Proceeds Reason', '_rd']
+             'Proceeds Reason', 'Order Type', 'Client', '_rd']
 show_cols = [c for c in show_cols if c in neg.columns]
 for _, r in neg.sort_values(['Apple Identifier', '_rd']).iterrows():
     print(' | '.join(f"{c}={r[c]}" for c in show_cols))
@@ -47,7 +47,7 @@ for (aid, sku, bd, ed), u in agg.items():
 
 print("\n--- 退款 aid 的正向销售按日分布（近 14 天，看是否仍有新充值/续费）---")
 pos = df[df['_u'] > 0]
-for aid in sorted(neg['Apple Identifier'].astype(int).unique()):
+for aid in sorted(neg['Apple Identifier'].astype(str).unique()):
     sub = pos[pos['Apple Identifier'] == aid]
     if len(sub) == 0:
         print(f"aid={aid}: 近 14 天无正向销售行")
