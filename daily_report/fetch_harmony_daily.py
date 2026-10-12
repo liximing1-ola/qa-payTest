@@ -346,7 +346,7 @@ def render_report_image(days_sorted, per_day, iap_by_day, m_start) -> bytes:
         s_dl += stat["new_download"]
         s_in += stat["new_install"]
         s_un += stat["uninstall"]
-    rows.append(((f"{m_start.month}月累计", f"{s_dl:,}", f"{s_in:,}", f"{s_un:,}"), True))
+    rows.append(((f"{m_start.month}月累计(至{end:%m-%d})", f"{s_dl:,}", f"{s_in:,}", f"{s_un:,}"), True))
     y = _draw_table(draw, X, y, ("日期", "新下载成功次数", "新安装成功次数", "卸载次数"),
                     rows, f_cell, f_cell_b, ('left', 'right', 'right', 'right'))
     y += 22
@@ -368,7 +368,7 @@ def render_report_image(days_sorted, per_day, iap_by_day, m_start) -> bytes:
         t_amt += stat["amount"]
         t_rc += stat["refund_count"]
         t_ra += stat["refund_amount"]
-    rows.append(((f"{m_start.month}月累计", f"{t_cnt:,}", f"{t_amt:,.2f}", f"{t_rc:,}", f"{t_ra:,.2f}"), True))
+    rows.append(((f"{m_start.month}月累计(至{end:%m-%d})", f"{t_cnt:,}", f"{t_amt:,.2f}", f"{t_rc:,}", f"{t_ra:,.2f}"), True))
     y = _draw_table(draw, X, y, ("日期", "订单数", "金额(元)", "退款笔数", "退款金额(元)"),
                     rows, f_cell, f_cell_b, ('left', 'right', 'right', 'right', 'right'))
     y += 10
