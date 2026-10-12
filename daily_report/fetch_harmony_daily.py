@@ -10,15 +10,19 @@ import time
 import csv
 import io
 import json
-import hashlib
-import base64
 import os
 from datetime import date, datetime, timedelta, timezone
 
 import jwt
 import requests
 from dotenv import load_dotenv
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw
+
+# 表格渲染与企微推送工具（三条日报共用）
+from report_common import (
+    C_TITLE, C_WARN, draw_table, load_font, report_failure, save_local,
+    send_wecom_image,
+)
 
 # 显式指向脚本同目录的 .env.harmony（任意 CWD 下均能找到配置）
 load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), '.env.harmony'))
@@ -232,90 +236,14 @@ def summarize_orders_by_day(orders: list) -> dict:
     return by_day
 
 
-# ========= 表格图片渲染（企微 text/markdown 均不渲染表格，走 image 消息）=========
-_FONT_DIR = r'C:\Windows\Fonts'
-# 渲染配色（雅黑字体不含彩色 emoji，图标一律用安全字符 ■/▶ 等）
-_C_TITLE = (28, 62, 120)
-_C_WARN = (190, 110, 10)
-_C_TEXT = (45, 45, 45)
-_C_GRID = (165, 165, 165)
-_C_HEADER_BG = (226, 232, 240)
-_C_TOTAL_BG = (243, 246, 252)
-
-
-def _load_font(size, bold=False):
-    for name in (('msyhbd.ttc' if bold else 'msyh.ttc'), 'simsun.ttc'):
-        try:
-            return ImageFont.truetype(os.path.join(_FONT_DIR, name), size)
-        except OSError:
-            continue
-    return ImageFont.load_default()
-
-
-def _cell_x(draw, text, font, col_x, col_w, align):
-    """按对齐方式计算单元格文本横坐标"""
-    w = draw.textlength(text, font=font)
-    if align == 'right':
-        return col_x + col_w - 12 - w
-    if align == 'center':
-        return col_x + (col_w - w) / 2
-    return col_x + 12
-
-
-def _draw_table(draw, x, y, headers, rows, font, bold_font, aligns):
-    """绘制带表头/网格线的表格。rows: [(单元格元组, 是否合计行)]，返回底部 y"""
-    widths = []
-    for i, h in enumerate(headers):
-        w = draw.textlength(h, font=bold_font)
-        for row in rows:
-            w = max(w, draw.textlength(row[0][i], font=font))
-        widths.append(int(w) + 24)
-    row_h = font.size + 18
-    total_w = sum(widths)
-
-    # 表头
-    draw.rectangle([x, y, x + total_w, y + row_h], fill=_C_HEADER_BG)
-    cy = y + (row_h - font.size) / 2
-    cx = x
-    for i, h in enumerate(headers):
-        draw.text((_cell_x(draw, h, bold_font, cx, widths[i], 'left'), cy),
-                  h, font=bold_font, fill=_C_TEXT)
-        cx += widths[i]
-    y += row_h
-
-    # 数据行（合计行加粗 + 浅蓝底）
-    for cells, is_total in rows:
-        row_font = bold_font if is_total else font
-        if is_total:
-            draw.rectangle([x, y, x + total_w, y + row_h], fill=_C_TOTAL_BG)
-        cy = y + (row_h - font.size) / 2
-        cx = x
-        for i, cell in enumerate(cells):
-            draw.text((_cell_x(draw, cell, row_font, cx, widths[i], aligns[i]), cy),
-                      cell, font=row_font, fill=_C_TEXT)
-            cx += widths[i]
-        # 行分隔线
-        draw.line([x, y, x + total_w, y], fill=_C_GRID, width=1)
-        y += row_h
-    # 竖线与外框
-    cx = x
-    for w in widths:
-        draw.line([cx, y - row_h * (len(rows) + 1), cx, y], fill=_C_GRID, width=1)
-        cx += w
-    draw.line([x, y, x + total_w, y], fill=_C_GRID, width=1)
-    draw.rectangle([x, y - row_h * (len(rows) + 1), x + total_w, y],
-                   outline=_C_GRID, width=1)
-    return y
-
-
 def render_report_image(days_sorted, per_day, iap_by_day, m_start) -> bytes:
     """渲染近 7 日日报：逐日 新下载/新安装/卸载 + 逐日内购（订单数/金额/退款）；
     表格底部合计行为自然月累计（m_start ~ 最新数据日）"""
-    f_title = _load_font(26, bold=True)
-    f_block = _load_font(21, bold=True)
-    f_cell = _load_font(19)
-    f_cell_b = _load_font(19, bold=True)
-    f_note = _load_font(15)
+    f_title = load_font(26, bold=True)
+    f_block = load_font(21, bold=True)
+    f_cell = load_font(19)
+    f_cell_b = load_font(19, bold=True)
+    f_note = load_font(15)
 
     W, X, TOP = 640, 30, 26
     canvas = Image.new('RGB', (W, 1200), 'white')
@@ -324,14 +252,14 @@ def render_report_image(days_sorted, per_day, iap_by_day, m_start) -> bytes:
 
     y = TOP
     draw.text((X, y), f"鸿蒙 近7日日报  {start:%m-%d} ~ {end:%m-%d}（{end:%Y}年）",
-              font=f_title, fill=_C_TITLE)
+              font=f_title, fill=C_TITLE)
     y += 40
-    draw.text((X, y), "注：口径与 AGC 后台一致，当日数据次日更新（不含今日）", font=f_note, fill=_C_WARN)
+    draw.text((X, y), "注：口径与 AGC 后台一致，当日数据次日更新（不含今日）", font=f_note, fill=C_WARN)
     y += 30
 
     # 下载安装（新下载 / 新安装 / 卸载）
     no_dl = {"new_download": 0, "new_install": 0, "uninstall": 0}
-    draw.text((X, y), "■ 下载安装（AGC 报表）", font=f_block, fill=_C_TITLE)
+    draw.text((X, y), "■ 下载安装（AGC 报表）", font=f_block, fill=C_TITLE)
     y += 34
     rows = []
     for d in days_sorted:
@@ -347,13 +275,13 @@ def render_report_image(days_sorted, per_day, iap_by_day, m_start) -> bytes:
         s_in += stat["new_install"]
         s_un += stat["uninstall"]
     rows.append(((f"{m_start.month}月累计(至{end:%m-%d})", f"{s_dl:,}", f"{s_in:,}", f"{s_un:,}"), True))
-    y = _draw_table(draw, X, y, ("日期", "新下载成功次数", "新安装成功次数", "卸载次数"),
+    y = draw_table(draw, X, y, ("日期", "新下载成功次数", "新安装成功次数", "卸载次数"),
                     rows, f_cell, f_cell_b, ('left', 'right', 'right', 'right'))
     y += 22
 
     # 内购（逐日：订单数 / 金额 / 退款；金额为人民币元，IAP 服务端原值）
     no_iap = {"count": 0, "amount": 0.0, "refund_count": 0, "refund_amount": 0.0}
-    draw.text((X, y), "■ 内购", font=f_block, fill=_C_TITLE)
+    draw.text((X, y), "■ 内购", font=f_block, fill=C_TITLE)
     y += 34
     rows = []
     for d in days_sorted:
@@ -369,38 +297,13 @@ def render_report_image(days_sorted, per_day, iap_by_day, m_start) -> bytes:
         t_rc += stat["refund_count"]
         t_ra += stat["refund_amount"]
     rows.append(((f"{m_start.month}月累计(至{end:%m-%d})", f"{t_cnt:,}", f"{t_amt:,.2f}", f"{t_rc:,}", f"{t_ra:,.2f}"), True))
-    y = _draw_table(draw, X, y, ("日期", "订单数", "金额(元)", "退款笔数", "退款金额(元)"),
+    y = draw_table(draw, X, y, ("日期", "订单数", "金额(元)", "退款笔数", "退款金额(元)"),
                     rows, f_cell, f_cell_b, ('left', 'right', 'right', 'right', 'right'))
     y += 10
 
     buf = io.BytesIO()
     canvas.crop((0, 0, W, int(y))).save(buf, format='PNG')
     return buf.getvalue()
-
-
-# 企业微信图片消息推送（表格截图）
-def send_wecom_image(png_bytes: bytes):
-    payload = {
-        "msgtype": "image",
-        "image": {
-            "base64": base64.b64encode(png_bytes).decode(),
-            "md5": hashlib.md5(png_bytes).hexdigest(),
-        }
-    }
-    r = requests.post(WECOM_WEBHOOK, json=payload, timeout=10)
-    print("企微图片推送结果：", r.json())
-
-
-# 企业微信文本消息推送（异常通知用）
-def send_wecom_msg(content: str):
-    payload = {
-        "msgtype": "text",
-        "text": {
-            "content": content
-        }
-    }
-    r = requests.post(WECOM_WEBHOOK, json=payload, timeout=10)
-    print("企微推送结果：", r.json())
 
 
 # ========= 主流程 =========
@@ -470,22 +373,15 @@ if __name__ == "__main__":
 
         png = render_report_image(days_sorted, per_day, iap_by_day, m_start)
         # 本地留档一份（排查渲染问题用）
-        with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                               'harmony_daily_report.png'), 'wb') as f:
-            f.write(png)
+        save_local(png, 'harmony_daily_report.png')
         if NO_PUSH:
             print("本地预览模式（HARMONY_NO_PUSH=true），已渲染未推送")
         else:
             if not WECOM_WEBHOOK:
                 raise Exception("WECOM_WEBHOOK 未配置（.env.harmony 或 .env，云端需写入 HARMONY_ENV_FILE）")
-            send_wecom_image(png)
+            send_wecom_image(WECOM_WEBHOOK, png)
             print("任务执行成功，日报图已推企业微信")
     except Exception as e:
-        err_msg = f"【鸿蒙日报任务异常】\n日期:{date.today()}\n错误信息:{str(e)}"
-        try:
-            if WECOM_WEBHOOK:
-                send_wecom_msg(err_msg)
-        except Exception:
-            pass
-        print(err_msg)
+        report_failure(WECOM_WEBHOOK, "鸿蒙日报任务异常",
+                       f"日期:{date.today()}\n错误信息:{str(e)}")
         sys.exit(1)

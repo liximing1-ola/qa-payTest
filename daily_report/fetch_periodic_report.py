@@ -15,6 +15,11 @@ from datetime import date, datetime, timedelta, timezone
 from PIL import Image, ImageDraw
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# 表格渲染与企微推送工具（三条日报共用）
+from report_common import (
+    C_ALERT_TEXT, C_TITLE, C_WARN, draw_table, load_font,
+    report_failure, save_local, send_wecom_image,
+)
 import fetch_asc_daily as asc
 import fetch_harmony_daily as hm
 
@@ -123,83 +128,36 @@ def _trend(cur, prev):
     pct = (cur - prev) / prev * 100
     arrow = "↑" if pct > 0 else ("↓" if pct < 0 else "→")
     txt = f"{arrow}{abs(pct):.1f}%"
-    return (txt, asc._C_ALERT_TEXT, True) if abs(pct) > 50 else txt
-
-
-def _draw_table_styled(draw, x, y, headers, rows, font, bold_font, aligns):
-    """同 asc._draw_table 布局，但单元格可为 (text, fill) 或 (text, fill, bold) 富样式元组。
-    rows: [(单元格元组, 是否合计行)]，富样式单元格按自身字体测宽（加粗不溢列）"""
-    def cell_info(cell):
-        if isinstance(cell, tuple):
-            return cell[0], cell[1], bold_font if (len(cell) > 2 and cell[2]) else font
-        return cell, asc._C_TEXT, font
-
-    widths = []
-    for i, h in enumerate(headers):
-        w = draw.textlength(h, font=bold_font)
-        for row in rows:
-            txt, _, cell_font = cell_info(row[0][i])
-            w = max(w, draw.textlength(txt, font=cell_font))
-        widths.append(int(w) + 24)
-    row_h = font.size + 18
-    total_w = sum(widths)
-
-    draw.rectangle([x, y, x + total_w, y + row_h], fill=asc._C_HEADER_BG)
-    cy = y + (row_h - font.size) / 2
-    cx = x
-    for i, h in enumerate(headers):
-        draw.text((asc._cell_x(draw, h, bold_font, cx, widths[i], 'left'), cy),
-                  h, font=bold_font, fill=asc._C_TEXT)
-        cx += widths[i]
-    y += row_h
-
-    for row in rows:
-        cy = y + (row_h - font.size) / 2
-        cx = x
-        for i, cell in enumerate(row[0]):
-            txt, fill, cell_font = cell_info(cell)
-            draw.text((asc._cell_x(draw, txt, cell_font, cx, widths[i], aligns[i]), cy),
-                      txt, font=cell_font, fill=fill)
-            cx += widths[i]
-        draw.line([x, y, x + total_w, y], fill=asc._C_GRID, width=1)
-        y += row_h
-    cx = 0
-    for w in widths:
-        draw.line([x + cx, y - row_h * (len(rows) + 1), x + cx, y], fill=asc._C_GRID, width=1)
-        cx += w
-    draw.line([x, y, x + total_w, y], fill=asc._C_GRID, width=1)
-    draw.rectangle([x, y - row_h * (len(rows) + 1), x + total_w, y],
-                   outline=asc._C_GRID, width=1)
-    return y
+    return (txt, C_ALERT_TEXT, True) if abs(pct) > 50 else txt
 
 
 def render_period_image(label, start, end, p_start, p_end,
                         ios: dict, ios_p: dict, hmc: dict, hm_p: dict) -> bytes:
     """渲染周期汇总：iOS / 鸿蒙两个区块，各指标带前一期环比"""
-    f_title = asc._load_font(24, bold=True)
-    f_block = asc._load_font(21, bold=True)
-    f_cell = asc._load_font(19)
-    f_cell_b = asc._load_font(19, bold=True)
-    f_note = asc._load_font(15)
+    f_title = load_font(24, bold=True)
+    f_block = load_font(21, bold=True)
+    f_cell = load_font(19)
+    f_cell_b = load_font(19, bold=True)
+    f_note = load_font(15)
 
     W, X, TOP = 640, 30, 26
     canvas = Image.new('RGB', (W, 1100), 'white')
     draw = ImageDraw.Draw(canvas)
     y = TOP
     draw.text((X, y), f"App Store & 鸿蒙 {label}  {start:%m-%d} ~ {end:%m-%d}（{end:%Y}年）",
-              font=f_title, fill=asc._C_TITLE)
+              font=f_title, fill=C_TITLE)
     y += 40
     draw.text((X, y), f"注：环比前一周期 {p_start:%m-%d} ~ {p_end:%m-%d}；"
                       f"iOS 销售额按 App 分列（顾客支付口径，人民币，含账号下其他应用）",
-              font=f_note, fill=asc._C_WARN)
+              font=f_note, fill=C_WARN)
     y += 30
 
     def block(title, rows):
         nonlocal y
-        draw.text((X, y), title, font=f_block, fill=asc._C_TITLE)
+        draw.text((X, y), title, font=f_block, fill=C_TITLE)
         y += 34
-        y = _draw_table_styled(draw, X, y, ("指标", "本期", "环比"),
-                               rows, f_cell, f_cell_b, ('left', 'right', 'right'))
+        y = draw_table(draw, X, y, ("指标", "本期", "环比"),
+                       rows, f_cell, f_cell_b, ('left', 'right', 'right'))
         y += 22
 
     num = lambda v: f"{v:,}"
@@ -253,17 +211,14 @@ if __name__ == "__main__":
         hmc = hm_period(start, end)
         hm_prev = hm_period(p_start, p_end)
         png = render_period_image(label, start, end, p_start, p_end, ios, ios_p, hmc, hm_prev)
-        with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                               'periodic_report.png'), 'wb') as f:
-            f.write(png)
+        save_local(png, 'periodic_report.png')
         if NO_PUSH:
             print("NO_PUSH 模式：已渲染留档，不推送")
             sys.exit(0)
-        asc.send_wecom_image(png)
+        send_wecom_image(asc.WECOM_WEBHOOK, png)
         print("任务执行成功，周期报表已推企业微信")
     except Exception as e:
-        err_msg = f"【周期报表任务异常】\n日期:{today}\n错误信息:{str(e)[:400]}"
-        asc.send_wecom_msg(err_msg)
-        print(err_msg)
+        report_failure(asc.WECOM_WEBHOOK, "周期报表任务异常",
+                       f"日期:{today}\n错误信息:{str(e)[:400]}")
         # 非零退出：workflow 记为失败，check 幂等不锁定当天，后续触发点可重试补发
         sys.exit(1)

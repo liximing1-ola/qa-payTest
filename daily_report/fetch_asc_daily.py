@@ -6,13 +6,17 @@ import requests
 import gzip
 import io
 import json
-import base64
-import hashlib
 from datetime import date, timedelta
 import os
 from dotenv import load_dotenv
 import pandas as pd
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw
+
+# 表格渲染与企微推送工具（三条日报共用）
+from report_common import (
+    ALERT_DOWNLOAD_THRESHOLD, C_TEXT, C_TITLE, C_WARN,
+    draw_table, load_font, report_failure, save_local, send_wecom_image,
+)
 
 # 显式指向脚本同目录的 .env（计划任务/任意 CWD 下均能找到配置）
 load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), '.env'))
@@ -146,97 +150,16 @@ def summarize_day(df, aids):
     total_sales, total_refund_amt, total_refund_cnt = _agg(df)
     return per_app, total_sales, total_refund_amt, total_refund_cnt
 
-# ========= 表格图片渲染（企微 text/markdown 均不渲染表格，走 image 消息）=========
-_FONT_DIR = r'C:\Windows\Fonts'
-# 渲染配色（雅黑字体不含彩色 emoji，图标一律用安全字符 ■/▶ 等）
-_C_TITLE = (28, 62, 120)
-_C_WARN = (190, 110, 10)
-_C_TEXT = (45, 45, 45)
-_C_GRID = (165, 165, 165)
-_C_HEADER_BG = (226, 232, 240)
-_C_TOTAL_BG = (243, 246, 252)
-# 当日下载超标行：红字 + 浅红底
-ALERT_DOWNLOAD_THRESHOLD = 1500
-_C_ALERT_TEXT = (205, 25, 25)
-_C_ALERT_BG = (253, 230, 230)
-
-def _load_font(size, bold=False):
-    for name in (('msyhbd.ttc' if bold else 'msyh.ttc'), 'simsun.ttc'):
-        try:
-            return ImageFont.truetype(os.path.join(_FONT_DIR, name), size)
-        except OSError:
-            continue
-    return ImageFont.load_default()
-
-def _cell_x(draw, text, font, col_x, col_w, align):
-    """按对齐方式计算单元格文本横坐标"""
-    w = draw.textlength(text, font=font)
-    if align == 'right':
-        return col_x + col_w - 12 - w
-    if align == 'center':
-        return col_x + (col_w - w) / 2
-    return col_x + 12
-
-def _draw_table(draw, x, y, headers, rows, font, bold_font, aligns):
-    """绘制带表头/网格线的表格。rows: [(单元格元组, 是否合计行)]，返回底部 y"""
-    widths = []
-    for i, h in enumerate(headers):
-        w = draw.textlength(h, font=bold_font)
-        for row in rows:
-            w = max(w, draw.textlength(row[0][i], font=font))
-        widths.append(int(w) + 24)
-    row_h = font.size + 18
-    total_w = sum(widths)
-
-    # 表头
-    draw.rectangle([x, y, x + total_w, y + row_h], fill=_C_HEADER_BG)
-    cy = y + (row_h - font.size) / 2
-    cx = x
-    for i, h in enumerate(headers):
-        draw.text((_cell_x(draw, h, bold_font, cx, widths[i], 'left'), cy),
-                  h, font=bold_font, fill=_C_TEXT)
-        cx += widths[i]
-    y += row_h
-
-    # 数据行（rows 元素可为二元组或 (cells, is_total, is_alert) 三元组）
-    for row in rows:
-        cells, is_total = row[0], row[1]
-        is_alert = row[2] if len(row) > 2 else False
-        row_font = bold_font if is_total else font
-        if is_total:
-            draw.rectangle([x, y, x + total_w, y + row_h], fill=_C_TOTAL_BG)
-        elif is_alert:
-            draw.rectangle([x, y, x + total_w, y + row_h], fill=_C_ALERT_BG)
-        text_fill = _C_ALERT_TEXT if is_alert and not is_total else _C_TEXT
-        cy = y + (row_h - font.size) / 2
-        cx = x
-        for i, cell in enumerate(cells):
-            draw.text((_cell_x(draw, cell, row_font, cx, widths[i], aligns[i]), cy),
-                      cell, font=row_font, fill=text_fill)
-            cx += widths[i]
-        # 行分隔线
-        draw.line([x, y, x + total_w, y], fill=_C_GRID, width=1)
-        y += row_h
-    # 竖线与外框
-    cx = x
-    for w in widths:
-        draw.line([cx, y - row_h * (len(rows) + 1), cx, y], fill=_C_GRID, width=1)
-        cx += w
-    draw.line([x, y, x + total_w, y], fill=_C_GRID, width=1)
-    draw.rectangle([x, y - row_h * (len(rows) + 1), x + total_w, y],
-                   outline=_C_GRID, width=1)
-    return y
-
 def render_report_image(days_sorted, per_day, day_sales, day_refund_amt, day_refund_cnt,
                         app_list, m_start, warning=None) -> bytes:
     """渲染近 7 日日报表格图片：每个 App 逐日下载量（底部自然月累计）+ 全账号
     自然月商品销售额（顾客支付口径 = 单价×数量，人民币展示）及月退款（负 Units 冲抵行）"""
-    f_title = _load_font(26, bold=True)
-    f_block = _load_font(21, bold=True)
-    f_cell = _load_font(19)
-    f_cell_b = _load_font(19, bold=True)
-    f_sales = _load_font(24, bold=True)
-    f_note = _load_font(15)
+    f_title = load_font(26, bold=True)
+    f_block = load_font(21, bold=True)
+    f_cell = load_font(19)
+    f_cell_b = load_font(19, bold=True)
+    f_sales = load_font(24, bold=True)
+    f_note = load_font(15)
 
     W, X, TOP = 640, 30, 26
     canvas = Image.new('RGB', (W, 1600), 'white')
@@ -247,16 +170,16 @@ def render_report_image(days_sorted, per_day, day_sales, day_refund_amt, day_ref
 
     y = TOP
     draw.text((X, y), f"App Store 近7日日报  {start:%m-%d} ~ {end:%m-%d}（{end:%Y}年）",
-              font=f_title, fill=_C_TITLE)
+              font=f_title, fill=C_TITLE)
     y += 44
     if warning:
-        draw.text((X, y), f"注：{warning}", font=f_note, fill=_C_WARN)
+        draw.text((X, y), f"注：{warning}", font=f_note, fill=C_WARN)
         y += 26
 
     no_stat = {'new': 0, 'redownload': 0}
     for app in app_list:
         aid = str(app['app_id'])
-        draw.text((X, y), f"■ {app['name']}", font=f_block, fill=_C_TITLE)
+        draw.text((X, y), f"■ {app['name']}", font=f_block, fill=C_TITLE)
         y += 34
         rows = []
         for d in days_sorted:
@@ -268,7 +191,7 @@ def render_report_image(days_sorted, per_day, day_sales, day_refund_amt, day_ref
         m_new = sum(per_day.get(d, {}).get(aid, no_stat)['new'] for d in m_days)
         m_re = sum(per_day.get(d, {}).get(aid, no_stat)['redownload'] for d in m_days)
         rows.append(((f"{m_start.month}月累计", f"{m_new:,}", f"{m_re:,}"), True))
-        y = _draw_table(draw, X, y, ("日期", "新下载", "历史安装"),
+        y = draw_table(draw, X, y, ("日期", "新下载", "历史安装"),
                         rows, f_cell, f_cell_b, ('left', 'right', 'right'))
         y += 22
 
@@ -277,18 +200,18 @@ def render_report_image(days_sorted, per_day, day_sales, day_refund_amt, day_ref
     m_refund_amt = sum(day_refund_amt.get(d, 0) for d in m_days)
     m_refund_cnt = sum(day_refund_cnt.get(d, 0) for d in m_days)
     draw.text((X, y), f"■ {m_start.month}月商品销售额（自然月，人民币）",
-              font=f_block, fill=_C_TITLE)
+              font=f_block, fill=C_TITLE)
     y += 40
 
     def _sales_row(name, amt, r_cnt, r_amt):
         nonlocal y
-        draw.text((X + 12, y + 5), name, font=f_cell_b, fill=_C_TEXT)
+        draw.text((X + 12, y + 5), name, font=f_cell_b, fill=C_TEXT)
         amt_txt = f"{amt:,.2f}"
-        draw.text((X + 150, y), amt_txt, font=f_sales, fill=_C_TEXT)
+        draw.text((X + 150, y), amt_txt, font=f_sales, fill=C_TEXT)
         amt_w = draw.textlength(amt_txt, font=f_sales)
         draw.text((X + 150 + amt_w + 12, y + 9),
                   f"(退款 {r_cnt:,} 件 / {abs(r_amt):,.2f} 元)",
-                  font=f_note, fill=_C_TEXT)
+                  font=f_note, fill=C_TEXT)
         y += 44
 
     app_sales_total = app_ramt_total = app_rcnt_total = 0
@@ -310,29 +233,6 @@ def render_report_image(days_sorted, per_day, day_sales, day_refund_amt, day_ref
     buf = io.BytesIO()
     canvas.crop((0, 0, W, int(y))).save(buf, format='PNG')
     return buf.getvalue()
-
-# 企业微信图片消息推送（表格截图）
-def send_wecom_image(png_bytes: bytes):
-    payload = {
-        "msgtype": "image",
-        "image": {
-            "base64": base64.b64encode(png_bytes).decode(),
-            "md5": hashlib.md5(png_bytes).hexdigest(),
-        }
-    }
-    r = requests.post(WECOM_WEBHOOK, json=payload, timeout=10)
-    print("企微图片推送结果：", r.json())
-
-# 企业微信文本消息推送（异常通知用）
-def send_wecom_msg(content: str):
-    payload = {
-        "msgtype": "text",
-        "text": {
-            "content": content
-        }
-    }
-    r = requests.post(WECOM_WEBHOOK, json=payload, timeout=10)
-    print("企微推送结果：", r.json())
 
 if __name__ == "__main__":
     yesterday = date.today() - timedelta(days=1)
@@ -360,14 +260,11 @@ if __name__ == "__main__":
             warning = f"昨日({yesterday:%m-%d})报告尚未生成，以下为近7日已可得数据"
         png = render_report_image(days_sorted, per_day, day_sales, day_refund_amt, day_refund_cnt, APP_LIST, m_start, warning)
         # 本地留档一份（排查渲染问题用）
-        with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                               'asc_daily_report.png'), 'wb') as f:
-            f.write(png)
-        send_wecom_image(png)
+        save_local(png, 'asc_daily_report.png')
+        send_wecom_image(WECOM_WEBHOOK, png)
         print("任务执行成功，表格图已推企业微信")
     except Exception as e:
-        err_msg = f"【App Store日报任务异常】\n日期:{yesterday}\n错误信息:{str(e)}"
-        send_wecom_msg(err_msg)
-        print(err_msg)
+        report_failure(WECOM_WEBHOOK, "App Store日报任务异常",
+                       f"日期:{yesterday}\n错误信息:{str(e)}")
         # 非零退出：workflow 记为失败，check 幂等不锁定当天，后续触发点可重试补发
         sys.exit(1)
