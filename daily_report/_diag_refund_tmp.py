@@ -33,6 +33,7 @@ if not neg_rows:
 all_neg = pd.concat(neg_rows, ignore_index=True)
 price = pd.to_numeric(all_neg['Customer Price'], errors='coerce').fillna(0.0)
 units = pd.to_numeric(all_neg['Units'], errors='coerce').fillna(0)
+all_neg['Units'] = units          # TSV 原始列为字符串，聚合前转回数值
 all_neg['_amt'] = price * units          # 负值（原币种）
 # 逐行复用生产折算口径：{币种: 金额} → CNY
 all_neg['_cny'] = [asc._total_cny({c: a})
