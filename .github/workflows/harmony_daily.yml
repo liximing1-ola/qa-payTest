@@ -56,9 +56,9 @@ jobs:
           runs=$(curl -sf -H "Authorization: Bearer $GH_TOKEN" \
             "https://api.github.com/repos/${{ github.repository }}/actions/workflows/harmony_daily.yml/runs?per_page=50")
           count=$(echo "$runs" | jq --arg c "$cutoff" --arg me "${{ github.run_id }}" \
-            '[.workflow_runs[] | select(.id != ($me | tonumber)) | select(.created_at >= $c) | select(.conclusion == "success" or .status == "queued" or .status == "in_progress")] | length' 2>/dev/null || echo -1)
+            '[.workflow_runs[] | select(.id != ($me | tonumber)) | select(.created_at >= $c) | select(.conclusion == "success")] | length' 2>/dev/null || echo -1)
           if [ "$count" -gt 0 ]; then
-            echo "今天已有 $count 条成功/进行中的运行，跳过本次"
+            echo "今天已有 $count 条成功运行，跳过本次"
             echo "skip=true" >> "$GITHUB_OUTPUT"
           else
             echo "今天尚无成功运行，本次执行"

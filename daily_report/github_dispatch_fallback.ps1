@@ -78,10 +78,10 @@ try {
         $active = @($runs.workflow_runs | Where-Object {
             $raw = $_.created_at
             if ($raw -is [DateTime]) { $t = $raw.ToUniversalTime() } else { $t = [DateTimeOffset]::Parse([string]$raw).UtcDateTime }
-            ($t -ge $cut) -and ($_.conclusion -eq 'success' -or $_.status -in @('queued', 'in_progress', 'pending', 'waiting', 'requested'))
+            ($t -ge $cut) -and ($_.conclusion -eq 'success')
         })
         if ($active.Count -gt 0) {
-            Write-Log ('SKIP     {0}: already success/queued/in_progress today ({1} run(s))' -f $wf, $active.Count)
+            Write-Log ('SKIP     {0}: already success today ({1} run(s))' -f $wf, $active.Count)
         } else {
             Invoke-RestMethod -Method Post -Headers $headers -ContentType 'application/json' -Body '{"ref":"main"}' -Uri "$base/actions/workflows/$wf/dispatches" | Out-Null
             Write-Log ('DISPATCH {0}: no success today, workflow_dispatch sent' -f $wf)
