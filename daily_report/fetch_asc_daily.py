@@ -14,7 +14,7 @@ from PIL import Image, ImageDraw
 
 # 表格渲染与企微推送工具（三条日报共用）
 from report_common import (
-    ALERT_DOWNLOAD_THRESHOLD, C_TEXT, C_TITLE, C_WARN,
+    ALERT_DOWNLOAD_THRESHOLD, C_ALERT_TEXT, C_TEXT, C_TITLE, C_WARN,
     draw_table, load_font, report_failure, save_local, send_wecom_image,
 )
 
@@ -217,9 +217,11 @@ def render_report_image(days_sorted, per_day, day_sales, day_refund_amt, day_ref
         amt_txt = f"{amt:,.2f}"
         draw.text((X + 150, y), amt_txt, font=f_sales, fill=C_TEXT)
         amt_w = draw.textlength(amt_txt, font=f_sales)
+        # 退款额度标红（无退款时保持默认色）
+        refund_fill = C_ALERT_TEXT if r_amt != 0 else C_TEXT
         draw.text((X + 150 + amt_w + 12, y + 9),
                   f"(退款 {r_cnt:,} 件 / {abs(r_amt):,.2f} 元)",
-                  font=f_note, fill=C_TEXT)
+                  font=f_note, fill=refund_fill)
         y += 44
 
     for app in app_list:
