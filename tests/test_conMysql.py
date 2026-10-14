@@ -174,6 +174,7 @@ class TestTransactionalChecks(unittest.TestCase):
     def _patched_conn(self):
         m_con = Mock()
         m_cur = Mock()
+        m_con.cursor.return_value = m_cur  # _transactional_write 使用 con.cursor()
         return m_con, m_cur, (
             patch.object(MySQLConnection, 'get_connection', return_value=m_con),
             patch.object(MySQLConnection, 'get_cursor', return_value=m_cur),

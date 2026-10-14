@@ -6,6 +6,7 @@ MySQL 连接管理基类
 连接管理逻辑，避免多份单例/重连/游标管理代码。
 """
 import logging
+from contextlib import contextmanager
 from typing import Optional, Tuple, Any
 
 import pymysql
@@ -55,6 +56,9 @@ class MySQLConnection:
 
         Args:
             dict_cursor: 是否返回字典游标
+
+        Note:
+            非字典游标使用单例模式复用；字典游标每次新建（调用方需自行关闭）
         """
         con = cls.get_connection()
         if dict_cursor:
@@ -62,6 +66,25 @@ class MySQLConnection:
         if cls._cursor is None or not cls._connection.open:
             cls._cursor = con.cursor()
         return cls._cursor
+
+    @classmethod
+    @contextmanager
+    def cursor(cls, dict_cursor: bool = False):
+        """游标上下文管理器，确保游标正确关闭
+
+        Args:
+            dict_cursor: 是否返回字典游标
+
+        Usage:
+            with MySQLConnection.cursor() as cur:
+                cur.execute(sql)
+        """
+        con = cls.get_connection()
+        cur = con.cursor(cursor=cursors.DictCursor) if dict_cursor else con.cursor()
+        try:
+            yield cur
+        finally:
+            cur.close()
 
     @classmethod
     def execute_query(cls, sql: str, params: Optional[Tuple] = None) -> Optional[Tuple]:

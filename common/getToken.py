@@ -4,6 +4,7 @@ Token生成器模块
 用于生成用户认证Token
 """
 import logging
+import os
 import time
 import random
 import hashlib
@@ -12,11 +13,11 @@ from urllib.parse import quote, urlencode
 
 logger = logging.getLogger(__name__)
 
-# 配置常量
-KEY = "^&(tre)%29^*"
+# 配置常量（敏感密钥通过环境变量加载）
+KEY = os.environ.get('TOKEN_KEY', '^&(tre)%29^*')
 EXPIRY = 2592000
 CHARS = '0123456789abcdefghijklmnopqrstuvwxyz'
-VERIFY_SALT = '5(d+V8cxpY%d'
+VERIFY_SALT = os.environ.get('TOKEN_VERIFY_SALT', '5(d+V8cxpY%d')
 KEY_C_LENGTH = 4
 SALT_LENGTH = 10
 

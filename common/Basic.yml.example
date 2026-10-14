@@ -1,0 +1,63 @@
+# coding=utf-8
+# ============================================================================
+# 基础配置文件模板
+# 复制本文件为 Basic.yml 并填入真实凭证后使用
+# 注意：Basic.yml 已被 .gitignore 忽略，不会提交到仓库
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# Dev 环境配置
+# ----------------------------------------------------------------------------
+header_dev:
+  Content-Type: "application/x-www-form-urlencoded"
+  User-Agent: "Mozilla/5.0 (Linux; Android 11; HD1900 Build/RKQ1.201022.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/87.0.4280.141 Mobile Safari/537.36 / Xs android V1.2.0.0 / Js V1.0.0.0 / Login V1658980709"
+  host: "dev.iambanban.com"
+
+data_dev_qq:
+  type: "login"
+  dtoken: "<YOUR_DEV_DTOKEN>"
+
+params_dev_qq: "t=<YOUR_DEV_T_PARAM>&o=<YOUR_DEV_O_PARAM>"
+
+# ----------------------------------------------------------------------------
+# 海外版环境配置
+# ----------------------------------------------------------------------------
+header_oversea:
+  Content-Type: "application/x-www-form-urlencoded"
+  User-Agent: "Agent / Xs android V1.0.5.3 / Js V1.0.0.0 / Login V1601690448"
+  host: "app-dev.iambanban.com"
+
+data_oversea_mobile:
+  mobile: "<YOUR_OVERSEA_MOBILE>"
+  dtoken: "<YOUR_OVERSEA_DTOKEN>"
+  area: "86"
+  password: "<YOUR_OVERSEA_PASSWORD_HASH>"
+
+data_oversea_mobile_params: "v=1&package=com:imbb:oversea:android&_ipv=0&_platform=android&_index=340&_model=PCRM00&_timestamp=1690283646&_abi=arm64-v8a&format=json&_sign=<YOUR_OVERSEA_SIGN>"
+
+# ----------------------------------------------------------------------------
+# SLP 环境配置
+# ----------------------------------------------------------------------------
+header_slp:
+  Content-Type: "application/x-www-form-urlencoded"
+  User-Agent: "Mozilla/5.0 (Linux; Android 11; CPH1969 Build/RP1A.200720.011; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/115.0.5790.138 Mobile Safari/537.36 / Xs android V5.0.31.0 / Js V1.0.0.0 / Login V1691131402"
+  host: "116.62.125.230"
+
+data_slp_mobile:
+  mobile: "15008520000"
+  type: "login"
+  code: "1111"
+  token: "<YOUR_SLP_TOKEN>"
+  dtoken: "<YOUR_SLP_DTOKEN>"
+  area: "86"
+
+data_slp_mobile_params: "v=1&package=com.yhl.sleepless.android&_ipv=0&_platform=android&_index=146&_model=CPH1969&_timestamp=1691133173&_sign=<YOUR_SLP_SIGN>"
+
+# ----------------------------------------------------------------------------
+# Teammate 测试账号配置
+# ----------------------------------------------------------------------------
+params_teammate_qq: "t=<YOUR_TEAMMATE_T_PARAM>&o=<YOUR_TEAMMATE_O_PARAM>"
+
+data_teammate_qq:
+  type: "login"
+  dtoken: "<YOUR_TEAMMATE_DTOKEN>"

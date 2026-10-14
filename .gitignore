@@ -19,3 +19,4 @@ common/__pycache__/
 /.vscode/
 *.pyc
 *.log
+common/Basic.yml

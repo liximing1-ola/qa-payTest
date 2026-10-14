@@ -135,8 +135,12 @@ class conMysql:
                 cursor.execute(sql, (uid,))
                 res = cursor.fetchone()
                 if res:
-                    res_dict = ast.literal_eval(res[0])
-                    return res_dict.get(str(money_type), 0)
+                    try:
+                        res_dict = ast.literal_eval(res[0])
+                        return res_dict.get(str(money_type), 0)
+                    except (ValueError, SyntaxError) as parse_err:
+                        logger.error('pay_change reason parse error: %s', parse_err)
+                        return 0
                 return 0
             except Exception as error:
                 logger.error('Select error: %s', error)

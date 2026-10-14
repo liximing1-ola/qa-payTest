@@ -113,8 +113,12 @@ class conMysql:
             res = cursor.fetchone()
             if res is None:
                 return 0
-            res_dict = ast.literal_eval(res[0])
-            return res_dict.get(money_type, 0)
+            try:
+                res_dict = ast.literal_eval(res[0])
+                return res_dict.get(money_type, 0)
+            except (ValueError, SyntaxError) as parse_err:
+                logger.error('pay_change reason parse error: %s', parse_err)
+                return None
         except Exception as error:
             logger.error('pay_change query error: %s', error)
             return None
@@ -298,15 +302,17 @@ class conMysql:
 
     @staticmethod
     def _transactional_write(write_fn):
-        """在统一的事务中执行写操作"""
+        """在统一的事务中执行写操作（使用独立游标，避免与共享游标互相干扰）"""
         con = MySQLConnection.get_connection()
-        cursor = MySQLConnection.get_cursor()
+        cursor = con.cursor()
         try:
             write_fn(cursor)
             con.commit()
         except Exception as error:
             con.rollback()
             logger.error('Transactional write error: %s', error)
+        finally:
+            cursor.close()
 
     @staticmethod
     def checkUserXsBroker(bid):
