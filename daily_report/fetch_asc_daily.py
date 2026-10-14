@@ -143,7 +143,8 @@ def summarize_day(df, aids):
 
     per_app = {}
     for aid in aids:
-        app_df = df[df['Apple Identifier'] == aid]
+        # 统一转字符串比较（pandas 可能把纯数字列自动推断为 int，导致字符串匹配失败）
+        app_df = df[df['Apple Identifier'].astype(str) == aid]
         sales, refund_amt, refund_cnt = _agg(app_df)
         per_app[aid] = {
             'new': int(app_df.loc[app_df['Product Type Identifier'] == '1', '_u'].sum()),
