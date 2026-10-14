@@ -142,9 +142,17 @@ def summarize_day(df, aids):
         return _total_cny(gross), _total_cny(neg_gross), int(-neg['_u'].sum())
 
     per_app = {}
+    # 谁是凶手 App ID（第二个监控 App，吸收家族变体 1583579xxx）
+    AID_SSS = aids[1] if len(aids) > 1 and aids[1] == '1483169890' else None
     for aid in aids:
         # 统一转字符串比较（pandas 可能把纯数字列自动推断为 int，导致字符串匹配失败）
-        app_df = df[df['Apple Identifier'].astype(str) == aid]
+        aid_str = df['Apple Identifier'].astype(str)
+        if aid == AID_SSS:
+            # 谁是凶手家族变体 App 前缀（1583579xxx，历史版本/马甲，业务归属谁是凶手）
+            mask = (aid_str == aid) | aid_str.str.startswith('1583579')
+        else:
+            mask = aid_str == aid
+        app_df = df[mask]
         sales, refund_amt, refund_cnt = _agg(app_df)
         per_app[aid] = {
             'new': int(app_df.loc[app_df['Product Type Identifier'] == '1', '_u'].sum()),
