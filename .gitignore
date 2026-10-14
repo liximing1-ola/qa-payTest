@@ -20,3 +20,5 @@ common/__pycache__/
 *.pyc
 *.log
 common/Basic.yml
+/screenshots/
+_diag_*_tmp.py
