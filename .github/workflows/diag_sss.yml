@@ -1,0 +1,31 @@
+name: Diag SSS (谁是凶手数据诊断)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diag:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - name: Install deps
+        run: pip install -r daily_report/requirements-asc.txt
+      - name: Write secrets
+        env:
+          ASC_ENV: ${{ secrets.ASC_ENV_FILE }}
+          ASC_P8: ${{ secrets.ASC_P8_KEY }}
+        run: |
+          [IO.File]::WriteAllText("$PWD/daily_report/.env", $env:ASC_ENV)
+          $ascP8 = [regex]::Match($env:ASC_ENV, 'PRIVATE_KEY_PATH=(\S+)').Groups[1].Value
+          if ($ascP8) { [IO.File]::WriteAllText("$PWD/daily_report/$ascP8", $env:ASC_P8) }
+      - name: Run diag
+        env:
+          PYTHONUTF8: '1'
+        run: python daily_report/_diag_sss_tmp.py
