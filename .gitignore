@@ -24,3 +24,7 @@ common/Basic.yml
 _diag_*_tmp.py
 _dispatch_diag_tmp.py
 .coverage
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+venv/
