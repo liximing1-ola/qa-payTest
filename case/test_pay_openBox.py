@@ -7,7 +7,7 @@
 from case.base import PayCase, PayTestBase
 
 from common.Config import config
-from common.runFailed import Retry
+from common.run_failed import Retry
 
 SCENES = [
     PayCase(

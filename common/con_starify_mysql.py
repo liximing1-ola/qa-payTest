@@ -17,7 +17,7 @@ class MySQLConnection(MySQLConnectionBase):
     _cursor = None
 
 
-class conMysql:
+class ConMysql:
     """MySQL操作类"""
 
     # ============ 查询方法 ============
@@ -114,4 +114,8 @@ class conMysql:
 
 
 if __name__ == '__main__':
-    logger.info(conMysql.select_user_info_sql('gift_num', 124458))
+    logger.info(ConMysql.select_user_info_sql('gift_num', 124458))
+
+
+# 兼容别名（驼峰 → PascalCase，后续逐步迁移外部调用后可移除）
+conMysql = ConMysql

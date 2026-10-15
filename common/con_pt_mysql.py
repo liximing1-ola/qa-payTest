@@ -21,7 +21,7 @@ class MySQLConnection(MySQLConnectionBase):
     _cursor = None
 
 
-class conMysql:
+class ConMysql:
     """MySQL 操作类"""
 
     # SQL 映射字典
@@ -61,13 +61,13 @@ class conMysql:
         if uid is None:
             uid = config.oversea_payUid
 
-        if accountType in conMysql.QUERY_SQL_MAP:
-            sql = conMysql.QUERY_SQL_MAP[accountType]
+        if accountType in ConMysql.QUERY_SQL_MAP:
+            sql = ConMysql.QUERY_SQL_MAP[accountType]
             res = MySQLConnection.execute_query(sql, params=(uid,))
             return int(res[0]) if res and res[0] else 0
 
         if accountType == 'single_money':
-            if money_type not in conMysql._MONEY_COLUMNS:
+            if money_type not in ConMysql._MONEY_COLUMNS:
                 raise ValueError(f'Invalid money_type column: {money_type}')
             sql = f"SELECT {money_type} FROM xs_user_money WHERE uid=%s"
             res = MySQLConnection.execute_query(sql, params=(uid,))
@@ -86,8 +86,8 @@ class conMysql:
             tableName: 表名
             uid: 用户 ID
         """
-        if tableName in conMysql.DELETE_SQL_MAP:
-            sql = conMysql.DELETE_SQL_MAP[tableName]
+        if tableName in ConMysql.DELETE_SQL_MAP:
+            sql = ConMysql.DELETE_SQL_MAP[tableName]
             MySQLConnection.execute_write(sql, params=(uid,))
         else:
             logger.warning('Unknown tableName: %s', tableName)
@@ -105,9 +105,11 @@ class conMysql:
         MySQLConnection.update_user_bigarea(*uids, bigarea_id=bigarea_id)
 
     @staticmethod
-    def updateUserLanguage(*uids: int, language: str = 'zh_CN', area_code: str = 'CN') -> None:
+    def update_user_language(*uids: int, language: str = 'zh_CN', area_code: str = 'CN') -> None:
         """更新用户语言"""
         MySQLConnection.update_user_language(*uids, language=language, area_code=area_code)
+
+    updateUserLanguage = staticmethod(update_user_language)  # 兼容别名
 
     @staticmethod
     def update_user_money_clear_sql(*uids: int) -> None:
@@ -182,3 +184,6 @@ class conMysql:
         """查询用户 VIP 数据"""
         return MySQLConnection.query_user_pay_room_money(uid)
 
+
+# 兼容别名（驼峰 → PascalCase，后续逐步迁移外部调用后可移除）
+conMysql = ConMysql

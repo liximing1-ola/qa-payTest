@@ -1,6 +1,6 @@
 # coding=utf-8
 """
-common/sqlScript.py 单元测试（MySQLClient 执行链 / 事务回滚 / 操作类 SQL 组装）
+common/sql_script.py 单元测试（MySQLClient 执行链 / 事务回滚 / 操作类 SQL 组装）
 
 全部 mock pymysql.connect，可在无数据库环境下直接运行：
     python -m pytest tests/test_sqlScript.py -v
@@ -9,7 +9,7 @@ import unittest
 from unittest.mock import Mock, patch
 
 from common.Config import config
-from common.sqlScript import (
+from common.sql_script import (
     MySQLClient,
     UserCommodityOperations,
     UserMoneyOperations,
@@ -24,7 +24,7 @@ class _FakeChain:
         self.con = Mock()
         self.cur = Mock()
         self.con.cursor.return_value = self.cur
-        self.patcher = patch('common.sqlScript.pymysql.connect',
+        self.patcher = patch('common.sql_script.pymysql.connect',
                              return_value=self.con)
 
     def __enter__(self):

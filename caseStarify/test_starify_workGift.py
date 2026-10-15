@@ -2,9 +2,9 @@ from caseStarify.base import StarifyCase, StarifyTestBase
 from caseStarify.deal_data import deal_pay_data
 from caseStarify.need_data import commodity_config, starify_payUid, starify_work_state
 
-from common.Assert import assert_equal
+from common.assert_util import assert_equal
 from common.con_starify_mysql import conMysql
-from common.runFailed import Retry
+from common.run_failed import Retry
 
 # (desc, commodity_key, clear_reward, work_state, balance, expected_star, expected_wealth, success, expected_msg)
 # expected_wealth=None 时取 commodity['wealth']

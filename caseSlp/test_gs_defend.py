@@ -8,7 +8,7 @@ from caseSlp.base import SlpCase, SlpTestBase
 from caseSlp.config import default_money, defend, gsUid, payUid, rates
 
 from common.con_slp_mysql import conMysql as mysql
-from common.runFailed import Retry
+from common.run_failed import Retry
 
 # 场景表：公会主播-个人守护（开通 -> 进阶 -> 解除，按 test 顺序执行）
 SCENES = [

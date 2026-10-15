@@ -270,7 +270,7 @@ class TestSlpMissingCoverage(unittest.TestCase):
 
     def test_update_user_language(self):
         with patch.object(MySQLConnection, 'update_user_language') as m:
-            conMysql.updateUserLanguage('111', language='en', area_code='US')
+            conMysql.update_user_language('111', language='en', area_code='US')
         m.assert_called_once_with('111', language='en', area_code='US')
 
     def test_update_popularity(self):

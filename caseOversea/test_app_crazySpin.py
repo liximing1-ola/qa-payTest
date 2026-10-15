@@ -12,7 +12,7 @@ from common.con_pt_mysql import conMysql
 from common.Config import config
 from common.Consts import case_list, result
 from common.Crazyspin import CrazySpin
-from common.runFailed import Retry
+from common.run_failed import Retry
 
 # 场景：扣除钻石购买欢乐券（2000 钻购买 10 张，cid=32）
 SCENE_001 = OverseaBizCase(

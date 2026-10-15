@@ -3,7 +3,7 @@ import unittest
 import pytest
 
 from common.con_mysql import conMysql as mysql
-from common.sqlScript import UserMoneyOperations
+from common.sql_script import UserMoneyOperations
 
 
 @unittest.skip('网赚分成逻辑 ')

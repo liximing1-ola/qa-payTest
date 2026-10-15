@@ -7,7 +7,7 @@ APP 海外版支付测试 - 私聊打赏验证
 from caseOversea.base import OverseaBizCase, OverseaBizTestBase
 
 from common.Config import config
-from common.runFailed import Retry
+from common.run_failed import Retry
 
 # 场景表：私聊打赏（余额不足/正常打赏/箱子打赏）
 CHAT_GIFT_SCENES = [

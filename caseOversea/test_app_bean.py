@@ -7,7 +7,7 @@ APP 海外版支付测试 - 金豆兑换验证
 from caseOversea.base import OverseaBizCase, OverseaBizTestBase
 
 from common.Config import config
-from common.runFailed import Retry
+from common.run_failed import Retry
 
 # 场景：验证余额兑换金豆流程（money 300 全量兑换为 gold_coin 600）
 SCENE_001 = OverseaBizCase(

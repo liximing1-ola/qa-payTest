@@ -9,7 +9,7 @@ from case.base import PayCase, PayTestBase
 
 from common.con_mysql import conMysql as mysql
 from common.Config import config
-from common.runFailed import Retry
+from common.run_failed import Retry
 
 # 打包结算主播 / 直播公会公会长
 PACK_CAL_UID = config.bb_user.pack_cal_uid

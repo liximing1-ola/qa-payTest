@@ -8,7 +8,7 @@ from caseOversea.base import AREA_RID, OverseaAreaTestBase, PayScene
 
 from common.con_pt_mysql import conMysql
 from common.Config import config
-from common.runFailed import Retry
+from common.run_failed import Retry
 
 SCENES = [
     PayScene(

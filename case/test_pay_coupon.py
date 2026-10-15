@@ -8,7 +8,7 @@ from case.base import PayCase, PayTestBase
 
 from common.con_mysql import conMysql as mysql
 from common.Config import config
-from common.runFailed import Retry
+from common.run_failed import Retry
 
 # 老司机券 / 电台青铜体验券
 GIFT_CID_COUPON = config.commodity.coupon_cid

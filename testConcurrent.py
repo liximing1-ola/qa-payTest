@@ -9,13 +9,13 @@ monkey.patch_all()
 from Robot import robot  # noqa: E402
 
 from common import Consts, Logs, method  # noqa: E402
-from common.Assert import assert_code, assert_equal  # noqa: E402
-from common.basicData import encodeData  # noqa: E402
+from common.assert_util import assert_code, assert_equal  # noqa: E402
+from common.basic_data import encode_data  # noqa: E402
 from common.Config import config  # noqa: E402
 from common.method import get_value  # noqa: E402
-from common.Request import post_request_session  # noqa: E402
+from common.request_util import post_request_session  # noqa: E402
 from common.Session import Session  # noqa: E402
-from common.sqlScript import UserCommodityOperations, UserMoneyOperations  # noqa: E402
+from common.sql_script import UserCommodityOperations, UserMoneyOperations  # noqa: E402
 
 logger = logging.getLogger(__name__)
 
@@ -81,13 +81,13 @@ class TestPayConcurrent:
         def setup():
             UserMoneyOperations.update(config.payUid, 10000)
             UserCommodityOperations.delete_all(config.payUid)
-            self._exec(self.URLS['pay'], encodeData(payType='shop-buy', cid=self.CID['gift'], money=9900, num=1))
+            self._exec(self.URLS['pay'], encode_data(payType='shop-buy', cid=self.CID['gift'], money=9900, num=1))
             assert_equal(UserMoneyOperations.select_all(config.payUid), 100)
             assert_equal(UserCommodityOperations.check_all(config.payUid), 1)
 
         def concurrent():
             cid = int(UserCommodityOperations.get_id(self.CID['gift'], config.payUid))
-            payload = encodeData(payType='package', rid=193185484, uid=config.rewardUid, giftId=54, money=9900, package_cid=cid, ctype='gift', num=1)
+            payload = encode_data(payType='package', rid=193185484, uid=config.rewardUid, giftId=54, money=9900, package_cid=cid, ctype='gift', num=1)
             self._exec(self.URLS['pay'], payload)
 
         def end():
@@ -143,7 +143,7 @@ class TestPayConcurrent:
             UserMoneyOperations.update(config.masterUid)
 
         def concurrent():
-            payload = encodeData(payType='package', money=100, uid=config.masterUid, giftId=config.giftId['5'])
+            payload = encode_data(payType='package', money=100, uid=config.masterUid, giftId=config.giftId['5'])
             self._exec(self.URLS['pay'], payload)
 
         def end():
@@ -160,7 +160,7 @@ class TestPayConcurrent:
             UserCommodityOperations.delete_all(config.payUid)
 
         def concurrent():
-            data = encodeData(payType='shop-buy', cid=self.CID['gift'], money=9900, num=1)
+            data = encode_data(payType='shop-buy', cid=self.CID['gift'], money=9900, num=1)
             self._exec(self.URLS['pay'], data)
 
         def end():

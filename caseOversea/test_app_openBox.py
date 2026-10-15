@@ -7,7 +7,7 @@ APP 海外版支付测试 - 背包开箱验证
 from caseOversea.base import OverseaBizCase, OverseaBizTestBase
 
 from common.Config import config
-from common.runFailed import Retry
+from common.run_failed import Retry
 
 # 场景表：背包开箱（铜箱子单开/银箱子多开）
 OPEN_BOX_SCENES = [

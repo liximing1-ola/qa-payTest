@@ -7,7 +7,7 @@ APP 海外版支付测试 - 私聊卡购买验证
 from caseOversea.base import OverseaBizCase, OverseaBizTestBase
 
 from common.Config import config
-from common.runFailed import Retry
+from common.run_failed import Retry
 
 # 场景：余额购买私聊卡（money 100-16*10=0，背包得到 10 张私聊卡 cid=42598）
 SCENE_001 = OverseaBizCase(

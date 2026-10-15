@@ -14,13 +14,13 @@ from typing import Any, Callable, Dict, Optional
 
 from caseSlp.config import pay_url, payUid
 
-from common.Assert import assert_body, assert_code, assert_equal
-from common.basicSlpData import encodeData
+from common.assert_util import assert_body, assert_code, assert_equal
+from common.basic_slp_data import encode_data
 from common.con_slp_mysql import conMysql as mysql
 from common.Consts import case_list, case_list_b, result
-from common.Request import post_request_session
+from common.request_util import post_request_session
 from common.scene_base import SceneFlowBase, resolve, resolve_check
-from common.sqlScript import UserCommodityOperations, UserMoneyOperations
+from common.sql_script import UserCommodityOperations, UserMoneyOperations
 
 # 场景结果记录表（与各测试文件的报告表一一对应）
 REPORT_TABLES = {
@@ -89,7 +89,7 @@ class SlpTestBase(SceneFlowBase):
 
     def flow_request(self, case: SlpCase, ctx: Dict[str, Any]) -> None:
         """3. 发起 SLP 支付请求（pay_url + token=slp）"""
-        data = encodeData(**{key: resolve(value, ctx) for key, value in case.data.items()})
+        data = encode_data(**{key: resolve(value, ctx) for key, value in case.data.items()})
         ctx['_res'] = post_request_session(pay_url, data, token_name='slp')
 
     def flow_assert(self, case: SlpCase, ctx: Dict[str, Any]) -> None:

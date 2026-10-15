@@ -6,7 +6,7 @@ APP 海外版支付测试 - 英语新区域验证
 """
 from caseOversea.base import RECEIVER_BROKER, OverseaAreaTestBase, PayScene
 
-from common.runFailed import Retry
+from common.run_failed import Retry
 
 SCENES = [
     PayScene(

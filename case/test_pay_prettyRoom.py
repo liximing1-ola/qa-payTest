@@ -7,7 +7,7 @@
 from case.base import PayCase, PayTestBase
 
 from common.Config import config
-from common.runFailed import Retry
+from common.run_failed import Retry
 
 # 靓号房 rid
 PRETTY_RID = config.bb_user.prettyRid

@@ -6,10 +6,10 @@
 """
 from case.base import PayCase, PayTestBase
 
-from common.Assert import assert_len
+from common.assert_util import assert_len
 from common.con_mysql import conMysql as mysql
 from common.Config import config
-from common.runFailed import Retry
+from common.run_failed import Retry
 
 # 本家族房 rid / 直播公会gs
 FLEET_RID = config.bb_user.fleetRid

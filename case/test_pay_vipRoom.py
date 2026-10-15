@@ -7,7 +7,7 @@
 from case.base import PayCase, PayTestBase
 
 from common.Config import config
-from common.runFailed import Retry
+from common.run_failed import Retry
 
 # 个人房 rid（vip>5级不回收）
 VIP_ROOM_RID = config.bb_user.vipRoomRid

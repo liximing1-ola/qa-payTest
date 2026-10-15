@@ -63,7 +63,7 @@ class _RunSceneTestBase(unittest.TestCase):
         self.tc.area_rid = AREA_RID_VALUE
 
         self.m_db = self._start_patch('caseOversea.base.conMysql')
-        self.m_encode = self._start_patch('caseOversea.base.encodeOverseaData',
+        self.m_encode = self._start_patch('caseOversea.base.encode_oversea_data',
                                           side_effect=lambda **kw: kw)
         self.m_post = self._start_patch('caseOversea.base.post_request_session',
                                         return_value={'code': 200, 'body': {}})
@@ -130,7 +130,7 @@ class TestRunSceneRequestBuilding(_RunSceneTestBase):
         self.m_encode.assert_called_once_with(payType='package', rid=123456)
 
     def test_default_scene_passes_no_rid(self):
-        """rid 为 None 时不传房间参数（走 encodeOverseaData 默认房）"""
+        """rid 为 None 时不传房间参数（走 encode_oversea_data 默认房）"""
         self.tc.run_scene(PayScene(des='默认房'))
         self.m_encode.assert_called_once_with(payType='package')
 

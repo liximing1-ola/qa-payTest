@@ -7,7 +7,7 @@ APP 海外版支付测试 - 守护开通验证
 from caseOversea.base import OverseaBizCase, OverseaBizTestBase
 
 from common.Config import config
-from common.runFailed import Retry
+from common.run_failed import Retry
 
 # 场景表：个人守护开通收益分成（非主播 80% / 主播 70%）
 DEFEND_SCENES = [

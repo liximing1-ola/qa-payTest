@@ -34,7 +34,7 @@ class RedisConnection:
         return redis.Redis(connection_pool=cls.get_pool(host))
 
 
-class conRedis:
+class ConRedis:
     """Redis操作类"""
 
     @staticmethod
@@ -47,7 +47,7 @@ class conRedis:
     @staticmethod
     def check_set_key(key, value):
         """检查并设置集合key"""
-        r = conRedis.get_conn()
+        r = ConRedis.get_conn()
         if r.scard(key) == 0:
             r.sadd(key, value)
 
@@ -60,11 +60,15 @@ class conRedis:
             values: 要删除的字段（可迭代对象）
             host: Redis主机，默认使用 config.redis_host_46
         """
-        r = conRedis.get_conn(host)
+        r = ConRedis.get_conn(host)
         for value in values:
             for k in value:
                 r.hdel(key, k)
 
 
 if __name__ == '__main__':
-    conRedis.check_set_key('Xs.WhiteList.SuperVoice.White', 100287189)
+    ConRedis.check_set_key('Xs.WhiteList.SuperVoice.White', 100287189)
+
+
+# 兼容别名（驼峰 → PascalCase，后续逐步迁移外部调用后可移除）
+conRedis = ConRedis

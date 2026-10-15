@@ -7,7 +7,7 @@ APP 海外版支付测试 - 韩国区域验证
 from caseOversea.base import RECEIVER_BROKER, OverseaAreaTestBase, PayScene
 
 from common.Config import config
-from common.runFailed import Retry
+from common.run_failed import Retry
 
 SCENES = [
     PayScene(

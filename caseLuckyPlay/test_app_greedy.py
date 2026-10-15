@@ -8,7 +8,7 @@ APP 幸运玩法支付测试 - 摩天轮验证
 import time
 import unittest
 
-from common.Assert import assert_equal
+from common.assert_util import assert_equal
 from common.con_pt_mysql import conMysql
 from common.con_redis import conRedis
 from common.Config import config
@@ -43,7 +43,7 @@ class TestPayGreedy(unittest.TestCase):
             if action == 'update_user_big_area':
                 conMysql.updateUserBigArea(*params['uids'], **{k: v for k, v in params.items() if k != 'uids'})
             elif action == 'update_user_language':
-                conMysql.updateUserLanguage(*params['uids'], **{k: v for k, v in params.items() if k != 'uids'})
+                conMysql.update_user_language(*params['uids'], **{k: v for k, v in params.items() if k != 'uids'})
             elif action == 'update_money':
                 conMysql.update_money_sql(**params)
 

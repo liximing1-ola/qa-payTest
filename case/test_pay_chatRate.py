@@ -6,11 +6,11 @@
 """
 from case.base import PayCase, PayTestBase
 
-from common.Assert import assert_len
+from common.assert_util import assert_len
 from common.con_mysql import conMysql as mysql
 from common.Config import config
 from common.method import calculate_vip_exp
-from common.runFailed import Retry
+from common.run_failed import Retry
 
 SCENES = [
     PayCase(

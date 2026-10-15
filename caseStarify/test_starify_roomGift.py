@@ -2,11 +2,11 @@ from caseStarify.base import StarifyCase, StarifyTestBase
 from caseStarify.deal_data import deal_pay_data
 from caseStarify.need_data import commodity_config, starify_payUid, starify_rewardUid01, starify_rewardUid02, wealth_lv
 
-from common.Assert import assert_between, assert_body, assert_code, assert_equal
+from common.assert_util import assert_between, assert_body, assert_code, assert_equal
 from common.con_starify_mysql import conMysql
 from common.Consts import case_list, result
-from common.Request import post_starify
-from common.runFailed import Retry
+from common.request_util import post_starify
+from common.run_failed import Retry
 from common.tools import hash_key
 
 

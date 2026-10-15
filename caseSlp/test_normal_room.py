@@ -18,7 +18,7 @@ from caseSlp.config import (
 )
 
 from common.con_slp_mysql import conMysql as mysql
-from common.runFailed import Retry
+from common.run_failed import Retry
 
 
 def _make_room_case(des, rid, room_type, gift_type):

@@ -7,11 +7,11 @@
 """
 from case.base import PayCase, PayTestBase
 
-from common.Assert import assert_len
+from common.assert_util import assert_len
 from common.con_mysql import conMysql as mysql
 from common.Config import config
-from common.runFailed import Retry
-from common.sqlScript import UserMoneyOperations
+from common.run_failed import Retry
+from common.sql_script import UserMoneyOperations
 
 # 打包结算主播 / 公会长 / 直播频道
 TEST_UID = config.live_role['pack_cal_uid']

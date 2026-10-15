@@ -22,7 +22,7 @@ class MySQLConnection(MySQLConnectionBase):
     _cursor = None
 
 
-class conMysql:
+class ConMysql:
     """MySQL 操作类"""
 
     # select_user_info_sql 简单查询映射（返回单值，默认返回 0）
@@ -54,7 +54,7 @@ class conMysql:
     @staticmethod
     def _select_single_money(uid, money_type):
         """单账户余额查询（money_type 为列名，无法参数化；uid 参数化）"""
-        if money_type not in conMysql._MONEY_COLUMNS:
+        if money_type not in ConMysql._MONEY_COLUMNS:
             raise ValueError(f'Invalid money_type column: {money_type}')
         sql = "SELECT {} FROM xs_user_money WHERE uid=%s".format(money_type)
         return MySQLConnection.execute_query_first(sql, params=(uid,), default=None)
@@ -124,12 +124,12 @@ class conMysql:
             return None
 
     SELECT_COMPLEX_HANDLERS = {
-        'single_money':  lambda uid, money_type, cid: conMysql._select_single_money(uid, money_type),
-        'relation_id':   lambda uid, money_type, cid: conMysql._select_relation_id(uid, cid),
-        'relation_config': lambda uid, money_type, cid: conMysql._select_relation_config(uid),
-        'union':         lambda uid, money_type, cid: conMysql._select_union(),
-        'fleet':         lambda uid, money_type, cid: conMysql._select_fleet(),
-        'pay_change':    lambda uid, money_type, cid: conMysql._select_pay_change(uid, money_type),
+        'single_money':  lambda uid, money_type, cid: ConMysql._select_single_money(uid, money_type),
+        'relation_id':   lambda uid, money_type, cid: ConMysql._select_relation_id(uid, cid),
+        'relation_config': lambda uid, money_type, cid: ConMysql._select_relation_config(uid),
+        'union':         lambda uid, money_type, cid: ConMysql._select_union(),
+        'fleet':         lambda uid, money_type, cid: ConMysql._select_fleet(),
+        'pay_change':    lambda uid, money_type, cid: ConMysql._select_pay_change(uid, money_type),
     }
 
     # delete_user_account_sql SQL 映射
@@ -183,22 +183,22 @@ class conMysql:
             cid: 物品 ID（用于 num_commodity、id_commodity、relation_id）
         """
         # 简单查询（返回单值，默认 0）
-        if accountType in conMysql.SELECT_SIMPLE_MAP:
-            sql = conMysql.SELECT_SIMPLE_MAP[accountType]
+        if accountType in ConMysql.SELECT_SIMPLE_MAP:
+            sql = ConMysql.SELECT_SIMPLE_MAP[accountType]
             return MySQLConnection.execute_query_first(sql, params=(uid,), default=0)
 
         # 带 cid 参数的查询
-        if accountType in conMysql.SELECT_WITH_CID_MAP:
-            sql = conMysql.SELECT_WITH_CID_MAP[accountType]
+        if accountType in ConMysql.SELECT_WITH_CID_MAP:
+            sql = ConMysql.SELECT_WITH_CID_MAP[accountType]
             return MySQLConnection.execute_query_first(sql, params=(cid, uid), default=0)
 
         # 返回 None 的查询
-        if accountType in conMysql.SELECT_RETURN_NONE_MAP:
-            sql = conMysql.SELECT_RETURN_NONE_MAP[accountType]
+        if accountType in ConMysql.SELECT_RETURN_NONE_MAP:
+            sql = ConMysql.SELECT_RETURN_NONE_MAP[accountType]
             return MySQLConnection.execute_query_first(sql, params=(uid,), default=None)
 
         # 复杂查询分发
-        handler = conMysql.SELECT_COMPLEX_HANDLERS.get(accountType)
+        handler = ConMysql.SELECT_COMPLEX_HANDLERS.get(accountType)
         if handler:
             return handler(uid, money_type, cid)
 
@@ -216,13 +216,13 @@ class conMysql:
             uid: 用户 ID
         """
         # DELETE 类操作
-        if tableName in conMysql.DELETE_SQL_MAP:
-            sql = conMysql.DELETE_SQL_MAP[tableName]
+        if tableName in ConMysql.DELETE_SQL_MAP:
+            sql = ConMysql.DELETE_SQL_MAP[tableName]
             MySQLConnection.execute_write(sql, params=(uid,))
 
         # UPDATE 类操作（历史命名兼容）
-        elif tableName in conMysql.DELETE_UPDATE_MAP:
-            sql = conMysql.DELETE_UPDATE_MAP[tableName]
+        elif tableName in ConMysql.DELETE_UPDATE_MAP:
+            sql = ConMysql.DELETE_UPDATE_MAP[tableName]
             MySQLConnection.execute_write(sql, params=(uid,))
 
         else:
@@ -239,7 +239,7 @@ class conMysql:
             uid: 用户 ID
             bid: 主播 ID
         """
-        entry = conMysql.UPDATE_USER_INFO_MAP.get(tableName)
+        entry = ConMysql.UPDATE_USER_INFO_MAP.get(tableName)
         if entry is None:
             logger.warning('update_user_info_sql: unknown tableName: %s', tableName)
             return
@@ -287,7 +287,7 @@ class conMysql:
     @staticmethod
     def insert_xs_user_commodity(uid, cid, num, state=0):
         """用户背包增加测试数据"""
-        conMysql.check_xs_commodity(cid)
+        ConMysql.check_xs_commodity(cid)
         MySQLConnection.insert_user_commodity(uid, cid, num, state)
 
     @staticmethod
@@ -330,7 +330,7 @@ class conMysql:
                     'UPDATE xs_broker SET creater=%s WHERE bid=%s LIMIT 1',
                     (bid, bid)
                 )
-        conMysql._transactional_write(_write)
+        ConMysql._transactional_write(_write)
 
     @staticmethod
     def check_user_xs_mentor_level(uid, level=4):
@@ -347,7 +347,7 @@ class conMysql:
                     'UPDATE xs_mentor_exp SET level=%s WHERE uid=%s LIMIT 1',
                     (level, uid)
                 )
-        conMysql._transactional_write(_write)
+        ConMysql._transactional_write(_write)
 
     @staticmethod
     def check_user_broker(uid, bid=136594717):
@@ -365,7 +365,7 @@ class conMysql:
                     'UPDATE xs_broker_user SET uid=%s, bid=%s WHERE id=%s LIMIT 1',
                     (uid, bid, res[0])
                 )
-        conMysql._transactional_write(_write)
+        ConMysql._transactional_write(_write)
 
     @staticmethod
     def check_broker_user_rate(uid, creater, rate=100):
@@ -382,5 +382,8 @@ class conMysql:
                     'UPDATE config.bbc_broker_user_rate SET rate=%s, broker_creater=%s WHERE uid=%s LIMIT 1',
                     (rate, creater, uid)
                 )
-        conMysql._transactional_write(_write)
+        ConMysql._transactional_write(_write)
 
+
+# 兼容别名（驼峰 → PascalCase，后续逐步迁移外部调用后可移除）
+conMysql = ConMysql

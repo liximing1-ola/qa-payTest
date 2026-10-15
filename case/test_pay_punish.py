@@ -7,7 +7,7 @@
 from case.base import PayCase, PayTestBase
 
 from common.Config import config
-from common.runFailed import Retry
+from common.run_failed import Retry
 
 # NSQ 异步扣款消息处理等待（秒）
 NSQ_SETTLE_WAIT = 2

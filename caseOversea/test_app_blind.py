@@ -6,10 +6,10 @@ APP 海外版支付测试 - 盲盒打赏验证
 """
 from caseOversea.base import OverseaBizCase, OverseaBizTestBase
 
-from common.Assert import assert_equal
+from common.assert_util import assert_equal
 from common.con_pt_mysql import conMysql
 from common.Config import config
-from common.runFailed import Retry
+from common.run_failed import Retry
 
 
 def _assert_blind_reconcile():

@@ -9,7 +9,7 @@ from case.base import PayCase, PayTestBase
 
 from common.con_mysql import conMysql as mysql
 from common.Config import config
-from common.runFailed import Retry
+from common.run_failed import Retry
 
 # 礼物 cid：四叶草 / 小天使
 GIFT_CID_CLOVER = 329

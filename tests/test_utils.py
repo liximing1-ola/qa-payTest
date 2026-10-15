@@ -105,7 +105,7 @@ class TestGetLogger(unittest.TestCase):
 # ============ Assert.py 测试 ============
 
 from common import Consts  # noqa: E402
-from common.Assert import (  # noqa: E402
+from common.assert_util import (  # noqa: E402
     _assert,
     _record_failure,
     assert_between,
@@ -155,21 +155,21 @@ class TestAssertCode(unittest.TestCase):
     def setUp(self):
         Consts.fail_case_reason.clear()
 
-    @patch('common.Assert._delay_for_rpc')
+    @patch('common.assert_util._delay_for_rpc')
     def test_passes_on_200(self, mock_delay):
         """状态码 200 应通过"""
         result = assert_code(200)
         self.assertTrue(result)
         self.assertEqual(len(Consts.fail_case_reason), 0)
 
-    @patch('common.Assert._delay_for_rpc')
+    @patch('common.assert_util._delay_for_rpc')
     def test_fails_on_500(self, mock_delay):
         """状态码 500 应失败"""
         with self.assertRaises(AssertionError):
             assert_code(500)
         self.assertTrue(len(Consts.fail_case_reason) > 0)
 
-    @patch('common.Assert._delay_for_rpc')
+    @patch('common.assert_util._delay_for_rpc')
     def test_custom_expected(self, mock_delay):
         """自定义期望状态码"""
         self.assertTrue(assert_code(301, 301))
@@ -267,9 +267,9 @@ class TestAssertBetween(unittest.TestCase):
             assert_between(101, 10, 100)
 
 
-# ============ runFailed.py 测试 ============
+# ============ run_failed.py 测试 ============
 
-from common.runFailed import Retry  # noqa: E402
+from common.run_failed import Retry  # noqa: E402
 
 
 class TestRetryDecorator(unittest.TestCase):

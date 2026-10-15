@@ -7,7 +7,7 @@ from caseSlp.base import SlpCase, SlpTestBase
 from caseSlp.config import business_room_rid, default_money, giftId, juewei_level, normal_uid, payUid
 
 from common.con_slp_mysql import conMysql as mysql
-from common.runFailed import Retry
+from common.run_failed import Retry
 
 # 消费后等待 vip 经验值/人气值落库的时长（秒）
 PROFILE_UPDATE_WAIT = 0.5

@@ -1,0 +1,175 @@
+# coding=utf-8
+"""
+HTTP 请求封装模块
+
+提供统一的 HTTP POST 请求功能，支持 Token 管理、HTTPS 转换和响应解析。
+"""
+import logging
+import os
+from typing import Any, Dict, Optional
+
+import requests
+
+from common.Config import config
+from common.Session import Session
+
+# 日志配置
+logger = logging.getLogger(__name__)
+
+# HTTPS 证书验证（测试环境默认关闭，可通过 VERIFY_SSL=1 环境变量启用）
+VERIFY_SSL: bool = os.environ.get('VERIFY_SSL', '0') == '1'
+
+# 默认请求头
+DEFAULT_HEADERS: Dict[str, str] = {
+    "User-Agent": "Mozilla/5.0 (Linux; Android 11; HD1900 Build/RKQ1.201022.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/87.0.4280.141 Mobile Safari/537.36 / Xs android V1.1.0.0 / Js V1.0.0.0 / Login V1658980709",
+    "Content-Type": "application/x-www-form-urlencoded",
+    'Connection': 'close'
+}
+
+# 请求超时配置
+DEFAULT_TIMEOUT: float = 30.0
+
+
+def _build_headers(token_name: str = 'dev', uid: Optional[int] = None) -> Dict[str, str]:
+    """构建header
+    Args:
+        token_name: Token 名称
+        uid: 用户 UID（可选，读取指定用户的 token 文件）
+    Returns:
+        请求头
+    """
+    headers = DEFAULT_HEADERS.copy()
+    headers["user-token"] = Session.check_user_token(operate='read', app_name=token_name, uid=uid) or ''
+    return headers
+
+
+def _ensure_https(url: str) -> str:
+    """确保 URL 使用 HTTPS
+    Args:
+        url: 原始 URL
+    Returns:
+        转换后的 HTTPS URL
+    """
+    if url.startswith('https://'):
+        return url
+    if url.startswith('http://'):
+        return url.replace('http://', 'https://', 1)
+    return f'https://{url}'
+
+
+def _parse_response(response: requests.Response) -> Dict[str, Any]:
+    """解析响应结果
+
+    成功（2xx）且为 JSON 时返回解析后的 body；
+    成功但非 JSON（如网关错误页）时 body 为 None 并附 error 说明，便于下游判空。
+    """
+    body = None
+    if response.ok:
+        try:
+            body = response.json()
+        except ValueError:
+            # 200 但返回非 JSON（如网关错误页），记录片段便于排障
+            logger.warning('Response is not JSON: %s', response.text[:200])
+            return {
+                'code': response.status_code,
+                'time_consuming': response.elapsed.total_seconds() * 1000,
+                'time_total': response.elapsed.total_seconds(),
+                'body': None,
+                'error': 'non-json response',
+            }
+    logger.debug('Response: %s', body)
+    return {
+        'code': response.status_code,
+        'time_consuming': response.elapsed.total_seconds() * 1000,
+        'time_total': response.elapsed.total_seconds(),
+        'body': body
+    }
+
+
+def post_request_session(url: str, data: Optional[Any],
+                         token_name: str = 'dev',
+                         uid: Optional[int] = None,
+                         timeout: float = DEFAULT_TIMEOUT) -> Dict[str, Any]:
+    """
+    POST 请求
+
+    Args:
+        url: 请求 URL
+        data: 请求数据
+        token_name: Token 名称，默认为 'dev'
+        uid: 用户 UID（可选，读取指定用户的 token 文件）
+        timeout: 请求超时时间，默认 30 秒
+
+    Returns:
+        包含 code、body、time_consuming、time_total 的响应字典
+    """
+    headers = _build_headers(token_name, uid)
+    url = _ensure_https(url)
+
+    try:
+        response = requests.post(
+            url=url,
+            data=data,
+            headers=headers,
+            verify=VERIFY_SSL,
+            timeout=timeout
+        )
+        return _parse_response(response)
+    except requests.RequestException as e:
+        log = logger.warning if isinstance(e, requests.Timeout) else logger.error
+        log('Request error: %s', e)
+        return {'code': -1, 'body': '', 'error': str(e)}
+    except Exception as e:
+        logger.error('Unexpected error: %s', e)
+        return {'code': -1, 'body': '', 'error': str(e)}
+
+
+def post_request_session_starify(url: str, data: Optional[Any],
+                                token_name: str = 'starify',
+                                uid: Optional[int] = None,
+                                timeout: float = DEFAULT_TIMEOUT) -> Dict[str, Any]:
+    """
+    Starify POST 请求（post_request_session 的 starify 封装）
+    Args:
+        url: 请求 URL
+        data: 请求数据
+        token_name: Token 名称，默认为 'starify'
+        uid: 用户 UID（可选，用于刷新指定用户的 token）
+        timeout: 请求超时时间
+    Returns:
+        包含 code、body、time_consuming、time_total 的响应字典
+    """
+    if uid is not None:
+        # 确保指定用户的 token 文件存在（不存在则触发空文件异常提示）
+        Session.check_user_token(operate='read', app_name=token_name, uid=uid)
+    return post_request_session(url, data, token_name=token_name, uid=uid, timeout=timeout)
+
+
+def post_starify(data: Optional[Any], uid: Optional[int] = None,
+                 timeout: float = DEFAULT_TIMEOUT) -> Dict[str, Any]:
+    """
+    Starify 支付接口 POST 请求快捷封装
+
+    自动使用 config.starify_pay_url 和 'starify' token，简化 caseStarify 用例调用。
+    Args:
+        data: 请求数据
+        uid: 用户 UID（可选，用于刷新指定用户的 token）
+        timeout: 请求超时时间
+    Returns:
+        包含 code、body、time_consuming、time_total 的响应字典
+    """
+    return post_request_session_starify(config.starify_pay_url, data,
+                                        token_name='starify', uid=uid, timeout=timeout)
+
+
+if __name__ == '__main__':
+    # 测试代码：从 token 文件读取，避免硬编码凭证
+    test_headers = {
+        'user-agent': 'Mozilla/5.0 (Linux; Android 11; CPH1969 Build/RP1A.200720.011; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/115.0.5790.138 Mobile Safari/537.36 / Xs android V5.0.31.0 / Js V1.0.0.0 / Login V1691131402',
+        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+        'Connection': 'close',
+        'user-token': Session.check_user_token(operate='read', app_name='slp'),
+    }
+    test_url = 'https://116.62.125.230/pay/create?package=com.yhl.sleepless.android'
+    test_data = 'platform=available&type=chat-gift&money=1000&params=%7B%22notify_group_id%22%3A0%2C%22to%22%3A%22105002312%22%2C%22giftId%22%3A5%2C%22giftNum%22%3A10%2C%22cid%22%3A0%2C%22ctype%22%3A%22%22%2C%22duction_money%22%3A0%2C%22version%22%3A2%2C%22num%22%3A10%2C%22gift_type%22%3A%22normal%22%2C%22star%22%3A0%2C%22show_pac_man_guide%22%3A1%2C%22all_mic%22%3A0%2C%22useCoin%22%3A-1%7D'
+    logger.info(requests.post(url=test_url, data=test_data, headers=test_headers, verify=VERIFY_SSL).json())

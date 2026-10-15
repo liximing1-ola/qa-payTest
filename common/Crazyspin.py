@@ -10,7 +10,7 @@ from typing import Any, Dict
 import requests
 
 from common.Config import config
-from common.Request import DEFAULT_TIMEOUT
+from common.request_util import DEFAULT_TIMEOUT
 from common.Session import Session
 
 # 默认请求参数

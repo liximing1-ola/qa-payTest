@@ -84,7 +84,7 @@ class TestRunCaseFlow(unittest.TestCase):
             success=1, msg='ok', post_wait=0.01,
         )
         with patch('caseSlp.base.UserMoneyOperations') as m_money, \
-                patch('caseSlp.base.encodeData',
+                patch('caseSlp.base.encode_data',
                       side_effect=lambda **kw: events.append(('data', kw)) or kw), \
                 patch('caseSlp.base.post_request_session',
                       side_effect=lambda url, d, token_name=None:
@@ -116,7 +116,7 @@ class TestRunCaseFlow(unittest.TestCase):
         body = {'success': 1}
         case = SlpCase(des='无msg场景', data={'a': 1}, msg=None)
         with patch.object(_DummySlpTest, '_prepare_test_data') as m_prep, \
-                patch('caseSlp.base.encodeData', return_value={'a': 1}), \
+                patch('caseSlp.base.encode_data', return_value={'a': 1}), \
                 patch('caseSlp.base.post_request_session',
                       return_value={'code': 200, 'body': body}), \
                 patch('caseSlp.base.assert_code'), \
@@ -130,7 +130,7 @@ class TestRunCaseFlow(unittest.TestCase):
         """setup/queries/checks 为空且 post_wait 为 0 时不应产生额外调用"""
         case = SlpCase(des='最小场景')
         with patch.object(_DummySlpTest, '_prepare_test_data') as m_prep, \
-                patch('caseSlp.base.encodeData', return_value={}) as m_enc, \
+                patch('caseSlp.base.encode_data', return_value={}) as m_enc, \
                 patch('caseSlp.base.post_request_session',
                       return_value={'code': 200, 'body': {}}) as m_req, \
                 patch('caseSlp.base.assert_code'), \
@@ -149,7 +149,7 @@ class TestRunCaseFlow(unittest.TestCase):
         """report='case_list_b' 时应写入第二张报告表"""
         fake_b = {}
         case = SlpCase(des='B表场景', report='case_list_b')
-        with patch('caseSlp.base.encodeData', return_value={}), \
+        with patch('caseSlp.base.encode_data', return_value={}), \
                 patch('caseSlp.base.post_request_session',
                       return_value={'code': 200, 'body': {}}), \
                 patch('caseSlp.base.assert_code'), \

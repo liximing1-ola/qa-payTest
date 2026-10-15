@@ -110,7 +110,7 @@ class TestRunCaseFlow(unittest.TestCase):
             success=1, msg='ok', post_wait=0.01,
         )
         with patch('case.base.UserMoneyOperations') as m_money, \
-                patch('case.base.encodeData',
+                patch('case.base.encode_data',
                       side_effect=lambda **kw: events.append(('data', kw)) or kw), \
                 patch('case.base.post_request_session',
                       side_effect=lambda url, d: events.append(('req', url, d))
@@ -142,7 +142,7 @@ class TestRunCaseFlow(unittest.TestCase):
         body = {'success': 1}
         case = PayCase(des='无msg场景', data={'a': 1}, msg=None)
         with patch.object(_DummyPayTest, '_prepare_test_data') as m_prep, \
-                patch('case.base.encodeData', return_value={'a': 1}), \
+                patch('case.base.encode_data', return_value={'a': 1}), \
                 patch('case.base.post_request_session',
                       return_value={'code': 200, 'body': body}), \
                 patch('case.base.assert_code'), \
@@ -156,7 +156,7 @@ class TestRunCaseFlow(unittest.TestCase):
         """setup/queries/checks 为空且 post_wait 为 0 时不应产生额外调用"""
         case = PayCase(des='最小场景')
         with patch.object(_DummyPayTest, '_prepare_test_data') as m_prep, \
-                patch('case.base.encodeData', return_value={}) as m_enc, \
+                patch('case.base.encode_data', return_value={}) as m_enc, \
                 patch('case.base.post_request_session',
                       return_value={'code': 200, 'body': {}}) as m_req, \
                 patch('case.base.assert_code'), \

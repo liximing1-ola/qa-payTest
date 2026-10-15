@@ -19,4 +19,4 @@ known-first-party = ["common"]
 python_version = "3.11"
 warn_unused_configs = true
 ignore_missing_imports = true
-check_untyped_defs = false
+check_untyped_defs = true

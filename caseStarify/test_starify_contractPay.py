@@ -4,11 +4,11 @@ from caseStarify.base import StarifyTestBase
 from caseStarify.deal_data import deal_pay_contract_data
 from caseStarify.need_data import a_uid, b_uid, c_uid, contract_ratio
 
-from common.Assert import assert_body, assert_code, assert_equal
+from common.assert_util import assert_body, assert_code, assert_equal
 from common.con_starify_mysql import conMysql
 from common.Consts import case_list, result
-from common.Request import post_starify
-from common.runFailed import Retry
+from common.request_util import post_starify
+from common.run_failed import Retry
 
 
 @Retry(max_n=1)

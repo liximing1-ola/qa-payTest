@@ -1,12 +1,12 @@
 import unittest
 
-from common.Assert import assert_body, assert_code, assert_equal
-from common.basicData import encodeData
+from common.assert_util import assert_body, assert_code, assert_equal
+from common.basic_data import encode_data
 from common.con_mysql import conMysql
 from common.Config import config
 from common.Consts import case_list_b, result
-from common.Request import post_request_session
-from common.runFailed import Retry
+from common.request_util import post_request_session
+from common.run_failed import Retry
 from common.Session import Session
 
 
@@ -66,7 +66,7 @@ class TestPayDuckRate(unittest.TestCase):
         ])
 
         # 发送请求
-        data = encodeData(money=100, rid=200064778, uid=testUid, giftId=config.giftId['5'])
+        data = encode_data(money=100, rid=200064778, uid=testUid, giftId=config.giftId['5'])
         res = post_request_session(config.rush_pay_url, data, token_name='rush')
 
         # 验证响应
@@ -105,7 +105,7 @@ class TestPayDuckRate(unittest.TestCase):
         ])
 
         # 发送请求
-        data = encodeData(payType='chat-gift', uid=testUid)
+        data = encode_data(payType='chat-gift', uid=testUid)
         res = post_request_session(config.rush_pay_url, data, token_name='rush')
 
         # 验证响应
@@ -144,7 +144,7 @@ class TestPayDuckRate(unittest.TestCase):
         ])
 
         # 发送请求
-        data = encodeData(payType='defend', uid=testUid, money=52000)
+        data = encode_data(payType='defend', uid=testUid, money=52000)
         res = post_request_session(config.rush_pay_url, data, token_name='rush')
 
         # 验证响应

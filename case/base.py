@@ -15,14 +15,14 @@ import time
 from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, Optional
 
-from common.Assert import assert_body, assert_code, assert_equal, assert_len
-from common.basicData import encodeData
+from common.assert_util import assert_body, assert_code, assert_equal, assert_len
+from common.basic_data import encode_data
 from common.con_mysql import conMysql as mysql
 from common.Config import config
 from common.Consts import case_list, case_list_b, case_list_c, result
-from common.Request import post_request_session
+from common.request_util import post_request_session
 from common.scene_base import SceneFlowBase, resolve, resolve_check
-from common.sqlScript import UserCommodityOperations, UserMoneyOperations
+from common.sql_script import UserCommodityOperations, UserMoneyOperations
 
 # 场景结果记录表（与各测试文件的报告表一一对应）
 REPORT_TABLES = {
@@ -99,7 +99,7 @@ class PayTestBase(SceneFlowBase):
 
     def flow_request(self, case: PayCase, ctx: Dict[str, Any]) -> None:
         """3. 发起请求（响应存入 ctx['_res'] 供断言阶段使用）"""
-        data = encodeData(**{key: resolve(value, ctx) for key, value in case.data.items()})
+        data = encode_data(**{key: resolve(value, ctx) for key, value in case.data.items()})
         ctx['_res'] = post_request_session(config.pay_url, data)
 
     def flow_assert(self, case: PayCase, ctx: Dict[str, Any]) -> None:

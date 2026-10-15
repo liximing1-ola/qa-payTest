@@ -17,10 +17,10 @@ Starify 域支付测试公共基类
 from dataclasses import dataclass, field
 from typing import Any, Dict, Optional
 
-from common.Assert import assert_body, assert_code
+from common.assert_util import assert_body, assert_code
 from common.con_starify_mysql import conMysql
 from common.Consts import case_list, case_list_b, result
-from common.Request import post_starify
+from common.request_util import post_starify
 from common.scene_base import SceneFlowBase
 
 # 场景结果记录表（与各测试文件的报告表一一对应）

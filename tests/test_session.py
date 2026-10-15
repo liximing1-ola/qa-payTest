@@ -138,11 +138,11 @@ class TestUseBackupPlan(unittest.TestCase):
         """备选方案应从数据库获取 salt 并生成 token"""
         import os
         from unittest.mock import patch as _patch
-        # getToken.py 模块级需要环境变量
+        # get_token.py 模块级需要环境变量
         with _patch.dict(os.environ, {'TOKEN_KEY': 'test', 'TOKEN_VERIFY_SALT': 'test'}):
             import importlib
 
-            import common.getToken as gt
+            import common.get_token as gt
             importlib.reload(gt)
             with _patch('common.con_mysql.conMysql.select_user_info_sql', return_value='salt_value'), \
                  _patch.object(gt.TokenGenerator, 'generate', return_value='backup_token'):

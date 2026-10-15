@@ -8,7 +8,7 @@ from case.base import PayCase, PayTestBase
 
 from common.con_mysql import conMysql as mysql
 from common.Config import config
-from common.runFailed import Retry
+from common.run_failed import Retry
 
 # 自定义分成主播 / 打包结算签约主播 / 公会长
 CUSTOM_UID = config.bb_user.custom_rate_uid

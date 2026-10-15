@@ -10,7 +10,7 @@ from unittest.mock import Mock, patch
 
 import requests
 
-from common.Request import (
+from common.request_util import (
     DEFAULT_TIMEOUT,
     VERIFY_SSL,
     _build_headers,
@@ -73,20 +73,20 @@ class TestParseResponse(unittest.TestCase):
 class TestBuildHeaders(unittest.TestCase):
     """_build_headers"""
 
-    @patch('common.Request.Session.check_user_token', return_value='token-abc')
+    @patch('common.request_util.Session.check_user_token', return_value='token-abc')
     def test_token_injected(self, mock_token):
         """token 应写入 user-token 头"""
         headers = _build_headers('app')
         self.assertEqual(headers['user-token'], 'token-abc')
         mock_token.assert_called_once_with(operate='read', app_name='app', uid=None)
 
-    @patch('common.Request.Session.check_user_token', return_value='token-uid')
+    @patch('common.request_util.Session.check_user_token', return_value='token-uid')
     def test_uid_forwarded(self, mock_token):
         """uid 应透传到 checkUserToken"""
         _build_headers('starify', uid=124458)
         mock_token.assert_called_once_with(operate='read', app_name='starify', uid=124458)
 
-    @patch('common.Request.Session.check_user_token', return_value='t')
+    @patch('common.request_util.Session.check_user_token', return_value='t')
     def test_default_headers_preserved(self, _mock_token):
         """默认 UA / Content-Type 应保留"""
         headers = _build_headers()
@@ -113,8 +113,8 @@ class TestEnsureHttps(unittest.TestCase):
 class TestPostRequestSession(unittest.TestCase):
     """post_request_session"""
 
-    @patch('common.Request.Session.check_user_token', return_value='t')
-    @patch('common.Request.requests.post')
+    @patch('common.request_util.Session.check_user_token', return_value='t')
+    @patch('common.request_util.requests.post')
     def test_normal_flow(self, mock_post, _mock_token):
         """正常请求：返回解析结果，URL 升级 https、带 timeout 与 verify 开关"""
         mock_post.return_value = _make_response(json_data={'success': 1})
@@ -129,8 +129,8 @@ class TestPostRequestSession(unittest.TestCase):
         self.assertEqual(kwargs['verify'], VERIFY_SSL)
         self.assertEqual(kwargs['headers']['user-token'], 't')
 
-    @patch('common.Request.Session.check_user_token', return_value='t')
-    @patch('common.Request.requests.post', side_effect=requests.Timeout('boom'))
+    @patch('common.request_util.Session.check_user_token', return_value='t')
+    @patch('common.request_util.requests.post', side_effect=requests.Timeout('boom'))
     def test_timeout_returns_error_code(self, _mock_post, _mock_token):
         """请求超时应返回 code=-1 与 error 说明"""
         result = post_request_session('http://x.y/z', None)
@@ -138,16 +138,16 @@ class TestPostRequestSession(unittest.TestCase):
         self.assertIn('error', result)
         self.assertEqual(result['body'], '')
 
-    @patch('common.Request.Session.check_user_token', return_value='t')
-    @patch('common.Request.requests.post', side_effect=RuntimeError('boom'))
+    @patch('common.request_util.Session.check_user_token', return_value='t')
+    @patch('common.request_util.requests.post', side_effect=RuntimeError('boom'))
     def test_unexpected_error_returns_error_code(self, _mock_post, _mock_token):
         """非 requests 异常也应返回 code=-1 而非向上抛出"""
         result = post_request_session('http://x.y/z', None)
         self.assertEqual(result['code'], -1)
         self.assertIn('error', result)
 
-    @patch('common.Request.Session.check_user_token', return_value='t')
-    @patch('common.Request.requests.post')
+    @patch('common.request_util.Session.check_user_token', return_value='t')
+    @patch('common.request_util.requests.post')
     def test_custom_timeout_forwarded(self, mock_post, _mock_token):
         """自定义 timeout 应传递到 requests.post"""
         mock_post.return_value = _make_response(json_data={})
@@ -158,15 +158,15 @@ class TestPostRequestSession(unittest.TestCase):
 class TestPostRequestSessionStarify(unittest.TestCase):
     """post_request_session_starify"""
 
-    @patch('common.Request.post_request_session', return_value={'code': 200, 'body': {}})
-    @patch('common.Request.Session.check_user_token')
+    @patch('common.request_util.post_request_session', return_value={'code': 200, 'body': {}})
+    @patch('common.request_util.Session.check_user_token')
     def test_with_uid(self, mock_token, mock_post):
         """指定 uid 时应先检查 token 文件"""
         result = post_request_session_starify('http://x.y/z', 'data', uid=123)
         mock_token.assert_called_once_with(operate='read', app_name='starify', uid=123)
         self.assertEqual(result['code'], 200)
 
-    @patch('common.Request.post_request_session', return_value={'code': 200, 'body': {}})
+    @patch('common.request_util.post_request_session', return_value={'code': 200, 'body': {}})
     def test_without_uid(self, mock_post):
         """不指定 uid 时应直接转发"""
         result = post_request_session_starify('http://x.y/z', 'data')
@@ -176,7 +176,7 @@ class TestPostRequestSessionStarify(unittest.TestCase):
 class TestPostStarify(unittest.TestCase):
     """post_starify"""
 
-    @patch('common.Request.post_request_session_starify', return_value={'code': 200, 'body': {}})
+    @patch('common.request_util.post_request_session_starify', return_value={'code': 200, 'body': {}})
     def test_delegates_to_starify_session(self, mock_starify):
         """应使用 config.starify_pay_url 和 starify token"""
         from common.Config import config

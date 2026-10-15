@@ -16,12 +16,12 @@ import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, Optional
 
-from common.Assert import assert_body, assert_code, assert_equal, assert_len
-from common.basicData import encodeOverseaData
+from common.assert_util import assert_body, assert_code, assert_equal, assert_len
+from common.basic_data import encode_oversea_data
 from common.con_pt_mysql import conMysql
 from common.Config import config
 from common.Consts import case_list, result
-from common.Request import post_request_session
+from common.request_util import post_request_session
 from common.scene_base import SceneFlowBase, resolve
 
 # 哨兵：房间 ID 取 setUpClass 中查询的 cls.area_rid（None 表示用 encodeOverseaData 默认房）
@@ -185,7 +185,7 @@ class OverseaAreaTestBase(OverseaTestBase):
             pay_kwargs['uid'] = ctx['receiver_uid']
         if scene.is_box:
             pay_kwargs['giftId'] = config.giftId['46']
-        data = encodeOverseaData(payType=scene.pay_type, **pay_kwargs)
+        data = encode_oversea_data(payType=scene.pay_type, **pay_kwargs)
         ctx['_res'] = post_request_session(config.oversea_pay_url, data, token_name='app')
 
     def flow_assert(self, scene: PayScene, ctx: Dict[str, Any]) -> None:
@@ -283,7 +283,7 @@ class OverseaBizTestBase(OverseaTestBase):
 
     def flow_request(self, case: OverseaBizCase, ctx: Dict[str, Any]) -> None:
         """3. 发起支付请求（默认走 config.oversea_pay_url，token=app）"""
-        data = encodeOverseaData(**{key: resolve(value, ctx) for key, value in case.data.items()})
+        data = encode_oversea_data(**{key: resolve(value, ctx) for key, value in case.data.items()})
         url = case.url if case.url is not None else config.oversea_pay_url
         ctx['_res'] = post_request_session(url, data, token_name='app')
 

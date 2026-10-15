@@ -7,7 +7,7 @@ APP 海外版支付测试 - VIP 人气值验证
 from caseOversea.base import OverseaBizCase, OverseaBizTestBase
 
 from common.Config import config
-from common.runFailed import Retry
+from common.run_failed import Retry
 
 # 人气值由定时 task 异步更新，校验前需等待的时长（秒）
 POPULARITY_TASK_WAIT = 2

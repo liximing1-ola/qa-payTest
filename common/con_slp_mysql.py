@@ -22,7 +22,7 @@ class MySQLConnection(MySQLConnectionBase):
     _cursor = None
 
 
-class conMysql:
+class ConMysql:
     """MySQL 操作类"""
 
     # ========== 查询 SQL 映射 ==========
@@ -82,8 +82,8 @@ class conMysql:
                          payuid: str = "200000128") -> Optional[Union[int, float, Dict, List]]:
         """查询用户信息（映射字典模式）"""
         # 简单 SQL 直接查
-        if accountType in conMysql.SELECT_SIMPLE_MAP:
-            sql = conMysql.SELECT_SIMPLE_MAP[accountType]
+        if accountType in ConMysql.SELECT_SIMPLE_MAP:
+            sql = ConMysql.SELECT_SIMPLE_MAP[accountType]
             default = 0
             if accountType in ('union', 'vip'):
                 res = MySQLConnection.execute_query_first(sql, default=None)
@@ -93,10 +93,10 @@ class conMysql:
             return MySQLConnection.execute_query_first(sql, params=(uid,), default=default)
 
         # 需要额外参数的 SQL
-        if accountType in conMysql.SELECT_WITH_PARAM_MAP:
-            template = conMysql.SELECT_WITH_PARAM_MAP[accountType]
+        if accountType in ConMysql.SELECT_WITH_PARAM_MAP:
+            template = ConMysql.SELECT_WITH_PARAM_MAP[accountType]
             if accountType == 'single_money':
-                if money_type not in conMysql._MONEY_COLUMNS:
+                if money_type not in ConMysql._MONEY_COLUMNS:
                     raise ValueError(f'Invalid money_type column: {money_type}')
                 sql = template.format(money_type=money_type)
                 params: Tuple[Union[str, int], ...] = (uid,)
@@ -110,7 +110,7 @@ class conMysql:
 
         # relation_config 返回字典
         if accountType == 'relation_config':
-            sql = conMysql.SELECT_COMPLEX_SQL
+            sql = ConMysql.SELECT_COMPLEX_SQL
             cursor = MySQLConnection.get_cursor()
             try:
                 cursor.execute(sql, (uid,))
@@ -124,12 +124,12 @@ class conMysql:
 
         # relation_id
         if accountType == 'relation_id':
-            sql = conMysql.SELECT_RELATION_ID_SQL
+            sql = ConMysql.SELECT_RELATION_ID_SQL
             return MySQLConnection.execute_query_first(sql, params=(payuid, uid, cid), default=0)
 
         # pay_change 需要解析字典
         if accountType == 'pay_change':
-            sql = conMysql.SELECT_PAY_CHANGE_SQL
+            sql = ConMysql.SELECT_PAY_CHANGE_SQL
             cursor = MySQLConnection.get_cursor()
             try:
                 cursor.execute(sql, (uid,))
@@ -154,7 +154,7 @@ class conMysql:
     @staticmethod
     def delete_user_account_sql(tableName: str, uid: str) -> None:
         """删除用户账户数据"""
-        sql = conMysql.DELETE_SQL_MAP.get(tableName)
+        sql = ConMysql.DELETE_SQL_MAP.get(tableName)
         if sql:
             MySQLConnection.execute_write(sql, params=(uid,))
         else:
@@ -173,9 +173,11 @@ class conMysql:
         MySQLConnection.update_user_bigarea(*uids, bigarea_id=bigarea_id)
 
     @staticmethod
-    def updateUserLanguage(*uids: str, language: str = 'zh_CN', area_code: str = 'CN') -> None:
+    def update_user_language(*uids: str, language: str = 'zh_CN', area_code: str = 'CN') -> None:
         """更新用户语言"""
         MySQLConnection.update_user_language(*uids, language=language, area_code=area_code)
+
+    updateUserLanguage = staticmethod(update_user_language)  # 兼容别名
 
     @staticmethod
     def update_user_money_clear_sql(*uids: str) -> None:
@@ -299,3 +301,6 @@ class conMysql:
             logger.error('select_zx_pay_data error: %s', error)
             return None
 
+
+# 兼容别名（驼峰 → PascalCase，后续逐步迁移外部调用后可移除）
+conMysql = ConMysql

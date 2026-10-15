@@ -13,7 +13,7 @@ from typing import List, Optional, Tuple
 
 from common.con_pt_mysql import conMysql
 from common.Config import config
-from common.Request import post_request_session
+from common.request_util import post_request_session
 
 logger = logging.getLogger(__name__)
 

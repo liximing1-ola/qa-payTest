@@ -29,7 +29,7 @@ class TestTokenGenerator(unittest.TestCase):
         cls.env_patch.start()
 
         # 确保模块已加载
-        import common.getToken as gt
+        import common.get_token as gt
         importlib.reload(gt)
         cls.gt = gt
 
@@ -67,7 +67,7 @@ class TestGenerateSalt(unittest.TestCase):
             'TOKEN_VERIFY_SALT': 'test_salt_for_salt'
         })
         cls.env_patch.start()
-        import common.getToken as gt
+        import common.get_token as gt
         importlib.reload(gt)
         cls.gt = gt
 
@@ -104,7 +104,7 @@ class TestMd5(unittest.TestCase):
             'TOKEN_VERIFY_SALT': 'test_salt_md5'
         })
         cls.env_patch.start()
-        import common.getToken as gt
+        import common.get_token as gt
         importlib.reload(gt)
         cls.gt = gt
 
@@ -143,7 +143,7 @@ class TestPhpMicrotime(unittest.TestCase):
             'TOKEN_VERIFY_SALT': 'test_salt_mtime'
         })
         cls.env_patch.start()
-        import common.getToken as gt
+        import common.get_token as gt
         importlib.reload(gt)
         cls.gt = gt
 
@@ -174,7 +174,7 @@ class TestRc4Encrypt(unittest.TestCase):
             'TOKEN_VERIFY_SALT': 'test_salt_rc4'
         })
         cls.env_patch.start()
-        import common.getToken as gt
+        import common.get_token as gt
         importlib.reload(gt)
         cls.gt = gt
 
@@ -213,7 +213,7 @@ class TestEnvironmentVariables(unittest.TestCase):
             os.environ['TOKEN_VERIFY_SALT'] = 'some_salt'
             os.environ.pop('TOKEN_KEY', None)
             with self.assertRaises(EnvironmentError):
-                import common.getToken as gt
+                import common.get_token as gt
                 importlib.reload(gt)
 
     def test_missing_verify_salt_raises(self):
@@ -222,7 +222,7 @@ class TestEnvironmentVariables(unittest.TestCase):
             os.environ['TOKEN_KEY'] = 'some_key'
             os.environ.pop('TOKEN_VERIFY_SALT', None)
             with self.assertRaises(EnvironmentError):
-                import common.getToken as gt
+                import common.get_token as gt
                 importlib.reload(gt)
 
 

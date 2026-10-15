@@ -9,7 +9,7 @@ from case.base import PayCase, PayTestBase
 from common.con_mysql import conMysql as mysql
 from common.Config import config
 from common.method import calculate_vip_exp
-from common.runFailed import Retry
+from common.run_failed import Retry
 
 SCENES = [
     PayCase(

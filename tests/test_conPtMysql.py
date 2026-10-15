@@ -101,7 +101,7 @@ class TestPtUpdateWrappers(unittest.TestCase):
 
     def test_update_user_language(self):
         with patch.object(MySQLConnection, 'update_user_language') as m:
-            conMysql.updateUserLanguage(1, language='en', area_code='US')
+            conMysql.update_user_language(1, language='en', area_code='US')
         m.assert_called_once_with(1, language='en', area_code='US')
 
     def test_update_user_money_clear(self):

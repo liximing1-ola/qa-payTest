@@ -29,18 +29,18 @@ qa-payTest/
 
 | 模块 | 功能说明 |
 |------|----------|
-| `Request.py` | 封装HTTP请求方法，支持GET/POST/PUT等多协议扩展 |
-| `Config.py` | 配置管理，包含环境配置、数据路径等 |
-| `paramsYaml.py` | YAML配置文件读取器 |
-| `Logs.py` | 日志记录，支持debug/info/warning/error/critical级别 |
-| `Session.py` | 登录Token获取与管理 |
-| `sqlScript.py` | SQL脚本执行 |
-| `conMysql.py` | MySQL数据库连接与操作 |
-| `conRedis.py` | Redis连接与操作 |
-| `Assert.py` | 断言验证工具 |
-| `Consts.py` | 全局数据记录 |
-| `runFailed.py` | 失败重试机制 |
-| `basicData.py` | 数据编码处理 |
+| `request_util.py` | 封装HTTP请求方法，支持GET/POST/PUT等多协议扩展 |
+| `config.py` | 配置管理，包含环境配置、数据路径等 |
+| `params_yaml.py` | YAML配置文件读取器 |
+| `logs.py` | 日志记录，支持debug/info/warning/error/critical级别 |
+| `session.py` | 登录Token获取与管理 |
+| `sql_script.py` | SQL脚本执行 |
+| `con_mysql.py` | MySQL数据库连接与操作 |
+| `con_redis.py` | Redis连接与操作 |
+| `assert_util.py` | 断言验证工具 |
+| `consts.py` | 全局数据记录 |
+| `run_failed.py` | 失败重试机制 |
+| `basic_data.py` | 数据编码处理 |
 | `scene_base.py` | 场景执行骨架（七段式模板方法，供各域测试基类复用） |
 
 ## 测试规范
@@ -90,20 +90,20 @@ qa-payTest/
 
 | 域 | 夹具模块 | 说明 |
 |----|----------|------|
-| 主站（BB）+ 海外版 | `common/Config.py` | `bb_user` / `live_role` / `oversea_user` / `oversea_room` / `giftId` / `oversea_giftId` / `commodity` 等子配置，经 `config` 单例访问 |
-| SLP | `caseSlp/config.py` | SLP 用户体系独立维护，不合并进 common/Config.py |
+| 主站（BB）+ 海外版 | `common/config.py` | `bb_user` / `live_role` / `oversea_user` / `oversea_room` / `giftId` / `oversea_giftId` / `commodity` 等子配置，经 `config` 单例访问 |
+| SLP | `caseSlp/config.py` | SLP 用户体系独立维护，不合并进 common/config.py |
 | Starify | `caseStarify/need_data.py` | Starify 实体与作品/礼物数据集独立维护 |
 
-- 新增场景实体优先在对应域夹具模块声明；跨域通用实体（如 `giftId`）才收敛到 `common/Config.py`
+- 新增场景实体优先在对应域夹具模块声明；跨域通用实体（如 `giftId`）才收敛到 `common/config.py`
 - `tests/test_config.py` 锁定主站/海外夹具的关键取值与结构（含 `giftId` 键集合），任何静默改数据都会使测试失败
 
 ### 新增用例指引
 
 以主站为例（其余域替换对应基类与夹具模块）：
 
-1. 在域夹具模块（主站为 `common/Config.py`）声明新实体（用户/房间/礼物/商品 ID），禁止在用例中硬编码数字
+1. 在域夹具模块（主站为 `common/config.py`）声明新实体（用户/房间/礼物/商品 ID），禁止在用例中硬编码数字
 2. 在对应测试文件的模块级 `SCENES` 表追加场景，只写与基准场景的差异字段，无需新增测试方法
-3. 若涉及新支付类型：在 `common/basicData.py` 的 `PAY_TYPE_HANDLERS`（或 `basicSlpData.py` 等域编码模块）注册 handler，并同步补 `tests/` 下对应单测
+3. 若涉及新支付类型：在 `common/basic_data.py` 的 `PAY_TYPE_HANDLERS`（或 `basic_slp_data.py` 等域编码模块）注册 handler，并同步补 `tests/` 下对应单测
 4. 用例数量变化后同步 `check_collect.py` 的 `EXPECTED_COLLECT_COUNT` 基线，防止覆盖静默下降
 
 ## 快速开始
@@ -146,7 +146,7 @@ python check_collect.py
 
 ## 配置说明
 
-配置文件位于 `common/Config.py`，包含：
+配置文件位于 `common/config.py`，包含：
 - 环境配置（dev/test/prod）
 - 数据库连接配置
 - Redis连接配置
