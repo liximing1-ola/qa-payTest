@@ -5,15 +5,15 @@ APP 海外版支付测试 - 商城购买验证
 """
 from caseOversea.base import OverseaBizCase, OverseaBizTestBase
 
-from common.Config import config
+from common.config import config
 
 # 场景表：商城购买道具（金豆道具/钻石道具）
 SHOP_BUY_SCENES = [
     OverseaBizCase(
         des='商城购买金豆道具场景',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.oversea_payUid, 'gold_coin': 30000}},
-            {'action': 'delete_user_account', 'params': {'table': 'user_commodity', 'uid': config.oversea_payUid}},
+            {'action': 'update_money', 'params': {'uid': config.oversea_pay_uid, 'gold_coin': 30000}},
+            {'action': 'delete_user_account', 'params': {'table': 'user_commodity', 'uid': config.oversea_pay_uid}},
         ],
         data={'payType': 'coin-shop-buy', 'money': 21000, 'cid': 694},
         checks=[
@@ -24,9 +24,9 @@ SHOP_BUY_SCENES = [
     OverseaBizCase(
         des='商城购买钻石道具场景',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.oversea_payUid, 'money': 2000, 'money_cash': 200,
+            {'action': 'update_money', 'params': {'uid': config.oversea_pay_uid, 'money': 2000, 'money_cash': 200,
                                                   'money_b': 400, 'money_cash_b': 400}},
-            {'action': 'delete_user_account', 'params': {'table': 'user_commodity', 'uid': config.oversea_payUid}},
+            {'action': 'delete_user_account', 'params': {'table': 'user_commodity', 'uid': config.oversea_pay_uid}},
         ],
         data={'payType': 'shop-buy', 'money': 3000, 'cid': 42671},
         checks=[

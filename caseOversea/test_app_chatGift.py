@@ -5,7 +5,7 @@ APP 海外版支付测试 - 私聊打赏验证
 """
 from caseOversea.base import OverseaBizCase, OverseaBizTestBase
 
-from common.Config import config
+from common.config import config
 from common.run_failed import Retry
 
 # 场景表：私聊打赏（余额不足/正常打赏/箱子打赏）
@@ -13,37 +13,37 @@ CHAT_GIFT_SCENES = [
     OverseaBizCase(
         des='私聊打赏余额不足场景',
         setup=[
-            {'action': 'clear_money', 'params': {'uids': [config.oversea_payUid, config.oversea_testUid]}},
+            {'action': 'clear_money', 'params': {'uids': [config.oversea_pay_uid, config.oversea_test_uid]}},
         ],
         data={'payType': 'chat-gift'},
         success=0,
         msg='餘額不足，無法支付',
-        checks=[{'field': 'sum_money', 'uid': config.oversea_testUid, 'expected': 0}],
+        checks=[{'field': 'sum_money', 'uid': config.oversea_test_uid, 'expected': 0}],
     ),
     OverseaBizCase(
         des='私聊打赏礼物场景',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.oversea_payUid, 'money': 600}},
-            {'action': 'update_money', 'params': {'uid': config.oversea_testUid}},
-            {'action': 'clear_extend_money', 'params': {'uid': config.oversea_testUid}},
+            {'action': 'update_money', 'params': {'uid': config.oversea_pay_uid, 'money': 600}},
+            {'action': 'update_money', 'params': {'uid': config.oversea_test_uid}},
+            {'action': 'clear_extend_money', 'params': {'uid': config.oversea_test_uid}},
         ],
         data={'payType': 'chat-gift'},
         checks=[
             {'field': 'sum_money', 'expected': 0},
-            {'field': 'money_cash_personal', 'uid': config.oversea_testUid, 'expected': 480},
+            {'field': 'money_cash_personal', 'uid': config.oversea_test_uid, 'expected': 480},
         ],
     ),
     OverseaBizCase(
         des='私聊打赏箱子场景',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.oversea_payUid, 'money': 600}},
-            {'action': 'update_money', 'params': {'uid': config.oversea_testUid}},
-            {'action': 'clear_extend_money', 'params': {'uid': config.oversea_testUid}},
+            {'action': 'update_money', 'params': {'uid': config.oversea_pay_uid, 'money': 600}},
+            {'action': 'update_money', 'params': {'uid': config.oversea_test_uid}},
+            {'action': 'clear_extend_money', 'params': {'uid': config.oversea_test_uid}},
         ],
-        data={'payType': 'chat-gift', 'giftId': config.oversea_giftId['46']},
+        data={'payType': 'chat-gift', 'giftId': config.oversea_gift_id['46']},
         checks=[
             {'field': 'sum_money', 'expected': 0},
-            {'field': 'money_cash_personal', 'uid': config.oversea_testUid, 'min': 240},
+            {'field': 'money_cash_personal', 'uid': config.oversea_test_uid, 'min': 240},
         ],
     ),
 ]

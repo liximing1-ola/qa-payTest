@@ -5,7 +5,7 @@
 """
 from case.base import PayCase, PayTestBase
 
-from common.Config import config
+from common.config import config
 from common.run_failed import Retry
 
 SCENES = [
@@ -43,23 +43,23 @@ SCENES = [
         setup=[
             {'action': 'update_money', 'params': {'money': 400, 'money_cash': 100,
                                                    'money_cash_b': 100, 'money_b': 100}},
-            {'action': 'update_money', 'params': {'uid': config.rewardUid}}
+            {'action': 'update_money', 'params': {'uid': config.reward_uid}}
         ],
-        data={'money': 600, 'giftId': config.giftId['46'], 'star': 1},
+        data={'money': 600, 'giftId': config.gift_id['46'], 'star': 1},
         checks=[
             {'field': 'sum_money', 'expected': 100},
-            {'field': 'sum_money', 'uid': config.rewardUid, 'min_value': 300 * 0.62}
+            {'field': 'sum_money', 'uid': config.reward_uid, 'min_value': 300 * 0.62}
         ]),
     PayCase(
         des='房间送多人多个box场景',
         setup=[
             {'action': 'update_money', 'params': {'money': 10000}},
-            {'action': 'update_money', 'params': {'uid': config.rewardUid}}
+            {'action': 'update_money', 'params': {'uid': config.reward_uid}}
         ],
-        data={'payType': 'package-more', 'num': 2, 'star': 2, 'money': 2100, 'giftId': config.giftId['47']},
+        data={'payType': 'package-more', 'num': 2, 'star': 2, 'money': 2100, 'giftId': config.gift_id['47']},
         checks=[
             {'field': 'sum_money', 'expected': 1600},
-            {'field': 'sum_money', 'uid': config.rewardUid, 'min_value': 1000}
+            {'field': 'sum_money', 'uid': config.reward_uid, 'min_value': 1000}
         ]),
 ]
 

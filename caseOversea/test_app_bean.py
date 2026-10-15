@@ -5,14 +5,14 @@ APP 海外版支付测试 - 金豆兑换验证
 """
 from caseOversea.base import OverseaBizCase, OverseaBizTestBase
 
-from common.Config import config
+from common.config import config
 from common.run_failed import Retry
 
 # 场景：验证余额兑换金豆流程（money 300 全量兑换为 gold_coin 600）
 SCENE_001 = OverseaBizCase(
     des='余额兑换金豆场景',
     setup=[
-        {'action': 'update_money', 'params': {'uid': config.oversea_payUid, 'money': 300}},
+        {'action': 'update_money', 'params': {'uid': config.oversea_pay_uid, 'money': 300}},
     ],
     data={'payType': 'exchange_gold'},
     checks=[

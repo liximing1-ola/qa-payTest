@@ -6,7 +6,7 @@ APP 海外版支付测试 - 房间打赏验证
 from caseOversea.base import AREA_RID, OverseaAreaTestBase, PayScene
 
 from common.con_pt_mysql import ConMysql
-from common.Config import config
+from common.config import config
 from common.run_failed import Retry
 
 SCENES = [

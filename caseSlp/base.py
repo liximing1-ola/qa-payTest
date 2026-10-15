@@ -17,7 +17,7 @@ from caseSlp.config import pay_url, payUid
 from common.assert_util import assert_body, assert_code, assert_equal
 from common.basic_slp_data import encode_data
 from common.con_slp_mysql import ConMysql as mysql
-from common.Consts import case_list, case_list_b, result
+from common.consts import case_list, case_list_b, result
 from common.request_util import post_request_session
 from common.scene_base import SceneFlowBase, resolve, resolve_check
 from common.sql_script import UserCommodityOperations, UserMoneyOperations

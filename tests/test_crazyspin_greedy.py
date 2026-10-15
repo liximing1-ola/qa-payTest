@@ -7,9 +7,9 @@ common/Crazyspin.py 与 common/Greedy.py 单元测试（URL 构建 / 请求透�
 import unittest
 from unittest.mock import Mock, patch
 
-from common.Config import config
-from common.Crazyspin import DEFAULT_PARAMS, CrazySpin
-from common.Greedy import BET_COUNT, MAX_RETRY_COUNT, Greedy
+from common.config import config
+from common.crazyspin import DEFAULT_PARAMS, CrazySpin
+from common.greedy import BET_COUNT, MAX_RETRY_COUNT, Greedy
 
 
 class TestCrazySpinUrls(unittest.TestCase):
@@ -41,7 +41,7 @@ class TestCrazySpinRequests(unittest.TestCase):
 
     def test_build_headers_injects_token(self):
         """请求头应注入 user-token 并保留默认 UA/Content-Type"""
-        with patch('common.Crazyspin.Session.check_user_token',
+        with patch('common.crazyspin.Session.check_user_token',
                    return_value='tok') as m:
             headers = CrazySpin._build_headers('app')
         self.assertEqual(headers['user-token'], 'tok')
@@ -51,9 +51,9 @@ class TestCrazySpinRequests(unittest.TestCase):
     def test_get_turntable_list(self):
         """list 接口应带 rid 参数与 token 头"""
         resp = Mock()
-        with patch('common.Crazyspin.Session.check_user_token',
+        with patch('common.crazyspin.Session.check_user_token',
                    return_value='tok'), \
-                patch('common.Crazyspin.requests.get', return_value=resp) as m:
+                patch('common.crazyspin.requests.get', return_value=resp) as m:
             res = CrazySpin.get_turntable_list(999, 800350557, token_name='app')
         self.assertIs(res, resp)
         url = m.call_args[1]['params']
@@ -72,13 +72,13 @@ class TestGreedyRequests(unittest.TestCase):
 
     def test_index_forwards(self):
         """index 应向正确 URL 发空 data 并用 app token"""
-        with patch('common.Greedy.post_request_session') as m:
+        with patch('common.greedy.post_request_session') as m:
             Greedy.index(5)
         m.assert_called_once_with(
             f"{config.oversea_host}greedy/index?uid=5", None, token_name='app')
 
     def test_stake_forwards_params(self):
-        with patch('common.Greedy.post_request_session') as m:
+        with patch('common.greedy.post_request_session') as m:
             Greedy.stake(5, vid=3, counter=9, round_id=7,
                          money_type='bean', notice=False)
         url, params = m.call_args[0][0], m.call_args[0][1]
@@ -103,13 +103,13 @@ class TestGreedyPolling(unittest.TestCase):
         """状态始终不匹配应重试满次数并返回 (None, None)"""
         with patch.object(Greedy, 'index', return_value={
                 'body': {'data': {'state': '0'}}}), \
-                patch('common.Greedy.time.sleep') as m_sleep:
+                patch('common.greedy.time.sleep') as m_sleep:
             res = Greedy._wait_for_state(5)
         self.assertEqual(res, (None, None))
         self.assertEqual(m_sleep.call_count, MAX_RETRY_COUNT)
 
     def test_wait_for_prize_matched(self):
-        with patch('common.Greedy.ConMysql.select_greedy_prize',
+        with patch('common.greedy.ConMysql.select_greedy_prize',
                    return_value=(100, 50)) as m:
             res = Greedy._wait_for_prize(5, 7)
         self.assertEqual(res, (100, 50))
@@ -117,9 +117,9 @@ class TestGreedyPolling(unittest.TestCase):
 
     def test_wait_for_prize_timeout(self):
         """无数据（返回 (0,0)）应重试满次数并返回 (0, 0)"""
-        with patch('common.Greedy.ConMysql.select_greedy_prize',
+        with patch('common.greedy.ConMysql.select_greedy_prize',
                    return_value=(0, 0)), \
-                patch('common.Greedy.time.sleep'):
+                patch('common.greedy.time.sleep'):
             res = Greedy._wait_for_prize(5, 7)
         self.assertEqual(res, (0, 0))
 

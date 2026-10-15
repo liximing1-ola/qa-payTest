@@ -7,40 +7,40 @@ import pytest
 from case.base import PayCase, PayTestBase
 
 from common.con_mysql import ConMysql as mysql
-from common.Config import config
+from common.config import config
 from common.run_failed import Retry
 
 SCENES = [
     PayCase(
         des='开通个人守护场景',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 52000}},
-            {'action': 'update_money', 'params': {'uid': config.rewardUid}}
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 52000}},
+            {'action': 'update_money', 'params': {'uid': config.reward_uid}}
         ],
         data={'payType': 'defend',
               'defend_id': lambda ctx: ctx['cls'].defend_520_config['id'],
               'money': lambda ctx: ctx['cls'].defend_520_config['money_value']},
         checks=[
             {'field': 'sum_money', 'expected': 0},
-            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 32240}
+            {'field': 'single_money', 'uid': config.reward_uid, 'expected': 32240}
         ]),
     PayCase(
         des='守护进阶场景',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 100000}},
-            {'action': 'update_money', 'params': {'uid': config.rewardUid}}
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 100000}},
+            {'action': 'update_money', 'params': {'uid': config.reward_uid}}
         ],
         data={'payType': 'defend-upgrade',
               'money': lambda ctx: ctx['cls'].defend_520_config['upgrade_money'],
               'defend_id': lambda ctx: ctx['cls'].defend_520_id},
         checks=[
             {'field': 'sum_money', 'expected': 100},
-            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 61938}
+            {'field': 'single_money', 'uid': config.reward_uid, 'expected': 61938}
         ]),
     PayCase(
         des='守护解除场景',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 40000}}
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 40000}}
         ],
         data={'payType': 'defend-break',
               'money': lambda ctx: ctx['cls'].defend_520_config['break_money'],
@@ -51,35 +51,35 @@ SCENES = [
     PayCase(
         des='守护消费GS收62%（mc）',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 520000}},
-            {'action': 'update_money', 'params': {'uid': config.gsUid}}
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 520000}},
+            {'action': 'update_money', 'params': {'uid': config.gs_uid}}
         ],
-        data={'payType': 'defend', 'uid': config.gsUid,
+        data={'payType': 'defend', 'uid': config.gs_uid,
               'defend_id': lambda ctx: ctx['cls'].defend_cp_config['id'],
               'money': lambda ctx: ctx['cls'].defend_cp_config['money_value']},
         checks=[
             {'field': 'sum_money', 'expected': 0},
-            {'field': 'single_money', 'uid': config.gsUid, 'expected': 520000 * config.rate,
+            {'field': 'single_money', 'uid': config.gs_uid, 'expected': 520000 * config.rate,
              'kwargs': {'money_type': 'money_cash'}}
         ]),
     PayCase(
         des='守护进阶消费GS收62%（mc）',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000000}},
-            {'action': 'update_money', 'params': {'uid': config.gsUid}}
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 1000000}},
+            {'action': 'update_money', 'params': {'uid': config.gs_uid}}
         ],
         data={'payType': 'defend-upgrade',
               'money': lambda ctx: ctx['cls'].defend_cp_config['upgrade_money'],
               'defend_id': lambda ctx: ctx['cls'].defend_cp_id},
         checks=[
             {'field': 'sum_money', 'expected': 480000},
-            {'field': 'single_money', 'uid': config.gsUid, 'expected': 520000 * config.rate,
+            {'field': 'single_money', 'uid': config.gs_uid, 'expected': 520000 * config.rate,
              'kwargs': {'money_type': 'money_cash'}}
         ]),
     PayCase(
         des='守护解除场景',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 100000}}
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 100000}}
         ],
         data={'payType': 'defend-break',
               'money': lambda ctx: ctx['cls'].defend_cp_config['break_money'],
@@ -102,7 +102,7 @@ class TestPayPersonDefend(PayTestBase):
         cls.defend_520_config = mysql.select_user_info_sql('relation_config', uid=2)
         cls.defend_cp_config = mysql.select_user_info_sql('relation_config', uid=1)
         cls.defend_520_id = mysql.select_user_info_sql('relation_id', cid=2)
-        cls.defend_cp_id = mysql.select_user_info_sql('relation_id', uid=config.gsUid, cid=1)
+        cls.defend_cp_id = mysql.select_user_info_sql('relation_id', uid=config.gs_uid, cid=1)
 
     @pytest.mark.run(order=1)
     def test_01_defendPayChangMoney(self):

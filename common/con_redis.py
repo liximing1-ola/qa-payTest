@@ -1,7 +1,7 @@
 """
 Redis数据库操作模块
 """
-from common.Config import config
+from common.config import config
 
 # Redis配置（host 从 Config 读取）
 REDIS_CONFIG = {

@@ -7,7 +7,7 @@ import pytest
 from case.base import PayCase, PayTestBase
 
 from common.con_mysql import ConMysql as mysql
-from common.Config import config
+from common.config import config
 from common.run_failed import Retry
 
 # 打包结算主播 / 直播公会公会长
@@ -18,7 +18,7 @@ SCENES = [
     PayCase(
         des='歌友房直播工会收60%公会魅力值',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 1000}},
             {'action': 'clear_user_money', 'params': {'uid1': PACK_CAL_UID, 'uid2': PACK_CEO_UID}}
         ],
         data={'payType': 'package', 'rid': lambda ctx: ctx['cls'].singer_rid, 'uid': PACK_CAL_UID},
@@ -32,40 +32,40 @@ SCENES = [
     PayCase(
         des='歌友房普通工会收62%公会魅力值',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
-            {'action': 'update_money', 'params': {'uid': config.gsUid}}
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 1000}},
+            {'action': 'update_money', 'params': {'uid': config.gs_uid}}
         ],
-        data={'payType': 'package', 'rid': lambda ctx: ctx['cls'].singer_rid, 'uid': config.gsUid},
+        data={'payType': 'package', 'rid': lambda ctx: ctx['cls'].singer_rid, 'uid': config.gs_uid},
         checks=[
-            {'field': 'single_money', 'uid': config.gsUid, 'money_type': 'money_cash', 'expected': 1000 * config.rate},
-            {'field': 'sum_money', 'uid': config.gsUid, 'expected': 1000 * config.rate},
+            {'field': 'single_money', 'uid': config.gs_uid, 'money_type': 'money_cash', 'expected': 1000 * config.rate},
+            {'field': 'sum_money', 'uid': config.gs_uid, 'expected': 1000 * config.rate},
             {'field': 'sum_money', 'expected': 0}
         ],
         report='case_list_b'),
     PayCase(
         des='歌友房打赏箱子GS收62%（mc）',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 600}},
-            {'action': 'update_money', 'params': {'uid': config.gsUid}}
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 600}},
+            {'action': 'update_money', 'params': {'uid': config.gs_uid}}
         ],
         data={'payType': 'package', 'money': 600, 'rid': lambda ctx: ctx['cls'].singer_rid,
-              'giftId': config.giftId['46'], 'uid': config.gsUid, 'star': 1},
+              'giftId': config.gift_id['46'], 'uid': config.gs_uid, 'star': 1},
         checks=[
             {'field': 'sum_money', 'expected': 0},
-            {'field': 'single_money', 'uid': config.gsUid, 'money_type': 'money_cash', 'min_value': 300 * config.rate},
-            {'field': 'sum_money', 'uid': config.gsUid, 'min_value': 300 * config.rate}
+            {'field': 'single_money', 'uid': config.gs_uid, 'money_type': 'money_cash', 'min_value': 300 * config.rate},
+            {'field': 'sum_money', 'uid': config.gs_uid, 'min_value': 300 * config.rate}
         ],
         report='case_list_b'),
     PayCase(
         des='歌友房普通用户礼物打赏收个人魅力值',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
-            {'action': 'update_money', 'params': {'uid': config.rewardUid}}
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 1000}},
+            {'action': 'update_money', 'params': {'uid': config.reward_uid}}
         ],
         data={'rid': lambda ctx: ctx['cls'].singer_rid},
         checks=[
-            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 620},
-            {'field': 'sum_money', 'uid': config.rewardUid, 'expected': 620},
+            {'field': 'single_money', 'uid': config.reward_uid, 'expected': 620},
+            {'field': 'sum_money', 'uid': config.reward_uid, 'expected': 620},
             {'field': 'sum_money', 'expected': 0}
         ],
         report='case_list_b'),

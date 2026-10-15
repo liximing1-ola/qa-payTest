@@ -5,7 +5,7 @@ APP 海外版支付测试 - 泰国区域验证
 """
 from caseOversea.base import OverseaAreaTestBase, PayScene
 
-from common.Config import config
+from common.config import config
 from common.run_failed import Retry
 
 SCENES = [

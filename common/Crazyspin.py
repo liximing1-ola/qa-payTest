@@ -8,9 +8,9 @@ from typing import Any
 
 import requests
 
-from common.Config import config
+from common.config import config
 from common.request_util import DEFAULT_TIMEOUT
-from common.Session import Session
+from common.session import Session
 
 # 默认请求参数
 DEFAULT_PARAMS: dict[str, str] = {

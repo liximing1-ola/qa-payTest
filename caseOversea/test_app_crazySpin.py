@@ -8,20 +8,20 @@ import unittest
 from caseOversea.base import OverseaBizCase, OverseaBizTestBase
 
 from common.con_pt_mysql import ConMysql
-from common.Config import config
-from common.Consts import case_list, result
-from common.Crazyspin import CrazySpin
+from common.config import config
+from common.consts import case_list, result
+from common.crazyspin import CrazySpin
 from common.run_failed import Retry
 
 # 场景：扣除钻石购买欢乐券（2000 钻购买 10 张，cid=32）
 SCENE_001 = OverseaBizCase(
     des='扣除钻石购买欢乐转盘欢乐券',
     setup=[
-        {'action': 'delete_user_account', 'params': {'table': 'user_commodity', 'uid': config.oversea_payUid}},
-        {'action': 'update_money', 'params': {'uid': config.oversea_payUid, 'money': 2000}},
+        {'action': 'delete_user_account', 'params': {'table': 'user_commodity', 'uid': config.oversea_pay_uid}},
+        {'action': 'update_money', 'params': {'uid': config.oversea_pay_uid, 'money': 2000}},
     ],
     data={'payType': 'shop-buy-crazyspin'},
-    url=CrazySpin.spin_buy_url(uid=config.oversea_payUid),
+    url=CrazySpin.spin_buy_url(uid=config.oversea_pay_uid),
     checks=[
         {'field': 'sum_money', 'expected': 1000},
         {'field': 'sum_commodity_32', 'expected': 10},
@@ -41,8 +41,8 @@ class TestPayCreate(OverseaBizTestBase):
     def test_02_playCrazySpin(self, des: str = '开启大转盘抽奖场景', cid: int = 32):
         """大转盘抽奖验证（占位：抽奖逻辑待业务接口就绪后补充）"""
         # 1. 构造数据
-        ConMysql.delete_user_account_sql('user_commodity', config.oversea_payUid)
-        ConMysql.insert_xs_user_commodity(config.oversea_payUid, cid=cid, num=100)  # 背包插入 100 个欢乐券
+        ConMysql.delete_user_account_sql('user_commodity', config.oversea_pay_uid)
+        ConMysql.insert_xs_user_commodity(config.oversea_pay_uid, cid=cid, num=100)  # 背包插入 100 个欢乐券
 
         # 抽奖逻辑待业务接口就绪后补充，当前仅保留跳过占位
         case_list[des] = result

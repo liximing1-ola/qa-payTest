@@ -3,7 +3,7 @@ import os
 
 import yaml
 
-from common.Config import config
+from common.config import config
 
 logger = logging.getLogger(__name__)
 _yaml_cache: dict = {}

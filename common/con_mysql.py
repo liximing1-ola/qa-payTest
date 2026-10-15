@@ -8,7 +8,7 @@ import ast
 import logging
 import time
 
-from common.Config import config
+from common.config import config
 from common.mysql_base import MySQLConnection as MySQLConnectionBase
 
 logger = logging.getLogger(__name__)
@@ -62,7 +62,7 @@ class ConMysql:
     def _select_relation_id(uid, cid):
         """守护关系 ID"""
         sql = "SELECT id FROM xs_relation_defend WHERE uid=%s AND defend_uid=%s AND relation_id=%s"
-        return MySQLConnection.execute_query_first(sql, params=(config.payUid, uid, cid), default=0)
+        return MySQLConnection.execute_query_first(sql, params=(config.pay_uid, uid, cid), default=0)
 
     @staticmethod
     def _select_relation_config(uid):
@@ -98,7 +98,7 @@ class ConMysql:
         if not rows:
             raise OSError('库表无家族房')
         for row in rows:
-            if row[0] != config.bb_user.fleetRid:
+            if row[0] != config.bb_user.fleet_rid:
                 return row[0]
         return rows[0][0]
 
@@ -172,7 +172,7 @@ class ConMysql:
     # ============ 查询方法 ============
 
     @staticmethod
-    def select_user_info_sql(accountType, uid=config.rewardUid, money_type='money_cash_b', cid=263):
+    def select_user_info_sql(accountType, uid=config.reward_uid, money_type='money_cash_b', cid=263):
         """查询用户信息
 
         Args:
@@ -250,7 +250,7 @@ class ConMysql:
     @staticmethod
     def check_xs_gift_config():
         """检查 xs_gift 配置"""
-        gift_ids = tuple(config.giftId.values())
+        gift_ids = tuple(config.gift_id.values())
         MySQLConnection._update_xs_gift_status(gift_ids)
 
     @staticmethod

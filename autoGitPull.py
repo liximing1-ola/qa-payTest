@@ -10,9 +10,9 @@ from time import time
 
 from Robot import robot
 
-from common import Consts, Logs
-from common.Config import config
-from common.Session import Session
+from common import consts, logs
+from common.config import config
+from common.session import Session
 
 logger = logging.getLogger(__name__)
 
@@ -35,9 +35,9 @@ class GitUpdater:
     }
 
     def __init__(self):
-        self.logger_pull = Logs.get_logger('gitCommitPull.log')
-        self.logger_update = Logs.get_logger('updateGitCode.log')
-        self.logger_error = Logs.get_logger('gitBranchError.log')
+        self.logger_pull = logs.get_logger('gitCommitPull.log')
+        self.logger_update = logs.get_logger('updateGitCode.log')
+        self.logger_error = logs.get_logger('gitBranchError.log')
 
     def _get_config(self, app_info):
         """Get application configuration"""
@@ -46,8 +46,8 @@ class GitUpdater:
             self.logger_error.error(f"Unknown app info: {app_info}")
             return None
         return {
-            'path': config.codeInfo[cfg['path_key']],
-            'branch': config.codeInfo[cfg['branch_key']],
+            'path': config.code_info[cfg['path_key']],
+            'branch': config.code_info[cfg['branch_key']],
             'env': cfg['env'],
             'bot': cfg['bot'],
             'notify_mode': cfg.get('notify_mode', 'slack')
@@ -111,7 +111,7 @@ class GitUpdater:
             self._pull_code(cfg['path'], app_info)
 
             # Init session and get commits
-            Consts.startTime = time()
+            consts.startTime = time()
             Session.getSession(cfg['env'])
             commits = self._get_commits(repo)
             if not commits:

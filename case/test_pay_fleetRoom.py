@@ -7,89 +7,89 @@ from case.base import PayCase, PayTestBase
 
 from common.assert_util import assert_len
 from common.con_mysql import ConMysql as mysql
-from common.Config import config
+from common.config import config
 from common.run_failed import Retry
 
 # 本家族房 rid / 直播公会gs
-FLEET_RID = config.bb_user.fleetRid
+FLEET_RID = config.bb_user.fleet_rid
 PACK_CAL_UID = config.bb_user.pack_cal_uid
 
 SCENES = [
     PayCase(
         des='家族房打赏直播公会gs场景',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 1000}},
             {'action': 'update_money', 'params': {'uid': PACK_CAL_UID}}
         ],
         data={'rid': FLEET_RID, 'uid': PACK_CAL_UID},
         checks=[
             {'field': 'single_money', 'uid': PACK_CAL_UID, 'expected': 800},
             {'field': 'sum_money', 'uid': PACK_CAL_UID, 'expected': 800},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
+            {'field': 'sum_money', 'uid': config.pay_uid, 'expected': 0}
         ],
         report='case_list_b'),
     PayCase(
         des='非本家族房打赏直播公会GS场景',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 1000}},
             {'action': 'update_money', 'params': {'uid': PACK_CAL_UID}}
         ],
         data={'rid': lambda ctx: ctx['cls'].other_fleet_rid, 'uid': PACK_CAL_UID},
         checks=[
             {'field': 'single_money', 'uid': PACK_CAL_UID, 'expected': 700},
             {'field': 'sum_money', 'uid': PACK_CAL_UID, 'expected': 700},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
+            {'field': 'sum_money', 'uid': config.pay_uid, 'expected': 0}
         ],
         report='case_list_b'),
     PayCase(
         des='fleetRoom打赏普通公会gs场景',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
-            {'action': 'update_money', 'params': {'uid': config.gsUid}}
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 1000}},
+            {'action': 'update_money', 'params': {'uid': config.gs_uid}}
         ],
-        data={'rid': FLEET_RID, 'uid': config.gsUid},
+        data={'rid': FLEET_RID, 'uid': config.gs_uid},
         checks=[
-            {'field': 'single_money', 'uid': config.gsUid, 'expected': 800},
-            {'field': 'sum_money', 'uid': config.gsUid, 'expected': 800},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
+            {'field': 'single_money', 'uid': config.gs_uid, 'expected': 800},
+            {'field': 'sum_money', 'uid': config.gs_uid, 'expected': 800},
+            {'field': 'sum_money', 'uid': config.pay_uid, 'expected': 0}
         ],
         report='case_list_b'),
     PayCase(
         des='非本家族房打赏公会GS场景',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 600}},
-            {'action': 'update_money', 'params': {'uid': config.gsUid}}
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 600}},
+            {'action': 'update_money', 'params': {'uid': config.gs_uid}}
         ],
         data={'money': 600, 'rid': lambda ctx: ctx['cls'].other_fleet_rid,
-              'giftId': config.giftId['46'], 'uid': config.gsUid, 'star': 1},
+              'giftId': config.gift_id['46'], 'uid': config.gs_uid, 'star': 1},
         checks=[
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0},
-            {'field': 'single_money', 'uid': config.gsUid, 'expected': 210, 'assert_func': assert_len}
+            {'field': 'sum_money', 'uid': config.pay_uid, 'expected': 0},
+            {'field': 'single_money', 'uid': config.gs_uid, 'expected': 210, 'assert_func': assert_len}
         ],
         report='case_list_b'),
     PayCase(
         des='fleetRoom打赏一代用户场景',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 600}},
-            {'action': 'update_money', 'params': {'uid': config.masterUid}}
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 600}},
+            {'action': 'update_money', 'params': {'uid': config.master_uid}}
         ],
-        data={'money': 600, 'rid': FLEET_RID, 'giftId': config.giftId['46'],
-              'uid': config.masterUid, 'star': 1},
+        data={'money': 600, 'rid': FLEET_RID, 'giftId': config.gift_id['46'],
+              'uid': config.master_uid, 'star': 1},
         checks=[
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0},
-            {'field': 'single_money', 'uid': config.masterUid, 'expected': 300 * 0.8, 'assert_func': assert_len}
+            {'field': 'sum_money', 'uid': config.pay_uid, 'expected': 0},
+            {'field': 'single_money', 'uid': config.master_uid, 'expected': 300 * 0.8, 'assert_func': assert_len}
         ],
         report='case_list_b'),
     PayCase(
         des='非本fleet房打赏场景',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
-            {'action': 'update_money', 'params': {'uid': config.rewardUid}}
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 1000}},
+            {'action': 'update_money', 'params': {'uid': config.reward_uid}}
         ],
         data={'rid': lambda ctx: ctx['cls'].other_fleet_rid},
         checks=[
-            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 620},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
+            {'field': 'single_money', 'uid': config.reward_uid, 'expected': 620},
+            {'field': 'sum_money', 'uid': config.pay_uid, 'expected': 0}
         ],
         report='case_list_b'),
 ]

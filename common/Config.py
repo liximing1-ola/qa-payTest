@@ -2,9 +2,9 @@
 全局配置管理模块
 
 使用方式:
-    from common.Config import config
+    from common.config import config
     url = config.pay_url
-    uid = config.payUid
+    uid = config.pay_uid
 """
 import logging
 import os
@@ -114,7 +114,7 @@ class AppNameConfig:
     不夜星球: str = 'slp'
 
     def __getitem__(self, key):
-        """支持 config.appName['1'] 访问方式"""
+        """支持 config.app_name['1'] 访问方式"""
         attr = f'_{key}' if key.isdigit() else key
         return getattr(self, attr, key)
 
@@ -134,48 +134,16 @@ class LinuxNodeConfig:
 @dataclass
 class BBUserConfig:
     """APP用户配置"""
-    payUid: int = 103273407
-    testUid: int = 105002312
+    pay_uid: int = 103273407
+    test_uid: int = 105002312
     pack_cal_uid: int = 105002313
-    vipRoomRid: int = 200089706
-    gsUid: int = 105002325
-    prettyRid: int = 200089942
-    fleetRid: int = 200091067
-    masterUid: int = 100500338        # 一代宗师（被打赏者）
-    businessUid: int = 105002103      # 商业房 auto_rid 房主（一代宗师）
+    vip_room_rid: int = 200089706
+    gs_uid: int = 105002325
+    pretty_rid: int = 200089942
+    fleet_rid: int = 200091067
+    master_uid: int = 100500338        # 一代宗师（被打赏者）
+    business_uid: int = 105002103      # 商业房 auto_rid 房主（一代宗师）
     custom_rate_uid: int = 100500205  # 自定义分成主播
-
-    @property
-    def pay_uid(self) -> int:
-        return self.payUid
-
-    @property
-    def test_uid(self) -> int:
-        return self.testUid
-
-    @property
-    def vip_room_rid(self) -> int:
-        return self.vipRoomRid
-
-    @property
-    def gs_uid(self) -> int:
-        return self.gsUid
-
-    @property
-    def pretty_rid(self) -> int:
-        return self.prettyRid
-
-    @property
-    def fleet_rid(self) -> int:
-        return self.fleetRid
-
-    @property
-    def master_uid(self) -> int:
-        return self.masterUid
-
-    @property
-    def business_uid(self) -> int:
-        return self.businessUid
 
 
 @dataclass
@@ -195,22 +163,10 @@ class LiveRoleConfig:
 @dataclass
 class OverseaUserConfig:
     """海外版用户配置"""
-    payUid: int = 800350557
-    testUid: int = 800022872
-    brokerUid: int = 800018895
+    pay_uid: int = 800350557
+    test_uid: int = 800022872
+    broker_uid: int = 800018895
     fleet_uid: int = 800041062
-
-    @property
-    def pay_uid(self) -> int:
-        return self.payUid
-
-    @property
-    def test_uid(self) -> int:
-        return self.testUid
-
-    @property
-    def broker_uid(self) -> int:
-        return self.brokerUid
 
     def __getitem__(self, key):
         """支持下标访问"""
@@ -256,9 +212,9 @@ class Config:
     BASE_PATH: str = field(default_factory=lambda: os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
     # ============ 应用配置 ============
-    appInfo: AppConfig = field(default_factory=AppConfig)
-    codeInfo: CodeConfig = field(default_factory=CodeConfig)
-    appName: AppNameConfig = field(default_factory=AppNameConfig)
+    app_info: AppConfig = field(default_factory=AppConfig)
+    code_info: CodeConfig = field(default_factory=CodeConfig)
+    app_name: AppNameConfig = field(default_factory=AppNameConfig)
     linux_node: LinuxNodeConfig = field(default_factory=LinuxNodeConfig)
     redis: RedisConfig = field(default_factory=RedisConfig)
     database: DatabaseConfig = field(default_factory=DatabaseConfig)
@@ -273,7 +229,7 @@ class Config:
     oversea_room: OverseaRoomConfig = field(default_factory=OverseaRoomConfig)
 
     # ============ 礼物配置 ============
-    giftId: dict[str, int] = field(default_factory=lambda: {
+    gift_id: dict[str, int] = field(default_factory=lambda: {
         "5": 5,      # 棒棒糖*100钻
         "7": 7,      # 大宝剑*1000钻
         "11": 11,    # 老司机*3000钻(券-500钻石)
@@ -284,7 +240,7 @@ class Config:
         "362": 362,  # 啵啵奶茶*1000（金豆）
     })
 
-    oversea_giftId: dict[str, int] = field(default_factory=lambda: {
+    oversea_gift_id: dict[str, int] = field(default_factory=lambda: {
         "10": 10,    # 么么哒*6币
         "46": 46,    # 幸运星*6币
         "47": 47,    # 五色星*21币
@@ -297,151 +253,75 @@ class Config:
 
     # ============ 便捷访问属性 ============
     @property
-    def payUid(self) -> int:
-        """打赏者UID"""
-        return self.bb_user.payUid
-
-    @property
-    def rewardUid(self) -> int:
-        """被打赏者UID（非一代宗师）"""
-        return self.bb_user.testUid
-
-    @property
-    def masterUid(self) -> int:
-        """被打赏者UID（一代宗师）"""
-        return self.bb_user.masterUid
-
-    @property
-    def businessUid(self) -> int:
-        """商业房房主UID（一代宗师）"""
-        return self.bb_user.businessUid
-
-    @property
-    def gsUid(self) -> int:
-        """公会用户UID"""
-        return self.bb_user.gsUid
-
-    @property
-    def oversea_payUid(self) -> int:
-        """打赏者UID"""
-        return self.oversea_user.payUid
-
-    @property
-    def oversea_testUid(self) -> int:
-        """测试UID"""
-        return self.oversea_user.testUid
-
-    @property
-    def oversea_brokerUid(self) -> int:
-        """公会成员UID"""
-        return self.oversea_user.brokerUid
-
-    @property
-    def oversea_fleetUid(self) -> int:
-        """家族UID"""
-        return self.oversea_user.fleet_uid
-
-    # ============ snake_case 别名 ============
-    @property
-    def app_info(self) -> AppConfig:
-        """应用配置（snake_case 别名）"""
-        return self.appInfo
-
-    @property
-    def code_info(self) -> CodeConfig:
-        """代码路径配置（snake_case 别名）"""
-        return self.codeInfo
-
-    @property
-    def app_name(self) -> AppNameConfig:
-        """应用名称映射（snake_case 别名）"""
-        return self.appName
-
-    @property
-    def gift_id(self) -> dict[str, int]:
-        """礼物ID映射（snake_case 别名）"""
-        return self.giftId
-
-    @property
-    def oversea_gift_id(self) -> dict[str, int]:
-        """海外礼物ID映射（snake_case 别名）"""
-        return self.oversea_giftId
-
-    @property
     def pay_uid(self) -> int:
-        """打赏者UID（snake_case 别名）"""
-        return self.payUid
+        """打赏者UID"""
+        return self.bb_user.pay_uid
 
     @property
     def test_uid(self) -> int:
-        """测试UID（snake_case 别名）"""
-        return self.bb_user.testUid
+        """测试UID"""
+        return self.bb_user.test_uid
 
     @property
     def reward_uid(self) -> int:
-        """被打赏者UID（snake_case 别名）"""
-        return self.rewardUid
+        """被打赏者UID（非一代宗师）"""
+        return self.bb_user.test_uid
 
     @property
     def master_uid(self) -> int:
-        """被打赏者UID-一代宗师（snake_case 别名）"""
-        return self.masterUid
+        """被打赏者UID（一代宗师）"""
+        return self.bb_user.master_uid
 
     @property
     def business_uid(self) -> int:
-        """商业房房主UID（snake_case 别名）"""
-        return self.businessUid
+        """商业房房主UID（一代宗师）"""
+        return self.bb_user.business_uid
 
     @property
     def gs_uid(self) -> int:
-        """公会用户UID（snake_case 别名）"""
-        return self.gsUid
+        """公会用户UID"""
+        return self.bb_user.gs_uid
 
     @property
     def oversea_pay_uid(self) -> int:
-        """海外打赏者UID（snake_case 别名）"""
-        return self.oversea_payUid
+        """海外打赏者UID"""
+        return self.oversea_user.pay_uid
 
     @property
     def oversea_test_uid(self) -> int:
-        """海外测试UID（snake_case 别名）"""
-        return self.oversea_testUid
+        """海外测试UID"""
+        return self.oversea_user.test_uid
 
     @property
     def oversea_broker_uid(self) -> int:
-        """海外公会成员UID（snake_case 别名）"""
-        return self.oversea_brokerUid
+        """海外公会成员UID"""
+        return self.oversea_user.broker_uid
 
     @property
     def oversea_fleet_uid(self) -> int:
-        """海外家族UID（snake_case 别名）"""
-        return self.oversea_fleetUid
+        """海外家族UID"""
+        return self.oversea_user.fleet_uid
 
     @property
     def bb_qq_login_url(self) -> str:
-        """QQ登录URL（snake_case 别名）"""
-        return self.bb_qqLogin_url
+        """QQ登录URL"""
+        return f"{self.app_info.bb_dev}account/qqlogin"
 
     # ============ URL配置 ============
     @property
     def oversea_host(self) -> str:
         """海外版测试域名"""
-        return self.appInfo.oversea_ali_main
+        return self.app_info.oversea_ali_main
 
     @property
     def pay_url(self) -> str:
         """支付接口URL"""
-        return f"{self.appInfo.bb_dev}pay/create?package="
+        return f"{self.app_info.bb_dev}pay/create?package="
 
     @property
     def slp_pay_url(self) -> str:
         """SLP支付接口URL"""
-        return f"{self.appInfo.slp}pay/create?package=com.yhl.sleepless.android"
-
-    @property
-    def bb_qqLogin_url(self) -> str:
-        """QQ登录URL"""
-        return f"{self.appInfo.bb_dev}account/qqlogin"
+        return f"{self.app_info.slp}pay/create?package=com.yhl.sleepless.android"
 
     @property
     def oversea_pay_url(self) -> str:
@@ -466,22 +346,22 @@ class Config:
     @property
     def rush_pay_url(self) -> str:
         """Rush支付接口URL"""
-        return f"{self.appInfo.rush}pay/create?package=com.imbb.banban.android"
+        return f"{self.app_info.rush}pay/create?package=com.imbb.banban.android"
 
     @property
     def starify_pay_url(self) -> str:
         """Starify支付接口URL"""
-        return f"{self.appInfo.starify}pay/create?package=com.imbb.starify.android"
+        return f"{self.app_info.starify}pay/create?package=com.imbb.starify.android"
 
     @property
     def starify_mobile_login_url(self) -> str:
         """Starify手机号登录URL"""
-        return f"{self.appInfo.starify}go/starify/login/mobileLogin"
+        return f"{self.app_info.starify}go/starify/login/mobileLogin"
 
     @property
     def slp_mobile_login_url(self) -> str:
         """SLP手机号登录URL"""
-        return f"{self.appInfo.slp}account/login"
+        return f"{self.app_info.slp}account/login"
 
 
 # 全局配置实例
@@ -489,5 +369,5 @@ config = Config()
 
 if __name__ == '__main__':
     logger.info(config.pay_url)
-    logger.info("payUid: %s", config.payUid)
-    logger.info("giftId['5']: %s", config.giftId['5'])
+    logger.info("pay_uid: %s", config.pay_uid)
+    logger.info("gift_id['5']: %s", config.gift_id['5'])

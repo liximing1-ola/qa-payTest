@@ -10,8 +10,8 @@ from typing import Any
 import requests
 import urllib3
 
-from common import Logs
-from common.Config import config
+from common import logs
+from common.config import config
 from common.params_yaml import Yaml
 
 logger = logging.getLogger(__name__)
@@ -118,12 +118,12 @@ class Session:
         Returns:
             Token 字典
         """
-        Logs.get_logger('getSession.log').warning(f'session 主方案获取失败，转备选方案，原因：{error_msg}')
+        logs.get_logger('getSession.log').warning(f'session 主方案获取失败，转备选方案，原因：{error_msg}')
         from common.con_mysql import ConMysql
         from common.get_token import TokenGenerator
 
-        user_index = ConMysql.select_user_info_sql('user_index', config.payUid)
-        token = TokenGenerator(config.payUid, user_index).generate()
+        user_index = ConMysql.select_user_info_sql('user_index', config.pay_uid)
+        token = TokenGenerator(config.pay_uid, user_index).generate()
         Session.check_user_token('write', app_name=env, token=token)
         logger.info('主方案失败，已启用备选方案获取 token')
         return {'token': token}
@@ -154,7 +154,7 @@ class Session:
         except Exception as error:
             if env_config.get('use_backup'):
                 return Session._use_backup_plan(env, str(error))
-            Logs.get_logger('getSession.log').error(f'session 获取失败，无备选方案，env={env}，原因：{error}')
+            logs.get_logger('getSession.log').error(f'session 获取失败，无备选方案，env={env}，原因：{error}')
 
         return None
 

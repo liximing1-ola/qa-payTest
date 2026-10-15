@@ -1,7 +1,7 @@
 """
 日志管理模块
 使用方式:
-    from common.Logs import get_logger
+    from common.logs import get_logger
     logger = get_logger('app.log')
     logger.info('message')
 """
@@ -9,7 +9,7 @@ import logging
 import os
 from logging.handlers import TimedRotatingFileHandler
 
-from common.Config import config
+from common.config import config
 
 # 默认日志配置
 DEFAULT_LOG_LEVEL = logging.DEBUG

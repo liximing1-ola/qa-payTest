@@ -7,12 +7,12 @@ common/Crazyspin.py、Greedy.py 单元测试
 import unittest
 from unittest.mock import patch
 
-from common.Crazyspin import (
+from common.crazyspin import (
     DEFAULT_HEADERS,
     DEFAULT_PARAMS,
     CrazySpin,
 )
-from common.Greedy import MAX_RETRY_COUNT, RETRY_INTERVAL, Greedy
+from common.greedy import MAX_RETRY_COUNT, RETRY_INTERVAL, Greedy
 
 
 class TestCrazySpinUrls(unittest.TestCase):
@@ -25,7 +25,7 @@ class TestCrazySpinUrls(unittest.TestCase):
         self.assertIn('rid=1', url)
         self.assertIn('_blid=100', url)
 
-    @patch('common.Crazyspin.Session.check_user_token', return_value='tk')
+    @patch('common.crazyspin.Session.check_user_token', return_value='tk')
     def test_build_headers_injects_token(self, mock_token):
         """_build_headers 应注入 token 且不改动 DEFAULT_HEADERS 原件"""
         headers = CrazySpin._build_headers('dev')
@@ -45,16 +45,16 @@ class TestCrazySpinUrls(unittest.TestCase):
         self.assertIn('/go/party/turntable/draw', url)
         self.assertIn('_blid=123', url)
 
-    @patch('common.Crazyspin.Session.check_user_token', return_value='tk')
-    @patch('common.Crazyspin.requests.get')
+    @patch('common.crazyspin.Session.check_user_token', return_value='tk')
+    @patch('common.crazyspin.requests.get')
     def test_get_turntable_list_passes_timeout(self, mock_get, _mock_token):
         """get_turntable_list 应带 timeout（防止网络挂起无限等待）"""
         CrazySpin.get_turntable_list(rid=1, uid=2)
         self.assertIn('timeout', mock_get.call_args[1])
         self.assertGreater(mock_get.call_args[1]['timeout'], 0)
 
-    @patch('common.Crazyspin.Session.check_user_token', return_value='tk')
-    @patch('common.Crazyspin.requests.get')
+    @patch('common.crazyspin.Session.check_user_token', return_value='tk')
+    @patch('common.crazyspin.requests.get')
     def test_get_turntable_horn_passes_timeout(self, mock_get, _mock_token):
         """get_turntable_horn 应带 timeout"""
         CrazySpin.get_turntable_horn(uid=2)
@@ -78,8 +78,8 @@ class TestGreedyWait(unittest.TestCase):
         self.assertGreaterEqual(MAX_RETRY_COUNT, 1)
         self.assertGreaterEqual(RETRY_INTERVAL, 0)
 
-    @patch('common.Greedy.time.sleep')
-    @patch('common.Greedy.Greedy.index')
+    @patch('common.greedy.time.sleep')
+    @patch('common.greedy.Greedy.index')
     def test_wait_for_state_retries_until_match(self, mock_index, mock_sleep):
         """状态不符时应按 RETRY_INTERVAL 间隔重试，命中即返回"""
         state_body = {'data': {'state': '1', 'round_id': 99, 'counter_range': 3}}
@@ -93,8 +93,8 @@ class TestGreedyWait(unittest.TestCase):
         self.assertEqual(mock_index.call_count, 3)
         self.assertEqual(mock_sleep.call_count, 2)
 
-    @patch('common.Greedy.time.sleep')
-    @patch('common.Greedy.Greedy.index')
+    @patch('common.greedy.time.sleep')
+    @patch('common.greedy.Greedy.index')
     def test_wait_for_state_exhausted_returns_none(self, mock_index, mock_sleep):
         """始终不匹配时应重试 MAX_RETRY_COUNT 次后返回 (None, None)"""
         mock_index.return_value = {'body': {'data': {'state': '0'}}}
@@ -103,8 +103,8 @@ class TestGreedyWait(unittest.TestCase):
         self.assertIsNone(counter)
         self.assertEqual(mock_index.call_count, MAX_RETRY_COUNT)
 
-    @patch('common.Greedy.time.sleep')
-    @patch('common.Greedy.ConMysql.select_greedy_prize')
+    @patch('common.greedy.time.sleep')
+    @patch('common.greedy.ConMysql.select_greedy_prize')
     def test_wait_for_prize_returns_on_data(self, mock_prize, mock_sleep):
         """有开奖数据时应立即返回，不再 sleep"""
         mock_prize.return_value = (30, 1200)
@@ -113,8 +113,8 @@ class TestGreedyWait(unittest.TestCase):
         self.assertEqual(prize, 1200)
         mock_sleep.assert_not_called()
 
-    @patch('common.Greedy.time.sleep')
-    @patch('common.Greedy.ConMysql.select_greedy_prize')
+    @patch('common.greedy.time.sleep')
+    @patch('common.greedy.ConMysql.select_greedy_prize')
     def test_wait_for_prize_exhausted_returns_zero(self, mock_prize, mock_sleep):
         """始终无数据时应重试 MAX_RETRY_COUNT 次后返回 (0, 0)"""
         mock_prize.return_value = (0, 0)

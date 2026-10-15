@@ -7,7 +7,7 @@ import pytest
 from case.base import PayCase, PayTestBase
 
 from common.con_mysql import ConMysql as mysql
-from common.Config import config
+from common.config import config
 from common.run_failed import Retry
 
 # 礼物 cid：四叶草 / 小天使
@@ -18,8 +18,8 @@ SCENES = [
     PayCase(
         des='商城购买单个道具场景',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money_cash': 100, 'money_cash_b': 100}},
-            {'action': 'delete_user_account', 'params': {'table': 'user_commodity', 'uid': config.payUid}}
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money_cash': 100, 'money_cash_b': 100}},
+            {'action': 'delete_user_account', 'params': {'table': 'user_commodity', 'uid': config.pay_uid}}
         ],
         data={'payType': 'shop-buy', 'money': 100, 'cid': GIFT_CID_CLOVER},
         checks=[
@@ -29,7 +29,7 @@ SCENES = [
     PayCase(
         des='商城购买n个道具场景',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000, 'money_cash': 100000,
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 1000, 'money_cash': 100000,
                                                    'money_cash_b': 1000, 'money_b': 1000}}
         ],
         data={'payType': 'shop-buy', 'cid': GIFT_CID_ANGEL, 'money': 9900, 'num': 10},
@@ -40,28 +40,28 @@ SCENES = [
     PayCase(
         des='打赏背包内物品场景',
         setup=[
-            {'action': 'clear_user_money', 'params': {'uid1': config.payUid, 'uid2': config.rewardUid}}
+            {'action': 'clear_user_money', 'params': {'uid1': config.pay_uid, 'uid2': config.reward_uid}}
         ],
-        queries=[('cid', lambda: int(mysql.select_user_info_sql('id_commodity', config.payUid, cid=GIFT_CID_ANGEL)))],
-        data={'rid': config.live_role['auto_rid'], 'giftId': config.giftId['54'], 'money': 9900,
+        queries=[('cid', lambda: int(mysql.select_user_info_sql('id_commodity', config.pay_uid, cid=GIFT_CID_ANGEL)))],
+        data={'rid': config.live_role['auto_rid'], 'giftId': config.gift_id['54'], 'money': 9900,
               'package_cid': lambda ctx: ctx['cid'], 'ctype': 'gift'},
         checks=[
             {'field': 'num_commodity', 'expected': 9, 'cid': GIFT_CID_ANGEL},
-            {'field': 'sum_money', 'uid': config.rewardUid, 'expected': 6138}
+            {'field': 'sum_money', 'uid': config.reward_uid, 'expected': 6138}
         ]),
     PayCase(
         des='打赏背包物品但物品不足抵扣的场景',
         setup=[
-            {'action': 'clear_user_money', 'params': {'uid1': config.payUid, 'uid2': config.rewardUid}}
+            {'action': 'clear_user_money', 'params': {'uid1': config.pay_uid, 'uid2': config.reward_uid}}
         ],
-        queries=[('cid', lambda: int(mysql.select_user_info_sql('id_commodity', config.payUid, cid=GIFT_CID_ANGEL)))],
-        data={'rid': config.live_role['auto_rid'], 'giftId': config.giftId['54'], 'money': 99000,
+        queries=[('cid', lambda: int(mysql.select_user_info_sql('id_commodity', config.pay_uid, cid=GIFT_CID_ANGEL)))],
+        data={'rid': config.live_role['auto_rid'], 'giftId': config.gift_id['54'], 'money': 99000,
               'package_cid': lambda ctx: ctx['cid'], 'ctype': 'gift', 'num': 10},
         success=0,
         msg='余额不足，无法支付',
         checks=[
             {'field': 'num_commodity', 'expected': 9, 'cid': GIFT_CID_ANGEL},
-            {'field': 'sum_money', 'uid': config.rewardUid, 'expected': 0}
+            {'field': 'sum_money', 'uid': config.reward_uid, 'expected': 0}
         ]),
 ]
 

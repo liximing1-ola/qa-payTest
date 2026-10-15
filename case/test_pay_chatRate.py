@@ -7,7 +7,7 @@ from case.base import PayCase, PayTestBase
 
 from common.assert_util import assert_len
 from common.con_mysql import ConMysql as mysql
-from common.Config import config
+from common.config import config
 from common.method import calculate_vip_exp
 from common.run_failed import Retry
 
@@ -16,69 +16,69 @@ SCENES = [
         des='私聊打赏钱不足的场景',
         setup=[
             {'action': 'clear_user_data'},
-            {'action': 'delete_account', 'table': 'broker_user', 'uid': config.rewardUid},
-            {'action': 'delete_account', 'table': 'chatroom', 'uid': config.rewardUid}
+            {'action': 'delete_account', 'table': 'broker_user', 'uid': config.reward_uid},
+            {'action': 'delete_account', 'table': 'chatroom', 'uid': config.reward_uid}
         ],
-        data={'payType': 'chat-gift', 'num': 10, 'giftId': config.giftId['5']},
+        data={'payType': 'chat-gift', 'num': 10, 'giftId': config.gift_id['5']},
         success=0,
         msg='余额不足，无法支付',
         checks=[
-            {'field': 'sum_money', 'uid': config.rewardUid, 'expected': 0}
+            {'field': 'sum_money', 'uid': config.reward_uid, 'expected': 0}
         ]),
     PayCase(
         des='私聊打赏礼物GS收72%',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
-            {'action': 'update_money', 'params': {'uid': config.gsUid}}
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 1000}},
+            {'action': 'update_money', 'params': {'uid': config.gs_uid}}
         ],
-        queries=[('vip_level', lambda: int(mysql.select_user_info_sql('pay_room_money', config.payUid)))],
-        data={'payType': 'chat-gift', 'uid': config.gsUid},
+        queries=[('vip_level', lambda: int(mysql.select_user_info_sql('pay_room_money', config.pay_uid)))],
+        data={'payType': 'chat-gift', 'uid': config.gs_uid},
         checks=[
-            {'field': 'single_money', 'uid': config.gsUid, 'expected': 1000 * (config.rate - 0.2),
+            {'field': 'single_money', 'uid': config.gs_uid, 'expected': 1000 * (config.rate - 0.2),
              'kwargs': {'money_type': 'money_cash'}},
-            {'field': 'single_money', 'uid': config.gsUid, 'expected': 300,
+            {'field': 'single_money', 'uid': config.gs_uid, 'expected': 300,
              'kwargs': {'money_type': 'money_cash_b'}},
-            {'field': 'sum_money', 'uid': config.gsUid, 'expected': 720},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0},
-            {'field': 'pay_room_money', 'uid': config.payUid,
+            {'field': 'sum_money', 'uid': config.gs_uid, 'expected': 720},
+            {'field': 'sum_money', 'uid': config.pay_uid, 'expected': 0},
+            {'field': 'pay_room_money', 'uid': config.pay_uid,
              'expected': lambda ctx: ctx['vip_level'] + calculate_vip_exp(pay_off=1000)}
         ]),
     PayCase(
         des='私聊打赏boxGS收72%',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 600}},
-            {'action': 'update_money', 'params': {'uid': config.gsUid}}
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 600}},
+            {'action': 'update_money', 'params': {'uid': config.gs_uid}}
         ],
-        data={'payType': 'chat-gift', 'uid': config.gsUid, 'money': 600,
-              'giftId': config.giftId['46'], 'star': 1},
+        data={'payType': 'chat-gift', 'uid': config.gs_uid, 'money': 600,
+              'giftId': config.gift_id['46'], 'star': 1},
         checks=[
-            {'field': 'single_money', 'uid': config.gsUid, 'expected': 300 * 0.3, 'assert_func': assert_len},
-            {'field': 'single_money', 'uid': config.gsUid, 'expected': 300 * (config.rate - 0.2),
+            {'field': 'single_money', 'uid': config.gs_uid, 'expected': 300 * 0.3, 'assert_func': assert_len},
+            {'field': 'single_money', 'uid': config.gs_uid, 'expected': 300 * (config.rate - 0.2),
              'kwargs': {'money_type': 'money_cash'}, 'assert_func': assert_len},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
+            {'field': 'sum_money', 'uid': config.pay_uid, 'expected': 0}
         ]),
     PayCase(
         des='私聊打赏非一代宗师用户分成72%（mcb）',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
-            {'action': 'update_money', 'params': {'uid': config.rewardUid}}
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 1000}},
+            {'action': 'update_money', 'params': {'uid': config.reward_uid}}
         ],
         data={'payType': 'chat-gift'},
         checks=[
-            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 720},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
+            {'field': 'single_money', 'uid': config.reward_uid, 'expected': 720},
+            {'field': 'sum_money', 'uid': config.pay_uid, 'expected': 0}
         ]),
     PayCase(
         des='私聊打赏一代宗师分成80%（mcb）',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
-            {'action': 'update_money', 'params': {'uid': config.masterUid}}
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 1000}},
+            {'action': 'update_money', 'params': {'uid': config.master_uid}}
         ],
-        data={'payType': 'chat-gift', 'uid': config.masterUid, 'money': 600,
-              'giftId': config.giftId['46'], 'star': 1},
+        data={'payType': 'chat-gift', 'uid': config.master_uid, 'money': 600,
+              'giftId': config.gift_id['46'], 'star': 1},
         checks=[
-            {'field': 'single_money', 'uid': config.masterUid, 'expected': 300 * 0.8, 'assert_func': assert_len},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 400}
+            {'field': 'single_money', 'uid': config.master_uid, 'expected': 300 * 0.8, 'assert_func': assert_len},
+            {'field': 'sum_money', 'uid': config.pay_uid, 'expected': 400}
         ]),
 ]
 

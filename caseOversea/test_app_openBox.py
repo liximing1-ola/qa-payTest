@@ -5,7 +5,7 @@ APP 海外版支付测试 - 背包开箱验证
 """
 from caseOversea.base import OverseaBizCase, OverseaBizTestBase
 
-from common.Config import config
+from common.config import config
 from common.run_failed import Retry
 
 # 场景表：背包开箱（铜箱子单开/银箱子多开）
@@ -13,11 +13,11 @@ OPEN_BOX_SCENES = [
     OverseaBizCase(
         des='背包开铜箱子场景',
         setup=[
-            {'action': 'delete_user_account', 'params': {'table': 'user_box', 'uid': config.oversea_payUid}},
-            {'action': 'delete_user_account', 'params': {'table': 'user_commodity', 'uid': config.oversea_payUid}},
-            {'action': 'insert_commodity', 'params': {'uid': config.oversea_payUid, 'cid': 2, 'num': 1}},
-            {'action': 'insert_box', 'params': {'uid': config.oversea_payUid}},
-            {'action': 'update_money', 'params': {'uid': config.oversea_payUid, 'money': 400,
+            {'action': 'delete_user_account', 'params': {'table': 'user_box', 'uid': config.oversea_pay_uid}},
+            {'action': 'delete_user_account', 'params': {'table': 'user_commodity', 'uid': config.oversea_pay_uid}},
+            {'action': 'insert_commodity', 'params': {'uid': config.oversea_pay_uid, 'cid': 2, 'num': 1}},
+            {'action': 'insert_box', 'params': {'uid': config.oversea_pay_uid}},
+            {'action': 'update_money', 'params': {'uid': config.oversea_pay_uid, 'money': 400,
                                                   'money_cash': 100, 'money_cash_b': 100, 'money_b': 100}},
         ],
         data={'payType': 'shop-buy-box'},
@@ -29,11 +29,11 @@ OPEN_BOX_SCENES = [
     OverseaBizCase(
         des='背包箱子多开场景',
         setup=[
-            {'action': 'delete_user_account', 'params': {'table': 'user_box', 'uid': config.oversea_payUid}},
-            {'action': 'delete_user_account', 'params': {'table': 'user_commodity', 'uid': config.oversea_payUid}},
-            {'action': 'insert_commodity', 'params': {'uid': config.oversea_payUid, 'cid': 3, 'num': 6}},
-            {'action': 'insert_box', 'params': {'uid': config.oversea_payUid}},
-            {'action': 'update_money', 'params': {'uid': config.oversea_payUid, 'money': 700,
+            {'action': 'delete_user_account', 'params': {'table': 'user_box', 'uid': config.oversea_pay_uid}},
+            {'action': 'delete_user_account', 'params': {'table': 'user_commodity', 'uid': config.oversea_pay_uid}},
+            {'action': 'insert_commodity', 'params': {'uid': config.oversea_pay_uid, 'cid': 3, 'num': 6}},
+            {'action': 'insert_box', 'params': {'uid': config.oversea_pay_uid}},
+            {'action': 'update_money', 'params': {'uid': config.oversea_pay_uid, 'money': 700,
                                                   'money_cash': 2000, 'money_cash_b': 2000, 'money_b': 2000}},
         ],
         data={'payType': 'shop-buy-box', 'num': 6},

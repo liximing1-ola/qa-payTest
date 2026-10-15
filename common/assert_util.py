@@ -10,8 +10,8 @@ import time
 from functools import wraps
 from typing import Any
 
-from common import Consts
-from common.Config import config
+from common import consts
+from common.config import config
 
 # RPC接口延迟配置（秒）
 RPC_DELAY = 0.5
@@ -25,7 +25,7 @@ def _delay_for_rpc():
 
 def _record_failure(reason: str):
     """记录失败原因到全局状态"""
-    Consts.fail_case_reason.append(reason)
+    consts.fail_case_reason.append(reason)
 
 
 def _assert_wrapper(func):

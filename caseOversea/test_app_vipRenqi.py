@@ -5,7 +5,7 @@ APP 海外版支付测试 - VIP 人气值验证
 """
 from caseOversea.base import OverseaBizCase, OverseaBizTestBase
 
-from common.Config import config
+from common.config import config
 from common.run_failed import Retry
 
 # 人气值由定时 task 异步更新，校验前需等待的时长（秒）
@@ -17,16 +17,16 @@ def _make_vip_renqi_case(des, pay_type):
     return OverseaBizCase(
         des=des,
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.oversea_payUid, 'money': 600}},
-            {'action': 'clear_pay_room_money', 'params': {'uid': config.oversea_payUid}},
-            {'action': 'clear_popularity', 'params': {'uid': config.oversea_testUid}},
+            {'action': 'update_money', 'params': {'uid': config.oversea_pay_uid, 'money': 600}},
+            {'action': 'clear_pay_room_money', 'params': {'uid': config.oversea_pay_uid}},
+            {'action': 'clear_popularity', 'params': {'uid': config.oversea_test_uid}},
         ],
         data={'payType': pay_type},
         post_wait=POPULARITY_TASK_WAIT,
         checks=[
             {'field': 'sum_money', 'expected': 0},
             {'field': 'pay_room_money', 'expected': 600},
-            {'field': 'popularity', 'uid': config.oversea_testUid, 'min': 600},
+            {'field': 'popularity', 'uid': config.oversea_test_uid, 'min': 600},
         ],
     )
 

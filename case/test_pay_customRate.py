@@ -6,7 +6,7 @@
 from case.base import PayCase, PayTestBase
 
 from common.con_mysql import ConMysql as mysql
-from common.Config import config
+from common.config import config
 from common.run_failed import Retry
 
 # 自定义分成主播 / 打包结算签约主播 / 公会长
@@ -18,15 +18,15 @@ SCENES = [
     PayCase(
         des='商业房打赏自定义分成:50',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 30, 'money_cash': 30,
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 30, 'money_cash': 30,
                                                    'money_cash_b': 30, 'money_b': 10}},
             {'action': 'clear_user_money', 'uids': (CUSTOM_UID, CEO_UID)},
             {'action': 'check_user_broker', 'params': {'uid': CUSTOM_UID, 'bid': CEO_UID}},
             {'action': 'check_broker_rate', 'params': {'uid': CUSTOM_UID, 'creater': CEO_UID, 'rate': 50}}
         ],
-        data={'money': 100, 'uid': CUSTOM_UID, 'giftId': config.giftId['5']},
+        data={'money': 100, 'uid': CUSTOM_UID, 'giftId': config.gift_id['5']},
         checks=[
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0},
+            {'field': 'sum_money', 'uid': config.pay_uid, 'expected': 0},
             {'field': 'single_money', 'uid': CUSTOM_UID, 'expected': 100 * config.rate * 0.5,
              'kwargs': {'money_type': 'money_cash'}},
             {'field': 'single_money', 'uid': CEO_UID, 'expected': 100 * config.rate * (1 - 0.5),
@@ -36,7 +36,7 @@ SCENES = [
     PayCase(
         des='私聊打赏自定义分成:80',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 930, 'money_cash': 30,
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 930, 'money_cash': 30,
                                                    'money_cash_b': 30, 'money_b': 10}},
             {'action': 'clear_user_money', 'uids': (CUSTOM_UID, CEO_UID)},
             {'action': 'check_user_broker', 'params': {'uid': CUSTOM_UID, 'bid': CEO_UID}},
@@ -44,7 +44,7 @@ SCENES = [
         ],
         data={'payType': 'chat-gift', 'uid': CUSTOM_UID},
         checks=[
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0},
+            {'field': 'sum_money', 'uid': config.pay_uid, 'expected': 0},
             {'field': 'sum_money', 'uid': CUSTOM_UID, 'expected': 636},
             {'field': 'single_money', 'uid': CUSTOM_UID, 'expected': 1000 * (config.rate - 0.2) * 0.8,
              'kwargs': {'money_type': 'money_cash'}},
@@ -55,14 +55,14 @@ SCENES = [
     PayCase(
         des='个人守护打赏自定义分成:25',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 52000}},
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 52000}},
             {'action': 'clear_user_money', 'uids': (CUSTOM_UID, CEO_UID)},
             {'action': 'check_user_broker', 'params': {'uid': CUSTOM_UID, 'bid': CEO_UID}},
             {'action': 'check_broker_rate', 'params': {'uid': CUSTOM_UID, 'creater': CEO_UID, 'rate': 25}}
         ],
         data={'payType': 'defend', 'uid': CUSTOM_UID, 'money': 52000, 'defend_id': 2},
         checks=[
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0},
+            {'field': 'sum_money', 'uid': config.pay_uid, 'expected': 0},
             {'field': 'single_money', 'uid': CUSTOM_UID, 'expected': 7800,
              'kwargs': {'money_type': 'money_cash'}},
             {'field': 'single_money', 'uid': CEO_UID, 'expected': 24440,
@@ -72,15 +72,15 @@ SCENES = [
     PayCase(
         des='直播公会房间打赏自定义分成比:70',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 30, 'money_cash': 30,
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 30, 'money_cash': 30,
                                                    'money_cash_b': 30, 'money_b': 10}},
             {'action': 'clear_user_money', 'uids': (PACK_CAL_UID, CEO_UID)},
             {'action': 'check_broker_rate', 'params': {'uid': PACK_CAL_UID, 'creater': CEO_UID, 'rate': 70}}
         ],
         data={'money': 100, 'rid': config.live_role['live_rid'], 'uid': PACK_CAL_UID,
-              'giftId': config.giftId['5']},
+              'giftId': config.gift_id['5']},
         checks=[
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0},
+            {'field': 'sum_money', 'uid': config.pay_uid, 'expected': 0},
             {'field': 'single_money', 'uid': PACK_CAL_UID, 'expected': 100 * 0.6 * 0.7,
              'kwargs': {'money_type': 'money_cash'}},
             {'field': 'single_money', 'uid': CEO_UID, 'expected': 39,
@@ -90,14 +90,14 @@ SCENES = [
     PayCase(
         des='直播公会私聊打赏自定义分成比:0',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 30, 'money_cash': 3000,
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 30, 'money_cash': 3000,
                                                    'money_cash_b': 70}},
             {'action': 'clear_user_money', 'uids': (PACK_CAL_UID, CEO_UID)},
             {'action': 'check_broker_rate', 'params': {'uid': PACK_CAL_UID, 'creater': CEO_UID, 'rate': 0}}
         ],
         data={'payType': 'chat-gift', 'uid': PACK_CAL_UID},
         checks=[
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 2100},
+            {'field': 'sum_money', 'uid': config.pay_uid, 'expected': 2100},
             {'field': 'single_money', 'uid': PACK_CAL_UID, 'expected': 0, 'kwargs': {'money_type': 'money_cash'}},
             {'field': 'sum_money', 'uid': PACK_CAL_UID, 'expected': 0},
             {'field': 'single_money', 'uid': CEO_UID, 'expected': 800, 'kwargs': {'money_type': 'money_cash'}}

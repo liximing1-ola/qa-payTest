@@ -178,7 +178,7 @@ class TestPostStarify(unittest.TestCase):
     @patch('common.request_util.post_request_session_starify', return_value={'code': 200, 'body': {}})
     def test_delegates_to_starify_session(self, mock_starify):
         """应使用 config.starify_pay_url 和 starify token"""
-        from common.Config import config
+        from common.config import config
         result = post_starify('data', uid=123, timeout=10)
         mock_starify.assert_called_once_with(
             config.starify_pay_url, 'data',

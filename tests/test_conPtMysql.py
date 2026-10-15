@@ -8,7 +8,7 @@ import unittest
 from unittest.mock import patch
 
 from common.con_pt_mysql import ConMysql, MySQLConnection
-from common.Config import config
+from common.config import config
 
 
 class TestPtSelectUserInfoSql(unittest.TestCase):
@@ -56,12 +56,12 @@ class TestPtSelectUserInfoSql(unittest.TestCase):
         self.assertIsNone(res)
 
     def test_default_uid_from_config(self):
-        """uid 为 None 时应使用 config.oversea_payUid"""
+        """uid 为 None 时应使用 config.oversea_pay_uid"""
         with patch.object(MySQLConnection, 'execute_query', return_value=(1,)) as m:
             ConMysql.select_user_info_sql('sum_money')
         m.assert_called_once()
         params = m.call_args[1]['params']
-        self.assertEqual(params, (config.oversea_payUid,))
+        self.assertEqual(params, (config.oversea_pay_uid,))
 
     def test_unknown_account_type(self):
         """未知 accountType 应返回 None"""

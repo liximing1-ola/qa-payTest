@@ -18,8 +18,8 @@ from typing import Any
 from common.assert_util import assert_body, assert_code, assert_equal, assert_len
 from common.basic_data import encode_data
 from common.con_mysql import ConMysql as mysql
-from common.Config import config
-from common.Consts import case_list, case_list_b, case_list_c, result
+from common.config import config
+from common.consts import case_list, case_list_b, case_list_c, result
 from common.request_util import post_request_session
 from common.scene_base import SceneFlowBase, resolve, resolve_check
 from common.sql_script import UserCommodityOperations, UserMoneyOperations
@@ -130,7 +130,7 @@ class PayTestBase(SceneFlowBase):
         支持的 action:
             update_money         → UserMoneyOperations.update(**params)
             clear_user_money     → mysql.update_user_money_clear_sql(uid1, uid2?)
-            clear_user_data      → mysql.update_user_money_clear_sql(config.payUid, config.rewardUid)
+            clear_user_data      → mysql.update_user_money_clear_sql(config.pay_uid, config.reward_uid)
             delete_user_account  → mysql.delete_user_account_sql(table, uid)
             delete_account       → mysql.delete_user_account_sql(table, uid)
             insert_commodity     → UserCommodityOperations.insert(uid, **params)
@@ -152,7 +152,7 @@ class PayTestBase(SceneFlowBase):
                 if 'uids' in step:
                     mysql.update_user_money_clear_sql(*step['uids'])
                 else:
-                    mysql.update_user_money_clear_sql(config.payUid, config.rewardUid)
+                    mysql.update_user_money_clear_sql(config.pay_uid, config.reward_uid)
             elif action in ('delete_user_account', 'delete_account'):
                 mysql.delete_user_account_sql(
                     params.get('table', step.get('table')),
@@ -161,10 +161,10 @@ class PayTestBase(SceneFlowBase):
                 mysql.delete_user_account_sql('user_commodity', step['uid'])
             elif action == 'insert_commodity':
                 params = dict(params)
-                uid = params.pop('uid', config.payUid)
+                uid = params.pop('uid', config.pay_uid)
                 UserCommodityOperations.insert(uid, **params)
             elif action == 'insert_user_box':
-                uid = step.get('uid', config.payUid)
+                uid = step.get('uid', config.pay_uid)
                 mysql.insert_xs_user_box(uid, **params)
             elif action == 'check_user_broker':
                 mysql.check_user_broker(**params) if params else mysql.check_user_broker(step['uid'], bid=step['bid'])
@@ -176,7 +176,7 @@ class PayTestBase(SceneFlowBase):
 
         每个 check 字典支持的 key:
             field      (必填) 查询字段
-            uid        (可选) 用户 ID，默认 config.payUid
+            uid        (可选) 用户 ID，默认 config.pay_uid
             expected   (可选) 期望值
             kwargs     (可选) 额外查询参数 dict
             money_type (可选) 货币类型
@@ -186,7 +186,7 @@ class PayTestBase(SceneFlowBase):
         """
         for check in checks:
             field = check['field']
-            uid = check.get('uid', config.payUid)
+            uid = check.get('uid', config.pay_uid)
             expected = check.get('expected')
 
             kwargs = check.get('kwargs', {})

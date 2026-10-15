@@ -11,8 +11,8 @@ from typing import Any
 from autoGitPull import update_time, updateCode
 from Robot import robot
 
-from common import Consts, Logs, method
-from common.Config import config
+from common import consts, logs, method
+from common.config import config
 from common.method import check_path
 
 # 连续两条机器人通知之间的间隔（秒），避免触发频率限制
@@ -21,7 +21,7 @@ NOTIFY_INTERVAL = 0.1
 
 # 应用配置映射
 APP_CONFIG: dict[str, dict[str, Any]] = {
-    config.appName['1']: {
+    config.app_name['1']: {
         'dir': '/case',
         'git_repos': ['bb_php', 'bb_go'],
         'bot': 'BB',
@@ -29,7 +29,7 @@ APP_CONFIG: dict[str, dict[str, Any]] = {
         'branch_key': 'bb_git_branch',
         'lang': 'zh'
     },
-    config.appName['2']: {
+    config.app_name['2']: {
         'dir': '/caseOversea',
         'git_repos': None,  # 使用 appInfo
         'bot': 'oversea',
@@ -37,7 +37,7 @@ APP_CONFIG: dict[str, dict[str, Any]] = {
         'branch_key': 'app_git_branch',
         'lang': 'en'
     },
-    config.appName['不夜星球']: {
+    config.app_name['不夜星球']: {
         'dir': '/caseSlp',
         'git_repos': ['slp_php', 'slp_common_rpc'],
         'bot': 'slp',
@@ -100,7 +100,7 @@ def log_result(test_result: unittest.TextTestResult, lang: str = 'zh') -> str:
                f"失败用例数：{len(test_result.failures)}, "
                f"异常用例数：{len(test_result.errors)}")
 
-    Logs.get_logger('caseResult.log').info(des)
+    logs.get_logger('caseResult.log').info(des)
     return des
 
 
@@ -115,10 +115,10 @@ def get_summary_data(test_result: unittest.TextTestResult,
     Returns:
         (case_list, case_list_2, use_time, branch) 元组
     """
-    case_list = method.dict_to_markdown(Consts.case_list)
-    case_list_2 = method.dict_to_markdown(Consts.case_list_b)
-    use_time = str(int(Consts.endTime - Consts.startTime)) + 's'
-    branch = config.codeInfo[branch_key]
+    case_list = method.dict_to_markdown(consts.case_list)
+    case_list_2 = method.dict_to_markdown(consts.case_list_b)
+    use_time = str(int(consts.endTime - consts.startTime)) + 's'
+    branch = config.code_info[branch_key]
     return case_list, case_list_2, use_time, branch
 
 
@@ -162,13 +162,13 @@ def notify_failures(app_info: str, test_result: unittest.TextTestResult,
     to = cfg.get('to', 'wx')
 
     if failures:
-        Logs.get_logger('failCase.log').error(f"failures: {failures}")
+        logs.get_logger('failCase.log').error(f"failures: {failures}")
         robot(cfg['mode'], des, bot=cfg['bot'], color='danger', to=to)
-        if Consts.fail_case_reason:
-            robot(cfg['mode'], Consts.fail_case_reason[0],
+        if consts.fail_case_reason:
+            robot(cfg['mode'], consts.fail_case_reason[0],
                  title=failures[0][0].id(), color='danger', bot=cfg['bot'], to=to)
     if errors:
-        Logs.get_logger('failCase.log').error(f"error: {errors}")
+        logs.get_logger('failCase.log').error(f"error: {errors}")
         for case, reason in errors:
             robot(cfg['mode'], reason, case.id(),
                  color='danger', bot=cfg['bot'], to=to)
@@ -214,26 +214,26 @@ def main(app_info: str) -> None:
         app_info: 应用信息
     """
     if app_info not in APP_CONFIG:
-        Logs.get_logger('runCode.log').error(f'未配置的应用，无法执行：{app_info}')
+        logs.get_logger('runCode.log').error(f'未配置的应用，无法执行：{app_info}')
         return
 
-    if app_info == config.appName['2']:
-        check_path(config.codeInfo['app_php_path'])
+    if app_info == config.app_name['2']:
+        check_path(config.code_info['app_php_path'])
 
     if pull_code(app_info):
         update_time('write', now=str(int(time())))
         test_result = run_tests(app_info)
-        Consts.endTime = time()
+        consts.endTime = time()
         handle_result(app_info, test_result)
     else:
-        Logs.get_logger('runCode.log').info('NoRun')
+        logs.get_logger('runCode.log').info('NoRun')
 
 
 if __name__ == "__main__":
     node = platform.node()
     if node == config.linux_node['ali']:
-        main(config.appName['2'])
+        main(config.app_name['2'])
     elif node == config.linux_node['ali-slp']:
-        main(config.appName['不夜星球'])
+        main(config.app_name['不夜星球'])
     else:
-        main(config.appName['1'])
+        main(config.app_name['1'])

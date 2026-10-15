@@ -5,7 +5,7 @@
 """
 from case.base import PayCase, PayTestBase
 
-from common.Config import config
+from common.config import config
 from common.run_failed import Retry
 
 # NSQ 异步扣款消息处理等待（秒）
@@ -15,16 +15,16 @@ SCENES = [
     PayCase(
         des='打赏时触发罚款流程',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 100}},
-            {'action': 'update_money', 'params': {'uid': config.rewardUid, 'money': 20, 'money_cash': 20,
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 100}},
+            {'action': 'update_money', 'params': {'uid': config.reward_uid, 'money': 20, 'money_cash': 20,
                                                    'money_debts': 100}}
         ],
-        data={'money': 100, 'rid': config.live_role['auto_rid'], 'giftId': config.giftId['5']},
+        data={'money': 100, 'rid': config.live_role['auto_rid'], 'giftId': config.gift_id['5']},
         post_wait=NSQ_SETTLE_WAIT,
         checks=[
-            {'field': 'single_money', 'uid': config.rewardUid, 'money_type': 'money', 'expected': 2},
-            {'field': 'single_money', 'uid': config.rewardUid, 'money_type': 'money_cash', 'expected': 0},
-            {'field': 'single_money', 'uid': config.rewardUid, 'money_type': 'money_debts', 'expected': 0}
+            {'field': 'single_money', 'uid': config.reward_uid, 'money_type': 'money', 'expected': 2},
+            {'field': 'single_money', 'uid': config.reward_uid, 'money_type': 'money_cash', 'expected': 0},
+            {'field': 'single_money', 'uid': config.reward_uid, 'money_type': 'money_debts', 'expected': 0}
         ],
         report='case_list_c'),
 ]

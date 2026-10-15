@@ -6,7 +6,7 @@
 from case.base import PayCase, PayTestBase
 
 from common.con_mysql import ConMysql as mysql
-from common.Config import config
+from common.config import config
 from common.run_failed import Retry
 
 # 老司机券 / 电台青铜体验券
@@ -17,79 +17,79 @@ SCENES = [
     PayCase(
         des='房间打赏但余额不足的场景',
         setup=[
-            {'action': 'clear_user_money', 'uids': (config.payUid, config.rewardUid)}
+            {'action': 'clear_user_money', 'uids': (config.pay_uid, config.reward_uid)}
         ],
-        data={'money': 100, 'giftId': config.giftId['5']},
+        data={'money': 100, 'giftId': config.gift_id['5']},
         checks=[
-            {'field': 'sum_money', 'uid': config.rewardUid, 'expected': 0}
+            {'field': 'sum_money', 'uid': config.reward_uid, 'expected': 0}
         ],
         success=0,
         msg='余额不足，无法支付'),
     PayCase(
         des='打赏礼物使用未激活券的场景',
         setup=[
-            {'action': 'delete_commodity', 'uid': config.payUid},
-            {'action': 'insert_commodity', 'params': {'uid': config.payUid, 'cid': GIFT_CID_COUPON, 'num': 1}},
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 3000}},
-            {'action': 'update_money', 'params': {'uid': config.rewardUid}}
+            {'action': 'delete_commodity', 'uid': config.pay_uid},
+            {'action': 'insert_commodity', 'params': {'uid': config.pay_uid, 'cid': GIFT_CID_COUPON, 'num': 1}},
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 3000}},
+            {'action': 'update_money', 'params': {'uid': config.reward_uid}}
         ],
-        queries=[('cid', lambda: mysql.select_user_info_sql('id_commodity', config.payUid, cid=GIFT_CID_COUPON))],
-        data={'giftId': config.giftId['11'], 'money': 3000,
+        queries=[('cid', lambda: mysql.select_user_info_sql('id_commodity', config.pay_uid, cid=GIFT_CID_COUPON))],
+        data={'giftId': config.gift_id['11'], 'money': 3000,
               'package_cid': lambda ctx: ctx['cid'],
               'ctype': 'coupon', 'duction_money': 500},
         checks=[
-            {'field': 'sum_money', 'uid': config.rewardUid, 'expected': 0},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 3000}
+            {'field': 'sum_money', 'uid': config.reward_uid, 'expected': 0},
+            {'field': 'sum_money', 'uid': config.pay_uid, 'expected': 3000}
         ],
         success=0,
         msg='余额不足，无法支付'),
     PayCase(
         des='打赏礼物时有激活券的场景',
         setup=[
-            {'action': 'delete_commodity', 'uid': config.payUid},
-            {'action': 'insert_commodity', 'params': {'uid': config.payUid, 'cid': GIFT_CID_COUPON, 'num': 1, 'state': 1}},
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 3000}},
-            {'action': 'update_money', 'params': {'uid': config.rewardUid}}
+            {'action': 'delete_commodity', 'uid': config.pay_uid},
+            {'action': 'insert_commodity', 'params': {'uid': config.pay_uid, 'cid': GIFT_CID_COUPON, 'num': 1, 'state': 1}},
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 3000}},
+            {'action': 'update_money', 'params': {'uid': config.reward_uid}}
         ],
-        queries=[('cid', lambda: mysql.select_user_info_sql('id_commodity', config.payUid, cid=GIFT_CID_COUPON))],
-        data={'giftId': config.giftId['11'], 'money': 3000,
+        queries=[('cid', lambda: mysql.select_user_info_sql('id_commodity', config.pay_uid, cid=GIFT_CID_COUPON))],
+        data={'giftId': config.gift_id['11'], 'money': 3000,
               'package_cid': lambda ctx: ctx['cid'],
               'ctype': 'coupon', 'duction_money': 500},
         checks=[
-            {'field': 'sum_money', 'uid': config.rewardUid, 'expected': 1860},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 500}
+            {'field': 'sum_money', 'uid': config.reward_uid, 'expected': 1860},
+            {'field': 'sum_money', 'uid': config.pay_uid, 'expected': 500}
         ]),
     PayCase(
         des='房间内打赏多人场景',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 5000, 'money_cash': 5000,
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 5000, 'money_cash': 5000,
                                                   'money_cash_b': 5000, 'money_b': 5000}},
-            {'action': 'clear_user_money', 'uids': (config.masterUid, config.rewardUid, config.gsUid)}
+            {'action': 'clear_user_money', 'uids': (config.master_uid, config.reward_uid, config.gs_uid)}
         ],
         data={'payType': 'package-more', 'num': 6,
-              'uids': (str(config.gsUid), str(config.rewardUid), str(config.masterUid))},
+              'uids': (str(config.gs_uid), str(config.reward_uid), str(config.master_uid))},
         checks=[
-            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 3720},
-            {'field': 'single_money', 'uid': config.masterUid, 'expected': 4200},
-            {'field': 'single_money', 'uid': config.gsUid, 'expected': 6000 * config.rate,
+            {'field': 'single_money', 'uid': config.reward_uid, 'expected': 3720},
+            {'field': 'single_money', 'uid': config.master_uid, 'expected': 4200},
+            {'field': 'single_money', 'uid': config.gs_uid, 'expected': 6000 * config.rate,
              'kwargs': {'money_type': 'money_cash'}},
-            {'field': 'single_money', 'uid': config.payUid, 'expected': 2000,
+            {'field': 'single_money', 'uid': config.pay_uid, 'expected': 2000,
              'kwargs': {'money_type': 'money_cash'}}
         ]),
     PayCase(
         des='电台使用青铜体验券',
         setup=[
-            {'action': 'delete_commodity', 'uid': config.payUid},
-            {'action': 'insert_commodity', 'params': {'uid': config.payUid, 'cid': GIFT_CID_RADIO, 'num': 1}},
-            {'action': 'clear_user_money', 'uids': (config.payUid, config.rewardUid)}
+            {'action': 'delete_commodity', 'uid': config.pay_uid},
+            {'action': 'insert_commodity', 'params': {'uid': config.pay_uid, 'cid': GIFT_CID_RADIO, 'num': 1}},
+            {'action': 'clear_user_money', 'uids': (config.pay_uid, config.reward_uid)}
         ],
-        queries=[('cid', lambda: mysql.select_user_info_sql('id_commodity', config.payUid, cid=GIFT_CID_RADIO))],
+        queries=[('cid', lambda: mysql.select_user_info_sql('id_commodity', config.pay_uid, cid=GIFT_CID_RADIO))],
         data={'payType': 'package-radioDefend', 'rid': 200022566, 'money': 520,
               'package_cid': lambda ctx: ctx['cid']},
         checks=[
-            {'field': 'sum_money', 'uid': config.rewardUid, 'expected': 0},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0},
-            {'field': 'num_commodity', 'uid': config.payUid, 'expected': 0, 'kwargs': {'cid': GIFT_CID_RADIO}}
+            {'field': 'sum_money', 'uid': config.reward_uid, 'expected': 0},
+            {'field': 'sum_money', 'uid': config.pay_uid, 'expected': 0},
+            {'field': 'num_commodity', 'uid': config.pay_uid, 'expected': 0, 'kwargs': {'cid': GIFT_CID_RADIO}}
         ]),
 ]
 

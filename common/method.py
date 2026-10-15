@@ -15,9 +15,9 @@ from typing import Any
 
 import requests
 
-from common import Consts
+from common import consts
 from common.con_mysql import ConMysql as mysql
-from common.Config import config
+from common.config import config
 
 logger = logging.getLogger(__name__)
 
@@ -139,16 +139,16 @@ def get_value(res: dict[str, Any]) -> None:
 
     if 'body' not in res:
         logger.warning('缺少 body 字段，时间：%s', current_time)
-        Consts.increment_fail()
+        consts.increment_fail()
         return
 
     body = res['body']
     if isinstance(body, dict) and body.get('success'):
         logger.info('结果：%s, 时间：%s', body['success'], current_time)
-        Consts.increment_success()
+        consts.increment_success()
     else:
         logger.info('结果：%s，时间：%s', body, current_time)
-        Consts.increment_fail()
+        consts.increment_fail()
 
 
 def format_reason(des: str, res: dict[str, Any]) -> str:
@@ -208,7 +208,7 @@ def calculate_vip_exp(money_type: str = 'money', uid: int | None = None, pay_off
     """计算 VIP 经验值
     Args:
         money_type: 货币类型（money/coin/bean）
-        uid: 用户 ID，默认为 config.payUid
+        uid: 用户 ID，默认为 config.pay_uid
         pay_off: 支付金额
     Returns:
         VIP 经验值
@@ -216,7 +216,7 @@ def calculate_vip_exp(money_type: str = 'money', uid: int | None = None, pay_off
         ValueError: 不支持的货币类型
     """
     if uid is None:
-        uid = config.payUid
+        uid = config.pay_uid
 
     if money_type in {'money', 'coin'}:
         title = get_user_title(mysql.select_user_info_sql('level', uid))

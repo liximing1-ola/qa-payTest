@@ -18,7 +18,7 @@ from typing import Any
 
 from common.assert_util import assert_body, assert_code
 from common.con_starify_mysql import ConMysql
-from common.Consts import case_list, case_list_b, result
+from common.consts import case_list, case_list_b, result
 from common.request_util import post_starify
 from common.scene_base import SceneFlowBase
 

@@ -14,7 +14,7 @@ import pymysql  # noqa: E402
 import requests  # noqa: E402
 import urllib3  # noqa: E402
 
-from common.Config import config  # noqa: E402
+from common.config import config  # noqa: E402
 
 logger = logging.getLogger(__name__)
 

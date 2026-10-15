@@ -6,7 +6,7 @@ from caseStarify.need_data import a_uid, b_uid, c_uid, contract_ratio
 
 from common.assert_util import assert_body, assert_code, assert_equal
 from common.con_starify_mysql import ConMysql
-from common.Consts import case_list, result
+from common.consts import case_list, result
 from common.request_util import post_starify
 from common.run_failed import Retry
 

@@ -3,11 +3,11 @@ import unittest
 from common.assert_util import assert_body, assert_code, assert_equal
 from common.basic_data import encode_data
 from common.con_mysql import ConMysql
-from common.Config import config
-from common.Consts import case_list_b, result
+from common.config import config
+from common.consts import case_list_b, result
 from common.request_util import post_request_session
 from common.run_failed import Retry
-from common.Session import Session
+from common.session import Session
 
 
 @Retry
@@ -66,7 +66,7 @@ class TestPayDuckRate(unittest.TestCase):
         ])
 
         # 发送请求
-        data = encode_data(money=100, rid=200064778, uid=testUid, giftId=config.giftId['5'])
+        data = encode_data(money=100, rid=200064778, uid=testUid, giftId=config.gift_id['5'])
         res = post_request_session(config.rush_pay_url, data, token_name='rush')
 
         # 验证响应

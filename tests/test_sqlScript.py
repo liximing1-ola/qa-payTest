@@ -7,7 +7,7 @@ common/sql_script.py 单元测试（MySQLClient 执行链 / 事务回滚 / 操�
 import unittest
 from unittest.mock import Mock, patch
 
-from common.Config import config
+from common.config import config
 from common.sql_script import (
     MySQLClient,
     UserCommodityOperations,

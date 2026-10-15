@@ -6,7 +6,7 @@ APP MySQL 数据库操作模块
 """
 import logging
 
-from common.Config import config
+from common.config import config
 from common.mysql_base import MySQLConnection as MySQLConnectionBase
 
 logger = logging.getLogger(__name__)
@@ -50,14 +50,14 @@ class ConMysql:
 
         Args:
             accountType: 账户类型
-            uid: 用户 ID，默认为 config.oversea_payUid
+            uid: 用户 ID，默认为 config.oversea_pay_uid
             money_type: 货币类型
 
         Returns:
             查询结果，失败返回 0 或 None
         """
         if uid is None:
-            uid = config.oversea_payUid
+            uid = config.oversea_pay_uid
 
         if accountType in ConMysql.QUERY_SQL_MAP:
             sql = ConMysql.QUERY_SQL_MAP[accountType]
@@ -155,7 +155,7 @@ class ConMysql:
     @staticmethod
     def check_xs_gift_config() -> None:
         """检查礼物配置"""
-        gift_ids = tuple(config.oversea_giftId.values())
+        gift_ids = tuple(config.oversea_gift_id.values())
         MySQLConnection._update_xs_gift_status(gift_ids)
 
     # ============ 查询方法 ============

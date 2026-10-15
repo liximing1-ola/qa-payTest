@@ -7,15 +7,15 @@ from caseOversea.base import OverseaBizCase, OverseaBizTestBase
 
 from common.assert_util import assert_equal
 from common.con_pt_mysql import ConMysql
-from common.Config import config
+from common.config import config
 from common.run_failed import Retry
 
 
 def _assert_blind_reconcile():
     """校验收礼人到账金额与 pay_change 流水一致"""
-    assert_equal(ConMysql.select_user_info_sql('money_cash_personal', config.oversea_testUid,
+    assert_equal(ConMysql.select_user_info_sql('money_cash_personal', config.oversea_test_uid,
                                             money_type='money_cash_personal'),
-                 ConMysql.select_user_info_sql('pay_change', config.oversea_testUid))
+                 ConMysql.select_user_info_sql('pay_change', config.oversea_test_uid))
 
 
 # 场景表：房间盲盒打赏（单人次/多人次多个）
@@ -23,31 +23,31 @@ BLIND_SCENES = [
     OverseaBizCase(
         des='房间送盲盒场景',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.oversea_payUid, 'money': 100,
+            {'action': 'update_money', 'params': {'uid': config.oversea_pay_uid, 'money': 100,
                                                   'money_cash': 100, 'money_cash_b': 100, 'money_b': 100}},
-            {'action': 'update_money', 'params': {'uid': config.oversea_testUid}},
-            {'action': 'clear_extend_money', 'params': {'uid': config.oversea_testUid}},
+            {'action': 'update_money', 'params': {'uid': config.oversea_test_uid}},
+            {'action': 'clear_extend_money', 'params': {'uid': config.oversea_test_uid}},
         ],
         data={'payType': 'package', 'money': 300,
-              'rid': config.oversea_room['th_union'], 'giftId': config.oversea_giftId['773']},
+              'rid': config.oversea_room['th_union'], 'giftId': config.oversea_gift_id['773']},
         checks=[
             {'field': 'sum_money', 'expected': 100},
-            {'field': 'money_cash_personal', 'uid': config.oversea_testUid, 'min': 30},
+            {'field': 'money_cash_personal', 'uid': config.oversea_test_uid, 'min': 30},
             {'assert_func': _assert_blind_reconcile},
         ],
     ),
     OverseaBizCase(
         des='房间送多人多个盲盒场景',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.oversea_payUid, 'money': 10000}},
-            {'action': 'update_money', 'params': {'uid': config.oversea_testUid}},
-            {'action': 'clear_extend_money', 'params': {'uid': config.oversea_testUid}},
+            {'action': 'update_money', 'params': {'uid': config.oversea_pay_uid, 'money': 10000}},
+            {'action': 'update_money', 'params': {'uid': config.oversea_test_uid}},
+            {'action': 'clear_extend_money', 'params': {'uid': config.oversea_test_uid}},
         ],
         data={'payType': 'package-more', 'num': 2, 'money': 1200,
-              'rid': config.oversea_room['th_union'], 'giftId': config.oversea_giftId['774']},
+              'rid': config.oversea_room['th_union'], 'giftId': config.oversea_gift_id['774']},
         checks=[
             {'field': 'sum_money', 'expected': 5200},
-            {'field': 'money_cash_personal', 'uid': config.oversea_testUid, 'min': 60},
+            {'field': 'money_cash_personal', 'uid': config.oversea_test_uid, 'min': 60},
         ],
     ),
 ]

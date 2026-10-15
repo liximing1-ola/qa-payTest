@@ -1,5 +1,5 @@
 """
-common/Logs.py、Assert.py、runFailed.py 单元测试
+common/logs.py、Assert.py、runFailed.py 单元测试
 
 可在无后端环境下直接运行：
     python -m pytest tests/test_utils.py -v
@@ -9,8 +9,8 @@ import unittest
 from logging.handlers import TimedRotatingFileHandler
 from unittest.mock import patch
 
-# ============ Logs.py 测试 ============
-from common.Logs import (
+# ============ logs.py 测试 ============
+from common.logs import (
     _create_handlers,
     _ensure_log_dir,
     get_logger,
@@ -24,7 +24,7 @@ class TestEnsureLogDir(unittest.TestCase):
         """返回的路径应在 BASE_PATH/log 下"""
         import os
 
-        from common.Config import config
+        from common.config import config
         path = _ensure_log_dir()
         self.assertEqual(path, os.path.join(config.BASE_PATH, 'log'))
 
@@ -103,7 +103,7 @@ class TestGetLogger(unittest.TestCase):
 
 # ============ Assert.py 测试 ============
 
-from common import Consts  # noqa: E402
+from common import consts  # noqa: E402
 from common.assert_util import (  # noqa: E402
     _assert,
     _record_failure,
@@ -120,53 +120,53 @@ class TestCoreAssert(unittest.TestCase):
     """核心 _assert 函数"""
 
     def setUp(self):
-        Consts.fail_case_reason.clear()
+        consts.fail_case_reason.clear()
 
     def test_passes_on_true(self):
         """条件为真不应抛异常"""
         _assert(True, 'should not fail')
-        self.assertEqual(len(Consts.fail_case_reason), 0)
+        self.assertEqual(len(consts.fail_case_reason), 0)
 
     def test_raises_on_false(self):
         """条件为假应抛 AssertionError"""
         with self.assertRaises(AssertionError) as ctx:
             _assert(False, 'test reason')
         self.assertEqual(str(ctx.exception), 'test reason')
-        self.assertIn('test reason', Consts.fail_case_reason)
+        self.assertIn('test reason', consts.fail_case_reason)
 
 
 class TestRecordFailure(unittest.TestCase):
     """_record_failure"""
 
     def setUp(self):
-        Consts.fail_case_reason.clear()
+        consts.fail_case_reason.clear()
 
     def test_appends_to_global_list(self):
         """应将原因追加到 fail_case_reason"""
         _record_failure('reason A')
         _record_failure('reason B')
-        self.assertEqual(Consts.fail_case_reason, ['reason A', 'reason B'])
+        self.assertEqual(consts.fail_case_reason, ['reason A', 'reason B'])
 
 
 class TestAssertCode(unittest.TestCase):
     """assert_code"""
 
     def setUp(self):
-        Consts.fail_case_reason.clear()
+        consts.fail_case_reason.clear()
 
     @patch('common.assert_util._delay_for_rpc')
     def test_passes_on_200(self, mock_delay):
         """状态码 200 应通过"""
         result = assert_code(200)
         self.assertTrue(result)
-        self.assertEqual(len(Consts.fail_case_reason), 0)
+        self.assertEqual(len(consts.fail_case_reason), 0)
 
     @patch('common.assert_util._delay_for_rpc')
     def test_fails_on_500(self, mock_delay):
         """状态码 500 应失败"""
         with self.assertRaises(AssertionError):
             assert_code(500)
-        self.assertTrue(len(Consts.fail_case_reason) > 0)
+        self.assertTrue(len(consts.fail_case_reason) > 0)
 
     @patch('common.assert_util._delay_for_rpc')
     def test_custom_expected(self, mock_delay):
@@ -178,7 +178,7 @@ class TestAssertLen(unittest.TestCase):
     """assert_len"""
 
     def setUp(self):
-        Consts.fail_case_reason.clear()
+        consts.fail_case_reason.clear()
 
     def test_passes_when_actual_gte_expected(self):
         """actual >= expect 应通过"""
@@ -189,14 +189,14 @@ class TestAssertLen(unittest.TestCase):
         """actual < expect 应失败"""
         with self.assertRaises(AssertionError):
             assert_len(3, 5)
-        self.assertTrue(len(Consts.fail_case_reason) > 0)
+        self.assertTrue(len(consts.fail_case_reason) > 0)
 
 
 class TestAssertEqual(unittest.TestCase):
     """assert_equal"""
 
     def setUp(self):
-        Consts.fail_case_reason.clear()
+        consts.fail_case_reason.clear()
 
     def test_passes_on_equal(self):
         """相等值应通过"""
@@ -207,14 +207,14 @@ class TestAssertEqual(unittest.TestCase):
         """不等值应失败"""
         with self.assertRaises(AssertionError):
             assert_equal(1, 2)
-        self.assertTrue(len(Consts.fail_case_reason) > 0)
+        self.assertTrue(len(consts.fail_case_reason) > 0)
 
 
 class TestAssertInText(unittest.TestCase):
     """assert_in_text"""
 
     def setUp(self):
-        Consts.fail_case_reason.clear()
+        consts.fail_case_reason.clear()
 
     def test_passes_when_found(self):
         """JSON 中包含目标文本应通过"""
@@ -232,7 +232,7 @@ class TestAssertBody(unittest.TestCase):
     """assert_body"""
 
     def setUp(self):
-        Consts.fail_case_reason.clear()
+        consts.fail_case_reason.clear()
 
     def test_passes_on_match(self):
         """字段值匹配应通过"""
@@ -250,7 +250,7 @@ class TestAssertBetween(unittest.TestCase):
     """assert_between"""
 
     def setUp(self):
-        Consts.fail_case_reason.clear()
+        consts.fail_case_reason.clear()
 
     def test_passes_in_range(self):
         """范围内的值应通过"""

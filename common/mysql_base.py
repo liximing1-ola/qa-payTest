@@ -11,7 +11,7 @@ from typing import Any
 import pymysql
 from pymysql import cursors
 
-from common.Config import config
+from common.config import config
 
 logger = logging.getLogger(__name__)
 

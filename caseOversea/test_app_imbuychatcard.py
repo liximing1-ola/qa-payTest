@@ -5,16 +5,16 @@ APP 海外版支付测试 - 私聊卡购买验证
 """
 from caseOversea.base import OverseaBizCase, OverseaBizTestBase
 
-from common.Config import config
+from common.config import config
 from common.run_failed import Retry
 
 # 场景：余额购买私聊卡（money 100-16*10=0，背包得到 10 张私聊卡 cid=42598）
 SCENE_001 = OverseaBizCase(
     des='余额购买私聊卡场景',
     setup=[
-        {'action': 'update_money', 'params': {'uid': config.oversea_payUid, 'money': 100, 'money_cash': 60}},
-        {'action': 'delete_user_account', 'params': {'table': 'user_commodity', 'uid': config.oversea_payUid}},
-        {'action': 'delete_user_account', 'params': {'table': 'chat_pay_card_record', 'uid': config.oversea_payUid}},
+        {'action': 'update_money', 'params': {'uid': config.oversea_pay_uid, 'money': 100, 'money_cash': 60}},
+        {'action': 'delete_user_account', 'params': {'table': 'user_commodity', 'uid': config.oversea_pay_uid}},
+        {'action': 'delete_user_account', 'params': {'table': 'chat_pay_card_record', 'uid': config.oversea_pay_uid}},
     ],
     data={'payType': 'chat-pay-card'},
     checks=[

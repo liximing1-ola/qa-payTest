@@ -11,7 +11,7 @@ from unittest.mock import Mock, call, patch
 from case import base as case_base
 from case.base import PayCase, PayTestBase, _resolve
 
-from common.Config import config
+from common.config import config
 
 
 class _DummyPayTest(PayTestBase):
@@ -197,7 +197,7 @@ class TestPrepareTestDataDispatcher(unittest.TestCase):
     def test_clear_user_data_defaults(self):
         with patch('case.base.mysql') as m:
             self.tc._prepare_test_data([{'action': 'clear_user_data'}])
-        m.update_user_money_clear_sql.assert_called_once_with(config.payUid, config.rewardUid)
+        m.update_user_money_clear_sql.assert_called_once_with(config.pay_uid, config.reward_uid)
 
     def test_delete_account_uses_params(self):
         with patch('case.base.mysql') as m:
@@ -216,7 +216,7 @@ class TestPrepareTestDataDispatcher(unittest.TestCase):
         with patch('case.base.UserCommodityOperations') as m:
             self.tc._prepare_test_data(
                 [{'action': 'insert_commodity', 'params': {'cid': 5, 'num': 2}}])
-        m.insert.assert_called_once_with(config.payUid, cid=5, num=2)
+        m.insert.assert_called_once_with(config.pay_uid, cid=5, num=2)
 
     def test_insert_commodity_explicit_uid(self):
         with patch('case.base.UserCommodityOperations') as m:
@@ -228,7 +228,7 @@ class TestPrepareTestDataDispatcher(unittest.TestCase):
         with patch('case.base.mysql') as m:
             self.tc._prepare_test_data(
                 [{'action': 'insert_user_box', 'params': {'gift_cid': 8}}])
-        m.insert_xs_user_box.assert_called_once_with(config.payUid, gift_cid=8)
+        m.insert_xs_user_box.assert_called_once_with(config.pay_uid, gift_cid=8)
 
     def test_check_user_broker_params_form(self):
         with patch('case.base.mysql') as m:
@@ -277,7 +277,7 @@ class TestValidateDbStateDispatcher(unittest.TestCase):
         with patch('case.base.mysql') as m_mysql, patch('case.base.assert_equal'):
             m_mysql.select_user_info_sql.return_value = 0
             self.tc._validate_db_state([{'field': 'bean', 'expected': 0}])
-        m_mysql.select_user_info_sql.assert_called_once_with('bean', config.payUid)
+        m_mysql.select_user_info_sql.assert_called_once_with('bean', config.pay_uid)
 
     def test_money_type_and_cid_passed_as_kwargs(self):
         with patch('case.base.mysql') as m_mysql, patch('case.base.assert_equal'):

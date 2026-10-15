@@ -18,8 +18,8 @@ from typing import Any
 from common.assert_util import assert_body, assert_code, assert_equal, assert_len
 from common.basic_data import encode_oversea_data
 from common.con_pt_mysql import ConMysql
-from common.Config import config
-from common.Consts import case_list, result
+from common.config import config
+from common.consts import case_list, result
 from common.request_util import post_request_session
 from common.scene_base import SceneFlowBase, resolve
 
@@ -158,18 +158,18 @@ class OverseaAreaTestBase(OverseaTestBase):
     # ============ 场景骨架钩子实现 ============
     def flow_prepare(self, scene: PayScene, ctx: dict[str, Any]) -> None:
         """准备：构造用户数据（receiver_uid 存入 ctx 供后续阶段使用）"""
-        receiver_uid = (config.oversea_brokerUid if scene.receiver == RECEIVER_BROKER
-                        else config.oversea_testUid)
+        receiver_uid = (config.oversea_broker_uid if scene.receiver == RECEIVER_BROKER
+                        else config.oversea_test_uid)
         ctx['receiver_uid'] = receiver_uid
 
         if scene.clear_all:
-            ConMysql.update_user_money_clear_sql(config.oversea_payUid, receiver_uid)
+            ConMysql.update_user_money_clear_sql(config.oversea_pay_uid, receiver_uid)
         else:
             if scene.payer_box_extra:
-                ConMysql.update_money_sql(config.oversea_payUid, scene.payer_money,
+                ConMysql.update_money_sql(config.oversea_pay_uid, scene.payer_money,
                                         money_cash=100, money_cash_b=100, money_b=100)
             else:
-                ConMysql.update_money_sql(config.oversea_payUid, scene.payer_money)
+                ConMysql.update_money_sql(config.oversea_pay_uid, scene.payer_money)
             ConMysql.update_money_sql(receiver_uid)
             if scene.clear_extend:
                 ConMysql.update_user_extend_money_clear_sql(receiver_uid)
@@ -184,7 +184,7 @@ class OverseaAreaTestBase(OverseaTestBase):
         if scene.receiver == RECEIVER_BROKER:
             pay_kwargs['uid'] = ctx['receiver_uid']
         if scene.is_box:
-            pay_kwargs['giftId'] = config.giftId['46']
+            pay_kwargs['giftId'] = config.gift_id['46']
         data = encode_oversea_data(payType=scene.pay_type, **pay_kwargs)
         ctx['_res'] = post_request_session(config.oversea_pay_url, data, token_name='app')
 
@@ -200,7 +200,7 @@ class OverseaAreaTestBase(OverseaTestBase):
         """校验：检查余额与对账"""
         receiver_uid = ctx['receiver_uid']
         if scene.payer_expect is not None:
-            assert_equal(ConMysql.select_user_info_sql('sum_money', config.oversea_payUid), scene.payer_expect)
+            assert_equal(ConMysql.select_user_info_sql('sum_money', config.oversea_pay_uid), scene.payer_expect)
         income = self._query_account(receiver_uid, scene.income_account, scene.income_money_type)
         if scene.income_min:
             assert_len(income, scene.income_expect)
@@ -348,7 +348,7 @@ class OverseaBizTestBase(OverseaTestBase):
         每个 check 字典支持的 key:
             assert_func (可选) 自定义无参断言函数（存在时忽略其余 key）
             field       (必填) 查询字段（含 pay_room_money / popularity 特殊字段）
-            uid         (可选) 用户 ID，默认 config.oversea_payUid
+            uid         (可选) 用户 ID，默认 config.oversea_pay_uid
             expected    (可选) 期望相等值（assert_equal）
             min         (可选) 期望最小值（assert_len）
             money_type  (可选) 货币类型（single_money 专用）
@@ -359,7 +359,7 @@ class OverseaBizTestBase(OverseaTestBase):
                 check['assert_func']()
                 continue
             field = check['field']
-            uid = check.get('uid', config.oversea_payUid)
+            uid = check.get('uid', config.oversea_pay_uid)
             actual: int | None
             if field in EXTRA_QUERY_MAP:
                 actual = EXTRA_QUERY_MAP[field](uid)

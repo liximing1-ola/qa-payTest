@@ -7,7 +7,7 @@ common/Assert.py 单元测试（断言工具）
 import unittest
 from unittest.mock import patch
 
-from common import Consts
+from common import consts
 
 
 class TestAssertCode(unittest.TestCase):
@@ -15,7 +15,7 @@ class TestAssertCode(unittest.TestCase):
 
     def setUp(self):
         """清理全局状态"""
-        Consts.fail_case_reason.clear()
+        consts.fail_case_reason.clear()
 
     @patch('common.assert_util._delay_for_rpc')
     def test_success(self, _mock_delay):
@@ -23,7 +23,7 @@ class TestAssertCode(unittest.TestCase):
         from common.assert_util import assert_code
         result = assert_code(200, 200)
         self.assertTrue(result)
-        self.assertEqual(len(Consts.fail_case_reason), 0)
+        self.assertEqual(len(consts.fail_case_reason), 0)
 
     @patch('common.assert_util._delay_for_rpc')
     def test_failure(self, _mock_delay):
@@ -31,15 +31,15 @@ class TestAssertCode(unittest.TestCase):
         from common.assert_util import assert_code
         with self.assertRaises(AssertionError):
             assert_code(500, 200)
-        self.assertEqual(len(Consts.fail_case_reason), 1)
-        self.assertIn('500', Consts.fail_case_reason[0])
+        self.assertEqual(len(consts.fail_case_reason), 1)
+        self.assertIn('500', consts.fail_case_reason[0])
 
 
 class TestAssertEqual(unittest.TestCase):
     """assert_equal 成功/失败"""
 
     def setUp(self):
-        Consts.fail_case_reason.clear()
+        consts.fail_case_reason.clear()
 
     def test_success(self):
         """值相等时应返回 True"""
@@ -52,14 +52,14 @@ class TestAssertEqual(unittest.TestCase):
         from common.assert_util import assert_equal
         with self.assertRaises(AssertionError):
             assert_equal(1, 2)
-        self.assertEqual(len(Consts.fail_case_reason), 1)
+        self.assertEqual(len(consts.fail_case_reason), 1)
 
 
 class TestAssertLen(unittest.TestCase):
     """assert_len 成功/失败"""
 
     def setUp(self):
-        Consts.fail_case_reason.clear()
+        consts.fail_case_reason.clear()
 
     def test_success(self):
         """实际长度 >= 预期时应返回 True"""
@@ -78,14 +78,14 @@ class TestAssertLen(unittest.TestCase):
         from common.assert_util import assert_len
         with self.assertRaises(AssertionError):
             assert_len(1, 5)
-        self.assertEqual(len(Consts.fail_case_reason), 1)
+        self.assertEqual(len(consts.fail_case_reason), 1)
 
 
 class TestAssertInText(unittest.TestCase):
     """assert_in_text 成功/失败"""
 
     def setUp(self):
-        Consts.fail_case_reason.clear()
+        consts.fail_case_reason.clear()
 
     def test_success(self):
         """body 中包含预期文本时应返回 True"""
@@ -98,14 +98,14 @@ class TestAssertInText(unittest.TestCase):
         from common.assert_util import assert_in_text
         with self.assertRaises(AssertionError):
             assert_in_text({'msg': '操作失败'}, '操作成功')
-        self.assertEqual(len(Consts.fail_case_reason), 1)
+        self.assertEqual(len(consts.fail_case_reason), 1)
 
 
 class TestAssertBody(unittest.TestCase):
     """assert_body 成功/失败"""
 
     def setUp(self):
-        Consts.fail_case_reason.clear()
+        consts.fail_case_reason.clear()
 
     def test_success(self):
         """字段值匹配时应返回 True"""
@@ -118,14 +118,14 @@ class TestAssertBody(unittest.TestCase):
         from common.assert_util import assert_body
         with self.assertRaises(AssertionError):
             assert_body({'code': 500}, 'code', 200)
-        self.assertEqual(len(Consts.fail_case_reason), 1)
+        self.assertEqual(len(consts.fail_case_reason), 1)
 
 
 class TestAssertBetween(unittest.TestCase):
     """assert_between 成功/失败"""
 
     def setUp(self):
-        Consts.fail_case_reason.clear()
+        consts.fail_case_reason.clear()
 
     def test_success_within_range(self):
         """数值在范围内应返回 True"""
@@ -155,30 +155,30 @@ class TestAssertBetween(unittest.TestCase):
 
 
 class TestRecordFailure(unittest.TestCase):
-    """_record_failure 记录到 Consts.fail_case_reason"""
+    """_record_failure 记录到 consts.fail_case_reason"""
 
     def setUp(self):
-        Consts.fail_case_reason.clear()
+        consts.fail_case_reason.clear()
 
     def test_records_reason(self):
         """应将原因追加到 fail_case_reason"""
         from common.assert_util import _record_failure
         _record_failure('test failure reason')
-        self.assertEqual(Consts.fail_case_reason, ['test failure reason'])
+        self.assertEqual(consts.fail_case_reason, ['test failure reason'])
 
     def test_multiple_failures(self):
         """多次失败应累积记录"""
         from common.assert_util import _record_failure
         _record_failure('reason 1')
         _record_failure('reason 2')
-        self.assertEqual(len(Consts.fail_case_reason), 2)
+        self.assertEqual(len(consts.fail_case_reason), 2)
 
 
 class TestAssertWrapper(unittest.TestCase):
     """_assert_wrapper 异常透传"""
 
     def setUp(self):
-        Consts.fail_case_reason.clear()
+        consts.fail_case_reason.clear()
 
     def test_assertion_error_propagates(self):
         """AssertionError 应直接透传不被包装"""
@@ -202,8 +202,8 @@ class TestAssertWrapper(unittest.TestCase):
 
         with self.assertRaises(RuntimeError):
             error_func()
-        self.assertEqual(len(Consts.fail_case_reason), 1)
-        self.assertIn('执行异常', Consts.fail_case_reason[0])
+        self.assertEqual(len(consts.fail_case_reason), 1)
+        self.assertIn('执行异常', consts.fail_case_reason[0])
 
     def test_none_return_becomes_true(self):
         """函数返回 None 时应转为 True"""

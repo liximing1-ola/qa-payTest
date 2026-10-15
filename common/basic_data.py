@@ -8,7 +8,7 @@ import logging
 import urllib.parse
 from typing import Any
 
-from common.Config import config
+from common.config import config
 
 logger = logging.getLogger(__name__)
 
@@ -478,8 +478,8 @@ OVERSEA_PAY_TYPE_HANDLERS = {
 def encode_data(payType: str = 'package',
                money: int = 1000,
                rid: str = config.live_role['auto_rid'],
-               uid: int = config.rewardUid,
-               giftId: int = config.giftId['7'],
+               uid: int = config.reward_uid,
+               giftId: int = config.gift_id['7'],
                giftType: str = 'normal',
                cid: int = 5,
                boxType: str = 'copper',
@@ -517,7 +517,7 @@ def encode_data(payType: str = 'package',
         ValueError: payType 不存在时抛出
     """
     if uids is None:
-        uids = (str(config.rewardUid), str(config.masterUid))
+        uids = (str(config.reward_uid), str(config.master_uid))
 
     if payType not in PAY_TYPE_HANDLERS:
         raise ValueError(f'payType "{payType}" is not supported')
@@ -550,7 +550,7 @@ def encode_data(payType: str = 'package',
 def encode_oversea_data(payType: str = 'package',
                  money: int = 600,
                  rid: str = config.oversea_room['business_joy'],
-                 uid: int = config.oversea_testUid,
+                 uid: int = config.oversea_test_uid,
                  giftId: int = 10,
                  giftType: str = 'normal',
                  cid: int = 5,
@@ -587,7 +587,7 @@ def encode_oversea_data(payType: str = 'package',
         ValueError: payType 不存在时抛出
     """
     if uids is None:
-        uids = (str(config.oversea_testUid), str(config.oversea_brokerUid))
+        uids = (str(config.oversea_test_uid), str(config.oversea_broker_uid))
 
     if payType not in OVERSEA_PAY_TYPE_HANDLERS:
         raise ValueError(f'payType "{payType}" is not supported')
@@ -619,6 +619,6 @@ if __name__ == '__main__':
                       num=2,
                       star=8,
                       money=2100,
-                      giftId=config.giftId['47'],
-                      uids=(str(config.rewardUid), str(config.gsUid)))
+                      giftId=config.gift_id['47'],
+                      uids=(str(config.reward_uid), str(config.gs_uid)))
     logger.info(data)

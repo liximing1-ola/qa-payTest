@@ -7,7 +7,7 @@
 from case.base import PayCase, PayTestBase
 
 from common.con_mysql import ConMysql as mysql
-from common.Config import config
+from common.config import config
 from common.method import calculate_vip_exp
 from common.run_failed import Retry
 
@@ -16,65 +16,65 @@ SCENES = [
         des='打赏金豆礼物但金豆不足的场景',
         setup=[
             {'action': 'delete_beans'},
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 10000}}
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 10000}}
         ],
-        data={'giftId': config.giftId['362'], 'giftType': 'bean'},
+        data={'giftId': config.gift_id['362'], 'giftType': 'bean'},
         checks=[
-            {'field': 'bean', 'uid': config.rewardUid, 'expected': 0}
+            {'field': 'bean', 'uid': config.reward_uid, 'expected': 0}
         ],
         success=0,
         msg='金豆不足'),
     PayCase(
         des='打赏金豆礼物的场景',
         setup=[
-            {'action': 'insert_beans', 'params': {'uid': config.payUid, 'money_coupon': 6000}}
+            {'action': 'insert_beans', 'params': {'uid': config.pay_uid, 'money_coupon': 6000}}
         ],
-        data={'payType': 'package-more', 'giftId': config.giftId['362'], 'giftType': 'bean',
-              'num': 6, 'uids': (str(config.rewardUid),)},
+        data={'payType': 'package-more', 'giftId': config.gift_id['362'], 'giftType': 'bean',
+              'num': 6, 'uids': (str(config.reward_uid),)},
         checks=[
-            {'field': 'bean', 'uid': config.payUid, 'expected': 0},
-            {'field': 'bean', 'uid': config.rewardUid, 'expected': 3000}
+            {'field': 'bean', 'uid': config.pay_uid, 'expected': 0},
+            {'field': 'bean', 'uid': config.reward_uid, 'expected': 3000}
         ]),
     PayCase(
         des='打赏金豆礼物不足用钻转换的场景',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 10000}},
-            {'action': 'update_money', 'params': {'uid': config.rewardUid}},
-            {'action': 'insert_beans', 'params': {'uid': config.payUid, 'money_coupon': 500}}
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 10000}},
+            {'action': 'update_money', 'params': {'uid': config.reward_uid}},
+            {'action': 'insert_beans', 'params': {'uid': config.pay_uid, 'money_coupon': 500}}
         ],
-        queries=[('vip_level', lambda: int(mysql.select_user_info_sql('pay_room_money', config.payUid)))],
-        data={'payType': 'package-exchange', 'giftId': config.giftId['362'], 'giftType': 'bean'},
+        queries=[('vip_level', lambda: int(mysql.select_user_info_sql('pay_room_money', config.pay_uid)))],
+        data={'payType': 'package-exchange', 'giftId': config.gift_id['362'], 'giftType': 'bean'},
         checks=[
-            {'field': 'bean', 'uid': config.payUid, 'expected': 500},
-            {'field': 'bean', 'uid': config.rewardUid, 'expected': 500},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 9000},
-            {'field': 'pay_room_money', 'uid': config.payUid,
+            {'field': 'bean', 'uid': config.pay_uid, 'expected': 500},
+            {'field': 'bean', 'uid': config.reward_uid, 'expected': 500},
+            {'field': 'sum_money', 'uid': config.pay_uid, 'expected': 9000},
+            {'field': 'pay_room_money', 'uid': config.pay_uid,
              'expected': lambda ctx: ctx['vip_level'] + calculate_vip_exp(money_type='bean', pay_off=1000)}
         ]),
     PayCase(
         des='私聊打赏钻石礼物时金豆不再抵扣平台手续费',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
-            {'action': 'update_money', 'params': {'uid': config.rewardUid}},
-            {'action': 'insert_beans', 'params': {'uid': config.payUid, 'money_coupon': 200}}
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 1000}},
+            {'action': 'update_money', 'params': {'uid': config.reward_uid}},
+            {'action': 'insert_beans', 'params': {'uid': config.pay_uid, 'money_coupon': 200}}
         ],
         data={'payType': 'chat-gift'},
         checks=[
-            {'field': 'bean', 'uid': config.payUid, 'expected': 200},
-            {'field': 'single_money', 'uid': config.payUid, 'expected': 0, 'kwargs': {'money_type': 'money'}},
-            {'field': 'sum_money', 'uid': config.rewardUid, 'expected': 720}
+            {'field': 'bean', 'uid': config.pay_uid, 'expected': 200},
+            {'field': 'single_money', 'uid': config.pay_uid, 'expected': 0, 'kwargs': {'money_type': 'money'}},
+            {'field': 'sum_money', 'uid': config.reward_uid, 'expected': 720}
         ]),
     PayCase(
         des='房间打赏钻石礼物时金豆不再抵扣平台手续费',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
-            {'action': 'update_money', 'params': {'uid': config.rewardUid}},
-            {'action': 'insert_beans', 'params': {'uid': config.payUid, 'money_coupon': 400}}
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 1000}},
+            {'action': 'update_money', 'params': {'uid': config.reward_uid}},
+            {'action': 'insert_beans', 'params': {'uid': config.pay_uid, 'money_coupon': 400}}
         ],
         checks=[
-            {'field': 'bean', 'uid': config.payUid, 'expected': 400},
-            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 620},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
+            {'field': 'bean', 'uid': config.pay_uid, 'expected': 400},
+            {'field': 'single_money', 'uid': config.reward_uid, 'expected': 620},
+            {'field': 'sum_money', 'uid': config.pay_uid, 'expected': 0}
         ]),
 ]
 
@@ -89,18 +89,18 @@ class TestPayBean(PayTestBase):
 
     def setUp(self) -> None:
         """测试前置清理"""
-        mysql.delete_user_bean_sql(config.payUid, config.rewardUid)
+        mysql.delete_user_bean_sql(config.pay_uid, config.reward_uid)
 
     def tearDown(self) -> None:
         """测试后置清理"""
-        mysql.delete_user_bean_sql(config.payUid, config.rewardUid)
+        mysql.delete_user_bean_sql(config.pay_uid, config.reward_uid)
 
     def _prepare_test_data(self, setup_steps):
         """金豆账户准备步骤（delete_beans / insert_beans），其余步骤转发基类"""
         for step in setup_steps:
             action = step['action']
             if action == 'delete_beans':
-                mysql.delete_user_bean_sql(config.payUid, config.rewardUid)
+                mysql.delete_user_bean_sql(config.pay_uid, config.reward_uid)
             elif action == 'insert_beans':
                 mysql.insert_bean_sql(**step['params'])
             else:

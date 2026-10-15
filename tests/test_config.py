@@ -1,5 +1,5 @@
 """
-common/Config.py 契约测试（测试数据夹具锁定）
+common/config.py 契约测试（测试数据夹具锁定）
 
 锁定各域共享实体的当前取值与结构，任何"静默改数据"都会在此显式失败；
 无外部依赖，可直接运行：
@@ -8,7 +8,7 @@ common/Config.py 契约测试（测试数据夹具锁定）
 import unittest
 from dataclasses import fields
 
-from common.Config import BBUserConfig, CommodityConfig, LiveRoleConfig, OverseaRoomConfig, OverseaUserConfig, config
+from common.config import BBUserConfig, CommodityConfig, LiveRoleConfig, OverseaRoomConfig, OverseaUserConfig, config
 
 
 class TestBBUserEntities(unittest.TestCase):
@@ -16,21 +16,21 @@ class TestBBUserEntities(unittest.TestCase):
 
     def test_base_uids(self):
         """打赏者 / 普通被打赏者 / 打包结算 / 公会等基础实体"""
-        self.assertEqual(config.bb_user.payUid, 103273407)
-        self.assertEqual(config.bb_user.testUid, 105002312)
+        self.assertEqual(config.bb_user.pay_uid, 103273407)
+        self.assertEqual(config.bb_user.test_uid, 105002312)
         self.assertEqual(config.bb_user.pack_cal_uid, 105002313)
-        self.assertEqual(config.bb_user.gsUid, 105002325)
+        self.assertEqual(config.bb_user.gs_uid, 105002325)
 
     def test_room_ids(self):
         """VIP 房 / 颜值房 / 舰队房房间号"""
-        self.assertEqual(config.bb_user.vipRoomRid, 200089706)
-        self.assertEqual(config.bb_user.prettyRid, 200089942)
-        self.assertEqual(config.bb_user.fleetRid, 200091067)
+        self.assertEqual(config.bb_user.vip_room_rid, 200089706)
+        self.assertEqual(config.bb_user.pretty_rid, 200089942)
+        self.assertEqual(config.bb_user.fleet_rid, 200091067)
 
     def test_converged_entities(self):
         """原散落在用例文件中的裸实体已收敛至此（一代宗师 / 商业房 / 自定义分成）"""
-        self.assertEqual(config.bb_user.masterUid, 100500338)
-        self.assertEqual(config.bb_user.businessUid, 105002103)
+        self.assertEqual(config.bb_user.master_uid, 100500338)
+        self.assertEqual(config.bb_user.business_uid, 105002103)
         self.assertEqual(config.bb_user.custom_rate_uid, 100500205)
 
 
@@ -46,41 +46,41 @@ class TestPropertyConsistency(unittest.TestCase):
 
     def test_bb_uid_properties(self):
         """BB 便捷属性直接委托 bb_user，避免双源定义"""
-        self.assertEqual(config.payUid, config.bb_user.payUid)
-        self.assertEqual(config.rewardUid, config.bb_user.testUid)
-        self.assertEqual(config.masterUid, config.bb_user.masterUid)
-        self.assertEqual(config.businessUid, config.bb_user.businessUid)
-        self.assertEqual(config.gsUid, config.bb_user.gsUid)
+        self.assertEqual(config.pay_uid, config.bb_user.pay_uid)
+        self.assertEqual(config.reward_uid, config.bb_user.test_uid)
+        self.assertEqual(config.master_uid, config.bb_user.master_uid)
+        self.assertEqual(config.business_uid, config.bb_user.business_uid)
+        self.assertEqual(config.gs_uid, config.bb_user.gs_uid)
 
     def test_oversea_uid_properties(self):
-        self.assertEqual(config.oversea_payUid, config.oversea_user.payUid)
-        self.assertEqual(config.oversea_testUid, config.oversea_user.testUid)
-        self.assertEqual(config.oversea_brokerUid, config.oversea_user.brokerUid)
-        self.assertEqual(config.oversea_fleetUid, config.oversea_user.fleet_uid)
+        self.assertEqual(config.oversea_pay_uid, config.oversea_user.pay_uid)
+        self.assertEqual(config.oversea_test_uid, config.oversea_user.test_uid)
+        self.assertEqual(config.oversea_broker_uid, config.oversea_user.broker_uid)
+        self.assertEqual(config.oversea_fleet_uid, config.oversea_user.fleet_uid)
 
     def test_master_uid_single_source(self):
-        """masterUid 必须定义在 bb_user 字段中，而非属性内硬编码"""
+        """master_uid 必须定义在 bb_user 字段中，而非属性内硬编码"""
         names = [f.name for f in fields(BBUserConfig)]
-        self.assertIn('masterUid', names)
-        self.assertEqual(config.masterUid, 100500338)
+        self.assertIn('master_uid', names)
+        self.assertEqual(config.master_uid, 100500338)
 
 
 class TestGiftContract(unittest.TestCase):
-    """礼物 ID 映射结构与关键值锁定（用例以 config.giftId['5'] 索引，防 KeyError 回归）"""
+    """礼物 ID 映射结构与关键值锁定（用例以 config.gift_id['5'] 索引，防 KeyError 回归）"""
 
     def test_gift_id_keys(self):
-        self.assertEqual(sorted(config.giftId, key=int),
+        self.assertEqual(sorted(config.gift_id, key=int),
                          ['5', '7', '11', '46', '47', '54', '62', '362'])
 
     def test_gift_id_values(self):
-        self.assertEqual(config.giftId['5'], 5)
-        self.assertEqual(config.giftId['46'], 46)
-        self.assertEqual(config.giftId['362'], 362)
+        self.assertEqual(config.gift_id['5'], 5)
+        self.assertEqual(config.gift_id['46'], 46)
+        self.assertEqual(config.gift_id['362'], 362)
 
     def test_oversea_gift_id(self):
-        self.assertEqual(sorted(config.oversea_giftId, key=int),
+        self.assertEqual(sorted(config.oversea_gift_id, key=int),
                          ['10', '46', '47', '773', '774'])
-        self.assertEqual(config.oversea_giftId['773'], 773)
+        self.assertEqual(config.oversea_gift_id['773'], 773)
 
 
 class TestRoleAndCommodityContract(unittest.TestCase):
@@ -96,9 +96,9 @@ class TestRoleAndCommodityContract(unittest.TestCase):
         self.assertEqual(config.live_role['live_rid'], config.live_role.live_rid)
 
     def test_oversea_user(self):
-        self.assertEqual(config.oversea_user.payUid, 800350557)
-        self.assertEqual(config.oversea_user.testUid, 800022872)
-        self.assertEqual(config.oversea_user.brokerUid, 800018895)
+        self.assertEqual(config.oversea_user.pay_uid, 800350557)
+        self.assertEqual(config.oversea_user.test_uid, 800022872)
+        self.assertEqual(config.oversea_user.broker_uid, 800018895)
         self.assertEqual(config.oversea_user.fleet_uid, 800041062)
 
     def test_oversea_room(self):

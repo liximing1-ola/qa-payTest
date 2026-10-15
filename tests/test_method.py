@@ -7,7 +7,7 @@ common/method.py 纯逻辑函数单元测试
 import unittest
 from unittest.mock import Mock, patch
 
-from common import Consts
+from common import consts
 from common.method import (
     _contains_key,
     calculate_vip_exp,
@@ -71,22 +71,22 @@ class TestGetValue(unittest.TestCase):
     """并发结果统计（读写 Consts 全局计数）"""
 
     def setUp(self):
-        Consts.success_num = 0
-        Consts.fail_num = 0
+        consts.success_num = 0
+        consts.fail_num = 0
 
     def test_success_increments_success_num(self):
         get_value({'body': {'success': 1}})
-        self.assertEqual(Consts.success_num, 1)
-        self.assertEqual(Consts.fail_num, 0)
+        self.assertEqual(consts.success_num, 1)
+        self.assertEqual(consts.fail_num, 0)
 
     def test_failure_increments_fail_num(self):
         get_value({'body': {'success': 0}})
-        self.assertEqual(Consts.success_num, 0)
-        self.assertEqual(Consts.fail_num, 1)
+        self.assertEqual(consts.success_num, 0)
+        self.assertEqual(consts.fail_num, 1)
 
     def test_missing_body_increments_fail_num(self):
         get_value({'code': 200})
-        self.assertEqual(Consts.fail_num, 1)
+        self.assertEqual(consts.fail_num, 1)
 
 
 class TestFormatReason(unittest.TestCase):

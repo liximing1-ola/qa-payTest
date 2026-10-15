@@ -8,18 +8,18 @@ import unittest
 
 from Robot import robot
 
-from common import Consts, Logs, method
-from common.Config import config
+from common import consts, logs, method
+from common.config import config
 
 # 应用配置映射
 APP_CONFIG: dict[str, dict[str, str]] = {
-    config.appName['1']: {
+    config.app_name['1']: {
         'dir': '/case',
         'pattern': 'test_pay_punish.py',
         'bot': None,
         'branch_key': 'bb_git_branch'
     },
-    config.appName['2']: {
+    config.app_name['2']: {
         'dir': '/caseLuckyPlay',
         'pattern': 'test_*.py',
         'bot': '1',
@@ -71,7 +71,7 @@ def log_result(test_result: unittest.TextTestResult) -> str:
     des = (f"用例总数：{test_result.testsRun}, "
            f"失败用例数：{len(test_result.failures)}, "
            f"异常用例数：{len(test_result.errors)}")
-    Logs.get_logger('caseResult_2.log').info(des)
+    logs.get_logger('caseResult_2.log').info(des)
     return des
 
 
@@ -84,7 +84,7 @@ def notify_success(app_info: str, test_result: unittest.TextTestResult,
         case_list: 用例列表
     """
     cfg = APP_CONFIG[app_info]
-    branch = config.codeInfo[cfg['branch_key']]
+    branch = config.code_info[cfg['branch_key']]
     des = (f"定时任务:\n{case_list}\n"
            f"用例数：{test_result.testsRun}, 失败数：0, 代码分支：{branch}")
     robot('markdown', des, bot=cfg['bot'])
@@ -98,7 +98,7 @@ def notify_failures(app_info: str, failures: list,
         failures: 失败用例列表
         log_type: 日志类型（failures/errors）
     """
-    Logs.get_logger('failCase.log').error(f"{log_type}: {failures}")
+    logs.get_logger('failCase.log').error(f"{log_type}: {failures}")
     bot = APP_CONFIG[app_info]['bot']
     for case, _ in failures:
         parts = case.id().split('.')
@@ -113,7 +113,7 @@ def handle_result(app_info: str, test_result: unittest.TextTestResult) -> None:
         test_result: 测试结果对象
     """
     log_result(test_result)
-    case_list = method.dict_to_markdown(Consts.case_list_c)
+    case_list = method.dict_to_markdown(consts.case_list_c)
 
     if not test_result.failures and not test_result.errors:
         notify_success(app_info, test_result, case_list)
@@ -130,7 +130,7 @@ def main(app_info: str) -> None:
         app_info: 应用信息
     """
     if app_info not in APP_CONFIG:
-        Logs.get_logger('runCode.log').error(f'未配置的应用，无法执行：{app_info}')
+        logs.get_logger('runCode.log').error(f'未配置的应用，无法执行：{app_info}')
         return
 
     test_result = run_tests(app_info)
@@ -139,7 +139,7 @@ def main(app_info: str) -> None:
 
 
 if __name__ == "__main__":
-    target_app = (config.appName['2']
+    target_app = (config.app_name['2']
                  if platform.node() == config.linux_node['ali']
-                 else config.appName['1'])
+                 else config.app_name['1'])
     main(target_app)

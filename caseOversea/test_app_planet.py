@@ -7,18 +7,18 @@ import unittest
 
 from caseOversea.base import OverseaBizCase, OverseaBizTestBase
 
-from common.Config import config
+from common.config import config
 
 # 场景：星球之旅扣钻石获取礼物（2000-1500=500 钻，背包得到 1 个物品）
 SCENE_001 = OverseaBizCase(
     des='星球之旅扣钻石获取礼物玩法',
     setup=[
-        {'action': 'delete_user_account', 'params': {'table': 'user_commodity', 'uid': config.oversea_payUid}},
+        {'action': 'delete_user_account', 'params': {'table': 'user_commodity', 'uid': config.oversea_pay_uid}},
         {'action': 'delete_user_account',
-         'params': {'table': 'user_journey_planet_record', 'uid': config.oversea_payUid}},
+         'params': {'table': 'user_journey_planet_record', 'uid': config.oversea_pay_uid}},
         {'action': 'delete_user_account',
-         'params': {'table': 'user_journey_planet_draw_record', 'uid': config.oversea_payUid}},
-        {'action': 'update_money', 'params': {'uid': config.oversea_payUid, 'money': 2000}},
+         'params': {'table': 'user_journey_planet_draw_record', 'uid': config.oversea_pay_uid}},
+        {'action': 'update_money', 'params': {'uid': config.oversea_pay_uid, 'money': 2000}},
     ],
     data={'payType': 'journey_planet_draw'},
     checks=[

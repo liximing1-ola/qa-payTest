@@ -5,7 +5,7 @@ APP 海外版支付测试 - 守护开通验证
 """
 from caseOversea.base import OverseaBizCase, OverseaBizTestBase
 
-from common.Config import config
+from common.config import config
 from common.run_failed import Retry
 
 # 场景表：个人守护开通收益分成（非主播 80% / 主播 70%）
@@ -13,26 +13,26 @@ DEFEND_SCENES = [
     OverseaBizCase(
         des='给非主播开通个人守护场景 80%',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.oversea_payUid, 'money': 66600}},
-            {'action': 'update_money', 'params': {'uid': config.oversea_testUid}},
-            {'action': 'clear_extend_money', 'params': {'uid': config.oversea_testUid}},
+            {'action': 'update_money', 'params': {'uid': config.oversea_pay_uid, 'money': 66600}},
+            {'action': 'update_money', 'params': {'uid': config.oversea_test_uid}},
+            {'action': 'clear_extend_money', 'params': {'uid': config.oversea_test_uid}},
         ],
         data={'payType': 'defend', 'money': 66600},
         checks=[
             {'field': 'sum_money', 'expected': 0},
-            {'field': 'money_cash_personal', 'uid': config.oversea_testUid, 'expected': 53280},
+            {'field': 'money_cash_personal', 'uid': config.oversea_test_uid, 'expected': 53280},
         ],
     ),
     OverseaBizCase(
         des='给主播开通个人守护场景 70%',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.oversea_payUid, 'money': 66600}},
-            {'action': 'update_money', 'params': {'uid': config.oversea_brokerUid}},
+            {'action': 'update_money', 'params': {'uid': config.oversea_pay_uid, 'money': 66600}},
+            {'action': 'update_money', 'params': {'uid': config.oversea_broker_uid}},
         ],
-        data={'payType': 'defend', 'money': 66600, 'uid': config.oversea_brokerUid},
+        data={'payType': 'defend', 'money': 66600, 'uid': config.oversea_broker_uid},
         checks=[
             {'field': 'sum_money', 'expected': 0},
-            {'field': 'single_money', 'uid': config.oversea_brokerUid, 'money_type': 'money_cash_b',
+            {'field': 'single_money', 'uid': config.oversea_broker_uid, 'money_type': 'money_cash_b',
              'expected': 46620},
         ],
     ),

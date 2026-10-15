@@ -10,9 +10,9 @@ import unittest
 from common.assert_util import assert_equal
 from common.con_pt_mysql import ConMysql
 from common.con_redis import ConRedis
-from common.Config import config
-from common.Consts import case_list_c, result
-from common.Greedy import Greedy
+from common.config import config
+from common.consts import case_list_c, result
+from common.greedy import Greedy
 
 # 等待 DB 写入传播后再清 Redis 缓存（秒）
 REDIS_CLEAR_WAIT = 1
@@ -79,7 +79,7 @@ class TestPayGreedy(unittest.TestCase):
         self._prepare_test_data([
             {'action': 'update_user_big_area', 'params': {'uids': list(config.oversea_user.values())}},
             {'action': 'update_user_language', 'params': {'uids': list(config.oversea_user.values())}},
-            {'action': 'update_money', 'params': {'uid': config.oversea_payUid, 'gold_coin': 10000}}
+            {'action': 'update_money', 'params': {'uid': config.oversea_pay_uid, 'gold_coin': 10000}}
         ])
 
         # 执行下注
@@ -88,7 +88,7 @@ class TestPayGreedy(unittest.TestCase):
         # 验证数据库
         self._validate_calculation({
             'field': 'single_money',
-            'uid': config.oversea_payUid,
+            'uid': config.oversea_pay_uid,
             'money_type': 'gold_coin',
             'expected_calc': 10000 - bet_data[0] + bet_data[1]
         })
@@ -115,7 +115,7 @@ class TestPayGreedy(unittest.TestCase):
         self._prepare_test_data([
             {'action': 'update_user_big_area', 'params': {'uids': list(config.oversea_user.values()), 'bigArea_id': 3}},
             {'action': 'update_user_language', 'params': {'uids': list(config.oversea_user.values()), 'language': 'ar', 'area_code': 'AR'}},
-            {'action': 'update_money', 'params': {'uid': config.oversea_payUid, 'money': 100000}}
+            {'action': 'update_money', 'params': {'uid': config.oversea_pay_uid, 'money': 100000}}
         ])
 
         # 执行下注
@@ -124,7 +124,7 @@ class TestPayGreedy(unittest.TestCase):
         # 验证数据库
         self._validate_calculation({
             'field': 'sum_money',
-            'uid': config.oversea_payUid,
+            'uid': config.oversea_pay_uid,
             'expected_calc': 100000 - bet_data[0] + bet_data[1]
         })
 

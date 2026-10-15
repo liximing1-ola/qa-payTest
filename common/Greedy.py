@@ -10,7 +10,7 @@ import random
 import time
 
 from common.con_pt_mysql import ConMysql
-from common.Config import config
+from common.config import config
 from common.request_util import post_request_session
 
 logger = logging.getLogger(__name__)
@@ -125,17 +125,17 @@ class Greedy:
         """
         try:
             # 等待可投注状态
-            round_id, counter_range = Greedy._wait_for_state(config.oversea_payUid)
+            round_id, counter_range = Greedy._wait_for_state(config.oversea_pay_uid)
             if not round_id:
                 return [0, 0]
 
             # 执行下注
             for _ in range(BET_COUNT):
                 vid = random.randint(*VID_RANGE)
-                Greedy.stake(config.oversea_payUid, vid, counter_range or 0, round_id or 0, money_type)
+                Greedy.stake(config.oversea_pay_uid, vid, counter_range or 0, round_id or 0, money_type)
 
             # 等待开奖结果
-            counter_all, prize = Greedy._wait_for_prize(config.oversea_payUid, round_id)
+            counter_all, prize = Greedy._wait_for_prize(config.oversea_pay_uid, round_id)
             return [counter_all, prize]
 
         except Exception as e:

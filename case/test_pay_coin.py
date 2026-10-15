@@ -6,7 +6,7 @@ coin 支付测试
 from case.base import PayCase, PayTestBase
 
 from common.con_mysql import ConMysql as mysql
-from common.Config import config
+from common.config import config
 from common.method import calculate_vip_exp
 from common.run_failed import Retry
 
@@ -14,26 +14,26 @@ SCENES = [
     PayCase(
         des='余额兑换金币场景',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}}
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 1000}}
         ],
         data={'payType': 'exchange_gold'},
         checks=[
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 400},
-            {'field': 'single_money', 'uid': config.payUid, 'expected': 600, 'kwargs': {'money_type': 'gold_coin'}}
+            {'field': 'sum_money', 'uid': config.pay_uid, 'expected': 400},
+            {'field': 'single_money', 'uid': config.pay_uid, 'expected': 600, 'kwargs': {'money_type': 'gold_coin'}}
         ]),
     PayCase(
         des='房间打赏金币礼物的场景',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'gold_coin': 100}},
-            {'action': 'clear_user_data', 'uids': (config.rewardUid, config.masterUid)}
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'gold_coin': 100}},
+            {'action': 'clear_user_data', 'uids': (config.reward_uid, config.master_uid)}
         ],
-        queries=[('vip_level', lambda: int(mysql.select_user_info_sql('pay_room_money', config.payUid)))],
-        data={'payType': 'package-more', 'money': 20, 'giftId': config.giftId['62'], 'giftType': 'coin'},
+        queries=[('vip_level', lambda: int(mysql.select_user_info_sql('pay_room_money', config.pay_uid)))],
+        data={'payType': 'package-more', 'money': 20, 'giftId': config.gift_id['62'], 'giftType': 'coin'},
         checks=[
-            {'field': 'single_money', 'uid': config.payUid, 'expected': 60, 'kwargs': {'money_type': 'gold_coin'}},
-            {'field': 'single_money', 'uid': config.masterUid, 'expected': 12, 'kwargs': {'money_type': 'gold_coin'}},
-            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 12, 'kwargs': {'money_type': 'gold_coin'}},
-            {'field': 'pay_room_money', 'uid': config.payUid,
+            {'field': 'single_money', 'uid': config.pay_uid, 'expected': 60, 'kwargs': {'money_type': 'gold_coin'}},
+            {'field': 'single_money', 'uid': config.master_uid, 'expected': 12, 'kwargs': {'money_type': 'gold_coin'}},
+            {'field': 'single_money', 'uid': config.reward_uid, 'expected': 12, 'kwargs': {'money_type': 'gold_coin'}},
+            {'field': 'pay_room_money', 'uid': config.pay_uid,
              'expected': lambda ctx: ctx['vip_level'] + calculate_vip_exp(money_type='coin', pay_off=40)}
         ]),
 ]

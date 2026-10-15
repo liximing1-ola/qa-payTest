@@ -8,7 +8,7 @@ import unittest
 from unittest.mock import Mock, call, patch
 
 from common.con_mysql import ConMysql, MySQLConnection
-from common.Config import config
+from common.config import config
 
 
 class TestSelectUserInfoSql(unittest.TestCase):
@@ -60,7 +60,7 @@ class TestSelectUserInfoSql(unittest.TestCase):
             ConMysql.select_user_info_sql('relation_id', uid=111, cid=7)
         m.assert_called_once_with(
             'SELECT id FROM xs_relation_defend WHERE uid=%s AND defend_uid=%s AND relation_id=%s',
-            params=(config.payUid, 111, 7), default=0)
+            params=(config.pay_uid, 111, 7), default=0)
 
     def test_unknown_account_type_returns_none(self):
         """未知 accountType 应返回 None 且不触发查询"""
@@ -324,8 +324,8 @@ class TestCheckXsGiftConfig(unittest.TestCase):
     @patch('common.con_mysql.config')
     @patch.object(MySQLConnection, '_update_xs_gift_status')
     def test_calls_with_gift_ids(self, mock_update, mock_config):
-        """应使用 config.giftId 的值调用 _update_xs_gift_status"""
-        mock_config.giftId = {'a': 1, 'b': 2}
+        """应使用 config.gift_id 的值调用 _update_xs_gift_status"""
+        mock_config.gift_id = {'a': 1, 'b': 2}
         ConMysql.check_xs_gift_config()
         mock_update.assert_called_once_with((1, 2))
 

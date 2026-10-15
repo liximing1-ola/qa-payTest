@@ -7,7 +7,7 @@ import unittest
 
 from caseOversea.base import OverseaAreaTestBase, PayScene
 
-from common.Config import config
+from common.config import config
 
 SCENES = [
     PayScene(

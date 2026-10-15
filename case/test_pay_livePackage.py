@@ -8,7 +8,7 @@ from case.base import PayCase, PayTestBase
 
 from common.assert_util import assert_len
 from common.con_mysql import ConMysql as mysql
-from common.Config import config
+from common.config import config
 from common.run_failed import Retry
 from common.sql_script import UserMoneyOperations
 
@@ -27,20 +27,20 @@ SCENES = [
              'kwargs': {'money_type': 'money_cash'}},
             {'field': 'single_money', 'uid': CEO_UID, 'expected': 210,
              'kwargs': {'money_type': 'money_cash'}},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
+            {'field': 'sum_money', 'uid': config.pay_uid, 'expected': 0}
         ],
         report='case_list_b'),
     PayCase(
         des='直播间内箱子打赏主播-公会长分成60:21',
         prepare=lambda t: t._prepare_broker_data(TEST_UID, CEO_UID, pay_money=700),
-        data={'money': 600, 'rid': LIVE_RID, 'giftId': config.giftId['46'],
+        data={'money': 600, 'rid': LIVE_RID, 'giftId': config.gift_id['46'],
               'uid': TEST_UID, 'star': 1},
         checks=[
             {'field': 'single_money', 'uid': TEST_UID, 'expected': 300 * 0.6,
              'kwargs': {'money_type': 'money_cash'}, 'assert_func': assert_len},
             {'field': 'single_money', 'uid': CEO_UID, 'expected': 300 * 0.21,
              'kwargs': {'money_type': 'money_cash'}, 'assert_func': assert_len},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 100}
+            {'field': 'sum_money', 'uid': config.pay_uid, 'expected': 100}
         ],
         report='case_list_b'),
     PayCase(
@@ -49,7 +49,7 @@ SCENES = [
         data={'payType': 'package-knightDefend', 'money': 99900,
               'uid': TEST_UID, 'rid': LIVE_RID},
         checks=[
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 100},
+            {'field': 'sum_money', 'uid': config.pay_uid, 'expected': 100},
             {'field': 'single_money', 'uid': TEST_UID, 'expected': 59940,
              'kwargs': {'money_type': 'money_cash'}},
             {'field': 'single_money', 'uid': CEO_UID, 'expected': 20979,
@@ -65,20 +65,20 @@ SCENES = [
              'kwargs': {'money_type': 'money_cash'}},
             {'field': 'single_money', 'uid': CEO_UID, 'expected': 200,
              'kwargs': {'money_type': 'money_cash'}},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
+            {'field': 'sum_money', 'uid': config.pay_uid, 'expected': 0}
         ],
         report='case_list_b'),
     PayCase(
         des='私聊打赏箱子主播-公会长分成60:20',
         prepare=lambda t: t._prepare_broker_data(TEST_UID, CEO_UID, pay_money=1000),
         data={'payType': 'chat-gift', 'money': 600, 'uid': TEST_UID,
-              'giftId': config.giftId['46'], 'star': 1},
+              'giftId': config.gift_id['46'], 'star': 1},
         checks=[
             {'field': 'single_money', 'uid': TEST_UID, 'expected': 300 * 0.6,
              'kwargs': {'money_type': 'money_cash'}, 'assert_func': assert_len},
             {'field': 'single_money', 'uid': CEO_UID, 'expected': 300 * 0.20,
              'kwargs': {'money_type': 'money_cash'}, 'assert_func': assert_len},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 400}
+            {'field': 'sum_money', 'uid': config.pay_uid, 'expected': 400}
         ],
         report='case_list_b'),
     PayCase(
@@ -92,32 +92,32 @@ SCENES = [
              'kwargs': {'money_type': 'money_cash'}},
             {'field': 'single_money', 'uid': CEO_UID, 'expected': 210,
              'kwargs': {'money_type': 'money_cash'}},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
+            {'field': 'sum_money', 'uid': config.pay_uid, 'expected': 0}
         ],
         report='case_list_b'),
     PayCase(
         des='直播间打赏麦下用户分成62:38',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 100}},
-            {'action': 'update_money', 'params': {'uid': config.rewardUid}}
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 100}},
+            {'action': 'update_money', 'params': {'uid': config.reward_uid}}
         ],
-        data={'giftId': config.giftId['5'], 'rid': LIVE_RID, 'money': 100},
+        data={'giftId': config.gift_id['5'], 'rid': LIVE_RID, 'money': 100},
         checks=[
-            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 62,
+            {'field': 'single_money', 'uid': config.reward_uid, 'expected': 62,
              'kwargs': {'money_type': 'money_cash_b'}},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
+            {'field': 'sum_money', 'uid': config.pay_uid, 'expected': 0}
         ],
         report='case_list_b'),
     PayCase(
         des='主播在非直播间被打赏70%进个人魅力',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 1000}},
             {'action': 'update_money', 'params': {'uid': TEST_UID}}
         ],
         data={'uid': TEST_UID},
         checks=[
             {'field': 'single_money', 'uid': TEST_UID, 'expected': 700},
-            {'field': 'sum_money', 'uid': config.payUid, 'expected': 0}
+            {'field': 'sum_money', 'uid': config.pay_uid, 'expected': 0}
         ],
         report='case_list_b'),
 ]
@@ -132,7 +132,7 @@ class TestPayLivePackage(PayTestBase):
         mysql.update_user_info_sql('chatroom', test_uid)  # 商业房房主
         mysql.update_user_info_sql('broker_user', test_uid, ceo_uid)  # 打包结算
         mysql.check_user_xs_broker(ceo_uid)  # 公会长
-        UserMoneyOperations.update(config.payUid, money=pay_money)
+        UserMoneyOperations.update(config.pay_uid, money=pay_money)
         mysql.update_user_money_clear_sql(test_uid, ceo_uid)
         if extra_steps:
             for step in extra_steps:

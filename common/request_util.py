@@ -9,8 +9,8 @@ from typing import Any
 
 import requests
 
-from common.Config import config
-from common.Session import Session
+from common.config import config
+from common.session import Session
 
 # 日志配置
 logger = logging.getLogger(__name__)

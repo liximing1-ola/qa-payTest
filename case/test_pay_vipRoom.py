@@ -5,51 +5,51 @@
 """
 from case.base import PayCase, PayTestBase
 
-from common.Config import config
+from common.config import config
 from common.run_failed import Retry
 
 # 个人房 rid（vip>5级不回收）
-VIP_ROOM_RID = config.bb_user.vipRoomRid
+VIP_ROOM_RID = config.bb_user.vip_room_rid
 
 SCENES = [
     PayCase(
         des='个人房礼物打赏给用户（mcb）',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 30, 'money_cash': 30,
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 30, 'money_cash': 30,
                                                    'money_cash_b': 30, 'money_b': 10}},
-            {'action': 'update_money', 'params': {'uid': config.rewardUid}}
+            {'action': 'update_money', 'params': {'uid': config.reward_uid}}
         ],
-        data={'payType': 'package', 'money': 100, 'rid': VIP_ROOM_RID, 'giftId': config.giftId['5']},
+        data={'payType': 'package', 'money': 100, 'rid': VIP_ROOM_RID, 'giftId': config.gift_id['5']},
         checks=[
-            {'field': 'single_money', 'uid': config.rewardUid, 'expected': 62},
+            {'field': 'single_money', 'uid': config.reward_uid, 'expected': 62},
             {'field': 'sum_money', 'expected': 0}
         ],
         report='case_list_b'),
     PayCase(
         des='个人房打赏box给用户（mcb）',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 400, 'money_cash': 100,
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money': 400, 'money_cash': 100,
                                                    'money_cash_b': 100, 'money_b': 100}},
-            {'action': 'update_money', 'params': {'uid': config.rewardUid}}
+            {'action': 'update_money', 'params': {'uid': config.reward_uid}}
         ],
         data={'payType': 'package', 'money': 600, 'rid': VIP_ROOM_RID,
-              'giftId': config.giftId['46'], 'star': 1},
+              'giftId': config.gift_id['46'], 'star': 1},
         checks=[
             {'field': 'sum_money', 'expected': 100},
-            {'field': 'single_money', 'uid': config.rewardUid, 'min_value': 300 * 0.62},
-            {'field': 'sum_money', 'uid': config.rewardUid, 'min_value': 300 * 0.62}
+            {'field': 'single_money', 'uid': config.reward_uid, 'min_value': 300 * 0.62},
+            {'field': 'sum_money', 'uid': config.reward_uid, 'min_value': 300 * 0.62}
         ],
         report='case_list_b'),
     PayCase(
         des='个人房打赏钻石礼物给GS（mcb）',
         setup=[
-            {'action': 'update_money', 'params': {'uid': config.payUid, 'money_cash_b': 100}},
-            {'action': 'update_money', 'params': {'uid': config.gsUid}}
+            {'action': 'update_money', 'params': {'uid': config.pay_uid, 'money_cash_b': 100}},
+            {'action': 'update_money', 'params': {'uid': config.gs_uid}}
         ],
-        data={'money': 100, 'rid': VIP_ROOM_RID, 'uid': config.gsUid, 'giftId': config.giftId['5']},
+        data={'money': 100, 'rid': VIP_ROOM_RID, 'uid': config.gs_uid, 'giftId': config.gift_id['5']},
         checks=[
-            {'field': 'single_money', 'uid': config.gsUid, 'expected': 70},
-            {'field': 'sum_money', 'uid': config.gsUid, 'expected': 70},
+            {'field': 'single_money', 'uid': config.gs_uid, 'expected': 70},
+            {'field': 'sum_money', 'uid': config.gs_uid, 'expected': 70},
             {'field': 'sum_money', 'expected': 0}
         ],
         report='case_list_b'),
