@@ -90,12 +90,12 @@ qa-payTest/
 
 | 域 | 夹具模块 | 说明 |
 |----|----------|------|
-| 主站（BB）+ 海外版 | `common/config.py` | `bb_user` / `live_role` / `oversea_user` / `oversea_room` / `giftId` / `oversea_giftId` / `commodity` 等子配置，经 `config` 单例访问 |
+| 主站（BB）+ 海外版 | `common/config.py` | `bb_user` / `live_role` / `oversea_user` / `oversea_room` / `gift_id` / `oversea_gift_id` / `commodity` 等子配置，经 `config` 单例访问 |
 | SLP | `caseSlp/config.py` | SLP 用户体系独立维护，不合并进 common/config.py |
 | Starify | `caseStarify/need_data.py` | Starify 实体与作品/礼物数据集独立维护 |
 
-- 新增场景实体优先在对应域夹具模块声明；跨域通用实体（如 `giftId`）才收敛到 `common/config.py`
-- `tests/test_config.py` 锁定主站/海外夹具的关键取值与结构（含 `giftId` 键集合），任何静默改数据都会使测试失败
+- 新增场景实体优先在对应域夹具模块声明；跨域通用实体（如 `gift_id`）才收敛到 `common/config.py`
+- `tests/test_config.py` 锁定主站/海外夹具的关键取值与结构（含 `gift_id` 键集合），任何静默改数据都会使测试失败
 
 ### 新增用例指引
 

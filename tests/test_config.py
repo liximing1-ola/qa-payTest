@@ -88,7 +88,7 @@ class TestRoleAndCommodityContract(unittest.TestCase):
 
     def test_live_role(self):
         self.assertEqual(config.live_role.pack_ceo, 105002314)
-        self.assertEqual(config.live_role.pack_master_NoPack, 105002319)
+        self.assertEqual(config.live_role.pack_master_no_pack, 105002319)
         self.assertEqual(config.live_role.pack_cal_uid, 105002313)
         self.assertEqual(config.live_role.live_rid, 193185577)
         self.assertEqual(config.live_role.auto_rid, 193185484)

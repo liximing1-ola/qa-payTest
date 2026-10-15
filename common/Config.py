@@ -150,7 +150,7 @@ class BBUserConfig:
 class LiveRoleConfig:
     """直播角色配置"""
     pack_ceo: int = 105002314
-    pack_master_NoPack: int = 105002319
+    pack_master_no_pack: int = 105002319
     pack_cal_uid: int = 105002313
     live_rid: int = 193185577
     auto_rid: int = 193185484
