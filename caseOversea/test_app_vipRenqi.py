@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 APP 海外版支付测试 - VIP 人气值验证
 

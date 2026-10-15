@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 common/conStarifyMysql.py 单元测试（SQL 分发 / 参数组装 / 签约歌手查询）
 

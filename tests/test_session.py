@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 common/Session.py 单元测试（会话管理）
 

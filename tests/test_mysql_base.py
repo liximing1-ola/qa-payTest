@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 common/mysql_base.py 单元测试（MySQL 连接管理基类）
 

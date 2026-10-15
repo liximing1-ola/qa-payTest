@@ -1,4 +1,3 @@
-# coding=utf-8
 import logging
 import os
 
@@ -98,7 +97,7 @@ def _build_headers(token_key):
     """构建请求头（统一管理 user-token）"""
     token = USER_TOKENS.get(token_key)
     if not token:
-        raise EnvironmentError(
+        raise OSError(
             f"缺少 '{token_key}' 的 token，请设置环境变量 EGG_TOKEN_{token_key.upper()}")
     return {**HEADERS_TEMPLATE, "user-token": token}
 
@@ -114,7 +113,7 @@ def check_response(res):
     """检查响应结果"""
     logger.info(res)
     if res.get('success') != 1:
-        raise EnvironmentError(res)
+        raise OSError(res)
 
 
 # ============ 支付接口 ============

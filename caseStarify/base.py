@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 Starify 域支付测试公共基类
 
@@ -15,7 +14,7 @@ Starify 域支付测试公共基类
 - DB 校验为自定义断言 callable 列表（无通用字段式查询分发器）。
 """
 from dataclasses import dataclass, field
-from typing import Any, Dict, Optional
+from typing import Any
 
 from common.assert_util import assert_body, assert_code
 from common.con_starify_mysql import conMysql
@@ -43,11 +42,11 @@ class StarifyCase:
     # 数据准备步骤（_prepare_test_data 分发格式）
     setup: list = field(default_factory=list)
     # post_starify 请求数据（deal_pay_data / deal_pay_contract_data 产物）
-    data: Dict[str, Any] = field(default_factory=dict)
+    data: dict[str, Any] = field(default_factory=dict)
     # 响应 success 预期值；None 表示不断言 success（失败用例仅断言 msg）
-    success: Optional[bool] = True
+    success: bool | None = True
     # 响应 msg 预期值（None 时跳过断言）
-    msg: Optional[str] = None
+    msg: str | None = None
     # DB 校验函数列表（无参 callable，逐个调用执行断言）
     checks: list = field(default_factory=list)
     # 结果记录表：'case_list' / 'case_list_b'
@@ -70,16 +69,16 @@ class StarifyTestBase(SceneFlowBase):
         self.run_flow(case)
 
     # ============ 场景骨架钩子实现 ============
-    def flow_prepare(self, case: StarifyCase, ctx: Dict[str, Any]) -> None:
+    def flow_prepare(self, case: StarifyCase, ctx: dict[str, Any]) -> None:
         """1. 准备测试数据"""
         if case.setup:
             self._prepare_test_data(case.setup)
 
-    def flow_request(self, case: StarifyCase, ctx: Dict[str, Any]) -> None:
+    def flow_request(self, case: StarifyCase, ctx: dict[str, Any]) -> None:
         """3. 发起 Starify 支付请求"""
         ctx['_res'] = post_starify(case.data)
 
-    def flow_assert(self, case: StarifyCase, ctx: Dict[str, Any]) -> None:
+    def flow_assert(self, case: StarifyCase, ctx: dict[str, Any]) -> None:
         """4. 响应断言（success 为 None 时仅断言 msg）"""
         res = ctx['_res']
         assert_code(res['code'])
@@ -88,12 +87,12 @@ class StarifyTestBase(SceneFlowBase):
         if case.msg is not None:
             assert_body(res['body'], 'msg', case.msg)
 
-    def flow_validate(self, case: StarifyCase, ctx: Dict[str, Any]) -> None:
+    def flow_validate(self, case: StarifyCase, ctx: dict[str, Any]) -> None:
         """6. DB 校验（逐个执行自定义断言函数）"""
         for check in case.checks:
             check()
 
-    def flow_record(self, case: StarifyCase, ctx: Dict[str, Any]) -> None:
+    def flow_record(self, case: StarifyCase, ctx: dict[str, Any]) -> None:
         """7. 记录结果"""
         REPORT_TABLES[case.report][case.des] = result
 

@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 common/Request.py 单元测试
 

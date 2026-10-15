@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """HarmonyOS 数据采集：AGC 下载安装报表（按天）+ IAP 服务端订单查询。
 配置来源：脚本同目录 .env.harmony（本机手填 / 云端由 workflow 从 Secrets 写入）。
 
@@ -12,7 +11,7 @@ import json
 import os
 import sys
 import time
-from datetime import date, datetime, timedelta, timezone
+from datetime import UTC, date, datetime, timedelta, timezone
 
 import jwt
 import requests
@@ -142,7 +141,7 @@ def agc_not_ready(per_day: dict, end_d: date) -> bool:
 
 # ========= IAP 服务端（JWT 鉴权 + 订单查询）=========
 def _iap_private_key() -> str:
-    with open(IAP_KEY_PATH, 'r') as f:
+    with open(IAP_KEY_PATH) as f:
         return f.read()
 
 
@@ -315,7 +314,7 @@ def render_report_image(days_sorted, per_day, iap_by_day, m_start) -> bytes:
 # ========= 主流程 =========
 if __name__ == "__main__":
     try:
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
 
         # ---------- 探测模式：拉数打印样例（不推送）----------
         if PROBE:

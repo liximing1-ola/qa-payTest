@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 caseOversea/base.py 单元测试（PayScene 参数载体 / run_scene 执行模板）
 

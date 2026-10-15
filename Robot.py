@@ -1,11 +1,10 @@
-# coding=utf-8
 """
 机器人通知模块
 提供多种消息通知方式（微信/Slack），支持文本、Markdown、图文等格式。
 """
 import logging
 from time import localtime, strftime, time
-from typing import Any, Dict, Optional
+from typing import Any
 
 import requests
 
@@ -14,14 +13,14 @@ from common import method
 logger = logging.getLogger(__name__)
 
 # 机器人配置
-ROBOT_URLS: Dict[str, Dict[str, str]] = {
+ROBOT_URLS: dict[str, dict[str, str]] = {
     'wechat': {},
     'slack': {}
 }
 
 
-def send_request(url: str, data: Dict[str, Any],
-                headers: Optional[Dict[str, str]] = None) -> Optional[requests.Response]:
+def send_request(url: str, data: dict[str, Any],
+                headers: dict[str, str] | None = None) -> requests.Response | None:
     """发送 HTTP 请求
 
     Args:
@@ -41,13 +40,13 @@ def send_request(url: str, data: Dict[str, Any],
         return None
 
 
-def _send_at_all(url: str, res: Optional[requests.Response]) -> None:
+def _send_at_all(url: str, res: requests.Response | None) -> None:
     """检查响应成功后发送 @所有人 消息"""
     if res and 'ok' in res.text:
         send_request(url, {"msgtype": "text", "text": {"mentioned_mobile_list": ["all"]}})
 
 
-def send_text(url: str, content: str, at_all: bool = False) -> Optional[requests.Response]:
+def send_text(url: str, content: str, at_all: bool = False) -> requests.Response | None:
     """发送文本消息
     Args:
         url: 机器人 URL
@@ -63,7 +62,7 @@ def send_text(url: str, content: str, at_all: bool = False) -> Optional[requests
     return res
 
 
-def send_markdown(url: str, content: str) -> Optional[requests.Response]:
+def send_markdown(url: str, content: str) -> requests.Response | None:
     """发送 Markdown 消息
     Args:
         url: 机器人 URL
@@ -75,7 +74,7 @@ def send_markdown(url: str, content: str) -> Optional[requests.Response]:
 
 
 def send_news(url: str, title: str, description: str, picurl: str,
-             link: str = "https://www.12306.cn/index/") -> Optional[requests.Response]:
+             link: str = "https://www.12306.cn/index/") -> requests.Response | None:
     """发送图文消息
     Args:
         url: 机器人 URL
@@ -103,7 +102,7 @@ def send_news(url: str, title: str, description: str, picurl: str,
 
 
 def send_slack(url: str, title: str, reason: str,
-              color: str = 'danger') -> Optional[requests.Response]:
+              color: str = 'danger') -> requests.Response | None:
     """发送 Slack 消息
     Args:
         url: Slack Webhook URL

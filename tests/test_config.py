@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 common/Config.py 契约测试（测试数据夹具锁定）
 

@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 coin 支付测试
 

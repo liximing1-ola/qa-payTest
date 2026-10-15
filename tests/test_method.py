@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 common/method.py 纯逻辑函数单元测试
 

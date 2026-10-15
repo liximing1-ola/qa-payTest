@@ -145,12 +145,12 @@ def update_time(operate, now=''):
             if not os.path.exists(file_path):
                 with open(file_path, 'w', encoding='utf-8') as f:
                     f.write(DEFAULT_TIMESTAMP)
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 return f.read().strip()
         content = now if operate == 'write' else DEFAULT_TIMESTAMP
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(content)
-    except IOError as e:
+    except OSError as e:
         logger.error("Error handling time file: %s", e)
         return DEFAULT_TIMESTAMP if operate == 'read' else None
 

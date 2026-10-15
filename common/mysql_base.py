@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 MySQL 连接管理基类
 
@@ -7,7 +6,7 @@ MySQL 连接管理基类
 """
 import logging
 from contextlib import contextmanager
-from typing import Any, Optional, Tuple
+from typing import Any
 
 import pymysql
 from pymysql import cursors
@@ -27,8 +26,8 @@ class MySQLConnection:
     """
 
     _config_name: str = 'dev'
-    _connection: Optional[pymysql.Connection] = None
-    _cursor: Optional[pymysql.cursors.Cursor] = None
+    _connection: pymysql.Connection | None = None
+    _cursor: pymysql.cursors.Cursor | None = None
 
     # 允许通过 single_money 查询的列名白名单（防 SQL 列名注入）
     _MONEY_COLUMNS = frozenset({
@@ -87,7 +86,7 @@ class MySQLConnection:
             cur.close()
 
     @classmethod
-    def execute_query(cls, sql: str, params: Optional[Tuple] = None) -> Optional[Tuple]:
+    def execute_query(cls, sql: str, params: tuple | None = None) -> tuple | None:
         """执行查询 SQL，返回单条记录
 
         Args:
@@ -106,7 +105,7 @@ class MySQLConnection:
             return None
 
     @classmethod
-    def execute_write(cls, sql: str, params: Optional[Tuple] = None) -> bool:
+    def execute_write(cls, sql: str, params: tuple | None = None) -> bool:
         """执行写 SQL
 
         Args:
@@ -128,7 +127,7 @@ class MySQLConnection:
             return False
 
     @classmethod
-    def execute_query_first(cls, sql: str, params: Optional[Tuple] = None, default: Any = 0) -> Any:
+    def execute_query_first(cls, sql: str, params: tuple | None = None, default: Any = 0) -> Any:
         """执行查询并返回第一行第一列
 
         Args:

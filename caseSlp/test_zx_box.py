@@ -1,4 +1,3 @@
-# -*- encoding=utf8 -*-
 __author__ = "Wu.Zhenxing"
 __title__ = ""
 __desc__ = "甄选礼盒"
@@ -98,7 +97,7 @@ SCENE_001 = SlpCase(
 		'num': 1000,
 		'gift_id': zx_box['6']['gid'],
 		'price': zx_box['6']['price'],
-		'uids': ('{}'.format(normal_uid), '{}'.format(gsUid)),
+		'uids': (f'{normal_uid}', f'{gsUid}'),
 	},
 	post_wait=BOX_SETTLE_WAIT,
 	checks=[{'assert_func': _validate_zx_box_settle}],

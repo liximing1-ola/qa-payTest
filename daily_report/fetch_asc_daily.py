@@ -44,7 +44,7 @@ if PRIVATE_KEY_PATH and not os.path.isabs(PRIVATE_KEY_PATH):
 
 # 生成ASC JWT Token
 def get_asc_token():
-    with open(PRIVATE_KEY_PATH, 'r') as f:
+    with open(PRIVATE_KEY_PATH) as f:
         private_key = f.read()
     payload = {
         "iss": ISSUER_ID,

@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 基础数据编码模块
 
@@ -7,7 +6,7 @@
 """
 import logging
 import urllib.parse
-from typing import Any, Dict, Optional, Tuple
+from typing import Any
 
 from common.Config import config
 
@@ -19,7 +18,7 @@ DEFAULT_USE_COIN = -1
 DEFAULT_SHOW_PAC_MAN_GUIDE = 1
 
 
-def _encode_data_helper(data: Dict[str, Any]) -> str:
+def _encode_data_helper(data: dict[str, Any]) -> str:
     """
     URL 编码辅助函数
 
@@ -35,7 +34,7 @@ def _encode_data_helper(data: Dict[str, Any]) -> str:
 def _build_package_params(rid: str, uid: str, money: int, giftId: int,
                           num: int, package_cid: int = 0, ctype: str = '',
                           duction_money: int = 0, star: int = 0,
-                          giftType: str = 'normal', **kwargs) -> Dict[str, Any]:
+                          giftType: str = 'normal', **kwargs) -> dict[str, Any]:
     """构建 package 类型的基础参数"""
     return {
         "rid": rid,
@@ -60,7 +59,7 @@ def _build_package_params(rid: str, uid: str, money: int, giftId: int,
 
 
 def _build_shop_buy_params(money: int = 0, num: int = 1, cid: int = 0, price: int = 0,
-                           version: int = DEFAULT_VERSION, **kwargs) -> Dict[str, Any]:
+                           version: int = DEFAULT_VERSION, **kwargs) -> dict[str, Any]:
     """构建 shop-buy 类型的基础参数
 
     Args:
@@ -490,7 +489,7 @@ def encode_data(payType: str = 'package',
                duction_money: int = 0,
                star: int = 0,
                defend_id: int = 244,
-               uids: Optional[Tuple[str, ...]] = None) -> str:
+               uids: tuple[str, ...] | None = None) -> str:
     """
     编码普通场景的消费数据
 
@@ -561,7 +560,7 @@ def encode_oversea_data(payType: str = 'package',
                  ctype: str = '',
                  duction_money: int = 0,
                  star: int = 0,
-                 uids: Optional[Tuple[str, ...]] = None) -> str:
+                 uids: tuple[str, ...] | None = None) -> str:
     """
     编码海外版平台的消费数据
 

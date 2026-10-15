@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 common/conRedis.py 单元测试
 

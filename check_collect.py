@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 用例收集基线校验（离线，无需后端环境）
 
@@ -44,12 +43,12 @@ def _collapse(text):
 
 def _report_failure(message):
     """经 GitHub annotation（::error::）与 job summary 双通道报告失败原因。"""
-    print('::error::check_collect: %s' % _collapse(message))
+    print(f'::error::check_collect: {_collapse(message)}')
     summary_path = os.environ.get('GITHUB_STEP_SUMMARY')
     if summary_path:
         try:
             with open(summary_path, 'a', encoding='utf-8') as fh:
-                fh.write('#### check_collect failed\n\n```text\n%s\n```\n' % message)
+                fh.write(f'#### check_collect failed\n\n```text\n{message}\n```\n')
         except OSError:
             pass
 
@@ -66,15 +65,13 @@ def main():
         tail = output[-3000:]
         print(tail)
         _report_failure(
-            'collect aborted: pytest exit=%s, count not parsed. tail: %s'
-            % (proc.returncode, tail))
+            f'collect aborted: pytest exit={proc.returncode}, count not parsed. tail: {tail}')
         return 1
     count = int(match.group(1))
     if count != EXPECTED_COLLECT_COUNT:
-        _report_failure('collect count mismatch: expected %d, actual %d'
-                        % (EXPECTED_COLLECT_COUNT, count))
+        _report_failure(f'collect count mismatch: expected {EXPECTED_COLLECT_COUNT}, actual {count}')
         return 1
-    print('[OK] collect baseline check passed: %d cases' % count)
+    print(f'[OK] collect baseline check passed: {count} cases')
     return 0
 
 

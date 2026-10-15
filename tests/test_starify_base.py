@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 caseStarify/base.py 单元测试（StarifyCase 数据载体 / run_case 执行模板 / 域分发器）
 

@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 common/Crazyspin.py、Greedy.py 单元测试
 

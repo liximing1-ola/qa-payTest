@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 common/conSlpMysql.py 单元测试（SQL 映射分发 / 参数组装 / 专用查询）
 

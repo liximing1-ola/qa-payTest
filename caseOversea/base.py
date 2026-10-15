@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 海外版测试公共基类
 
@@ -14,7 +13,7 @@ OverseaTestBase 承载全部海外版用例的公共前置处理（礼物配置�
 """
 import time
 from dataclasses import dataclass, field
-from typing import Any, Dict, Optional
+from typing import Any
 
 from common.assert_util import assert_body, assert_code, assert_equal, assert_len
 from common.basic_data import encode_oversea_data
@@ -64,13 +63,13 @@ class PayScene:
     # 响应 success 预期值
     success: int = 1
     # 响应 msg 预期值（None 跳过断言）
-    msg: Optional[str] = None
+    msg: str | None = None
     # 打赏者 sum_money 预期值（None 跳过断言）
-    payer_expect: Optional[int] = 100
+    payer_expect: int | None = 100
     # 被打赏者到账查询字段
     income_account: str = 'money_cash_personal'
     # 到账查询 money_type（None 不传该参数）
-    income_money_type: Optional[str] = None
+    income_money_type: str | None = None
     # 到账预期值
     income_expect: int = 0
     # True 断言到账 >= income_expect（箱子开出物品最小值）；False 断言相等
@@ -78,9 +77,9 @@ class PayScene:
     # 是否对账：到账字段 == pay_change 流水
     check_pay_change: bool = False
     # 对账查询字段（None 时同 income_account）
-    reconcile_account: Optional[str] = None
+    reconcile_account: str | None = None
     # 对账查询 money_type（None 时同 income_money_type）
-    reconcile_money_type: Optional[str] = None
+    reconcile_money_type: str | None = None
 
 
 class OverseaTestBase(SceneFlowBase):
@@ -96,10 +95,11 @@ class OverseaTestBase(SceneFlowBase):
     """
 
     check_gift_config: bool = False
-    bigarea_id: Optional[int] = None
-    room_type: str = None
+    bigarea_id: int | None = None
+    room_type: str | None = None
     room_rid = None
-    room_area: str = None
+    room_area: str | None = None
+    area_rid: int | None = None
     clear_redis_on_setup: bool = False
     clear_redis_on_teardown: bool = False
 
@@ -116,7 +116,7 @@ class OverseaTestBase(SceneFlowBase):
         if cls.check_gift_config:
             conMysql.check_xs_gift_config()
         if cls.bigarea_id is not None:
-            conMysql.updateUserBigArea(*config.oversea_user.values(), bigarea_id=cls.bigarea_id)
+            conMysql.updateUserBigArea(*config.oversea_user.values(), bigarea_id=cls.bigarea_id)  #type: ignore[attr-defined]
             if cls.room_rid is not None:
                 conMysql.updateUserRidInfoSql(cls.room_type, cls.room_rid, area=cls.room_area)
             if cls.clear_redis_on_setup:
@@ -126,7 +126,7 @@ class OverseaTestBase(SceneFlowBase):
     def tearDownClass(cls) -> None:
         """测试后清理：恢复用户大区（及可选的 Redis 清理）"""
         if cls.bigarea_id is not None:
-            conMysql.updateUserBigArea(*config.oversea_user.values())
+            conMysql.updateUserBigArea(*config.oversea_user.values())  #type: ignore[attr-defined]
             if cls.clear_redis_on_teardown:
                 time.sleep(REDIS_CLEAR_WAIT)
                 cls._clear_area_redis()
@@ -156,7 +156,7 @@ class OverseaAreaTestBase(OverseaTestBase):
         self.run_flow(scene)
 
     # ============ 场景骨架钩子实现 ============
-    def flow_prepare(self, scene: PayScene, ctx: Dict[str, Any]) -> None:
+    def flow_prepare(self, scene: PayScene, ctx: dict[str, Any]) -> None:
         """准备：构造用户数据（receiver_uid 存入 ctx 供后续阶段使用）"""
         receiver_uid = (config.oversea_brokerUid if scene.receiver == RECEIVER_BROKER
                         else config.oversea_testUid)
@@ -174,9 +174,9 @@ class OverseaAreaTestBase(OverseaTestBase):
             if scene.clear_extend:
                 conMysql.update_user_extend_money_clear_sql(receiver_uid)
 
-    def flow_request(self, scene: PayScene, ctx: Dict[str, Any]) -> None:
+    def flow_request(self, scene: PayScene, ctx: dict[str, Any]) -> None:
         """请求：发起打赏（响应存入 ctx['_res'] 供断言阶段使用）"""
-        pay_kwargs: Dict[str, Any] = {}
+        pay_kwargs: dict[str, Any] = {}
         if scene.rid is AREA_RID:
             pay_kwargs['rid'] = self.area_rid
         elif scene.rid is not None:
@@ -188,7 +188,7 @@ class OverseaAreaTestBase(OverseaTestBase):
         data = encode_oversea_data(payType=scene.pay_type, **pay_kwargs)
         ctx['_res'] = post_request_session(config.oversea_pay_url, data, token_name='app')
 
-    def flow_assert(self, scene: PayScene, ctx: Dict[str, Any]) -> None:
+    def flow_assert(self, scene: PayScene, ctx: dict[str, Any]) -> None:
         """断言：校验接口响应"""
         res = ctx['_res']
         assert_code(res['code'])
@@ -196,7 +196,7 @@ class OverseaAreaTestBase(OverseaTestBase):
         if scene.msg is not None:
             assert_body(res['body'], 'msg', scene.msg)
 
-    def flow_validate(self, scene: PayScene, ctx: Dict[str, Any]) -> None:
+    def flow_validate(self, scene: PayScene, ctx: dict[str, Any]) -> None:
         """校验：检查余额与对账"""
         receiver_uid = ctx['receiver_uid']
         if scene.payer_expect is not None:
@@ -212,12 +212,12 @@ class OverseaAreaTestBase(OverseaTestBase):
             rec_value = self._query_account(receiver_uid, rec_account, rec_type)
             assert_equal(rec_value, conMysql.select_user_info_sql(accountType='pay_change', uid=receiver_uid))
 
-    def flow_record(self, scene: PayScene, ctx: Dict[str, Any]) -> None:
+    def flow_record(self, scene: PayScene, ctx: dict[str, Any]) -> None:
         """记录：写入报告表"""
         case_list[scene.des] = result
 
     @staticmethod
-    def _query_account(uid: int, account: str, money_type: Optional[str]) -> int:
+    def _query_account(uid: int, account: str, money_type: str | None) -> int | None:
         """查询账户字段（money_type 为 None 时不传，保持与原调用一致）"""
         if money_type is None:
             return conMysql.select_user_info_sql(account, uid)
@@ -240,13 +240,13 @@ class OverseaBizCase:
     # 数据准备步骤（_prepare_test_data 分发格式）
     setup: list = field(default_factory=list)
     # encodeOverseaData 参数（只声明与默认值的差异）；值可为 callable(ctx) 在运行期求值
-    data: Dict[str, Any] = field(default_factory=dict)
+    data: dict[str, Any] = field(default_factory=dict)
     # 请求地址（None 时用 config.oversea_pay_url）
-    url: Optional[str] = None
+    url: str | None = None
     # 响应 success 预期值（失败场景为 0）
     success: int = 1
     # 响应 msg 预期值（None 时跳过断言）
-    msg: Optional[str] = None
+    msg: str | None = None
     # 请求后等待秒数（等待异步数据落库）
     post_wait: float = 0
     # DB 校验项（_validate_db_state 格式）
@@ -276,18 +276,18 @@ class OverseaBizTestBase(OverseaTestBase):
         self.run_flow(case)
 
     # ============ 场景骨架钩子实现 ============
-    def flow_prepare(self, case: OverseaBizCase, ctx: Dict[str, Any]) -> None:
+    def flow_prepare(self, case: OverseaBizCase, ctx: dict[str, Any]) -> None:
         """1. 准备测试数据"""
         if case.setup:
             self._prepare_test_data(case.setup)
 
-    def flow_request(self, case: OverseaBizCase, ctx: Dict[str, Any]) -> None:
+    def flow_request(self, case: OverseaBizCase, ctx: dict[str, Any]) -> None:
         """3. 发起支付请求（默认走 config.oversea_pay_url，token=app）"""
         data = encode_oversea_data(**{key: resolve(value, ctx) for key, value in case.data.items()})
         url = case.url if case.url is not None else config.oversea_pay_url
         ctx['_res'] = post_request_session(url, data, token_name='app')
 
-    def flow_assert(self, case: OverseaBizCase, ctx: Dict[str, Any]) -> None:
+    def flow_assert(self, case: OverseaBizCase, ctx: dict[str, Any]) -> None:
         """4. 响应断言"""
         res = ctx['_res']
         assert_code(res['code'])
@@ -295,17 +295,17 @@ class OverseaBizTestBase(OverseaTestBase):
         if case.msg is not None:
             assert_body(res['body'], 'msg', case.msg)
 
-    def flow_wait(self, case: OverseaBizCase, ctx: Dict[str, Any]) -> None:
+    def flow_wait(self, case: OverseaBizCase, ctx: dict[str, Any]) -> None:
         """5. 等待异步数据落库"""
         if case.post_wait:
             time.sleep(case.post_wait)
 
-    def flow_validate(self, case: OverseaBizCase, ctx: Dict[str, Any]) -> None:
+    def flow_validate(self, case: OverseaBizCase, ctx: dict[str, Any]) -> None:
         """6. DB 校验"""
         if case.checks:
             self._validate_db_state(case.checks)
 
-    def flow_record(self, case: OverseaBizCase, ctx: Dict[str, Any]) -> None:
+    def flow_record(self, case: OverseaBizCase, ctx: dict[str, Any]) -> None:
         """7. 记录结果"""
         case_list[case.des] = result
 
@@ -360,6 +360,7 @@ class OverseaBizTestBase(OverseaTestBase):
                 continue
             field = check['field']
             uid = check.get('uid', config.oversea_payUid)
+            actual: int | None
             if field in EXTRA_QUERY_MAP:
                 actual = EXTRA_QUERY_MAP[field](uid)
             else:

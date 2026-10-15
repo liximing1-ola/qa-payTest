@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 common/getToken.py 单元测试（Token 生成器）
 

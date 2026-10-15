@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 common/Logs.py、Assert.py、runFailed.py 单元测试
 

@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 common/get_token.py 单元测试
 

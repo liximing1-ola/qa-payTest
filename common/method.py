@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 公共方法工具模块
 
@@ -12,7 +11,7 @@
 import logging
 import os
 import time
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 import requests
 
@@ -25,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 # ============ 字典转换 ============
 
-def dict_to_slack_fields(result_dict: Dict[str, Any]) -> List[Dict[str, Any]]:
+def dict_to_slack_fields(result_dict: dict[str, Any]) -> list[dict[str, Any]]:
     """将字典转换为 Slack fields 格式
 
     Args:
@@ -40,7 +39,7 @@ def dict_to_slack_fields(result_dict: Dict[str, Any]) -> List[Dict[str, Any]]:
     ]
 
 
-def dict_to_markdown(result_dict: Dict[str, Any]) -> str:
+def dict_to_markdown(result_dict: dict[str, Any]) -> str:
     """将字典转换为 Markdown 格式
 
     Args:
@@ -57,13 +56,13 @@ def dict_to_markdown(result_dict: Dict[str, Any]) -> str:
 _IMG_APP_ID: str = os.environ.get('IMG_API_APP_ID', '')
 _IMG_APP_SECRET: str = os.environ.get('IMG_API_APP_SECRET', '')
 
-IMAGE_APIS: Dict[int, str] = {
+IMAGE_APIS: dict[int, str] = {
     1: f'https://www.mxnzp.com/api/image/girl/list/random?app_id={_IMG_APP_ID}&app_secret={_IMG_APP_SECRET}',
     2: 'https://shibe.online/api/shibes?count=1'
 }
 
 
-def get_image(mode: int = 2) -> Optional[str]:
+def get_image(mode: int = 2) -> str | None:
     """随机获取图片
 
     Args:
@@ -93,7 +92,7 @@ def get_image(mode: int = 2) -> Optional[str]:
 
 # ============ JSON 工具 ============
 
-def is_extend(data: Union[dict, list], tag: str) -> bool:
+def is_extend(data: dict | list, tag: str) -> bool:
     """检查字段是否在 JSON 中存在
 
     Args:
@@ -109,7 +108,7 @@ def is_extend(data: Union[dict, list], tag: str) -> bool:
     return _contains_key(data, tag)
 
 
-def _contains_key(data: Union[dict, list], tag: str) -> bool:
+def _contains_key(data: dict | list, tag: str) -> bool:
     """递归检查 JSON 中是否包含指定 key（短路查找）
 
     Args:
@@ -130,7 +129,7 @@ def _contains_key(data: Union[dict, list], tag: str) -> bool:
 
 # ============ 结果处理 ============
 
-def get_value(res: Dict[str, Any]) -> None:
+def get_value(res: dict[str, Any]) -> None:
     """处理响应结果，统计成功/失败
 
     Args:
@@ -152,7 +151,7 @@ def get_value(res: Dict[str, Any]) -> None:
         Consts.increment_fail()
 
 
-def format_reason(des: str, res: Dict[str, Any]) -> str:
+def format_reason(des: str, res: dict[str, Any]) -> str:
     """格式化失败原因
     Args:
         des: 描述信息
@@ -176,12 +175,12 @@ def check_path(path: str) -> None:
     if not os.path.exists(path):
         from Robot import robot
         robot('icon', f'php代码路径异常: {path}', bot='APP')
-        raise EnvironmentError('代码路径异常')
+        raise OSError('代码路径异常')
 
 
 # ============ 爵位等级 ============
 
-TITLE_LEVEL_MAP: Dict[int, float] = {
+TITLE_LEVEL_MAP: dict[int, float] = {
     10: 1.0,   # 骑士
     20: 1.0,   # 男爵
     30: 1.0,   # 子爵
@@ -195,7 +194,7 @@ TITLE_LEVEL_MAP: Dict[int, float] = {
 }
 
 
-def get_user_title(level: int) -> Optional[float]:
+def get_user_title(level: int) -> float | None:
     """根据等级获取爵位系数
     Args:
         level: 用户等级
@@ -205,7 +204,7 @@ def get_user_title(level: int) -> Optional[float]:
     return TITLE_LEVEL_MAP.get(level)
 
 
-def calculate_vip_exp(money_type: str = 'money', uid: Optional[int] = None, pay_off: int = 100) -> int:
+def calculate_vip_exp(money_type: str = 'money', uid: int | None = None, pay_off: int = 100) -> int:
     """计算 VIP 经验值
     Args:
         money_type: 货币类型（money/coin/bean）

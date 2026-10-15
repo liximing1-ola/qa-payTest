@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 common/sql_script.py 单元测试（MySQLClient 执行链 / 事务回滚 / 操作类 SQL 组装）
 

@@ -16,12 +16,12 @@ logger = logging.getLogger(__name__)
 # 配置常量（敏感密钥通过环境变量加载）
 KEY: str = os.environ.get('TOKEN_KEY', '')
 if not KEY:
-    raise EnvironmentError('TOKEN_KEY environment variable is required')
+    raise OSError('TOKEN_KEY environment variable is required')
 EXPIRY = 2592000
 CHARS = '0123456789abcdefghijklmnopqrstuvwxyz'
 VERIFY_SALT: str = os.environ.get('TOKEN_VERIFY_SALT', '')
 if not VERIFY_SALT:
-    raise EnvironmentError('TOKEN_VERIFY_SALT environment variable is required')
+    raise OSError('TOKEN_VERIFY_SALT environment variable is required')
 KEY_C_LENGTH = 4
 SALT_LENGTH = 10
 

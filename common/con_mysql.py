@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 MySQL 数据库操作模块（普通场景）
 
@@ -56,7 +55,7 @@ class ConMysql:
         """单账户余额查询（money_type 为列名，无法参数化；uid 参数化）"""
         if money_type not in ConMysql._MONEY_COLUMNS:
             raise ValueError(f'Invalid money_type column: {money_type}')
-        sql = "SELECT {} FROM xs_user_money WHERE uid=%s".format(money_type)
+        sql = f"SELECT {money_type} FROM xs_user_money WHERE uid=%s"
         return MySQLConnection.execute_query_first(sql, params=(uid,), default=None)
 
     @staticmethod
@@ -86,7 +85,7 @@ class ConMysql:
         sql = "SELECT rid FROM xs_chatroom WHERE property='union' LIMIT 1"
         res = MySQLConnection.execute_query(sql)
         if res is None:
-            raise EnvironmentError('库表无联盟房')
+            raise OSError('库表无联盟房')
         return res[0]
 
     @staticmethod
@@ -97,7 +96,7 @@ class ConMysql:
         cursor.execute(sql)
         rows = cursor.fetchall()
         if not rows:
-            raise EnvironmentError('库表无家族房')
+            raise OSError('库表无家族房')
         for row in rows:
             if row[0] != config.bb_user.fleetRid:
                 return row[0]
@@ -296,7 +295,7 @@ class ConMysql:
         sql = "SELECT name FROM xs_commodity WHERE cid=%s"
         res = MySQLConnection.execute_query_first(sql, params=(cid,), default=None)
         if res is None:
-            raise Exception('xs_commodity {}不存在'.format(name))
+            raise Exception(f'xs_commodity {name}不存在')
 
     # ============ 公会/守护关系方法 ============
 

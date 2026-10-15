@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 caseSlp/base.py 单元测试（SlpCase 数据载体 / run_case 执行模板 / 域分发器）
 

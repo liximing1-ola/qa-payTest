@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 自动化测试运行器
 
@@ -7,7 +6,7 @@
 import platform
 import unittest
 from time import sleep, time
-from typing import Any, Dict, Optional, Tuple
+from typing import Any
 
 from autoGitPull import update_time, updateCode
 from Robot import robot
@@ -21,7 +20,7 @@ NOTIFY_INTERVAL = 0.1
 
 
 # 应用配置映射
-APP_CONFIG: Dict[str, Dict[str, Any]] = {
+APP_CONFIG: dict[str, dict[str, Any]] = {
     config.appName['1']: {
         'dir': '/case',
         'git_repos': ['bb_php', 'bb_go'],
@@ -50,7 +49,7 @@ APP_CONFIG: Dict[str, Dict[str, Any]] = {
 }
 
 
-def load_cases(app_info: str) -> Optional[unittest.TestSuite]:
+def load_cases(app_info: str) -> unittest.TestSuite | None:
     """加载测试用例
 
     Args:
@@ -106,7 +105,7 @@ def log_result(test_result: unittest.TextTestResult, lang: str = 'zh') -> str:
 
 
 def get_summary_data(test_result: unittest.TextTestResult,
-                    branch_key: str) -> Tuple[str, str, str, str]:
+                    branch_key: str) -> tuple[str, str, str, str]:
     """获取汇总数据
 
     Args:

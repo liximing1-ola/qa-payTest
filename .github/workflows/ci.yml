@@ -46,7 +46,7 @@ jobs:
         run: ruff check .
 
       - name: 类型检查（mypy）
-        run: mypy common/ --ignore-missing-imports
+        run: mypy common tests --ignore-missing-imports
 
       - name: 用例收集基线校验
         run: python check_collect.py

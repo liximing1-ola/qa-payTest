@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 common/basicSlpData.py 单元测试（SLP 消费数据编码分发）
 

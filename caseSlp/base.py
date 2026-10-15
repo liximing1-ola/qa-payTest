@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 SLP 域支付测试公共基类
 
@@ -9,8 +8,9 @@ SLP 域支付测试公共基类
 本模块为其 SLP 域适配层（请求走 caseSlp/config.py 的 pay_url，token=slp）。
 """
 import time
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any, Callable, Dict, Optional
+from typing import Any
 
 from caseSlp.config import pay_url, payUid
 
@@ -40,17 +40,17 @@ class SlpCase:
     # 用例描述（同时作为报告表键）
     des: str
     # 自定义组合准备 callable(testcase)，先于 setup 执行
-    prepare: Optional[Callable] = None
+    prepare: Callable | None = None
     # 数据准备步骤（_prepare_test_data 分发格式）
     setup: list = field(default_factory=list)
     # 请求前查询：((ctx 键, 无参可调用), ...)，结果存入 ctx 供 data/checks 引用
     queries: list = field(default_factory=list)
     # encodeData 参数；值可为 callable(ctx) 在运行期求值
-    data: Dict[str, Any] = field(default_factory=dict)
+    data: dict[str, Any] = field(default_factory=dict)
     # 响应 success 预期值（失败场景为 0）
     success: int = 1
     # 响应 msg 预期值（None 时跳过断言）
-    msg: Optional[str] = None
+    msg: str | None = None
     # 请求后等待秒数（等待异步数据落库）
     post_wait: float = 0
     # DB 校验项（_validate_db_state 格式）；expected 可为 callable(ctx) 延迟求值
@@ -75,24 +75,24 @@ class SlpTestBase(SceneFlowBase):
         self.run_flow(case)
 
     # ============ 场景骨架钩子实现 ============
-    def flow_prepare(self, case: SlpCase, ctx: Dict[str, Any]) -> None:
+    def flow_prepare(self, case: SlpCase, ctx: dict[str, Any]) -> None:
         """1. 准备测试数据（自定义组合准备 + 标准步骤）"""
         if case.prepare is not None:
             case.prepare(self)
         if case.setup:
             self._prepare_test_data(case.setup)
 
-    def flow_queries(self, case: SlpCase, ctx: Dict[str, Any]) -> None:
+    def flow_queries(self, case: SlpCase, ctx: dict[str, Any]) -> None:
         """2. 请求前查询（供动态 data/checks 引用）"""
         for key, query in case.queries:
             ctx[key] = query()
 
-    def flow_request(self, case: SlpCase, ctx: Dict[str, Any]) -> None:
+    def flow_request(self, case: SlpCase, ctx: dict[str, Any]) -> None:
         """3. 发起 SLP 支付请求（pay_url + token=slp）"""
         data = encode_data(**{key: resolve(value, ctx) for key, value in case.data.items()})
         ctx['_res'] = post_request_session(pay_url, data, token_name='slp')
 
-    def flow_assert(self, case: SlpCase, ctx: Dict[str, Any]) -> None:
+    def flow_assert(self, case: SlpCase, ctx: dict[str, Any]) -> None:
         """4. 响应断言"""
         res = ctx['_res']
         assert_code(res['code'])
@@ -100,17 +100,17 @@ class SlpTestBase(SceneFlowBase):
         if case.msg is not None:
             assert_body(res['body'], 'msg', case.msg)
 
-    def flow_wait(self, case: SlpCase, ctx: Dict[str, Any]) -> None:
+    def flow_wait(self, case: SlpCase, ctx: dict[str, Any]) -> None:
         """5. 等待异步数据落库"""
         if case.post_wait:
             time.sleep(case.post_wait)
 
-    def flow_validate(self, case: SlpCase, ctx: Dict[str, Any]) -> None:
+    def flow_validate(self, case: SlpCase, ctx: dict[str, Any]) -> None:
         """6. DB 校验"""
         if case.checks:
             self._validate_db_state([resolve_check(check, ctx) for check in case.checks], ctx)
 
-    def flow_record(self, case: SlpCase, ctx: Dict[str, Any]) -> None:
+    def flow_record(self, case: SlpCase, ctx: dict[str, Any]) -> None:
         """7. 记录结果"""
         REPORT_TABLES[case.report][case.des] = result
 

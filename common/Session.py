@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 会话管理模块
 
@@ -6,14 +5,14 @@
 """
 import logging
 import os
-from typing import Any, Dict, Optional
+from typing import Any
 
 import requests
 import urllib3
 
 from common import Logs
 from common.Config import config
-from common.paramsYaml import Yaml
+from common.params_yaml import Yaml
 
 logger = logging.getLogger(__name__)
 
@@ -27,13 +26,13 @@ class Session:
     """会话管理类"""
 
     # 环境配置映射
-    ENV_CONFIGS: Dict[str, Dict[str, Any]] = {
+    ENV_CONFIGS: dict[str, dict[str, Any]] = {
         "dev": {
             "headers_key": 'header_dev',
             "params_key": 'params_dev_qq',
             "body_key": 'data_dev_qq',
             "package": 'x.x.x.x',
-            "login_url": config.bb_qqLogin_url,
+            "login_url": config.bb_qq_login_url,
             "use_backup": True,
         },
         "rush": {
@@ -41,10 +40,10 @@ class Session:
             "params_key": 'params_teammate_qq',
             "body_key": 'data_teammate_qq',
             "package": 'x.x.x.x',
-            "login_url": config.bb_qqLogin_url,
+            "login_url": config.bb_qq_login_url,
             "use_backup": False,
         },
-        config.appName['1']: {
+        config.app_name['1']: {
             "headers_key": 'header_oversea',
             "params_key": 'data_oversea_mobile_params',
             "body_key": 'data_oversea_mobile',
@@ -52,7 +51,7 @@ class Session:
             "login_url": config.oversea_mobile_login_url,
             "use_backup": False,
         },
-        config.appName['不夜星球']: {
+        config.app_name['不夜星球']: {
             "headers_key": 'header_slp',
             "params_key": 'data_slp_mobile_params',
             "body_key": 'data_slp_mobile',
@@ -63,7 +62,7 @@ class Session:
     }
 
     @staticmethod
-    def _login(env_config: Dict[str, Any], env: str) -> Dict[str, Any]:
+    def _login(env_config: dict[str, Any], env: str) -> dict[str, Any]:
         """执行登录请求
 
         Args:
@@ -87,7 +86,7 @@ class Session:
         return res.json()
 
     @staticmethod
-    def _handle_response(res: Dict[str, Any], env: str) -> Optional[Dict[str, str]]:
+    def _handle_response(res: dict[str, Any], env: str) -> dict[str, str] | None:
         """处理响应结果
 
         Args:
@@ -109,7 +108,7 @@ class Session:
         return {'token': token, 'uid': uid}
 
     @staticmethod
-    def _use_backup_plan(env: str, error_msg: str) -> Dict[str, str]:
+    def _use_backup_plan(env: str, error_msg: str) -> dict[str, str]:
         """使用备选方案获取 token
 
         Args:
@@ -121,7 +120,7 @@ class Session:
         """
         Logs.get_logger('getSession.log').warning(f'session 主方案获取失败，转备选方案，原因：{error_msg}')
         from common.con_mysql import conMysql
-        from common.getToken import TokenGenerator
+        from common.get_token import TokenGenerator
 
         user_index = conMysql.select_user_info_sql('user_index', config.payUid)
         token = TokenGenerator(config.payUid, user_index).generate()
@@ -130,7 +129,7 @@ class Session:
         return {'token': token}
 
     @staticmethod
-    def get_session(env: str) -> Optional[Dict[str, str]]:
+    def get_session(env: str) -> dict[str, str] | None:
         """获取登录 session
 
         Args:
@@ -161,7 +160,7 @@ class Session:
 
     @staticmethod
     def check_user_token(operate: str, app_name: str = 'dev',
-                      token: str = '', uid: Optional[int] = None) -> Optional[str]:
+                      token: str = '', uid: int | None = None) -> str | None:
         """检查/写入用户 token
         Args:
             operate: 操作类型（'read'/'write'）
@@ -186,7 +185,7 @@ class Session:
                 f.write(token)
                 f.flush()
         elif operate == 'read':
-            with open(txt_path, 'r') as f:
+            with open(txt_path) as f:
                 content = f.read()
                 if content:
                     return content

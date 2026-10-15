@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """
 APP 幸运玩法支付测试 - 摩天轮验证
 

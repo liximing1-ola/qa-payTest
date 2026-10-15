@@ -1,11 +1,10 @@
-# coding=utf-8
 """
 疯狂转盘模块
 
 提供转盘抽奖相关的 URL 构建和 HTTP 请求功能。
 """
 import urllib.parse
-from typing import Any, Dict
+from typing import Any
 
 import requests
 
@@ -14,7 +13,7 @@ from common.request_util import DEFAULT_TIMEOUT
 from common.Session import Session
 
 # 默认请求参数
-DEFAULT_PARAMS: Dict[str, str] = {
+DEFAULT_PARAMS: dict[str, str] = {
     'package': 'com.imbb.oversea.android',
     '_ipv': '0',
     '_platform': 'android',
@@ -24,7 +23,7 @@ DEFAULT_PARAMS: Dict[str, str] = {
 }
 
 # 默认请求头
-DEFAULT_HEADERS: Dict[str, str] = {
+DEFAULT_HEADERS: dict[str, str] = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36",
     "Content-Type": "application/x-www-form-urlencoded",
     'Connection': 'close',
@@ -35,7 +34,7 @@ class CrazySpin:
     """疯狂转盘操作类"""
 
     @staticmethod
-    def _build_url(endpoint: str, params: Dict[str, Any]) -> str:
+    def _build_url(endpoint: str, params: dict[str, Any]) -> str:
         """构建完整 URL
 
         Args:
@@ -49,7 +48,7 @@ class CrazySpin:
         return f"{base_url}?{urllib.parse.urlencode(params)}"
 
     @staticmethod
-    def _build_headers(token_name: str = 'dev') -> Dict[str, str]:
+    def _build_headers(token_name: str = 'dev') -> dict[str, str]:
         """构建请求头
 
         Args:

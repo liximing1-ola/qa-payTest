@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 common/Assert.py 单元测试（断言工具）
 

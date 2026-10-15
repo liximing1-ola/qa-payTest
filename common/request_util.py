@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 HTTP 请求封装模块
 
@@ -6,7 +5,7 @@ HTTP 请求封装模块
 """
 import logging
 import os
-from typing import Any, Dict, Optional
+from typing import Any
 
 import requests
 
@@ -20,7 +19,7 @@ logger = logging.getLogger(__name__)
 VERIFY_SSL: bool = os.environ.get('VERIFY_SSL', '0') == '1'
 
 # 默认请求头
-DEFAULT_HEADERS: Dict[str, str] = {
+DEFAULT_HEADERS: dict[str, str] = {
     "User-Agent": "Mozilla/5.0 (Linux; Android 11; HD1900 Build/RKQ1.201022.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/87.0.4280.141 Mobile Safari/537.36 / Xs android V1.1.0.0 / Js V1.0.0.0 / Login V1658980709",
     "Content-Type": "application/x-www-form-urlencoded",
     'Connection': 'close'
@@ -30,7 +29,7 @@ DEFAULT_HEADERS: Dict[str, str] = {
 DEFAULT_TIMEOUT: float = 30.0
 
 
-def _build_headers(token_name: str = 'dev', uid: Optional[int] = None) -> Dict[str, str]:
+def _build_headers(token_name: str = 'dev', uid: int | None = None) -> dict[str, str]:
     """构建header
     Args:
         token_name: Token 名称
@@ -57,7 +56,7 @@ def _ensure_https(url: str) -> str:
     return f'https://{url}'
 
 
-def _parse_response(response: requests.Response) -> Dict[str, Any]:
+def _parse_response(response: requests.Response) -> dict[str, Any]:
     """解析响应结果
 
     成功（2xx）且为 JSON 时返回解析后的 body；
@@ -86,10 +85,10 @@ def _parse_response(response: requests.Response) -> Dict[str, Any]:
     }
 
 
-def post_request_session(url: str, data: Optional[Any],
+def post_request_session(url: str, data: Any | None,
                          token_name: str = 'dev',
-                         uid: Optional[int] = None,
-                         timeout: float = DEFAULT_TIMEOUT) -> Dict[str, Any]:
+                         uid: int | None = None,
+                         timeout: float = DEFAULT_TIMEOUT) -> dict[str, Any]:
     """
     POST 请求
 
@@ -124,10 +123,10 @@ def post_request_session(url: str, data: Optional[Any],
         return {'code': -1, 'body': '', 'error': str(e)}
 
 
-def post_request_session_starify(url: str, data: Optional[Any],
+def post_request_session_starify(url: str, data: Any | None,
                                 token_name: str = 'starify',
-                                uid: Optional[int] = None,
-                                timeout: float = DEFAULT_TIMEOUT) -> Dict[str, Any]:
+                                uid: int | None = None,
+                                timeout: float = DEFAULT_TIMEOUT) -> dict[str, Any]:
     """
     Starify POST 请求（post_request_session 的 starify 封装）
     Args:
@@ -145,8 +144,8 @@ def post_request_session_starify(url: str, data: Optional[Any],
     return post_request_session(url, data, token_name=token_name, uid=uid, timeout=timeout)
 
 
-def post_starify(data: Optional[Any], uid: Optional[int] = None,
-                 timeout: float = DEFAULT_TIMEOUT) -> Dict[str, Any]:
+def post_starify(data: Any | None, uid: int | None = None,
+                 timeout: float = DEFAULT_TIMEOUT) -> dict[str, Any]:
     """
     Starify 支付接口 POST 请求快捷封装
 

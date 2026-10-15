@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 定时任务测试运行器
 
@@ -6,7 +5,6 @@
 """
 import platform
 import unittest
-from typing import Dict, Optional
 
 from Robot import robot
 
@@ -14,7 +12,7 @@ from common import Consts, Logs, method
 from common.Config import config
 
 # 应用配置映射
-APP_CONFIG: Dict[str, Dict[str, str]] = {
+APP_CONFIG: dict[str, dict[str, str]] = {
     config.appName['1']: {
         'dir': '/case',
         'pattern': 'test_pay_punish.py',
@@ -30,7 +28,7 @@ APP_CONFIG: Dict[str, Dict[str, str]] = {
 }
 
 
-def load_cases(app_info: str) -> Optional[unittest.TestSuite]:
+def load_cases(app_info: str) -> unittest.TestSuite | None:
     """加载测试用例
     Args:
         app_info: 应用信息
@@ -50,7 +48,7 @@ def load_cases(app_info: str) -> Optional[unittest.TestSuite]:
     return testcase
 
 
-def run_tests(app_info: str) -> Optional[unittest.TextTestResult]:
+def run_tests(app_info: str) -> unittest.TextTestResult | None:
     """执行测试并返回结果
     Args:
         app_info: 应用信息

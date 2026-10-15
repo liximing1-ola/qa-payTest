@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 SLP MySQL 数据库操作模块
 
@@ -8,7 +7,7 @@ SLP MySQL 数据库操作模块
 import ast
 import logging
 import time
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 from common.mysql_base import MySQLConnection as MySQLConnectionBase
 
@@ -26,7 +25,7 @@ class ConMysql:
     """MySQL 操作类"""
 
     # ========== 查询 SQL 映射 ==========
-    SELECT_SIMPLE_MAP: Dict[str, str] = {
+    SELECT_SIMPLE_MAP: dict[str, str] = {
         'bean': "SELECT money_coupon FROM xs_user_money_extend WHERE uid=%s",
         'cash': "SELECT cash FROM xs_user_money_extend WHERE uid=%s",
         'sum_money': "SELECT money+money_b+money_cash_b+money_cash FROM xs_user_money WHERE uid=%s",
@@ -39,7 +38,7 @@ class ConMysql:
         'growth': "SELECT growth FROM xs_user_title_new WHERE uid=%s",
     }
 
-    SELECT_WITH_PARAM_MAP: Dict[str, str] = {
+    SELECT_WITH_PARAM_MAP: dict[str, str] = {
         'single_money': "SELECT {money_type} FROM xs_user_money WHERE uid=%s",
         'num_commodity': "SELECT num FROM xs_user_commodity WHERE cid=%s AND uid=%s",
         'id_commodity': "SELECT id FROM xs_user_commodity WHERE cid=%s AND uid=%s",
@@ -63,7 +62,7 @@ class ConMysql:
     )
 
     # delete_user_account_sql SQL 映射
-    DELETE_SQL_MAP: Dict[str, str] = {
+    DELETE_SQL_MAP: dict[str, str] = {
         'user_commodity': "DELETE FROM xs_user_commodity WHERE uid=%s",
         'user_title': "DELETE FROM xs_user_title WHERE uid=%s LIMIT 5",
         'broker_user': "DELETE FROM xs_broker_user WHERE uid=%s LIMIT 1",
@@ -79,7 +78,7 @@ class ConMysql:
     def select_user_info_sql(accountType: str, uid: str = "200000126",
                          money_type: str = 'money_cash_b',
                          cid: int = 263,
-                         payuid: str = "200000128") -> Optional[Union[int, float, Dict, List]]:
+                         payuid: str = "200000128") -> int | float | dict | list | None:
         """查询用户信息（映射字典模式）"""
         # 简单 SQL 直接查
         if accountType in ConMysql.SELECT_SIMPLE_MAP:
@@ -88,7 +87,7 @@ class ConMysql:
             if accountType in ('union', 'vip'):
                 res = MySQLConnection.execute_query_first(sql, default=None)
                 if res is None:
-                    raise EnvironmentError(f'库表无{"联盟房" if accountType == "union" else "个人房"}')
+                    raise OSError(f'库表无{"联盟房" if accountType == "union" else "个人房"}')
                 return res
             return MySQLConnection.execute_query_first(sql, params=(uid,), default=default)
 
@@ -99,7 +98,7 @@ class ConMysql:
                 if money_type not in ConMysql._MONEY_COLUMNS:
                     raise ValueError(f'Invalid money_type column: {money_type}')
                 sql = template.format(money_type=money_type)
-                params: Tuple[Union[str, int], ...] = (uid,)
+                params: tuple[str | int, ...] = (uid,)
             elif accountType in ('num_commodity', 'id_commodity'):
                 sql = template
                 params = (cid, uid)
@@ -218,14 +217,14 @@ class ConMysql:
     # ============ 检查配置 ============
 
     @staticmethod
-    def check_xs_gift_config(gift_ids: Tuple[int, ...]) -> None:
+    def check_xs_gift_config(gift_ids: tuple[int, ...]) -> None:
         """检查礼物配置"""
         MySQLConnection._update_xs_gift_status(gift_ids)
 
     # ============ 专用查询方法 ============
 
     @staticmethod
-    def select_greedy_prize(uid: str, round_id: int) -> Optional[Tuple]:
+    def select_greedy_prize(uid: str, round_id: int) -> tuple | None:
         """查询摩天轮开奖数据"""
         return MySQLConnection.query_greedy_prize(uid, round_id)
 
@@ -265,7 +264,7 @@ class ConMysql:
         MySQLConnection.execute_write(sql, params=(level, growth, growth, subscribe_time, uid))
 
     @staticmethod
-    def check_rid_factory_type(rid: int) -> Optional[str]:
+    def check_rid_factory_type(rid: int) -> str | None:
         """查询房间的 room_factory_type"""
         sql = "SELECT room_factory_type FROM xs_chatroom WHERE rid=%s"
         return MySQLConnection.execute_query_first(sql, params=(rid,), default=None)
@@ -283,7 +282,7 @@ class ConMysql:
         MySQLConnection.execute_write(sql, params=(agreement_version, uid))
 
     @staticmethod
-    def select_zx_pay_data(uid: str) -> Optional[List[Dict[str, Any]]]:
+    def select_zx_pay_data(uid: str) -> list[dict[str, Any]] | None:
         """查询 ZX 打赏流水聚合数据"""
         sql = (
             "SELECT JSON_EXTRACT(reason, '$.to') AS to_uid, "

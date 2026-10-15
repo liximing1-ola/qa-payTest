@@ -1,4 +1,3 @@
-# -*- encoding=utf8 -*-
 __author__ = "Wu.Zhenxing"
 __title__ = ""
 __desc__ = "打赏多人多礼物"

@@ -1,4 +1,3 @@
-# coding=utf-8
 import logging
 import os
 
@@ -39,7 +38,7 @@ class YamlReader:
             return None
 
         try:
-            with open(yaml_path, 'r', encoding='utf-8') as f:
+            with open(yaml_path, encoding='utf-8') as f:
                 yaml_data = yaml.safe_load(f)
             _yaml_cache[yaml_path] = yaml_data
             return yaml_data.get(key) if yaml_data else None

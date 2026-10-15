@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 APP MySQL 数据库操作模块
 
@@ -6,7 +5,6 @@ APP MySQL 数据库操作模块
 使用单例模式管理数据库连接，支持自动重连。
 """
 import logging
-from typing import Dict, Optional, Tuple
 
 from common.Config import config
 from common.mysql_base import MySQLConnection as MySQLConnectionBase
@@ -25,7 +23,7 @@ class ConMysql:
     """MySQL 操作类"""
 
     # SQL 映射字典
-    QUERY_SQL_MAP: Dict[str, str] = {
+    QUERY_SQL_MAP: dict[str, str] = {
         'sum_money': "SELECT money+money_b+money_cash_b+money_cash FROM xs_user_money WHERE uid=%s",
         'sum_commodity': "SELECT SUM(num) FROM xs_user_commodity WHERE uid=%s",
         'sum_commodity_32': "SELECT SUM(num) FROM xs_user_commodity WHERE uid=%s AND cid=32",
@@ -36,7 +34,7 @@ class ConMysql:
 
     _MONEY_COLUMNS = MySQLConnection._MONEY_COLUMNS
 
-    DELETE_SQL_MAP: Dict[str, str] = {
+    DELETE_SQL_MAP: dict[str, str] = {
         'user_commodity': "DELETE FROM xs_user_commodity WHERE uid=%s",
         'user_box': "DELETE FROM xs_user_box WHERE uid=%s",
         'user_journey_planet_draw_record': "DELETE FROM xs_user_journey_planet_draw_record WHERE uid=%s",
@@ -47,7 +45,7 @@ class ConMysql:
     # ============ 查询方法 ============
 
     @staticmethod
-    def select_user_info_sql(accountType: str, uid: Optional[int] = None, money_type: str = 'money_cash_b') -> Optional[int]:
+    def select_user_info_sql(accountType: str, uid: int | None = None, money_type: str = 'money_cash_b') -> int | None:
         """查询用户信息
 
         Args:
@@ -165,7 +163,7 @@ class ConMysql:
     # ============ 查询方法 ============
 
     @staticmethod
-    def select_greedy_prize(uid: int, round_id: int) -> Tuple:
+    def select_greedy_prize(uid: int, round_id: int) -> tuple:
         """查询摩天轮开奖数据"""
         return MySQLConnection.query_greedy_prize(uid, round_id) or (0, 0)
 

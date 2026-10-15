@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 common/params_yaml.py 单元测试
 

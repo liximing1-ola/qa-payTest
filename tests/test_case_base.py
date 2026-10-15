@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 case/base.py 单元测试（PayCase 数据载体 / run_case 执行模板 / 步骤分发器）
 

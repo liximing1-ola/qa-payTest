@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 common/Crazyspin.py 与 common/Greedy.py 单元测试（URL 构建 / 请求透传 / 轮询流程）
 

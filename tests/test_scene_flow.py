@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 common/scene_base.py 单元测试（场景执行骨架 / 延迟求值辅助）
 

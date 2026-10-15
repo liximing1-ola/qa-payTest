@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 MySQL 数据库脚本工具模块
 
@@ -7,7 +6,7 @@ MySQL 数据库脚本工具模块
 """
 import logging
 from contextlib import contextmanager
-from typing import Any, Dict, Optional, Tuple
+from typing import Any
 
 import pymysql
 
@@ -21,7 +20,7 @@ class MySQLClient:
     _config_name: str = 'dev'
 
     @classmethod
-    def _get_config(cls) -> Dict[str, Any]:
+    def _get_config(cls) -> dict[str, Any]:
         """获取当前数据库配置"""
         configs = {
             'dev': config.database.dev_config,
@@ -52,7 +51,7 @@ class MySQLClient:
                 cursor.close()
 
     @classmethod
-    def execute(cls, sql: str, params: Optional[tuple] = None,
+    def execute(cls, sql: str, params: tuple | None = None,
                 fetch_one: bool = False, fetch_all: bool = False):
         """执行 SQL 语句
         Args:
@@ -78,7 +77,7 @@ class MySQLClient:
                 raise
 
     @classmethod
-    def execute_write(cls, sql: str, params: Optional[tuple] = None,
+    def execute_write(cls, sql: str, params: tuple | None = None,
                       error_msg: str = 'execute fail') -> None:
         """执行写操作
         Args:
@@ -92,7 +91,7 @@ class MySQLClient:
             logger.error('%s: %s', error_msg, e)
 
     @classmethod
-    def execute_read(cls, sql: str, params: Optional[tuple] = None,
+    def execute_read(cls, sql: str, params: tuple | None = None,
                      default: Any = None) -> Any:
         """执行读操作
         Args:
@@ -139,7 +138,7 @@ class UserMoneyOperations:
                             error_msg='update fail')
 
     @staticmethod
-    def select_all(uid: int) -> Optional[int]:
+    def select_all(uid: int) -> int | None:
         """查询用户所有账户余额之和
         Args:
             uid: 用户ID
@@ -186,7 +185,7 @@ class UserCommodityOperations:
         return int(result) if result else 0
 
     @staticmethod
-    def get_id(uid: int, cid: int) -> Optional[int]:
+    def get_id(uid: int, cid: int) -> int | None:
         """获取物品表 ID
         Args:
             uid: 用户 ID
@@ -215,7 +214,7 @@ class UserProfileOperations:
     """用户资料相关操作"""
 
     @staticmethod
-    def get_uids(limit_num: int, min_uid: int = 131542080, app_id: int = 1) -> Tuple[str, ...]:
+    def get_uids(limit_num: int, min_uid: int = 131542080, app_id: int = 1) -> tuple[str, ...]:
         """生成一批 用户ID
         Args:
             limit_num: 限制数量级

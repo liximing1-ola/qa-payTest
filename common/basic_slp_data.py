@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 SLP 消费数据编码模块
 
@@ -237,7 +236,7 @@ def encode_data(
         duction_money=0,
         star=0,
         defend_id=244,
-        uids=('{}'.format(rewardUid), '{}'.format(gsUid)),
+        uids=(f'{rewardUid}', f'{gsUid}'),
         knight_level=room_defend['zhenai']['month']['knight_level'],
         duration_level=room_defend['zhenai']['month']['duration_level'],
         price=slp_config.giftId['69']['price']
@@ -295,6 +294,6 @@ if __name__ == '__main__':
         num=2,
         gift_id=zx_box['6']['gid'],
         price=zx_box['6']['price'],
-        uids=('{}'.format(normal_uid), '{}'.format(gsUid))
+        uids=(f'{normal_uid}', f'{gsUid}')
     )
     logger.info(data)

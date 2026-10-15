@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 支付测试公共基类
 
@@ -12,8 +11,9 @@ common/scene_base.py 的 SceneFlowBase 编排，本模块为其支付域适配�
 - REPORT_TABLES 保留本模块定义，报告路由与测试 patch 目标不变
 """
 import time
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any, Callable, Dict, Optional
+from typing import Any
 
 from common.assert_util import assert_body, assert_code, assert_equal, assert_len
 from common.basic_data import encode_data
@@ -48,19 +48,19 @@ class PayCase:
     # 数据准备步骤（_prepare_test_data 分发格式）
     setup: list = field(default_factory=list)
     # encodeData 参数；值可为 callable(ctx) 在运行期求值
-    data: Dict[str, Any] = field(default_factory=dict)
+    data: dict[str, Any] = field(default_factory=dict)
     # DB 校验项（_validate_db_state 格式）；expected 可为 callable(ctx) 延迟求值
     checks: list = field(default_factory=list)
     # 响应 success 预期值（失败场景为 0）
     success: int = 1
     # 响应 msg 预期值（None 时跳过断言）
-    msg: Optional[str] = None
+    msg: str | None = None
     # 请求后等待秒数（等待 NSQ 等异步消息处理）
     post_wait: float = 0
     # 请求前查询：((ctx 键, 无参可调用), ...)，结果存入 ctx 供 data/checks 引用
     queries: list = field(default_factory=list)
     # 自定义组合准备 callable(testcase)，先于 setup 执行
-    prepare: Optional[Callable] = None
+    prepare: Callable | None = None
     # 结果记录表：'case_list' / 'case_list_b' / 'case_list_c'
     report: str = 'case_list'
 
@@ -85,24 +85,24 @@ class PayTestBase(SceneFlowBase):
         self.run_flow(case)
 
     # ============ 场景骨架钩子实现 ============
-    def flow_prepare(self, case: PayCase, ctx: Dict[str, Any]) -> None:
+    def flow_prepare(self, case: PayCase, ctx: dict[str, Any]) -> None:
         """1. 准备测试数据（自定义组合准备 + 标准步骤）"""
         if case.prepare is not None:
             case.prepare(self)
         if case.setup:
             self._prepare_test_data(case.setup)
 
-    def flow_queries(self, case: PayCase, ctx: Dict[str, Any]) -> None:
+    def flow_queries(self, case: PayCase, ctx: dict[str, Any]) -> None:
         """2. 请求前查询（供动态 data/checks 引用）"""
         for key, query in case.queries:
             ctx[key] = query()
 
-    def flow_request(self, case: PayCase, ctx: Dict[str, Any]) -> None:
+    def flow_request(self, case: PayCase, ctx: dict[str, Any]) -> None:
         """3. 发起请求（响应存入 ctx['_res'] 供断言阶段使用）"""
         data = encode_data(**{key: resolve(value, ctx) for key, value in case.data.items()})
         ctx['_res'] = post_request_session(config.pay_url, data)
 
-    def flow_assert(self, case: PayCase, ctx: Dict[str, Any]) -> None:
+    def flow_assert(self, case: PayCase, ctx: dict[str, Any]) -> None:
         """4. 响应断言"""
         res = ctx['_res']
         assert_code(res['code'])
@@ -110,17 +110,17 @@ class PayTestBase(SceneFlowBase):
         if case.msg is not None:
             assert_body(res['body'], 'msg', case.msg)
 
-    def flow_wait(self, case: PayCase, ctx: Dict[str, Any]) -> None:
+    def flow_wait(self, case: PayCase, ctx: dict[str, Any]) -> None:
         """5. 等待异步消息处理（NSQ 等）"""
         if case.post_wait:
             time.sleep(case.post_wait)
 
-    def flow_validate(self, case: PayCase, ctx: Dict[str, Any]) -> None:
+    def flow_validate(self, case: PayCase, ctx: dict[str, Any]) -> None:
         """6. DB 校验"""
         if case.checks:
             self._validate_db_state([self._resolve_check(check, ctx) for check in case.checks])
 
-    def flow_record(self, case: PayCase, ctx: Dict[str, Any]) -> None:
+    def flow_record(self, case: PayCase, ctx: dict[str, Any]) -> None:
         """7. 记录结果"""
         REPORT_TABLES[case.report][case.des] = result
 

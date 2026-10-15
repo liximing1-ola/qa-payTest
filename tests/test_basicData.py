@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 common/basic_data.py 单元测试（encode_data / encode_oversea_data 分发与编码）
 

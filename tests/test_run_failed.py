@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 common/run_failed.py 单元测试（重试装饰器）
 

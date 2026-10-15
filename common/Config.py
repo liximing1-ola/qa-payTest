@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 全局配置管理模块
 
@@ -10,7 +9,7 @@
 import logging
 import os
 from dataclasses import dataclass, field
-from typing import Any, Dict
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -70,19 +69,19 @@ class DatabaseConfig:
     charset: str = 'utf8'
 
     @property
-    def dev_config(self) -> Dict[str, Any]:
+    def dev_config(self) -> dict[str, Any]:
         """DEV 环境连接配置"""
         return {'host': self.dev_host, 'port': self.dev_port, 'user': self.dev_user,
                 'password': self.dev_password, 'database': self.database, 'charset': self.charset}
 
     @property
-    def ali_config(self) -> Dict[str, Any]:
+    def ali_config(self) -> dict[str, Any]:
         """ALI 环境连接配置"""
         return {'host': self.ali_host, 'port': self.ali_port, 'user': self.ali_user,
                 'password': self.ali_password, 'database': self.database, 'charset': self.charset}
 
     @property
-    def rds_config(self) -> Dict[str, Any]:
+    def rds_config(self) -> dict[str, Any]:
         """RDS 阿里云连接配置"""
         return {'host': self.rds_host, 'port': self.rds_port, 'user': self.rds_user,
                 'password': self.rds_password, 'database': self.database, 'charset': self.charset}
@@ -146,6 +145,38 @@ class BBUserConfig:
     businessUid: int = 105002103      # 商业房 auto_rid 房主（一代宗师）
     custom_rate_uid: int = 100500205  # 自定义分成主播
 
+    @property
+    def pay_uid(self) -> int:
+        return self.payUid
+
+    @property
+    def test_uid(self) -> int:
+        return self.testUid
+
+    @property
+    def vip_room_rid(self) -> int:
+        return self.vipRoomRid
+
+    @property
+    def gs_uid(self) -> int:
+        return self.gsUid
+
+    @property
+    def pretty_rid(self) -> int:
+        return self.prettyRid
+
+    @property
+    def fleet_rid(self) -> int:
+        return self.fleetRid
+
+    @property
+    def master_uid(self) -> int:
+        return self.masterUid
+
+    @property
+    def business_uid(self) -> int:
+        return self.businessUid
+
 
 @dataclass
 class LiveRoleConfig:
@@ -168,6 +199,18 @@ class OverseaUserConfig:
     testUid: int = 800022872
     brokerUid: int = 800018895
     fleet_uid: int = 800041062
+
+    @property
+    def pay_uid(self) -> int:
+        return self.payUid
+
+    @property
+    def test_uid(self) -> int:
+        return self.testUid
+
+    @property
+    def broker_uid(self) -> int:
+        return self.brokerUid
 
     def __getitem__(self, key):
         """支持下标访问"""
@@ -230,7 +273,7 @@ class Config:
     oversea_room: OverseaRoomConfig = field(default_factory=OverseaRoomConfig)
 
     # ============ 礼物配置 ============
-    giftId: Dict[str, int] = field(default_factory=lambda: {
+    giftId: dict[str, int] = field(default_factory=lambda: {
         "5": 5,      # 棒棒糖*100钻
         "7": 7,      # 大宝剑*1000钻
         "11": 11,    # 老司机*3000钻(券-500钻石)
@@ -241,7 +284,7 @@ class Config:
         "362": 362,  # 啵啵奶茶*1000（金豆）
     })
 
-    oversea_giftId: Dict[str, int] = field(default_factory=lambda: {
+    oversea_giftId: dict[str, int] = field(default_factory=lambda: {
         "10": 10,    # 么么哒*6币
         "46": 46,    # 幸运星*6币
         "47": 47,    # 五色星*21币
@@ -297,6 +340,87 @@ class Config:
     def oversea_fleetUid(self) -> int:
         """家族UID"""
         return self.oversea_user.fleet_uid
+
+    # ============ snake_case 别名 ============
+    @property
+    def app_info(self) -> AppConfig:
+        """应用配置（snake_case 别名）"""
+        return self.appInfo
+
+    @property
+    def code_info(self) -> CodeConfig:
+        """代码路径配置（snake_case 别名）"""
+        return self.codeInfo
+
+    @property
+    def app_name(self) -> AppNameConfig:
+        """应用名称映射（snake_case 别名）"""
+        return self.appName
+
+    @property
+    def gift_id(self) -> dict[str, int]:
+        """礼物ID映射（snake_case 别名）"""
+        return self.giftId
+
+    @property
+    def oversea_gift_id(self) -> dict[str, int]:
+        """海外礼物ID映射（snake_case 别名）"""
+        return self.oversea_giftId
+
+    @property
+    def pay_uid(self) -> int:
+        """打赏者UID（snake_case 别名）"""
+        return self.payUid
+
+    @property
+    def test_uid(self) -> int:
+        """测试UID（snake_case 别名）"""
+        return self.bb_user.testUid
+
+    @property
+    def reward_uid(self) -> int:
+        """被打赏者UID（snake_case 别名）"""
+        return self.rewardUid
+
+    @property
+    def master_uid(self) -> int:
+        """被打赏者UID-一代宗师（snake_case 别名）"""
+        return self.masterUid
+
+    @property
+    def business_uid(self) -> int:
+        """商业房房主UID（snake_case 别名）"""
+        return self.businessUid
+
+    @property
+    def gs_uid(self) -> int:
+        """公会用户UID（snake_case 别名）"""
+        return self.gsUid
+
+    @property
+    def oversea_pay_uid(self) -> int:
+        """海外打赏者UID（snake_case 别名）"""
+        return self.oversea_payUid
+
+    @property
+    def oversea_test_uid(self) -> int:
+        """海外测试UID（snake_case 别名）"""
+        return self.oversea_testUid
+
+    @property
+    def oversea_broker_uid(self) -> int:
+        """海外公会成员UID（snake_case 别名）"""
+        return self.oversea_brokerUid
+
+    @property
+    def oversea_fleet_uid(self) -> int:
+        """海外家族UID（snake_case 别名）"""
+        return self.oversea_fleetUid
+
+    @property
+    def bb_qq_login_url(self) -> str:
+        """QQ登录URL（snake_case 别名）"""
+        return self.bb_qqLogin_url
 
     # ============ URL配置 ============
     @property

@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """
 摩天轮 API 封装
 
@@ -9,7 +8,6 @@ import logging
 import os
 import random
 import time
-from typing import List, Optional, Tuple
 
 from common.con_pt_mysql import conMysql
 from common.Config import config
@@ -21,7 +19,7 @@ logger = logging.getLogger(__name__)
 MAX_RETRY_COUNT: int = int(os.environ.get('GREEDY_MAX_RETRY', '10'))
 RETRY_INTERVAL: int = int(os.environ.get('GREEDY_RETRY_INTERVAL', '5'))
 BET_COUNT: int = 6
-VID_RANGE: Tuple[int, int] = (1, 8)
+VID_RANGE: tuple[int, int] = (1, 8)
 
 
 class Greedy:
@@ -77,7 +75,7 @@ class Greedy:
         return post_request_session(url, params, token_name='app')
 
     @staticmethod
-    def _wait_for_state(uid: int, target_state: str = '1') -> Tuple[Optional[int], Optional[int]]:
+    def _wait_for_state(uid: int, target_state: str = '1') -> tuple[int | None, int | None]:
         """等待摩天轮进入指定状态
 
         Args:
@@ -96,7 +94,7 @@ class Greedy:
         return None, None
 
     @staticmethod
-    def _wait_for_prize(uid: int, round_id: int) -> Tuple[int, int]:
+    def _wait_for_prize(uid: int, round_id: int) -> tuple[int, int]:
         """等待开奖结果
 
         Args:
@@ -115,7 +113,7 @@ class Greedy:
         return 0, 0
 
     @staticmethod
-    def bet(money_type: str) -> List[int]:
+    def bet(money_type: str) -> list[int]:
         """
         执行下注流程
 

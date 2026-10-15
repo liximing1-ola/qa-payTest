@@ -1,4 +1,3 @@
-# coding=utf-8
 """
 Starify MySQL数据库操作模块
 """
