@@ -284,9 +284,6 @@ def encode_data(
     return _encode_data(data)
 
 
-# 兼容别名（驼峰 → snake_case，后续逐步迁移外部调用后可移除）
-encodeData = encode_data  # 兼容别名
-
 
 if __name__ == '__main__':
     data = encode_data(

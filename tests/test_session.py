@@ -143,7 +143,7 @@ class TestUseBackupPlan(unittest.TestCase):
 
             import common.get_token as gt
             importlib.reload(gt)
-            with _patch('common.con_mysql.conMysql.select_user_info_sql', return_value='salt_value'), \
+            with _patch('common.con_mysql.ConMysql.select_user_info_sql', return_value='salt_value'), \
                  _patch.object(gt.TokenGenerator, 'generate', return_value='backup_token'):
                 from common.Session import Session
                 result = Session._use_backup_plan('dev', 'main plan failed')

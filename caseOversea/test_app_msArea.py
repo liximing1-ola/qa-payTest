@@ -7,7 +7,7 @@ import unittest
 
 from caseOversea.base import AREA_RID, RECEIVER_BROKER, OverseaAreaTestBase, PayScene
 
-from common.con_pt_mysql import conMysql
+from common.con_pt_mysql import ConMysql
 
 SCENES = [
     PayScene(
@@ -51,7 +51,7 @@ class TestPayCreate(OverseaAreaTestBase):
     def setUpClass(cls):
         """查询马来区个人房 rid（每类只查一次）"""
         super().setUpClass()
-        cls.area_rid = conMysql.select_user_chatroom(property='vip', bigarea_id=9)
+        cls.area_rid = ConMysql.select_user_chatroom(property='vip', bigarea_id=9)
 
     def test_01_msAreaFleetRoomPay(self):
         """马来区家族房/个人房礼物非主播打赏 80% 分成"""

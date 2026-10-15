@@ -3,7 +3,7 @@ from caseStarify.deal_data import deal_pay_data
 from caseStarify.need_data import commodity_config, starify_payUid, starify_rewardUid01, starify_rewardUid02, wealth_lv
 
 from common.assert_util import assert_between, assert_body, assert_code, assert_equal
-from common.con_starify_mysql import conMysql
+from common.con_starify_mysql import ConMysql
 from common.Consts import case_list, result
 from common.request_util import post_starify
 from common.run_failed import Retry
@@ -48,23 +48,23 @@ def _assert_single_step(commodity, to_uids, pay_balance, bag_num, total_hit,
     if success and reward:
         bag_used = min(bag_num, total_gifts)
         star_cost = commodity['price'] * (total_gifts - bag_used)
-        assert_equal(conMysql.select_user_info_sql('star_coin', starify_payUid), pay_balance - star_cost)
-        assert_equal(conMysql.select_user_info_sql('gift_num', starify_payUid, commodity['cid']),
+        assert_equal(ConMysql.select_user_info_sql('star_coin', starify_payUid), pay_balance - star_cost)
+        assert_equal(ConMysql.select_user_info_sql('gift_num', starify_payUid, commodity['cid']),
                      bag_num - bag_used)
         for uid in to_uids:
-            assert_between(conMysql.select_user_info_sql('star_coin', uid),
+            assert_between(ConMysql.select_user_info_sql('star_coin', uid),
                            int(commodity['price'] * commodity['reward_lower']) * total_hit,
                            int(commodity['price'] * commodity['reward_upper']) * total_hit)
-            assert_equal(conMysql.select_user_info_sql('charm', uid), commodity['charm'] * total_hit)
-        assert_equal(conMysql.select_user_info_sql('wealth', starify_payUid),
+            assert_equal(ConMysql.select_user_info_sql('charm', uid), commodity['charm'] * total_hit)
+        assert_equal(ConMysql.select_user_info_sql('wealth', starify_payUid),
                      commodity['wealth'] * (total_gifts - bag_used))
     else:
-        assert_equal(conMysql.select_user_info_sql('star_coin', starify_payUid), pay_balance)
-        assert_equal(conMysql.select_user_info_sql('gift_num', starify_payUid, commodity['cid']), bag_num)
+        assert_equal(ConMysql.select_user_info_sql('star_coin', starify_payUid), pay_balance)
+        assert_equal(ConMysql.select_user_info_sql('gift_num', starify_payUid, commodity['cid']), bag_num)
         for uid in to_uids:
-            assert_equal(conMysql.select_user_info_sql('star_coin', uid), 0)
-            assert_equal(conMysql.select_user_info_sql('charm', uid), 0)
-        assert_equal(conMysql.select_user_info_sql('wealth', starify_payUid), 0)
+            assert_equal(ConMysql.select_user_info_sql('star_coin', uid), 0)
+            assert_equal(ConMysql.select_user_info_sql('charm', uid), 0)
+        assert_equal(ConMysql.select_user_info_sql('wealth', starify_payUid), 0)
 
 
 # ========== 单请求场景（余额/背包/人数组合） ==========
@@ -139,10 +139,10 @@ def _make_privilege_fail_case(des, lv, gift_lv):
     level_min = wealth_lv[f'lv{lv}']['min']
 
     def _assert():
-        assert_equal(conMysql.select_user_info_sql('star_coin', starify_payUid), 50000)
-        assert_equal(conMysql.select_user_info_sql('star_coin', starify_rewardUid01), 0)
-        assert_equal(conMysql.select_user_info_sql('wealth', starify_payUid), level_min)
-        assert_equal(conMysql.select_user_info_sql('charm', starify_rewardUid01), 0)
+        assert_equal(ConMysql.select_user_info_sql('star_coin', starify_payUid), 50000)
+        assert_equal(ConMysql.select_user_info_sql('star_coin', starify_rewardUid01), 0)
+        assert_equal(ConMysql.select_user_info_sql('wealth', starify_payUid), level_min)
+        assert_equal(ConMysql.select_user_info_sql('charm', starify_rewardUid01), 0)
 
     return StarifyCase(
         des=des,
@@ -175,16 +175,16 @@ def _make_privilege_success_case(des, lv, gift_lv):
     level_min = wealth_lv[f'lv{lv}']['min']
 
     def _assert():
-        assert_equal(conMysql.select_user_info_sql('star_coin', starify_payUid), 50000 - commodity['price'])
+        assert_equal(ConMysql.select_user_info_sql('star_coin', starify_payUid), 50000 - commodity['price'])
         if gift_lv in (5, 6):
-            assert_between(conMysql.select_user_info_sql('star_coin', starify_rewardUid01),
+            assert_between(ConMysql.select_user_info_sql('star_coin', starify_rewardUid01),
                            int(commodity['price'] * commodity['reward_lower']),
                            int(commodity['price'] * commodity['reward_upper']))
         else:
-            assert_equal(conMysql.select_user_info_sql('star_coin', starify_rewardUid01), 0)
-        assert_equal(conMysql.select_user_info_sql('wealth', starify_payUid),
+            assert_equal(ConMysql.select_user_info_sql('star_coin', starify_rewardUid01), 0)
+        assert_equal(ConMysql.select_user_info_sql('wealth', starify_payUid),
                      level_min + commodity['wealth'])
-        assert_equal(conMysql.select_user_info_sql('charm', starify_rewardUid01), commodity['charm'])
+        assert_equal(ConMysql.select_user_info_sql('charm', starify_rewardUid01), commodity['charm'])
 
     return StarifyCase(
         des=des,
@@ -285,10 +285,10 @@ class TestPayCreate(StarifyTestBase):
                 money -= commodity['price']
                 wealth += commodity['wealth']
                 charm += commodity['charm']
-                assert_equal(conMysql.select_user_info_sql('star_coin', starify_payUid), money)
-                assert_equal(conMysql.select_user_info_sql('star_coin', starify_rewardUid01), 0)
-                assert_equal(conMysql.select_user_info_sql('wealth', starify_payUid), wealth)
-                assert_equal(conMysql.select_user_info_sql('charm', starify_rewardUid01), charm)
+                assert_equal(ConMysql.select_user_info_sql('star_coin', starify_payUid), money)
+                assert_equal(ConMysql.select_user_info_sql('star_coin', starify_rewardUid01), 0)
+                assert_equal(ConMysql.select_user_info_sql('wealth', starify_payUid), wealth)
+                assert_equal(ConMysql.select_user_info_sql('charm', starify_rewardUid01), charm)
         case_list[des] = result
 
     # ========== 特权礼物 ==========

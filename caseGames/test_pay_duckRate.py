@@ -2,7 +2,7 @@ import unittest
 
 from common.assert_util import assert_body, assert_code, assert_equal
 from common.basic_data import encode_data
-from common.con_mysql import conMysql
+from common.con_mysql import ConMysql
 from common.Config import config
 from common.Consts import case_list_b, result
 from common.request_util import post_request_session
@@ -25,11 +25,11 @@ class TestPayDuckRate(unittest.TestCase):
             action = step['action']
             params = step.get('params', {})
             if action == 'update_money':
-                conMysql.updateMoneySql(**params)
+                ConMysql.updateMoneySql(**params)
             elif action == 'clear_user_money':
-                conMysql.updateUserMoneyClearSql(params['uid1'], params.get('uid2'))
+                ConMysql.updateUserMoneyClearSql(params['uid1'], params.get('uid2'))
             elif action == 'check_user_broker':
-                conMysql.checkUserBroker(params['uid'], bid=params['bid'])
+                ConMysql.checkUserBroker(params['uid'], bid=params['bid'])
 
     def _validate_db_state(self, checks):
         """验证数据库状态"""
@@ -37,7 +37,7 @@ class TestPayDuckRate(unittest.TestCase):
             field = check['field']
             uid = check['uid']
             expected = check['expected']
-            assert_equal(conMysql.select_user_info_sql(field, uid), expected)
+            assert_equal(ConMysql.select_user_info_sql(field, uid), expected)
 
     def test_01_roomPayCustomRate_60(self):
         """

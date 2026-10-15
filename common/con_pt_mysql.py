@@ -107,8 +107,6 @@ class ConMysql:
         """更新用户语言"""
         MySQLConnection.update_user_language(*uids, language=language, area_code=area_code)
 
-    updateUserLanguage = staticmethod(update_user_language)  # 兼容别名
-
     @staticmethod
     def update_user_money_clear_sql(*uids: int) -> None:
         """清空用户账户余额"""
@@ -181,7 +179,3 @@ class ConMysql:
     def sql_xs_user_profile_pay_room_money(uid: int) -> int:
         """查询用户 VIP 数据"""
         return MySQLConnection.query_user_pay_room_money(uid)
-
-
-# 兼容别名（驼峰 → PascalCase，后续逐步迁移外部调用后可移除）
-conMysql = ConMysql

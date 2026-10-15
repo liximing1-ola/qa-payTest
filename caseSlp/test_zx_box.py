@@ -6,7 +6,7 @@ from caseSlp.base import SlpCase, SlpTestBase
 from caseSlp.config import gsUid, juewei_level, normal_uid, payUid, rates, zx_box
 
 from common.assert_util import assert_equal
-from common.con_slp_mysql import conMysql as mysql
+from common.con_slp_mysql import ConMysql as mysql
 from common.run_failed import Retry
 
 # 礼盒打赏后等待结算数据落库的时长（秒）

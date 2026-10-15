@@ -1,7 +1,7 @@
 """
 MySQL 连接管理基类
 
-统一各数据库模块（conMysql/conPtMysql/conSlpMysql/conStarifyMysql）中重复的
+统一各数据库模块（ConMysql/ConPtMysql/ConSlpMysql/ConStarifyMysql）中重复的
 连接管理逻辑，避免多份单例/重连/游标管理代码。
 """
 import logging
@@ -139,7 +139,7 @@ class MySQLConnection:
         return res[0] if res else default
 
     # ============ 公共业务操作 ============
-    # 以下方法提取自 conPtMysql/conSlpMysql 中完全相同的实现，
+    # 以下方法提取自 ConPtMysql/ConSlpMysql 中完全相同的实现，
     # 通过 classmethod + cls 自动路由到正确的子类连接。
 
     @classmethod

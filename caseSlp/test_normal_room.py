@@ -16,7 +16,7 @@ from caseSlp.config import (
 	rates,
 )
 
-from common.con_slp_mysql import conMysql as mysql
+from common.con_slp_mysql import ConMysql as mysql
 from common.run_failed import Retry
 
 

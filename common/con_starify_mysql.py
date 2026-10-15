@@ -114,7 +114,3 @@ class ConMysql:
 
 if __name__ == '__main__':
     logger.info(ConMysql.select_user_info_sql('gift_num', 124458))
-
-
-# 兼容别名（驼峰 → PascalCase，后续逐步迁移外部调用后可移除）
-conMysql = ConMysql

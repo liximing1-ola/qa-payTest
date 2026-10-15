@@ -5,7 +5,7 @@ APP 海外版支付测试 - 越南区域验证
 """
 from caseOversea.base import AREA_RID, OverseaAreaTestBase, PayScene
 
-from common.con_pt_mysql import conMysql
+from common.con_pt_mysql import ConMysql
 from common.Config import config
 from common.run_failed import Retry
 
@@ -45,7 +45,7 @@ class TestPayCreate(OverseaAreaTestBase):
     def setUpClass(cls):
         """查询越南区商业房 rid（每类只查一次）"""
         super().setUpClass()
-        cls.area_rid = conMysql.select_user_chatroom('business', bigarea_id=7)
+        cls.area_rid = ConMysql.select_user_chatroom('business', bigarea_id=7)
 
     def test_01_viAreaVipRoomPay(self):
         """越南区区商业房礼物打赏非主播 70% 分成场景"""

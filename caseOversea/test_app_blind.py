@@ -6,16 +6,16 @@ APP 海外版支付测试 - 盲盒打赏验证
 from caseOversea.base import OverseaBizCase, OverseaBizTestBase
 
 from common.assert_util import assert_equal
-from common.con_pt_mysql import conMysql
+from common.con_pt_mysql import ConMysql
 from common.Config import config
 from common.run_failed import Retry
 
 
 def _assert_blind_reconcile():
     """校验收礼人到账金额与 pay_change 流水一致"""
-    assert_equal(conMysql.select_user_info_sql('money_cash_personal', config.oversea_testUid,
+    assert_equal(ConMysql.select_user_info_sql('money_cash_personal', config.oversea_testUid,
                                             money_type='money_cash_personal'),
-                 conMysql.select_user_info_sql('pay_change', config.oversea_testUid))
+                 ConMysql.select_user_info_sql('pay_change', config.oversea_testUid))
 
 
 # 场景表：房间盲盒打赏（单人次/多人次多个）

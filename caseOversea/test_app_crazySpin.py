@@ -7,7 +7,7 @@ import unittest
 
 from caseOversea.base import OverseaBizCase, OverseaBizTestBase
 
-from common.con_pt_mysql import conMysql
+from common.con_pt_mysql import ConMysql
 from common.Config import config
 from common.Consts import case_list, result
 from common.Crazyspin import CrazySpin
@@ -41,8 +41,8 @@ class TestPayCreate(OverseaBizTestBase):
     def test_02_playCrazySpin(self, des: str = '开启大转盘抽奖场景', cid: int = 32):
         """大转盘抽奖验证（占位：抽奖逻辑待业务接口就绪后补充）"""
         # 1. 构造数据
-        conMysql.delete_user_account_sql('user_commodity', config.oversea_payUid)
-        conMysql.insert_xs_user_commodity(config.oversea_payUid, cid=cid, num=100)  # 背包插入 100 个欢乐券
+        ConMysql.delete_user_account_sql('user_commodity', config.oversea_payUid)
+        ConMysql.insert_xs_user_commodity(config.oversea_payUid, cid=cid, num=100)  # 背包插入 100 个欢乐券
 
         # 抽奖逻辑待业务接口就绪后补充，当前仅保留跳过占位
         case_list[des] = result

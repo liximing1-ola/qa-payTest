@@ -68,7 +68,3 @@ class ConRedis:
 
 if __name__ == '__main__':
     ConRedis.check_set_key('Xs.WhiteList.SuperVoice.White', 100287189)
-
-
-# 兼容别名（驼峰 → PascalCase，后续逐步迁移外部调用后可移除）
-conRedis = ConRedis

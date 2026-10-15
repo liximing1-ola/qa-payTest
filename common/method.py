@@ -16,7 +16,7 @@ from typing import Any
 import requests
 
 from common import Consts
-from common.con_mysql import conMysql as mysql
+from common.con_mysql import ConMysql as mysql
 from common.Config import config
 
 logger = logging.getLogger(__name__)

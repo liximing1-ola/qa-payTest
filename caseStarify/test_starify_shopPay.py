@@ -3,7 +3,7 @@ from caseStarify.deal_data import deal_pay_data
 from caseStarify.need_data import commodity_config, starify_payUid
 
 from common.assert_util import assert_equal
-from common.con_starify_mysql import conMysql
+from common.con_starify_mysql import ConMysql
 from common.run_failed import Retry
 from common.tools import deal_num
 
@@ -21,9 +21,9 @@ def _make_shop_case(des, commodity_key, sale_level):
     duration = commodity[f'level_{sale_level}']['duration']
 
     def _assert():
-        assert_equal(conMysql.select_user_info_sql('star_coin', starify_payUid), user_money - cost)
-        assert_equal(conMysql.select_user_info_sql('commodity_num', starify_payUid, commodity['cid'], duration), 1)
-        assert_equal(conMysql.select_user_info_sql('wealth', starify_payUid), cost)
+        assert_equal(ConMysql.select_user_info_sql('star_coin', starify_payUid), user_money - cost)
+        assert_equal(ConMysql.select_user_info_sql('commodity_num', starify_payUid, commodity['cid'], duration), 1)
+        assert_equal(ConMysql.select_user_info_sql('wealth', starify_payUid), cost)
 
     return StarifyCase(
         des=des,

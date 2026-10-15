@@ -119,10 +119,10 @@ class Session:
             Token 字典
         """
         Logs.get_logger('getSession.log').warning(f'session 主方案获取失败，转备选方案，原因：{error_msg}')
-        from common.con_mysql import conMysql
+        from common.con_mysql import ConMysql
         from common.get_token import TokenGenerator
 
-        user_index = conMysql.select_user_info_sql('user_index', config.payUid)
+        user_index = ConMysql.select_user_info_sql('user_index', config.payUid)
         token = TokenGenerator(config.payUid, user_index).generate()
         Session.check_user_token('write', app_name=env, token=token)
         logger.info('主方案失败，已启用备选方案获取 token')

@@ -76,7 +76,7 @@ class TestRunCaseFlow(unittest.TestCase):
             data=data,
             checks=[_check],
         )
-        with patch('caseStarify.base.conMysql') as m_mysql, \
+        with patch('caseStarify.base.ConMysql') as m_mysql, \
                 patch('caseStarify.base.post_starify',
                       side_effect=lambda d: events.append(('req', d))
                       or {'code': 200, 'body': body}), \
@@ -150,25 +150,25 @@ class TestPrepareDispatcher(unittest.TestCase):
         self.tc = _make_testcase()
 
     def test_update_money(self):
-        with patch('caseStarify.base.conMysql') as m:
+        with patch('caseStarify.base.ConMysql') as m:
             self.tc._prepare_test_data(
                 [{'action': 'update_money', 'params': {'uid': 1, 'money': 5}}])
         m.update_money_sql.assert_called_once_with(1, 5)
 
     def test_update_wealth(self):
-        with patch('caseStarify.base.conMysql') as m:
+        with patch('caseStarify.base.ConMysql') as m:
             self.tc._prepare_test_data(
                 [{'action': 'update_wealth', 'params': {'uid': 1, 'wealth': 100}}])
         m.update_wealth_sql.assert_called_once_with(1, 100)
 
     def test_update_charm(self):
-        with patch('caseStarify.base.conMysql') as m:
+        with patch('caseStarify.base.ConMysql') as m:
             self.tc._prepare_test_data(
                 [{'action': 'update_charm', 'params': {'uid': 1, 'charm': 8}}])
         m.update_charm_sql.assert_called_once_with(1, 8)
 
     def test_delete_user_account_with_wid(self):
-        with patch('caseStarify.base.conMysql') as m:
+        with patch('caseStarify.base.ConMysql') as m:
             self.tc._prepare_test_data([{
                 'action': 'delete_user_account',
                 'params': {'table': 'user_work_reward', 'uid': 9, 'wid': 9926},
@@ -176,7 +176,7 @@ class TestPrepareDispatcher(unittest.TestCase):
         m.delete_user_account_sql.assert_called_once_with('user_work_reward', 9, 9926)
 
     def test_delete_user_account_default_wid(self):
-        with patch('caseStarify.base.conMysql') as m:
+        with patch('caseStarify.base.ConMysql') as m:
             self.tc._prepare_test_data([{
                 'action': 'delete_user_account',
                 'params': {'table': 'user_commodity', 'uid': 9},
@@ -184,20 +184,20 @@ class TestPrepareDispatcher(unittest.TestCase):
         m.delete_user_account_sql.assert_called_once_with('user_commodity', 9, 0)
 
     def test_insert_commodity(self):
-        with patch('caseStarify.base.conMysql') as m:
+        with patch('caseStarify.base.ConMysql') as m:
             self.tc._prepare_test_data(
                 [{'action': 'insert_commodity',
                   'params': {'uid': 9, 'cid': 8, 'num': 2}}])
         m.insert_xs_user_commodity.assert_called_once_with(9, 8, 2)
 
     def test_delete_producer_singer(self):
-        with patch('caseStarify.base.conMysql') as m:
+        with patch('caseStarify.base.ConMysql') as m:
             self.tc._prepare_test_data(
                 [{'action': 'delete_producer_singer', 'params': {'singer_uid': 9}}])
         m.delete_producer_singer.assert_called_once_with(9)
 
     def test_update_singer_worth(self):
-        with patch('caseStarify.base.conMysql') as m:
+        with patch('caseStarify.base.ConMysql') as m:
             self.tc._prepare_test_data(
                 [{'action': 'update_singer_worth',
                   'params': {'singer_uid': 9, 'worth': 100}}])
@@ -205,6 +205,6 @@ class TestPrepareDispatcher(unittest.TestCase):
 
     def test_unknown_action_noop(self):
         """未知 action 不应触发任何数据库操作"""
-        with patch('caseStarify.base.conMysql') as m:
+        with patch('caseStarify.base.ConMysql') as m:
             self.tc._prepare_test_data([{'action': 'not_exists'}])
         self.assertEqual(m.mock_calls, [])

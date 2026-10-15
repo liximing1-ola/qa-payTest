@@ -17,7 +17,7 @@ from typing import Any
 
 from common.assert_util import assert_body, assert_code, assert_equal, assert_len
 from common.basic_data import encode_data
-from common.con_mysql import conMysql as mysql
+from common.con_mysql import ConMysql as mysql
 from common.Config import config
 from common.Consts import case_list, case_list_b, case_list_c, result
 from common.request_util import post_request_session
@@ -47,7 +47,7 @@ class PayCase:
     des: str
     # 数据准备步骤（_prepare_test_data 分发格式）
     setup: list = field(default_factory=list)
-    # encodeData 参数；值可为 callable(ctx) 在运行期求值
+    # encode_data 参数；值可为 callable(ctx) 在运行期求值
     data: dict[str, Any] = field(default_factory=dict)
     # DB 校验项（_validate_db_state 格式）；expected 可为 callable(ctx) 延迟求值
     checks: list = field(default_factory=list)

@@ -382,7 +382,3 @@ class ConMysql:
                     (rate, creater, uid)
                 )
         ConMysql._transactional_write(_write)
-
-
-# 兼容别名（驼峰 → PascalCase，后续逐步迁移外部调用后可移除）
-conMysql = ConMysql

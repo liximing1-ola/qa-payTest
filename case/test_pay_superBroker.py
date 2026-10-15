@@ -2,7 +2,7 @@ import unittest
 
 import pytest
 
-from common.con_mysql import conMysql as mysql
+from common.con_mysql import ConMysql as mysql
 from common.sql_script import UserMoneyOperations
 
 

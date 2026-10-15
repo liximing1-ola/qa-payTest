@@ -17,7 +17,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from common.assert_util import assert_body, assert_code
-from common.con_starify_mysql import conMysql
+from common.con_starify_mysql import ConMysql
 from common.Consts import case_list, case_list_b, result
 from common.request_util import post_starify
 from common.scene_base import SceneFlowBase
@@ -100,29 +100,29 @@ class StarifyTestBase(SceneFlowBase):
         """准备测试数据（Starify 域通用步骤分发器）
 
         支持的 action:
-            update_money           → conMysql.update_money_sql(uid, money)
-            update_wealth          → conMysql.update_wealth_sql(uid, wealth)
-            update_charm           → conMysql.update_charm_sql(uid, charm)
-            delete_user_account    → conMysql.delete_user_account_sql(table, uid, wid)
-            insert_commodity       → conMysql.insert_xs_user_commodity(uid, cid, num)
-            delete_producer_singer → conMysql.delete_producer_singer(singer_uid)
-            update_singer_worth    → conMysql.update_singer_worth(singer_uid, worth)
+            update_money           → ConMysql.update_money_sql(uid, money)
+            update_wealth          → ConMysql.update_wealth_sql(uid, wealth)
+            update_charm           → ConMysql.update_charm_sql(uid, charm)
+            delete_user_account    → ConMysql.delete_user_account_sql(table, uid, wid)
+            insert_commodity       → ConMysql.insert_xs_user_commodity(uid, cid, num)
+            delete_producer_singer → ConMysql.delete_producer_singer(singer_uid)
+            update_singer_worth    → ConMysql.update_singer_worth(singer_uid, worth)
         """
         for step in setup_steps:
             action = step['action']
             params = step.get('params', {})
             if action == 'update_money':
-                conMysql.update_money_sql(params['uid'], params['money'])
+                ConMysql.update_money_sql(params['uid'], params['money'])
             elif action == 'update_wealth':
-                conMysql.update_wealth_sql(params['uid'], params['wealth'])
+                ConMysql.update_wealth_sql(params['uid'], params['wealth'])
             elif action == 'update_charm':
-                conMysql.update_charm_sql(params['uid'], params['charm'])
+                ConMysql.update_charm_sql(params['uid'], params['charm'])
             elif action == 'delete_user_account':
-                conMysql.delete_user_account_sql(params['table'], params['uid'],
+                ConMysql.delete_user_account_sql(params['table'], params['uid'],
                                               params.get('wid', 0))
             elif action == 'insert_commodity':
-                conMysql.insert_xs_user_commodity(params['uid'], params['cid'], params['num'])
+                ConMysql.insert_xs_user_commodity(params['uid'], params['cid'], params['num'])
             elif action == 'delete_producer_singer':
-                conMysql.delete_producer_singer(params['singer_uid'])
+                ConMysql.delete_producer_singer(params['singer_uid'])
             elif action == 'update_singer_worth':
-                conMysql.update_singer_worth(params['singer_uid'], params['worth'])
+                ConMysql.update_singer_worth(params['singer_uid'], params['worth'])

@@ -104,7 +104,7 @@ class TestGreedyWait(unittest.TestCase):
         self.assertEqual(mock_index.call_count, MAX_RETRY_COUNT)
 
     @patch('common.Greedy.time.sleep')
-    @patch('common.Greedy.conMysql.select_greedy_prize')
+    @patch('common.Greedy.ConMysql.select_greedy_prize')
     def test_wait_for_prize_returns_on_data(self, mock_prize, mock_sleep):
         """有开奖数据时应立即返回，不再 sleep"""
         mock_prize.return_value = (30, 1200)
@@ -114,7 +114,7 @@ class TestGreedyWait(unittest.TestCase):
         mock_sleep.assert_not_called()
 
     @patch('common.Greedy.time.sleep')
-    @patch('common.Greedy.conMysql.select_greedy_prize')
+    @patch('common.Greedy.ConMysql.select_greedy_prize')
     def test_wait_for_prize_exhausted_returns_zero(self, mock_prize, mock_sleep):
         """始终无数据时应重试 MAX_RETRY_COUNT 次后返回 (0, 0)"""
         mock_prize.return_value = (0, 0)

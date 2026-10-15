@@ -9,7 +9,7 @@ import os
 import random
 import time
 
-from common.con_pt_mysql import conMysql
+from common.con_pt_mysql import ConMysql
 from common.Config import config
 from common.request_util import post_request_session
 
@@ -105,7 +105,7 @@ class Greedy:
             (counter_all, prize) 元组
         """
         for _ in range(MAX_RETRY_COUNT):
-            result = conMysql.select_greedy_prize(uid, round_id)
+            result = ConMysql.select_greedy_prize(uid, round_id)
             # select_greedy_prize 无数据时返回 (0, 0)，有数据时返回实际元组
             if result is not None and result != (0, 0):
                 return result[0], result[1]

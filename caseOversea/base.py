@@ -17,13 +17,13 @@ from typing import Any
 
 from common.assert_util import assert_body, assert_code, assert_equal, assert_len
 from common.basic_data import encode_oversea_data
-from common.con_pt_mysql import conMysql
+from common.con_pt_mysql import ConMysql
 from common.Config import config
 from common.Consts import case_list, result
 from common.request_util import post_request_session
 from common.scene_base import SceneFlowBase, resolve
 
-# 哨兵：房间 ID 取 setUpClass 中查询的 cls.area_rid（None 表示用 encodeOverseaData 默认房）
+# 哨兵：房间 ID 取 setUpClass 中查询的 cls.area_rid（None 表示用 encode_oversea_data 默认房）
 AREA_RID = object()
 
 # 收礼人类型：非主播 / 公会主播
@@ -50,7 +50,7 @@ class PayScene:
     pay_type: str = 'package'
     # 是否箱子打赏（幸运星 giftId['46']）
     is_box: bool = False
-    # 房间 ID：AREA_RID 取 setUpClass 查询值；None 用 encodeOverseaData 默认房
+    # 房间 ID：AREA_RID 取 setUpClass 查询值；None 用 encode_oversea_data 默认房
     rid: Any = None
     # 打赏者初始 money
     payer_money: int = 700
@@ -105,20 +105,20 @@ class OverseaTestBase(SceneFlowBase):
 
     @classmethod
     def _clear_area_redis(cls) -> None:
-        """清理大区相关的 Redis 缓存（按需导入 conRedis，避免非 Redis 场景引入依赖）"""
-        from common.con_redis import conRedis
-        conRedis.del_key('User.Big.Area.Id', config.oversea_user.values(), host=config.redis_host_ali)
-        conRedis.del_key('User.Big.Area', config.oversea_user.values(), host=config.redis_host_ali)
+        """清理大区相关的 Redis 缓存（按需导入 ConRedis，避免非 Redis 场景引入依赖）"""
+        from common.con_redis import ConRedis
+        ConRedis.del_key('User.Big.Area.Id', config.oversea_user.values(), host=config.redis_host_ali)
+        ConRedis.del_key('User.Big.Area', config.oversea_user.values(), host=config.redis_host_ali)
 
     @classmethod
     def setUpClass(cls) -> None:
         """测试前准备：检查礼物配置、设置用户大区（及可选的房间大区/Redis 清理）"""
         if cls.check_gift_config:
-            conMysql.check_xs_gift_config()
+            ConMysql.check_xs_gift_config()
         if cls.bigarea_id is not None:
-            conMysql.updateUserBigArea(*config.oversea_user.values(), bigarea_id=cls.bigarea_id)  #type: ignore[attr-defined]
+            ConMysql.updateUserBigArea(*config.oversea_user.values(), bigarea_id=cls.bigarea_id)  #type: ignore[attr-defined]
             if cls.room_rid is not None:
-                conMysql.updateUserRidInfoSql(cls.room_type, cls.room_rid, area=cls.room_area)
+                ConMysql.updateUserRidInfoSql(cls.room_type, cls.room_rid, area=cls.room_area)
             if cls.clear_redis_on_setup:
                 cls._clear_area_redis()
 
@@ -126,7 +126,7 @@ class OverseaTestBase(SceneFlowBase):
     def tearDownClass(cls) -> None:
         """测试后清理：恢复用户大区（及可选的 Redis 清理）"""
         if cls.bigarea_id is not None:
-            conMysql.updateUserBigArea(*config.oversea_user.values())  #type: ignore[attr-defined]
+            ConMysql.updateUserBigArea(*config.oversea_user.values())  #type: ignore[attr-defined]
             if cls.clear_redis_on_teardown:
                 time.sleep(REDIS_CLEAR_WAIT)
                 cls._clear_area_redis()
@@ -163,16 +163,16 @@ class OverseaAreaTestBase(OverseaTestBase):
         ctx['receiver_uid'] = receiver_uid
 
         if scene.clear_all:
-            conMysql.update_user_money_clear_sql(config.oversea_payUid, receiver_uid)
+            ConMysql.update_user_money_clear_sql(config.oversea_payUid, receiver_uid)
         else:
             if scene.payer_box_extra:
-                conMysql.update_money_sql(config.oversea_payUid, scene.payer_money,
+                ConMysql.update_money_sql(config.oversea_payUid, scene.payer_money,
                                         money_cash=100, money_cash_b=100, money_b=100)
             else:
-                conMysql.update_money_sql(config.oversea_payUid, scene.payer_money)
-            conMysql.update_money_sql(receiver_uid)
+                ConMysql.update_money_sql(config.oversea_payUid, scene.payer_money)
+            ConMysql.update_money_sql(receiver_uid)
             if scene.clear_extend:
-                conMysql.update_user_extend_money_clear_sql(receiver_uid)
+                ConMysql.update_user_extend_money_clear_sql(receiver_uid)
 
     def flow_request(self, scene: PayScene, ctx: dict[str, Any]) -> None:
         """请求：发起打赏（响应存入 ctx['_res'] 供断言阶段使用）"""
@@ -200,7 +200,7 @@ class OverseaAreaTestBase(OverseaTestBase):
         """校验：检查余额与对账"""
         receiver_uid = ctx['receiver_uid']
         if scene.payer_expect is not None:
-            assert_equal(conMysql.select_user_info_sql('sum_money', config.oversea_payUid), scene.payer_expect)
+            assert_equal(ConMysql.select_user_info_sql('sum_money', config.oversea_payUid), scene.payer_expect)
         income = self._query_account(receiver_uid, scene.income_account, scene.income_money_type)
         if scene.income_min:
             assert_len(income, scene.income_expect)
@@ -210,7 +210,7 @@ class OverseaAreaTestBase(OverseaTestBase):
             rec_account = scene.reconcile_account or scene.income_account
             rec_type = scene.income_money_type if scene.reconcile_money_type is None else scene.reconcile_money_type
             rec_value = self._query_account(receiver_uid, rec_account, rec_type)
-            assert_equal(rec_value, conMysql.select_user_info_sql(accountType='pay_change', uid=receiver_uid))
+            assert_equal(rec_value, ConMysql.select_user_info_sql(accountType='pay_change', uid=receiver_uid))
 
     def flow_record(self, scene: PayScene, ctx: dict[str, Any]) -> None:
         """记录：写入报告表"""
@@ -220,8 +220,8 @@ class OverseaAreaTestBase(OverseaTestBase):
     def _query_account(uid: int, account: str, money_type: str | None) -> int | None:
         """查询账户字段（money_type 为 None 时不传，保持与原调用一致）"""
         if money_type is None:
-            return conMysql.select_user_info_sql(account, uid)
-        return conMysql.select_user_info_sql(account, uid, money_type=money_type)
+            return ConMysql.select_user_info_sql(account, uid)
+        return ConMysql.select_user_info_sql(account, uid, money_type=money_type)
 
 
 # ============ 通用支付业务场景（非区域消费） ============
@@ -239,7 +239,7 @@ class OverseaBizCase:
     des: str
     # 数据准备步骤（_prepare_test_data 分发格式）
     setup: list = field(default_factory=list)
-    # encodeOverseaData 参数（只声明与默认值的差异）；值可为 callable(ctx) 在运行期求值
+    # encode_oversea_data 参数（只声明与默认值的差异）；值可为 callable(ctx) 在运行期求值
     data: dict[str, Any] = field(default_factory=dict)
     # 请求地址（None 时用 config.oversea_pay_url）
     url: str | None = None
@@ -255,8 +255,8 @@ class OverseaBizCase:
 
 # 非 selectUserInfoSql 通用字段的特殊查询（check 字典 field 名 -> 查询函数）
 EXTRA_QUERY_MAP = {
-    'pay_room_money': conMysql.sql_xs_user_profile_pay_room_money,
-    'popularity': conMysql.sql_xs_user_popularity,
+    'pay_room_money': ConMysql.sql_xs_user_profile_pay_room_money,
+    'popularity': ConMysql.sql_xs_user_popularity,
 }
 
 
@@ -313,34 +313,34 @@ class OverseaBizTestBase(OverseaTestBase):
         """准备测试数据（海外版通用业务步骤分发器）
 
         支持的 action:
-            update_money         → conMysql.update_money_sql(**params)
-            clear_money          → conMysql.update_user_money_clear_sql(*params['uids'])
-            delete_user_account  → conMysql.delete_user_account_sql(table, uid)
-            insert_commodity     → conMysql.insert_xs_user_commodity(uid, cid, num)
-            insert_box           → conMysql.insert_xs_user_box(uid)
-            clear_extend_money   → conMysql.update_user_extend_money_clear_sql(uid)
-            clear_pay_room_money → conMysql.update_xs_user_profile_pay_room_money(uid)
-            clear_popularity     → conMysql.update_xs_user_popularity(uid)
+            update_money         → ConMysql.update_money_sql(**params)
+            clear_money          → ConMysql.update_user_money_clear_sql(*params['uids'])
+            delete_user_account  → ConMysql.delete_user_account_sql(table, uid)
+            insert_commodity     → ConMysql.insert_xs_user_commodity(uid, cid, num)
+            insert_box           → ConMysql.insert_xs_user_box(uid)
+            clear_extend_money   → ConMysql.update_user_extend_money_clear_sql(uid)
+            clear_pay_room_money → ConMysql.update_xs_user_profile_pay_room_money(uid)
+            clear_popularity     → ConMysql.update_xs_user_popularity(uid)
         """
         for step in setup_steps:
             action = step['action']
             params = step.get('params', {})
             if action == 'update_money':
-                conMysql.update_money_sql(**params)
+                ConMysql.update_money_sql(**params)
             elif action == 'clear_money':
-                conMysql.update_user_money_clear_sql(*params['uids'])
+                ConMysql.update_user_money_clear_sql(*params['uids'])
             elif action == 'delete_user_account':
-                conMysql.delete_user_account_sql(params['table'], params['uid'])
+                ConMysql.delete_user_account_sql(params['table'], params['uid'])
             elif action == 'insert_commodity':
-                conMysql.insert_xs_user_commodity(params['uid'], params['cid'], params['num'])
+                ConMysql.insert_xs_user_commodity(params['uid'], params['cid'], params['num'])
             elif action == 'insert_box':
-                conMysql.insert_xs_user_box(params['uid'])
+                ConMysql.insert_xs_user_box(params['uid'])
             elif action == 'clear_extend_money':
-                conMysql.update_user_extend_money_clear_sql(params['uid'])
+                ConMysql.update_user_extend_money_clear_sql(params['uid'])
             elif action == 'clear_pay_room_money':
-                conMysql.update_xs_user_profile_pay_room_money(params['uid'])
+                ConMysql.update_xs_user_profile_pay_room_money(params['uid'])
             elif action == 'clear_popularity':
-                conMysql.update_xs_user_popularity(params['uid'])
+                ConMysql.update_xs_user_popularity(params['uid'])
 
     def _validate_db_state(self, checks):
         """验证数据库状态（海外版通用业务校验分发器）
@@ -367,7 +367,7 @@ class OverseaBizTestBase(OverseaTestBase):
                 kwargs = dict(check.get('kwargs', {}))
                 if 'money_type' in check:
                     kwargs.setdefault('money_type', check['money_type'])
-                actual = conMysql.select_user_info_sql(field, uid, **kwargs)
+                actual = ConMysql.select_user_info_sql(field, uid, **kwargs)
             if 'expected' in check:
                 assert_equal(actual, check['expected'])
             if 'min' in check:

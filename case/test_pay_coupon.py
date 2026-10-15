@@ -5,7 +5,7 @@
 """
 from case.base import PayCase, PayTestBase
 
-from common.con_mysql import conMysql as mysql
+from common.con_mysql import ConMysql as mysql
 from common.Config import config
 from common.run_failed import Retry
 

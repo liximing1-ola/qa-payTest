@@ -5,7 +5,7 @@ APP 海外版支付测试 - 印度尼西亚区域验证
 """
 from caseOversea.base import AREA_RID, OverseaAreaTestBase, PayScene
 
-from common.con_pt_mysql import conMysql
+from common.con_pt_mysql import ConMysql
 from common.Config import config
 from common.run_failed import Retry
 
@@ -46,7 +46,7 @@ class TestPayCreate(OverseaAreaTestBase):
     def setUpClass(cls):
         """查询印尼区家族房 rid（每类只查一次）"""
         super().setUpClass()
-        cls.area_rid = conMysql.select_user_chatroom(property='fleet', bigarea_id=5)
+        cls.area_rid = ConMysql.select_user_chatroom(property='fleet', bigarea_id=5)
 
     def test_01_idAreaFleetRoomPay(self):
         """印尼区家族房礼物非主播打赏 80% 分成"""

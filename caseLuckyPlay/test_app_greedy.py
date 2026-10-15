@@ -8,8 +8,8 @@ import time
 import unittest
 
 from common.assert_util import assert_equal
-from common.con_pt_mysql import conMysql
-from common.con_redis import conRedis
+from common.con_pt_mysql import ConMysql
+from common.con_redis import ConRedis
 from common.Config import config
 from common.Consts import case_list_c, result
 from common.Greedy import Greedy
@@ -24,10 +24,10 @@ class TestPayGreedy(unittest.TestCase):
     @classmethod
     def tearDownClass(cls) -> None:
         """测试后清理：恢复用户大区，清理 Redis 缓存"""
-        conMysql.updateUserBigArea(*config.oversea_user.values())
+        ConMysql.updateUserBigArea(*config.oversea_user.values())
         time.sleep(REDIS_CLEAR_WAIT)
-        conRedis.del_key('User.Big.Area.Id', config.oversea_user.values(), host=config.redis_host_ali)
-        conRedis.del_key('User.Big.Area', config.oversea_user.values(), host=config.redis_host_ali)
+        ConRedis.del_key('User.Big.Area.Id', config.oversea_user.values(), host=config.redis_host_ali)
+        ConRedis.del_key('User.Big.Area', config.oversea_user.values(), host=config.redis_host_ali)
 
     def _prepare_test_data(self, setup_steps):
         """
@@ -40,11 +40,11 @@ class TestPayGreedy(unittest.TestCase):
             action = step['action']
             params = step.get('params', {})
             if action == 'update_user_big_area':
-                conMysql.updateUserBigArea(*params['uids'], **{k: v for k, v in params.items() if k != 'uids'})
+                ConMysql.updateUserBigArea(*params['uids'], **{k: v for k, v in params.items() if k != 'uids'})
             elif action == 'update_user_language':
-                conMysql.update_user_language(*params['uids'], **{k: v for k, v in params.items() if k != 'uids'})
+                ConMysql.update_user_language(*params['uids'], **{k: v for k, v in params.items() if k != 'uids'})
             elif action == 'update_money':
-                conMysql.update_money_sql(**params)
+                ConMysql.update_money_sql(**params)
 
     def _validate_calculation(self, check):
         """
@@ -57,7 +57,7 @@ class TestPayGreedy(unittest.TestCase):
         uid = check['uid']
         money_type = check.get('money_type')
         expected_calc = check['expected_calc']
-        actual = conMysql.select_user_info_sql(field, uid, money_type=money_type)
+        actual = ConMysql.select_user_info_sql(field, uid, money_type=money_type)
         assert_equal(actual, expected_calc)
 
     def test_01_greedy_bet(self):

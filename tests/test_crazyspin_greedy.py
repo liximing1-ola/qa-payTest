@@ -109,7 +109,7 @@ class TestGreedyPolling(unittest.TestCase):
         self.assertEqual(m_sleep.call_count, MAX_RETRY_COUNT)
 
     def test_wait_for_prize_matched(self):
-        with patch('common.Greedy.conMysql.select_greedy_prize',
+        with patch('common.Greedy.ConMysql.select_greedy_prize',
                    return_value=(100, 50)) as m:
             res = Greedy._wait_for_prize(5, 7)
         self.assertEqual(res, (100, 50))
@@ -117,7 +117,7 @@ class TestGreedyPolling(unittest.TestCase):
 
     def test_wait_for_prize_timeout(self):
         """无数据（返回 (0,0)）应重试满次数并返回 (0, 0)"""
-        with patch('common.Greedy.conMysql.select_greedy_prize',
+        with patch('common.Greedy.ConMysql.select_greedy_prize',
                    return_value=(0, 0)), \
                 patch('common.Greedy.time.sleep'):
             res = Greedy._wait_for_prize(5, 7)

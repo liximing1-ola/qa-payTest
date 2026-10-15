@@ -16,7 +16,7 @@ from caseSlp.config import pay_url, payUid
 
 from common.assert_util import assert_body, assert_code, assert_equal
 from common.basic_slp_data import encode_data
-from common.con_slp_mysql import conMysql as mysql
+from common.con_slp_mysql import ConMysql as mysql
 from common.Consts import case_list, case_list_b, result
 from common.request_util import post_request_session
 from common.scene_base import SceneFlowBase, resolve, resolve_check
@@ -45,7 +45,7 @@ class SlpCase:
     setup: list = field(default_factory=list)
     # 请求前查询：((ctx 键, 无参可调用), ...)，结果存入 ctx 供 data/checks 引用
     queries: list = field(default_factory=list)
-    # encodeData 参数；值可为 callable(ctx) 在运行期求值
+    # encode_data 参数；值可为 callable(ctx) 在运行期求值
     data: dict[str, Any] = field(default_factory=dict)
     # 响应 success 预期值（失败场景为 0）
     success: int = 1

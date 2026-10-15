@@ -176,8 +176,6 @@ class ConMysql:
         """更新用户语言"""
         MySQLConnection.update_user_language(*uids, language=language, area_code=area_code)
 
-    updateUserLanguage = staticmethod(update_user_language)  # 兼容别名
-
     @staticmethod
     def update_user_money_clear_sql(*uids: str) -> None:
         """清空用户账户余额"""
@@ -299,7 +297,3 @@ class ConMysql:
         except Exception as error:
             logger.error('select_zx_pay_data error: %s', error)
             return None
-
-
-# 兼容别名（驼峰 → PascalCase，后续逐步迁移外部调用后可移除）
-conMysql = ConMysql

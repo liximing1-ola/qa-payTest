@@ -144,6 +144,47 @@ python check_collect.py
 
 以上检查已在 CI（`.github/workflows/ci.yml`）中自动执行。
 
+## CI/CD 流水线
+
+项目配置了 GitHub Actions 自动流水线（`.github/workflows/ci.yml`），在 push 或 PR 到 main 分支时自动执行：
+
+1. **单元测试 + 覆盖率** — 运行 pytest，覆盖率不低于 90%
+2. **语法编译检查** — compileall 验证所有目录
+3. **代码风格** — ruff 检查（E/F/W/I/UP 规则）
+4. **类型检查** — mypy 检查 common/ 和 tests/
+5. **用例收集基线** — check_collect.py 验证用例数量
+
+另有定时工作流：
+- `asc_daily.yml` — iOS App Store Connect 日报
+- `harmony_daily.yml` — 鸿蒙 AGC 日报
+- `periodic_report.yml` — 周报/月报
+
+## 代码质量工具
+
+### pre-commit hooks
+
+安装 pre-commit 后，执行以下命令启用：
+
+```bash
+pip install pre-commit
+pre-commit install
+```
+
+配置了 ruff（代码风格 + 自动修复）和 mypy（类型检查）两个 hook。
+
+### 本地运行检查
+
+```bash
+# 代码风格检查
+ruff check .
+
+# 类型检查
+mypy common/ tests/ --ignore-missing-imports
+
+# 单元测试（含覆盖率）
+python -m pytest tests/ -q --cov=common --cov-report=term-missing --cov-fail-under=90
+```
+
 ## 配置说明
 
 配置文件位于 `common/config.py`，包含：
@@ -151,6 +192,18 @@ python check_collect.py
 - 数据库连接配置
 - Redis连接配置
 - 应用信息配置
+
+### 环境变量配置
+
+| 变量名 | 说明 | 必填 |
+|--------|------|------|
+| `TOKEN_KEY` | Token 加密密钥 | 是 |
+| `TOKEN_VERIFY_SALT` | Token 验证盐值 | 是 |
+| `DB_DEV_HOST` | 开发环境数据库地址 | 否（默认读取 Basic.yml） |
+| `DB_DEV_PASSWORD` | 开发环境数据库密码 | 否 |
+| `REDIS_46_HOST` | Redis 地址 | 否 |
+| `IMG_API_APP_ID` | 图片 API App ID | 否 |
+| `IMG_API_APP_SECRET` | 图片 API App Secret | 否 |
 
 ## 测试用例分类
 

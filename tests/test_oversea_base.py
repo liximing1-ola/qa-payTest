@@ -61,7 +61,7 @@ class _RunSceneTestBase(unittest.TestCase):
         self.tc = _DummyOverseaTest.__new__(_DummyOverseaTest)
         self.tc.area_rid = AREA_RID_VALUE
 
-        self.m_db = self._start_patch('caseOversea.base.conMysql')
+        self.m_db = self._start_patch('caseOversea.base.ConMysql')
         self.m_encode = self._start_patch('caseOversea.base.encode_oversea_data',
                                           side_effect=lambda **kw: kw)
         self.m_post = self._start_patch('caseOversea.base.post_request_session',
@@ -227,13 +227,13 @@ class TestQueryAccountHelper(unittest.TestCase):
     """_query_account 静态方法：money_type 为空时不传该参数"""
 
     def test_without_money_type(self):
-        with patch('caseOversea.base.conMysql') as m_db:
+        with patch('caseOversea.base.ConMysql') as m_db:
             m_db.select_user_info_sql.return_value = 7
             self.assertEqual(OverseaAreaTestBase._query_account(1, 'money', None), 7)
             m_db.select_user_info_sql.assert_called_once_with('money', 1)
 
     def test_with_money_type(self):
-        with patch('caseOversea.base.conMysql') as m_db:
+        with patch('caseOversea.base.ConMysql') as m_db:
             m_db.select_user_info_sql.return_value = 7
             self.assertEqual(OverseaAreaTestBase._query_account(1, 'money', 'money_cash'), 7)
             m_db.select_user_info_sql.assert_called_once_with('money', 1, money_type='money_cash')

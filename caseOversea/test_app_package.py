@@ -5,7 +5,7 @@ APP 海外版支付测试 - 房间打赏验证
 """
 from caseOversea.base import AREA_RID, OverseaAreaTestBase, PayScene
 
-from common.con_pt_mysql import conMysql
+from common.con_pt_mysql import ConMysql
 from common.Config import config
 from common.run_failed import Retry
 
@@ -43,7 +43,7 @@ class TestPayCreate(OverseaAreaTestBase):
     def setUpClass(cls):
         """查询 2 区商业房 rid（每类只查一次）"""
         super().setUpClass()
-        cls.area_rid = conMysql.select_user_chatroom('business', bigarea_id=2)
+        cls.area_rid = ConMysql.select_user_chatroom('business', bigarea_id=2)
 
     def test_01_RoomPayNoMoney(self):
         """房间打赏但余额不足的场景"""
