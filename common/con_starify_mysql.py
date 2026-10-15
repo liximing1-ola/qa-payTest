@@ -2,8 +2,8 @@
 """
 Starify MySQL数据库操作模块
 """
-import time
 import logging
+import time
 
 from common.mysql_base import MySQLConnection as MySQLConnectionBase
 
@@ -22,7 +22,7 @@ class conMysql:
 
     # ============ 查询方法 ============
     @staticmethod
-    def selectUserInfoSql(accountType, uid, cid=0, duration_time=86400):
+    def select_user_info_sql(accountType, uid, cid=0, duration_time=86400):
         """查询用户信息"""
         sql_map = {
             'star_coin': ("SELECT star_coin FROM xs_user_money WHERE uid=%s", (uid,)),
@@ -41,27 +41,27 @@ class conMysql:
 
     # ============ 更新方法 ============
     @staticmethod
-    def updateMoneySql(uid, money):
+    def update_money_sql(uid, money):
         """更新用户账户余额"""
         MySQLConnection.execute_write(
             "UPDATE xs_user_money SET star_coin=%s WHERE uid=%s", params=(money, uid))
 
     @staticmethod
-    def updateWealthSql(uid, wealth, pre_wealth=0):
+    def update_wealth_sql(uid, wealth, pre_wealth=0):
         """更新用户财富值"""
         MySQLConnection.execute_write(
             "UPDATE xs_user_wealth SET wealth=%s, pre_wealth=%s WHERE uid=%s",
             params=(wealth, pre_wealth, uid))
 
     @staticmethod
-    def updateCharmSql(uid, charm):
+    def update_charm_sql(uid, charm):
         """更新用户魅力值"""
         MySQLConnection.execute_write(
             "UPDATE xs_user_charm SET charm=%s WHERE uid=%s", params=(charm, uid))
 
     # ============ 删除方法 ============
     @staticmethod
-    def deleteUserAccountSql(tableName, uid, wid=0):
+    def delete_user_account_sql(tableName, uid, wid=0):
         """删除用户数据"""
         sql_map = {
             'user_commodity': ("DELETE FROM xs_user_commodity WHERE uid=%s", (uid,)),
@@ -74,7 +74,7 @@ class conMysql:
 
     # ============ 插入方法 ============
     @staticmethod
-    def insertXsUserCommodity(uid, cid, num, period_end=None):
+    def insert_xs_user_commodity(uid, cid, num, period_end=None):
         """向用户背包发礼物"""
         if period_end is None:
             period_end = int(time.time() + 3600)
@@ -85,7 +85,7 @@ class conMysql:
 
     # ============ 歌手相关 ============
     @staticmethod
-    def deleteProducerSinger(singer_uid):
+    def delete_producer_singer(singer_uid):
         """清除制作人/歌手关系"""
         sql_list = [
             ("UPDATE xs_audition_singer SET producer_uid=0 WHERE uid=%s", (singer_uid,)),
@@ -95,7 +95,7 @@ class conMysql:
             MySQLConnection.execute_write(sql, params=params)
 
     @staticmethod
-    def selectProducerSinger(producer_uid):
+    def select_producer_singer(producer_uid):
         """查询已签约歌手人数"""
         sql_list = [
             ("SELECT COUNT(1) FROM xs_audition_relation WHERE producer_uid=%s", (producer_uid,)),
@@ -107,11 +107,11 @@ class conMysql:
         )
 
     @staticmethod
-    def updateSingerWorth(singer_uid, worth=100):
+    def update_singer_worth(singer_uid, worth=100):
         """修改歌手身价"""
         MySQLConnection.execute_write(
             "UPDATE xs_audition_singer SET worth=%s WHERE uid=%s", params=(worth, singer_uid))
 
 
 if __name__ == '__main__':
-    logger.info(conMysql.selectUserInfoSql('gift_num', 124458))
+    logger.info(conMysql.select_user_info_sql('gift_num', 124458))

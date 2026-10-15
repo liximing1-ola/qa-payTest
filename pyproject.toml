@@ -1,0 +1,22 @@
+# ============================================
+# 项目工具链配置（ruff / mypy）
+# ============================================
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+src = ["common", "case", "caseOversea", "caseSlp", "caseStarify", "caseGames", "caseLuckyPlay", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+# E=pycodestyle errors, F=pyflakes, W=pycodestyle warnings, I=isort
+ignore = ["E501", "W191", "E101"]  # 行长度由 line-length 控制；W191/E101 为项目已有 tab 缩进风格，修复风险大
+
+[tool.ruff.lint.isort]
+known-first-party = ["common"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_unused_configs = true
+ignore_missing_imports = true
+check_untyped_defs = false

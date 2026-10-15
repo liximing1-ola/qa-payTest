@@ -5,6 +5,7 @@ __desc__ = "打赏多人多礼物"
 
 from caseSlp.base import SlpCase, SlpTestBase
 from caseSlp.config import giftId, gs_A_uid, gs_B_ceo_rid, gs_B_uid, normal_uid, payUid, rates
+
 from common.runFailed import Retry
 
 # 打赏人数与礼物个数

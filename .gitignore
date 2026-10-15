@@ -22,3 +22,5 @@ common/__pycache__/
 common/Basic.yml
 /screenshots/
 _diag_*_tmp.py
+_dispatch_diag_tmp.py
+.coverage

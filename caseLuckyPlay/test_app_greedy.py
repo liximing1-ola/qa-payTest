@@ -5,14 +5,15 @@ APP 幸运玩法支付测试 - 摩天轮验证
 
 验证摩天轮下注开奖流程。
 """
-from common.conPtMysql import conMysql
-import unittest
-from common.Config import config
-from common.Greedy import Greedy
-from common.Assert import assert_equal
-from common.Consts import case_list_c, result
 import time
-from common.conRedis import conRedis
+import unittest
+
+from common.Assert import assert_equal
+from common.con_pt_mysql import conMysql
+from common.con_redis import conRedis
+from common.Config import config
+from common.Consts import case_list_c, result
+from common.Greedy import Greedy
 
 # 等待 DB 写入传播后再清 Redis 缓存（秒）
 REDIS_CLEAR_WAIT = 1
@@ -26,13 +27,13 @@ class TestPayGreedy(unittest.TestCase):
         """测试后清理：恢复用户大区，清理 Redis 缓存"""
         conMysql.updateUserBigArea(*config.oversea_user.values())
         time.sleep(REDIS_CLEAR_WAIT)
-        conRedis.delKey('User.Big.Area.Id', config.oversea_user.values(), host=config.redis_host_ali)
-        conRedis.delKey('User.Big.Area', config.oversea_user.values(), host=config.redis_host_ali)
+        conRedis.del_key('User.Big.Area.Id', config.oversea_user.values(), host=config.redis_host_ali)
+        conRedis.del_key('User.Big.Area', config.oversea_user.values(), host=config.redis_host_ali)
 
     def _prepare_test_data(self, setup_steps):
         """
         准备测试数据
-        
+
         Args:
             setup_steps: 准备步骤列表
         """
@@ -44,12 +45,12 @@ class TestPayGreedy(unittest.TestCase):
             elif action == 'update_user_language':
                 conMysql.updateUserLanguage(*params['uids'], **{k: v for k, v in params.items() if k != 'uids'})
             elif action == 'update_money':
-                conMysql.updateMoneySql(**params)
+                conMysql.update_money_sql(**params)
 
     def _validate_calculation(self, check):
         """
         验证计算结果
-        
+
         Args:
             check: 检查项字典
         """
@@ -57,16 +58,16 @@ class TestPayGreedy(unittest.TestCase):
         uid = check['uid']
         money_type = check.get('money_type')
         expected_calc = check['expected_calc']
-        actual = conMysql.selectUserInfoSql(field, uid, money_type=money_type)
+        actual = conMysql.select_user_info_sql(field, uid, money_type=money_type)
         assert_equal(actual, expected_calc)
 
     def test_01_greedy_bet(self):
         """
         华语区金豆下注验证
-        
+
         用例描述：
         验证摩天轮下注开奖流程
-        
+
         脚本步骤：
         1. 构造用户数据
         2. 用户下注金豆，等待开奖
@@ -98,16 +99,16 @@ class TestPayGreedy(unittest.TestCase):
     def test_02_greedy_bet(self):
         """
         阿语区钻石下注验证
-        
+
         用例描述：
         验证摩天轮下注开奖流程
-        
+
         脚本步骤：
         1. 构造用户数据
         2. 用户下注钻石，等待开奖
         3. 检查账户钻石消耗
         4. 检查账户钻石余额：初始钻石 - 下注钻石 + 中奖钻石
-        
+
         """
         des = '摩天轮下注开奖场景--阿语区钻石'
 

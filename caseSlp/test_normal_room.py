@@ -4,8 +4,20 @@ __title__ = ""
 __desc__ = "普通用户-房间打赏"
 
 from caseSlp.base import SlpCase, SlpTestBase
-from caseSlp.config import business_room_rid, business_room_uid, default_money, default_num, giftId, gs_friend_rid, gs_soundchat_rid, normal_uid, payUid, rates
-from common.conSlpMysql import conMysql as mysql
+from caseSlp.config import (
+	business_room_rid,
+	business_room_uid,
+	default_money,
+	default_num,
+	giftId,
+	gs_friend_rid,
+	gs_soundchat_rid,
+	normal_uid,
+	payUid,
+	rates,
+)
+
+from common.con_slp_mysql import conMysql as mysql
 from common.runFailed import Retry
 
 
@@ -22,13 +34,13 @@ def _make_room_case(des, rid, room_type, gift_type):
 		              'params': {'uid': payUid, 'cid': giftId['69']['cid'],
 		                         'num': default_num}})
 
-	queries = [('rid', lambda: rid if rid is not None else mysql.selectUserInfoSql('vip'))]
+	queries = [('rid', lambda: rid if rid is not None else mysql.select_user_info_sql('vip'))]
 	data = {'rid': lambda ctx: ctx['rid'], 'payType': 'package', 'uid': normal_uid,
 	        'gift_id': giftId['69']['gid']}
 	if gift_type == 'gift':
 		data['package_cid'] = lambda ctx: ctx['box_cid']
 		data['ctype'] = 'gift'
-		queries.append(('box_cid', lambda: int(mysql.selectUserInfoSql(
+		queries.append(('box_cid', lambda: int(mysql.select_user_info_sql(
 			'id_commodity', payUid, cid=giftId['69']['cid']))))
 
 	return SlpCase(

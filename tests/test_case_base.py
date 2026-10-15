@@ -11,6 +11,7 @@ from unittest.mock import Mock, call, patch
 
 from case import base as case_base
 from case.base import PayCase, PayTestBase, _resolve
+
 from common.Config import config
 
 
@@ -187,17 +188,17 @@ class TestPrepareTestDataDispatcher(unittest.TestCase):
         with patch('case.base.mysql') as m:
             self.tc._prepare_test_data(
                 [{'action': 'clear_user_money', 'params': {'uid1': 1, 'uid2': 2}}])
-        m.updateUserMoneyClearSql.assert_called_once_with(1, 2)
+        m.update_user_money_clear_sql.assert_called_once_with(1, 2)
 
     def test_clear_user_money_with_uids_list(self):
         with patch('case.base.mysql') as m:
             self.tc._prepare_test_data([{'action': 'clear_user_money', 'uids': [1, 2, 3]}])
-        m.updateUserMoneyClearSql.assert_called_once_with(1, 2, 3)
+        m.update_user_money_clear_sql.assert_called_once_with(1, 2, 3)
 
     def test_clear_user_data_defaults(self):
         with patch('case.base.mysql') as m:
             self.tc._prepare_test_data([{'action': 'clear_user_data'}])
-        m.updateUserMoneyClearSql.assert_called_once_with(config.payUid, config.rewardUid)
+        m.update_user_money_clear_sql.assert_called_once_with(config.payUid, config.rewardUid)
 
     def test_delete_account_uses_params(self):
         with patch('case.base.mysql') as m:
@@ -205,12 +206,12 @@ class TestPrepareTestDataDispatcher(unittest.TestCase):
                 'action': 'delete_user_account',
                 'params': {'table': 'user_commodity', 'uid': 9},
             }])
-        m.deleteUserAccountSql.assert_called_once_with('user_commodity', 9)
+        m.delete_user_account_sql.assert_called_once_with('user_commodity', 9)
 
     def test_delete_commodity(self):
         with patch('case.base.mysql') as m:
             self.tc._prepare_test_data([{'action': 'delete_commodity', 'uid': 9}])
-        m.deleteUserAccountSql.assert_called_once_with('user_commodity', 9)
+        m.delete_user_account_sql.assert_called_once_with('user_commodity', 9)
 
     def test_insert_commodity_default_uid(self):
         with patch('case.base.UserCommodityOperations') as m:
@@ -228,18 +229,18 @@ class TestPrepareTestDataDispatcher(unittest.TestCase):
         with patch('case.base.mysql') as m:
             self.tc._prepare_test_data(
                 [{'action': 'insert_user_box', 'params': {'gift_cid': 8}}])
-        m.insertXsUserBox.assert_called_once_with(config.payUid, gift_cid=8)
+        m.insert_xs_user_box.assert_called_once_with(config.payUid, gift_cid=8)
 
     def test_check_user_broker_params_form(self):
         with patch('case.base.mysql') as m:
             self.tc._prepare_test_data(
                 [{'action': 'check_user_broker', 'params': {'uid': 9, 'bid': 5}}])
-        m.checkUserBroker.assert_called_once_with(uid=9, bid=5)
+        m.check_user_broker.assert_called_once_with(uid=9, bid=5)
 
     def test_check_user_broker_uid_bid_form(self):
         with patch('case.base.mysql') as m:
             self.tc._prepare_test_data([{'action': 'check_user_broker', 'uid': 9, 'bid': 5}])
-        m.checkUserBroker.assert_called_once_with(9, bid=5)
+        m.check_user_broker.assert_called_once_with(9, bid=5)
 
     def test_check_broker_rate(self):
         with patch('case.base.mysql') as m:
@@ -247,7 +248,7 @@ class TestPrepareTestDataDispatcher(unittest.TestCase):
                 'action': 'check_broker_rate',
                 'params': {'uid': 9, 'creater': 5, 'rate': 50},
             }])
-        m.checkBrokerUserRate.assert_called_once_with(uid=9, creater=5, rate=50)
+        m.check_broker_user_rate.assert_called_once_with(uid=9, creater=5, rate=50)
 
     def test_unknown_action_noop(self):
         """未知 action 不应触发任何数据库操作"""
@@ -268,40 +269,40 @@ class TestValidateDbStateDispatcher(unittest.TestCase):
 
     def test_basic_equal(self):
         with patch('case.base.mysql') as m_mysql, patch('case.base.assert_equal') as m_eq:
-            m_mysql.selectUserInfoSql.return_value = 5
+            m_mysql.select_user_info_sql.return_value = 5
             self.tc._validate_db_state([{'field': 'bean', 'uid': 123, 'expected': 5}])
-        m_mysql.selectUserInfoSql.assert_called_once_with('bean', 123)
+        m_mysql.select_user_info_sql.assert_called_once_with('bean', 123)
         m_eq.assert_called_once_with(5, 5)
 
     def test_default_uid_is_pay_uid(self):
         with patch('case.base.mysql') as m_mysql, patch('case.base.assert_equal'):
-            m_mysql.selectUserInfoSql.return_value = 0
+            m_mysql.select_user_info_sql.return_value = 0
             self.tc._validate_db_state([{'field': 'bean', 'expected': 0}])
-        m_mysql.selectUserInfoSql.assert_called_once_with('bean', config.payUid)
+        m_mysql.select_user_info_sql.assert_called_once_with('bean', config.payUid)
 
     def test_money_type_and_cid_passed_as_kwargs(self):
         with patch('case.base.mysql') as m_mysql, patch('case.base.assert_equal'):
-            m_mysql.selectUserInfoSql.return_value = 1
+            m_mysql.select_user_info_sql.return_value = 1
             self.tc._validate_db_state([{
                 'field': 'single_money', 'uid': 1, 'expected': 1,
                 'money_type': 'money_cash', 'cid': 9,
             }])
-        m_mysql.selectUserInfoSql.assert_called_once_with(
+        m_mysql.select_user_info_sql.assert_called_once_with(
             'single_money', 1, money_type='money_cash', cid=9)
 
     def test_extra_kwargs_merged(self):
         with patch('case.base.mysql') as m_mysql, patch('case.base.assert_equal'):
-            m_mysql.selectUserInfoSql.return_value = 1
+            m_mysql.select_user_info_sql.return_value = 1
             self.tc._validate_db_state([{
                 'field': 'x', 'uid': 1, 'expected': 1, 'kwargs': {'q': 2},
             }])
-        m_mysql.selectUserInfoSql.assert_called_once_with('x', 1, q=2)
+        m_mysql.select_user_info_sql.assert_called_once_with('x', 1, q=2)
 
     def test_min_value_uses_assert_len(self):
         with patch('case.base.mysql') as m_mysql, \
                 patch('case.base.assert_len') as m_len, \
                 patch('case.base.assert_equal') as m_eq:
-            m_mysql.selectUserInfoSql.return_value = 5
+            m_mysql.select_user_info_sql.return_value = 5
             self.tc._validate_db_state(
                 [{'field': 'popularity', 'uid': 1, 'min_value': 3}])
         m_len.assert_called_once_with(5, 3)
@@ -310,7 +311,7 @@ class TestValidateDbStateDispatcher(unittest.TestCase):
     def test_assert_func_custom_check(self):
         custom = Mock()
         with patch('case.base.mysql') as m_mysql:
-            m_mysql.selectUserInfoSql.return_value = 7
+            m_mysql.select_user_info_sql.return_value = 7
             self.tc._validate_db_state([{
                 'field': 'x', 'uid': 1, 'expected': 9, 'assert_func': custom,
             }])

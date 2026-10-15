@@ -5,9 +5,10 @@ APP 海外版支付测试 - 马来西亚区域验证
 验证马来区消费差异化分成体系（马来大区已关闭合并到印尼，保留历史参考）。
 """
 import unittest
-from common.conPtMysql import conMysql
-from caseOversea.base import OverseaAreaTestBase, PayScene, AREA_RID, RECEIVER_BROKER
 
+from caseOversea.base import AREA_RID, RECEIVER_BROKER, OverseaAreaTestBase, PayScene
+
+from common.con_pt_mysql import conMysql
 
 SCENES = [
     PayScene(

@@ -5,6 +5,7 @@ __desc__ = "普通用户-私聊"
 
 from caseSlp.base import SlpCase, SlpTestBase
 from caseSlp.config import default_money, default_num, giftId, normal_uid, payUid, rates, rewardUid
+
 from common.runFailed import Retry
 
 # 场景表：普通用户-私聊打赏

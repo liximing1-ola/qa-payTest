@@ -7,9 +7,10 @@
 import unittest
 
 from case.base import PayCase, PayTestBase
+
 from common.Assert import assert_len
+from common.con_mysql import conMysql as mysql
 from common.Config import config
-from common.conMysql import conMysql as mysql
 from common.method import calculate_vip_exp
 from common.runFailed import Retry
 
@@ -25,7 +26,7 @@ SCENES = [
             {'action': 'update_money', 'params': {'uid': config.rewardUid}},
             {'action': 'update_money', 'params': {'uid': config.gsUid}}
         ],
-        queries=[('vip_level', lambda: int(mysql.selectUserInfoSql('pay_room_money', config.payUid)))],
+        queries=[('vip_level', lambda: int(mysql.select_user_info_sql('pay_room_money', config.payUid)))],
         data={'money': 100, 'giftId': config.giftId['5']},
         checks=[
             {'field': 'single_money', 'uid': config.rewardUid, 'expected': 62},
@@ -42,12 +43,12 @@ SCENES = [
                                                   'money_cash_b': 100, 'money_b': 100}},
             {'action': 'update_money', 'params': {'uid': config.masterUid}}
         ],
-        queries=[('vip_level', lambda: int(mysql.selectUserInfoSql('pay_room_money', config.payUid)))],
+        queries=[('vip_level', lambda: int(mysql.select_user_info_sql('pay_room_money', config.payUid)))],
         data={'money': 600, 'uid': config.masterUid, 'giftId': config.giftId['46'], 'star': 4},
         checks=[
             {'field': 'sum_money', 'uid': config.payUid, 'expected': 100},
             {'field': 'single_money', 'uid': config.masterUid,
-             'expected': lambda ctx: mysql.selectUserInfoSql('pay_change', uid=config.masterUid,
+             'expected': lambda ctx: mysql.select_user_info_sql('pay_change', uid=config.masterUid,
                                                              money_type='_in_c_b')},
             {'field': 'pay_room_money', 'uid': config.payUid,
              'expected': lambda ctx: ctx['vip_level'] + calculate_vip_exp(pay_off=600)}

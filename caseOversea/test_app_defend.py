@@ -5,6 +5,7 @@ APP 海外版支付测试 - 守护开通验证
 验证个人守护开通的收益分成场景。
 """
 from caseOversea.base import OverseaBizCase, OverseaBizTestBase
+
 from common.Config import config
 from common.runFailed import Retry
 

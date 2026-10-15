@@ -6,7 +6,7 @@ APP MySQL 数据库操作模块
 使用单例模式管理数据库连接，支持自动重连。
 """
 import logging
-from typing import Optional, Tuple, Dict
+from typing import Dict, Optional, Tuple
 
 from common.Config import config
 from common.mysql_base import MySQLConnection as MySQLConnectionBase
@@ -45,22 +45,22 @@ class conMysql:
     }
 
     # ============ 查询方法 ============
-    
+
     @staticmethod
-    def selectUserInfoSql(accountType: str, uid: int = None, money_type: str = 'money_cash_b') -> Optional[int]:
+    def select_user_info_sql(accountType: str, uid: Optional[int] = None, money_type: str = 'money_cash_b') -> Optional[int]:
         """查询用户信息
-        
+
         Args:
             accountType: 账户类型
             uid: 用户 ID，默认为 config.oversea_payUid
             money_type: 货币类型
-            
+
         Returns:
             查询结果，失败返回 0 或 None
         """
         if uid is None:
             uid = config.oversea_payUid
-            
+
         if accountType in conMysql.QUERY_SQL_MAP:
             sql = conMysql.QUERY_SQL_MAP[accountType]
             res = MySQLConnection.execute_query(sql, params=(uid,))
@@ -79,7 +79,7 @@ class conMysql:
     # ============ 删除方法 ============
 
     @staticmethod
-    def deleteUserAccountSql(tableName: str, uid: int) -> None:
+    def delete_user_account_sql(tableName: str, uid: int) -> None:
         """删除用户数据
 
         Args:
@@ -95,12 +95,12 @@ class conMysql:
     # ============ 更新方法 ============
 
     @staticmethod
-    def updateUserRidInfoSql(property_rid: str, rid: int, area: str = 'en') -> None:
+    def update_user_rid_info_sql(property_rid: str, rid: int, area: str = 'en') -> None:
         """更新房间属性"""
         MySQLConnection.update_room_property(property_rid, rid, area)
 
     @staticmethod
-    def updateUserBigArea(*uids: int, bigarea_id: int = 2) -> None:
+    def update_user_big_area(*uids: int, bigarea_id: int = 2) -> None:
         """更新用户大区"""
         MySQLConnection.update_user_bigarea(*uids, bigarea_id=bigarea_id)
 
@@ -110,19 +110,19 @@ class conMysql:
         MySQLConnection.update_user_language(*uids, language=language, area_code=area_code)
 
     @staticmethod
-    def updateUserMoneyClearSql(*uids: int) -> None:
+    def update_user_money_clear_sql(*uids: int) -> None:
         """清空用户账户余额"""
         MySQLConnection.clear_user_money(*uids)
 
     @staticmethod
-    def updateUserextendMoneyClearSql(*uids: int) -> None:
+    def update_user_extend_money_clear_sql(*uids: int) -> None:
         """清空用户扩展账户余额"""
         sql = "UPDATE xs_user_money_extend SET money_cash_personal=0 WHERE uid=%s"
         for uid in uids:
             MySQLConnection.execute_write(sql, params=(uid,))
 
     @staticmethod
-    def updateMoneySql(uid: int, money: int = 0, money_cash: int = 0,
+    def update_money_sql(uid: int, money: int = 0, money_cash: int = 0,
                        money_cash_b: int = 0, money_b: int = 0,
                        gold_coin: int = 0, money_debts: int = 0) -> None:
         """更新用户账户余额"""
@@ -131,31 +131,31 @@ class conMysql:
                                        gold_coin=gold_coin, money_debts=money_debts)
 
     @staticmethod
-    def updateXsUserpopularity(uid: int) -> None:
+    def update_xs_user_popularity(uid: int) -> None:
         """更新用户人气数据"""
         MySQLConnection.reset_user_popularity(uid)
 
     @staticmethod
-    def updateXsUserprofile_pay_room_money(uid: int) -> None:
+    def update_xs_user_profile_pay_room_money(uid: int) -> None:
         """更新用户 VIP 数据"""
         MySQLConnection.reset_user_pay_room_money(uid)
 
     # ============ 插入方法 ============
 
     @staticmethod
-    def insertXsUserCommodity(uid: int, cid: int, num: int, state: int = 0) -> None:
+    def insert_xs_user_commodity(uid: int, cid: int, num: int, state: int = 0) -> None:
         """用户背包增加数据"""
         MySQLConnection.insert_user_commodity(uid, cid, num, state)
 
     @staticmethod
-    def insertXsUserBox(uid: int, gift_cid: int = 2505, box_type: str = 'copper') -> None:
+    def insert_xs_user_box(uid: int, gift_cid: int = 2505, box_type: str = 'copper') -> None:
         """更新箱子刷新物品"""
         MySQLConnection.insert_user_box(uid, gift_cid, box_type)
 
     # ============ 检查配置 ============
 
     @staticmethod
-    def checkXsGiftConfig() -> None:
+    def check_xs_gift_config() -> None:
         """检查礼物配置"""
         gift_ids = tuple(config.oversea_giftId.values())
         MySQLConnection._update_xs_gift_status(gift_ids)
@@ -173,11 +173,12 @@ class conMysql:
         return MySQLConnection.query_user_chatroom(property, bigarea_id)
 
     @staticmethod
-    def sqlXsUserpopularity(uid: int) -> int:
+    def sql_xs_user_popularity(uid: int) -> int:
         """查询用户人气数据"""
         return MySQLConnection.query_user_popularity(uid)
 
     @staticmethod
-    def sqlXsUserprofile_pay_room_money(uid: int) -> int:
+    def sql_xs_user_profile_pay_room_money(uid: int) -> int:
         """查询用户 VIP 数据"""
         return MySQLConnection.query_user_pay_room_money(uid)
+

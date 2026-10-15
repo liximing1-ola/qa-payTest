@@ -6,13 +6,17 @@ SLP 消费数据编码模块
 """
 import logging
 import urllib.parse
-from typing import Optional, Tuple
 
-from caseSlp.config import (
-    business_room_rid, default_num, gsUid, normal_uid, rewardUid,
-    room_defend, zx_box,
-)
 from caseSlp import config as slp_config
+from caseSlp.config import (
+    business_room_rid,
+    default_num,
+    gsUid,
+    normal_uid,
+    rewardUid,
+    room_defend,
+    zx_box,
+)
 
 logger = logging.getLogger(__name__)
 

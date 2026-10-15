@@ -23,7 +23,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent
 # 全仓用例收集基线（调整用例数量时需同步更新此值）
-EXPECTED_COLLECT_COUNT = 511
+EXPECTED_COLLECT_COUNT = 542
 
 
 def _configure_stdio():
@@ -57,7 +57,7 @@ def _report_failure(message):
 def main():
     _configure_stdio()
     proc = subprocess.run(
-        [sys.executable, '-m', 'pytest', '--collect-only', '-q'],
+        [sys.executable, '-m', 'pytest', '--collect-only'],
         cwd=str(REPO_ROOT), capture_output=True,
         encoding='utf-8', errors='replace')
     output = (proc.stdout or '') + (proc.stderr or '')

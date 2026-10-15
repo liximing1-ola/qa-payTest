@@ -8,10 +8,11 @@ import os
 from datetime import datetime
 from time import time
 
+from Robot import robot
+
 from common import Consts, Logs
 from common.Config import config
 from common.Session import Session
-from Robot import robot
 
 logger = logging.getLogger(__name__)
 
@@ -138,7 +139,7 @@ class GitUpdater:
 def update_time(operate, now=''):
     """Manage update timestamp file"""
     file_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), TIME_FILE)
-    
+
     try:
         if operate == 'read':
             if not os.path.exists(file_path):

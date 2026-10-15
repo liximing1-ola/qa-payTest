@@ -10,7 +10,7 @@
 import logging
 import os
 from dataclasses import dataclass, field
-from typing import Dict, Any
+from typing import Any, Dict
 
 logger = logging.getLogger(__name__)
 
@@ -192,7 +192,7 @@ class OverseaRoomConfig:
     union_ar: int = 105713367
     business_joy_vi: int = 105726676
     union_vi: int = 105718889
-    
+
     def __getitem__(self, key):
         """支持下标访问"""
         return getattr(self, key, None)

@@ -5,9 +5,10 @@
 场景差异通过模块级 SCENES 表声明，由 PayTestBase.run_case 统一执行。
 """
 from case.base import PayCase, PayTestBase
-from common.Config import config
+
 from common.Assert import assert_len
-from common.conMysql import conMysql as mysql
+from common.con_mysql import conMysql as mysql
+from common.Config import config
 from common.runFailed import Retry
 
 # 本家族房 rid / 直播公会gs
@@ -102,7 +103,7 @@ class TestPayFleetRoom(PayTestBase):
     @classmethod
     def setUpClass(cls):
         """查询非本家族房 rid（延迟到运行期，避免 import 阶段依赖数据库）"""
-        cls.other_fleet_rid = mysql.selectUserInfoSql('fleet')
+        cls.other_fleet_rid = mysql.select_user_info_sql('fleet')
 
     def test_01_sameFleetRoomLiveGsRate(self):
         """同家族房内直播公会成员礼物打赏到账80%个人魅力值"""

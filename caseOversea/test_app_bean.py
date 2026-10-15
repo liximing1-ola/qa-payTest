@@ -5,6 +5,7 @@ APP 海外版支付测试 - 金豆兑换验证
 验证余额兑换金豆的流程和账户余额变化。
 """
 from caseOversea.base import OverseaBizCase, OverseaBizTestBase
+
 from common.Config import config
 from common.runFailed import Retry
 

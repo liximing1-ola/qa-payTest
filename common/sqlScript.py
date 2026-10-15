@@ -6,9 +6,11 @@ MySQL 数据库脚本工具模块
 支持多环境配置（DEV/ALI），使用上下文管理器确保资源正确释放。
 """
 import logging
-import pymysql
-from typing import Optional, Any, Tuple, Dict
 from contextlib import contextmanager
+from typing import Any, Dict, Optional, Tuple
+
+import pymysql
+
 from common.Config import config
 
 logger = logging.getLogger(__name__)

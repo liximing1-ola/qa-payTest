@@ -9,8 +9,7 @@ common/Config.py 契约测试（测试数据夹具锁定）
 import unittest
 from dataclasses import fields
 
-from common.Config import (BBUserConfig, CommodityConfig, LiveRoleConfig,
-                           OverseaRoomConfig, OverseaUserConfig, config)
+from common.Config import BBUserConfig, CommodityConfig, LiveRoleConfig, OverseaRoomConfig, OverseaUserConfig, config
 
 
 class TestBBUserEntities(unittest.TestCase):

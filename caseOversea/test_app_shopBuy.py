@@ -5,6 +5,7 @@ APP 海外版支付测试 - 商城购买验证
 验证商城使用金豆和钻石购买道具的流程。
 """
 from caseOversea.base import OverseaBizCase, OverseaBizTestBase
+
 from common.Config import config
 
 # 场景表：商城购买道具（金豆道具/钻石道具）

@@ -5,10 +5,10 @@
 场景差异通过模块级 SCENES 表声明，由 PayTestBase.run_case 统一执行。
 """
 import pytest
-
 from case.base import PayCase, PayTestBase
+
+from common.con_mysql import conMysql as mysql
 from common.Config import config
-from common.conMysql import conMysql as mysql
 from common.runFailed import Retry
 
 SCENES = [
@@ -100,10 +100,10 @@ class TestPayPersonDefend(PayTestBase):
         """查询守护关系配置与关系 ID（延迟到运行期，避免 import 阶段依赖数据库）"""
         # {'id': 2, 'name': '小宝贝', 'money_value': 52000, 'break_money': 28800, 'upgrade_money': 99900}
         # {'id': 1, 'name': 'CP', 'money_value': 520000, 'break_money': 99900, 'upgrade_money': 520000}
-        cls.defend_520_config = mysql.selectUserInfoSql('relation_config', uid=2)
-        cls.defend_cp_config = mysql.selectUserInfoSql('relation_config', uid=1)
-        cls.defend_520_id = mysql.selectUserInfoSql('relation_id', cid=2)
-        cls.defend_cp_id = mysql.selectUserInfoSql('relation_id', uid=config.gsUid, cid=1)
+        cls.defend_520_config = mysql.select_user_info_sql('relation_config', uid=2)
+        cls.defend_cp_config = mysql.select_user_info_sql('relation_config', uid=1)
+        cls.defend_520_id = mysql.select_user_info_sql('relation_id', cid=2)
+        cls.defend_cp_id = mysql.select_user_info_sql('relation_id', uid=config.gsUid, cid=1)
 
     @pytest.mark.run(order=1)
     def test_01_defendPayChangMoney(self):

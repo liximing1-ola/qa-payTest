@@ -5,8 +5,9 @@ coin 支付测试
 场景差异通过模块级 SCENES 表声明，由 PayTestBase.run_case 统一执行。
 """
 from case.base import PayCase, PayTestBase
+
+from common.con_mysql import conMysql as mysql
 from common.Config import config
-from common.conMysql import conMysql as mysql
 from common.method import calculate_vip_exp
 from common.runFailed import Retry
 
@@ -27,7 +28,7 @@ SCENES = [
             {'action': 'update_money', 'params': {'uid': config.payUid, 'gold_coin': 100}},
             {'action': 'clear_user_data', 'uids': (config.rewardUid, config.masterUid)}
         ],
-        queries=[('vip_level', lambda: int(mysql.selectUserInfoSql('pay_room_money', config.payUid)))],
+        queries=[('vip_level', lambda: int(mysql.select_user_info_sql('pay_room_money', config.payUid)))],
         data={'payType': 'package-more', 'money': 20, 'giftId': config.giftId['62'], 'giftType': 'coin'},
         checks=[
             {'field': 'single_money', 'uid': config.payUid, 'expected': 60, 'kwargs': {'money_type': 'gold_coin'}},

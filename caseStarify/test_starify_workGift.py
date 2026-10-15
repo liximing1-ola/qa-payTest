@@ -1,10 +1,10 @@
 from caseStarify.base import StarifyCase, StarifyTestBase
 from caseStarify.deal_data import deal_pay_data
 from caseStarify.need_data import commodity_config, starify_payUid, starify_work_state
-from common.Assert import assert_equal
-from common.conStarifyMysql import conMysql
-from common.runFailed import Retry
 
+from common.Assert import assert_equal
+from common.con_starify_mysql import conMysql
+from common.runFailed import Retry
 
 # (desc, commodity_key, clear_reward, work_state, balance, expected_star, expected_wealth, success, expected_msg)
 # expected_wealth=None 时取 commodity['wealth']
@@ -32,8 +32,8 @@ def _make_work_gift_case(desc, commodity_key, clear_reward, work_state,
     expected_w = commodity['wealth'] if expected_wealth is None else expected_wealth
 
     def _assert():
-        assert_equal(conMysql.selectUserInfoSql('star_coin', starify_payUid), expected_star)
-        assert_equal(conMysql.selectUserInfoSql('wealth', starify_payUid), expected_w)
+        assert_equal(conMysql.select_user_info_sql('star_coin', starify_payUid), expected_star)
+        assert_equal(conMysql.select_user_info_sql('wealth', starify_payUid), expected_w)
 
     return StarifyCase(
         des=desc,

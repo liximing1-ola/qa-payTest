@@ -4,11 +4,11 @@ APP 海外版支付测试 - 房间打赏验证
 
 验证房间场景下的打赏功能，包括余额不足和正常打赏。
 """
-from common.Config import config
-from common.conPtMysql import conMysql
-from caseOversea.base import OverseaAreaTestBase, PayScene, AREA_RID
-from common.runFailed import Retry
+from caseOversea.base import AREA_RID, OverseaAreaTestBase, PayScene
 
+from common.con_pt_mysql import conMysql
+from common.Config import config
+from common.runFailed import Retry
 
 SCENES = [
     PayScene(

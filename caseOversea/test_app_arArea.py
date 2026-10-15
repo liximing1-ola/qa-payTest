@@ -5,9 +5,10 @@ APP 海外版支付测试 - 阿拉伯区域验证
 验证阿语区消费差异化分成体系（老版本样式，已替换新分成，保留历史参考）。
 """
 import unittest
-from common.Config import config
+
 from caseOversea.base import OverseaAreaTestBase, PayScene
 
+from common.Config import config
 
 SCENES = [
     PayScene(

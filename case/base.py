@@ -15,14 +15,14 @@ import time
 from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, Optional
 
-from common.Config import config
-from common.Assert import assert_equal, assert_len, assert_code, assert_body
-from common.Request import post_request_session
+from common.Assert import assert_body, assert_code, assert_equal, assert_len
 from common.basicData import encodeData
+from common.con_mysql import conMysql as mysql
+from common.Config import config
 from common.Consts import case_list, case_list_b, case_list_c, result
-from common.conMysql import conMysql as mysql
+from common.Request import post_request_session
 from common.scene_base import SceneFlowBase, resolve, resolve_check
-from common.sqlScript import UserMoneyOperations, UserCommodityOperations
+from common.sqlScript import UserCommodityOperations, UserMoneyOperations
 
 # 场景结果记录表（与各测试文件的报告表一一对应）
 REPORT_TABLES = {
@@ -129,14 +129,14 @@ class PayTestBase(SceneFlowBase):
 
         支持的 action:
             update_money         → UserMoneyOperations.update(**params)
-            clear_user_money     → mysql.updateUserMoneyClearSql(uid1, uid2?)
-            clear_user_data      → mysql.updateUserMoneyClearSql(config.payUid, config.rewardUid)
-            delete_user_account  → mysql.deleteUserAccountSql(table, uid)
-            delete_account       → mysql.deleteUserAccountSql(table, uid)
+            clear_user_money     → mysql.update_user_money_clear_sql(uid1, uid2?)
+            clear_user_data      → mysql.update_user_money_clear_sql(config.payUid, config.rewardUid)
+            delete_user_account  → mysql.delete_user_account_sql(table, uid)
+            delete_account       → mysql.delete_user_account_sql(table, uid)
             insert_commodity     → UserCommodityOperations.insert(uid, **params)
-            insert_user_box      → mysql.insertXsUserBox(uid, **params)
-            check_user_broker    → mysql.checkUserBroker(uid, bid)
-            check_broker_rate    → mysql.checkBrokerUserRate(uid, creater, rate)
+            insert_user_box      → mysql.insert_xs_user_box(uid, **params)
+            check_user_broker    → mysql.check_user_broker(uid, bid)
+            check_broker_rate    → mysql.check_broker_user_rate(uid, creater, rate)
         """
         for step in setup_steps:
             action = step['action']
@@ -145,31 +145,31 @@ class PayTestBase(SceneFlowBase):
                 UserMoneyOperations.update(**params)
             elif action == 'clear_user_money':
                 if 'uids' in step:
-                    mysql.updateUserMoneyClearSql(*step['uids'])
+                    mysql.update_user_money_clear_sql(*step['uids'])
                 else:
-                    mysql.updateUserMoneyClearSql(params['uid1'], params.get('uid2'))
+                    mysql.update_user_money_clear_sql(params['uid1'], params.get('uid2'))
             elif action == 'clear_user_data':
                 if 'uids' in step:
-                    mysql.updateUserMoneyClearSql(*step['uids'])
+                    mysql.update_user_money_clear_sql(*step['uids'])
                 else:
-                    mysql.updateUserMoneyClearSql(config.payUid, config.rewardUid)
+                    mysql.update_user_money_clear_sql(config.payUid, config.rewardUid)
             elif action in ('delete_user_account', 'delete_account'):
-                mysql.deleteUserAccountSql(
+                mysql.delete_user_account_sql(
                     params.get('table', step.get('table')),
                     params.get('uid', step.get('uid')))
             elif action == 'delete_commodity':
-                mysql.deleteUserAccountSql('user_commodity', step['uid'])
+                mysql.delete_user_account_sql('user_commodity', step['uid'])
             elif action == 'insert_commodity':
                 params = dict(params)
                 uid = params.pop('uid', config.payUid)
                 UserCommodityOperations.insert(uid, **params)
             elif action == 'insert_user_box':
                 uid = step.get('uid', config.payUid)
-                mysql.insertXsUserBox(uid, **params)
+                mysql.insert_xs_user_box(uid, **params)
             elif action == 'check_user_broker':
-                mysql.checkUserBroker(**params) if params else mysql.checkUserBroker(step['uid'], bid=step['bid'])
+                mysql.check_user_broker(**params) if params else mysql.check_user_broker(step['uid'], bid=step['bid'])
             elif action == 'check_broker_rate':
-                mysql.checkBrokerUserRate(**params)
+                mysql.check_broker_user_rate(**params)
 
     def _validate_db_state(self, checks):
         """验证数据库状态（通用检查分发器）
@@ -195,7 +195,7 @@ class PayTestBase(SceneFlowBase):
             if 'cid' in check:
                 kwargs.setdefault('cid', check['cid'])
 
-            actual = mysql.selectUserInfoSql(field, uid, **kwargs)
+            actual = mysql.select_user_info_sql(field, uid, **kwargs)
 
             if 'min_value' in check:
                 assert_len(actual, check['min_value'])

@@ -10,21 +10,27 @@
 
 手动测试/补发：PERIODIC_FORCE=week|month 指定周期；PERIODIC_NO_PUSH=true 只渲染不推送。
 """
+import io
 import os
 import sys
-import io
 from datetime import date, datetime, timedelta, timezone
 
 from PIL import Image, ImageDraw
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 # 表格渲染与企微推送工具（三条日报共用）
-from report_common import (
-    C_ALERT_TEXT, C_TITLE, C_WARN, draw_table, load_font,
-    report_failure, save_local, send_wecom_image,
-)
 import fetch_asc_daily as asc
 import fetch_harmony_daily as hm
+from report_common import (
+    C_ALERT_TEXT,
+    C_TITLE,
+    C_WARN,
+    draw_table,
+    load_font,
+    report_failure,
+    save_local,
+    send_wecom_image,
+)
 
 CST = timezone(timedelta(hours=8))
 FORCE = os.getenv("PERIODIC_FORCE", "").lower()      # week|month（手动指定，用于测试/补发）
@@ -156,8 +162,8 @@ def render_period_image(label, start, end, p_start, p_end,
                        rows, f_cell, f_cell_b, ('left', 'right', 'right'))
         y += 22
 
-    num = lambda v: f"{v:,}"
-    money = lambda v: f"{v:,.2f}"
+    def num(v): return f"{v:,}"
+    def money(v): return f"{v:,.2f}"
     ios_rows = []
     for app in asc.APP_LIST:
         aid = str(app['app_id'])

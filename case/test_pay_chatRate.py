@@ -5,9 +5,10 @@
 场景差异通过模块级 SCENES 表声明，由 PayTestBase.run_case 统一执行。
 """
 from case.base import PayCase, PayTestBase
-from common.Config import config
+
 from common.Assert import assert_len
-from common.conMysql import conMysql as mysql
+from common.con_mysql import conMysql as mysql
+from common.Config import config
 from common.method import calculate_vip_exp
 from common.runFailed import Retry
 
@@ -31,7 +32,7 @@ SCENES = [
             {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 1000}},
             {'action': 'update_money', 'params': {'uid': config.gsUid}}
         ],
-        queries=[('vip_level', lambda: int(mysql.selectUserInfoSql('pay_room_money', config.payUid)))],
+        queries=[('vip_level', lambda: int(mysql.select_user_info_sql('pay_room_money', config.payUid)))],
         data={'payType': 'chat-gift', 'uid': config.gsUid},
         checks=[
             {'field': 'single_money', 'uid': config.gsUid, 'expected': 1000 * (config.rate - 0.2),

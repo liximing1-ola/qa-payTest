@@ -1,11 +1,13 @@
 # coding=utf-8
 import logging
 import os
+
 import yaml
+
 from common.Config import config
 
 logger = logging.getLogger(__name__)
-_yaml_cache = {}
+_yaml_cache: dict = {}
 
 
 class YamlReader:

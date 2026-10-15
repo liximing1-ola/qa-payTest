@@ -3,11 +3,11 @@
 """
 import threading
 
-case_list = {}
-case_list_b = {}
-case_list_c = {}
+case_list: dict = {}
+case_list_b: dict = {}
+case_list_c: dict = {}
 # 失败结果列表
-fail_case_reason = []
+fail_case_reason: list = []
 # pass
 result = '✅'
 # 记录时间

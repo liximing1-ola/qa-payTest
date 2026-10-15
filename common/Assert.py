@@ -9,9 +9,9 @@ import platform
 import time
 from functools import wraps
 from typing import Any
+
 from common import Consts
 from common.Config import config
-
 
 # RPC接口延迟配置（秒）
 RPC_DELAY = 0.5

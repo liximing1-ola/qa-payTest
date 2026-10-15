@@ -5,7 +5,8 @@ __desc__ = "经验值相关用例"
 
 from caseSlp.base import SlpCase, SlpTestBase
 from caseSlp.config import business_room_rid, default_money, giftId, juewei_level, normal_uid, payUid
-from common.conSlpMysql import conMysql as mysql
+
+from common.con_slp_mysql import conMysql as mysql
 from common.runFailed import Retry
 
 # 消费后等待 vip 经验值/人气值落库的时长（秒）
@@ -28,8 +29,8 @@ def _make_exp_case(des, level_name):
 			{'action': 'delete_commodity', 'uid': payUid},
 		],
 		queries=[
-			('old_vip', lambda: mysql.selectUserInfoSql('pay_room_money', payUid)),
-			('old_pop', lambda: mysql.selectUserInfoSql('popularity', normal_uid)),
+			('old_vip', lambda: mysql.select_user_info_sql('pay_room_money', payUid)),
+			('old_pop', lambda: mysql.select_user_info_sql('popularity', normal_uid)),
 		],
 		data={'rid': business_room_rid, 'payType': 'package', 'uid': normal_uid,
 		      'gift_id': giftId['69']['gid']},

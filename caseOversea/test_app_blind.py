@@ -5,17 +5,18 @@ APP 海外版支付测试 - 盲盒打赏验证
 验证房间内送盲盒的逻辑。
 """
 from caseOversea.base import OverseaBizCase, OverseaBizTestBase
+
 from common.Assert import assert_equal
+from common.con_pt_mysql import conMysql
 from common.Config import config
-from common.conPtMysql import conMysql
 from common.runFailed import Retry
 
 
 def _assert_blind_reconcile():
     """校验收礼人到账金额与 pay_change 流水一致"""
-    assert_equal(conMysql.selectUserInfoSql('money_cash_personal', config.oversea_testUid,
+    assert_equal(conMysql.select_user_info_sql('money_cash_personal', config.oversea_testUid,
                                             money_type='money_cash_personal'),
-                 conMysql.selectUserInfoSql('pay_change', config.oversea_testUid))
+                 conMysql.select_user_info_sql('pay_change', config.oversea_testUid))
 
 
 # 场景表：房间盲盒打赏（单人次/多人次多个）

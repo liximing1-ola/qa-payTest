@@ -4,11 +4,11 @@ APP 海外版支付测试 - 越南区域验证
 
 验证越南区消费差异化分成体系。
 """
-from common.Config import config
-from common.conPtMysql import conMysql
-from caseOversea.base import OverseaAreaTestBase, PayScene, AREA_RID
-from common.runFailed import Retry
+from caseOversea.base import AREA_RID, OverseaAreaTestBase, PayScene
 
+from common.con_pt_mysql import conMysql
+from common.Config import config
+from common.runFailed import Retry
 
 SCENES = [
     PayScene(

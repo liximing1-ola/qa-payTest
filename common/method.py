@@ -12,10 +12,12 @@
 import logging
 import os
 import time
-from typing import Dict, List, Any, Optional, Union
+from typing import Any, Dict, List, Optional, Union
+
 import requests
+
 from common import Consts
-from common.conMysql import conMysql as mysql
+from common.con_mysql import conMysql as mysql
 from common.Config import config
 
 logger = logging.getLogger(__name__)
@@ -23,12 +25,12 @@ logger = logging.getLogger(__name__)
 
 # ============ 字典转换 ============
 
-def dict_to_slack_fields(result_dict: Dict[str, Any]) -> List[Dict[str, str]]:
+def dict_to_slack_fields(result_dict: Dict[str, Any]) -> List[Dict[str, Any]]:
     """将字典转换为 Slack fields 格式
-    
+
     Args:
         result_dict: 结果字典
-        
+
     Returns:
         Slack fields 格式列表
     """
@@ -40,10 +42,10 @@ def dict_to_slack_fields(result_dict: Dict[str, Any]) -> List[Dict[str, str]]:
 
 def dict_to_markdown(result_dict: Dict[str, Any]) -> str:
     """将字典转换为 Markdown 格式
-    
+
     Args:
         result_dict: 结果字典
-        
+
     Returns:
         Markdown 格式字符串
     """
@@ -63,10 +65,10 @@ IMAGE_APIS: Dict[int, str] = {
 
 def get_image(mode: int = 2) -> Optional[str]:
     """随机获取图片
-    
+
     Args:
         mode: 图片获取模式（1=女生图片，2=狗狗图片）
-        
+
     Returns:
         图片 URL，失败返回 None
     """
@@ -85,7 +87,7 @@ def get_image(mode: int = 2) -> Optional[str]:
             return data[0]
     except Exception as e:
         logger.error('get_image error: %s', e)
-    
+
     return None
 
 
@@ -93,11 +95,11 @@ def get_image(mode: int = 2) -> Optional[str]:
 
 def is_extend(data: Union[dict, list], tag: str) -> bool:
     """检查字段是否在 JSON 中存在
-    
+
     Args:
         data: JSON 数据（字典或列表）
         tag: 要检查的字段名
-        
+
     Returns:
         字段是否存在
     """
@@ -109,11 +111,11 @@ def is_extend(data: Union[dict, list], tag: str) -> bool:
 
 def _contains_key(data: Union[dict, list], tag: str) -> bool:
     """递归检查 JSON 中是否包含指定 key（短路查找）
-    
+
     Args:
         data: JSON 数据
         tag: 要检查的字段名
-        
+
     Returns:
         是否存在
     """
@@ -130,7 +132,7 @@ def _contains_key(data: Union[dict, list], tag: str) -> bool:
 
 def get_value(res: Dict[str, Any]) -> None:
     """处理响应结果，统计成功/失败
-    
+
     Args:
         res: HTTP 响应结果字典
     """
@@ -203,22 +205,22 @@ def get_user_title(level: int) -> Optional[float]:
     return TITLE_LEVEL_MAP.get(level)
 
 
-def calculate_vip_exp(money_type: str = 'money', uid: int = None, pay_off: int = 100) -> int:
+def calculate_vip_exp(money_type: str = 'money', uid: Optional[int] = None, pay_off: int = 100) -> int:
     """计算 VIP 经验值
     Args:
         money_type: 货币类型（money/coin/bean）
         uid: 用户 ID，默认为 config.payUid
-        pay_off: 支付金额   
+        pay_off: 支付金额
     Returns:
-        VIP 经验值     
+        VIP 经验值
     Raises:
         ValueError: 不支持的货币类型
     """
     if uid is None:
         uid = config.payUid
-        
+
     if money_type in {'money', 'coin'}:
-        title = get_user_title(mysql.selectUserInfoSql('level', uid))
+        title = get_user_title(mysql.select_user_info_sql('level', uid))
         return int(pay_off * title) if title else 0
     elif money_type == 'bean':
         return int(pay_off * 1.5)

@@ -19,5 +19,5 @@ class TestPayUnity(unittest.TestCase):
         用例描述：
         验证unity游戏内道具购买
         """
-        des = 'unity道具购买场景'
+        _des = 'unity道具购买场景'
         pass

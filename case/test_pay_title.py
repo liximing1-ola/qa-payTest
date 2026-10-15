@@ -1,4 +1,5 @@
 import unittest
+
 import pytest
 
 
@@ -26,7 +27,7 @@ class TestPayTitle(unittest.TestCase):
         3.校验接口和返回值数据
         4.检查剩余钱值,预期值：（200000 - 100000 + 60000 = 160000）
         """
-        des = '开通爵位场景'
+        _des = '开通爵位场景'
         pass
 
     @pytest.mark.run(order=2)
@@ -40,5 +41,5 @@ class TestPayTitle(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查剩余钱值,预期值：（200000 - 60000 + 36000 = 176000）
         """
-        des = '爵位续费场景'
+        _des = '爵位续费场景'
         pass

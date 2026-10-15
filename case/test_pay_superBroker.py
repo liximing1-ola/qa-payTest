@@ -1,6 +1,8 @@
-from common.conMysql import conMysql as mysql
 import unittest
+
 import pytest
+
+from common.con_mysql import conMysql as mysql
 from common.sqlScript import UserMoneyOperations
 
 
@@ -11,7 +13,7 @@ class TestPaySuperBroker(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        mysql.updateUserInfoSql('super_chatroom', TestPaySuperBroker.star_role['super-voice-fresh'])
+        mysql.update_user_info_sql('super_chatroom', TestPaySuperBroker.star_role['super-voice-fresh'])
 
     def _prepare_test_data(self, setup_steps):
         """准备测试数据"""
@@ -21,15 +23,15 @@ class TestPaySuperBroker(unittest.TestCase):
             if action == 'update_money':
                 UserMoneyOperations.update(**params)
             elif action == 'update_user_info':
-                mysql.updateUserInfoSql(params['field'], params['value'])
+                mysql.update_user_info_sql(params['field'], params['value'])
 
     def _validate_db_state(self, checks):
         """验证数据库状态"""
         for check in checks:
-            field = check['field']
-            uid = check.get('uid')
-            money_type = check.get('money_type')
-            expected = check['expected']
+            _field = check['field']
+            _uid = check.get('uid')
+            _money_type = check.get('money_type')
+            _expected = check['expected']
             # 具体验证逻辑待实现
             pass
 
@@ -44,7 +46,7 @@ class TestPaySuperBroker(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：1000 * 0.35 = 350(个人魅力值)
         """
-        des = '网赚房无公会无经纪人初级艺人收35%个人魅力值'
+        _des = '网赚房无公会无经纪人初级艺人收35%个人魅力值'
         pass
 
     @pytest.mark.run(order=2)
@@ -58,7 +60,7 @@ class TestPaySuperBroker(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：1000 * 0.45 = 450(个人魅力值)
         """
-        des = '网赚房无公会无经纪人中级艺人收45%个人魅力值'
+        _des = '网赚房无公会无经纪人中级艺人收45%个人魅力值'
         pass
 
     @pytest.mark.run(order=3)
@@ -72,7 +74,7 @@ class TestPaySuperBroker(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：1000 * 0.55 = 550(个人魅力值)
         """
-        des = '网赚房无公会无经纪人高级艺人收55%个人魅力值'
+        _des = '网赚房无公会无经纪人高级艺人收55%个人魅力值'
         pass
 
     @pytest.mark.run(order=4)
@@ -86,7 +88,7 @@ class TestPaySuperBroker(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：1000 * 0.45 = 450（公会魅力值）
         """
-        des = '网赚指定工会无经纪人中级艺人收45%公会魅力值'
+        _des = '网赚指定工会无经纪人中级艺人收45%公会魅力值'
         pass
 
     @pytest.mark.run(order=5)
@@ -101,7 +103,7 @@ class TestPaySuperBroker(unittest.TestCase):
         4.检查被打赏者余额，预期为：1000 * 0.5 = 500（个人魅力值）
         5.检查经纪人余额，预期为：1000 * 0.8 = 80（个人魅力值）
         """
-        des = '网赚无工会有经纪人(1j)初级艺人分成50:8'
+        _des = '网赚无工会有经纪人(1j)初级艺人分成50:8'
         pass
 
     @pytest.mark.run(order=6)
@@ -116,7 +118,7 @@ class TestPaySuperBroker(unittest.TestCase):
         4.检查被打赏者余额，预期为：1000 * 0.6 = 600
         5.检查经纪人余额，预期为：1000 * 0.08 = 80
         """
-        des = '网赚指定工会有经纪人(1j)的中级艺人分成60:8'
+        _des = '网赚指定工会有经纪人(1j)的中级艺人分成60:8'
         pass
 
     @pytest.mark.run(order=7)
@@ -131,7 +133,7 @@ class TestPaySuperBroker(unittest.TestCase):
         4.检查被打赏者余额，预期为：1000 * 0.7 = 700（money_cash）
         5.检查经纪人余额，预期为： 1000 * 0.12 = 120(money_cash)
         """
-        des = '网赚有工会有经纪人(7j)高级艺人分成70:12'
+        _des = '网赚有工会有经纪人(7j)高级艺人分成70:12'
         pass
 
     @pytest.mark.run(order=8)
@@ -146,7 +148,7 @@ class TestPaySuperBroker(unittest.TestCase):
         4.检查被打赏者余额，预期为：1000 * 0.62 = 620（个人魅力值）
         5.检查经纪人余额，预期为：0
         """
-        des = '普通房指定工会有经纪人(1j)只艺人收到62%'
+        _des = '普通房指定工会有经纪人(1j)只艺人收到62%'
         pass
 
     @pytest.mark.run(order=9)
@@ -160,5 +162,5 @@ class TestPaySuperBroker(unittest.TestCase):
         3.校验接口状态和返回值数据
         4.检查被打赏者余额，预期为：1000 * 0.7 = 700(个人魅力值)
         """
-        des = '网赚房无公会无经纪人白名单艺人收70%个人魅力值'
+        _des = '网赚房无公会无经纪人白名单艺人收70%个人魅力值'
         pass

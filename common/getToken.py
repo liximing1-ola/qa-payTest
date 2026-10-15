@@ -3,21 +3,25 @@ Token生成器模块
 
 用于生成用户认证Token
 """
+import base64
+import hashlib
 import logging
 import os
-import time
 import random
-import hashlib
-import base64
+import time
 from urllib.parse import quote, urlencode
 
 logger = logging.getLogger(__name__)
 
 # 配置常量（敏感密钥通过环境变量加载）
-KEY = os.environ.get('TOKEN_KEY', '^&(tre)%29^*')
+KEY: str = os.environ.get('TOKEN_KEY', '')
+if not KEY:
+    raise EnvironmentError('TOKEN_KEY environment variable is required')
 EXPIRY = 2592000
 CHARS = '0123456789abcdefghijklmnopqrstuvwxyz'
-VERIFY_SALT = os.environ.get('TOKEN_VERIFY_SALT', '5(d+V8cxpY%d')
+VERIFY_SALT: str = os.environ.get('TOKEN_VERIFY_SALT', '')
+if not VERIFY_SALT:
+    raise EnvironmentError('TOKEN_VERIFY_SALT environment variable is required')
 KEY_C_LENGTH = 4
 SALT_LENGTH = 10
 
@@ -41,11 +45,11 @@ class TokenGenerator:
             "c": ""
         }
         string = urlencode(arg_dict)
-        
+
         # 生成摘要
         digests = self._md5(string + VERIFY_SALT)  # hexdigest() 已是小写
         data = string + digests[:5]
-        
+
         # 生成密钥
         key = self._md5(KEY)
         key_a = self._md5(key[:16])
@@ -58,13 +62,13 @@ class TokenGenerator:
 
         # RC4加密
         encrypted = self._rc4_encrypt(data, crypt_key)
-        
+
         # 生成Token
         token = quote(
             key_c + str(base64.b64encode(bytes(encrypted, encoding='latin1')), encoding='latin1')
             .replace("=", "")
         ).replace("/", "%2F").replace("%", "__")
-        
+
         return token
 
     @staticmethod

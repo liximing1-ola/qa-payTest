@@ -11,7 +11,7 @@ from unittest.mock import Mock, call, patch
 
 from caseSlp import base as slp_base
 from caseSlp.base import SlpCase, SlpTestBase
-from caseSlp.config import payUid, pay_url
+from caseSlp.config import pay_url, payUid
 
 
 class _DummySlpTest(SlpTestBase):
@@ -176,7 +176,7 @@ class TestPrepareDispatcher(unittest.TestCase):
         with patch('caseSlp.base.mysql') as m:
             self.tc._prepare_test_data(
                 [{'action': 'clear_user_money', 'uids': [1, 2, 3]}])
-        m.updateUserMoneyClearSql.assert_called_once_with(1, 2, 3)
+        m.update_user_money_clear_sql.assert_called_once_with(1, 2, 3)
 
     def test_delete_user_account_uses_params(self):
         with patch('caseSlp.base.mysql') as m:
@@ -184,12 +184,12 @@ class TestPrepareDispatcher(unittest.TestCase):
                 'action': 'delete_user_account',
                 'params': {'table': 'user_title_new', 'uid': 9},
             }])
-        m.deleteUserAccountSql.assert_called_once_with('user_title_new', 9)
+        m.delete_user_account_sql.assert_called_once_with('user_title_new', 9)
 
     def test_delete_commodity(self):
         with patch('caseSlp.base.mysql') as m:
             self.tc._prepare_test_data([{'action': 'delete_commodity', 'uid': 9}])
-        m.deleteUserAccountSql.assert_called_once_with('user_commodity', 9)
+        m.delete_user_account_sql.assert_called_once_with('user_commodity', 9)
 
     def test_insert_commodity_default_uid(self):
         with patch('caseSlp.base.UserCommodityOperations') as m:
@@ -207,28 +207,28 @@ class TestPrepareDispatcher(unittest.TestCase):
         with patch('caseSlp.base.mysql') as m:
             self.tc._prepare_test_data(
                 [{'action': 'update_user_god', 'params': {'uid': 9, 'god': 1}}])
-        m.updateUserGodSql.assert_called_once_with(9, 1)
+        m.update_user_god_sql.assert_called_once_with(9, 1)
 
     def test_update_user_title(self):
         with patch('caseSlp.base.mysql') as m:
             self.tc._prepare_test_data(
                 [{'action': 'update_user_title', 'params': {'uid': 9, 'level': 70}}])
-        m.updateUserInfoSql.assert_called_once_with('user_title_new', 9, level=70)
+        m.update_user_info_sql.assert_called_once_with('user_title_new', 9, level=70)
 
     def test_check_user_broker(self):
         with patch('caseSlp.base.mysql') as m, patch('caseSlp.base.assert_equal') as m_eq:
-            m.checkUserBroker.return_value = True
+            m.check_user_broker.return_value = True
             self.tc._prepare_test_data(
                 [{'action': 'check_user_broker', 'uid': 9, 'expected': True}])
-        m.checkUserBroker.assert_called_once_with(9)
+        m.check_user_broker.assert_called_once_with(9)
         m_eq.assert_called_once_with(True, True)
 
     def test_check_rid_type(self):
         with patch('caseSlp.base.mysql') as m, patch('caseSlp.base.assert_equal') as m_eq:
-            m.checkRidFactoryType.return_value = 'business-friend'
+            m.check_rid_factory_type.return_value = 'business-friend'
             self.tc._prepare_test_data(
                 [{'action': 'check_rid_type', 'rid': 88, 'expected': 'business-friend'}])
-        m.checkRidFactoryType.assert_called_once_with(88)
+        m.check_rid_factory_type.assert_called_once_with(88)
         m_eq.assert_called_once_with('business-friend', 'business-friend')
 
     def test_unknown_action_noop(self):
@@ -250,43 +250,43 @@ class TestValidateDispatcher(unittest.TestCase):
 
     def test_basic_equal(self):
         with patch('caseSlp.base.mysql') as m_mysql, patch('caseSlp.base.assert_equal') as m_eq:
-            m_mysql.selectUserInfoSql.return_value = 5
+            m_mysql.select_user_info_sql.return_value = 5
             self.tc._validate_db_state([{'field': 'sum_money', 'uid': 123, 'expected': 5}])
-        m_mysql.selectUserInfoSql.assert_called_once_with('sum_money', 123)
+        m_mysql.select_user_info_sql.assert_called_once_with('sum_money', 123)
         m_eq.assert_called_once_with(5, 5)
 
     def test_default_uid_is_pay_uid(self):
         with patch('caseSlp.base.mysql') as m_mysql, patch('caseSlp.base.assert_equal'):
-            m_mysql.selectUserInfoSql.return_value = 0
+            m_mysql.select_user_info_sql.return_value = 0
             self.tc._validate_db_state([{'field': 'sum_money', 'expected': 0}])
-        m_mysql.selectUserInfoSql.assert_called_once_with('sum_money', payUid)
+        m_mysql.select_user_info_sql.assert_called_once_with('sum_money', payUid)
 
     def test_money_type_and_cid_passed_as_kwargs(self):
         with patch('caseSlp.base.mysql') as m_mysql, patch('caseSlp.base.assert_equal'):
-            m_mysql.selectUserInfoSql.return_value = 1
+            m_mysql.select_user_info_sql.return_value = 1
             self.tc._validate_db_state([{
                 'field': 'single_money', 'uid': 1, 'expected': 1,
                 'money_type': 'money_cash', 'cid': 9,
             }])
-        m_mysql.selectUserInfoSql.assert_called_once_with(
+        m_mysql.select_user_info_sql.assert_called_once_with(
             'single_money', 1, money_type='money_cash', cid=9)
 
     def test_payuid_kwarg_for_relation_query(self):
         with patch('caseSlp.base.mysql') as m_mysql, patch('caseSlp.base.assert_equal'):
-            m_mysql.selectUserInfoSql.return_value = 2
+            m_mysql.select_user_info_sql.return_value = 2
             self.tc._validate_db_state([{
                 'field': 'relation_id', 'uid': 9, 'cid': 2, 'payuid': 8, 'expected': 2,
             }])
-        m_mysql.selectUserInfoSql.assert_called_once_with(
+        m_mysql.select_user_info_sql.assert_called_once_with(
             'relation_id', 9, cid=2, payuid=8)
 
     def test_extra_kwargs_merged(self):
         with patch('caseSlp.base.mysql') as m_mysql, patch('caseSlp.base.assert_equal'):
-            m_mysql.selectUserInfoSql.return_value = 1
+            m_mysql.select_user_info_sql.return_value = 1
             self.tc._validate_db_state([{
                 'field': 'x', 'uid': 1, 'expected': 1, 'kwargs': {'q': 2},
             }])
-        m_mysql.selectUserInfoSql.assert_called_once_with('x', 1, q=2)
+        m_mysql.select_user_info_sql.assert_called_once_with('x', 1, q=2)
 
     def test_assert_func_custom_check(self):
         """assert_func 应收到 ctx 且不触发表查询"""
@@ -295,4 +295,4 @@ class TestValidateDispatcher(unittest.TestCase):
         with patch('caseSlp.base.mysql') as m_mysql:
             self.tc._validate_db_state([{'assert_func': custom}], ctx)
         custom.assert_called_once_with(ctx)
-        m_mysql.selectUserInfoSql.assert_not_called()
+        m_mysql.select_user_info_sql.assert_not_called()

@@ -42,7 +42,7 @@ class TestCrazySpinRequests(unittest.TestCase):
 
     def test_build_headers_injects_token(self):
         """请求头应注入 user-token 并保留默认 UA/Content-Type"""
-        with patch('common.Crazyspin.Session.checkUserToken',
+        with patch('common.Crazyspin.Session.check_user_token',
                    return_value='tok') as m:
             headers = CrazySpin._build_headers('app')
         self.assertEqual(headers['user-token'], 'tok')
@@ -52,7 +52,7 @@ class TestCrazySpinRequests(unittest.TestCase):
     def test_get_turntable_list(self):
         """list 接口应带 rid 参数与 token 头"""
         resp = Mock()
-        with patch('common.Crazyspin.Session.checkUserToken',
+        with patch('common.Crazyspin.Session.check_user_token',
                    return_value='tok'), \
                 patch('common.Crazyspin.requests.get', return_value=resp) as m:
             res = CrazySpin.get_turntable_list(999, 800350557, token_name='app')

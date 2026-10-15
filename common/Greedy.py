@@ -7,12 +7,13 @@
 """
 import logging
 import os
-import time
 import random
-from typing import Tuple, List, Optional
+import time
+from typing import List, Optional, Tuple
+
+from common.con_pt_mysql import conMysql
 from common.Config import config
 from common.Request import post_request_session
-from common.conPtMysql import conMysql
 
 logger = logging.getLogger(__name__)
 
@@ -29,11 +30,11 @@ class Greedy:
     @staticmethod
     def _build_url(endpoint: str, uid: int) -> str:
         """构建请求 URL
-        
+
         Args:
             endpoint: API 端点
             uid: 用户 ID
-            
+
         Returns:
             完整的 URL
         """
@@ -42,10 +43,10 @@ class Greedy:
     @staticmethod
     def index(uid: int):
         """获取摩天轮玩法信息
-        
+
         Args:
             uid: 用户 ID
-            
+
         Returns:
             HTTP 响应对象
         """
@@ -53,10 +54,10 @@ class Greedy:
         return post_request_session(url, None, token_name='app')
 
     @staticmethod
-    def stake(uid: int, vid: int, counter: int, round_id: int, 
+    def stake(uid: int, vid: int, counter: int, round_id: int,
               money_type: str, notice: bool = False):
         """下注
-        
+
         Args:
             uid: 用户 ID
             vid: 下注 ID
@@ -78,11 +79,11 @@ class Greedy:
     @staticmethod
     def _wait_for_state(uid: int, target_state: str = '1') -> Tuple[Optional[int], Optional[int]]:
         """等待摩天轮进入指定状态
-        
+
         Args:
             uid: 用户 ID
             target_state: 目标状态
-            
+
         Returns:
             (round_id, counter_range) 元组，失败返回 (None, None)
         """
@@ -97,11 +98,11 @@ class Greedy:
     @staticmethod
     def _wait_for_prize(uid: int, round_id: int) -> Tuple[int, int]:
         """等待开奖结果
-        
+
         Args:
             uid: 用户 ID
             round_id: 回合 ID
-            
+
         Returns:
             (counter_all, prize) 元组
         """
@@ -117,10 +118,10 @@ class Greedy:
     def bet(money_type: str) -> List[int]:
         """
         执行下注流程
-        
+
         Args:
             money_type: 货币类型
-            
+
         Returns:
             [下注次数，奖金]
         """
@@ -133,7 +134,7 @@ class Greedy:
             # 执行下注
             for _ in range(BET_COUNT):
                 vid = random.randint(*VID_RANGE)
-                Greedy.stake(config.oversea_payUid, vid, counter_range, round_id, money_type)
+                Greedy.stake(config.oversea_payUid, vid, counter_range or 0, round_id or 0, money_type)
 
             # 等待开奖结果
             counter_all, prize = Greedy._wait_for_prize(config.oversea_payUid, round_id)

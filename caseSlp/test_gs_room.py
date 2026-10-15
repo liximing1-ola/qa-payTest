@@ -4,8 +4,24 @@ __title__ = ""
 __desc__ = "公会主播-房间打赏"
 
 from caseSlp.base import SlpCase, SlpTestBase
-from caseSlp.config import default_money, default_num, giftId, gsUid, gs_A_ceo_rid, gs_A_rid, gs_A_uid, gs_B_ceo_rid, gs_B_rid, gs_B_uid, gs_friend_rid, gs_soundchat_rid, payUid, rates
-from common.conSlpMysql import conMysql as mysql
+from caseSlp.config import (
+	default_money,
+	default_num,
+	giftId,
+	gs_A_ceo_rid,
+	gs_A_rid,
+	gs_A_uid,
+	gs_B_ceo_rid,
+	gs_B_rid,
+	gs_B_uid,
+	gs_friend_rid,
+	gs_soundchat_rid,
+	gsUid,
+	payUid,
+	rates,
+)
+
+from common.con_slp_mysql import conMysql as mysql
 from common.runFailed import Retry
 
 
@@ -24,13 +40,13 @@ def _make_gs_room_case(des, rid, uid, god, gift_type, money_type, room_type):
 		              'params': {'uid': payUid, 'cid': giftId['69']['cid'],
 		                         'num': default_num}})
 
-	queries = [('rid', lambda: rid if rid is not None else mysql.selectUserInfoSql('vip'))]
+	queries = [('rid', lambda: rid if rid is not None else mysql.select_user_info_sql('vip'))]
 	data = {'rid': lambda ctx: ctx['rid'], 'payType': 'package', 'uid': uid,
 	        'gift_id': giftId['69']['gid']}
 	if gift_type == 'gift':
 		data['package_cid'] = lambda ctx: ctx['box_cid']
 		data['ctype'] = 'gift'
-		queries.append(('box_cid', lambda: int(mysql.selectUserInfoSql(
+		queries.append(('box_cid', lambda: int(mysql.select_user_info_sql(
 			'id_commodity', payUid, cid=giftId['69']['cid']))))
 
 	single_money = {'field': 'single_money', 'uid': uid,

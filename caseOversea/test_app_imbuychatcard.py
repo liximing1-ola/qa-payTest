@@ -5,6 +5,7 @@ APP 海外版支付测试 - 私聊卡购买验证
 验证余额购买私聊卡的流程。
 """
 from caseOversea.base import OverseaBizCase, OverseaBizTestBase
+
 from common.Config import config
 from common.runFailed import Retry
 

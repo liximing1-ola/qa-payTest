@@ -4,10 +4,10 @@ __title__ = ""
 __desc__ = "公会主播-个人守护"
 
 import pytest
-
 from caseSlp.base import SlpCase, SlpTestBase
 from caseSlp.config import default_money, defend, gsUid, payUid, rates
-from common.conSlpMysql import conMysql as mysql
+
+from common.con_slp_mysql import conMysql as mysql
 from common.runFailed import Retry
 
 # 场景表：公会主播-个人守护（开通 -> 进阶 -> 解除，按 test 顺序执行）
@@ -37,7 +37,7 @@ SCENES = [
 			{'action': 'update_money', 'params': {'uid': gsUid}},
 			{'action': 'update_user_god', 'params': {'uid': gsUid, 'god': 1}},
 		],
-		queries=[('defend_id', lambda: mysql.selectUserInfoSql(
+		queries=[('defend_id', lambda: mysql.select_user_info_sql(
 			'relation_id', payuid=payUid, uid=gsUid, cid=defend['小宝贝']['id']))],
 		data={'uid': gsUid, 'payType': 'defend-upgrade',
 		      'money': defend['小宝贝']['upgrade_price'],
@@ -59,9 +59,9 @@ SCENES = [
 		],
 		queries=[
 			# 原用例的探询查询（结果不使用），保留执行以保持行为一致
-			('_relation_id_probe', lambda: mysql.selectUserInfoSql(
+			('_relation_id_probe', lambda: mysql.select_user_info_sql(
 				'relation_id', uid=gsUid, cid=defend['小宝贝']['id'])),
-			('defend_id', lambda: mysql.selectUserInfoSql(
+			('defend_id', lambda: mysql.select_user_info_sql(
 				'relation_id', payuid=payUid, uid=gsUid, cid=defend['小宝贝']['id'])),
 		],
 		data={'uid': gsUid, 'payType': 'defend-break',

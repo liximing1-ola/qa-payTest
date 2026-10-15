@@ -5,6 +5,7 @@ __desc__ = "异常/边界值用例"
 
 from caseSlp.base import SlpCase, SlpTestBase
 from caseSlp.config import default_money, default_num, giftId, normal_uid, payUid
+
 from common.runFailed import Retry
 
 

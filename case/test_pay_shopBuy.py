@@ -5,10 +5,10 @@
 场景差异通过模块级 SCENES 表声明，由 PayTestBase.run_case 统一执行。
 """
 import pytest
-
 from case.base import PayCase, PayTestBase
+
+from common.con_mysql import conMysql as mysql
 from common.Config import config
-from common.conMysql import conMysql as mysql
 from common.runFailed import Retry
 
 # 礼物 cid：四叶草 / 小天使
@@ -43,7 +43,7 @@ SCENES = [
         setup=[
             {'action': 'clear_user_money', 'params': {'uid1': config.payUid, 'uid2': config.rewardUid}}
         ],
-        queries=[('cid', lambda: int(mysql.selectUserInfoSql('id_commodity', config.payUid, cid=GIFT_CID_ANGEL)))],
+        queries=[('cid', lambda: int(mysql.select_user_info_sql('id_commodity', config.payUid, cid=GIFT_CID_ANGEL)))],
         data={'rid': config.live_role['auto_rid'], 'giftId': config.giftId['54'], 'money': 9900,
               'package_cid': lambda ctx: ctx['cid'], 'ctype': 'gift'},
         checks=[
@@ -55,7 +55,7 @@ SCENES = [
         setup=[
             {'action': 'clear_user_money', 'params': {'uid1': config.payUid, 'uid2': config.rewardUid}}
         ],
-        queries=[('cid', lambda: int(mysql.selectUserInfoSql('id_commodity', config.payUid, cid=GIFT_CID_ANGEL)))],
+        queries=[('cid', lambda: int(mysql.select_user_info_sql('id_commodity', config.payUid, cid=GIFT_CID_ANGEL)))],
         data={'rid': config.live_role['auto_rid'], 'giftId': config.giftId['54'], 'money': 99000,
               'package_cid': lambda ctx: ctx['cid'], 'ctype': 'gift', 'num': 10},
         success=0,

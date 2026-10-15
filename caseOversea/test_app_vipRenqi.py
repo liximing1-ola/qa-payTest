@@ -5,6 +5,7 @@ APP 海外版支付测试 - VIP 人气值验证
 验证房间打赏和私聊打赏赠送礼物时的人气值和 VIP 等级变化。
 """
 from caseOversea.base import OverseaBizCase, OverseaBizTestBase
+
 from common.Config import config
 from common.runFailed import Retry
 

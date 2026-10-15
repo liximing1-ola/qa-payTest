@@ -5,6 +5,7 @@ APP 海外版支付测试 - 私聊打赏验证
 验证私聊场景下的打赏功能，包括余额不足、正常打赏和箱子打赏。
 """
 from caseOversea.base import OverseaBizCase, OverseaBizTestBase
+
 from common.Config import config
 from common.runFailed import Retry
 

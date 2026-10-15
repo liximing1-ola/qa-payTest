@@ -6,17 +6,18 @@ common/method.py 纯逻辑函数单元测试
     python -m pytest tests/test_method.py -v
 """
 import unittest
+from unittest.mock import Mock, patch
 
 from common import Consts
 from common.method import (
-    dict_to_slack_fields,
-    dict_to_markdown,
-    is_extend,
     _contains_key,
-    get_value,
+    calculate_vip_exp,
+    dict_to_markdown,
+    dict_to_slack_fields,
     format_reason,
     get_user_title,
-    calculate_vip_exp,
+    get_value,
+    is_extend,
 )
 
 
@@ -128,6 +129,95 @@ class TestCalculateVipExp(unittest.TestCase):
     def test_unsupported_money_type_raises(self):
         with self.assertRaises(ValueError):
             calculate_vip_exp('unknown')
+
+
+class TestGetImage(unittest.TestCase):
+    """get_image 图片获取"""
+
+    @patch('common.method.requests.get')
+    def test_mode1_success(self, mock_get):
+        """mode=1 成功时应返回 imageUrl"""
+        from common.method import get_image
+        mock_resp = Mock()
+        mock_resp.json.return_value = {'code': 1, 'data': [{'imageUrl': 'http://img.test/1.jpg'}]}
+        mock_resp.raise_for_status = Mock()
+        mock_get.return_value = mock_resp
+
+        result = get_image(mode=1)
+        self.assertEqual(result, 'http://img.test/1.jpg')
+
+    @patch('common.method.requests.get')
+    def test_mode2_success(self, mock_get):
+        """mode=2 成功时应返回第一个元素"""
+        from common.method import get_image
+        mock_resp = Mock()
+        mock_resp.json.return_value = ['http://shibe.online/dog1.jpg']
+        mock_resp.raise_for_status = Mock()
+        mock_get.return_value = mock_resp
+
+        result = get_image(mode=2)
+        self.assertEqual(result, 'http://shibe.online/dog1.jpg')
+
+    @patch('common.method.requests.get')
+    def test_mode1_code_not_1(self, mock_get):
+        """mode=1 但 code!=1 应返回 None"""
+        from common.method import get_image
+        mock_resp = Mock()
+        mock_resp.json.return_value = {'code': 0, 'msg': 'error'}
+        mock_resp.raise_for_status = Mock()
+        mock_get.return_value = mock_resp
+
+        result = get_image(mode=1)
+        self.assertIsNone(result)
+
+    def test_invalid_mode_returns_none(self):
+        """无效 mode 应返回 None"""
+        from common.method import get_image
+        result = get_image(mode=999)
+        self.assertIsNone(result)
+
+    @patch('common.method.requests.get', side_effect=Exception('network error'))
+    def test_request_exception_returns_none(self, mock_get):
+        """请求异常应返回 None"""
+        from common.method import get_image
+        result = get_image(mode=2)
+        self.assertIsNone(result)
+
+
+class TestCheckPath(unittest.TestCase):
+    """check_path 路径检查"""
+
+    @patch('common.method.os.path.exists', return_value=True)
+    def test_existing_path_no_error(self, mock_exists):
+        """路径存在时不应抛异常"""
+        from common.method import check_path
+        check_path('/some/existing/path')  # 不抛异常
+
+    @patch('Robot.robot')
+    @patch('common.method.os.path.exists', return_value=False)
+    def test_missing_path_raises(self, mock_exists, mock_robot):
+        """路径不存在应抛 EnvironmentError"""
+        from common.method import check_path
+        with self.assertRaises(EnvironmentError):
+            check_path('/some/missing/path')
+
+
+class TestCalculateVipExpMoney(unittest.TestCase):
+    """VIP 经验计算 money/coin 分支"""
+
+    @patch('common.method.mysql')
+    def test_money_with_title(self, mock_mysql):
+        """money 类型且有爵位时应返回 pay_off * title"""
+        mock_mysql.select_user_info_sql.return_value = 50  # 侯爵
+        result = calculate_vip_exp('money', uid=111, pay_off=100)
+        self.assertEqual(result, int(100 * 1.1))
+
+    @patch('common.method.mysql')
+    def test_coin_with_no_title(self, mock_mysql):
+        """coin 类型但无爵位时应返回 0"""
+        mock_mysql.select_user_info_sql.return_value = 999  # 不存在的等级
+        result = calculate_vip_exp('coin', uid=111, pay_off=100)
+        self.assertEqual(result, 0)
 
 
 if __name__ == '__main__':

@@ -9,11 +9,11 @@ import unittest
 from unittest.mock import patch
 
 from common.Crazyspin import (
-    CrazySpin,
     DEFAULT_HEADERS,
     DEFAULT_PARAMS,
+    CrazySpin,
 )
-from common.Greedy import Greedy, MAX_RETRY_COUNT, RETRY_INTERVAL
+from common.Greedy import MAX_RETRY_COUNT, RETRY_INTERVAL, Greedy
 
 
 class TestCrazySpinUrls(unittest.TestCase):
@@ -26,7 +26,7 @@ class TestCrazySpinUrls(unittest.TestCase):
         self.assertIn('rid=1', url)
         self.assertIn('_blid=100', url)
 
-    @patch('common.Crazyspin.Session.checkUserToken', return_value='tk')
+    @patch('common.Crazyspin.Session.check_user_token', return_value='tk')
     def test_build_headers_injects_token(self, mock_token):
         """_build_headers 应注入 token 且不改动 DEFAULT_HEADERS 原件"""
         headers = CrazySpin._build_headers('dev')
@@ -46,7 +46,7 @@ class TestCrazySpinUrls(unittest.TestCase):
         self.assertIn('/go/party/turntable/draw', url)
         self.assertIn('_blid=123', url)
 
-    @patch('common.Crazyspin.Session.checkUserToken', return_value='tk')
+    @patch('common.Crazyspin.Session.check_user_token', return_value='tk')
     @patch('common.Crazyspin.requests.get')
     def test_get_turntable_list_passes_timeout(self, mock_get, _mock_token):
         """get_turntable_list 应带 timeout（防止网络挂起无限等待）"""
@@ -54,7 +54,7 @@ class TestCrazySpinUrls(unittest.TestCase):
         self.assertIn('timeout', mock_get.call_args[1])
         self.assertGreater(mock_get.call_args[1]['timeout'], 0)
 
-    @patch('common.Crazyspin.Session.checkUserToken', return_value='tk')
+    @patch('common.Crazyspin.Session.check_user_token', return_value='tk')
     @patch('common.Crazyspin.requests.get')
     def test_get_turntable_horn_passes_timeout(self, mock_get, _mock_token):
         """get_turntable_horn 应带 timeout"""

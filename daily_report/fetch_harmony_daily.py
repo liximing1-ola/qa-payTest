@@ -5,13 +5,13 @@
 探测模式：环境变量 HARMONY_PROBE=true 时拉取最近数据并打印样例，用于验证接口连通性。
 """
 
-import sys
-import time
 import csv
+import hashlib
 import io
 import json
-import hashlib
 import os
+import sys
+import time
 from datetime import date, datetime, timedelta, timezone
 
 import jwt
@@ -21,7 +21,12 @@ from PIL import Image, ImageDraw
 
 # 表格渲染与企微推送工具（三条日报共用）
 from report_common import (
-    C_TITLE, C_WARN, draw_table, load_font, report_failure, save_local,
+    C_TITLE,
+    C_WARN,
+    draw_table,
+    load_font,
+    report_failure,
+    save_local,
     send_wecom_image,
 )
 

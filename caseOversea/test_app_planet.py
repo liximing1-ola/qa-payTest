@@ -7,6 +7,7 @@ APP 海外版支付测试 - 星球之旅验证
 import unittest
 
 from caseOversea.base import OverseaBizCase, OverseaBizTestBase
+
 from common.Config import config
 
 # 场景：星球之旅扣钻石获取礼物（2000-1500=500 钻，背包得到 1 个物品）

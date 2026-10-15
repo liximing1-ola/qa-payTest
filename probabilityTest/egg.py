@@ -1,18 +1,21 @@
 # coding=utf-8
 import logging
 import os
+
 import gevent
 from gevent import monkey
 
 monkey.patch_all()
 
-import time
-import urllib.parse
-import random
-import pymysql
-import requests
-import urllib3
-from common.Config import config
+import random  # noqa: E402
+import time  # noqa: E402
+import urllib.parse  # noqa: E402
+
+import pymysql  # noqa: E402
+import requests  # noqa: E402
+import urllib3  # noqa: E402
+
+from common.Config import config  # noqa: E402
 
 logger = logging.getLogger(__name__)
 
@@ -49,13 +52,13 @@ GIFT_ID_BEAN  = 488
 
 # 礼物配置
 GIFT_CONFIG = {
-    35: 52000, 38: 131400, 63: 20, 100: 9900, 226: 600, 286: 5200, 310: 30, 
-    315: 20, 446: 300, 450: 1000, 451: 2100, 452: 6600, 455: 13400, 
+    35: 52000, 38: 131400, 63: 20, 100: 9900, 226: 600, 286: 5200, 310: 30,
+    315: 20, 446: 300, 450: 1000, 451: 2100, 452: 6600, 455: 13400,
     488: 600, 495: 1200, 496: 4000, 497: 18800, 560: 100
 }
 
 VAP_CONFIG = {
-    629: 21, 628: 6, 621: 188, 620: 6, 614: 520, 610: 10, 607: 21, 
+    629: 21, 628: 6, 621: 188, 620: 6, 614: 520, 610: 10, 607: 21,
     577: 21, 572: 1, 570: 1314, 316: 3344, 322: 188, 330: 30
 }
 
@@ -119,9 +122,9 @@ def post_pay_create():
     """个人房幸运蛋概率测试"""
     level = random.randint(1, 3)
     money = EGG_LEVEL_MONEY.get(level)
-    
+
     headers = _build_headers('create')
-    
+
     data = {
         "platform": "available",
         "type": "package",
@@ -148,7 +151,7 @@ def post_pay_create():
             "egg_level": str(level)
         }
     }
-    
+
     res = send_request(config.pay_url + "com.imbb.banban.android", data, headers, verify=True)
     check_response(res)
 
@@ -156,7 +159,7 @@ def post_pay_create():
 def post_pay_600(gift_num):
     """600金豆支付"""
     headers = _build_headers('pay600')
-    
+
     data = {
         "platform": "available",
         "type": "package",
@@ -182,7 +185,7 @@ def post_pay_600(gift_num):
             "all_mic": 0
         }
     }
-    
+
     res = send_request(BASE_URL, data, headers)
     check_response(res)
 
@@ -190,7 +193,7 @@ def post_pay_600(gift_num):
 def post_pay_ktv():
     """KTV场景支付"""
     headers = _build_headers('ktv')
-    
+
     for gift_id, price in GIFT_CONFIG.items():
         data = {
             "platform": "available",
@@ -217,7 +220,7 @@ def post_pay_ktv():
                 "all_mic": 0
             }
         }
-        
+
         res = send_request(BASE_URL, data, headers)
         time.sleep(GIFT_INTERVAL)
         check_response(res)
@@ -226,7 +229,7 @@ def post_pay_ktv():
 def post_pay_live():
     """直播场景支付"""
     headers = _build_headers('live')
-    
+
     for gift_id, price in VAP_CONFIG.items():
         data = {
             "platform": "available",
@@ -253,7 +256,7 @@ def post_pay_live():
                 "all_mic": 0
             }
         }
-        
+
         res = send_request(BASE_URL, data, headers)
         time.sleep(GIFT_INTERVAL)
         check_response(res)
@@ -269,7 +272,7 @@ def main_pay():
     """主入口"""
     update_bean(UID_BEAN_RESET, 1000000000)
     update_bean(UID_EGG, 0)
-    
+
     for _ in range(100000):
         run_concurrent(post_pay_create, 20)
 

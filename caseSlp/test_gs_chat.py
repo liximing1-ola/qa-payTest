@@ -5,6 +5,7 @@ __desc__ = "公会主播-私聊"
 
 from caseSlp.base import SlpCase, SlpTestBase
 from caseSlp.config import default_money, default_num, giftId, gsUid, payUid, rates
+
 from common.runFailed import Retry
 
 # 场景表：公会主播-私聊打赏

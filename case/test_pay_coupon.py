@@ -5,8 +5,9 @@
 场景差异通过模块级 SCENES 表声明，由 PayTestBase.run_case 统一执行。
 """
 from case.base import PayCase, PayTestBase
+
+from common.con_mysql import conMysql as mysql
 from common.Config import config
-from common.conMysql import conMysql as mysql
 from common.runFailed import Retry
 
 # 老司机券 / 电台青铜体验券
@@ -33,7 +34,7 @@ SCENES = [
             {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 3000}},
             {'action': 'update_money', 'params': {'uid': config.rewardUid}}
         ],
-        queries=[('cid', lambda: mysql.selectUserInfoSql('id_commodity', config.payUid, cid=GIFT_CID_COUPON))],
+        queries=[('cid', lambda: mysql.select_user_info_sql('id_commodity', config.payUid, cid=GIFT_CID_COUPON))],
         data={'giftId': config.giftId['11'], 'money': 3000,
               'package_cid': lambda ctx: ctx['cid'],
               'ctype': 'coupon', 'duction_money': 500},
@@ -51,7 +52,7 @@ SCENES = [
             {'action': 'update_money', 'params': {'uid': config.payUid, 'money': 3000}},
             {'action': 'update_money', 'params': {'uid': config.rewardUid}}
         ],
-        queries=[('cid', lambda: mysql.selectUserInfoSql('id_commodity', config.payUid, cid=GIFT_CID_COUPON))],
+        queries=[('cid', lambda: mysql.select_user_info_sql('id_commodity', config.payUid, cid=GIFT_CID_COUPON))],
         data={'giftId': config.giftId['11'], 'money': 3000,
               'package_cid': lambda ctx: ctx['cid'],
               'ctype': 'coupon', 'duction_money': 500},
@@ -83,7 +84,7 @@ SCENES = [
             {'action': 'insert_commodity', 'params': {'uid': config.payUid, 'cid': GIFT_CID_RADIO, 'num': 1}},
             {'action': 'clear_user_money', 'uids': (config.payUid, config.rewardUid)}
         ],
-        queries=[('cid', lambda: mysql.selectUserInfoSql('id_commodity', config.payUid, cid=GIFT_CID_RADIO))],
+        queries=[('cid', lambda: mysql.select_user_info_sql('id_commodity', config.payUid, cid=GIFT_CID_RADIO))],
         data={'payType': 'package-radioDefend', 'rid': 200022566, 'money': 520,
               'package_cid': lambda ctx: ctx['cid']},
         checks=[

@@ -10,8 +10,8 @@ import unittest
 from dataclasses import FrozenInstanceError
 from unittest.mock import call, patch
 
-from caseOversea.base import (AREA_RID, RECEIVER_BROKER, RECEIVER_NORMAL,
-                              OverseaAreaTestBase, PayScene)
+from caseOversea.base import AREA_RID, RECEIVER_BROKER, RECEIVER_NORMAL, OverseaAreaTestBase, PayScene
+
 from common.Config import config
 from common.Consts import result
 
@@ -87,17 +87,17 @@ class TestRunSceneAccountSetup(_RunSceneTestBase):
     def test_normal_scene_resets_both_wallets(self):
         """普通场景：打赏者按 payer_money 充值，收礼人余额清零"""
         self.tc.run_scene(PayScene(des='普通场景'))
-        self.assertEqual(self.m_db.updateMoneySql.call_args_list, [
+        self.assertEqual(self.m_db.update_money_sql.call_args_list, [
             call(config.oversea_payUid, 700),
             call(config.oversea_testUid),
         ])
-        self.m_db.updateUserMoneyClearSql.assert_not_called()
-        self.m_db.updateUserextendMoneyClearSql.assert_not_called()
+        self.m_db.update_user_money_clear_sql.assert_not_called()
+        self.m_db.update_user_extend_money_clear_sql.assert_not_called()
 
     def test_payer_box_extra_adds_box_wallets(self):
         """箱子场景：打赏者附加三钱包各 100"""
         self.tc.run_scene(PayScene(des='箱子余额', payer_box_extra=True))
-        self.assertEqual(self.m_db.updateMoneySql.call_args_list, [
+        self.assertEqual(self.m_db.update_money_sql.call_args_list, [
             call(config.oversea_payUid, 700, money_cash=100, money_cash_b=100, money_b=100),
             call(config.oversea_testUid),
         ])
@@ -105,15 +105,15 @@ class TestRunSceneAccountSetup(_RunSceneTestBase):
     def test_clear_all_skips_balance_writes(self):
         """余额不足场景：仅清空双方余额，不做任何充值"""
         self.tc.run_scene(PayScene(des='余额不足', clear_all=True, success=0))
-        self.m_db.updateUserMoneyClearSql.assert_called_once_with(
+        self.m_db.update_user_money_clear_sql.assert_called_once_with(
             config.oversea_payUid, config.oversea_testUid)
-        self.m_db.updateMoneySql.assert_not_called()
-        self.m_db.updateUserextendMoneyClearSql.assert_not_called()
+        self.m_db.update_money_sql.assert_not_called()
+        self.m_db.update_user_extend_money_clear_sql.assert_not_called()
 
     def test_clear_extend_clears_receiver_extend(self):
         """clear_extend 场景：清空被打赏者钱包附加表"""
         self.tc.run_scene(PayScene(des='清附加表', clear_extend=True))
-        self.m_db.updateUserextendMoneyClearSql.assert_called_once_with(config.oversea_testUid)
+        self.m_db.update_user_extend_money_clear_sql.assert_called_once_with(config.oversea_testUid)
 
 
 class TestRunSceneRequestBuilding(_RunSceneTestBase):
@@ -138,7 +138,7 @@ class TestRunSceneRequestBuilding(_RunSceneTestBase):
         """公会主播收礼：额外传递 uid=brokerUid，余额与到账均查 broker"""
         self.tc.run_scene(PayScene(des='公会场景', receiver=RECEIVER_BROKER))
         self.m_encode.assert_called_once_with(payType='package', uid=config.oversea_brokerUid)
-        self.assertEqual(self.m_db.updateMoneySql.call_args_list, [
+        self.assertEqual(self.m_db.update_money_sql.call_args_list, [
             call(config.oversea_payUid, 700),
             call(config.oversea_brokerUid),
         ])
@@ -178,12 +178,12 @@ class TestRunSceneAssertions(_RunSceneTestBase):
     def test_payer_expect_none_skips_wallet_check(self):
         """payer_expect 为 None 时不查询打赏者余额"""
         self.tc.run_scene(PayScene(des='跳过打赏者校验', payer_expect=None))
-        self.m_db.selectUserInfoSql.assert_called_once_with(
+        self.m_db.select_user_info_sql.assert_called_once_with(
             'money_cash_personal', config.oversea_testUid)
 
     def test_income_min_uses_assert_len(self):
         """箱子到账：income_min=True 时断言最小值而非相等"""
-        self.m_db.selectUserInfoSql.return_value = 0
+        self.m_db.select_user_info_sql.return_value = 0
         self.tc.run_scene(PayScene(des='箱子到账', payer_expect=None,
                                    income_min=True, income_expect=30))
         self.m_len.assert_called_once_with(0, 30)
@@ -193,15 +193,15 @@ class TestRunSceneAssertions(_RunSceneTestBase):
         """income_money_type 非空时作为关键字参数传入查询"""
         self.tc.run_scene(PayScene(des='带钱包类型', payer_expect=None,
                                    income_money_type='money'))
-        self.m_db.selectUserInfoSql.assert_called_once_with(
+        self.m_db.select_user_info_sql.assert_called_once_with(
             'money_cash_personal', config.oversea_testUid, money_type='money')
 
     def test_check_pay_change_reconciles(self):
         """对账：到账字段值与 pay_change 流水相等"""
-        self.m_db.selectUserInfoSql.side_effect = [62, 62, 62]
+        self.m_db.select_user_info_sql.side_effect = [62, 62, 62]
         self.tc.run_scene(PayScene(des='对账', payer_expect=None,
                                    check_pay_change=True, income_expect=62))
-        self.assertEqual(self.m_db.selectUserInfoSql.call_args_list, [
+        self.assertEqual(self.m_db.select_user_info_sql.call_args_list, [
             call('money_cash_personal', config.oversea_testUid),
             call('money_cash_personal', config.oversea_testUid),
             call(accountType='pay_change', uid=config.oversea_testUid),
@@ -210,13 +210,13 @@ class TestRunSceneAssertions(_RunSceneTestBase):
 
     def test_check_pay_change_custom_reconcile_fields(self):
         """对账查询支持独立账户与钱包类型（reconcile_*）"""
-        self.m_db.selectUserInfoSql.return_value = 0
+        self.m_db.select_user_info_sql.return_value = 0
         self.tc.run_scene(PayScene(des='自定义对账', payer_expect=None,
                                    check_pay_change=True,
                                    reconcile_account='money',
                                    reconcile_money_type='money_cash'))
         self.assertIn(call('money', config.oversea_testUid, money_type='money_cash'),
-                      self.m_db.selectUserInfoSql.call_args_list)
+                      self.m_db.select_user_info_sql.call_args_list)
 
     def test_result_recorded_in_case_list(self):
         """场景描述作为报告键写入 case_list"""
@@ -229,15 +229,15 @@ class TestQueryAccountHelper(unittest.TestCase):
 
     def test_without_money_type(self):
         with patch('caseOversea.base.conMysql') as m_db:
-            m_db.selectUserInfoSql.return_value = 7
+            m_db.select_user_info_sql.return_value = 7
             self.assertEqual(OverseaAreaTestBase._query_account(1, 'money', None), 7)
-            m_db.selectUserInfoSql.assert_called_once_with('money', 1)
+            m_db.select_user_info_sql.assert_called_once_with('money', 1)
 
     def test_with_money_type(self):
         with patch('caseOversea.base.conMysql') as m_db:
-            m_db.selectUserInfoSql.return_value = 7
+            m_db.select_user_info_sql.return_value = 7
             self.assertEqual(OverseaAreaTestBase._query_account(1, 'money', 'money_cash'), 7)
-            m_db.selectUserInfoSql.assert_called_once_with('money', 1, money_type='money_cash')
+            m_db.select_user_info_sql.assert_called_once_with('money', 1, money_type='money_cash')
 
 
 if __name__ == '__main__':

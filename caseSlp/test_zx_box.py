@@ -5,8 +5,9 @@ __desc__ = "甄选礼盒"
 
 from caseSlp.base import SlpCase, SlpTestBase
 from caseSlp.config import gsUid, juewei_level, normal_uid, payUid, rates, zx_box
+
 from common.Assert import assert_equal
-from common.conSlpMysql import conMysql as mysql
+from common.con_slp_mysql import conMysql as mysql
 from common.runFailed import Retry
 
 # 礼盒打赏后等待结算数据落库的时长（秒）
@@ -39,11 +40,11 @@ def _validate_zx_box_settle(ctx):
 			total_num = int(data['total_num'])
 			normal_rq_total += price * RQ * total_num
 			normal_fencheng_total += price * total_num
-	assert_equal(mysql.selectUserInfoSql("popularity", normal_uid), normal_rq_total)
-	assert_equal(mysql.selectUserInfoSql("popularity", gsUid), gs_rq_total)
+	assert_equal(mysql.select_user_info_sql("popularity", normal_uid), normal_rq_total)
+	assert_equal(mysql.select_user_info_sql("popularity", gsUid), gs_rq_total)
 	# 校验收礼人分成
-	assert_equal(mysql.selectUserInfoSql('single_money', gsUid, 'money_cash'), gs_fencheng_total * rates['gs']['default'])
-	assert_equal(mysql.selectUserInfoSql('single_money', normal_uid, 'money_cash_b'), normal_fencheng_total * rates['normal']['default'])
+	assert_equal(mysql.select_user_info_sql('single_money', gsUid, 'money_cash'), gs_fencheng_total * rates['gs']['default'])
+	assert_equal(mysql.select_user_info_sql('single_money', normal_uid, 'money_cash_b'), normal_fencheng_total * rates['normal']['default'])
 	# 校验送礼人VIP值
 	pay_vip_total = 0
 	for data in send_gift_data:
@@ -51,7 +52,7 @@ def _validate_zx_box_settle(ctx):
 		VIP = zx_box['6'][data['gid']]['VIP']
 		total_num = int(data['total_num'])
 		pay_vip_total += price * VIP * total_num
-	assert_equal(mysql.selectUserInfoSql("pay_room_money", payUid), pay_vip_total * _JW['update'] / 100)
+	assert_equal(mysql.select_user_info_sql("pay_room_money", payUid), pay_vip_total * _JW['update'] / 100)
 
 	# 校验送礼人贵族成长值
 	pay_czz_total = 0
@@ -61,7 +62,7 @@ def _validate_zx_box_settle(ctx):
 		total_num = int(data['total_num'])
 		if price >= 10000:  # 大于10000钻+送礼人成长值
 			pay_czz_total += price * CZZ * total_num
-	assert_equal(mysql.selectUserInfoSql("growth", payUid), pay_czz_total + _JW['base'])
+	assert_equal(mysql.select_user_info_sql("growth", payUid), pay_czz_total + _JW['base'])
 
 	# 校验送礼人扣费
 	pay_total_money = 0
@@ -69,7 +70,7 @@ def _validate_zx_box_settle(ctx):
 		price = zx_box['6'][data['gid']]['price']
 		total_num = int(data['total_num'])
 		pay_total_money += price * total_num
-	assert_equal(mysql.selectUserInfoSql('sum_money', payUid), BASE_MONEY - pay_total_money)
+	assert_equal(mysql.select_user_info_sql('sum_money', payUid), BASE_MONEY - pay_total_money)
 
 
 # 场景：送礼人=亲王(vip=1.2倍),甄选礼盒(6元),送多人多个

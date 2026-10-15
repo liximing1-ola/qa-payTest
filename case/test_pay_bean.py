@@ -6,8 +6,9 @@
 金豆账户（xs_user_money_extend）读写由自定义 _prepare_test_data 扩展。
 """
 from case.base import PayCase, PayTestBase
+
+from common.con_mysql import conMysql as mysql
 from common.Config import config
-from common.conMysql import conMysql as mysql
 from common.method import calculate_vip_exp
 from common.runFailed import Retry
 
@@ -42,7 +43,7 @@ SCENES = [
             {'action': 'update_money', 'params': {'uid': config.rewardUid}},
             {'action': 'insert_beans', 'params': {'uid': config.payUid, 'money_coupon': 500}}
         ],
-        queries=[('vip_level', lambda: int(mysql.selectUserInfoSql('pay_room_money', config.payUid)))],
+        queries=[('vip_level', lambda: int(mysql.select_user_info_sql('pay_room_money', config.payUid)))],
         data={'payType': 'package-exchange', 'giftId': config.giftId['362'], 'giftType': 'bean'},
         checks=[
             {'field': 'bean', 'uid': config.payUid, 'expected': 500},
@@ -85,24 +86,24 @@ class TestPayBean(PayTestBase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        mysql.checkXsGiftConfig()
+        mysql.check_xs_gift_config()
 
     def setUp(self) -> None:
         """测试前置清理"""
-        mysql.deleteUserBeanSql(config.payUid, config.rewardUid)
+        mysql.delete_user_bean_sql(config.payUid, config.rewardUid)
 
     def tearDown(self) -> None:
         """测试后置清理"""
-        mysql.deleteUserBeanSql(config.payUid, config.rewardUid)
+        mysql.delete_user_bean_sql(config.payUid, config.rewardUid)
 
     def _prepare_test_data(self, setup_steps):
         """金豆账户准备步骤（delete_beans / insert_beans），其余步骤转发基类"""
         for step in setup_steps:
             action = step['action']
             if action == 'delete_beans':
-                mysql.deleteUserBeanSql(config.payUid, config.rewardUid)
+                mysql.delete_user_bean_sql(config.payUid, config.rewardUid)
             elif action == 'insert_beans':
-                mysql.insertBeanSql(**step['params'])
+                mysql.insert_bean_sql(**step['params'])
             else:
                 super()._prepare_test_data([step])
 

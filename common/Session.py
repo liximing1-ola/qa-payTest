@@ -6,9 +6,11 @@
 """
 import logging
 import os
-from typing import Optional, Dict, Any
+from typing import Any, Dict, Optional
+
 import requests
 import urllib3
+
 from common import Logs
 from common.Config import config
 from common.paramsYaml import Yaml
@@ -63,11 +65,11 @@ class Session:
     @staticmethod
     def _login(env_config: Dict[str, Any], env: str) -> Dict[str, Any]:
         """执行登录请求
-        
+
         Args:
             env_config: 环境配置字典
             env: 环境名称
-            
+
         Returns:
             登录响应 JSON 数据
         """
@@ -87,11 +89,11 @@ class Session:
     @staticmethod
     def _handle_response(res: Dict[str, Any], env: str) -> Optional[Dict[str, str]]:
         """处理响应结果
-        
+
         Args:
             res: 响应数据
             env: 环境名称
-            
+
         Returns:
             Token 和 UID 字典，失败返回 None
         """
@@ -103,37 +105,37 @@ class Session:
         uid = res['data'].get('uid')
         logger.info('%s: token acquired', env)
 
-        Session.checkUserToken('write', app_name=env, token=token)
+        Session.check_user_token('write', app_name=env, token=token)
         return {'token': token, 'uid': uid}
 
     @staticmethod
     def _use_backup_plan(env: str, error_msg: str) -> Dict[str, str]:
         """使用备选方案获取 token
-        
+
         Args:
             env: 环境名称
             error_msg: 错误信息
-            
+
         Returns:
             Token 字典
         """
         Logs.get_logger('getSession.log').warning(f'session 主方案获取失败，转备选方案，原因：{error_msg}')
-        from common.conMysql import conMysql
+        from common.con_mysql import conMysql
         from common.getToken import TokenGenerator
 
-        user_index = conMysql.selectUserInfoSql('user_index', config.payUid)
+        user_index = conMysql.select_user_info_sql('user_index', config.payUid)
         token = TokenGenerator(config.payUid, user_index).generate()
-        Session.checkUserToken('write', app_name=env, token=token)
+        Session.check_user_token('write', app_name=env, token=token)
         logger.info('主方案失败，已启用备选方案获取 token')
         return {'token': token}
 
     @staticmethod
-    def getSession(env: str) -> Optional[Dict[str, str]]:
+    def get_session(env: str) -> Optional[Dict[str, str]]:
         """获取登录 session
-        
+
         Args:
             env: 环境名称（dev/rush/不夜星球等）
-            
+
         Returns:
             Token 字典，失败返回 None
         """
@@ -158,16 +160,16 @@ class Session:
         return None
 
     @staticmethod
-    def checkUserToken(operate: str, app_name: str = 'dev', 
+    def check_user_token(operate: str, app_name: str = 'dev',
                       token: str = '', uid: Optional[int] = None) -> Optional[str]:
         """检查/写入用户 token
         Args:
             operate: 操作类型（'read'/'write'）
             app_name: 应用名称
             token: Token 字符串（write 时需要）
-            uid: 用户 ID，可选 
+            uid: 用户 ID，可选
         Returns:
-            读取操作返回 token，写入操作返回 None   
+            读取操作返回 token，写入操作返回 None
         Raises:
             Exception: 读取时文件为空抛出异常
         """
@@ -189,5 +191,6 @@ class Session:
                 if content:
                     return content
                 raise Exception(f"{txt_path}-为空!")
-        
+
         return None
+

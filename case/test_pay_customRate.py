@@ -5,8 +5,9 @@
 场景差异通过模块级 SCENES 表声明，由 PayTestBase.run_case 统一执行。
 """
 from case.base import PayCase, PayTestBase
+
+from common.con_mysql import conMysql as mysql
 from common.Config import config
-from common.conMysql import conMysql as mysql
 from common.runFailed import Retry
 
 # 自定义分成主播 / 打包结算签约主播 / 公会长
@@ -113,7 +114,7 @@ class TestPayCustomRate(PayTestBase):
     @classmethod
     def tearDownClass(cls) -> None:
         """恢复公会长分成比例"""
-        mysql.checkBrokerUserRate(PACK_CAL_UID, CEO_UID, rate=100)
+        mysql.check_broker_user_rate(PACK_CAL_UID, CEO_UID, rate=100)
 
     def test_01_roomPayCustomRate_50(self):
         """后台自定义分成比例为50%，打赏100分"""

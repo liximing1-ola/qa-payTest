@@ -6,13 +6,12 @@ common/basicData.py 单元测试（encodeData / encodeOverseaData 分发与编�
     python -m pytest tests/test_basicData.py -v
 """
 import ast
+import unittest
 import urllib.parse
 
-import unittest
-
 from common.basicData import (
-    PAY_TYPE_HANDLERS,
     OVERSEA_PAY_TYPE_HANDLERS,
+    PAY_TYPE_HANDLERS,
     _encode_data_helper,
     encodeData,
     encodeOverseaData,

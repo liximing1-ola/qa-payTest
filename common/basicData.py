@@ -7,7 +7,8 @@
 """
 import logging
 import urllib.parse
-from typing import Dict, Any, Tuple, Optional
+from typing import Any, Dict, Optional, Tuple
+
 from common.Config import config
 
 logger = logging.getLogger(__name__)
@@ -21,17 +22,17 @@ DEFAULT_SHOW_PAC_MAN_GUIDE = 1
 def _encode_data_helper(data: Dict[str, Any]) -> str:
     """
     URL 编码辅助函数
-    
+
     Args:
         data: 待编码的字典数据
-        
+
     Returns:
         编码后的字符串
     """
     return urllib.parse.urlencode(data).replace('+', '').replace('%27', '%22')
 
 
-def _build_package_params(rid: str, uid: str, money: int, giftId: int, 
+def _build_package_params(rid: str, uid: str, money: int, giftId: int,
                           num: int, package_cid: int = 0, ctype: str = '',
                           duction_money: int = 0, star: int = 0,
                           giftType: str = 'normal', **kwargs) -> Dict[str, Any]:
@@ -61,7 +62,7 @@ def _build_package_params(rid: str, uid: str, money: int, giftId: int,
 def _build_shop_buy_params(money: int = 0, num: int = 1, cid: int = 0, price: int = 0,
                            version: int = DEFAULT_VERSION, **kwargs) -> Dict[str, Any]:
     """构建 shop-buy 类型的基础参数
-    
+
     Args:
         money: 金额（如果 price 为 0 则使用 money）
         num: 数量
@@ -69,7 +70,7 @@ def _build_shop_buy_params(money: int = 0, num: int = 1, cid: int = 0, price: in
         price: 单价（如果为 0 则使用 money）
         version: 版本号
         **kwargs: 其他参数
-        
+
     Returns:
         shop-buy 参数字典
     """
@@ -164,7 +165,7 @@ PAY_TYPE_HANDLERS = {
     'package': _handler_package,
     'package-more': _handler_package_more,
     'package-exchange': _handler_package_exchange,
-    
+
     'package-knightDefend': lambda **kw: {
         "platform": "available",
         "type": "package",
@@ -178,7 +179,7 @@ PAY_TYPE_HANDLERS = {
             "useCoin": DEFAULT_USE_COIN,
         }
     },
-    
+
     'package-radioDefend': lambda **kw: {
         "platform": "available",
         "type": "package",
@@ -194,7 +195,7 @@ PAY_TYPE_HANDLERS = {
             "useCoin": DEFAULT_USE_COIN,
         }
     },
-    
+
     'chat-gift': lambda **kw: {
         "platform": "available",
         "type": "chat-gift",
@@ -216,7 +217,7 @@ PAY_TYPE_HANDLERS = {
             "useCoin": DEFAULT_USE_COIN
         }
     },
-    
+
     'shop-buy-box': lambda **kw: {
         "platform": 'available',
         "type": 'shop-buy',
@@ -235,9 +236,9 @@ PAY_TYPE_HANDLERS = {
             "useCoin": DEFAULT_USE_COIN
         }
     },
-    
+
     'shop-buy': _handler_shop_buy,
-    
+
     'defend': lambda **kw: {
         "platform": 'available',
         "type": 'defend',
@@ -251,7 +252,7 @@ PAY_TYPE_HANDLERS = {
             "useCoin": DEFAULT_USE_COIN
         }
     },
-    
+
     'defend-upgrade': lambda **kw: {
         "platform": 'available',
         "type": 'defend-upgrade',
@@ -261,7 +262,7 @@ PAY_TYPE_HANDLERS = {
             "useCoin": DEFAULT_USE_COIN
         }
     },
-    
+
     'defend-break': lambda **kw: {
         "platform": 'available',
         "type": 'defend-break',
@@ -272,7 +273,7 @@ PAY_TYPE_HANDLERS = {
         },
         "_special_encode": True  # 标记需要特殊处理
     },
-    
+
     'title': lambda **kw: {
         "platform": "available",
         "type": "title",
@@ -287,9 +288,9 @@ PAY_TYPE_HANDLERS = {
             "useCoin": DEFAULT_USE_COIN
         }
     },
-    
+
     'exchange_gold': _handler_exchange_gold,
-    
+
     'unity-game-buy': lambda **kw: {
         "platform": 'available',
         "type": 'unity-game-buy',
@@ -305,7 +306,7 @@ PAY_TYPE_HANDLERS = {
             "rid": 105707946
         }
     },
-    
+
     'pub-drink-buy': lambda **kw: {
         "platform": 'available',
         "type": 'pub-drink-buy',
@@ -320,7 +321,7 @@ PAY_TYPE_HANDLERS = {
             "exchange": 1,
         }
     },
-    
+
     'deco-present': lambda **kw: {
         "platform": 'available',
         "type": 'deco-present',
@@ -337,7 +338,7 @@ PAY_TYPE_HANDLERS = {
             "useCoin": DEFAULT_USE_COIN
         }
     },
-    
+
     'banban-consume': lambda **kw: {
         "platform": 'available',
         "type": 'banban-consume',
@@ -356,7 +357,7 @@ OVERSEA_PAY_TYPE_HANDLERS = {
     'package': _handler_package,
     'package-more': _handler_package_more,
     'package-exchange': _handler_package_exchange,
-    
+
     'chat-gift': lambda **kw: {
         "platform": "available",
         "type": "chat-gift",
@@ -377,9 +378,9 @@ OVERSEA_PAY_TYPE_HANDLERS = {
             "useCoin": DEFAULT_USE_COIN
         }
     },
-    
+
     'shop-buy': _handler_shop_buy,
-    
+
     'shop-buy-box': lambda **kw: {
         "platform": 'available',
         "type": 'shop-buy',
@@ -398,7 +399,7 @@ OVERSEA_PAY_TYPE_HANDLERS = {
             "useCoin": DEFAULT_USE_COIN
         }
     },
-    
+
     'coin-shop-buy': lambda **kw: {
         "platform": 'available',
         "type": 'coin-shop-buy',
@@ -413,9 +414,9 @@ OVERSEA_PAY_TYPE_HANDLERS = {
             "useCoin": -1
         }
     },
-    
+
     'exchange_gold': _handler_exchange_gold,
-    
+
     'defend': lambda **kw: {
         "platform": 'available',
         "type": 'defend',
@@ -429,7 +430,7 @@ OVERSEA_PAY_TYPE_HANDLERS = {
             "useCoin": DEFAULT_USE_COIN
         }
     },
-    
+
     'shop-buy-crazyspin': lambda **kw: {
         "platform": 'available',
         "type": 'shop-buy',
@@ -446,13 +447,13 @@ OVERSEA_PAY_TYPE_HANDLERS = {
             "useCoin": DEFAULT_USE_COIN
         }
     },
-    
+
     'play-crazyspin': lambda **kw: {
         "rid": kw['rid'],
         "draw_type": 10,
         "turntable_type": 1,
     },
-    
+
     'journey_planet_draw': lambda **kw: {
         "platform": "available",
         "type": "journey-planet-draw",
@@ -465,7 +466,7 @@ OVERSEA_PAY_TYPE_HANDLERS = {
             "useCoin": DEFAULT_USE_COIN
         }
     },
-    
+
     'chat-pay-card': lambda **kw: {
         'platform': 'available',
         'type': 'chat-pay-card',
@@ -478,7 +479,7 @@ OVERSEA_PAY_TYPE_HANDLERS = {
 def encodeData(payType: str = 'package',
                money: int = 1000,
                rid: str = config.live_role['auto_rid'],
-               uid: str = config.rewardUid,
+               uid: int = config.rewardUid,
                giftId: int = config.giftId['7'],
                giftType: str = 'normal',
                cid: int = 5,
@@ -492,7 +493,7 @@ def encodeData(payType: str = 'package',
                uids: Optional[Tuple[str, ...]] = None) -> str:
     """
     编码普通场景的消费数据
-    
+
     Args:
         payType: 支付类型
         money: 金额
@@ -509,19 +510,19 @@ def encodeData(payType: str = 'package',
         star: 星级
         defend_id: 守护 ID
         uids: 用户 ID 元组
-        
+
     Returns:
         编码后的数据字符串
-        
+
     Raises:
         ValueError: payType 不存在时抛出
     """
     if uids is None:
         uids = (str(config.rewardUid), str(config.masterUid))
-    
+
     if payType not in PAY_TYPE_HANDLERS:
         raise ValueError(f'payType "{payType}" is not supported')
-    
+
     handler = PAY_TYPE_HANDLERS[payType]
     data = handler(
         money=money,
@@ -539,18 +540,18 @@ def encodeData(payType: str = 'package',
         defend_id=defend_id,
         uids=uids
     )
-    
+
     # 特殊处理：defend-break 需要单独编码
     if data.pop('_special_encode', False):
         return urllib.parse.urlencode(data)
-    
+
     return _encode_data_helper(data)
 
 
 def encodeOverseaData(payType: str = 'package',
                  money: int = 600,
                  rid: str = config.oversea_room['business_joy'],
-                 uid: str = config.oversea_testUid,
+                 uid: int = config.oversea_testUid,
                  giftId: int = 10,
                  giftType: str = 'normal',
                  cid: int = 5,
@@ -563,7 +564,7 @@ def encodeOverseaData(payType: str = 'package',
                  uids: Optional[Tuple[str, ...]] = None) -> str:
     """
     编码海外版平台的消费数据
-    
+
     Args:
         payType: 支付类型
         money: 金额
@@ -579,19 +580,19 @@ def encodeOverseaData(payType: str = 'package',
         duction_money: 优惠金额
         star: 星级
         uids: 用户 ID 元组
-        
+
     Returns:
         编码后的数据字符串
-        
+
     Raises:
         ValueError: payType 不存在时抛出
     """
     if uids is None:
         uids = (str(config.oversea_testUid), str(config.oversea_brokerUid))
-    
+
     if payType not in OVERSEA_PAY_TYPE_HANDLERS:
         raise ValueError(f'payType "{payType}" is not supported')
-    
+
     handler = OVERSEA_PAY_TYPE_HANDLERS[payType]
     data = handler(
         money=money,
@@ -608,7 +609,7 @@ def encodeOverseaData(payType: str = 'package',
         star=star,
         uids=uids
     )
-    
+
     return _encode_data_helper(data)
 
 

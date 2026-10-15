@@ -5,22 +5,17 @@ common/Logs.py、Assert.py、runFailed.py 单元测试
 可在无后端环境下直接运行：
     python -m pytest tests/test_utils.py -v
 """
-import functools
 import logging
 import unittest
+from logging.handlers import TimedRotatingFileHandler
 from unittest.mock import patch
 
 # ============ Logs.py 测试 ============
-
 from common.Logs import (
-    get_logger,
-    _ensure_log_dir,
     _create_handlers,
-    DEFAULT_WHEN,
-    DEFAULT_BACK_COUNT,
-    DEFAULT_LOG_LEVEL,
+    _ensure_log_dir,
+    get_logger,
 )
-from logging.handlers import TimedRotatingFileHandler
 
 
 class TestEnsureLogDir(unittest.TestCase):
@@ -29,6 +24,7 @@ class TestEnsureLogDir(unittest.TestCase):
     def test_returns_existing_path(self):
         """返回的路径应在 BASE_PATH/log 下"""
         import os
+
         from common.Config import config
         path = _ensure_log_dir()
         self.assertEqual(path, os.path.join(config.BASE_PATH, 'log'))
@@ -45,7 +41,8 @@ class TestCreateHandlers(unittest.TestCase):
 
     def test_returns_two_handlers(self):
         """应返回控制台和文件两个 handler"""
-        import tempfile, os
+        import os
+        import tempfile
         formatter = logging.Formatter('%(message)s')
         with tempfile.NamedTemporaryFile(suffix='.log', delete=False) as f:
             tmp_path = f.name
@@ -60,7 +57,8 @@ class TestCreateHandlers(unittest.TestCase):
 
     def test_custom_when_and_back_count(self):
         """自定义 when/back_count 应被正确应用"""
-        import tempfile, os
+        import os
+        import tempfile
         formatter = logging.Formatter('%(message)s')
         with tempfile.NamedTemporaryFile(suffix='.log', delete=False) as f:
             tmp_path = f.name
@@ -106,17 +104,16 @@ class TestGetLogger(unittest.TestCase):
 
 # ============ Assert.py 测试 ============
 
-from common import Consts
-from common.Assert import (
+from common import Consts  # noqa: E402
+from common.Assert import (  # noqa: E402
     _assert,
     _record_failure,
+    assert_between,
+    assert_body,
     assert_code,
-    assert_len,
     assert_equal,
     assert_in_text,
-    assert_body,
-    assert_between,
-    RPC_DELAY,
+    assert_len,
 )
 
 
@@ -272,7 +269,7 @@ class TestAssertBetween(unittest.TestCase):
 
 # ============ runFailed.py 测试 ============
 
-from common.runFailed import Retry
+from common.runFailed import Retry  # noqa: E402
 
 
 class TestRetryDecorator(unittest.TestCase):

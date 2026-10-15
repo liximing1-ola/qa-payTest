@@ -3,10 +3,11 @@ import time
 from caseStarify.base import StarifyTestBase
 from caseStarify.deal_data import deal_pay_contract_data
 from caseStarify.need_data import a_uid, b_uid, c_uid, contract_ratio
+
 from common.Assert import assert_body, assert_code, assert_equal
+from common.con_starify_mysql import conMysql
 from common.Consts import case_list, result
 from common.Request import post_starify
-from common.conStarifyMysql import conMysql
 from common.runFailed import Retry
 
 
@@ -67,7 +68,7 @@ class TestPayCreate(StarifyTestBase):
 
     def _coin(self, uid, expected):
         """断言星币余额"""
-        assert_equal(conMysql.selectUserInfoSql('star_coin', uid), expected)
+        assert_equal(conMysql.select_user_info_sql('star_coin', uid), expected)
 
     def _quota(self, uid, expected):
         """断言名额"""

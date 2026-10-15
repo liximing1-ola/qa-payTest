@@ -12,12 +12,13 @@ import time
 from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, Optional
 
-from caseSlp.config import payUid, pay_url
+from caseSlp.config import pay_url, payUid
+
 from common.Assert import assert_body, assert_code, assert_equal
+from common.basicSlpData import encodeData
+from common.con_slp_mysql import conMysql as mysql
 from common.Consts import case_list, case_list_b, result
 from common.Request import post_request_session
-from common.basicSlpData import encodeData
-from common.conSlpMysql import conMysql as mysql
 from common.scene_base import SceneFlowBase, resolve, resolve_check
 from common.sqlScript import UserCommodityOperations, UserMoneyOperations
 
@@ -118,14 +119,14 @@ class SlpTestBase(SceneFlowBase):
 
         支持的 action:
             update_money         → UserMoneyOperations.update(**params)
-            clear_user_money     → mysql.updateUserMoneyClearSql(*uids)
-            delete_user_account  → mysql.deleteUserAccountSql(table, uid)
-            delete_commodity     → mysql.deleteUserAccountSql('user_commodity', uid)
+            clear_user_money     → mysql.update_user_money_clear_sql(*uids)
+            delete_user_account  → mysql.delete_user_account_sql(table, uid)
+            delete_commodity     → mysql.delete_user_account_sql('user_commodity', uid)
             insert_commodity     → UserCommodityOperations.insert(uid, **params)
-            update_user_god      → mysql.updateUserGodSql(uid, god)
-            update_user_title    → mysql.updateUserInfoSql('user_title_new', uid, level)
-            check_user_broker    → assert_equal(mysql.checkUserBroker(uid), expected)
-            check_rid_type       → assert_equal(mysql.checkRidFactoryType(rid), expected)
+            update_user_god      → mysql.update_user_god_sql(uid, god)
+            update_user_title    → mysql.update_user_info_sql('user_title_new', uid, level)
+            check_user_broker    → assert_equal(mysql.check_user_broker(uid), expected)
+            check_rid_type       → assert_equal(mysql.check_rid_factory_type(rid), expected)
         """
         for step in setup_steps:
             action = step['action']
@@ -133,24 +134,24 @@ class SlpTestBase(SceneFlowBase):
             if action == 'update_money':
                 UserMoneyOperations.update(**params)
             elif action == 'clear_user_money':
-                mysql.updateUserMoneyClearSql(*step['uids'])
+                mysql.update_user_money_clear_sql(*step['uids'])
             elif action == 'delete_user_account':
-                mysql.deleteUserAccountSql(params.get('table', step.get('table')),
+                mysql.delete_user_account_sql(params.get('table', step.get('table')),
                                            params.get('uid', step.get('uid')))
             elif action == 'delete_commodity':
-                mysql.deleteUserAccountSql('user_commodity', step['uid'])
+                mysql.delete_user_account_sql('user_commodity', step['uid'])
             elif action == 'insert_commodity':
                 insert_params = dict(params)
                 uid = insert_params.pop('uid', payUid)
                 UserCommodityOperations.insert(uid, **insert_params)
             elif action == 'update_user_god':
-                mysql.updateUserGodSql(params['uid'], params['god'])
+                mysql.update_user_god_sql(params['uid'], params['god'])
             elif action == 'update_user_title':
-                mysql.updateUserInfoSql('user_title_new', params['uid'], level=params['level'])
+                mysql.update_user_info_sql('user_title_new', params['uid'], level=params['level'])
             elif action == 'check_user_broker':
-                assert_equal(mysql.checkUserBroker(step['uid']), step['expected'])
+                assert_equal(mysql.check_user_broker(step['uid']), step['expected'])
             elif action == 'check_rid_type':
-                assert_equal(mysql.checkRidFactoryType(step['rid']), step['expected'])
+                assert_equal(mysql.check_rid_factory_type(step['rid']), step['expected'])
 
     def _validate_db_state(self, checks, ctx=None):
         """验证数据库状态（SLP 域校验分发器）
@@ -178,5 +179,5 @@ class SlpTestBase(SceneFlowBase):
                 kwargs.setdefault('cid', check['cid'])
             if 'payuid' in check:
                 kwargs.setdefault('payuid', check['payuid'])
-            actual = mysql.selectUserInfoSql(field, uid, **kwargs)
+            actual = mysql.select_user_info_sql(field, uid, **kwargs)
             assert_equal(actual, check.get('expected'))

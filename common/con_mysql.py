@@ -5,9 +5,9 @@ MySQL 数据库操作模块（普通场景）
 提供用户信息查询、账户数据管理、公会/守护关系操作等功能。
 使用 SQL 映射字典替代 if-elif 分支，提升可维护性。
 """
+import ast
 import logging
 import time
-import ast
 
 from common.Config import config
 from common.mysql_base import MySQLConnection as MySQLConnectionBase
@@ -25,7 +25,7 @@ class MySQLConnection(MySQLConnectionBase):
 class conMysql:
     """MySQL 操作类"""
 
-    # selectUserInfoSql 简单查询映射（返回单值，默认返回 0）
+    # select_user_info_sql 简单查询映射（返回单值，默认返回 0）
     SELECT_SIMPLE_MAP = {
         'bean':          "SELECT money_coupon FROM xs_user_money_extend WHERE uid=%s",
         'cash':          "SELECT cash FROM xs_user_money_extend WHERE uid=%s",
@@ -35,13 +35,13 @@ class conMysql:
         'popularity':    "SELECT popularity FROM xs_user_popularity WHERE uid=%s",
     }
 
-    # selectUserInfoSql 带 cid 参数的查询映射
+    # select_user_info_sql 带 cid 参数的查询映射
     SELECT_WITH_CID_MAP = {
         'num_commodity': "SELECT num FROM xs_user_commodity WHERE cid=%s AND uid=%s",
         'id_commodity':  "SELECT id FROM xs_user_commodity WHERE cid=%s AND uid=%s",
     }
 
-    # selectUserInfoSql 仅 uid 参数的查询映射（返回 None 而非 0）
+    # select_user_info_sql 仅 uid 参数的查询映射（返回 None 而非 0）
     SELECT_RETURN_NONE_MAP = {
         'level':      "SELECT level FROM xs_user_title_new WHERE uid=%s",
         'user_index': "SELECT salt FROM xs_user_index WHERE uid=%s",
@@ -132,7 +132,7 @@ class conMysql:
         'pay_change':    lambda uid, money_type, cid: conMysql._select_pay_change(uid, money_type),
     }
 
-    # deleteUserAccountSql SQL 映射
+    # delete_user_account_sql SQL 映射
     DELETE_SQL_MAP = {
         'user_commodity': "DELETE FROM xs_user_commodity WHERE uid=%s",
         'user_title':     "DELETE FROM xs_user_title WHERE uid=%s LIMIT 5",
@@ -141,13 +141,13 @@ class conMysql:
         'user_box':       "DELETE FROM xs_user_box WHERE uid=%s LIMIT 1",
     }
 
-    # deleteUserAccountSql 更新类映射（名为 delete 但实际是 update 的操作）
+    # delete_user_account_sql 更新类映射（名为 delete 但实际是 update 的操作）
     DELETE_UPDATE_MAP = {
         'user_profile':    "UPDATE xs_user_profile SET title=0 WHERE uid=%s LIMIT 1",
         'user_title_new':  "UPDATE xs_user_title_new SET subscribe_time=0 WHERE uid=%s LIMIT 1",
     }
 
-    # updateUserInfoSql SQL 与参数映射（params_builder 接收 (uid, bid) 返回参数元组）
+    # update_user_info_sql SQL 与参数映射（params_builder 接收 (uid, bid) 返回参数元组）
     UPDATE_USER_INFO_MAP = {
         'broker_user': (
             "UPDATE xs_broker_user SET bid=%s, uid=%s, state=1, pack_cal=1 WHERE id=50 LIMIT 1",
@@ -173,7 +173,7 @@ class conMysql:
     # ============ 查询方法 ============
 
     @staticmethod
-    def selectUserInfoSql(accountType, uid=config.rewardUid, money_type='money_cash_b', cid=263):
+    def select_user_info_sql(accountType, uid=config.rewardUid, money_type='money_cash_b', cid=263):
         """查询用户信息
 
         Args:
@@ -208,7 +208,7 @@ class conMysql:
     # ============ 删除方法 ============
 
     @staticmethod
-    def deleteUserAccountSql(tableName, uid):
+    def delete_user_account_sql(tableName, uid):
         """删除/清理用户数据
 
         Args:
@@ -226,12 +226,12 @@ class conMysql:
             MySQLConnection.execute_write(sql, params=(uid,))
 
         else:
-            logger.warning('deleteUserAccountSql: unknown tableName: %s', tableName)
+            logger.warning('delete_user_account_sql: unknown tableName: %s', tableName)
 
     # ============ 更新方法 ============
 
     @staticmethod
-    def updateUserInfoSql(tableName, uid, bid=config.live_role['pack_ceo']):
+    def update_user_info_sql(tableName, uid, bid=config.live_role['pack_ceo']):
         """更新用户数据
 
         Args:
@@ -241,7 +241,7 @@ class conMysql:
         """
         entry = conMysql.UPDATE_USER_INFO_MAP.get(tableName)
         if entry is None:
-            logger.warning('updateUserInfoSql: unknown tableName: %s', tableName)
+            logger.warning('update_user_info_sql: unknown tableName: %s', tableName)
             return
         sql, params_builder = entry
         MySQLConnection.execute_write(sql, params=params_builder(uid, bid))
@@ -249,49 +249,49 @@ class conMysql:
     # ============ 数据管理方法 ============
 
     @staticmethod
-    def checkXsGiftConfig():
+    def check_xs_gift_config():
         """检查 xs_gift 配置"""
         gift_ids = tuple(config.giftId.values())
         MySQLConnection._update_xs_gift_status(gift_ids)
 
     @staticmethod
-    def updateUserMoneyClearSql(*uids):
+    def update_user_money_clear_sql(*uids):
         """清空用户账户余额"""
         MySQLConnection.clear_user_money(*uids)
 
     @staticmethod
-    def updateMoneySql(uid, money=0, money_cash=0, money_cash_b=0, money_b=0, gold_coin=0, money_debts=0):
+    def update_money_sql(uid, money=0, money_cash=0, money_cash_b=0, money_b=0, gold_coin=0, money_debts=0):
         """更新用户账户余额"""
         MySQLConnection.set_user_money(uid, money=money, money_cash=money_cash,
                                        money_cash_b=money_cash_b, money_b=money_b,
                                        gold_coin=gold_coin, money_debts=money_debts)
 
     @staticmethod
-    def deleteUserBeanSql(*uids):
+    def delete_user_bean_sql(*uids):
         """删除用户金豆账户数据"""
         sql = "DELETE FROM xs_user_money_extend WHERE uid=%s LIMIT 1"
         for uid in uids:
             MySQLConnection.execute_write(sql, params=(uid,))
 
     @staticmethod
-    def insertBeanSql(uid, money_coupon, cash=0, cash_lock=0):
+    def insert_bean_sql(uid, money_coupon, cash=0, cash_lock=0):
         """插入用户金豆余额"""
         sql = "INSERT INTO xs_user_money_extend(uid, money_coupon, cash, cash_lock) VALUES(%s,%s,%s,%s)"
         MySQLConnection.execute_write(sql, params=(uid, money_coupon, cash, cash_lock))
 
     @staticmethod
-    def insertXsUserBox(uid, gift_cid=9, box_type='copper'):
+    def insert_xs_user_box(uid, gift_cid=9, box_type='copper'):
         """更新箱子刷新物品"""
         MySQLConnection.insert_user_box(uid, gift_cid, box_type)
 
     @staticmethod
-    def insertXsUserCommodity(uid, cid, num, state=0):
+    def insert_xs_user_commodity(uid, cid, num, state=0):
         """用户背包增加测试数据"""
-        conMysql.checkXsCommodity(cid)
+        conMysql.check_xs_commodity(cid)
         MySQLConnection.insert_user_commodity(uid, cid, num, state)
 
     @staticmethod
-    def checkXsCommodity(cid, name='青铜体验券'):
+    def check_xs_commodity(cid, name='青铜体验券'):
         """检查物品是否存在"""
         sql = "SELECT name FROM xs_commodity WHERE cid=%s"
         res = MySQLConnection.execute_query_first(sql, params=(cid,), default=None)
@@ -315,7 +315,7 @@ class conMysql:
             cursor.close()
 
     @staticmethod
-    def checkUserXsBroker(bid):
+    def check_user_xs_broker(bid):
         """查询工会是否存在，不存在则创建"""
         def _write(cursor):
             cursor.execute('SELECT * FROM xs_broker WHERE bid=%s', (bid,))
@@ -333,7 +333,7 @@ class conMysql:
         conMysql._transactional_write(_write)
 
     @staticmethod
-    def checkUserXsMentorLevel(uid, level=4):
+    def check_user_xs_mentor_level(uid, level=4):
         """查询用户是否是师父，不是则设为一代宗师"""
         def _write(cursor):
             cursor.execute('SELECT * FROM xs_mentor_exp WHERE uid=%s', (uid,))
@@ -350,7 +350,7 @@ class conMysql:
         conMysql._transactional_write(_write)
 
     @staticmethod
-    def checkUserBroker(uid, bid=136594717):
+    def check_user_broker(uid, bid=136594717):
         """查询工会用户，不存在则创建"""
         def _write(cursor):
             cursor.execute('SELECT id FROM xs_broker_user WHERE uid=%s', (uid,))
@@ -368,7 +368,7 @@ class conMysql:
         conMysql._transactional_write(_write)
 
     @staticmethod
-    def checkBrokerUserRate(uid, creater, rate=100):
+    def check_broker_user_rate(uid, creater, rate=100):
         """查询/设置用户分成比例"""
         def _write(cursor):
             cursor.execute('SELECT * FROM config.bbc_broker_user_rate WHERE uid=%s', (uid,))
@@ -383,3 +383,4 @@ class conMysql:
                     (rate, creater, uid)
                 )
         conMysql._transactional_write(_write)
+

@@ -4,9 +4,11 @@
 提供多种消息通知方式（微信/Slack），支持文本、Markdown、图文等格式。
 """
 import logging
-from time import time, strftime, localtime
-from typing import Optional, Dict, Any
+from time import localtime, strftime, time
+from typing import Any, Dict, Optional
+
 import requests
+
 from common import method
 
 logger = logging.getLogger(__name__)
@@ -18,10 +20,10 @@ ROBOT_URLS: Dict[str, Dict[str, str]] = {
 }
 
 
-def send_request(url: str, data: Dict[str, Any], 
+def send_request(url: str, data: Dict[str, Any],
                 headers: Optional[Dict[str, str]] = None) -> Optional[requests.Response]:
     """发送 HTTP 请求
-    
+
     Args:
         url: 请求 URL
         data: 请求数据
@@ -65,14 +67,14 @@ def send_markdown(url: str, content: str) -> Optional[requests.Response]:
     """发送 Markdown 消息
     Args:
         url: 机器人 URL
-        content: Markdown 内容  
+        content: Markdown 内容
     Returns:
         响应对象
     """
     return send_request(url, {"msgtype": "markdown", "markdown": {"content": content}})
 
 
-def send_news(url: str, title: str, description: str, picurl: str, 
+def send_news(url: str, title: str, description: str, picurl: str,
              link: str = "https://www.12306.cn/index/") -> Optional[requests.Response]:
     """发送图文消息
     Args:
@@ -100,7 +102,7 @@ def send_news(url: str, title: str, description: str, picurl: str,
     return res
 
 
-def send_slack(url: str, title: str, reason: str, 
+def send_slack(url: str, title: str, reason: str,
               color: str = 'danger') -> Optional[requests.Response]:
     """发送 Slack 消息
     Args:
@@ -108,7 +110,7 @@ def send_slack(url: str, title: str, reason: str,
         title: title
         reason: 原因
         color: 颜色标记
-        
+
     Returns:
         响应对象
     """
@@ -121,7 +123,7 @@ def send_slack(url: str, title: str, reason: str,
     return send_request(url, data)
 
 
-def robot(mode: str, reason: str, title: str = '', bot: str = 'BB', 
+def robot(mode: str, reason: str, title: str = '', bot: str = 'BB',
          color: str = "good", to: str = 'wx') -> None:
     """机器人入口
     Args:
@@ -145,7 +147,7 @@ def robot(mode: str, reason: str, title: str = '', bot: str = 'BB',
         send_markdown(url, reason)
     elif mode == 'icon':
         send_news(url, f"{strftime('%m-%d %H:%M', localtime(time()))}, Execution is abnormal. Please check the status!",
-                  reason, method.get_image(mode=1))
+                  reason, method.get_image(mode=1) or '')
     elif mode == 'slack':
         send_slack(url, title, reason, color)
     elif mode == 'slack_oversea':

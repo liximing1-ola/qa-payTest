@@ -6,15 +6,16 @@ from gevent import monkey
 
 monkey.patch_all()
 
-from common import Consts, Logs, method
-from common.Assert import assert_equal, assert_code
-from common.basicData import encodeData
-from common.Config import config
-from common.method import get_value
-from common.Request import post_request_session
-from common.Session import Session
-from common.sqlScript import UserCommodityOperations, UserMoneyOperations
-from Robot import robot
+from Robot import robot  # noqa: E402
+
+from common import Consts, Logs, method  # noqa: E402
+from common.Assert import assert_code, assert_equal  # noqa: E402
+from common.basicData import encodeData  # noqa: E402
+from common.Config import config  # noqa: E402
+from common.method import get_value  # noqa: E402
+from common.Request import post_request_session  # noqa: E402
+from common.Session import Session  # noqa: E402
+from common.sqlScript import UserCommodityOperations, UserMoneyOperations  # noqa: E402
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +32,7 @@ class TestPayConcurrent:
     CID = {'gift': 340, 'frame': 264}
 
     def __init__(self):
-        Session.getSession('dev')
+        Session.get_session('dev')
 
     def _run_concurrent(self, func, times):
         """执行并发测试"""

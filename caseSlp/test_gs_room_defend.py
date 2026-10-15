@@ -4,7 +4,8 @@ __title__ = ""
 __desc__ = "公会主播-房间守护"
 
 from caseSlp.base import SlpCase, SlpTestBase
-from caseSlp.config import default_money, gsUid, gs_A_ceo_uid, gs_soundchat_rid, payUid, rates, room_defend
+from caseSlp.config import default_money, gs_A_ceo_uid, gs_soundchat_rid, gsUid, payUid, rates, room_defend
+
 from common.runFailed import Retry
 
 # 真爱守护-月（开通档位）

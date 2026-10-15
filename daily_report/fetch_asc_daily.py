@@ -1,21 +1,29 @@
-import sys
-import time
-
-import jwt
-import requests
 import gzip
 import io
 import json
-from datetime import date, timedelta
 import os
-from dotenv import load_dotenv
+import sys
+import time
+from datetime import date, timedelta
+
+import jwt
 import pandas as pd
+import requests
+from dotenv import load_dotenv
 from PIL import Image, ImageDraw
 
 # 表格渲染与企微推送工具（三条日报共用）
 from report_common import (
-    ALERT_DOWNLOAD_THRESHOLD, C_ALERT_TEXT, C_TEXT, C_TITLE, C_WARN,
-    draw_table, load_font, report_failure, save_local, send_wecom_image,
+    ALERT_DOWNLOAD_THRESHOLD,
+    C_ALERT_TEXT,
+    C_TEXT,
+    C_TITLE,
+    C_WARN,
+    draw_table,
+    load_font,
+    report_failure,
+    save_local,
+    send_wecom_image,
 )
 
 # 显式指向脚本同目录的 .env（计划任务/任意 CWD 下均能找到配置）

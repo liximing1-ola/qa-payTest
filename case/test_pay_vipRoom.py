@@ -5,6 +5,7 @@
 场景差异通过模块级 SCENES 表声明，由 PayTestBase.run_case 统一执行。
 """
 from case.base import PayCase, PayTestBase
+
 from common.Config import config
 from common.runFailed import Retry
 

@@ -5,12 +5,14 @@
 支持多应用（伴伴/海外版/不夜星球）的测试用例自动执行、结果汇总和通知。
 """
 import platform
-from time import time, sleep
 import unittest
-from typing import Optional, Dict, Any, Tuple
-from Robot import robot
+from time import sleep, time
+from typing import Any, Dict, Optional, Tuple
+
 from autoGitPull import update_time, updateCode
-from common import Logs, method, Consts
+from Robot import robot
+
+from common import Consts, Logs, method
 from common.Config import config
 from common.method import check_path
 
@@ -50,17 +52,17 @@ APP_CONFIG: Dict[str, Dict[str, Any]] = {
 
 def load_cases(app_info: str) -> Optional[unittest.TestSuite]:
     """加载测试用例
-    
+
     Args:
         app_info: 应用信息
-        
+
     Returns:
         测试套件，失败返回 None
     """
     cfg = APP_CONFIG.get(app_info)
     if not cfg:
         return None
-    
+
     case_dir = config.BASE_PATH + cfg['dir']
     discover = unittest.defaultTestLoader.discover(case_dir, pattern="test_*.py", top_level_dir=None)
     testcase = unittest.TestSuite()
@@ -70,10 +72,10 @@ def load_cases(app_info: str) -> Optional[unittest.TestSuite]:
 
 def run_tests(app_info: str) -> unittest.TextTestResult:
     """执行测试
-    
+
     Args:
         app_info: 应用信息
-        
+
     Returns:
         测试结果对象
     """
@@ -82,11 +84,11 @@ def run_tests(app_info: str) -> unittest.TextTestResult:
 
 def log_result(test_result: unittest.TextTestResult, lang: str = 'zh') -> str:
     """记录测试结果
-    
+
     Args:
         test_result: 测试结果对象
         lang: 语言（zh/en）
-        
+
     Returns:
         结果描述字符串
     """
@@ -98,19 +100,19 @@ def log_result(test_result: unittest.TextTestResult, lang: str = 'zh') -> str:
         des = (f"用例总数：{test_result.testsRun}, "
                f"失败用例数：{len(test_result.failures)}, "
                f"异常用例数：{len(test_result.errors)}")
-    
+
     Logs.get_logger('caseResult.log').info(des)
     return des
 
 
-def get_summary_data(test_result: unittest.TextTestResult, 
+def get_summary_data(test_result: unittest.TextTestResult,
                     branch_key: str) -> Tuple[str, str, str, str]:
     """获取汇总数据
-    
+
     Args:
         test_result: 测试结果对象
         branch_key: 分支键名
-        
+
     Returns:
         (case_list, case_list_2, use_time, branch) 元组
     """
@@ -123,14 +125,14 @@ def get_summary_data(test_result: unittest.TextTestResult,
 
 def notify_success(app_info: str, test_result: unittest.TextTestResult) -> None:
     """通知成功结果
-    
+
     Args:
         app_info: 应用信息
         test_result: 测试结果对象
     """
     cfg = APP_CONFIG[app_info]
     case_list, case_list_2, use_time, branch = get_summary_data(test_result, cfg['branch_key'])
-    
+
     if cfg['lang'] == 'en':
         des_2 = (f"{case_list_2}\n"
                  f"Total: {test_result.testsRun}, Failures: 0, "
@@ -139,17 +141,17 @@ def notify_success(app_info: str, test_result: unittest.TextTestResult) -> None:
         des_2 = (f"{case_list_2}\n"
                  f"用例数：{test_result.testsRun}, 失败数：0, "
                  f"总耗时：{use_time}, 代码分支：{branch}")
-    
+
     to = cfg.get('to', 'wx')
     robot(cfg['mode'], case_list, bot=cfg['bot'], to=to)
     sleep(NOTIFY_INTERVAL)
     robot(cfg['mode'], des_2, bot=cfg['bot'], to=to)
 
 
-def notify_failures(app_info: str, test_result: unittest.TextTestResult, 
+def notify_failures(app_info: str, test_result: unittest.TextTestResult,
                    des: str) -> None:
     """通知失败结果
-    
+
     Args:
         app_info: 应用信息
         test_result: 测试结果对象
@@ -159,31 +161,31 @@ def notify_failures(app_info: str, test_result: unittest.TextTestResult,
     failures = test_result.failures
     errors = test_result.errors
     to = cfg.get('to', 'wx')
-    
+
     if failures:
         Logs.get_logger('failCase.log').error(f"failures: {failures}")
         robot(cfg['mode'], des, bot=cfg['bot'], color='danger', to=to)
         if Consts.fail_case_reason:
-            robot(cfg['mode'], Consts.fail_case_reason[0], 
+            robot(cfg['mode'], Consts.fail_case_reason[0],
                  title=failures[0][0].id(), color='danger', bot=cfg['bot'], to=to)
     if errors:
         Logs.get_logger('failCase.log').error(f"error: {errors}")
         for case, reason in errors:
-            robot(cfg['mode'], reason, case.id(), 
+            robot(cfg['mode'], reason, case.id(),
                  color='danger', bot=cfg['bot'], to=to)
             break
 
 
 def handle_result(app_info: str, test_result: unittest.TextTestResult) -> None:
     """处理测试结果
-    
+
     Args:
         app_info: 应用信息
         test_result: 测试结果对象
     """
     cfg = APP_CONFIG[app_info]
     des = log_result(test_result, cfg['lang'])
-    
+
     if len(test_result.failures) == 0 and len(test_result.errors) == 0:
         notify_success(app_info, test_result)
     else:
@@ -199,7 +201,7 @@ def pull_code(app_info: str) -> bool:
     """
     cfg = APP_CONFIG[app_info]
     repos = cfg.get('git_repos')
-    
+
     if repos:
         results = [updateCode.autoGitPull(repo) for repo in repos]
         return any(results)
@@ -215,10 +217,10 @@ def main(app_info: str) -> None:
     if app_info not in APP_CONFIG:
         Logs.get_logger('runCode.log').error(f'未配置的应用，无法执行：{app_info}')
         return
-    
+
     if app_info == config.appName['2']:
         check_path(config.codeInfo['app_php_path'])
-    
+
     if pull_code(app_info):
         update_time('write', now=str(int(time())))
         test_result = run_tests(app_info)

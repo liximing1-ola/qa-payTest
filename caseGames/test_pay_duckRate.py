@@ -1,10 +1,11 @@
 import unittest
-from common.basicData import encodeData
+
 from common.Assert import assert_body, assert_code, assert_equal
+from common.basicData import encodeData
+from common.con_mysql import conMysql
 from common.Config import config
 from common.Consts import case_list_b, result
 from common.Request import post_request_session
-from common.conMysql import conMysql
 from common.runFailed import Retry
 from common.Session import Session
 
@@ -36,7 +37,7 @@ class TestPayDuckRate(unittest.TestCase):
             field = check['field']
             uid = check['uid']
             expected = check['expected']
-            assert_equal(conMysql.selectUserInfoSql(field, uid), expected)
+            assert_equal(conMysql.select_user_info_sql(field, uid), expected)
 
     def test_01_roomPayCustomRate_60(self):
         """

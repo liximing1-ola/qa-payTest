@@ -6,14 +6,21 @@ common/getToken.py 单元测试
 可在无后端环境下直接运行：
     python -m pytest tests/test_getToken.py -v
 """
+import os
 import re
 import unittest
 
+# getToken.py 模块级需要环境变量，import 前必须设置
+if not os.environ.get('TOKEN_KEY'):
+    os.environ['TOKEN_KEY'] = 'test_key_for_ci'
+if not os.environ.get('TOKEN_VERIFY_SALT'):
+    os.environ['TOKEN_VERIFY_SALT'] = 'test_salt_for_ci'
+
 from common.getToken import (
-    TokenGenerator,
     CHARS,
     KEY_C_LENGTH,
     SALT_LENGTH,
+    TokenGenerator,
 )
 
 

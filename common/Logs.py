@@ -9,8 +9,8 @@
 import logging
 import os
 from logging.handlers import TimedRotatingFileHandler
-from common.Config import config
 
+from common.Config import config
 
 # 默认日志配置
 DEFAULT_LOG_LEVEL = logging.DEBUG

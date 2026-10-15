@@ -5,6 +5,7 @@ APP 海外版支付测试 - 背包开箱验证
 验证背包内开箱子得到物品的流程。
 """
 from caseOversea.base import OverseaBizCase, OverseaBizTestBase
+
 from common.Config import config
 from common.runFailed import Retry
 

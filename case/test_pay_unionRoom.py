@@ -5,10 +5,10 @@
 场景差异通过模块级 SCENES 表声明，由 PayTestBase.run_case 统一执行。
 """
 import pytest
-
 from case.base import PayCase, PayTestBase
+
+from common.con_mysql import conMysql as mysql
 from common.Config import config
-from common.conMysql import conMysql as mysql
 from common.runFailed import Retry
 
 # 打包结算主播 / 直播公会公会长
@@ -80,7 +80,7 @@ class TestPayUnionRoom(PayTestBase):
     @classmethod
     def setUpClass(cls):
         """查询歌友房 rid（延迟到运行期，避免 import 阶段依赖数据库）"""
-        cls.singer_rid = mysql.selectUserInfoSql('union')
+        cls.singer_rid = mysql.select_user_info_sql('union')
 
     @pytest.mark.run(order=1)
     def test_01_singerRoomLiveBrokerRate_60(self):

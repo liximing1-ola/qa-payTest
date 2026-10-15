@@ -8,7 +8,7 @@ SLP MySQL 数据库操作模块
 import ast
 import logging
 import time
-from typing import Optional, Tuple, Dict, Any, List, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 from common.mysql_base import MySQLConnection as MySQLConnectionBase
 
@@ -62,7 +62,7 @@ class conMysql:
         "SELECT reason FROM xs_pay_change WHERE uid=%s ORDER BY id DESC LIMIT 1"
     )
 
-    # deleteUserAccountSql SQL 映射
+    # delete_user_account_sql SQL 映射
     DELETE_SQL_MAP: Dict[str, str] = {
         'user_commodity': "DELETE FROM xs_user_commodity WHERE uid=%s",
         'user_title': "DELETE FROM xs_user_title WHERE uid=%s LIMIT 5",
@@ -74,11 +74,11 @@ class conMysql:
     }
 
     # ============ 查询方法 ============
-    
+
     @staticmethod
-    def selectUserInfoSql(accountType: str, uid: str = "200000126", 
-                         money_type: str = 'money_cash_b', 
-                         cid: int = 263, 
+    def select_user_info_sql(accountType: str, uid: str = "200000126",
+                         money_type: str = 'money_cash_b',
+                         cid: int = 263,
                          payuid: str = "200000128") -> Optional[Union[int, float, Dict, List]]:
         """查询用户信息（映射字典模式）"""
         # 简单 SQL 直接查
@@ -99,7 +99,7 @@ class conMysql:
                 if money_type not in conMysql._MONEY_COLUMNS:
                     raise ValueError(f'Invalid money_type column: {money_type}')
                 sql = template.format(money_type=money_type)
-                params = (uid,)
+                params: Tuple[Union[str, int], ...] = (uid,)
             elif accountType in ('num_commodity', 'id_commodity'):
                 sql = template
                 params = (cid, uid)
@@ -150,9 +150,9 @@ class conMysql:
         return None
 
     # ============ 删除方法 ============
-    
+
     @staticmethod
-    def deleteUserAccountSql(tableName: str, uid: str) -> None:
+    def delete_user_account_sql(tableName: str, uid: str) -> None:
         """删除用户账户数据"""
         sql = conMysql.DELETE_SQL_MAP.get(tableName)
         if sql:
@@ -163,12 +163,12 @@ class conMysql:
     # ============ 更新方法 ============
 
     @staticmethod
-    def updateUserRidInfoSql(property_rid: str, rid: int, area: str = 'en') -> None:
+    def update_user_rid_info_sql(property_rid: str, rid: int, area: str = 'en') -> None:
         """更新房间属性"""
         MySQLConnection.update_room_property(property_rid, rid, area)
 
     @staticmethod
-    def updateUserBigArea(*uids: str, bigarea_id: int = 2) -> None:
+    def update_user_big_area(*uids: str, bigarea_id: int = 2) -> None:
         """更新用户大区"""
         MySQLConnection.update_user_bigarea(*uids, bigarea_id=bigarea_id)
 
@@ -178,12 +178,12 @@ class conMysql:
         MySQLConnection.update_user_language(*uids, language=language, area_code=area_code)
 
     @staticmethod
-    def updateUserMoneyClearSql(*uids: str) -> None:
+    def update_user_money_clear_sql(*uids: str) -> None:
         """清空用户账户余额"""
         MySQLConnection.clear_user_money(*uids)
 
     @staticmethod
-    def updateMoneySql(uid: str, money: int = 0, money_cash: int = 0,
+    def update_money_sql(uid: str, money: int = 0, money_cash: int = 0,
                        money_cash_b: int = 0, money_b: int = 0,
                        gold_coin: int = 0, money_debts: int = 0) -> None:
         """更新用户账户余额"""
@@ -192,31 +192,31 @@ class conMysql:
                                        gold_coin=gold_coin, money_debts=money_debts)
 
     @staticmethod
-    def updateXsUserpopularity(uid: str) -> None:
+    def update_xs_user_popularity(uid: str) -> None:
         """更新用户人气数据"""
         MySQLConnection.reset_user_popularity(uid)
 
     @staticmethod
-    def updateXsUserprofile_pay_room_money(uid: str) -> None:
+    def update_xs_user_profile_pay_room_money(uid: str) -> None:
         """更新用户 VIP 数据"""
         MySQLConnection.reset_user_pay_room_money(uid)
 
     # ============ 插入方法 ============
 
     @staticmethod
-    def insertXsUserCommodity(uid: str, cid: int, num: int, state: int = 0) -> None:
+    def insert_xs_user_commodity(uid: str, cid: int, num: int, state: int = 0) -> None:
         """用户背包增加数据"""
         MySQLConnection.insert_user_commodity(uid, cid, num, state)
 
     @staticmethod
-    def insertXsUserBox(uid: str, gift_cid: int = 2505, box_type: str = 'copper') -> None:
+    def insert_xs_user_box(uid: str, gift_cid: int = 2505, box_type: str = 'copper') -> None:
         """更新箱子刷新物品"""
         MySQLConnection.insert_user_box(uid, gift_cid, box_type)
 
     # ============ 检查配置 ============
 
     @staticmethod
-    def checkXsGiftConfig(gift_ids: Tuple[int, ...]) -> None:
+    def check_xs_gift_config(gift_ids: Tuple[int, ...]) -> None:
         """检查礼物配置"""
         MySQLConnection._update_xs_gift_status(gift_ids)
 
@@ -233,22 +233,22 @@ class conMysql:
         return MySQLConnection.query_user_chatroom(property, bigarea_id)
 
     @staticmethod
-    def sqlXsUserpopularity(uid: str) -> int:
+    def sql_xs_user_popularity(uid: str) -> int:
         """查询用户人气数据"""
         return MySQLConnection.query_user_popularity(uid)
 
     @staticmethod
-    def sqlXsUserprofile_pay_room_money(uid: str) -> int:
+    def sql_xs_user_profile_pay_room_money(uid: str) -> int:
         """查询用户 VIP 数据"""
         return MySQLConnection.query_user_pay_room_money(uid)
 
     # ============ SLP 测试依赖的兼容方法 ============
 
     @staticmethod
-    def updateUserInfoSql(tableName: str, uid: str, level: int = 10) -> None:
+    def update_user_info_sql(tableName: str, uid: str, level: int = 10) -> None:
         """更新用户信息（当前仅支持 user_title_new 爵位等级）"""
         if tableName != 'user_title_new':
-            logger.warning('updateUserInfoSql 不支持 tableName: %s', tableName)
+            logger.warning('update_user_info_sql 不支持 tableName: %s', tableName)
             return
         jw_config = {
             "0": 0, "10": 0, "20": 20000, "30": 80000,
@@ -263,25 +263,25 @@ class conMysql:
         MySQLConnection.execute_write(sql, params=(level, growth, growth, subscribe_time, uid))
 
     @staticmethod
-    def checkRidFactoryType(rid: int) -> Optional[str]:
+    def check_rid_factory_type(rid: int) -> Optional[str]:
         """查询房间的 room_factory_type"""
         sql = "SELECT room_factory_type FROM xs_chatroom WHERE rid=%s"
         return MySQLConnection.execute_query_first(sql, params=(rid,), default=None)
 
     @staticmethod
-    def checkUserBroker(uid: str) -> bool:
+    def check_user_broker(uid: str) -> bool:
         """校验是否是公会成员"""
         sql = "SELECT id FROM xs_broker_user WHERE uid=%s AND deleted=0 LIMIT 1"
         return MySQLConnection.execute_query_first(sql, params=(uid,), default=None) is not None
 
     @staticmethod
-    def updateUserGodSql(uid: str, agreement_version: int) -> None:
+    def update_user_god_sql(uid: str, agreement_version: int) -> None:
         """更新用户 settings 的 agreement_version"""
         sql = "UPDATE xs_user_settings SET agreement_version=%s WHERE uid=%s"
         MySQLConnection.execute_write(sql, params=(agreement_version, uid))
 
     @staticmethod
-    def selectZxPayData(uid: str) -> Optional[List[Dict[str, Any]]]:
+    def select_zx_pay_data(uid: str) -> Optional[List[Dict[str, Any]]]:
         """查询 ZX 打赏流水聚合数据"""
         sql = (
             "SELECT JSON_EXTRACT(reason, '$.to') AS to_uid, "
@@ -296,5 +296,6 @@ class conMysql:
             cursor.execute(sql, (uid,))
             return cursor.fetchall()
         except Exception as error:
-            logger.error('selectZxPayData error: %s', error)
+            logger.error('select_zx_pay_data error: %s', error)
             return None
+

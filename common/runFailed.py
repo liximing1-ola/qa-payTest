@@ -15,12 +15,12 @@ Usage:
     @Retry(interval=0)  # 关闭重试间隔，失败后立即重试
     def test_003(self): pass
 """
-import sys
 import functools
-import traceback
 import inspect
-import time
 import logging
+import sys
+import time
+import traceback
 
 logger = logging.getLogger(__name__)
 

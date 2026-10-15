@@ -6,9 +6,10 @@
 公会打包结算数据由类方法 _prepare_broker_data 组合准备。
 """
 from case.base import PayCase, PayTestBase
+
 from common.Assert import assert_len
+from common.con_mysql import conMysql as mysql
 from common.Config import config
-from common.conMysql import conMysql as mysql
 from common.runFailed import Retry
 from common.sqlScript import UserMoneyOperations
 
@@ -85,7 +86,7 @@ SCENES = [
         des='直播公会主播(非宗师)-公会长打赏分成60:21',
         prepare=lambda t: t._prepare_broker_data(
             TEST_UID, CEO_UID, pay_money=1000,
-            extra_steps=[lambda: mysql.checkUserXsMentorLevel(TEST_UID, level=1)]),
+            extra_steps=[lambda: mysql.check_user_xs_mentor_level(TEST_UID, level=1)]),
         data={'rid': LIVE_RID, 'uid': TEST_UID},
         checks=[
             {'field': 'single_money', 'uid': TEST_UID, 'expected': 600,
@@ -129,11 +130,11 @@ class TestPayLivePackage(PayTestBase):
 
     def _prepare_broker_data(self, test_uid, ceo_uid, pay_money, extra_steps=None):
         """准备公会打包结算测试数据"""
-        mysql.updateUserInfoSql('chatroom', test_uid)  # 商业房房主
-        mysql.updateUserInfoSql('broker_user', test_uid, ceo_uid)  # 打包结算
-        mysql.checkUserXsBroker(ceo_uid)  # 公会长
+        mysql.update_user_info_sql('chatroom', test_uid)  # 商业房房主
+        mysql.update_user_info_sql('broker_user', test_uid, ceo_uid)  # 打包结算
+        mysql.check_user_xs_broker(ceo_uid)  # 公会长
         UserMoneyOperations.update(config.payUid, money=pay_money)
-        mysql.updateUserMoneyClearSql(test_uid, ceo_uid)
+        mysql.update_user_money_clear_sql(test_uid, ceo_uid)
         if extra_steps:
             for step in extra_steps:
                 step()

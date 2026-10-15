@@ -7,7 +7,7 @@ MySQL 连接管理基类
 """
 import logging
 from contextlib import contextmanager
-from typing import Optional, Tuple, Any
+from typing import Any, Optional, Tuple
 
 import pymysql
 from pymysql import cursors
@@ -63,7 +63,7 @@ class MySQLConnection:
         con = cls.get_connection()
         if dict_cursor:
             return con.cursor(cursor=cursors.DictCursor)
-        if cls._cursor is None or not cls._connection.open:
+        if cls._cursor is None or cls._connection is None or not cls._connection.open:
             cls._cursor = con.cursor()
         return cls._cursor
 

@@ -5,12 +5,13 @@
 提供转盘抽奖相关的 URL 构建和 HTTP 请求功能。
 """
 import urllib.parse
-from typing import Dict, Any
+from typing import Any, Dict
+
 import requests
+
 from common.Config import config
 from common.Request import DEFAULT_TIMEOUT
 from common.Session import Session
-
 
 # 默认请求参数
 DEFAULT_PARAMS: Dict[str, str] = {
@@ -36,11 +37,11 @@ class CrazySpin:
     @staticmethod
     def _build_url(endpoint: str, params: Dict[str, Any]) -> str:
         """构建完整 URL
-        
+
         Args:
             endpoint: API 端点
             params: 请求参数
-            
+
         Returns:
             完整的 URL
         """
@@ -50,24 +51,24 @@ class CrazySpin:
     @staticmethod
     def _build_headers(token_name: str = 'dev') -> Dict[str, str]:
         """构建请求头
-        
+
         Args:
             token_name: Token 名称
-            
+
         Returns:
             请求头字典
         """
         headers = DEFAULT_HEADERS.copy()
-        headers["user-token"] = Session.checkUserToken(operate='read', app_name=token_name)
+        headers["user-token"] = Session.check_user_token(operate='read', app_name=token_name) or ''
         return headers
 
     @staticmethod
     def spin_buy_url(uid: int) -> str:
         """获取购买 URL
-        
+
         Args:
             uid: 用户 ID
-            
+
         Returns:
             购买 URL
         """
@@ -83,10 +84,10 @@ class CrazySpin:
     @staticmethod
     def spin_play_url(uid: int) -> str:
         """获取抽奖 URL
-        
+
         Args:
             uid: 用户 ID
-            
+
         Returns:
             抽奖 URL
         """
@@ -102,12 +103,12 @@ class CrazySpin:
     @staticmethod
     def get_turntable_list(rid: int, uid: int, token_name: str = 'dev') -> requests.Response:
         """获取转盘列表
-        
+
         Args:
             rid: 房间 ID
             uid: 用户 ID
             token_name: Token 名称
-            
+
         Returns:
             HTTP 响应对象
         """
@@ -126,11 +127,11 @@ class CrazySpin:
     @staticmethod
     def get_turntable_horn(uid: int, token_name: str = 'dev') -> requests.Response:
         """获取转盘喇叭
-        
+
         Args:
             uid: 用户 ID
             token_name: Token 名称
-            
+
         Returns:
             HTTP 响应对象
         """
