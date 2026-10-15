@@ -28,3 +28,10 @@ _dispatch_diag_tmp.py
 .pytest_cache/
 .ruff_cache/
 venv/
+
+# Certificate files
+*.key
+*.pem
+*.p12
+*.pfx
+*.jks

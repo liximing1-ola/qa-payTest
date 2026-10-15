@@ -48,10 +48,9 @@ class TestSelectUserInfoSql(unittest.TestCase):
 
     def test_single_money_rejects_non_whitelist_column(self):
         """白名单外的 money_type 应抛 ValueError 且不执行查询（防注入）"""
-        with patch.object(MySQLConnection, 'execute_query_first') as m:
-            with self.assertRaises(ValueError):
-                ConMysql.select_user_info_sql('single_money', uid=111,
-                                           money_type='money_cash; DROP TABLE x')
+        with patch.object(MySQLConnection, 'execute_query_first') as m, self.assertRaises(ValueError):
+            ConMysql.select_user_info_sql('single_money', uid=111,
+                                       money_type='money_cash; DROP TABLE x')
         m.assert_not_called()
 
     def test_relation_id_handler(self):
@@ -157,9 +156,8 @@ class TestSimpleWrappers(unittest.TestCase):
             ConMysql.check_xs_commodity(5)  # 存在时不抛异常
 
     def test_check_xs_commodity_missing_raises(self):
-        with patch.object(MySQLConnection, 'execute_query_first', return_value=None):
-            with self.assertRaises(Exception):
-                ConMysql.check_xs_commodity(5)
+        with patch.object(MySQLConnection, 'execute_query_first', return_value=None), self.assertRaises(Exception):  # noqa: B017
+            ConMysql.check_xs_commodity(5)
 
     def test_update_user_money_clear(self):
         with patch.object(MySQLConnection, 'clear_user_money') as m:
@@ -265,9 +263,8 @@ class TestComplexHandlers(unittest.TestCase):
 
     def test_select_union_not_found(self):
         """无联盟房时应抛 EnvironmentError"""
-        with patch.object(MySQLConnection, 'execute_query', return_value=None):
-            with self.assertRaises(EnvironmentError):
-                ConMysql.select_user_info_sql('union')
+        with patch.object(MySQLConnection, 'execute_query', return_value=None), self.assertRaises(EnvironmentError):
+            ConMysql.select_user_info_sql('union')
 
     def test_select_fleet_found(self):
         """有家族房时应返回非 bb_user.fleetRid 的 rid"""
@@ -281,9 +278,8 @@ class TestComplexHandlers(unittest.TestCase):
         """无家族房时应抛 EnvironmentError"""
         m_cur, p = self._patched_cursor()
         m_cur.fetchall.return_value = []
-        with p:
-            with self.assertRaises(EnvironmentError):
-                ConMysql.select_user_info_sql('fleet')
+        with p, self.assertRaises(EnvironmentError):
+            ConMysql.select_user_info_sql('fleet')
 
     def test_select_pay_change_found(self):
         """有记录时应解析 reason 字典"""

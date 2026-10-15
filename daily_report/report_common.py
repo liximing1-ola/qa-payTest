@@ -5,6 +5,7 @@
 - save_local / report_failure：本地留档与任务异常通知
 """
 import base64
+import contextlib
 import hashlib
 import os
 
@@ -143,8 +144,6 @@ def report_failure(webhook: str, title: str, detail: str):
     """任务异常通知（推送失败不影响本地打印与退出码）"""
     err_msg = f"【{title}】\n{detail}"
     if webhook:
-        try:
+        with contextlib.suppress(Exception):
             send_wecom_msg(webhook, err_msg)
-        except Exception:
-            pass
     print(err_msg)

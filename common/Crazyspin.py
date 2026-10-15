@@ -111,7 +111,7 @@ class CrazySpin:
         Returns:
             HTTP 响应对象
         """
-        params = {
+        params: dict[str, Any] = {
             **DEFAULT_PARAMS,
             'rid': rid,
             '_index': '878',
@@ -134,7 +134,7 @@ class CrazySpin:
         Returns:
             HTTP 响应对象
         """
-        params = {
+        params: dict[str, Any] = {
             **DEFAULT_PARAMS,
             'turntable_type': 1,
             '_index': '878',

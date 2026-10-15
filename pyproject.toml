@@ -8,8 +8,8 @@ line-length = 120
 src = ["common", "case", "caseOversea", "caseSlp", "caseStarify", "caseGames", "caseLuckyPlay", "tests"]
 
 [tool.ruff.lint]
-select = ["E", "F", "W", "I", "UP"]
-# E=pycodestyle errors, F=pyflakes, W=pycodestyle warnings, I=isort, UP=pyupgrade
+select = ["E", "F", "W", "I", "UP", "B", "SIM"]
+# E=pycodestyle errors, F=pyflakes, W=pycodestyle warnings, I=isort, UP=pyupgrade, B=flake8-bugbear, SIM=flake8-simplify
 ignore = ["E501", "W191", "E101"]  # 行长度由 line-length 控制；W191/E101 为项目已有 tab 缩进风格，修复风险大
 
 [tool.ruff.lint.isort]
@@ -23,4 +23,6 @@ check_untyped_defs = true
 
 [[tool.mypy.overrides]]
 module = ["tests.*"]
+# tests/ 开启 check_untyped_defs=true 后产 88 个错误（多为 setUp 动态属性、append 返回值误用等），
+# 修复成本高且不影响运行时正确性，暂保留 false；后续逐步治理
 check_untyped_defs = false

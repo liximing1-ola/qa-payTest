@@ -129,7 +129,7 @@ python run_all_case.py
 python run_crontab_case.py
 
 # 运行并发测试
-python testConcurrent.py
+python test_concurrent.py
 ```
 
 ### 离线自测（无需后端环境）

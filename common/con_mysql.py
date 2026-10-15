@@ -73,7 +73,7 @@ class ConMysql:
             cursor.execute(sql, (uid,))
             res = cursor.fetchall()
             column = [index[0] for index in cursor.description]
-            data_dict = [dict(zip(column, row)) for row in res]
+            data_dict = [dict(zip(column, row, strict=False)) for row in res]
             return data_dict[0] if data_dict else None
         except Exception as error:
             logger.error('relation_config query error: %s', error)

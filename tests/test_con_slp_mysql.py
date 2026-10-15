@@ -23,9 +23,8 @@ class TestSelectUserInfoSql(unittest.TestCase):
 
     def test_union_missing_raises(self):
         """union/vip 查无房间时应抛 EnvironmentError"""
-        with patch.object(MySQLConnection, 'execute_query_first', return_value=None):
-            with self.assertRaises(EnvironmentError):
-                ConMysql.select_user_info_sql('union')
+        with patch.object(MySQLConnection, 'execute_query_first', return_value=None), self.assertRaises(EnvironmentError):
+            ConMysql.select_user_info_sql('union')
 
     def test_union_found(self):
         """union 命中时按无参调用并透传 rid"""
@@ -45,10 +44,9 @@ class TestSelectUserInfoSql(unittest.TestCase):
 
     def test_single_money_rejects_non_whitelist(self):
         """白名单外的 money_type 应抛 ValueError 且不执行查询（防注入）"""
-        with patch.object(MySQLConnection, 'execute_query_first') as m:
-            with self.assertRaises(ValueError):
-                ConMysql.select_user_info_sql('single_money', '111',
-                                           money_type='money_cash; DROP TABLE x')
+        with patch.object(MySQLConnection, 'execute_query_first') as m, self.assertRaises(ValueError):
+            ConMysql.select_user_info_sql('single_money', '111',
+                                       money_type='money_cash; DROP TABLE x')
         m.assert_not_called()
 
     def test_with_cid_map(self):
@@ -304,9 +302,8 @@ class TestSlpMissingCoverage(unittest.TestCase):
 
     def test_vip_found_raises(self):
         """vip 查无房间时应抛 EnvironmentError"""
-        with patch.object(MySQLConnection, 'execute_query_first', return_value=None):
-            with self.assertRaises(EnvironmentError):
-                ConMysql.select_user_info_sql('vip')
+        with patch.object(MySQLConnection, 'execute_query_first', return_value=None), self.assertRaises(EnvironmentError):
+            ConMysql.select_user_info_sql('vip')
 
 
 if __name__ == '__main__':

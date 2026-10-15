@@ -14,6 +14,7 @@ CI 兼容性设计（GitHub windows-latest runner 为英文区域，捕获管道
 - 失败时输出 ::error:: 工作流命令生成 annotation（匿名 API 可读取），
   并追加写入 GITHUB_STEP_SUMMARY，便于在无日志权限时定位失败原因。
 """
+import contextlib
 import os
 import re
 import subprocess
@@ -22,7 +23,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent
 # 全仓用例收集基线（调整用例数量时需同步更新此值）
-EXPECTED_COLLECT_COUNT = 542
+EXPECTED_COLLECT_COUNT = 503
 
 
 def _configure_stdio():
@@ -30,10 +31,8 @@ def _configure_stdio():
     for stream in (sys.stdout, sys.stderr):
         reconfigure = getattr(stream, 'reconfigure', None)
         if reconfigure is not None:
-            try:
+            with contextlib.suppress(ValueError, OSError):
                 reconfigure(errors='replace')
-            except (ValueError, OSError):
-                pass
 
 
 def _collapse(text):

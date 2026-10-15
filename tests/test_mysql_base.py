@@ -134,9 +134,8 @@ class TestCursorContextManager(unittest.TestCase):
         mock_conn.cursor.return_value = mock_cursor
         mock_get_conn.return_value = mock_conn
 
-        with self.assertRaises(RuntimeError):
-            with MySQLConnection.cursor():
-                raise RuntimeError('boom')
+        with self.assertRaises(RuntimeError), MySQLConnection.cursor():
+            raise RuntimeError('boom')
 
         mock_cursor.close.assert_called_once()
 

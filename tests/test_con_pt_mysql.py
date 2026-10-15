@@ -44,9 +44,8 @@ class TestPtSelectUserInfoSql(unittest.TestCase):
 
     def test_single_money_invalid_column(self):
         """非法 money_type 应抛 ValueError"""
-        with patch.object(MySQLConnection, 'execute_query') as m:
-            with self.assertRaises(ValueError):
-                ConMysql.select_user_info_sql('single_money', uid=111, money_type='bad_col')
+        with patch.object(MySQLConnection, 'execute_query') as m, self.assertRaises(ValueError):
+            ConMysql.select_user_info_sql('single_money', uid=111, money_type='bad_col')
         m.assert_not_called()
 
     def test_single_money_no_result(self):

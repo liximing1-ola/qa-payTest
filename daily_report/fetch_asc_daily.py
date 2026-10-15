@@ -68,7 +68,7 @@ def get_asc_daily_report(report_date: date, token: str = None):
     }
     url = "https://api.appstoreconnect.apple.com/v1/salesReports"
     # 404（数据未生成）直接抛给上层回退；其他错误（网络/限流）重试 3 次
-    for attempt in range(3):
+    for _attempt in range(3):
         resp = requests.get(url, headers=headers, params=params, timeout=30)
         if resp.status_code == 200 or resp.status_code == 404:
             break
@@ -155,11 +155,8 @@ def summarize_day(df, aids):
     for aid in aids:
         # 统一转字符串比较（pandas 可能把纯数字列自动推断为 int，导致字符串匹配失败）
         aid_str = df['Apple Identifier'].astype(str)
-        if aid == AID_SSS:
-            # 谁是凶手家族变体 App 前缀（1583579xxx，历史版本/马甲，业务归属谁是凶手）
-            mask = (aid_str == aid) | aid_str.str.startswith('1583579')
-        else:
-            mask = aid_str == aid
+        # 谁是凶手家族变体 App 前缀（1583579xxx，历史版本/马甲，业务归属谁是凶手）
+        mask = (aid_str == aid) | aid_str.str.startswith('1583579') if aid == AID_SSS else aid_str == aid
         app_df = df[mask]
         sales, refund_amt, refund_cnt = _agg(app_df)
         per_app[aid] = {

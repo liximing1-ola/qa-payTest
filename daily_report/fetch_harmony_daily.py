@@ -120,8 +120,8 @@ def summarize_downloads(csv_text: str) -> dict:
         if not d:
             continue
 
-        def num(key):
-            v = (row.get(key) or "0").replace(",", "").strip()
+        def num(key, _row=row):
+            v = (_row.get(key) or "0").replace(",", "").strip()
             return int(float(v)) if v else 0
 
         agg = by_day.setdefault(d, {"new_download": 0, "new_install": 0, "uninstall": 0})

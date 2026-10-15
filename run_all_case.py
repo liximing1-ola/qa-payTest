@@ -8,7 +8,7 @@ import unittest
 from time import sleep, time
 from typing import Any
 
-from autoGitPull import update_time, updateCode
+from auto_git_pull import update_time, updateCode
 from Robot import robot
 
 from common import consts, logs, method

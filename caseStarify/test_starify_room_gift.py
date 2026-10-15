@@ -294,11 +294,11 @@ class TestPayCreate(StarifyTestBase):
     # ========== 特权礼物 ==========
 
     def test_room_privilege_fail_all(self, des='房间打赏,送>当前财富等级的特权礼物'):
-        for (lv, gift_lv), scene in zip(PRIVILEGE_FAIL_CASES, PRIVILEGE_FAIL_SCENES):
+        for (lv, gift_lv), scene in zip(PRIVILEGE_FAIL_CASES, PRIVILEGE_FAIL_SCENES, strict=False):
             with self.subTest(lv=lv, gift_lv=gift_lv):
                 self.run_case(scene)
 
     def test_room_privilege_success_all(self, des='房间打赏,送<=当前财富等级的特权礼物'):
-        for (lv, gift_lv), scene in zip(PRIVILEGE_SUCCESS_CASES, PRIVILEGE_SUCCESS_SCENES):
+        for (lv, gift_lv), scene in zip(PRIVILEGE_SUCCESS_CASES, PRIVILEGE_SUCCESS_SCENES, strict=False):
             with self.subTest(lv=lv, gift_lv=gift_lv):
                 self.run_case(scene)

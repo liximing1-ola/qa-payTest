@@ -115,7 +115,7 @@ class ConMysql:
                 cursor.execute(sql, (uid,))
                 res = cursor.fetchall()
                 columns = [desc[0] for desc in cursor.description]
-                data_dict = [dict(zip(columns, row)) for row in res]
+                data_dict = [dict(zip(columns, row, strict=False)) for row in res]
                 return data_dict[0] if data_dict else None
             except Exception as error:
                 logger.error('Select error: %s', error)
