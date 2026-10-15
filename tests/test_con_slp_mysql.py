@@ -2,7 +2,7 @@
 common/conSlpMysql.py 单元测试（SQL 映射分发 / 参数组装 / 专用查询）
 
 全部 mock MySQLConnection 底层执行方法，可在无数据库环境下直接运行：
-    python -m pytest tests/test_conSlpMysql.py -v
+    python -m pytest tests/test_con_slp_mysql.py -v
 """
 import unittest
 from unittest.mock import Mock, patch

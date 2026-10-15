@@ -2,7 +2,7 @@
 common/params_yaml.py 单元测试
 
 全部 mock 文件系统，可在无外部依赖下直接运行：
-    python -m pytest tests/test_paramsYaml.py -v
+    python -m pytest tests/test_params_yaml.py -v
 """
 import unittest
 from unittest.mock import mock_open, patch

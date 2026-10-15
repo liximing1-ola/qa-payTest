@@ -2,7 +2,7 @@
 common/sql_script.py 单元测试（MySQLClient 执行链 / 事务回滚 / 操作类 SQL 组装）
 
 全部 mock pymysql.connect，可在无数据库环境下直接运行：
-    python -m pytest tests/test_sqlScript.py -v
+    python -m pytest tests/test_sql_script.py -v
 """
 import unittest
 from unittest.mock import Mock, patch

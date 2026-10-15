@@ -2,7 +2,7 @@
 common/conStarifyMysql.py 单元测试（SQL 分发 / 参数组装 / 签约歌手查询）
 
 全部 mock MySQLConnection 底层执行方法，可在无数据库环境下直接运行：
-    python -m pytest tests/test_conStarifyMysql.py -v
+    python -m pytest tests/test_con_starify_mysql.py -v
 """
 import time
 import unittest

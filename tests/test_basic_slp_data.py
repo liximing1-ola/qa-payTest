@@ -2,7 +2,7 @@
 common/basicSlpData.py 单元测试（SLP 消费数据编码分发）
 
 全部离线运行（caseSlp.config 为纯常量，无 DB/网络依赖）：
-    python -m pytest tests/test_basicSlpData.py -v
+    python -m pytest tests/test_basic_slp_data.py -v
 """
 import ast
 import unittest
