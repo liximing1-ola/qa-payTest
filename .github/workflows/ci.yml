@@ -73,7 +73,9 @@ jobs:
       - name: 收集诊断（仅失败时）
         if: failure()
         run: |
-          echo "=== Installed Packages ==="
+          Write-Host "=== Installed Packages ==="
           pip list
-          echo "=== Test Verbose Output ==="
-          python -m pytest tests/ -v --tb=short 2>&1 | Select-Object -Last 80
+          Write-Host "=== Test Verbose Output ==="
+          python -m pytest tests/ -v --tb=long 2>&1 | Out-File -FilePath test_output.txt -Encoding utf8
+          Get-Content test_output.txt -Tail 120
+        continue-on-error: true
