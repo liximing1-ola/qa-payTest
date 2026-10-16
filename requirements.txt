@@ -1,13 +1,13 @@
 # ============================================
-# 依赖清单（与 CI 及本地实测运行集一致）
+# Dependency list (aligned with CI and local test runs)
 #
-# 核心段为离线检查与用例收集链的最小集合，
-# 版本与 .github/workflows/ci.yml 锚定，请勿单独漂移；
-# 可选段仅特定独立脚本需要，不影响测试主链。
-# 安装：pip install -r requirements.txt
+# Core section: minimal set for offline checks and case collection,
+# Versions anchored to .github/workflows/ci.yml, do not drift independently;
+# Optional section: only needed by specific standalone scripts.
+# Install: pip install -r requirements.txt
 # ============================================
 
-# ---- 核心（CI 同款，py3.11 实测可构建/运行）----
+# ---- Core (same as CI, verified on py3.11) ----
 pytest==8.4.2
 requests==2.32.5
 urllib3==2.5.0
@@ -16,13 +16,13 @@ gevent==24.11.1
 PyYAML==6.0.2
 redis==8.1.0
 
-# ---- 可选（独立脚本依赖，不影响 pytest 主链）----
-# others/bot_dinner.py、others/bot_tea.py（节假日判断）
+# ---- Optional (standalone script deps, does not affect pytest main chain) ----
+# others/bot_dinner.py, others/bot_tea.py (holiday detection)
 chinesecalendar>=1.10.0
-# autoGitPull.py（git 拉取通知）
+# autoGitPull.py (git pull notification)
 GitPython>=3.1.20
 
-# ---- 开发工具（代码质量检查）----
+# ---- Dev tools (code quality checks) ----
 ruff==0.9.0
 mypy==1.14.1
 pytest-cov>=6.1.1
