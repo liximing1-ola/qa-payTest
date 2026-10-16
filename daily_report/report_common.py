@@ -141,6 +141,24 @@ def save_local(png_bytes: bytes, filename: str):
         f.write(png_bytes)
 
 
+def _post_wecom(webhook: str, payload: dict) -> None:
+    """统一的企微 webhook POST + 响应校验"""
+    r = requests.post(webhook, json=payload, timeout=10)
+    if r.status_code != 200:
+        logger.warning("企微推送 HTTP %d: %s", r.status_code, r.text[:200])
+        return
+    try:
+        resp = r.json()
+    except ValueError:
+        logger.warning("企微推送返回非 JSON: %s", r.text[:200])
+        return
+    errcode = resp.get("errcode", 0)
+    if errcode != 0:
+        logger.warning("企微推送失败 errcode=%d: %s", errcode, resp.get("errmsg", ""))
+    else:
+        logger.info("企微推送成功")
+
+
 def send_wecom_image(webhook: str, png_bytes: bytes):
     """企业微信图片消息推送（表格截图）"""
     payload = {
@@ -150,16 +168,7 @@ def send_wecom_image(webhook: str, png_bytes: bytes):
             "md5": hashlib.md5(png_bytes).hexdigest(),
         }
     }
-    r = requests.post(webhook, json=payload, timeout=10)
-    if r.status_code != 200:
-        logger.warning('企微图片推送 HTTP 异常: status=%s, body=%s', r.status_code, r.text)
-        return
-    resp = r.json()
-    errcode = resp.get('errcode', 0)
-    if errcode != 0:
-        logger.warning('企微图片推送失败: errcode=%s, errmsg=%s', errcode, resp.get('errmsg', ''))
-    else:
-        logger.info('企微图片推送成功')
+    _post_wecom(webhook, payload)
 
 
 def send_wecom_msg(webhook: str, content: str):
@@ -170,16 +179,7 @@ def send_wecom_msg(webhook: str, content: str):
             "content": content
         }
     }
-    r = requests.post(webhook, json=payload, timeout=10)
-    if r.status_code != 200:
-        logger.warning('企微推送 HTTP 异常: status=%s, body=%s', r.status_code, r.text)
-        return
-    resp = r.json()
-    errcode = resp.get('errcode', 0)
-    if errcode != 0:
-        logger.warning('企微推送失败: errcode=%s, errmsg=%s', errcode, resp.get('errmsg', ''))
-    else:
-        logger.info('企微推送成功')
+    _post_wecom(webhook, payload)
 
 
 def report_failure(webhook: str, title: str, detail: str):
@@ -190,9 +190,3 @@ def report_failure(webhook: str, title: str, detail: str):
             send_wecom_msg(webhook, err_msg)
     logger.info(err_msg)
 
-
-if __name__ == '__main__':
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s [%(levelname)s] %(name)s - %(message)s',
-    )

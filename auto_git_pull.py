@@ -158,6 +158,3 @@ def update_time(operate, now=''):
 # Backward compatibility
 updateCode = GitUpdater()
 
-
-if __name__ == '__main__':
-    update_time('change')

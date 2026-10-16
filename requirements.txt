@@ -17,8 +17,6 @@ PyYAML==6.0.2
 redis==8.1.0
 
 # ---- Optional (standalone script deps, does not affect pytest main chain) ----
-# others/bot_dinner.py, others/bot_tea.py (holiday detection)
-chinesecalendar>=1.10.0
 # autoGitPull.py (git pull notification)
 GitPython>=3.1.20
 

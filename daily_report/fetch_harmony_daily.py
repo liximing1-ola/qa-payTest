@@ -80,14 +80,7 @@ def _create_retry_session() -> requests.Session:
         raise_on_status=False,
     )
 
-    class _LoggingAdapter(HTTPAdapter):
-        def send(self, request, **kw):
-            retries = kw.get("_retry_count", 0)
-            if retries:
-                logger.info("重试请求 #%d: %s %s", retries, request.method, request.url)
-            return super().send(request, **kw)
-
-    adapter = _LoggingAdapter(max_retries=retry)
+    adapter = HTTPAdapter(max_retries=retry)
     session.mount("https://", adapter)
     session.mount("http://", adapter)
     return session

@@ -154,6 +154,3 @@ def robot(mode: str, reason: str, title: str = '', bot: str = 'BB',
     else:
         logger.warning('不支持的消息模式，跳过通知：mode=%s', mode)
 
-
-if __name__ == '__main__':
-    robot('slack', reason='commit')
