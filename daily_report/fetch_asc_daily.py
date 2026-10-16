@@ -1,6 +1,7 @@
 import gzip
 import io
 import json
+import logging
 import os
 import sys
 import time
@@ -25,6 +26,8 @@ from report_common import (
     save_local,
     send_wecom_image,
 )
+
+logger = logging.getLogger(__name__)
 
 # 显式指向脚本同目录的 .env（计划任务/任意 CWD 下均能找到配置）
 load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), '.env'))
@@ -114,9 +117,26 @@ def backfill_reports(reports: dict, start_d: date, end_d: date):
         d += timedelta(days=1)
     return reports
 
+# ========= 马甲包归属配置 =========
+# 马甲包 App ID 列表（这些 App 的销售额/退款归属其主 App）
+VEST_APP_IDS = {
+    '1483169890',  # 谁是凶手
+}
+
+# 马甲家族变体 App 前缀（历史版本/马甲包，按前缀匹配归属对应主 App）
+VEST_FAMILY_PREFIXES = {
+    '1483169890': ['1583579'],  # 谁是凶手 ← 家族变体前缀 1583579xxx
+}
+
+# ========= 汇率配置 =========
+EXCHANGE_RATE_API = "https://open.er-api.com/v6/latest/USD"  # 免费无需 key
+EXCHANGE_RATES_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "exchange_rates.json")
+EXCHANGE_RATE_CACHE_DAYS = 30  # 本地汇率缓存超过此天数才触发在线刷新
+MIN_CURRENCY_COUNT = 10  # 在线获取币种数低于此值视为异常数据，回退本地缓存
+
 # 常见结算币种对 CNY 的近似折算率（日报统一以人民币（元）展示，精确对账以 ASC 财务报告为准；
 # 表外币种按 1.0 计，新币种出现时需及时补表）
-CNY_RATES = {
+DEFAULT_CNY_RATES = {
     'CNY': 1.0, 'EUR': 7.80, 'USD': 7.20, 'JPY': 0.048, 'HKD': 0.92,
     'SGD': 5.40, 'TWD': 0.23, 'AUD': 4.80, 'MYR': 1.55, 'IDR': 0.00045,
     'GBP': 9.20, 'CAD': 5.30, 'NZD': 4.35, 'KRW': 0.0052, 'BRL': 1.30,
@@ -124,6 +144,93 @@ CNY_RATES = {
     'SAR': 1.92, 'DKK': 1.05, 'HUF': 0.020, 'KZT': 0.0145, 'NGN': 0.0047,
     'ZAR': 0.40, 'EGP': 0.148,
 }
+
+
+
+def fetch_online_cny_rates() -> dict[str, float] | None:
+    """从免费 API 获取最新汇率，返回以 CNY 为基准的汇率字典（1 单位 = ? CNY）。
+    失败返回 None。"""
+    try:
+        resp = requests.get(EXCHANGE_RATE_API, timeout=15)
+        resp.raise_for_status()
+        data = resp.json()
+        if data.get("result") != "success":
+            logger.warning("汇率 API 返回非 success: %s", data.get("result"))
+            return None
+        rates = data.get("rates", {})
+        cny_per_usd = rates.get("CNY")
+        if not cny_per_usd:
+            logger.warning("汇率 API 未返回 CNY 汇率")
+            return None
+        # 转换：1 货币X = (cny_per_usd / rates[X]) CNY
+        cny_rates = {"CNY": 1.0}
+        for code, rate in rates.items():
+            if rate and code != "CNY":
+                cny_rates[code] = round(cny_per_usd / rate, 6)
+        if len(cny_rates) < MIN_CURRENCY_COUNT:
+            logger.warning(
+                "在线获取汇率币种数量（%d）低于阈值 %d，视为异常数据",
+                len(cny_rates), MIN_CURRENCY_COUNT,
+            )
+            return None
+        logger.info("在线获取汇率成功（%d 个币种）", len(cny_rates))
+        return cny_rates
+    except Exception as e:
+        logger.warning("在线获取汇率失败: %s", e)
+        return None
+
+
+def load_cny_rates() -> dict:
+    """从本地 exchange_rates.json 加载汇率，文件不存在或读取失败时回退到内置默认值。
+    不会自动触发在线获取，避免模块加载时覆盖手动维护的汇率文件。"""
+    try:
+        with open(EXCHANGE_RATES_FILE, encoding='utf-8') as f:
+            rates = json.load(f)
+        logger.info("汇率已从 %s 加载（%d 个币种）", EXCHANGE_RATES_FILE, len(rates))
+        return rates
+    except Exception as e:
+        logger.warning("汇率文件加载失败（%s），使用内置默认汇率（%d 个币种）",
+                       e, len(DEFAULT_CNY_RATES))
+        return dict(DEFAULT_CNY_RATES)
+
+
+def _rates_file_age_days() -> float:
+    """返回 exchange_rates.json 文件的天数年龄，文件不存在返回 inf。"""
+    if not os.path.exists(EXCHANGE_RATES_FILE):
+        return float('inf')
+    mtime = os.path.getmtime(EXCHANGE_RATES_FILE)
+    return (time.time() - mtime) / 86400
+
+
+def refresh_cny_rates() -> dict:
+    """刷新汇率：本地缓存未满 30 天时直接加载，超过 30 天才触发在线获取。
+    在线获取失败或返回异常数据时回退到本地缓存。"""
+    global CNY_RATES
+    age = _rates_file_age_days()
+    if age < EXCHANGE_RATE_CACHE_DAYS:
+        logger.info("汇率缓存未过期（%.1f 天前更新，阈值 %d 天），直接加载本地缓存",
+                    age, EXCHANGE_RATE_CACHE_DAYS)
+        CNY_RATES = load_cny_rates()
+        return CNY_RATES
+
+    logger.info("汇率缓存已过期（%.1f 天前，阈值 %d 天），触发在线获取",
+                age, EXCHANGE_RATE_CACHE_DAYS)
+    online_rates = fetch_online_cny_rates()
+    if online_rates:
+        try:
+            with open(EXCHANGE_RATES_FILE, "w", encoding="utf-8") as f:
+                json.dump(online_rates, f, indent=4, ensure_ascii=False)
+            logger.info("在线获取汇率成功，已更新本地缓存（%d 个币种）", len(online_rates))
+        except Exception as e:
+            logger.warning("写入汇率缓存文件失败: %s", e)
+        CNY_RATES = online_rates
+    else:
+        logger.info("在线获取失败，重新加载本地汇率缓存")
+        CNY_RATES = load_cny_rates()
+    return CNY_RATES
+
+
+CNY_RATES = load_cny_rates()
 
 def _total_cny(amount_by_currency: dict) -> float:
     """多币种商品销售额折算为人民币总额（两位小数展示；未知币种按 1.0 计）"""
@@ -150,13 +257,12 @@ def summarize_day(df, aids):
         return _total_cny(gross), _total_cny(neg_gross), int(-neg['_u'].sum())
 
     per_app = {}
-    # 谁是凶手 App ID（第二个监控 App，吸收家族变体 1583579xxx）
-    AID_SSS = aids[1] if len(aids) > 1 and aids[1] == '1483169890' else None
     for aid in aids:
         # 统一转字符串比较（pandas 可能把纯数字列自动推断为 int，导致字符串匹配失败）
         aid_str = df['Apple Identifier'].astype(str)
-        # 谁是凶手家族变体 App 前缀（1583579xxx，历史版本/马甲，业务归属谁是凶手）
-        mask = (aid_str == aid) | aid_str.str.startswith('1583579') if aid == AID_SSS else aid_str == aid
+        # 马甲家族变体 App 按前缀匹配，销售额/退款归属对应主 App
+        prefixes = VEST_FAMILY_PREFIXES.get(aid, [])
+        mask = (aid_str == aid) | aid_str.str.startswith(tuple(prefixes)) if prefixes and aid in VEST_APP_IDS else aid_str == aid
         app_df = df[mask]
         sales, refund_amt, refund_cnt = _agg(app_df)
         per_app[aid] = {
@@ -254,6 +360,10 @@ def render_report_image(days_sorted, per_day, day_sales, day_refund_amt, day_ref
     return buf.getvalue()
 
 if __name__ == "__main__":
+    logging.basicConfig(
+        format="%(asctime)s [%(levelname)s] %(name)s - %(message)s",
+        level=logging.INFO,
+    )
     yesterday = date.today() - timedelta(days=1)
     try:
         # 拉取窗口放宽到 10 天，取最近 7 个有数据的日期（昨日缺报时往前补齐）
@@ -281,7 +391,7 @@ if __name__ == "__main__":
         # 本地留档一份（排查渲染问题用）
         save_local(png, 'asc_daily_report.png')
         send_wecom_image(WECOM_WEBHOOK, png)
-        print("任务执行成功，表格图已推企业微信")
+        logger.info("任务执行成功，表格图已推企业微信")
     except Exception as e:
         report_failure(WECOM_WEBHOOK, "App Store日报任务异常",
                        f"日期:{yesterday}\n错误信息:{str(e)}")

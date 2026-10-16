@@ -10,13 +10,22 @@
 手动测试/补发：PERIODIC_FORCE=week|month 指定周期；PERIODIC_NO_PUSH=true 只渲染不推送。
 """
 import io
+import logging
 import os
 import sys
+import time
 from datetime import date, datetime, timedelta, timezone
 
 from PIL import Image, ImageDraw
 
+# ---------------------------------------------------------------------------
+# 路径修正：脚本通过 python fetch_periodic_report.py 直接运行（非包模式），
+# Python 不会自动把脚本所在目录加入 sys.path，导致同目录模块无法导入。
+# 此处显式将脚本目录插入 sys.path 顶部，确保 fetch_asc_daily / fetch_harmony_daily /
+# report_common 可被正常 import（它们的 __main__ 块受 guard 保护，不会被触发）。
+# ---------------------------------------------------------------------------
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
 # 表格渲染与企微推送工具（三条日报共用）
 import fetch_asc_daily as asc
 import fetch_harmony_daily as hm
@@ -31,7 +40,11 @@ from report_common import (
     send_wecom_image,
 )
 
+logger = logging.getLogger(__name__)
+
 CST = timezone(timedelta(hours=8))
+# ASC JWT 有效期 20 分钟，预留 2 分钟安全余量用于循环中过期检测
+_ASC_TOKEN_TTL = 20 * 60 - 120
 FORCE = os.getenv("PERIODIC_FORCE", "").lower()      # week|month（手动指定，用于测试/补发）
 NO_PUSH = os.getenv("PERIODIC_NO_PUSH", "").lower() == "true"
 
@@ -69,10 +82,19 @@ def asc_period(start: date, end: date) -> dict:
     new = redownload = refund_cnt = 0
     sales = refund_amt = 0.0
     days = 0
+    # 预生成 ASC JWT（有效期 20 分钟），循环内复用；接近过期时自动刷新
+    token = asc.get_asc_token()
+    token_ts = time.time()
+    logger.info("ASC token 已生成，周期 %s ~ %s", start, end)
     d = start
     while d <= end:
+        # 检测 token 是否接近过期（剩余不足 2 分钟），必要时刷新
+        if time.time() - token_ts > _ASC_TOKEN_TTL:
+            token = asc.get_asc_token()
+            token_ts = time.time()
+            logger.info("ASC token 已刷新（循环中接近过期）")
         try:
-            df = asc.get_asc_daily_report(d)
+            df = asc.get_asc_daily_report(d, token)
         except Exception as e:
             if 'code:404' not in str(e):
                 raise
@@ -101,12 +123,17 @@ def asc_period(start: date, end: date) -> dict:
 
 def hm_period(start: date, end: date) -> dict:
     """鸿蒙周期汇总：下载报表区间一次拉取 + IAP 订单分段拉取后整期聚合"""
-    dl = hm.summarize_downloads(hm.get_download_report(start, end))
+    # 预生成 AGC token 与加载 IAP 私钥，整个周期循环内复用
+    session = hm._create_retry_session()
+    agc_token = hm.get_agc_token(session)
+    iap_key = hm._iap_private_key() if hm.IAP_KEY_PATH else None
+    logger.info("AGC token + IAP 私钥已缓存，周期 %s ~ %s", start, end)
+    dl = hm.summarize_downloads(hm.get_download_report(start, end, agc_token, session))
     start_ms = int(datetime(start.year, start.month, start.day, tzinfo=CST).timestamp() * 1000)
     # 窗口取 [起始日 00:00, 结束日+1 00:00) 北京时间，与日报口径一致
     end_ms = int(datetime(end.year, end.month, end.day, tzinfo=CST).timestamp() * 1000) \
         + 24 * 3600 * 1000
-    summary = hm.summarize_orders(hm.query_iap_orders_range(start_ms, end_ms))
+    summary = hm.summarize_orders(hm.query_iap_orders_range(start_ms, end_ms, iap_key, session))
     nd = ni = un = 0
     d = start
     while d <= end:
@@ -191,14 +218,21 @@ def render_period_image(label, start, end, p_start, p_end,
 
 
 if __name__ == "__main__":
+    logging.basicConfig(
+        format="%(asctime)s [%(levelname)s] %(name)s - %(message)s",
+        level=logging.INFO,
+    )
     today = datetime.now(CST).date()
     try:
         period = resolve_period(today)
         if period is None:
-            print(f"{today} 非周期日（非周一且非 1 号），静默退出")
+            logger.info("%s 非周期日（非周一且非 1 号），静默退出", today)
             sys.exit(0)
         (start, end), (p_start, p_end), kind, label = period
-        print(f"周期：{label} {start} ~ {end}（环比 {p_start} ~ {p_end}）")
+        logger.info("周期：%s %s ~ %s（环比 %s ~ %s）", label, start, end, p_start, p_end)
+
+        # 刷新汇率缓存（周期报表跨多日，汇率一致性很重要）
+        asc.refresh_cny_rates()
 
         # ---------- AGC 就绪检测（鸿蒙，同日报策略）----------
         # 周期末日的下载报表未就绪时：15 点前放弃本次（exit 1 → run failure，
@@ -208,8 +242,9 @@ if __name__ == "__main__":
             end_dl = hm.summarize_downloads(hm.get_download_report(end, end))
             if hm.agc_not_ready(end_dl, end) and datetime.now(CST).hour < 15:
                 st = end_dl.get(f"{end:%Y%m%d}") or {"new_download": 0}
-                print(f"AGC 周期末日({end})报表未就绪（新下载 {st['new_download']}，"
-                      f"新安装仍为 0），本次不发送，等待后续触发点重试")
+                logger.warning("AGC 周期末日(%s)报表未就绪（新下载 %d，"
+                               "新安装仍为 0），本次不发送，等待后续触发点重试",
+                               end, st['new_download'])
                 sys.exit(1)
 
         ios = asc_period(start, end)
@@ -219,12 +254,13 @@ if __name__ == "__main__":
         png = render_period_image(label, start, end, p_start, p_end, ios, ios_p, hmc, hm_prev)
         save_local(png, 'periodic_report.png')
         if NO_PUSH:
-            print("NO_PUSH 模式：已渲染留档，不推送")
+            logger.info("NO_PUSH 模式：已渲染留档，不推送")
             sys.exit(0)
         send_wecom_image(asc.WECOM_WEBHOOK, png)
-        print("任务执行成功，周期报表已推企业微信")
+        logger.info("任务执行成功，周期报表已推企业微信")
     except Exception as e:
         report_failure(asc.WECOM_WEBHOOK, "周期报表任务异常",
                        f"日期:{today}\n错误信息:{str(e)[:400]}")
+        logger.error("周期报表任务异常: %s", e)
         # 非零退出：workflow 记为失败，check 幂等不锁定当天，后续触发点可重试补发
         sys.exit(1)

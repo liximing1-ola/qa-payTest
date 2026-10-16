@@ -8,6 +8,7 @@ import csv
 import hashlib
 import io
 import json
+import logging
 import os
 import sys
 import time
@@ -28,6 +29,10 @@ from report_common import (
     save_local,
     send_wecom_image,
 )
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
+
+logger = logging.getLogger(__name__)
 
 # 显式指向脚本同目录的 .env.harmony（任意 CWD 下均能找到配置）
 load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), '.env.harmony'))
@@ -63,10 +68,37 @@ if not WECOM_WEBHOOK:
 # 北京时间（AGC 后台页面口径：销售分析按北京日聚合）
 CST = timezone(timedelta(hours=8))
 
+# ========= 带重试的 session =========
+def _create_retry_session() -> requests.Session:
+    """创建带重试策略的 requests Session（5xx + 连接错误自动重试）"""
+    session = requests.Session()
+    retry = Retry(
+        total=3,
+        backoff_factor=2,
+        status_forcelist=[500, 502, 503, 504],
+        allowed_methods=["GET", "POST"],
+        raise_on_status=False,
+    )
+
+    class _LoggingAdapter(HTTPAdapter):
+        def send(self, request, **kw):
+            retries = kw.get("_retry_count", 0)
+            if retries:
+                logger.info("重试请求 #%d: %s %s", retries, request.method, request.url)
+            return super().send(request, **kw)
+
+    adapter = _LoggingAdapter(max_retries=retry)
+    session.mount("https://", adapter)
+    session.mount("http://", adapter)
+    return session
+
+
 # ========= AGC 授权（API客户端方式）=========
-def get_agc_token() -> str:
+def get_agc_token(session: requests.Session = None) -> str:
     """获取 access_token（client_credentials，有效期 48 小时）"""
-    resp = requests.post(f"{AGC_BASE}/api/oauth2/v1/token", json={
+    if session is None:
+        session = _create_retry_session()
+    resp = session.post(f"{AGC_BASE}/api/oauth2/v1/token", json={
         "grant_type": "client_credentials",
         "client_id": CLIENT_ID,
         "client_secret": CLIENT_SECRET,
@@ -76,14 +108,18 @@ def get_agc_token() -> str:
     token = data.get("access_token")
     if not token:
         raise Exception(f"AGC token 获取失败：{str(data)[:300]}")
+    logger.info("AGC token 获取成功")
     return token
 
 
 # ========= 下载安装报表 =========
-def get_download_report(start_d: date, end_d: date, token: str = None) -> str:
+def get_download_report(start_d: date, end_d: date, token: str = None,
+                        session: requests.Session = None) -> str:
     """获取 AGC 下载安装报表 → 返回 CSV 文本（日期区间 ≤180 天）"""
+    if session is None:
+        session = _create_retry_session()
     if token is None:
-        token = get_agc_token()
+        token = get_agc_token(session)
     url = f"{AGC_BASE}/api/report/harmony-report/v1/harmony/appDownloadAnalysisExport/{APP_ID}"
     headers = {
         "Authorization": f"Bearer {token}",
@@ -97,7 +133,7 @@ def get_download_report(start_d: date, end_d: date, token: str = None) -> str:
         "language": "zh-CN",
         "exportType": "CSV",
     }
-    resp = requests.get(url, headers=headers, params=params, timeout=60)
+    resp = session.get(url, headers=headers, params=params, timeout=60)
     if resp.status_code != 200:
         raise Exception(f"AGC 报表接口失败 code:{resp.status_code} msg:{resp.text[:300]}")
     data = resp.json()
@@ -107,7 +143,8 @@ def get_download_report(start_d: date, end_d: date, token: str = None) -> str:
     file_url = data.get("fileURL")
     if not file_url:
         raise Exception(f"AGC 报表未返回 fileURL：{str(data)[:300]}")
-    csv_resp = requests.get(file_url, timeout=60)
+    logger.info("AGC 报表 fileURL 获取成功，开始下载 CSV")
+    csv_resp = session.get(file_url, timeout=60)
     csv_resp.raise_for_status()
     return csv_resp.content.decode("utf-8-sig")
 
@@ -141,12 +178,14 @@ def agc_not_ready(per_day: dict, end_d: date) -> bool:
 
 # ========= IAP 服务端（JWT 鉴权 + 订单查询）=========
 def _iap_private_key() -> str:
+    logger.info("从文件加载 IAP 私钥: %s", IAP_KEY_PATH)
     with open(IAP_KEY_PATH) as f:
         return f.read()
 
 
-def get_iap_jwt(body_str: str) -> str:
-    """按华为规范生成 ES256 JWT，digest = Body 字符串的 SHA-256（hex）"""
+def get_iap_jwt(body_str: str, private_key: str = None) -> str:
+    """按华为规范生成 ES256 JWT，digest = Body 字符串的 SHA-256（hex）
+    private_key: 预读取的私钥内容；为 None 时回退到每次读文件（向后兼容）。"""
     now = int(time.time())
     payload = {
         "iss": IAP_ISSUER_ID,
@@ -156,22 +195,27 @@ def get_iap_jwt(body_str: str) -> str:
         "aid": APP_ID,
         "digest": hashlib.sha256(body_str.encode("utf-8")).hexdigest(),
     }
-    return jwt.encode(payload, _iap_private_key(), algorithm="ES256",
+    key = private_key if private_key is not None else _iap_private_key()
+    return jwt.encode(payload, key, algorithm="ES256",
                       headers={"kid": IAP_KEY_ID})
 
 
-def query_iap_orders(start_ms: int, end_ms: int) -> list:
+def query_iap_orders(start_ms: int, end_ms: int,
+                     private_key: str = None,
+                     session: requests.Session = None) -> list:
     """查询 [start_ms, end_ms) 内付款/退款订单（窗口 ≤48 小时，自动翻页）"""
+    if session is None:
+        session = _create_retry_session()
     orders = []
     body = {"startTime": start_ms, "endTime": end_ms}
     while True:
         # 固定分隔符序列化，保证 digest 与发送内容逐字节一致
         body_str = json.dumps(body, separators=(",", ":"))
-        resp = requests.post(
+        resp = session.post(
             f"{IAP_BASE}/order/harmony/v1/application/trade/orders/query",
             data=body_str.encode("utf-8"),
             headers={
-                "Authorization": f"Bearer {get_iap_jwt(body_str)}",
+                "Authorization": f"Bearer {get_iap_jwt(body_str, private_key)}",
                 "Content-Type": "application/json;charset=UTF-8",
             },
             timeout=60,
@@ -181,7 +225,9 @@ def query_iap_orders(start_ms: int, end_ms: int) -> list:
         data = resp.json()
         if str(data.get("responseCode")) != "0":
             raise Exception(f"IAP 订单接口返回失败：{str(data)[:300]}")
-        orders.extend(data.get("orderInfoList") or [])
+        page_orders = data.get("orderInfoList") or []
+        orders.extend(page_orders)
+        logger.info("IAP 订单翻页：本页 %d 条，累计 %d 条", len(page_orders), len(orders))
         continuation = data.get("continuationToken")
         if not continuation:
             break
@@ -189,13 +235,17 @@ def query_iap_orders(start_ms: int, end_ms: int) -> list:
     return orders
 
 
-def query_iap_orders_range(start_ms: int, end_ms: int) -> list:
+def query_iap_orders_range(start_ms: int, end_ms: int,
+                           private_key: str = None,
+                           session: requests.Session = None) -> list:
     """查询任意长度区间：按 47 小时切段依次查询后合并（接口单窗口上限 48 小时）"""
+    if session is None:
+        session = _create_retry_session()
     orders = []
     seg_start = start_ms
     while seg_start < end_ms:
         seg_end = min(seg_start + 47 * 3600 * 1000, end_ms)
-        orders.extend(query_iap_orders(seg_start, seg_end))
+        orders.extend(query_iap_orders(seg_start, seg_end, private_key, session))
         seg_start = seg_end
     return orders
 
@@ -313,6 +363,10 @@ def render_report_image(days_sorted, per_day, iap_by_day, m_start) -> bytes:
 
 # ========= 主流程 =========
 if __name__ == "__main__":
+    logging.basicConfig(
+        format="%(asctime)s [%(levelname)s] %(name)s - %(message)s",
+        level=logging.INFO,
+    )
     try:
         now = datetime.now(UTC)
 
@@ -320,27 +374,31 @@ if __name__ == "__main__":
         if PROBE:
             # AGC 下载报表（权限/接口问题不影响下方 IAP 探测）
             try:
-                token = get_agc_token()
-                print("[probe] AGC token 获取成功")
+                session = _create_retry_session()
+                token = get_agc_token(session)
+                logger.info("[probe] AGC token 获取成功")
                 start_d, end_d = (now - timedelta(days=7)).date(), now.date()
-                csv_text = get_download_report(start_d, end_d, token)
-                print(f"[probe] 下载报表区间：{start_d} ~ {end_d}，CSV 前 1200 字符：")
-                print(csv_text[:1200])
-                print("[probe] 下载汇总：", json.dumps(summarize_downloads(csv_text), ensure_ascii=False))
+                csv_text = get_download_report(start_d, end_d, token, session)
+                logger.info("[probe] 下载报表区间：%s ~ %s，CSV 前 1200 字符：\n%s",
+                            start_d, end_d, csv_text[:1200])
+                logger.info("[probe] 下载汇总：%s", json.dumps(summarize_downloads(csv_text), ensure_ascii=False))
             except Exception as e:
-                print("[probe] 下载报表失败：", e)
+                logger.error("[probe] 下载报表失败：%s", e)
 
             # IAP 订单
             try:
+                iap_session = _create_retry_session()
+                iap_key = _iap_private_key() if IAP_KEY_PATH else None
+                logger.info("[probe] IAP 私钥已加载")
                 start_ms = int((now - timedelta(hours=24)).timestamp() * 1000)
                 end_ms = int(now.timestamp() * 1000)
-                orders = query_iap_orders(start_ms, end_ms)
-                print(f"[probe] IAP 近24小时(UTC)订单数：{len(orders)}")
+                orders = query_iap_orders(start_ms, end_ms, iap_key, iap_session)
+                logger.info("[probe] IAP 近24小时(UTC)订单数：%d", len(orders))
                 for o in orders[:3]:
-                    print("[probe] 订单样例：", json.dumps(o, ensure_ascii=False))
-                print("[probe] IAP 汇总：", json.dumps(summarize_orders(orders), ensure_ascii=False))
+                    logger.info("[probe] 订单样例：%s", json.dumps(o, ensure_ascii=False))
+                logger.info("[probe] IAP 汇总：%s", json.dumps(summarize_orders(orders), ensure_ascii=False))
             except Exception as e:
-                print("[probe] IAP 订单查询失败：", e)
+                logger.error("[probe] IAP 订单查询失败：%s", e)
             sys.exit(0)
 
         # ---------- 正式日报 ----------
@@ -353,8 +411,13 @@ if __name__ == "__main__":
         # 报表请求区间取两者更早日，保证 7 日明细与月累计来自同一批数据
         fetch_start = min(start_d, m_start)
 
-        token = get_agc_token()
-        csv_text = get_download_report(fetch_start, end_d, token)
+        # 一次性创建重试 session 并缓存 IAP 私钥
+        session = _create_retry_session()
+        iap_key = _iap_private_key() if IAP_KEY_PATH else None
+        logger.info("IAP 私钥已缓存，来源: %s", IAP_KEY_PATH)
+
+        token = get_agc_token(session)
+        csv_text = get_download_report(fetch_start, end_d, token, session)
         per_day = summarize_downloads(csv_text)
 
         # ---------- AGC 就绪检测 ----------
@@ -364,8 +427,9 @@ if __name__ == "__main__":
         if not NO_PUSH and not FORCE and agc_not_ready(per_day, end_d) \
                 and datetime.now(CST).hour < 15:
             last_stat = per_day.get(f"{end_d:%Y%m%d}") or {"new_download": 0}
-            print(f"AGC 昨日({end_d})报表未就绪（新下载 {last_stat['new_download']}，"
-                  f"新安装仍为 0），本次不发送，等待后续触发点重试")
+            logger.warning("AGC 昨日(%s)报表未就绪（新下载 %d，新安装仍为 0），"
+                           "本次不发送，等待后续触发点重试",
+                           end_d, last_stat['new_download'])
             sys.exit(1)
 
         # 内购窗口：北京时间 [fetch_start 00:00, end_d+1 00:00)，与后台"每日销售额"对齐
@@ -373,20 +437,21 @@ if __name__ == "__main__":
                                 tzinfo=CST).timestamp() * 1000)
         end_ms = int(datetime(end_d.year, end_d.month, end_d.day,
                               tzinfo=CST).timestamp() * 1000) + 24 * 3600 * 1000
-        orders = query_iap_orders_range(start_ms, end_ms)
+        orders = query_iap_orders_range(start_ms, end_ms, iap_key, session)
         iap_by_day = summarize_orders_by_day(orders)
 
         png = render_report_image(days_sorted, per_day, iap_by_day, m_start)
         # 本地留档一份（排查渲染问题用）
         save_local(png, 'harmony_daily_report.png')
         if NO_PUSH:
-            print("本地预览模式（HARMONY_NO_PUSH=true），已渲染未推送")
+            logger.info("本地预览模式（HARMONY_NO_PUSH=true），已渲染未推送")
         else:
             if not WECOM_WEBHOOK:
                 raise Exception("WECOM_WEBHOOK 未配置（.env.harmony 或 .env，云端需写入 HARMONY_ENV_FILE）")
             send_wecom_image(WECOM_WEBHOOK, png)
-            print("任务执行成功，日报图已推企业微信")
+            logger.info("任务执行成功，日报图已推企业微信")
     except Exception as e:
+        logger.error("鸿蒙日报任务异常: %s", e)
         report_failure(WECOM_WEBHOOK, "鸿蒙日报任务异常",
                        f"日期:{date.today()}\n错误信息:{str(e)}")
         sys.exit(1)

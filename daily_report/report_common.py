@@ -7,12 +7,38 @@
 import base64
 import contextlib
 import hashlib
+import logging
 import os
+import sys
 
 import requests
 from PIL import ImageFont
 
-FONT_DIR = r'C:\Windows\Fonts'
+logger = logging.getLogger(__name__)
+
+
+def _detect_font_dir() -> str:
+    """跨平台检测系统字体目录，支持环境变量 FONT_DIR 覆盖。"""
+    env_dir = os.environ.get('FONT_DIR')
+    if env_dir:
+        if os.path.isdir(env_dir):
+            return env_dir
+        logger.warning('环境变量 FONT_DIR=%s 不存在，回退到自动检测', env_dir)
+
+    if sys.platform == 'win32':
+        candidate = r'C:\Windows\Fonts'
+    elif sys.platform == 'darwin':
+        candidate = '/System/Library/Fonts'
+    else:
+        candidate = '/usr/share/fonts'
+
+    if os.path.isdir(candidate):
+        return candidate
+    logger.warning('系统字体目录 %s 不存在，字体加载将使用默认字体', candidate)
+    return ''
+
+
+FONT_DIR = _detect_font_dir()
 # 渲染配色（雅黑字体不含彩色 emoji，图标一律用安全字符 ■/▶ 等）
 C_TITLE = (28, 62, 120)
 C_WARN = (190, 110, 10)
@@ -125,7 +151,15 @@ def send_wecom_image(webhook: str, png_bytes: bytes):
         }
     }
     r = requests.post(webhook, json=payload, timeout=10)
-    print("企微图片推送结果：", r.json())
+    if r.status_code != 200:
+        logger.warning('企微图片推送 HTTP 异常: status=%s, body=%s', r.status_code, r.text)
+        return
+    resp = r.json()
+    errcode = resp.get('errcode', 0)
+    if errcode != 0:
+        logger.warning('企微图片推送失败: errcode=%s, errmsg=%s', errcode, resp.get('errmsg', ''))
+    else:
+        logger.info('企微图片推送成功')
 
 
 def send_wecom_msg(webhook: str, content: str):
@@ -137,7 +171,15 @@ def send_wecom_msg(webhook: str, content: str):
         }
     }
     r = requests.post(webhook, json=payload, timeout=10)
-    print("企微推送结果：", r.json())
+    if r.status_code != 200:
+        logger.warning('企微推送 HTTP 异常: status=%s, body=%s', r.status_code, r.text)
+        return
+    resp = r.json()
+    errcode = resp.get('errcode', 0)
+    if errcode != 0:
+        logger.warning('企微推送失败: errcode=%s, errmsg=%s', errcode, resp.get('errmsg', ''))
+    else:
+        logger.info('企微推送成功')
 
 
 def report_failure(webhook: str, title: str, detail: str):
@@ -146,4 +188,11 @@ def report_failure(webhook: str, title: str, detail: str):
     if webhook:
         with contextlib.suppress(Exception):
             send_wecom_msg(webhook, err_msg)
-    print(err_msg)
+    logger.info(err_msg)
+
+
+if __name__ == '__main__':
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s [%(levelname)s] %(name)s - %(message)s',
+    )
